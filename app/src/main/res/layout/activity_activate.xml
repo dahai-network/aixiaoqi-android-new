@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_back"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/device"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/connectStatusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_text"
+            android:drawableRight="@drawable/arrow"
+
+            android:layout_marginLeft="@dimen/padding"
+            android:textSize="14sp"
+            />
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/payForWhatTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/effective_date"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/payWayTextView"
+            android:layout_width="wrap_content"
+            android:minWidth="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_text"
+            android:drawableRight="@drawable/arrow"
+            android:layout_marginLeft="@dimen/padding"
+            android:textSize="14sp"
+            />
+
+
+    </LinearLayout>
+
+    <View
+        style="@style/horizontal_line_view"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:background="@color/white"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/effective_length"
+            android:textSize="14sp"
+            android:id="@+id/textView4"/>
+
+        <TextView
+            android:id="@+id/expireDaysTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_text"
+            android:textSize="14sp"
+            android:layout_marginRight="5dp"
+            android:text="@string/no_data_show"
+            />
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/sureTextView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginLeft="@dimen/padding_20dp"
+        android:layout_marginTop="@dimen/padding_15dp"
+        android:layout_marginRight="@dimen/padding_20dp"
+        android:background="@drawable/circle_green_ret"
+        android:gravity="center"
+        android:text="@string/activate_packet"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        />
+</LinearLayout>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_back"
+
+    >
+
+    <LinearLayout
+        android:id="@+id/loginLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="40dp">
+
+
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_margin="20dp"
+            android:layout_marginTop="@dimen/padding_15dp"
+            android:src="@drawable/login_logo"
+            />
+
+
+        <EditText
+            android:id="@+id/usernameEdit"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="55dp"
+            android:background="#00000000"
+            android:drawableLeft="@drawable/login_username_pic"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:hint="@string/input_phone"
+            android:inputType="phone"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/login_hint_gray"
+            android:textSize="15dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="2.5dp"
+            android:background="@color/login_bottom_line"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/pwdEdit"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:drawableLeft="@drawable/login_psw_pic"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:hint="@string/input_psw"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:textColorHint="@color/login_hint_gray"
+                android:textSize="15dp"/>
+
+            <CheckBox
+                android:id="@+id/hindPswCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/login_psw_see_check"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1px"
+            android:layout_marginTop="2.5dp"
+            android:background="@color/login_bottom_line"
+            />
+
+
+        <Button
+            android:id="@+id/login_btn"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/circle_green_ret"
+            android:text="@string/login"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"/>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/forgetPswTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding_20dp"
+                android:paddingLeft="@dimen/padding_20dp"
+                android:text="@string/forget_psw"
+                android:textColor="@color/white"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" | "
+                android:textColor="@color/white"
+                />
+
+            <TextView
+                android:id="@+id/registTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding_20dp"
+                android:paddingRight="@dimen/padding_20dp"
+                android:text="@string/regist"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

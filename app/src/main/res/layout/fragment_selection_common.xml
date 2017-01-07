@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/search_bar_back"
+    android:layout_height="match_parent">
+
+    <de.blinkt.openvpn.views.TitleBar
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_50dp"
+        />
+
+    <EditText
+        android:layout_below="@id/title"
+        android:id="@+id/searchEditText"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="@dimen/padding_10"
+        android:layout_marginRight="@dimen/padding_10"
+        android:layout_marginTop="8dp"
+        android:layout_height="@dimen/padding_30dp"
+        android:background="@drawable/search_et"
+        android:drawableLeft="@drawable/connecter_search"
+        android:drawablePadding="@dimen/padding"
+        android:singleLine="true"
+        android:textSize="@dimen/little_12"
+        android:hint="@string/search"
+        android:gravity="center_vertical"
+        />
+
+    <FrameLayout
+        android:layout_below="@id/searchEditText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.blinkt.openvpn.views.contact.TouchableRecyclerView
+            android:id="@+id/contact_member"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_marginRight="15dp"/>
+
+        <TextView
+            android:id="@+id/contact_dialog"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:textColor="#ffffffff"
+            android:textSize="30dp"
+            android:visibility="invisible"/>
+
+        <de.blinkt.openvpn.views.contact.SideBar
+            android:id="@+id/contact_sidebar"
+            android:layout_width="15dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right|center"
+            android:layout_marginRight="3dp"/>
+    </FrameLayout>
+
+
+
+    <TextView
+        android:id="@+id/tv_no_permission"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title"
+        android:visibility="gone"
+        android:background="@color/gray_back"
+        android:paddingTop="@dimen/padding_175dp"
+        android:textColor="@color/gray_text"
+        android:paddingLeft="@dimen/padding_30dp"
+        android:paddingRight="@dimen/padding_30dp"
+        android:text="@string/no_permission"
+        />
+</RelativeLayout>

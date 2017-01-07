@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/order_detail_background"
+    android:orientation="vertical"
+    >
+
+    <include layout="@layout/view_no_net"/>
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_marginTop="15dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/headBarRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/packetImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            />
+
+        <TextView
+            android:id="@+id/packageNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@id/packetImageView"
+            android:textSize="15sp"
+
+            />
+
+
+        <TextView
+            android:id="@+id/priceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packageNameTextView"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/packetImageView"
+            android:text="@string/no_data_show"
+            android:textColor="@color/order_detail_orange"
+            />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/arrow"
+            />
+
+    </RelativeLayout>
+
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_marginTop="15dp"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingLeft="15dp"
+        >
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/order_num_nocolon"/>
+
+        <TextView
+            android:id="@+id/orderNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+            />
+
+
+        <View
+            android:id="@+id/line1"
+            style="@style/horizontal_line_view"
+            android:layout_below="@id/textView2"
+            />
+
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line1"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/pay_date"/>
+
+        <TextView
+            android:id="@+id/orderTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/line1"
+            android:layout_marginRight="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+            />
+
+
+    </RelativeLayout>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_marginTop="15dp"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingLeft="15dp"
+        >
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/pay_way"/>
+
+        <TextView
+            android:id="@+id/payWayTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+
+            />
+
+
+        <View
+            android:id="@+id/line2"
+            style="@style/horizontal_line_view"
+            android:layout_below="@id/textView"
+            />
+
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line2"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/expiry_date"/>
+
+        <TextView
+            android:id="@+id/expiryDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/line2"
+            android:layout_marginRight="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+            />
+
+        <View
+            android:id="@+id/line3"
+            style="@style/horizontal_line_view"
+            android:layout_below="@id/textView4"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line3"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/packet_status"/>
+
+        <TextView
+            android:id="@+id/packetStatusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/line3"
+            android:layout_marginRight="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+            />
+
+    </RelativeLayout>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+</LinearLayout>

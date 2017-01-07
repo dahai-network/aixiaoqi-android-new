@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_lable"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_back"
+ >
+
+    <EditText
+        android:id="@+id/lableEditText"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"
+        android:lines="1"
+        android:textSize="@dimen/little_14"
+        android:maxLength="20"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:paddingRight="@dimen/padding_15dp"
+        />
+</RelativeLayout>

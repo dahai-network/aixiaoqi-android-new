@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/call_phone_selector"
+    android:paddingTop="@dimen/padding_10dp"
+    android:paddingLeft="@dimen/padding_15dp"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/order_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/padding_15dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/arrow"
+        android:paddingRight="@dimen/padding_15dp"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/parchase_number"
+        android:layout_toLeftOf="@id/arrow"
+        android:layout_marginRight="@dimen/padding_10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/readly_select_number"
+        android:layout_below="@id/order_number"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_below="@id/readly_select_number"
+        android:layout_marginTop="@dimen/padding_10dp"
+        style="@style/horizontal_line_view"/>
+</RelativeLayout>

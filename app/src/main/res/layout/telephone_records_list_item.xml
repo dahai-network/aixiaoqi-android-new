@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/call_phone_selector"
+    android:paddingLeft="@dimen/padding_15dp"
+    android:minHeight="@dimen/dialpad_row_height"
+    >
+
+    <ImageView
+        android:id="@+id/callstatusimg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_centerVertical="true"
+        />
+
+    <TextView
+        android:layout_marginLeft="@dimen/padding"
+        android:paddingTop="@dimen/padding_10dp"
+        android:paddingRight="@dimen/padding_15dp"
+        android:id="@+id/name_text_view"
+        android:layout_toRightOf="@id/callstatusimg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/little_16"
+        />
+
+    <TextView
+        android:id="@+id/phone_number_text_view"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="@dimen/padding"
+        android:layout_below="@id/name_text_view"
+        android:paddingRight="@dimen/padding_15dp"
+        android:paddingBottom="@dimen/padding_10dp"
+        android:layout_toRightOf="@id/callstatusimg"
+        android:layout_height="wrap_content"
+        android:textColor="@color/country_packet_gray"
+        android:textSize="@dimen/little_12"
+
+        />
+
+    <TextView
+        android:id="@+id/datatime_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textSize="@dimen/little_12"
+        android:paddingRight="@dimen/padding_10"
+        android:textColor="@color/country_packet_gray"
+        android:layout_centerVertical="true"
+        android:gravity="right"/>
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_alignParentBottom="true"
+        />
+</RelativeLayout>

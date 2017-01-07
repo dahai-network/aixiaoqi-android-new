@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/dialog_background"
+              android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="@dimen/padding_25dp"
+        android:textColor="@color/order_detail_orange"
+        android:textSize="@dimen/little_18"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/get_kingcard_gift"
+        android:textSize="@dimen/little_18"
+        />
+
+    <EditText
+        android:id="@+id/inputKingcardPhoneNumberEditText"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginBottom="@dimen/padding_10dp"
+        android:layout_marginLeft="15dp"
+        android:paddingLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:hint="@string/input_kingcard_phonenumber"
+        android:background="@drawable/kingcard_activate_edit"
+        android:layout_marginTop="10dp"
+        />
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_rechange"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/padding_40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/sure"
+            android:textColor="@color/aggreement"
+            android:textSize="@dimen/little_16"
+            />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="@dimen/padding_40dp"
+            android:background="@color/light_gray"
+            />
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/padding_40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/aggreement"
+            android:textSize="@dimen/little_16"
+            />
+    </LinearLayout>
+
+</LinearLayout>

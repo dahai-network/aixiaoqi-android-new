@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/call_phone_background"
+                android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_50dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/nametxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/little_28"
+            />
+
+        <TextView
+            android:id="@+id/address_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+
+            />
+
+        <Chronometer
+            android:id="@+id/chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:format="%s"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_control_voide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/calmTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="25dp"
+            android:drawableTop="@drawable/record_voice_selector"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="@string/quiet"
+            android:textColor="@android:color/white"
+            android:textSize="12dp"
+            />
+
+        <TextView
+            android:id="@+id/mtview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="25dp"
+            android:drawableTop="@drawable/hand_free_selector"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="@string/hang_free"
+            android:textColor="@android:color/white"
+            android:textSize="12dp"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginBottom="45dp"
+        android:layout_marginLeft="@dimen/padding_25dp"
+        android:layout_marginRight="@dimen/padding_25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/receiveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableTop="@drawable/call_answer"
+            android:drawablePadding="@dimen/padding"
+            android:layout_marginRight="@dimen/padding_20dp"
+            android:textColor="@color/white"
+            android:gravity="center_horizontal"
+            android:text="@string/receive"
+            />
+
+        <TextView
+            android:id="@+id/cancelcallbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/hang_up"
+            android:drawablePadding="@dimen/padding"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:gravity="center_horizontal"
+            android:text="@string/hang_down"
+            />
+
+        <TextView
+            android:id="@+id/hangupbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:drawableTop="@drawable/hang_up"
+            android:drawablePadding="@dimen/padding"
+            android:textColor="@color/white"
+            android:gravity="center_horizontal"
+            android:text="@string/hang_down"
+            />
+    </RelativeLayout>
+</RelativeLayout>

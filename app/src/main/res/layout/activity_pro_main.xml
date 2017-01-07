@@ -1,0 +1,185 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+
+    <de.blinkt.openvpn.views.CustomViewPager
+        android:id="@+id/mViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        style="@style/horizontal_line_view"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="51dp">
+
+        <LinearLayout
+            android:id="@+id/bottom_bar_linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/bottom_bar"
+            android:orientation="horizontal"
+            >
+
+            <LinearLayout
+                android:id="@+id/indexLinearLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/indexImageView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/index_icon"/>
+
+                <TextView
+                    android:id="@+id/indexTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/index"
+                    android:textColor="@android:color/white"
+                    android:textSize="11sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/phoneLinearLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/phoneImageView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:id="@+id/phoneTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/phone"
+                    android:textColor="@android:color/white"
+                    android:textSize="11sp"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/addressListLienarLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/addressListImageView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/address_list_icon"/>
+
+                <TextView
+                    android:id="@+id/addressListTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address_list"
+                    android:textColor="@android:color/white"
+                    android:textSize="11sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sportLinearLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/sportImageView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/sport_selector"/>
+
+                <TextView
+                    android:id="@+id/sportTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sport"
+                    android:textColor="@android:color/white"
+                    android:textSize="11sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/accountLinearLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/accountImageView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/account_icon"/>
+
+                <TextView
+                    android:id="@+id/accountTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/personal_center"
+                    android:textColor="@android:color/white"
+                    android:textSize="11sp"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/phone_linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bottom_bar"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/phoneNumberImageView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.75"
+                android:scaleType="center"
+                android:src="@drawable/phone_icon_check_open"/>
+
+            <ImageView
+                android:id="@+id/callImageView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/call_phone_green"/>
+
+            <ImageView
+                android:id="@+id/deleteImageView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.75"
+                android:padding="15dp"
+                android:src="@drawable/delete_btn"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

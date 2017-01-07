@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/ll_dialog_calendar"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:visibility="gone"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_dialog_top"
+            android:layout_width="fill_parent"
+            android:layout_height="50dip"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:background="@color/black"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_last_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/padding_50dp"
+                android:padding="@dimen/padding_20dp"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@+id/tv_show_month_view_dialog"
+                android:drawableLeft="@drawable/btn_top_back"
+                />
+
+            <TextView
+                android:id="@+id/tv_show_month_view_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/little_18"/>
+
+
+            <TextView
+                android:id="@+id/tv_next_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="@dimen/padding_20dp"
+                android:layout_marginLeft="@dimen/padding_50dp"
+                android:layout_toRightOf="@id/tv_show_month_view_dialog"
+                android:paddingLeft="@dimen/padding"
+                android:paddingRight="@dimen/padding"
+                android:drawableRight="@drawable/next_month"
+                />
+
+        </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="20dip"
+                android:background="#fffffe"
+                android:paddingBottom="2dip"
+                android:paddingTop="2dip">
+
+                    <TextView
+                        style="@style/dateStyle"
+                        android:text="日"
+                        android:textColor="@color/date_1"/>
+
+                    <TextView
+                        style="@style/dateStyle"
+                        android:text="一"
+                        android:textColor="@color/date_2"/>
+
+                    <TextView
+                        style="@style/dateStyle"
+                        android:text="二"
+                        android:textColor="@color/date_2"/>
+
+                    <TextView
+                        style="@style/dateStyle"
+                        android:text="三"
+                        android:textColor="@color/date_2"/>
+
+                    <TextView
+                        style="@style/dateStyle"
+                        android:text="四"
+                        android:textColor="@color/date_2"/>
+
+                    <TextView
+                        style="@style/dateStyle"
+                        android:text="五"
+                        android:textColor="@color/date_2"/>
+
+                    <TextView
+                        style="@style/dateStyle"
+                        android:text="六"
+                        android:textColor="@color/date_1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_alignParentTop="true"
+                android:background="#20000000">
+            </View>
+
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="fill_parent"
+                android:layout_height="310dp"
+                android:layout_gravity="center"
+                android:background="#ffffff">
+            </android.support.v4.view.ViewPager>
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/call_phone_selector"
+    android:orientation="vertical"
+    >
+
+    <View
+        android:id="@+id/line"
+        style="@style/horizontal_line_view"
+        android:layout_marginLeft="@dimen/padding_10"
+        />
+
+
+
+    <ImageView
+        android:layout_below="@id/line"
+        android:id="@+id/headImageView"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/padding"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:layout_marginBottom="@dimen/padding_5dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_below="@id/line"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/padding_15dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding"
+        android:layout_centerVertical="true"
+        android:ellipsize="end"
+        android:layout_toRightOf="@id/headImageView"
+        android:maxLines="1"
+        android:text="你好"
+        android:id="@+id/nameTextView"/>
+
+</RelativeLayout>

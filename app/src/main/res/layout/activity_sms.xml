@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/consignee_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_50dp"
+
+        >
+        <TextView
+            android:id="@+id/sms_receive_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:layout_centerVertical="true"
+            android:text="@string/consignee"
+            android:textColor="@color/connect_us_gray"/>
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/add_contact_iv"
+            android:layout_toRightOf="@id/sms_receive_text"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            >
+
+            <LinearLayout
+                android:id="@+id/select_contact_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                >
+            </LinearLayout>
+
+        </ScrollView>
+        <ImageView
+            android:id="@+id/add_contact_iv"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:layout_marginRight="@dimen/padding_20dp"
+            android:src="@drawable/add_contact"
+            android:layout_height="wrap_content"/>
+
+
+        <View
+           android:layout_alignParentBottom="true"
+            style="@style/horizontal_line_view"/>
+    </RelativeLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/pull_down_sr"
+        android:layout_below="@id/consignee_ll"
+        android:layout_above="@+id/rl_send_sms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/sms_detail_rv"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/padding"
+            android:layout_height="wrap_content"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/rl_send_sms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/padding_50dp"
+        android:orientation="horizontal"
+        android:background="@color/search_bar_back"
+        android:layout_alignParentBottom="true">
+
+        <EditText
+            android:id="@+id/sms_content_et"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:layout_gravity="center_vertical"
+            android:maxHeight="@dimen/padding_72dp"
+            android:background="@drawable/send_sms_edit_box"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/send_sms_tv"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:textColor="@color/readed"
+            android:text="@string/send_sms"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <include layout="@layout/view_no_net"/>
+</RelativeLayout>

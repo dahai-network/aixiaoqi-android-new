@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/sport_detail_data_background"
+                android:paddingBottom="@dimen/padding_5dp"
+                android:paddingLeft="@dimen/padding_10dp"
+                android:paddingTop="@dimen/padding_5dp"
+    >
+
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@drawable/sport_step"
+        />
+
+    <TextView
+        android:id="@+id/activeTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/image"
+        android:text="21:48-22:48"
+        android:textColor="@color/active_time"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/activeTimeTextView"
+        android:text="@string/active"
+        android:textColor="@color/active_time"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activeTimeTextView"
+        android:layout_toRightOf="@id/image">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activeTimeTextView"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/image"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/stepTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+
+                android:textColor="@color/white"
+                android:textSize="17.5sp"
+                />
+
+            <TextView
+                android:id="@+id/stepUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activeTimeTextView"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="@dimen/padding_2dp"
+                android:layout_toRightOf="@id/stepTextView"
+                android:text="@string/step"
+                android:textColor="@color/active_time"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activeTimeTextView"
+            android:layout_centerVertical="true"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/kmTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:textColor="@color/white"
+                android:textSize="17.5dp"
+
+                />
+
+            <TextView
+                android:id="@+id/kmUnite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activeTimeTextView"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="@dimen/padding_2dp"
+                android:layout_toRightOf="@id/kmTextView"
+                android:text="@string/m"
+                android:textColor="@color/active_time"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activeTimeTextView"
+            android:layout_centerVertical="true"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/kcalTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="17.5dp"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activeTimeTextView"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="@dimen/padding_2dp"
+                android:layout_toRightOf="@id/kcalTextView"
+                android:text="@string/kCal"
+                android:textColor="@color/active_time"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

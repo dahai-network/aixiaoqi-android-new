@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:background="@color/order_detail_background"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/provice_tv"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_height="@dimen/padding_40dp"/>
+    <View
+        android:layout_width="1px"
+        android:layout_marginTop="@dimen/padding_10dp"
+        android:layout_height="@dimen/padding_20dp"
+        android:background="@color/light_gray"
+        ></View>
+    <TextView
+        android:id="@+id/city_tv"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_weight="1"
+        android:layout_height="@dimen/padding_40dp" />
+
+
+</LinearLayout>

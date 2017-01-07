@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/contact_header"
+            android:layout_width="@dimen/padding_35dp"
+            android:layout_height="@dimen/padding_35dp"
+            android:layout_marginLeft="@dimen/padding_15dp"
+            android:layout_marginTop="@dimen/padding_20dp"
+            android:layout_marginBottom="@dimen/padding_20dp"
+            />
+        <TextView
+            android:layout_toRightOf="@id/contact_header"
+            android:id="@+id/contact_name"
+            android:paddingLeft="@dimen/padding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_5dp"
+            android:layout_marginTop="@dimen/padding_25dp"
+            android:layout_marginBottom="@dimen/padding_20dp"
+            />
+
+        <View
+            android:id="@+id/line"
+            android:layout_below="@id/contact_header"
+            style="@style/horizontal_line_view"/>
+        <LinearLayout
+            android:layout_below="@id/line"
+            android:id="@+id/ll_phone_info"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/delete_phone"
+            android:layout_below="@id/ll_phone_info"
+            android:layout_width="match_parent"
+            android:textColor="@color/phone_number_color"
+            android:layout_height="@dimen/padding_40dp"
+            android:paddingLeft="@dimen/padding_15dp"
+            android:text="@string/delete_contact"
+            android:gravity="center_vertical"/>
+        <View
+            android:layout_below="@id/delete_phone"
+            android:layout_marginBottom="@dimen/padding_10dp"
+            style="@style/horizontal_line_view"/>
+    </RelativeLayout>
+</ScrollView>
+

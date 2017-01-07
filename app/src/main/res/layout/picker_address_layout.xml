@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/transparent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_background"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/padding_40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/padding_15dp"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/little_16"
+            android:text="@string/complete"
+
+            />
+
+        <View
+            android:id="@+id/line"
+            android:layout_below="@id/title"
+            style="@style/horizontal_line_view"/>
+
+
+        <de.blinkt.openvpn.views.PickerScrollView
+            android:id="@+id/pickerscrlllviewaddress"
+            android:layout_below="@id/line"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:background="#ffffff"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@id/pickerscrlllviewaddress"
+            android:layout_marginLeft="@dimen/padding_25dp"
+            android:layout_marginRight="@dimen/padding_25dp"
+            android:layout_marginTop="-95dp"
+            android:background="@drawable/picker_tv_bg"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

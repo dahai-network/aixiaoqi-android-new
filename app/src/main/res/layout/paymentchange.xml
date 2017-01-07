@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_below="@id/pricell"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:paddingLeft="15dp"
+              android:paddingRight="15dp"
+              android:paddingTop="10dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pay_way"
+        android:textSize="15sp"
+        />
+
+    <LinearLayout
+        android:id="@+id/balancePayLienarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="7.5dp"
+        android:paddingTop="7.5dp">
+
+        <TextView
+            android:id="@+id/balanceTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/balance_pay"
+            android:drawablePadding="4dp"
+            android:gravity="center_vertical"
+            android:text="@string/balance_pay"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/balancePayCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:button="@drawable/pay_way_choice"
+            android:clickable="false"
+            />
+    </LinearLayout>
+
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+
+    <RelativeLayout
+        android:id="@+id/weixinPayLienarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="7.5dp"
+        android:paddingTop="7.5dp">
+
+
+        <ImageView
+            android:id="@+id/weixin"
+            android:layout_width="@dimen/padding_30dp"
+            android:layout_height="@dimen/padding_30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/weixin_pay"
+            />
+
+
+        <TextView
+            android:id="@+id/text_weixin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_toRightOf="@id/weixin"
+            android:text="@string/weixin_pay"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_weixin"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_toRightOf="@id/weixin"
+            android:text="@string/weixin_pay_detail"
+            android:textColor="@color/order_gray"
+            android:textSize="12sp"/>
+
+        <CheckBox
+            android:id="@+id/weixinPayCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:button="@drawable/pay_way_choice"
+            android:clickable="false"
+            />
+    </RelativeLayout>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <RelativeLayout
+        android:id="@+id/aliPayLienarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="7.5dp"
+        android:paddingTop="7.5dp">
+
+
+        <ImageView
+            android:id="@+id/zhifubao_icon"
+            android:layout_width="@dimen/padding_30dp"
+            android:layout_height="@dimen/padding_30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ali_pay"
+            />
+
+
+        <TextView
+            android:id="@+id/zhifubao_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_toRightOf="@id/zhifubao_icon"
+            android:text="@string/ali_pay"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/zhifubao_text"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_toRightOf="@id/zhifubao_icon"
+            android:text="@string/ali_pay_detail"
+            android:textColor="@color/order_gray"
+            android:textSize="12sp"/>
+
+        <CheckBox
+            android:id="@+id/aliPayCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:button="@drawable/pay_way_choice"
+            android:checked="true"
+            android:clickable="false"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/order_detail_background"
+    android:orientation="vertical"
+   >
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_marginTop="15dp"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/amountTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="@dimen/padding_15dp"
+            android:gravity="center"
+            android:text="@string/select_rechart_amount"
+            android:textSize="15sp"
+            />
+
+        <de.blinkt.openvpn.views.RadioGroup
+            android:id="@+id/moneyRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/amountTextView"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_15dp"
+                android:paddingRight="@dimen/padding_15dp"
+                android:paddingTop="@dimen/padding_15dp"
+                >
+
+                <RadioButton
+                    android:id="@+id/recharge20Button"
+                    android:layout_width="0dp"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:background="@drawable/rechange_selector_icon"
+                    android:layout_height="33dp"
+                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:layout_weight="1"
+                    android:text="20"
+                    />
+
+                <RadioButton
+                    android:id="@+id/recharge50Button"
+                    android:layout_width="0dp"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:background="@drawable/rechange_selector_icon"
+                    android:layout_height="33dp"
+                    android:layout_weight="1"
+                    android:text="50"
+                    />
+
+                <RadioButton
+                    android:id="@+id/recharge100Button"
+                    android:layout_width="0dp"
+                    android:layout_height="33dp"
+                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:button="@null"
+                    android:checked="true"
+                    android:background="@drawable/rechange_selector_icon"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:text="100"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_15dp">
+
+                <RadioButton
+                    android:id="@+id/recharge300Button"
+                    android:layout_width="0dp"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:background="@drawable/rechange_selector_icon"
+                    android:layout_height="33dp"
+                    android:layout_weight="1"
+                    android:text="300"
+                    />
+
+                <RadioButton
+                    android:id="@+id/recharge500Button"
+                    android:layout_width="0dp"
+                    android:layout_height="33dp"
+                    android:button="@null"
+                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:background="@drawable/rechange_selector_icon"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:text="500"
+                    />
+                <RadioButton
+                    android:id="@+id/recharge1000Button"
+                    android:layout_width="0dp"
+                    android:layout_height="33dp"
+                    android:button="@null"
+                    android:visibility="visible"
+                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:background="@drawable/rechange_selector_icon"
+                    android:gravity="center"
+                    android:hint="@string/custom_money"
+                    android:layout_weight="1"
+                    />
+            </LinearLayout>
+        </de.blinkt.openvpn.views.RadioGroup>
+        <LinearLayout
+            android:id="@+id/ll_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/moneyRadioGroup"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_marginRight="@dimen/padding_10dp"
+                android:layout_height="33dp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="33dp"
+                android:layout_marginRight="@dimen/padding_10dp"
+                android:layout_weight="1"
+
+                />
+            <EditText
+                android:id="@+id/amountEditText"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="33dp"
+                android:visibility="invisible"
+                android:layout_marginRight="@dimen/padding_10dp"
+                android:layout_alignBottom="@id/moneyRadioGroup"
+                android:background="@drawable/rechange_balance"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:hint="@string/custom_money"
+                android:inputType="numberDecimal"
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_marginBottom="15dp"
+        />
+
+    <LinearLayout
+        android:layout_below="@id/pricell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recharge_way"
+            android:textSize="15sp"
+            />
+
+
+
+
+
+
+
+        <RelativeLayout
+            android:id="@+id/weixinPayLienarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="7.5dp"
+            android:paddingTop="7.5dp">
+
+
+
+            <ImageView
+                android:id="@+id/weixin"
+                android:layout_width="@dimen/padding_30dp"
+                android:layout_height="@dimen/padding_30dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/weixin_pay"
+                />
+
+            <TextView
+                android:id="@+id/text_weixin"
+                android:layout_toRightOf="@id/weixin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding"
+                android:text="@string/weixin_pay"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_below="@id/text_weixin"
+                android:layout_toRightOf="@id/weixin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding"
+                android:text="@string/weixin_pay_detail"
+                android:textColor="@color/order_gray"
+                android:textSize="12sp"/>
+
+            <CheckBox
+                android:id="@+id/weixinPayCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:button="@drawable/pay_way_choice"
+                android:clickable="false"
+                />
+        </RelativeLayout>
+
+        <View
+            style="@style/horizontal_line_view"
+            />
+
+        <RelativeLayout
+            android:id="@+id/aliPayLienarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="7.5dp"
+            android:paddingTop="7.5dp">
+
+
+
+            <ImageView
+                android:id="@+id/zhifubao_icon"
+                android:layout_width="@dimen/padding_30dp"
+                android:layout_height="@dimen/padding_30dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ali_pay"
+                />
+
+
+            <TextView
+                android:id="@+id/zhifubao_text"
+                android:layout_toRightOf="@id/zhifubao_icon"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_height="wrap_content"
+                android:text="@string/ali_pay"
+                android:textSize="14sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_below="@id/zhifubao_text"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding"
+                android:text="@string/ali_pay_detail"
+                android:layout_toRightOf="@id/zhifubao_icon"
+                android:textColor="@color/order_gray"
+                android:textSize="12sp"/>
+            <CheckBox
+                android:id="@+id/aliPayCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:button="@drawable/pay_way_choice"
+                android:checked="true"
+                android:clickable="false"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/nextBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/regist_btn"
+        android:text="@string/next"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"/>
+</LinearLayout>

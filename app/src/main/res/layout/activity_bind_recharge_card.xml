@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_back_2"
+    android:orientation="vertical"
+    >
+
+    <EditText
+        android:id="@+id/cardPswswEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"
+        android:gravity="top"
+        android:hint="@string/input_recharge_card_psw"
+        android:maxLength="32"
+        android:padding="15dp"
+        android:textSize="15dp"/>
+
+    <Button
+        android:id="@+id/sendBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="@dimen/padding_100dp"
+        android:background="@drawable/login_btn"
+        android:text="@string/sure_and_use"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        />
+
+</LinearLayout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_contact_recode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/tv_no_permission"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title"
+        android:background="@color/gray_back"
+        android:paddingTop="@dimen/padding_175dp"
+        android:visibility="gone"
+        android:textColor="@color/gray_text"
+        android:paddingLeft="@dimen/padding_30dp"
+        android:paddingRight="@dimen/padding_30dp"
+        android:text="@string/no_permission"
+        />
+
+    <de.blinkt.openvpn.views.T9TelephoneDialpadView
+        android:id="@+id/t9dialpadview"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        />
+
+
+</RelativeLayout>
+
+
+

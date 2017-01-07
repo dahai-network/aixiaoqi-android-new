@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_set_alarm"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_back"
+    android:orientation="vertical"
+   >
+
+    <RelativeLayout
+        android:id="@+id/picker_rel1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_background"
+        >
+
+        <LinearLayout
+            android:id="@+id/pickerscrlllview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/padding_72dp"
+            android:paddingRight="@dimen/padding_72dp"
+            android:orientation="horizontal">
+
+            <de.blinkt.openvpn.views.PickerScrollView
+                android:id="@+id/pickerscrlllviewHour"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_weight="1"
+                android:background="#ffffff"/>
+
+            <de.blinkt.openvpn.views.PickerScrollView
+                android:id="@+id/pickerscrlllviewMiunue"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_weight="1"
+                android:background="#ffffff"/>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/padding_25dp"
+            android:layout_marginRight="@dimen/padding_25dp"
+            android:background="@drawable/picker_tv_bg"/>
+    </RelativeLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/repeatLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:background="@color/white"
+            android:layout_height="@dimen/padding_40dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:text="@string/repeat"
+                />
+
+            <TextView
+                android:id="@+id/repeatTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/arrow"
+                android:textColor="@color/gray_text"
+                android:text="@string/no_repeat"/>
+        </LinearLayout>
+
+        <View
+            style="@style/horizontal_line_view"/>
+
+        <LinearLayout
+            android:id="@+id/lableLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+            android:background="@color/white"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:text="@string/label"
+                />
+
+            <TextView
+                android:id="@+id/lableTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/arrow"
+                android:textColor="@color/gray_text"
+                android:text="@string/alarm_clock"/>
+        </LinearLayout>
+</LinearLayout>

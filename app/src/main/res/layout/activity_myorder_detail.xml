@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/order_detail_background"
+    android:orientation="vertical"
+    >
+
+    <include layout="@layout/view_no_net"/>
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_marginTop="15dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/orderDetailTitleRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/countryImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+
+            />
+
+        <TextView
+            android:id="@+id/packageNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@id/countryImageView"
+            android:textSize="15sp"
+            />
+
+
+        <TextView
+            android:id="@+id/priceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packageNameTextView"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/countryImageView"
+            android:text="@string/no_data_show"
+            android:textColor="@color/order_detail_orange"
+            />
+
+
+        <TextView
+            android:id="@+id/packetCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/priceTextView"
+            android:layout_gravity="bottom"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/arrow"
+            />
+
+    </RelativeLayout>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"
+        android:paddingLeft="15dp"
+        >
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/order_num"/>
+
+        <TextView
+            android:id="@+id/orderNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="10dp"
+            android:paddingRight="@dimen/padding_15dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+            />
+
+
+        <View
+            android:id="@+id/line1"
+            style="@style/horizontal_line_view"
+            android:layout_below="@id/textView2"
+            />
+
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line1"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/order_time"/>
+
+        <TextView
+            android:id="@+id/orderTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/line1"
+            android:paddingBottom="10dp"
+            android:paddingRight="@dimen/padding_15dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+            />
+
+
+        <View
+            android:id="@+id/line2"
+            style="@style/horizontal_line_view"
+            android:layout_below="@id/textView3"
+            />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"
+        android:paddingLeft="15dp"
+        >
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/pay_way_myorder"/>
+
+        <TextView
+            android:id="@+id/payWayTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="10dp"
+            android:paddingRight="@dimen/padding_15dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+
+            />
+
+        <View
+            android:id="@+id/line3"
+            style="@style/horizontal_line_view"
+            android:layout_below="@id/payWayTextView"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line3"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/all_price"/>
+
+        <TextView
+            android:id="@+id/allPriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/line3"
+            android:paddingBottom="10dp"
+            android:paddingRight="@dimen/padding_15dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+            />
+
+
+    </RelativeLayout>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_marginTop="15dp"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingLeft="15dp"
+        >
+
+
+        <TextView
+            android:id="@+id/expirytitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="有效期："
+            />
+
+        <TextView
+            android:id="@+id/expiryDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="10dp"
+            android:paddingRight="@dimen/padding_15dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+            />
+
+        <View
+            style="@style/horizontal_line_view"
+            android:layout_below="@id/expirytitleTextView"
+            />
+
+        <TextView
+            android:id="@+id/dateTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/expirytitleTextView"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/last_activation_date_colon"
+            />
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/dateTitleTextView"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="10dp"
+            android:paddingRight="@dimen/padding_15dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+            />
+        <View
+            style="@style/horizontal_line_view"
+            android:layout_below="@id/dateTitleTextView"
+            />
+
+
+        <TextView
+            android:id="@+id/statueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dateTitleTextView"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="套餐状态："
+            />
+
+        <TextView
+            android:id="@+id/packageStateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/statueTextView"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="10dp"
+            android:paddingRight="@dimen/padding_15dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/order_gray"
+            />
+    </RelativeLayout>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <Button
+        android:id="@+id/activateTextView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginLeft="@dimen/padding_20dp"
+        android:layout_marginRight="@dimen/padding_20dp"
+        android:layout_marginTop="@dimen/padding_15dp"
+        android:background="@drawable/circle_green_ret"
+        android:text="@string/activate_now"
+        android:textColor="@android:color/white"
+        android:textSize="16dp"/>
+
+    <Button
+        android:id="@+id/cancelOrderButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginLeft="@dimen/padding_20dp"
+        android:layout_marginRight="@dimen/padding_20dp"
+        android:layout_marginTop="@dimen/padding_10dp"
+        android:background="@drawable/circle_light_gray_ret"
+        android:text="@string/cancel_order"
+        android:textSize="16dp"/>
+
+
+</LinearLayout>

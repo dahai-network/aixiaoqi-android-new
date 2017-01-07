@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/gray_back_2"
+    android:id="@+id/rootLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:layout_marginTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/headImageView"
+                    android:layout_width="@dimen/padding_50dp"
+                    android:layout_height="@dimen/padding_50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/arrow"
+                    android:src="@drawable/account_icon_check"
+                    />
+
+                <View
+                    android:id="@+id/arrow"
+                    android:layout_width="10dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="@dimen/padding"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:drawableRight="@drawable/arrow"
+                    />
+
+                <TextView
+                    android:id="@+id/changeHeadTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+
+                    android:text="@string/edit_head"
+                    />
+            </RelativeLayout>
+
+            <View
+                style="@style/horizontal_line_view"
+                />
+
+
+            <View
+                android:layout_marginTop="15dp"
+                style="@style/horizontal_line_view"
+                />
+
+            <LinearLayout
+                android:id="@+id/nameTableRow"
+                android:layout_width="match_parent"
+                android:background="@drawable/call_phone_selector"
+                android:orientation="horizontal"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:layout_height="@dimen/padding_40dp"
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/name"
+                    />
+
+                <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textColor="@color/country_packet_gray"
+                    android:drawablePadding="@dimen/padding"
+                    android:drawableRight="@drawable/arrow"
+                    />
+
+            </LinearLayout>
+
+            <View
+                style="@style/horizontal_line_view"
+                />
+
+            <LinearLayout
+                android:id="@+id/sexTableRow"
+                android:background="@drawable/call_phone_selector"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_40dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/sex"
+                    />
+
+                <TextView
+                    android:id="@+id/sexTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:drawablePadding="@dimen/padding"
+                    android:textColor="@color/country_packet_gray"
+                    android:drawableRight="@drawable/arrow"
+
+                    />
+
+
+            </LinearLayout>
+
+            <View
+                style="@style/horizontal_line_view"
+                />
+
+            <LinearLayout
+                android:id="@+id/ageTableRow"
+                android:layout_width="match_parent"
+                android:background="@drawable/call_phone_selector"
+                android:layout_height="@dimen/padding_40dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/birthday"
+                    />
+
+                <TextView
+                    android:id="@+id/ageTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/padding"
+                    android:textColor="@color/country_packet_gray"
+                    android:drawableRight="@drawable/arrow"
+                    android:gravity="right"
+
+                    />
+
+
+            </LinearLayout>
+
+            <View
+                style="@style/horizontal_line_view"
+                />
+
+            <LinearLayout
+                android:id="@+id/statureTableRow"
+
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_40dp"
+                android:background="@drawable/call_phone_selector"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/stature"
+                    />
+
+                <TextView
+                    android:id="@+id/statureTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/padding"
+                    android:textColor="@color/country_packet_gray"
+                    android:drawableRight="@drawable/arrow"
+                    android:gravity="right"
+                    />
+
+
+            </LinearLayout>
+
+            <View
+                style="@style/horizontal_line_view"
+                />
+
+            <LinearLayout
+                android:id="@+id/weightTableRow"
+                android:layout_width="match_parent"
+
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:layout_height="@dimen/padding_40dp"
+                android:background="@drawable/call_phone_selector"
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/weight"
+                    />
+
+                <TextView
+                    android:id="@+id/weightTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/padding"
+                    android:textColor="@color/country_packet_gray"
+                    android:drawableRight="@drawable/arrow"
+                    android:gravity="right"
+
+                    />
+
+
+            </LinearLayout>
+
+            <View
+                style="@style/horizontal_line_view"
+                />
+
+            <View
+                android:layout_marginTop="15dp"
+                style="@style/horizontal_line_view"
+                />
+
+            <LinearLayout
+                android:id="@+id/motionTargetTableRow"
+                android:layout_width="match_parent"
+
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:layout_height="@dimen/padding_40dp"
+                android:background="@drawable/call_phone_selector"
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/motion_target"
+                    />
+
+                <TextView
+                    android:id="@+id/motionTargetTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/padding"
+                    android:textColor="@color/country_packet_gray"
+                    android:drawableRight="@drawable/arrow"
+                    android:gravity="right"
+
+                    />
+
+
+            </LinearLayout>
+
+            <View
+                style="@style/horizontal_line_view"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:layout_height="@dimen/padding_40dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/BMI"
+                    />
+
+                <TextView
+                    android:id="@+id/BMITextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/country_packet_gray"
+                    android:layout_marginRight="15dp"
+                    android:gravity="right"
+
+                    />
+
+            </LinearLayout>
+
+            <View
+                style="@style/horizontal_line_view"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

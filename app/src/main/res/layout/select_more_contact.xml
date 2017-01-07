@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:padding="@dimen/padding_5dp"-->
+<!--&gt;-->
+
+<TextView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_contact"
+    android:layout_width="wrap_content"
+    android:layout_marginLeft="@dimen/padding"
+    android:padding="@dimen/padding_5dp"
+    android:textColor="@color/select_contacct"
+    android:layout_height="wrap_content"/>
+
+    <!--<ImageView-->
+    <!--android:id="@+id/delete_contact_iv"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:visibility="gone"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="@dimen/padding"-->
+    <!--android:src="@drawable/un_effective"/>-->
+    <!--</LinearLayout>-->

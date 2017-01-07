@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_sport_data"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:background="@color/black"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/calendar_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@+id/tv_show_month_view"
+            android:background="@drawable/calendar"
+            />
+
+        <TextView
+            android:id="@+id/tv_show_month_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="7月"
+            android:textColor="@color/white"
+            android:textSize="@dimen/little_18"/>
+
+
+        <TextView
+            android:id="@+id/tv_sport_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/sport_like"
+            android:paddingLeft="@dimen/padding"
+            android:paddingRight="@dimen/padding"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title"
+        android:background="@color/color2a303c"
+        android:orientation="vertical">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/sportDataRecylerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/sportNoDataLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/sport_warn"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_5dp"
+                android:lineSpacingMultiplier="1.2"
+                android:text="@string/sport_no_data"
+                android:textColor="@color/color_7d8698"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <include layout="@layout/dialog_calendar"/>
+</RelativeLayout>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/regist_back"
+
+    >
+
+    <RelativeLayout
+        android:id="@+id/registRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/regist_and_password_commen"/>
+
+        <Button
+            android:id="@+id/regist_btn"
+            android:layout_width="match_parent"
+            android:layout_below="@id/include"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/circle_green_ret"
+            android:text="注册"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+
+
+
+        <CheckBox
+            android:id="@+id/allowCheckBox"
+            android:layout_below="@id/regist_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/regist_checkbox"
+            android:checked="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="@dimen/padding_72dp"
+            android:text="@string/readed"
+            android:textColor="@color/readed"
+            />
+
+        <TextView
+            android:id="@+id/agreementTextView"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/allowCheckBox"
+            android:layout_marginTop="12dp"
+            android:layout_below="@id/regist_btn"
+            android:layout_height="wrap_content"
+            android:text="@string/agreement_mark"
+            android:textColor="@color/aggreement"
+            />
+
+    </RelativeLayout>
+</ScrollView>

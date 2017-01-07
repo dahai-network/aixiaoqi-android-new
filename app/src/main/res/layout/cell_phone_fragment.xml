@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/black"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/edit_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                android:background="@drawable/sms_edit"
+                />
+
+
+            <RadioGroup
+                android:id="@+id/operation_rg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/cell_phone_rb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:checked="true"
+                    android:textColor="@color/white"
+                    android:background="@drawable/select_top_cell"
+                    android:text="@string/call_phone"/>
+
+                <RadioButton
+                    android:id="@+id/message_rb"
+                    android:layout_width="wrap_content"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:background="@drawable/default_top_cell_sms"
+                    android:layout_height="wrap_content"
+                    android:text="@string/message"/>
+            </RadioGroup>
+
+
+            <EditText
+                android:id="@+id/dial_input_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:inputType="phone"
+                android:padding="@dimen/padding"
+                android:textColor="@color/phone_top_color"
+                android:textColorHint="@color/cardview_light_background"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+
+
+    <de.blinkt.openvpn.views.CustomViewPager
+        android:id="@+id/mViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+</LinearLayout>

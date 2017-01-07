@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_background"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/textviewUploading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_8dp"
+        android:freezesText="true"
+        android:text="@string/dfu_status_uploading"
+       />
+
+    <ProgressBar
+        android:id="@+id/progressbar_file"
+        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+      />
+
+    <TextView
+        android:id="@+id/textviewProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_8dp"
+        android:freezesText="true"
+        android:text="0%"
+       />
+</LinearLayout>

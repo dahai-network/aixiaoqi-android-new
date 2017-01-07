@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_back_2"
+    android:orientation="vertical"
+    >
+
+    <View
+        android:layout_marginTop="@dimen/padding_20dp"
+        style="@style/horizontal_line_view"
+        />
+
+    <TextView
+        android:id="@+id/link_bracelet_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:background="@drawable/call_phone_selector"
+        android:drawableLeft="@drawable/link_bracelet"
+        android:drawablePadding="@dimen/padding"
+        android:drawableRight="@drawable/arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/link_bracelet"
+        android:textSize="14sp"/>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <View
+        android:layout_marginTop="@dimen/padding_10"
+        style="@style/horizontal_line_view"
+        />
+
+    <TextView
+
+        android:id="@+id/before_going_abroad_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:background="@drawable/call_phone_selector"
+        android:drawableLeft="@drawable/before_going_abroad"
+        android:drawablePadding="@dimen/padding"
+        android:drawableRight="@drawable/arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/before_going_abroad"
+        android:textSize="14sp"/>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <TextView
+
+        android:id="@+id/outside_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:background="@drawable/call_phone_selector"
+        android:drawableLeft="@drawable/outside"
+        android:drawablePadding="@dimen/padding"
+        android:drawableRight="@drawable/arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/outside"
+        android:textSize="14sp"/>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <TextView
+
+        android:id="@+id/after_going_abroad_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:background="@drawable/call_phone_selector"
+        android:drawableLeft="@drawable/after_going_abroad"
+        android:drawablePadding="@dimen/padding"
+        android:drawableRight="@drawable/arrow"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/after_going_abroad"
+        android:textSize="14sp"/>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+</LinearLayout>

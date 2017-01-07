@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="de.blinkt.openvpn.activities.CountryPackageActivity">
+
+    <include layout="@layout/view_no_net"/>
+
+
+        <!--带导航点的viewpager布局-->
+        <ImageView
+            android:id="@+id/packageImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_img"
+            />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/packageDetailRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+       />
+
+    <TextView
+        android:id="@+id/nodataTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/country_no_data"
+        android:visibility="gone"
+        android:textColor="@color/dark_orange"/>
+</LinearLayout>

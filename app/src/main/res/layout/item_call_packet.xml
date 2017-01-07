@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding_15dp"
+        android:layout_marginTop="@dimen/padding_10dp"
+        android:text="500分钟通话套餐"
+        android:textSize="15sp"
+        />
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nameTextView"
+        android:layout_marginLeft="@dimen/padding_15dp"
+        android:text="有效期：1个月"
+        android:textColor="@color/order_gray"
+        android:textSize="12sp"/>
+
+
+    <TextView
+        android:id="@+id/numberTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/padding_15dp"
+        android:text="-20.00"
+        android:textColor="@color/dark_orange"
+        android:textSize="15sp"
+        />
+
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_below="@id/timeTextView"
+        android:layout_marginTop="@dimen/padding_10dp"/>
+</RelativeLayout>

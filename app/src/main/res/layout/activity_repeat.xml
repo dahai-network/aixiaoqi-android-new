@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_back"
+  >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        >
+
+        <LinearLayout
+            android:id="@+id/sundayLienarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/everySunday"
+                />
+
+            <CheckBox
+                android:id="@+id/sundayCheckBox"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center_vertical|right"
+                android:button="@drawable/alarm_check_selector"
+                />
+        </LinearLayout>
+
+        <View
+            style="@style/horizontal_line_view"
+           />
+
+        <LinearLayout
+            android:id="@+id/mondayLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+            android:gravity="center_vertical"
+
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/everyMonday"
+                />
+
+            <CheckBox
+                android:id="@+id/mondayCheckBox"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center_vertical|right"
+                android:button="@drawable/alarm_check_selector"
+                />
+        </LinearLayout>
+
+        <View
+            style="@style/horizontal_line_view"
+           />
+
+        <LinearLayout
+            android:id="@+id/tuesdayLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+            android:gravity="center_vertical"
+
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/everyTuesday"
+                />
+
+            <CheckBox
+                android:id="@+id/tuesDayCheckBox"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center_vertical|right"
+                android:button="@drawable/alarm_check_selector"
+                />
+        </LinearLayout>
+
+        <View
+            style="@style/horizontal_line_view"
+          />
+
+        <LinearLayout
+            android:id="@+id/wednesdayLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+            android:gravity="center_vertical"
+
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/everyWednesday"
+                />
+
+            <CheckBox
+                android:id="@+id/wednesdayCheckBox"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center_vertical|right"
+                android:button="@drawable/alarm_check_selector"
+                />
+        </LinearLayout>
+
+        <View
+            style="@style/horizontal_line_view"
+         />
+
+        <LinearLayout
+            android:id="@+id/thursdayLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+            android:gravity="center_vertical"
+
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/everyThursday"
+                />
+
+            <CheckBox
+                android:id="@+id/thursdayCheckBox"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center_vertical|right"
+                android:button="@drawable/alarm_check_selector"
+                />
+        </LinearLayout>
+
+        <View
+            style="@style/horizontal_line_view"
+           />
+
+        <LinearLayout
+            android:id="@+id/fridayLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+            android:gravity="center_vertical"
+
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/everyFriday"
+                />
+
+            <CheckBox
+                android:id="@+id/fridayCheckBox"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center_vertical|right"
+                android:button="@drawable/alarm_check_selector"
+                />
+        </LinearLayout>
+
+        <View
+            style="@style/horizontal_line_view"
+           />
+
+        <LinearLayout
+            android:id="@+id/saturdayLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+            android:gravity="center_vertical"
+
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/everySaturday"
+                />
+
+            <CheckBox
+                android:id="@+id/saturdayCheckBox"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center_vertical|right"
+                android:button="@drawable/alarm_check_selector"
+                />
+        </LinearLayout>
+
+        <View
+            style="@style/horizontal_line_view"
+           />
+    </LinearLayout>
+</LinearLayout>

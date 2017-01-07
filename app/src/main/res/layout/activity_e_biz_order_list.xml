@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/order_detail_background"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+<RelativeLayout
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/receive_phone_number"
+        android:text="@string/receive_phone_number"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:layout_marginTop="@dimen/padding_10dp"
+        android:gravity="bottom"
+        android:background="@color/white"
+        android:layout_height="@dimen/padding_30dp" />
+
+<LinearLayout
+    android:id="@+id/add_phone_number"
+    android:layout_width="match_parent"
+    android:layout_below="@id/receive_phone_number"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+</LinearLayout>
+    <Button
+        android:id="@+id/add_new_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:background="@drawable/send_sms_selector"
+        android:padding="5dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="@string/add_new_phone_number"
+        android:textSize="12dp"/>
+    <TextView
+        android:layout_below="@id/add_phone_number"
+        android:id="@+id/order_list"
+        android:layout_width="match_parent"
+        android:text="@string/order_list"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:layout_height="@dimen/padding_40dp" />
+    <de.blinkt.openvpn.views.FullyRecylerView
+        android:id="@+id/rv_e_biz_order_list"
+        android:layout_below="@id/order_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </de.blinkt.openvpn.views.FullyRecylerView>
+</RelativeLayout>
+</ScrollView>

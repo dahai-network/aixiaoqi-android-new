@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="346dp"
+              android:background="@drawable/sport_data_background"
+              android:gravity="center_horizontal"
+              android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_marginTop="@dimen/padding_25dp"
+        android:orientation="horizontal"
+        >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rl_km"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/kmTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/color01d0c0"
+                    android:textSize="@dimen/little_18"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:layout_toRightOf="@id/kmTextView"
+                    android:layout_alignBaseline="@id/kmTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="km"
+                    android:textColor="@color/white"
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="@string/distace"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rl_kcal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/kcalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color01d0c0"
+                    android:textSize="@dimen/little_18"
+                    android:text="0"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+
+                    android:layout_toRightOf="@id/kcalTextView"
+                    android:layout_alignBaseline="@id/kcalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+
+                    android:text="@string/kCal"
+                    android:textColor="@color/white"
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="@string/deplete"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rl_sport"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/sportTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8000"
+                    android:textColor="@color/color01d0c0"
+                    android:textSize="@dimen/little_18"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+
+                    android:layout_toRightOf="@id/sportTextView"
+                    android:layout_alignBaseline="@id/sportTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="@string/step"
+                    android:textColor="@color/white"
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="@string/sport_target"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <de.blinkt.openvpn.views.ArcProgress
+        android:id="@+id/arc_progress"
+        android:layout_marginTop="15dp"
+        android:layout_width="@dimen/padding_300dp"
+        android:layout_height="@dimen/padding_300dp"
+
+        />
+</LinearLayout>
+

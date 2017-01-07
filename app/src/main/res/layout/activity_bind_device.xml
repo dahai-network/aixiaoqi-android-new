@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_back"
+    >
+
+
+
+
+    <TextView
+        android:id="@+id/search_bluetooth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43.5dp"
+        android:text="@string/searching_wrist_strap"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        />
+
+    <TextView
+        android:layout_below="@id/search_bluetooth"
+        android:id="@+id/tip_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/please_close_to_the_phone"
+        android:textSize="10sp"
+        android:textColor="@color/login_bottom_line"
+        />
+
+
+    <ImageView
+        android:id="@+id/stopImageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/seeking_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        />
+
+    <de.blinkt.openvpn.views.PointProgressBar
+        android:id="@+id/pintProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tip_search"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="135dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/all_device_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>

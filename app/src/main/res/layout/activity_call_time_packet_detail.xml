@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/order_detail_background"
+    android:orientation="vertical"
+    >
+
+    <include layout="@layout/view_no_net"/>
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_marginTop="15dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/packetDetailRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/countryImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+
+            />
+
+        <TextView
+            android:id="@+id/packageNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@id/countryImageView"
+            android:textSize="15sp"
+
+            />
+
+
+        <TextView
+            android:id="@+id/priceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/order_detail_orange"
+            />
+
+
+    </RelativeLayout>
+
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7.5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="7.5dp"
+        android:text="@string/used_introduce"
+        android:textSize="@dimen/little_14"
+        />
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="15dp"
+        >
+
+        <TextView
+            android:id="@+id/introduceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="拨打APP时收取的服务费，如果不开通该套餐，有效期一个月"
+            android:textColor="@color/color_2d2d2d"
+            />
+
+    </RelativeLayout>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7.5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="7.5dp"
+        android:text="@string/used_notice"
+        android:textSize="@dimen/little_14"
+        />
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="15dp"
+        >
+
+        <TextView
+            android:id="@+id/noticeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="拨打APP时收取的服务费，如果不开通该套餐，有效期一个月"
+            android:textColor="@color/color_2d2d2d"
+            />
+
+    </RelativeLayout>
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+    <Button
+        android:id="@+id/buyButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginLeft="@dimen/padding_20dp"
+        android:layout_marginRight="@dimen/padding_20dp"
+        android:layout_marginTop="@dimen/padding_15dp"
+        android:background="@drawable/circle_green_ret"
+        android:text="@string/click_buy"
+        android:textColor="@android:color/white"
+        android:textSize="16dp"/>
+
+</LinearLayout>

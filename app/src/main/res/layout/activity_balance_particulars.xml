@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_balance_particulars"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_back_2"
+  >
+
+    <include layout="@layout/view_no_net"/>
+
+    <include layout="@layout/view_no_data"/>
+
+    <de.blinkt.openvpn.views.xrecycler.XRecyclerView
+        android:id="@+id/particularsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

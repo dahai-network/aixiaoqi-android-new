@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2012-2016 Arne Schwabe
+  ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
+  -->
+
+<resources>
+    <dimen name="paddingItemsSidebarLog">20dp</dimen>
+    <dimen name="stdpadding">8dp</dimen>
+    <bool name="logSildersAlwaysVisible">false</bool>
+    <dimen name="searchbox_marginlr">15dp</dimen>
+    <dimen name="diameter">48dp</dimen>
+    <dimen name="elevation_low">1dp</dimen>
+    <dimen name="elevation_high">4dp</dimen>
+    <dimen name="add_button_margin">16dp</dimen>
+    <dimen name="add_button_margin_topfab">96dp</dimen>
+    <dimen name="round_button_diameter">56dp</dimen>
+    <dimen name="switchbar_pad">16dp</dimen>
+    <dimen name="vpn_setting_padding">16dp</dimen>
+    <dimen name="versionmarginRL">20dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="padding_8dp">8dp</dimen>
+    <dimen name="padding_2dp">2dp</dimen>
+    <dimen name="padding">4dp</dimen>
+    <dimen name="padding_5dp">5dp</dimen>
+    <dimen name="padding_20dp">20dp</dimen>
+    <dimen name="padding_50dp">50dp</dimen>
+    <dimen name="padding_55dp">55dp</dimen>
+    <dimen name="padding_25dp">25dp</dimen>
+    <dimen name="padding_30dp">30dp</dimen>
+    <dimen name="padding_32dp">32dp</dimen>
+    <dimen name="padding_35dp">35dp</dimen>
+    <dimen name="padding_72dp">72dp</dimen>
+    <dimen name="padding_100dp">100dp</dimen>
+    <dimen name="padding_175dp">175dp</dimen>
+    <dimen name="padding_200dp">200dp</dimen>
+    <dimen name="padding_250dp">250dp</dimen>
+    <dimen name="padding_300dp">300dp</dimen>
+    <dimen name="padding_10dp">10dp</dimen>
+    <dimen name="padding_15dp">15dp</dimen>
+    <dimen name="padding_40dp">40dp</dimen>
+    <dimen name="padding_60dp">60dp</dimen>
+    <dimen name="little_12">12sp</dimen>
+    <dimen name="little_16">16sp</dimen>
+    <dimen name="little_14">14sp</dimen>
+    <dimen name="little_18">18sp</dimen>
+    <dimen name="little_20">20sp</dimen>
+    <dimen name="little_22">22sp</dimen>
+    <dimen name="little_28">28sp</dimen>
+    <dimen name="little_38">38sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="dialpad_row_height">54dp</dimen>
+    <!--
+    <dimen name="dialpad_row_height">54dp</dimen>
+       <dimen name="dialpad_icon_height">32dp</dimen>
+       <dimen name="dialpad_icon_width">32dp</dimen>
+       <dimen name="dialpad_margin_right">12dp</dimen>
+       <dimen name="dialpad_margin_left">12dp</dimen>
+       <dimen name="bottom_tab_height">54dp</dimen>
+       <dimen name="list_item_height">54dp</dimen>
+       <dimen name="btn_height">54dp</dimen>
+       <dimen name="padding">4dp</dimen>
+       <dimen name="padding_left">4dp</dimen>
+       <dimen name="padding_right">4dp</dimen>
+       <dimen name="padding_top">4dp</dimen>
+       <dimen name="padding_bottom">4dp</dimen>
+       <dimen name="margin">15dp</dimen>
+       <dimen name="margin_left">4dp</dimen>
+       <dimen name="margin_right">4dp</dimen>
+       <dimen name="margin_top">4dp</dimen>
+       <dimen name="margin_bottom">4dp</dimen>
+       <dimen name="index_view_width">48dp</dimen>
+       <dimen name="index_view_height">192dp</dimen>
+       <dimen name="index_key_width">36dp</dimen>
+       <dimen name="index_key_height">36dp</dimen>
+       <dimen name="index_value_width">36dp</dimen>
+       <dimen name="index_value_height">36dp</dimen>
+       <dimen name="index_key_text_size">24sp</dimen>
+       <dimen name="index_value_text_size">24sp</dimen>
+       <dimen name="division_line_height">1dp</dimen>
+       <dimen name="icon_width">36dp</dimen>
+       <dimen name="icon_height">36dp</dimen>
+       <dimen name="navigation_bar_height">54dp</dimen>
+       <dimen name="corner_radius">3dp</dimen>
+
+   -->
+</resources>

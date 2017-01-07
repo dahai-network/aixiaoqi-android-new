@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/call_phone_selector"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    >
+
+    <ImageView
+        android:id="@+id/packetImageView"
+        android:layout_width="@dimen/padding_40dp"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginTop="@dimen/padding_10dp"
+        android:background="@drawable/sport_step"
+        />
+
+    <TextView
+        android:id="@+id/packageNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding_8dp"
+        android:layout_marginRight="@dimen/padding_10dp"
+        android:layout_marginTop="@dimen/padding_10dp"
+        android:layout_toRightOf="@id/packetImageView"
+        android:text="美国一日游"
+        android:textSize="15sp"
+        />
+
+    <TextView
+        android:id="@+id/priceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/packageNameTextView"
+        android:layout_toRightOf="@id/packageNameTextView"
+        android:text="20$"
+        android:textColor="@color/order_money"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/stateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/padding_10dp"
+        android:text="已激活"
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/packageNameTextView"
+        android:layout_marginLeft="@dimen/padding_8dp"
+        android:layout_toRightOf="@id/packetImageView"
+        android:text="有效期：2016-08-01至2016-12-12"
+        android:textColor="@color/order_item"
+        android:textSize="11sp"
+        />
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_below="@id/packetImageView"
+        android:layout_marginTop="@dimen/padding_15dp"
+        />
+</RelativeLayout>
+
+

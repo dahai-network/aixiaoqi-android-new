@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/rootLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:background="@drawable/call_phone_selector"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_10dp">
+
+    <TextView
+        android:id="@+id/numberTextView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:textColor="@color/white"
+        android:background="@drawable/country_packet_num1"
+        android:gravity="center"
+        android:textSize="25sp"
+        />
+
+    <TextView
+        android:id="@+id/packageNameTextView"
+        android:layout_toRightOf="@id/numberTextView"
+        android:layout_width="wrap_content"
+       android:layout_marginTop="@dimen/padding_8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding"
+        android:text="美国一日游"
+        android:textSize="15sp"
+
+        />
+
+    <TextView
+        android:id="@+id/flowTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding"
+        android:layout_below="@id/packageNameTextView"
+        android:layout_toRightOf="@id/numberTextView"
+        android:textColor="@color/country_packet_gray"
+        android:text="不限流量"
+        />
+    <TextView
+        android:id="@+id/priceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$30.00"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:drawablePadding="@dimen/padding_10"
+        android:textSize="22.5sp"
+        android:drawableRight="@drawable/arrow"
+        android:textColor="@color/dark_orange"
+        />
+
+
+
+</RelativeLayout>

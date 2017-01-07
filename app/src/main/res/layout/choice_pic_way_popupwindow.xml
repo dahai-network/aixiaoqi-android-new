@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/transparent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_background"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_top_layer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+
+            android:background="@color/white"
+            android:textColor="@color/aggreement"
+            android:textSize="@dimen/little_16"
+            android:gravity="center"
+            />
+
+        <View
+            style="@style/horizontal_line_view"/>
+
+        <TextView
+            android:id="@+id/tv_center_layer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+
+            android:background="@color/white"
+            android:textColor="@color/aggreement"
+            android:textSize="@dimen/little_16"
+            android:gravity="center"
+            />
+
+        <View
+            android:id="@+id/bottom_line_view"
+            style="@style/horizontal_line_view"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/tv_bottom_layer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+
+            android:background="@color/white"
+            android:textColor="@color/aggreement"
+            android:textSize="@dimen/little_16"
+            android:gravity="center"
+            android:visibility="gone"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_marginTop="@dimen/padding"
+        android:layout_width="match_parent"
+        android:background="@drawable/dialog_background"
+        android:layout_height="@dimen/padding_40dp"
+        android:gravity="center"
+
+        android:layout_marginBottom="@dimen/padding_10"
+        android:text="@string/cancel"
+        />
+
+</LinearLayout>

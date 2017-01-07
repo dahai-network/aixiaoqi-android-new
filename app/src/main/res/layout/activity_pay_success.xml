@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_back"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/completeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:drawableLeft="@drawable/pay_success"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:textSize="15sp"
+        android:text="充值成功"
+        />
+
+    <RelativeLayout
+        android:layout_below="@id/completeTextView"
+        android:layout_width="match_parent"
+        android:id="@+id/payForWhatLl"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/payForWhatTextView"
+            android:layout_width="wrap_content"
+            android:paddingLeft="15dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="充值方式"
+            android:textSize="14sp"
+            />
+        <TextView
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:layout_alignParentRight="true"
+            android:id="@+id/payWayTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_text"
+            android:textSize="14sp"
+            />
+        <View
+            android:id="@+id/line"
+            android:layout_below="@id/payForWhatTextView"
+            style="@style/horizontal_line_view"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line"
+            android:paddingLeft="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/amount_money"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/moneyTextView"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/line"
+            android:paddingTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_text"
+            android:textSize="14sp"
+            />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@id/sureTextView"
+        android:layout_below="@+id/payForWhatLl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_15dp"
+        android:background="@drawable/regist_btn"
+        android:layout_marginLeft="@dimen/padding_15dp"
+        android:layout_marginRight="@dimen/padding_15dp"
+        android:gravity="center"
+        android:text="@string/complete"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        />
+</RelativeLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/padding_60dp"
+    android:background="@drawable/call_phone_selector"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_10"
+
+    >
+    <ImageView
+        android:id="@+id/countryImageView"
+        android:layout_width="@dimen/padding_40dp"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/sport_step"
+        />
+
+    <TextView
+        android:id="@+id/packageNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/padding_10dp"
+        android:layout_toRightOf="@id/countryImageView"
+        android:layout_marginLeft="@dimen/padding_8dp"
+        android:text="美国一日游"
+        android:textSize="15sp"
+        />
+
+    <TextView
+        android:id="@+id/priceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="20$"
+        android:layout_toRightOf="@id/packageNameTextView"
+        android:textColor="@color/order_money"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/stateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:drawableLeft="@drawable/un_effective"
+        android:text="已激活"
+        android:textColor="@color/order_item"
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/packageNameTextView"
+        android:layout_toRightOf="@id/countryImageView"
+        android:text="有效期：2016-08-01至2016-12-12"
+        android:textColor="@color/order_item"
+        android:layout_marginLeft="@dimen/padding_8dp"
+        android:textSize="11sp"
+        />
+
+</RelativeLayout>

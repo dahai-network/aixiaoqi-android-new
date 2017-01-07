@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.blinkt.openvpn.views.SwipeMenuView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:clickable="true"
+    android:background="@color/white"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/swipe_content"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+
+            android:paddingLeft="@dimen/padding_15dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/alarm_clock_delete_iv"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_vertical"
+               android:layout_marginRight="@dimen/padding_5dp"
+                android:src="@drawable/alarm_clock_delete"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:id="@+id/ll_smoth_close"
+                android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/alarm_clock_time_tv"
+                        android:layout_width="wrap_content"
+                        android:textSize="@dimen/little_38"
+                        android:layout_height="wrap_content"
+                        />
+
+                <TextView
+                    android:id="@+id/alarm_clock_days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activate_begin"
+                    android:textSize="@dimen/little_12"
+                    />
+            </LinearLayout>
+            <de.blinkt.openvpn.views.SwitchView
+                android:id="@+id/switchView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/padding_15dp"
+                />
+            <ImageView
+                android:id="@+id/can_click_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/padding_15dp"
+                android:src="@drawable/arrow"/>
+        </LinearLayout>
+        <View
+            android:id="@+id/match_screen"
+            style="@style/horizontal_line_view"/>
+        <View
+            android:id="@+id/margin_screen"
+            style="@style/horizontal_line_view_margin_15dp"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:background="@color/color_ff4a57"
+        android:text="删除"
+        android:textColor="@color/white"/>
+
+</de.blinkt.openvpn.views.SwipeMenuView>

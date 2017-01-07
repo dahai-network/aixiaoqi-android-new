@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:background="@color/gray_back_2"
+              android:orientation="vertical"
+              android:layout_height="match_parent">
+
+    <View
+        android:layout_marginTop="@dimen/padding_15dp"
+        style="@style/horizontal_line_view"/>
+
+    <EditText
+        android:id="@+id/et_nick_name"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:layout_width="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:hint="@string/nick_name"
+        android:textSize="@dimen/little_14"
+        android:layout_height="@dimen/padding_40dp"
+        android:background="@color/white"/>
+
+    <View
+        style="@style/horizontal_line_view"/>
+</LinearLayout>
