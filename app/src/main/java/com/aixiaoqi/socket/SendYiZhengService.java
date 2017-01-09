@@ -36,21 +36,21 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
         }
         Log.e("C_TAG","number="+number);
         List<TlvEntity> yiZhengTlvList=new ArrayList<>();
-        if(Contant.CONNECTION.equals(header))
+        if(SocketConstant.CONNECTION.equals(header))
             connection(yiZhengTlvList);
-        else if(Contant.PRE_DATA.equals(header)){
+        else if(SocketConstant.PRE_DATA.equals(header)){
             sdkReturn(yiZhengTlvList);
-        }else if(Contant.UPDATE_CONNECTION.equals(header)){
+        }else if(SocketConstant.UPDATE_CONNECTION.equals(header)){
             updateConnection(yiZhengTlvList);
         }
-        MessagePackageEntity messagePackageEntity =new MessagePackageEntity(Contant.SESSION_ID,number,header,yiZhengTlvList);
+        MessagePackageEntity messagePackageEntity =new MessagePackageEntity(SocketConstant.SESSION_ID,number,header,yiZhengTlvList);
         String str=messagePackageEntity.combinationPackage();
         mReceiveSocketService.sendMessage(str);
     }
 
     private   void sdkReturn(List<TlvEntity> yiZhengTlvList) {
         TlvEntity yiZhengTlv=new TlvEntity("01","00");
-        TlvEntity yiZhengTlv1=new TlvEntity(Contant.SDK_TAG,Contant.SDK_VALUE);
+        TlvEntity yiZhengTlv1=new TlvEntity(SocketConstant.SDK_TAG, SocketConstant.SDK_VALUE);
         yiZhengTlvList.add(yiZhengTlv);
         yiZhengTlvList.add(yiZhengTlv1);
     }
@@ -63,10 +63,10 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
     }
 
     private   void connection(List<TlvEntity> yiZhengTlvList) {
-        for(int i=0;i<Contant.CONNENCT_TAG.length;i++){
-            TlvEntity yiZhengTlv=new TlvEntity(Contant.CONNENCT_TAG[i],Contant.CONNENCT_VALUE[i]);
+        for(int i = 0; i< SocketConstant.CONNENCT_TAG.length; i++){
+            TlvEntity yiZhengTlv=new TlvEntity(SocketConstant.CONNENCT_TAG[i], SocketConstant.CONNENCT_VALUE[i]);
             yiZhengTlvList.add(yiZhengTlv);
-            Log.e("connection","Tag"+Contant.CONNENCT_TAG[i]+"\nvalue="+Contant.CONNENCT_VALUE[i]);
+            Log.e("connection","Tag"+ SocketConstant.CONNENCT_TAG[i]+"\nvalue="+ SocketConstant.CONNENCT_VALUE[i]);
         }
     }
 

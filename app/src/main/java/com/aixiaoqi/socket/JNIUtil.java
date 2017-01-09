@@ -1,5 +1,9 @@
 package com.aixiaoqi.socket;
 
+import android.util.Log;
+
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+
 /**
  * Created by Administrator on 2016/12/27 0027.
  */
@@ -8,7 +12,7 @@ public class JNIUtil {
     private static final String libSoName = "aixiaoqi";
     public native void getCardInfo() ;
 
-    public native void main() ;
+    public native void main(byte simType) ;
     public native void simComEvtApp2Drv(byte chn,byte index,int length ,byte[] pData);
     static {
         System.loadLibrary(libSoName);
@@ -24,14 +28,40 @@ public class JNIUtil {
         }
         return jniUtil;
     }
-    public static void  startSDK(){
+    public static void  startSDK(String phonenumber){
         if(jniUtil!=null)
-            jniUtil.main();
+            phoneAddress(phonenumber);
     }
-    public static void  reStartSDK(){
-        if(jniUtil!=null)
-            jniUtil.simComEvtApp2Drv((byte)0,(byte)1,0,HexStringExchangeBytesUtil.hexStringToBytes(""));
-            jniUtil.main();
+    private static void phoneAddress(String phonenumber){
+        if(matchesPhoneNumber(phonenumber)==1||matchesPhoneNumber(phonenumber)==2)
+            jniUtil.main((byte)1);
+        else if(matchesPhoneNumber(phonenumber)==3){
+            jniUtil.main((byte)2);
+        }
     }
 
+    public static void  reStartSDK(String phonenumber){
+        if(jniUtil!=null)
+            jniUtil.simComEvtApp2Drv((byte)0,(byte)1,0, HexStringExchangeBytesUtil.hexStringToBytes(""));
+        phoneAddress(phonenumber);
+    }
+    public static int matchesPhoneNumber(String phone_number) {
+
+        String cm = "^((13[4-9])|(147)|(15[0-2,7-9])|(178)|(1705)|(18[2-4,7-8]))\\d{8}$";//中国移动
+        String cu = "^((13[0-2])|(145)|(15[5-6])|(176)|(1709)|(18[5-6]))\\d{8}$";//中国联通
+        String ct = "^((133)|(153)|(1700)|(18[0-1,9]))\\d{8}$";//中国电信
+
+        int flag = 0;
+        if (phone_number.matches(cm)) {
+            flag = 1;
+        } else if (phone_number.matches(cu)) {
+            flag = 2;
+        } else if (phone_number.matches(ct)) {
+            flag = 3;
+        } else {
+            flag = 4;
+        }
+        return flag;
+
+    }
 }

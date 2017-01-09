@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+
 /**
  * Socket收发器 通过Socket发送数据，并使用新线程监听Socket接收到的数据
  * 

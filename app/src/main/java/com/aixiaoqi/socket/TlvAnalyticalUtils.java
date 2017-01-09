@@ -5,6 +5,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+
 /**
  * TLV的解析
  */
@@ -19,7 +21,7 @@ public class TlvAnalyticalUtils {
         tag=tag&127;
         position=position+8;
         String sessionId=hexString.substring(position,position+8);
-        Contant.SESSION_ID=sessionId;
+        SocketConstant.SESSION_ID=sessionId;
         position=position+8;
         String hexStringMessageNumber=hexString.substring(position,position+4);
         position=position+4;
@@ -80,7 +82,7 @@ public class TlvAnalyticalUtils {
                 if("00".equals(tempTag)) {
                     if (typeParams == 199) {
                         byte[] bytes=HexStringExchangeBytesUtil.hexStringToBytes(value);
-                        sendToSdkLisener.send((byte)5,vl, bytes);
+                        sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA),vl, bytes);
                     }
                 }else if(typeParams==199){
                     String  rpValue="000100163b9f94801fc78031e073fe211b573786609b30800119";
@@ -107,15 +109,21 @@ public class TlvAnalyticalUtils {
                     count=0;
                 }
                 if(count<=3){
-                    sendToSdkLisener.send((byte)2,0, HexStringExchangeBytesUtil.hexStringToBytes(""));
+                    sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR),0, HexStringExchangeBytesUtil.hexStringToBytes(""));
                     StringBuilder stringBuilder=new StringBuilder();
                     stringBuilder.append(orData);
                     stringBuilder.replace(4,6,Integer.toHexString(tag|0x80));
-//                Log.e("combinationPackage","ordata="+Integer.toHexString(tag&0xff)+"\nnewdata="+Integer.toHexString(tag|0x80));
-//                String respone=orData.substring(6,8);
                     stringBuilder.replace(6,8,"00");
                     sendToSdkLisener.sendServer(stringBuilder.toString());
-                    TestProvider.sendYiZhengService.sendGoip(Contant.CONNECTION);
+                    TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+                }
+            }else if(tag==5){
+                if (typeParams == 162) {
+                    if(Integer.parseInt(value,16)==3){
+                        registerSimStatueLisener.registerSucceed();//注册成功
+                    }else if(Integer.parseInt(value,16)>4){
+                        registerSimStatueLisener.registerFail();//注册失败
+                    }
                 }
             }
 
@@ -134,7 +142,7 @@ public class TlvAnalyticalUtils {
         lastClickTime = time;
         return false;
     }
-   public static  SendToSdkLisener sendToSdkLisener;
+    public static  SendToSdkLisener sendToSdkLisener;
     public static void setListener(SendToSdkLisener listener) {
         sendToSdkLisener = listener;
     }
@@ -143,6 +151,18 @@ public class TlvAnalyticalUtils {
         void sendServer(String hexString);
 
     }
+
+    public static RegisterSimStatueLisener registerSimStatueLisener;
+    public static void setListener(RegisterSimStatueLisener listener) {
+        registerSimStatueLisener = listener;
+    }
+    public interface RegisterSimStatueLisener {
+        void registerSucceed();
+        void registerFail();
+
+    }
+
+
 
     /**
      * 返回最后的Value的长度

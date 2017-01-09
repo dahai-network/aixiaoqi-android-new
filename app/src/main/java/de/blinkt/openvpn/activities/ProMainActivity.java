@@ -71,7 +71,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private ImageView callImageView;
 	private ImageView deleteImageView;
 	//判断是否展开了键盘
-	private boolean isDeploy = true;
+	public static boolean isDeploy = true;
 	private String TAG = "ProMainActivity";
 	private ReceiveBLEMoveReceiver bleMoveReceiver;
 	private UartService mService = null;
@@ -358,6 +358,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				} else {
 					phoneNumberImageView.setImageResource(R.drawable.phone_icon_check_open);
 				}
+
 				llArray[1].performClick();
 				break;
 			case R.id.callImageView:
@@ -546,7 +547,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						JNIUtil.getInstance().startSDK();
+						JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
 					}
 				}).start();
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {

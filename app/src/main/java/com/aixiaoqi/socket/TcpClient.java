@@ -37,7 +37,7 @@ public abstract class TcpClient implements Runnable {
 	public void run() {
 		try {
 
-			SocketAddress address = new InetSocketAddress(Contant.hostIP, Contant.port);
+			SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
 			Socket socket = new Socket();
 			socket.connect(address,30000);
 			socket.setTcpNoDelay(true);

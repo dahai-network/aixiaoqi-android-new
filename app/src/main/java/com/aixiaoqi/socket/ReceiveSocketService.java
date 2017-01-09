@@ -8,6 +8,10 @@ import android.os.IBinder;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.util.SharedUtils;
+
 /**
  * Created by Administrator on 2016/12/30 0030.
  */
@@ -45,8 +49,8 @@ public class ReceiveSocketService extends Service {
         @Override
         public void onReceive(SocketTransceiver transceiver, byte[] s,int length) {
             TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s,length));
-            if(!Contant.SESSION_ID_TEMP.equals(Contant.SESSION_ID)&&count==0){
-                timer.schedule(task,10000,10000);
+            if(!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)&&count==0){
+                timer.schedule(task,60000,60000);
                 count=count+1;
             }
         }
@@ -54,7 +58,7 @@ public class ReceiveSocketService extends Service {
         @Override
         public void onDisconnect(SocketTransceiver transceiver) {
             tcpClient.disconnect();
-            JNIUtil.getInstance().reStartSDK();
+            JNIUtil.getInstance().reStartSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
         }
 
 
@@ -93,7 +97,7 @@ public class ReceiveSocketService extends Service {
         @Override
         public void run() {
             // 需要做的事:发送消息
-            TestProvider.sendYiZhengService.sendGoip(Contant.UPDATE_CONNECTION);
+            TestProvider.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
         }
     };
 }

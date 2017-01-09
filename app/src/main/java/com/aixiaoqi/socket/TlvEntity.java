@@ -1,9 +1,11 @@
 package com.aixiaoqi.socket;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/12/12 0012.
  */
-public class TlvEntity {
+public class TlvEntity implements Serializable{
 
     private String hexStringTag;//参数类型   Tag
     private String hexStringLength;//内容字节数 Length

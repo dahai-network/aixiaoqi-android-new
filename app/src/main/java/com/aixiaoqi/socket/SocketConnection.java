@@ -31,10 +31,6 @@ public class SocketConnection implements ServiceConnection {
             Log.e("service222","PackageName"+componentName.getPackageName()+"\nClassName"+componentName.getClassName()+"\nShortClassName"+componentName.getShortClassName());
             mReceiveSocketService = ((ReceiveSocketService.LocalBinder) service)
                     .getService();
-        }else if(service instanceof UartService.LocalBinder){
-            Log.e("service333","PackageName"+componentName.getPackageName()+"\nClassName"+componentName.getClassName()+"\nShortClassName"+componentName.getShortClassName());
-//            mService = ((UartService.LocalBinder) service).getService();
-//            mService.initialize();
         }
     }
 
@@ -45,8 +41,6 @@ public class SocketConnection implements ServiceConnection {
         }else if("qixiaoqi.socket.ReceiveSocketService".equals(name.getClassName())){
             mReceiveSocketService = null;
         }
-//        else if("jzj.socket.UartService".equals(name.getClassName())){
-//            mService = null;
-//        }
+
     }
 }

@@ -16,9 +16,9 @@ public class TestProvider   {
 		if(sendYiZhengService==null){
 			sendYiZhengService=new SendYiZhengService();
 		}
-		if("04".equals(indexString)||"05".equals(indexString)){
+		if(SocketConstant.EN_APPEVT_PRDATA.equals(indexString)|| SocketConstant.EN_APPEVT_SIMDATA.equals(indexString)){
 			preDataSplit(info);
-		}else if("06".equals(indexString)){
+		}else if(SocketConstant.EN_APPEVT_SIMINFO.equals(indexString)){
 			iccidDataSplit(info);
 		}
 	}
@@ -41,12 +41,12 @@ public class TestProvider   {
 				iccidEntity.setImmsi(iccidArray1[1]);
 			}
 		}
-		Contant.CONNENCT_VALUE[Contant.CONNENCT_VALUE.length-5]=RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
-		Contant.CONNENCT_VALUE[Contant.CONNENCT_VALUE.length-6]=RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length-5]=RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length-6]=RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
 		isIccid=true;
 		if(isCreate&&isIccid) {
 			Log.e("preDataSplit","isCreate1"+isCreate+"isIccid1"+isIccid);
-			sendYiZhengService.sendGoip(Contant.CONNECTION);
+			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
 	private static  void preDataSplit(String item){
@@ -57,7 +57,7 @@ public class TestProvider   {
 				isCreate=true;
 				Log.e("preDataSplit","isCreate"+isCreate+"isIccid"+isIccid);
 				if(isCreate&&isIccid){
-					sendYiZhengService.sendGoip(Contant.CONNECTION);
+					sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 				}
 			}
 
@@ -67,14 +67,14 @@ public class TestProvider   {
 		preDataEntity.setLenString(item.substring(4,8));
 		preDataEntity.setPreDataString(item.substring(8,item.length()));
 		String hex=preDataEntity.getPreDataString();
-		if("04".equals(preDataEntity.getEvtIndex())){
-			Contant.CONNENCT_VALUE[Contant.CONNENCT_VALUE.length-1]=hex;
-			Contant.CONNENCT_VALUE[Contant.CONNENCT_VALUE.length-2]=preDataEntity.getLenString();
+		if(SocketConstant.EN_APPEVT_PRDATA.equals(preDataEntity.getEvtIndex())){
+			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length-1]=hex;
+			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length-2]=preDataEntity.getLenString();
 			sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
 
-		}else if("05".equals(preDataEntity.getEvtIndex())){
-			Contant.SDK_VALUE=hex;
-			sendYiZhengService.sendGoip(Contant.PRE_DATA);
+		}else if(SocketConstant.EN_APPEVT_SIMDATA.equals(preDataEntity.getEvtIndex())){
+			SocketConstant.SDK_VALUE=hex;
+			sendYiZhengService.sendGoip(SocketConstant.PRE_DATA);
 
 		}
 	}
