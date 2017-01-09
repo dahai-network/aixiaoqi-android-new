@@ -122,7 +122,7 @@ public class TlvAnalyticalUtils {
                     if(Integer.parseInt(value,16)==3){
                         registerSimStatueLisener.registerSucceed();//注册成功
                     }else if(Integer.parseInt(value,16)>4){
-                        registerSimStatueLisener.registerFail();//注册失败
+                        registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL);//注册失败
                     }
                 }
             }
@@ -158,7 +158,7 @@ public class TlvAnalyticalUtils {
     }
     public interface RegisterSimStatueLisener {
         void registerSucceed();
-        void registerFail();
+        void registerFail(int type);
 
     }
 

@@ -20,7 +20,6 @@ public class SocketConnection implements ServiceConnection {
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder service) {
         if(service instanceof ReceiveDataframSocketService.LocalBinder){
-            Log.e("service111","PackageName"+componentName.getPackageName()+"\nClassName"+componentName.getClassName()+"\nShortClassName"+componentName.getShortClassName());
             mReceiveDataframSocketService = ((ReceiveDataframSocketService.LocalBinder) service)
                     .getService();
             //TODO UDP 发送给蓝牙
@@ -29,7 +28,6 @@ public class SocketConnection implements ServiceConnection {
             }
             sdkAndBluetoothDataInchange.initReceiveDataframSocketService(mReceiveDataframSocketService, ICSOpenVPNApplication.uartService);
         }else if(service instanceof ReceiveSocketService.LocalBinder ){
-            Log.e("service222","PackageName"+componentName.getPackageName()+"\nClassName"+componentName.getClassName()+"\nShortClassName"+componentName.getShortClassName());
             mReceiveSocketService = ((ReceiveSocketService.LocalBinder) service)
                     .getService();
         }

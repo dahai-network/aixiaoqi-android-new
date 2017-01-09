@@ -63,4 +63,8 @@ public class SocketConstant {
     public static final String  EN_APPEVT_PRDATA="05";
     public static final String  EN_APPEVT_SIMDATA="06";
     public static final String  EN_APPEVT_SIMINFO="07";
+
+    public static final int  REGISTER_FAIL=1;
+    public static final int  REGISTER_FAIL_IMSI_IS_NULL=2;
+    public static final int  REGISTER_FAIL_IMSI_IS_ERROR=3;
 }
