@@ -8,14 +8,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.aixiaoqi.socket.SocketConnection;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.ActivateActivity;
@@ -40,9 +37,8 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
-import static de.blinkt.openvpn.constant.Constant.GET_ICCID_STEP2;
-import static de.blinkt.openvpn.constant.Constant.GET_ICCID_STEP3;
-import static de.blinkt.openvpn.constant.Constant.GET_ICCID_STEP4;
+import static de.blinkt.openvpn.constant.Constant.FIND_VERSION;
+import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.IS_WRITE_CARD_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
@@ -250,7 +246,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							if (sendStepThread != null)
 								sendStepThread = null;
 							if (!CommonTools.isFastDoubleClick(3000)) {
-								sendMessageToBlueTooth("AA0A01A1");
+								sendMessageToBlueTooth(FIND_VERSION);
 							}
 							if (!isOpenStepService) {
 								Intent updateStepIntent = new Intent(context, UpdateStepService.class);
@@ -296,14 +292,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							}
 							break;
 						case (byte) 0xDB: case (byte) 0xDA:
-//							messages.add(messageFromBlueTooth);
-//							if (txValue[3] == txValue[4]) {
-//								mStrSimCmdPacket = PacketeUtil.Combination(messages);
-//								// 接收到一个完整的数据包,发送到SDK
-//								ReceiveDBOperate(mStrSimCmdPacket);
-//								messages.clear();
-//							}
-							SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth,txValue);
+							messages.add(messageFromBlueTooth);
+							if (txValue[3] == txValue[4]) {
+								mStrSimCmdPacket = PacketeUtil.Combination(messages);
+								// 接收到一个完整的数据包,发送到SDK
+								ReceiveDBOperate(mStrSimCmdPacket);
+								messages.clear();
+							}
+//							SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth,txValue);
 							break;
 						case (byte) 0xEE:
 							if (!isOpenStepService) {
@@ -329,7 +325,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					Log.i("toBlue", "已收到重置信息：" + messageFromBlueTooth);
 					resetOrderStr = messageFromBlueTooth;
 					break;
-
 
 				default:
 					updateMessage(messageFromBlueTooth);
@@ -370,7 +365,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	}
 
 	SharedUtils utils = SharedUtils.getInstance();
-	public static boolean isGetIccid = false;
 	public static boolean isGetnullCardid = false;//是否获取空卡数据
 
 	//写卡流程
@@ -381,9 +375,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //			repeatReceive33 = false;
 //		}
 		if (mStrSimCmdPacket.contains(WRITE_CARD_STEP1)) {
-			if (isGetIccid) {
-				sendMessageSeparate("A0C0000016");
-			}
 			if (isGetnullCardid) {
 				sendMessageSeparate("A0A40000022F02");
 			}
@@ -393,7 +384,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			sendMessageSeparate("A0120000" + lastTwoBytesStr);
 		} else if (mStrSimCmdPacket.contains(WRITE_CARD_STEP4)) {
 			sendMessageSeparate("A01400000C810301250082028281830100");
-		} else if (mStrSimCmdPacket.contains(GET_ICCID_STEP3)) {
+		} else if (mStrSimCmdPacket.contains(GET_NULLCARDID)) {
 			if (isGetnullCardid)
 				sendMessageSeparate("A0B000000A");
 
@@ -408,23 +399,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 				isGetnullCardid = false;
 				return;
-			}
-			if (mStrSimCmdPacket.contains(GET_ICCID_STEP2)) {
-				//首先将最后的9000删掉，然后匹配两个任意字符为一组，再倒序输出拼接在一起成为ICCID
-				String ICCIDStr = "";
-				mStrSimCmdPacket = mStrSimCmdPacket.substring(0, 20);
-				Pattern pattern = Pattern.compile("[0-9]{2}");
-				Matcher m = pattern.matcher(mStrSimCmdPacket);
-				while (m.find()) {
-					ICCIDStr += reverse(m.group());
-				}
-				Log.i("iccid", "ICCIDStr:" + ICCIDStr);
-				utils.writeString(Constant.ICCID, ICCIDStr);
-				sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
-				Intent intent = new Intent();
-				intent.setAction(MyOrderDetailActivity.FINISH_PROCESS);
-				LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-				isGetIccid = false;
 			}
 		} else if (mStrSimCmdPacket.contains(UP_TP_POWER_RECEIVE)) {
 			//当上电完成则需要发送写卡命令
@@ -441,10 +415,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					intent.setAction(MyOrderDetailActivity.FIND_NULL_CARD_ID);
 					LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 				}
-			}
-			if (isGetIccid && mStrSimCmdPacket.contains(GET_ICCID_STEP4)) {
-				sendMessageSeparate("A0B000000A");
-				return;
 			}
 		}
 	}

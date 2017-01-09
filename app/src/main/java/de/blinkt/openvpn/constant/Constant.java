@@ -59,6 +59,8 @@ public class Constant {
 	public static final String OFF_TO_POWER = "AADC040173";//断点指令
 	public static final String REAL_TIME_STEPS = "AA010401AE ";//实时步数
 	public static final String HISTORICAL_STEPS = "AA030401AC";//历史步数
+	public static final String FIND_DEVICE = "AA0604O1A9";//查找手环
+	public static final String FIND_VERSION = "AA0A01A1";//版本号
 	//ICCID标记
 	public static final String ICCID = "ICCID";
 	//来电，短信，微信，QQ通知开关标记
@@ -118,12 +120,8 @@ public class Constant {
 	public static final String WRITE_CARD_STEP9 = "d02081030123";
 	public static final String WRITE_CARD_STEP11 = "d03c8103012";
 
-	//获取ICCID流程
-	public static final String GET_ICCID_STEP1 = "9f16";
-	public static final String GET_ICCID_STEP2 = "0000565C3F000";
-	public static final String GET_ICCID_STEP3 = "9f0f";
-	public static final String GET_ICCID_STEP4 = "0000000a2fe20";
-	public static final String ICCID_HEAD = "9868";
+	//获取空卡流程
+	public static final String GET_NULLCARDID = "9f0f";
 
 	public static final String DOWNLOAD_PATH = "/sdcard/aixiaoqi/upload.zip";
 	public static final String UPLOAD_PATH = "/aixiaoqi/upload.zip";

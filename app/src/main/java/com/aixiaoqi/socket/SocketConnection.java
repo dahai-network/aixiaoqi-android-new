@@ -12,9 +12,10 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
  * Created by Administrator on 2017/1/6 0006.
  */
 public class SocketConnection implements ServiceConnection {
-    public static ReceiveSocketService mReceiveSocketService = null;
-    public  static ReceiveDataframSocketService mReceiveDataframSocketService = null;
-    public  static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
+	public static ReceiveSocketService mReceiveSocketService = null;
+	public static ReceiveDataframSocketService mReceiveDataframSocketService = null;
+	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
+
 
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder service) {
@@ -43,4 +44,6 @@ public class SocketConnection implements ServiceConnection {
         }
 
     }
+
+
 }

@@ -67,6 +67,7 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.activities.BindDeviceActivity.FAILT;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
+import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
@@ -181,6 +182,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			GetBindDeviceHttp http = new GetBindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 			new Thread(http).start();
 		} else {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			sendMessageToBlueTooth(UP_TO_POWER);
 		}
 		if (mService.mConnectionState == UartService.STATE_CONNECTED) {
@@ -202,6 +208,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					deviceAddresstemp = deviceAddress;
 					macTextView.setText(deviceAddresstemp);
 					utils.writeString(Constant.IMEI, deviceAddress);
+
+					conStatusLinearLayout.setVisibility(View.VISIBLE);
+					setConStatus(conStatusResource);
+					firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
+
 				} else if (resultCode == FAILT) {
 					finish();
 				}
@@ -223,7 +234,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 
-	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.findStatusLinearLayout, R.id.simStatusTextView})
+	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.findStatusLinearLayout, R.id.simStatusTextView, R.id.statueTextView})
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.unBindButton:
@@ -235,6 +246,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				firmwareTextView.setText("");
 				macTextView.setText("");
 				simStatusTextView.setText("");
+				conStatusLinearLayout.setVisibility(View.GONE);
 				utils.delete(Constant.IMEI);
 				utils.delete(Constant.BRACELETVERSION);
 				sendMessageToBlueTooth("AAABCDEFAA");
@@ -252,27 +264,22 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				}
 				break;
 			case R.id.findStatusLinearLayout:
-				if (!ICSOpenVPNApplication.isConnect) {
-					clickFindBracelet();
-				}
+				sendMessageToBlueTooth(FIND_DEVICE);
 				break;
 			case R.id.simStatusTextView:
 				sendMessageToBlueTooth(UP_TO_POWER);
+				break;
+			case R.id.statueTextView:
+				clickFindBracelet();
 				break;
 		}
 	}
 
 	private void clickFindBracelet() {
 		if (mBtAdapter != null) {
-			if (!mBtAdapter.isEnabled()) {
-				Log.i(TAG, "onClick - BT not enabled yet");
-				Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-				startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-			} else {
-				Intent intent = new Intent(MyDeviceActivity.this, BindDeviceActivity.class);
-				startActivityForResult(intent, REQUEST_SELECT_DEVICE);
-			}
-
+			scanLeDevice(false);
+			Intent intent = new Intent(MyDeviceActivity.this, BindDeviceActivity.class);
+			startActivityForResult(intent, REQUEST_SELECT_DEVICE);
 		}
 	}
 
@@ -406,8 +413,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				}
 			}
 		}
-
-
 	};
 
 	private void setView() {
@@ -484,7 +489,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				unBindButton.setVisibility(View.VISIBLE);
 				//当接口调用完毕后，扫描设备，打开状态栏
 				conStatusLinearLayout.setVisibility(View.VISIBLE);
-				scanLeDevice();
+				scanLeDevice(true);
 			} else {
 				clickFindBracelet();
 			}
@@ -599,7 +604,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				MobclickAgent.onEvent(context, CLICKDEVICEUPGRADE);
 			downloadSkyUpgradePackageHttp(url);
 		} else if (type == NOT_YET_REARCH) {
-			scanLeDevice();
+			scanLeDevice(true);
 		} else {
 			onBackPressed();
 		}
@@ -645,22 +650,23 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	//我的设备内如果有已储存设备的话，那么开始扫描已有设备进行连接，不用进入绑定流程啦！
-	private void scanLeDevice() {
-
-
-		// Stops scanning after a pre-defined scan period.
-		new Handler().postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				if (mService.mConnectionState != UartService.STATE_CONNECTED) {
-					mBtAdapter.stopLeScan(mLeScanCallback);
-					showDialog();
+	private void scanLeDevice(boolean enable) {
+		if (enable) {
+			// Stops scanning after a pre-defined scan period.
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					if (mService.mConnectionState != UartService.STATE_CONNECTED) {
+						mBtAdapter.stopLeScan(mLeScanCallback);
+						showDialog();
+					}
 				}
-			}
-		}, SCAN_PERIOD);
+			}, SCAN_PERIOD);
 
-		mBtAdapter.startLeScan(mLeScanCallback);
-
+			mBtAdapter.startLeScan(mLeScanCallback);
+		} else {
+			mBtAdapter.stopLeScan(mLeScanCallback);
+		}
 
 	}
 
@@ -684,7 +690,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 										mBtAdapter.stopLeScan(mLeScanCallback);
 										Intent result = new Intent();
 										result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, device.getAddress());
-										checkIsBindDevie(device);
+//										checkIsBindDevie(device);
 										mService.connect(macAddressStr);
 									}
 								}

@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.lang.reflect.Method;
@@ -50,8 +51,10 @@ public class BindDeviceActivity extends CommenActivity implements RecyclerBaseAd
 	@BindView(R.id.stopImageView)
 	ImageView stopImageView;
 	@BindView(R.id.all_device_rv)
-
 	RecyclerView allDeviceRv;
+	@BindView(R.id.connectedRelativeLayout)
+	RelativeLayout connectedRelativeLayout;
+
 	private Handler mHandler;
 	private BluetoothAdapter mBluetoothAdapter;
 	List<BluetoothDevice> deviceList;
@@ -67,10 +70,16 @@ public class BindDeviceActivity extends CommenActivity implements RecyclerBaseAd
 	private BroadcastReceiver bindCompeleteReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Intent result = new Intent();
-			result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, deviceAddress);
-			BindDeviceActivity.this.setResult(Activity.RESULT_OK, result);
-			BindDeviceActivity.this.finish();
+			connectedRelativeLayout.setVisibility(View.VISIBLE);
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					Intent result = new Intent();
+					result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, deviceAddress);
+					BindDeviceActivity.this.setResult(Activity.RESULT_OK, result);
+					BindDeviceActivity.this.finish();
+				}
+			}, 2000);
 		}
 	};
 
@@ -184,19 +193,12 @@ public class BindDeviceActivity extends CommenActivity implements RecyclerBaseAd
 										return;
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
-									if (deviceAddress.equals(device.getAddress())) {
-										mBluetoothAdapter.stopLeScan(mLeScanCallback);
-										Intent result = new Intent();
-										result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, device.getAddress());
-										checkIsBindDevie(device);
-										setResult(Activity.RESULT_OK, result);
-										finish();
-									} else if (device.getName().contains("ZiJian")) {
+									if (device.getName().contains("ZiJian")) {
 //									  else if (device.getName().contains("unitoys")) {
 										//如果信号强度绝对值大于这个值（距离\）,则配对
 										if (Math.abs(rssi) < 90) {
 											mBluetoothAdapter.stopLeScan(mLeScanCallback);
-											checkIsBindDevie(device);
+//											checkIsBindDevie(device);
 											deviceAddress = device.getAddress();
 											IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, device.getAddress());
 											new Thread(http).start();
