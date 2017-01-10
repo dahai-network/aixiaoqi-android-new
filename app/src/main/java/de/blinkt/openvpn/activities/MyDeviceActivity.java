@@ -295,7 +295,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				sendMessageToBlueTooth(FIND_DEVICE);
 				break;
 			case R.id.simStatusTextView:
-				sendMessageToBlueTooth(UP_TO_POWER);
+				if (!CommonTools.isFastDoubleClick(2000)) {
+					sendMessageToBlueTooth(UP_TO_POWER);
+				}
 				break;
 			case R.id.statueTextView:
 				clickFindBracelet();
@@ -715,12 +717,14 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 										return;
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
-									if (macAddressStr.equals(device.getAddress())) {
-										mBtAdapter.stopLeScan(mLeScanCallback);
-										Intent result = new Intent();
-										result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, device.getAddress());
+									if (macAddressStr != null) {
+										if (macAddressStr.equals(device.getAddress())) {
+											mBtAdapter.stopLeScan(mLeScanCallback);
+											Intent result = new Intent();
+											result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, device.getAddress());
 //										checkIsBindDevie(device);
-										mService.connect(macAddressStr);
+											mService.connect(macAddressStr);
+										}
 									}
 								}
 							});

@@ -356,6 +356,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				//友盟方法统计
 				MobclickAgent.onEvent(this, CLICKHOMECONTACT);
 				viewPagerCurrentPageIndex = 4;
+				accountFragment.setBleStatus(indexFragment.getBlutoothStatus());
 				break;
 			case R.id.sportLinearLayout:
 				viewPagerCurrentPageIndex = 3;
@@ -423,8 +424,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					isClick = false;
 					hidePhoneBottomBar();
 					llArray[position].performClick();
-				} else {
-
+				}
+				else {
 					if (!isClick) {
 						removeAllStatus();
 						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {

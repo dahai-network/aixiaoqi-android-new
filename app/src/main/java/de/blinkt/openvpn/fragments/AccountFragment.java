@@ -112,6 +112,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	@BindView(R.id.tv_coming_tel_tip)
 	TextView tvComingTelTip;
 	SharedUtils utils = SharedUtils.getInstance();
+	//bluetooth status蓝牙状态
+	private String bleStatus;
 
 
 	public AccountFragment() {
@@ -217,6 +219,21 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKMYDEVICE);
 				intent = new Intent(getActivity(), MyDeviceActivity.class);
+				int status = 0;
+				if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBleStatus())) {
+					status = R.string.index_no_signal;
+				} else if (getActivity().getResources().getString(R.string.index_connecting).equals(getBleStatus())) {
+					status = R.string.index_connecting;
+				} else if (getActivity().getResources().getString(R.string.index_high_signal).equals(getBleStatus())) {
+					status = R.string.index_high_signal;
+				} else if (getActivity().getResources().getString(R.string.index_no_packet).equals(getBleStatus())) {
+					status = R.string.index_no_packet;
+				} else if (getString(R.string.index_un_insert_card).equals(getBleStatus())) {
+					status = R.string.index_no_signal;
+				} else if (getString(R.string.index_high_signal).equals(getBleStatus())) {
+					status = R.string.index_high_signal;
+				}
+				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, status);
 				break;
 			case R.id.tv_setting:
 				//友盟方法统计
@@ -321,5 +338,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				mService.writeRXCharacteristic(value);
 			}
 		}
+	}
+
+	public String getBleStatus() {
+		return bleStatus;
+	}
+
+	public void setBleStatus(String bleStatus) {
+		this.bleStatus = bleStatus;
 	}
 }
