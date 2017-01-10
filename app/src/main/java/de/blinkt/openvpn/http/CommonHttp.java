@@ -47,6 +47,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+
+
 /**
  * Created by Administrator on 2016/9/6 0006.
  */
@@ -65,6 +67,15 @@ public abstract class CommonHttp implements Callback, Runnable {
 	private String msg;
 	private static Call call;
 
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
+	}
+
+	private Object data;
 	protected HashMap<String, String> params;
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 	protected boolean isDownload;
@@ -144,6 +155,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			BaseEntry baseEntry = gson.fromJson(responseBody, BaseEntry.class);
 			status = baseEntry.getStatus();
 			msg = baseEntry.getMsg();
+			data=baseEntry.getData();
 			if (status == 1) {
 				right(gson.toJson(baseEntry.getData()));
 			} else if (status == -999) {
