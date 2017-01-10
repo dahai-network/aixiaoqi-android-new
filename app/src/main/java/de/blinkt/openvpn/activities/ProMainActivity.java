@@ -557,6 +557,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	@Override
 	public void registerFail(final int type) {
+		unbindService(mServiceConnection);
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -574,6 +575,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		});
 
+
 	}
 
 	//用于改变indexFragment状态的Receiver
@@ -590,7 +592,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					@Override
 					public void run() {
 						Log.e("phoneAddress","main.start()");
-						SocketConstant.REGISTER_STATUE_CODE=1;
 						JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
 					}
 				}).start();

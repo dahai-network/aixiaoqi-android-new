@@ -16,7 +16,6 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
         sendService(header);
     }
     public  void initSocket(ReceiveSocketService receiveSocketService){
-        //TODO 初始化TCP socket
         if(TlvAnalyticalUtils.sendToSdkLisener==null){
             TlvAnalyticalUtils.setListener(this);
         }
@@ -73,13 +72,11 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
 
     @Override
     public void send(byte evnindex,int length, byte[] bytes) {
-        //TODO 发送健全数据到SDK
         JNIUtil.getInstance().simComEvtApp2Drv((byte)0,evnindex,length,bytes);
     }
 
     @Override
     public void sendServer(String hexString) {
-        //TODO 把关于是010101的值修改发送到一正服务器
         mReceiveSocketService.sendMessage(hexString);
     }
 

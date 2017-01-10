@@ -48,11 +48,11 @@ public class ReceiveSocketService extends Service {
             }
         }
         private void sendMessage() {
-                byte[] value;
-                value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
-                ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
-                TlvAnalyticalUtils.isOffToPower=false;
-                Log.e("BLUETOOTH", "SIM POWER UP");
+            byte[] value;
+            value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
+            ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
+            TlvAnalyticalUtils.isOffToPower=false;
+            Log.e("BLUETOOTH", "SIM POWER UP");
 
         }
         @Override
@@ -69,6 +69,7 @@ public class ReceiveSocketService extends Service {
 
         @Override
         public void onDisconnect(SocketTransceiver transceiver) {
+            count=0;
             tcpClient.disconnect();
             JNIUtil.getInstance().reStartSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
         }

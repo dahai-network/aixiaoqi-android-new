@@ -45,7 +45,6 @@ public class SdkAndBluetoothDataInchange {
 
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
 		num++;
-		//Log.e("Bluetooth","num="+num+"\ntxValue[4]="+txValue[4]);
 		if (num != txValue[4]) {
 			num = 0;
 			Log.e("BlueError", "蓝牙数据出错重发=" + finalTemp);
@@ -92,7 +91,6 @@ public class SdkAndBluetoothDataInchange {
 
 
 	private void sendToSDKAboutBluetoothInfo(final String finalMessage) {
-		//TODO 从蓝牙发出的数据到SDK
 		if (mReceiveDataframSocketService != null) {
 			mReceiveDataframSocketService.sendToSdkMessage(finalMessage);
 		}
@@ -102,7 +100,6 @@ public class SdkAndBluetoothDataInchange {
 	private String finalTemp;
 
 	private void sendToBluetoothAboutCardInfo(String msg) {
-		//TODO 从SDK发出的数据到蓝牙
 		String temp = "";
 		if (msg.length() > 7) {
 			temp = msg.substring(7);
