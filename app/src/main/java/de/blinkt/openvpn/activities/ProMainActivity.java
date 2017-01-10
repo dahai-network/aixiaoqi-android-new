@@ -70,7 +70,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private ImageView callImageView;
 	private ImageView deleteImageView;
 	//判断是否展开了键盘
-	private boolean isDeploy = true;
+	public static boolean isDeploy = true;
 	private String TAG = "ProMainActivity";
 	private ReceiveBLEMoveReceiver bleMoveReceiver;
 	private UartService mService = null;
@@ -362,6 +362,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				} else {
 					phoneNumberImageView.setImageResource(R.drawable.phone_icon_check_open);
 				}
+
 				llArray[1].performClick();
 				break;
 			case R.id.callImageView:
@@ -545,14 +546,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 				//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
 				indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
-//				startDataframService();
-//				startSocketService();
-//				new Thread(new Runnable() {
-//					@Override
-//					public void run() {
-//						JNIUtil.getInstance().startSDK();
-//					}
-//				}).start();
+//					startDataframService();
+//					startSocketService();
+//					new Thread(new Runnable() {
+//						@Override
+//						public void run() {
+//							JNIUtil.getInstance().startSDK();
+//						}
+//					}).start();
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {

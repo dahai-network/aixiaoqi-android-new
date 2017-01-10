@@ -193,7 +193,10 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (mService.mConnectionState == UartService.STATE_CONNECTED) {
 			conStatusLinearLayout.setVisibility(View.VISIBLE);
 			int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
-			setConStatus(blueStatus);
+			if(blueStatus!=0)
+			{
+				setConStatus(blueStatus);
+			}
 		}
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
 	}

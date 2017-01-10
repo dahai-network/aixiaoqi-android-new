@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import de.blinkt.openvpn.bluetooth.service.UartService;
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 
 /**
  * Created by Administrator on 2017/1/5 0005.

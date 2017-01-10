@@ -250,6 +250,10 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 					status = R.string.index_high_signal;
 				} else if (getActivity().getResources().getString(R.string.index_no_packet).equals(getBlutoothStatus())) {
 					status = R.string.index_no_packet;
+				} else if (getString(R.string.index_un_insert_card).equals(getBlutoothStatus())) {
+					status = R.string.index_no_signal;
+				} else if (getString(R.string.index_high_signal).equals(getBlutoothStatus())) {
+					status = R.string.index_high_signal;
 				}
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, status);
 				startActivity(intent);

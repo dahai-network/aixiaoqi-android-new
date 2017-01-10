@@ -10,23 +10,13 @@ public class HexStringExchangeBytesUtil {
 	 * @param src byte[] data
 	 * @return hex string
 	 */
-	public static String bytesToHexString(byte[] src) {
-		StringBuilder stringBuilder = new StringBuilder("");
-		int length = src.length;
-		if (src == null || length <= 0) {
-			return null;
-		}
-		for (int i = 0; i < length; i++) {
-			int v = src[i] & 0xFF;
-			String hv = Integer.toHexString(v);
-			if (hv.length() < 2) {
-				stringBuilder.append(0);
-			}
-			stringBuilder.append(hv);
-		}
-		return stringBuilder.toString();
+	public static String bytesToHexString(byte[] src,int length) {
+		return bytesToHexString( src,0,length);
 	}
+	public static String bytesToHexString(byte[] src ) {
 
+		return bytesToHexString( src,0,src.length);
+	}
 	public static String bytesToHexString(byte[] src, int startPos, int endpos) {
 		StringBuilder stringBuilder = new StringBuilder("");
 
@@ -63,10 +53,8 @@ public class HexStringExchangeBytesUtil {
 		}
 		return d;
 	}
-
 	/**
 	 * Convert char to byte
-	 *
 	 * @param c char
 	 * @return byte
 	 */

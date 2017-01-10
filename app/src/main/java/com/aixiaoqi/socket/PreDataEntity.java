@@ -1,9 +1,11 @@
 package com.aixiaoqi.socket;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/12/24 0024.
  */
-public class PreDataEntity {
+public class PreDataEntity implements Serializable {
     private String chnString;
     private String lenString;
     private String preDataString;

@@ -54,12 +54,10 @@ public class PacketeUtil {
                 //补上0
                 int needToAdd0Count = 28 - eachCombindMessage.length();
                 builder.append(eachCombindMessage);
-//                String addZeroStr = "";
                 for (int j = 0; j < needToAdd0Count; j++) {
-//                    addZeroStr += "0";
                     builder.append("0");
                 }
-//                builder.append(eachCombindMessage + );
+
             }
         }
         return builder.toString();

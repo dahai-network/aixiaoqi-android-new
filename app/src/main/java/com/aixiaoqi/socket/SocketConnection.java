@@ -16,37 +16,32 @@ public class SocketConnection implements ServiceConnection {
 	public static ReceiveDataframSocketService mReceiveDataframSocketService = null;
 	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
 
-	@Override
-	public void onServiceConnected(ComponentName componentName, IBinder service) {
-		if (service instanceof ReceiveDataframSocketService.LocalBinder) {
-			Log.e("service111", "PackageName" + componentName.getPackageName() + "\nClassName" + componentName.getClassName() + "\nShortClassName" + componentName.getShortClassName());
-			mReceiveDataframSocketService = ((ReceiveDataframSocketService.LocalBinder) service)
-					.getService();
-			//TODO UDP 发送给蓝牙
-			if (sdkAndBluetoothDataInchange == null) {
-				sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
-			}
-			sdkAndBluetoothDataInchange.initReceiveDataframSocketService(mReceiveDataframSocketService, ICSOpenVPNApplication.uartService);
-		} else if (service instanceof ReceiveSocketService.LocalBinder) {
-			Log.e("service222", "PackageName" + componentName.getPackageName() + "\nClassName" + componentName.getClassName() + "\nShortClassName" + componentName.getShortClassName());
-			mReceiveSocketService = ((ReceiveSocketService.LocalBinder) service)
-					.getService();
-		} else if (service instanceof UartService.LocalBinder) {
-			Log.e("service333", "PackageName" + componentName.getPackageName() + "\nClassName" + componentName.getClassName() + "\nShortClassName" + componentName.getShortClassName());
-//            mService = ((UartService.LocalBinder) service).getService();
-//            mService.initialize();
-		}
-	}
 
-	@Override
-	public void onServiceDisconnected(ComponentName name) {
-		if ("aixiaoqi.socket.ReceiveDataframSocketService".equals(name.getClassName())) {
-			mReceiveDataframSocketService = null;
-		} else if ("qixiaoqi.socket.ReceiveSocketService".equals(name.getClassName())) {
-			mReceiveSocketService = null;
-		}
-//        else if("jzj.socket.UartService".equals(name.getClassName())){
-//            mService = null;
-//        }
-	}
+    @Override
+    public void onServiceConnected(ComponentName componentName, IBinder service) {
+        if(service instanceof ReceiveDataframSocketService.LocalBinder){
+            mReceiveDataframSocketService = ((ReceiveDataframSocketService.LocalBinder) service)
+                    .getService();
+            //TODO UDP 发送给蓝牙
+            if(sdkAndBluetoothDataInchange==null) {
+                sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
+            }
+            sdkAndBluetoothDataInchange.initReceiveDataframSocketService(mReceiveDataframSocketService, ICSOpenVPNApplication.uartService);
+        }else if(service instanceof ReceiveSocketService.LocalBinder ){
+            mReceiveSocketService = ((ReceiveSocketService.LocalBinder) service)
+                    .getService();
+        }
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        if("aixiaoqi.socket.ReceiveDataframSocketService".equals(name.getClassName())){
+            mReceiveDataframSocketService = null;
+        }else if("qixiaoqi.socket.ReceiveSocketService".equals(name.getClassName())){
+            mReceiveSocketService = null;
+        }
+
+    }
+
+
 }
