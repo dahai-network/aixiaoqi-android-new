@@ -28,7 +28,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.DeviceAdapter;
-import cn.com.johnson.adapter.RecyclerBaseAdapter;
 import de.blinkt.openvpn.activities.Base.CommenActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.Constant;
@@ -44,7 +43,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
-public class BindDeviceActivity extends CommenActivity implements RecyclerBaseAdapter.OnItemClickListener, InterfaceCallback, DialogInterfaceTypeBase {
+public class BindDeviceActivity extends CommenActivity implements InterfaceCallback, DialogInterfaceTypeBase {
 
 	public static String BIND_COMPELETE = "BIND_COMPELETE";
 	public static int FAILT = 4;
@@ -54,7 +53,6 @@ public class BindDeviceActivity extends CommenActivity implements RecyclerBaseAd
 	RecyclerView allDeviceRv;
 	@BindView(R.id.connectedRelativeLayout)
 	RelativeLayout connectedRelativeLayout;
-
 	private Handler mHandler;
 	private BluetoothAdapter mBluetoothAdapter;
 	List<BluetoothDevice> deviceList;
@@ -114,20 +112,10 @@ public class BindDeviceActivity extends CommenActivity implements RecyclerBaseAd
 		if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 			deviceAddress = utils.readString(Constant.IMEI);
 		}
-		scanLeDevice(true);
+		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+		startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 	}
 
-	@Override
-	public void onItemClick(View view, Object data) {
-		mBluetoothAdapter.stopLeScan(mLeScanCallback);
-		BluetoothDevice device = (BluetoothDevice) data;
-		Intent result = new Intent();
-		result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, device.getAddress());
-		SharedUtils utils = SharedUtils.getInstance();
-		utils.writeString(Constant.IMEI, device.getAddress());
-		setResult(Activity.RESULT_OK, result);
-		finish();
-	}
 
 	private void scanLeDevice(final boolean enable) {
 
@@ -283,7 +271,7 @@ public class BindDeviceActivity extends CommenActivity implements RecyclerBaseAd
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_ENABLE_BT) {
 			if (resultCode == Activity.RESULT_OK) {
-				Toast.makeText(this, "重新搜索", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(this, "重新搜索", Toast.LENGTH_SHORT).show();
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -299,6 +287,7 @@ public class BindDeviceActivity extends CommenActivity implements RecyclerBaseAd
 			} else {
 				Log.d(TAG, "BT not enabled");
 				Toast.makeText(this, "蓝牙未打开", Toast.LENGTH_SHORT).show();
+				finish();
 			}
 		}
 	}

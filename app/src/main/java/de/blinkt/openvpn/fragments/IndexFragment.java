@@ -241,6 +241,17 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
+				int status = 0;
+				if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBlutoothStatus())) {
+					status = R.string.index_no_signal;
+				} else if (getActivity().getResources().getString(R.string.index_connecting).equals(getBlutoothStatus())) {
+					status = R.string.index_connecting;
+				} else if (getActivity().getResources().getString(R.string.index_high_signal).equals(getBlutoothStatus())) {
+					status = R.string.index_high_signal;
+				} else if (getActivity().getResources().getString(R.string.index_no_packet).equals(getBlutoothStatus())) {
+					status = R.string.index_no_packet;
+				}
+				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, status);
 				startActivity(intent);
 			}
 		});
@@ -387,7 +398,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 //				hotPackageRecyclerView.setBackgroundResource(R.color.white);
 				hotPackageRecyclerView.setNestedScrollingEnabled(false);
 //				FullyGridLayoutManager GridManager = new FullyGridLayoutManager(getActivity(), 4);
-				hotPackageRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),4));
+				hotPackageRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
 				hotPackageRecyclerView.addItemDecoration(new DividerGridItemDecoration(getActivity()));
 				hotPackageRecyclerView.setAdapter(new HotPackageAdapter(hotList, getActivity()));
 				scrollLinearlayout.addView(hotPackageRecyclerView);
@@ -460,5 +471,10 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	//修改蓝牙状态
 	public void changeBluetoothStatus(String leftText, int leftIconId) {
 		title.setLeftIvIconAndText(leftIconId, leftText);
+	}
+
+	//获取蓝牙状态
+	public String getBlutoothStatus() {
+		return title.getLeftText().getText().toString();
 	}
 }

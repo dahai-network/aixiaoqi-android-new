@@ -93,7 +93,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				public void run() {
 					try {
 						Log.i("toBLue", "连接成功");
-						Thread.sleep(1000);
+						Thread.sleep(3000);
 
 						//测试用后删除//结束BindDeviceActivity
 						Intent bindCompeleteIntent = new Intent();

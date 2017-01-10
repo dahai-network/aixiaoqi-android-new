@@ -110,7 +110,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	private static final int REQUEST_ENABLE_BT = 2;
 	private static final int UART_PROFILE_CONNECTED = 20;
 	private static final int UART_PROFILE_DISCONNECTED = 21;
-	private static int conStatusResource;
+	public static final String BLUESTATUSFROMPROMAIN = "bluestatusfrompromain";
+	private static int conStatusResource = R.string.index_connecting;
 	private TimerTask checkPowerTask = new TimerTask() {
 		@Override
 		public void run() {
@@ -191,7 +192,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		}
 		if (mService.mConnectionState == UartService.STATE_CONNECTED) {
 			conStatusLinearLayout.setVisibility(View.VISIBLE);
-			setConStatus(conStatusResource);
+			int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
+			setConStatus(blueStatus);
 		}
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
 	}
@@ -358,6 +360,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 									}
 								});
 								connectThread.start();
+								setConStatus(R.string.index_connecting);
 								showProgress("正在重新连接");
 
 							}

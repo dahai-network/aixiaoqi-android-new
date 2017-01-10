@@ -27,7 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
@@ -88,6 +87,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	//重连时间
 	private long RECONNECT_TIME = 180000;
 	SocketConnection socketConnection;
+
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
 		return super.getLastCustomNonConfigurationInstance();
@@ -108,7 +108,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				finish();
 			}
 			//打开蓝牙服务后开始搜索
-			//searchBLE();
+			searchBLE();
 		}
 
 		public void onServiceDisconnected(ComponentName classname) {
@@ -127,7 +127,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		addListener();
 		setListener();
 		initServices();
-		socketConnection=new SocketConnection();
+		socketConnection = new SocketConnection();
 	}
 
 
@@ -148,17 +148,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		Intent bindIntent = new Intent(this, UartService.class);
 		bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
 	}
+
 	private void startSocketService() {
 		Intent receiveSdkIntent = new Intent(this, ReceiveSocketService.class);
-		bindService(receiveSdkIntent,socketConnection , Context.BIND_AUTO_CREATE);
+		bindService(receiveSdkIntent, socketConnection, Context.BIND_AUTO_CREATE);
 
 	}
 
 	private void startDataframService() {
 		Intent receiveSdkIntent = new Intent(this, ReceiveDataframSocketService.class);
-		bindService(receiveSdkIntent,socketConnection , Context.BIND_AUTO_CREATE);
+		bindService(receiveSdkIntent, socketConnection, Context.BIND_AUTO_CREATE);
 
 	}
+
 	public LinearLayout getLlArrayToSport() {
 		return llArray[3];
 	}
@@ -287,7 +289,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		}
 	}
+
 	private Handler stopHandler = null;
+
 	//扫描五秒后断连
 	private void scanDeviceFiveSecond() {
 		scanLeDevice(true);
@@ -295,8 +299,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			@Override
 			public void run() {
 				indexFragment.changeBluetoothStatus(getResources().getString(R.string.index_connecting), R.drawable.index_connecting);
-				if(stopHandler==null)
-				{
+				if (stopHandler == null) {
 					stopHandler = new Handler();
 				}
 				stopHandler.postDelayed(new Runnable() {
@@ -306,7 +309,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
-								indexFragment.changeBluetoothStatus(getResources().getString(R.string.index_unconnect), R.drawable.index_unconnect);
+								if (indexFragment.getBlutoothStatus().equals(getResources().getString(R.string.index_unconnect)))
+									indexFragment.changeBluetoothStatus(getResources().getString(R.string.index_unconnect), R.drawable.index_unconnect);
 							}
 						});
 					}
@@ -541,14 +545,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 				//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
 				indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
-				startDataframService();
-				startSocketService();
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						JNIUtil.getInstance().startSDK();
-					}
-				}).start();
+//				startDataframService();
+//				startSocketService();
+//				new Thread(new Runnable() {
+//					@Override
+//					public void run() {
+//						JNIUtil.getInstance().startSDK();
+//					}
+//				}).start();
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
