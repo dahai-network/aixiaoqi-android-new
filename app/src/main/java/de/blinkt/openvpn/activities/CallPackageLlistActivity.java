@@ -104,7 +104,7 @@ public class CallPackageLlistActivity extends BaseActivity implements XRecyclerV
 					if (pageNumber == 1) {
 						callListRecylerView.setVisibility(View.GONE);
 						NodataRelativeLayout.setVisibility(View.VISIBLE);
-						noDataTextView.setText(getResources().getString(R.string.no_order));
+						noDataTextView.setText(getResources().getString(R.string.no_packet));
 					}
 					callListRecylerView.noMoreLoading();
 				}

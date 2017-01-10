@@ -186,7 +186,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 										//如果信号强度绝对值大于这个值（距离\）,则配对
 										if (Math.abs(rssi) < 90) {
 											mBluetoothAdapter.stopLeScan(mLeScanCallback);
-//											checkIsBindDevie(device);
 											deviceAddress = device.getAddress();
 											IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, device.getAddress());
 											new Thread(http).start();

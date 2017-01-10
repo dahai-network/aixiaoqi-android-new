@@ -71,13 +71,12 @@ import static de.blinkt.openvpn.activities.BindDeviceActivity.FAILT;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
-import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
 
-public class MyDeviceActivity extends BaseActivity implements InterfaceCallback, DialogInterfaceTypeBase, View.OnClickListener,TlvAnalyticalUtils.RegisterSimStatueLisener {
+public class MyDeviceActivity extends BaseActivity implements InterfaceCallback, DialogInterfaceTypeBase, View.OnClickListener, TlvAnalyticalUtils.RegisterSimStatueLisener {
 	@BindView(R.id.noConnectImageView)
 	ImageView noConnectImageView;
 	@BindView(R.id.statueTextView)
@@ -445,11 +444,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						} else if (txValue[1] == (byte) 0x33) {
 							simStatusTextView.setText(getResources().getString(R.string.index_inserted_card));
 							simStatusTextView.setTextColor(ContextCompat.getColor(MyDeviceActivity.this, R.color.select_contacct));
-							sendMessageToBlueTooth(OFF_TO_POWER);
+//							sendMessageToBlueTooth(OFF_TO_POWER);
 						} else if (txValue[1] == (byte) 0x11) {
 							simStatusTextView.setText(getResources().getString(R.string.index_un_insert_card));
 							simStatusTextView.setTextColor(ContextCompat.getColor(MyDeviceActivity.this, R.color.gray_text));
-							sendMessageToBlueTooth(OFF_TO_POWER);
+//							sendMessageToBlueTooth(OFF_TO_POWER);
 						}
 						break;
 				}

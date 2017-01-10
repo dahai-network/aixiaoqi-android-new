@@ -311,6 +311,7 @@
     <string name="hang_free">免提</string>
     <!--没有数据时候-->
     <string name="no_order">没有订单</string>
+    <string name="no_packet">没有套餐</string>
     <string name="no_balance_detail">没有余额详情</string>
 
     <!--支付成功-->

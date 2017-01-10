@@ -44,6 +44,7 @@ import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.IS_WRITE_CARD_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR;
+import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.UP_TP_POWER_RECEIVE;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_91;
@@ -105,7 +106,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						}
 						Thread.sleep(500);
 						//测试代码
-						sendMessageToBlueTooth(UP_TO_POWER);
+//						sendMessageToBlueTooth(UP_TO_POWER);
 
 //						sendMessageToBlueTooth("AABBCCDDEEFF");//绑定命令
 //						Thread.sleep(1000);
@@ -272,6 +273,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 								cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
 								LocalBroadcastManager.getInstance(context).sendBroadcast(cardBreakIntent);
 							}
+							//复位操作
+							sendMessageSeparate(RESTORATION);
 							break;
 						case (byte) 0x33:
 							//添加计时器20秒后没有回复则写卡失败

@@ -1,5 +1,7 @@
 package com.aixiaoqi.socket;
 
+import android.util.Log;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,7 +9,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
-import de.blinkt.openvpn.model.LocationEntity;
 
 /**
  * Socket收发器 通过Socket发送数据，并使用新线程监听Socket接收到的数据
@@ -76,12 +77,15 @@ public abstract class SocketTransceiver implements Runnable {
 	 * @return 发送成功返回true
 	 */
 	public boolean send(String s) {
+		Log.i("toBLue","发送字符串out="+(out != null));
 		if (out != null) {
 			try {
+				Log.i("toBLue","发送字符串");
 				out.write(HexStringExchangeBytesUtil.hexStringToBytes(s));
 				out.flush();
 				return true;
 			} catch (Exception e) {
+
 				e.printStackTrace();
 				this.onDisconnect(addr);
 			}

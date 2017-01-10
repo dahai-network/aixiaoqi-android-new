@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -36,7 +37,8 @@ public class ReceiveSocketService extends Service {
     TcpClient tcpClient =new TcpClient() {
         @Override
         public void onConnect(SocketTransceiver transceiver) {
-            createSocketLisener.create();
+			Log.i("toBLue","正在注册GOIP");
+			createSocketLisener.create();
         }
 
         @Override
@@ -69,7 +71,9 @@ public class ReceiveSocketService extends Service {
 		contactFailCount++;
     }
     public void sendMessage(String s){
+		Log.e("sendMessage","发送到GOIPtcpClient"+(tcpClient!=null)+"\n发送到GOIPtcpClient"+(tcpClient.getTransceiver()!=null));
         if(tcpClient!=null&&tcpClient.getTransceiver()!=null){
+
             tcpClient.getTransceiver().send(s);
         }
     }
