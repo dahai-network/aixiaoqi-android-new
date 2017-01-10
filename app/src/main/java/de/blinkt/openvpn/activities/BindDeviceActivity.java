@@ -229,7 +229,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			if (http.getIsBindEntity().getBindStatus() == 0) {
 				mService.connect(deviceAddress);
 				//测试用代码
-				BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddress, "1");
+				BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddress, utils.readString(Constant.BRACELETVERSION));
 				new Thread(bindDevicehttp).start();
 			} else {
 				CommonTools.showShortToast(this, "该设备已经绑定过了！");

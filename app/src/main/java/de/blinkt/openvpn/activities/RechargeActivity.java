@@ -208,7 +208,7 @@ public class RechargeActivity extends BaseActivity implements InterfaceCallback,
 			case R.id.nextBtn:
 				//友盟方法统计
 				HashMap<String, String> map = new HashMap<>();
-				if (CommonTools.isFastDoubleClick(1000)) {
+				if (!CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
 				nextBtn.setEnabled(false);

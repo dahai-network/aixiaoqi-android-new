@@ -94,14 +94,18 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				public void run() {
 					try {
 						Log.i("toBLue", "连接成功");
-						Thread.sleep(3000);
+						Thread.sleep(1000);
 
 						//测试用后删除//结束BindDeviceActivity
 						Intent bindCompeleteIntent = new Intent();
 						bindCompeleteIntent.setAction(BindDeviceActivity.BIND_COMPELETE);
 						LocalBroadcastManager.getInstance(context).sendBroadcast(bindCompeleteIntent);
+						if (!CommonTools.isFastDoubleClick(3000)) {
+							sendMessageToBlueTooth(FIND_VERSION);
+						}
+						Thread.sleep(500);
 						//测试代码
-//						sendMessageToBlueTooth(UP_TO_POWER);
+						sendMessageToBlueTooth(UP_TO_POWER);
 
 //						sendMessageToBlueTooth("AABBCCDDEEFF");//绑定命令
 //						Thread.sleep(1000);
@@ -258,8 +262,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //							Intent bindCompeleteIntent = new Intent();
 //							bindCompeleteIntent.setAction(BindDeviceActivity.BIND_COMPELETE);
 //							LocalBroadcastManager.getInstance(context).sendBroadcast(bindCompeleteIntent);
-							//检测是否插卡了
-							sendMessageSeparate(UP_TO_POWER);
 							break;
 						case (byte) 0x09:
 							Log.i("test", "上一次充电时间");
