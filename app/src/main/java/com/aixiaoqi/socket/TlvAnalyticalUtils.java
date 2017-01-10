@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.constant.Constant;
 
 /**
  * TLV的解析
@@ -13,7 +14,7 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 public class TlvAnalyticalUtils {
 
 	private static String TAG = "TlvAnalyticalUtils";
-	public static NotifySimStatueSubject notifysimstatuesubject = new NotifySimStatueSubject();
+
 
 	public static MessagePackageEntity builderMessagePackage(String hexString) {
 		Log.e("TlvAnalyticalUtils", hexString);
@@ -21,6 +22,16 @@ public class TlvAnalyticalUtils {
 		String responeHeader = hexString.substring(position, position + 8);
 		String tagString = hexString.substring(4, 6);
 		int tag = Integer.parseInt(tagString, 16);
+		String responeString = hexString.substring(6, 8);
+		int responeCode = Integer.parseInt(responeString, 16);
+		responeCode = responeCode & 127;
+		if(responeCode==41){
+			registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL);//注册失败,未授权
+			return null;
+		}else if(responeCode==39){
+			registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL);//注册失败，无卡可用
+			return null;
+		}
 		tag = tag & 127;
 		position = position + 8;
 		String sessionId = hexString.substring(position, position + 8);
@@ -127,10 +138,11 @@ public class TlvAnalyticalUtils {
 						Log.e("RegisterSim", "RegisterSimStatue=" + Integer.parseInt(value, 16));
 						if (Integer.parseInt(value, 16) == 3) {
 							if (registerSimStatueLisener != null)
-								notifysimstatuesubject.NotifySuccess();//注册成功
+								registerSimStatueLisener.registerSucceed();
 						} else if (Integer.parseInt(value, 16) > 4) {
 							if (registerSimStatueLisener != null)
-								notifysimstatuesubject.NotifyFail(SocketConstant.REGISTER_FAIL);//注册失败
+								registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL);
+
 						}
 					}
 				} catch (NullPointerException e) {
@@ -180,37 +192,11 @@ public class TlvAnalyticalUtils {
 
 	public interface RegisterSimStatueLisener {
 		void registerSucceed();
-
 		void registerFail(int type);
 
 	}
 
-	public static class NotifySimStatueSubject {
-		private ArrayList<RegisterSimStatueLisener> registerSimStatueLiseners = new ArrayList<>();
 
-		//增加观察者
-		public void attach(RegisterSimStatueLisener registerSimStatueLisener) {
-			registerSimStatueLiseners.add(registerSimStatueLisener);
-		}
-
-		//移除观察者
-		public void detach(RegisterSimStatueLisener registerSimStatueLisener) {
-			registerSimStatueLiseners.remove(registerSimStatueLisener);
-		}
-
-		//向观察者们发送通知
-		public void NotifySuccess() {
-			for (RegisterSimStatueLisener r : registerSimStatueLiseners) {
-				r.registerSucceed();
-			}
-		}
-
-		public void NotifyFail(int type) {
-			for (RegisterSimStatueLisener r : registerSimStatueLiseners) {
-				r.registerFail(type);
-			}
-		}
-	}
 
 
 	/**

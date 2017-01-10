@@ -61,7 +61,7 @@ import de.blinkt.openvpn.util.ViewUtil;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
 
-public class ProMainActivity extends BaseNetActivity implements View.OnClickListener {
+public class ProMainActivity extends BaseNetActivity implements View.OnClickListener,TlvAnalyticalUtils.RegisterSimStatueLisener {
 
 	private ViewPager mViewPager;
 	private TextView[] tvArray = new TextView[5];
@@ -542,6 +542,39 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					});
 				}
 			};
+
+	@Override
+	public void registerSucceed() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+			}
+		});
+
+	}
+
+	@Override
+	public void registerFail(final int type) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				switch (type) {
+					case SocketConstant.REGISTER_FAIL:
+						CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail));
+						break;
+					case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
+						CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail_card_invalid));
+						break;
+					case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
+						CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail_card_operators));
+						break;
+				}
+			}
+		});
+
+	}
+
 	//用于改变indexFragment状态的Receiver
 	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {
 		@Override
@@ -555,30 +588,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
+						Log.e("phoneAddress","main.start()");
 						JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
 					}
 				}).start();
-				TlvAnalyticalUtils.notifysimstatuesubject.attach(new TlvAnalyticalUtils.RegisterSimStatueLisener() {
-					@Override
-					public void registerSucceed() {
-						indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
-					}
-
-					@Override
-					public void registerFail(int type) {
-						switch (type) {
-							case SocketConstant.REGISTER_FAIL:
-								CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail));
-								break;
-							case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
-								CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail_card_invalid));
-								break;
-							case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
-								CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail_card_operators));
-								break;
-						}
-					}
-				});
+				TlvAnalyticalUtils.setListener(ProMainActivity.this);
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {

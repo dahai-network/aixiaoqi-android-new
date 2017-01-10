@@ -254,7 +254,7 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 			dayString = day + "";
 		}
 		String monthString;
-		if (day < 10) {
+		if (month < 10) {
 			monthString = "0" + (month+1);
 		} else {
 			monthString =  (month+1)+"";

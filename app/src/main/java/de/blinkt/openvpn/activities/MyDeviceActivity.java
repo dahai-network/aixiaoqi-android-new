@@ -77,7 +77,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
 
-public class MyDeviceActivity extends BaseActivity implements InterfaceCallback, DialogInterfaceTypeBase, View.OnClickListener {
+public class MyDeviceActivity extends BaseActivity implements InterfaceCallback, DialogInterfaceTypeBase, View.OnClickListener,TlvAnalyticalUtils.RegisterSimStatueLisener {
 	@BindView(R.id.noConnectImageView)
 	ImageView noConnectImageView;
 	@BindView(R.id.statueTextView)
@@ -201,14 +201,13 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		}
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
 
-		TlvAnalyticalUtils.notifysimstatuesubject.attach(new TlvAnalyticalUtils.RegisterSimStatueLisener() {
-			@Override
-			public void registerSucceed() {
-				setConStatus(R.string.index_high_signal);
-			}
+	}
 
+	@Override
+	public void registerFail(final int type) {
+		runOnUiThread(new Runnable() {
 			@Override
-			public void registerFail(int type) {
+			public void run() {
 				switch (type) {
 					case SocketConstant.REGISTER_FAIL:
 						CommonTools.showShortToast(MyDeviceActivity.this, getString(R.string.regist_fail));
@@ -222,6 +221,18 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				}
 			}
 		});
+
+	}
+
+	@Override
+	public void registerSucceed() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				setConStatus(R.string.index_high_signal);
+			}
+		});
+
 	}
 
 	private String deviceAddresstemp;

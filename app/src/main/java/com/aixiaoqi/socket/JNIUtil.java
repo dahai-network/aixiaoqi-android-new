@@ -33,6 +33,7 @@ public class JNIUtil {
             phoneAddress(phonenumber);
     }
     private static void phoneAddress(String phonenumber){
+        Log.e("phoneAddress","phoneAddress");
         if(matchesPhoneNumber(phonenumber)==1||matchesPhoneNumber(phonenumber)==2)
             jniUtil.main((byte)1);
         else if(matchesPhoneNumber(phonenumber)==3){

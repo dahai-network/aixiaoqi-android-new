@@ -181,7 +181,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 										return;
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
-									if (device.getName().contains("ZiJian")) {
+									if (device.getName().contains("Xiao")) {
 //									  else if (device.getName().contains("unitoys")) {
 										//如果信号强度绝对值大于这个值（距离\）,则配对
 										if (Math.abs(rssi) < 90) {
