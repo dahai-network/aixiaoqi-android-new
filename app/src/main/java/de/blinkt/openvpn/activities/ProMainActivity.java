@@ -27,9 +27,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
+import com.aixiaoqi.socket.SocketConstant;
+import com.aixiaoqi.socket.TlvAnalyticalUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -51,6 +54,7 @@ import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.service.CallPhoneService;
+import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
 
@@ -546,14 +550,35 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 				//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
 				indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
-//					startDataframService();
-//					startSocketService();
-//					new Thread(new Runnable() {
-//						@Override
-//						public void run() {
-//							JNIUtil.getInstance().startSDK();
-//						}
-//					}).start();
+				startDataframService();
+				startSocketService();
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
+					}
+				}).start();
+				TlvAnalyticalUtils.notifysimstatuesubject.attach(new TlvAnalyticalUtils.RegisterSimStatueLisener() {
+					@Override
+					public void registerSucceed() {
+						indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+					}
+
+					@Override
+					public void registerFail(int type) {
+						switch (type) {
+							case SocketConstant.REGISTER_FAIL:
+								CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail));
+								break;
+							case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
+								CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail_card_invalid));
+								break;
+							case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
+								CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail_card_operators));
+								break;
+						}
+					}
+				});
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {

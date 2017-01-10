@@ -3,6 +3,8 @@ package com.aixiaoqi.socket;
 import android.text.TextUtils;
 import android.util.Log;
 
+import static com.aixiaoqi.socket.TlvAnalyticalUtils.notifysimstatuesubject;
+
 public class TestProvider   {
 
 	static PreDataEntity preDataEntity=new PreDataEntity();
@@ -54,12 +56,12 @@ public class TestProvider   {
 				}
 			}else{
 				if(TlvAnalyticalUtils.registerSimStatueLisener!=null)
-				TlvAnalyticalUtils.registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR);
+					notifysimstatuesubject.NotifyFail(SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR);
 				return ;
 			}
 		}else {
 			if(TlvAnalyticalUtils.registerSimStatueLisener!=null)
-			TlvAnalyticalUtils.registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
+				notifysimstatuesubject.NotifyFail(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 			return;
 		}
 	}

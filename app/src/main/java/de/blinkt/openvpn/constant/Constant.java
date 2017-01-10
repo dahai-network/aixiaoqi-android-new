@@ -69,8 +69,10 @@ public class Constant {
 	public static final String MESSAGE_REMIND = "NotificaSMS";
 	public static final String WEIXIN_REMIND = "NotificaWeChat";
 	public static final String QQ_REMIND = "NotificaQQ";
-	//是否打开写卡流程，如果没有打开则是测试SIM卡是否连接上
+	//是否打开写卡流程，如果没有打开则是测试SIM卡是否连接上，如果否则为写卡流程，可以连接到GOIP
 	public static boolean IS_TEXT_SIM = true;
+	//是否连接到GOIP（默认true）
+	public static boolean IS_RECEIVE_GOIP = true;
 
 	/**
 	 * 支付宝支付业务：入参app_id

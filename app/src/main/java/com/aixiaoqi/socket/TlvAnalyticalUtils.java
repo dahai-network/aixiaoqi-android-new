@@ -12,182 +12,232 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
  */
 public class TlvAnalyticalUtils {
 
-    public static MessagePackageEntity builderMessagePackage(String hexString){
-        Log.e("TlvAnalyticalUtils",hexString);
-        int position = 0;
-        String responeHeader=hexString.substring(position,position+8);
-        String tagString=hexString.substring(4,6);
-        int tag=Integer.parseInt(tagString,16);
-        tag=tag&127;
-        position=position+8;
-        String sessionId=hexString.substring(position,position+8);
-        SocketConstant.SESSION_ID=sessionId;
-        position=position+8;
-        String hexStringMessageNumber=hexString.substring(position,position+4);
-        position=position+4;
-        String hexStringDatalength=hexString.substring(position,position+4);
+	private static String TAG = "TlvAnalyticalUtils";
+	public static NotifySimStatueSubject notifysimstatuesubject = new NotifySimStatueSubject();
+
+	public static MessagePackageEntity builderMessagePackage(String hexString) {
+		Log.e("TlvAnalyticalUtils", hexString);
+		int position = 0;
+		String responeHeader = hexString.substring(position, position + 8);
+		String tagString = hexString.substring(4, 6);
+		int tag = Integer.parseInt(tagString, 16);
+		tag = tag & 127;
+		position = position + 8;
+		String sessionId = hexString.substring(position, position + 8);
+		SocketConstant.SESSION_ID = sessionId;
+		position = position + 8;
+		String hexStringMessageNumber = hexString.substring(position, position + 4);
+		position = position + 4;
+		String hexStringDatalength = hexString.substring(position, position + 4);
 
 
-        position=position+4;
-        List<TlvEntity> list=  builderTlvList(hexString,hexString.substring(position,hexString.length()),tag);
-        MessagePackageEntity messagePackageEntity=new MessagePackageEntity(list,sessionId,hexStringMessageNumber,hexStringDatalength,responeHeader);
+		position = position + 4;
+		List<TlvEntity> list = builderTlvList(hexString, hexString.substring(position, hexString.length()), tag);
+		MessagePackageEntity messagePackageEntity = new MessagePackageEntity(list, sessionId, hexStringMessageNumber, hexStringDatalength, responeHeader);
 
-        return  messagePackageEntity;
-    }
-    public static void builderMessagePackageList(String hexString){
-        String dataLength= hexString.substring(20,24);
-        int index= Integer.parseInt(dataLength,16)*2;
-        if(index+24<hexString.length()){
-            builderMessagePackage(hexString.substring(0,index+24));
-            builderMessagePackageList(hexString.substring(index+24));
-        }else{
-            builderMessagePackage(hexString);
-        }
-    }
+		return messagePackageEntity;
+	}
 
-    private static  List<TlvEntity> builderTlvList(String orData, String hexString, int tag) {
-        int position = 0;
-        String tempTag="";
-        List<TlvEntity> tlvs = new ArrayList<>();
-        while (position < hexString.length()) {
-            String _hexTag = getTag(hexString, position);
-            position += _hexTag.length();
-            LPositon lPositon = getLengthAndPosition(hexString, position);
+	public static void builderMessagePackageList(String hexString) {
+		String dataLength = hexString.substring(20, 24);
+		int index = Integer.parseInt(dataLength, 16) * 2;
+		if (index + 24 < hexString.length()) {
+			builderMessagePackage(hexString.substring(0, index + 24));
+			builderMessagePackageList(hexString.substring(index + 24));
+		} else {
+			builderMessagePackage(hexString);
+		}
+	}
 
-            int vl = lPositon.getvL();
-            position = lPositon.getposition();
-            String value="";
-            if(position+vl*2<=hexString.length()){
-                value = hexString.substring( position, position + vl * 2);
-            }else{
-                position=position+vl*2;
-                continue;
-            }
-            position = position + value.length();
-            int typeParams=  Integer.parseInt(_hexTag,16);
-            if(tag==4){
+	private static List<TlvEntity> builderTlvList(String orData, String hexString, int tag) {
+		int position = 0;
+		String tempTag = "";
+		List<TlvEntity> tlvs = new ArrayList<>();
+		while (position < hexString.length()) {
+			String _hexTag = getTag(hexString, position);
+			position += _hexTag.length();
+			LPositon lPositon = getLengthAndPosition(hexString, position);
 
-                if(typeParams==2||typeParams==122||typeParams==160||typeParams==170||typeParams==171||typeParams==172||typeParams==180||typeParams==190||typeParams==191||typeParams==197){
-                    value= RadixAsciiChange.convertHexToString(value.substring(0,value.length()-2));
+			int vl = lPositon.getvL();
+			position = lPositon.getposition();
+			String value = "";
+			if (position + vl * 2 <= hexString.length()) {
+				value = hexString.substring(position, position + vl * 2);
+			} else {
+				position = position + vl * 2;
+				continue;
+			}
+			position = position + value.length();
+			int typeParams = Integer.parseInt(_hexTag, 16);
+			if (tag == 4) {
 
-                }
-            }else if(tag==16){
-                if(typeParams==1){
-                    tempTag=value;
-                    if("01".equals(value)){
-                        orData=orData.replace("8a1000","8a9000");
-                    }
+				if (typeParams == 2 || typeParams == 122 || typeParams == 160 || typeParams == 170 || typeParams == 171 || typeParams == 172 || typeParams == 180 || typeParams == 190 || typeParams == 191 || typeParams == 197) {
+					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
 
-                }
-                if("00".equals(tempTag)) {
-                    if (typeParams == 199) {
-                        byte[] bytes=HexStringExchangeBytesUtil.hexStringToBytes(value);
-                        sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA),vl, bytes);
-                    }
-                }else if(typeParams==199){
-                    String  rpValue="000100163b9f94801fc78031e073fe211b573786609b30800119";
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(rpValue);
-                    if(rpValue.length()<vl*2){
-                        for(int i=rpValue.length();i<vl*2;i++ ){
-                            stringBuilder.append("0");
-                        }
-                    }
-                    orData=orData.replace(value, stringBuilder.toString());
-                    sendToSdkLisener.sendServer(orData);
-                }
-                if(value.length()>=2){
-                    value=RadixAsciiChange.convertHexToString(value.substring(0,value.length()-2));
-                }
-            } else if(tag==15){
-                if(System.currentTimeMillis()-lastClickTime>365*24*60*60*1000l||isFast(90*60*1000)){
-                    if(!isFast(90*60*1000)){
-                        isFast(90*60*1000);
-                    }
-                    count++;
-                }else{
-                    count=0;
-                }
-                if(count<=3){
-                    sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR),0, HexStringExchangeBytesUtil.hexStringToBytes(""));
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(orData);
-                    stringBuilder.replace(4,6,Integer.toHexString(tag|0x80));
-                    stringBuilder.replace(6,8,"00");
-                    sendToSdkLisener.sendServer(stringBuilder.toString());
-                    TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-                }
-            }else if(tag==5){
-                if (typeParams == 162) {
-                    if(Integer.parseInt(value,16)==3){
-                        registerSimStatueLisener.registerSucceed();//注册成功
-                    }else if(Integer.parseInt(value,16)>4){
-                        registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL);//注册失败
-                    }
-                }
-            }
+				}
+			} else if (tag == 16) {
+				if (typeParams == 1) {
+					tempTag = value;
+					if ("01".equals(value)) {
+						orData = orData.replace("8a1000", "8a9000");
+					}
 
-            tlvs.add(new TlvEntity(_hexTag, vl+"", value));
-        }
-        return tlvs;
-    }
-    private static long lastClickTime;
-    private static int count=0;
-    public static boolean isFast(int maxTime) {
-        long time = System.currentTimeMillis();
-        long timeD = time - lastClickTime;
-        if (0 <timeD && timeD <maxTime) {
-            return true;
-        }
-        lastClickTime = time;
-        return false;
-    }
-    public static  SendToSdkLisener sendToSdkLisener;
-    public static void setListener(SendToSdkLisener listener) {
-        sendToSdkLisener = listener;
-    }
-    public interface SendToSdkLisener {
-        void send(byte evnindex, int length, byte[] bytes);
-        void sendServer(String hexString);
+				}
+				if ("00".equals(tempTag)) {
+					if (typeParams == 199) {
+						byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
+						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
+					}
+				} else if (typeParams == 199) {
+					String rpValue = "000100163b9f94801fc78031e073fe211b573786609b30800119";
+					StringBuilder stringBuilder = new StringBuilder();
+					stringBuilder.append(rpValue);
+					if (rpValue.length() < vl * 2) {
+						for (int i = rpValue.length(); i < vl * 2; i++) {
+							stringBuilder.append("0");
+						}
+					}
+					orData = orData.replace(value, stringBuilder.toString());
+					sendToSdkLisener.sendServer(orData);
+				}
+				if (value.length() >= 2) {
+					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
+				}
+			} else if (tag == 15) {
+				if (System.currentTimeMillis() - lastClickTime > 365 * 24 * 60 * 60 * 1000l || isFast(90 * 60 * 1000)) {
+					if (!isFast(90 * 60 * 1000)) {
+						isFast(90 * 60 * 1000);
+					}
+					count++;
+				} else {
+					count = 0;
+				}
+				if (count <= 3) {
+					sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));
+					StringBuilder stringBuilder = new StringBuilder();
+					stringBuilder.append(orData);
+					stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
+					stringBuilder.replace(6, 8, "00");
+					sendToSdkLisener.sendServer(stringBuilder.toString());
+					TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+				}
+			} else if (tag == 5) {
+				try {
+					if (typeParams == 162) {
+						Log.e("RegisterSim", "RegisterSimStatue=" + Integer.parseInt(value, 16));
+						if (Integer.parseInt(value, 16) == 3) {
+							if (registerSimStatueLisener != null)
+								notifysimstatuesubject.NotifySuccess();//注册成功
+						} else if (Integer.parseInt(value, 16) > 4) {
+							if (registerSimStatueLisener != null)
+								notifysimstatuesubject.NotifyFail(SocketConstant.REGISTER_FAIL);//注册失败
+						}
+					}
+				} catch (NullPointerException e) {
+					Log.e(TAG, "typeParams nullpointException");
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 
-    }
+			tlvs.add(new TlvEntity(_hexTag, vl + "", value));
+		}
+		return tlvs;
+	}
 
-    public static RegisterSimStatueLisener registerSimStatueLisener;
-    public static void setListener(RegisterSimStatueLisener listener) {
-        registerSimStatueLisener = listener;
-    }
-    public interface RegisterSimStatueLisener {
-        void registerSucceed();
-        void registerFail(int type);
+	private static long lastClickTime;
+	private static int count = 0;
 
-    }
+	public static boolean isFast(int maxTime) {
+		long time = System.currentTimeMillis();
+		long timeD = time - lastClickTime;
+		if (0 < timeD && timeD < maxTime) {
+			return true;
+		}
+		lastClickTime = time;
+		return false;
+	}
+
+	public static SendToSdkLisener sendToSdkLisener;
+
+	public static void setListener(SendToSdkLisener listener) {
+		sendToSdkLisener = listener;
+	}
+
+	public interface SendToSdkLisener {
+		void send(byte evnindex, int length, byte[] bytes);
+
+		void sendServer(String hexString);
+
+	}
+
+	public static RegisterSimStatueLisener registerSimStatueLisener;
+
+	public static void setListener(RegisterSimStatueLisener listener) {
+		registerSimStatueLisener = listener;
+	}
+
+	public interface RegisterSimStatueLisener {
+		void registerSucceed();
+
+		void registerFail(int type);
+
+	}
+
+	public static class NotifySimStatueSubject {
+		private ArrayList<RegisterSimStatueLisener> registerSimStatueLiseners = new ArrayList<>();
+
+		//增加观察者
+		public void attach(RegisterSimStatueLisener registerSimStatueLisener) {
+			registerSimStatueLiseners.add(registerSimStatueLisener);
+		}
+
+		//移除观察者
+		public void detach(RegisterSimStatueLisener registerSimStatueLisener) {
+			registerSimStatueLiseners.remove(registerSimStatueLisener);
+		}
+
+		//向观察者们发送通知
+		public void NotifySuccess() {
+			for (RegisterSimStatueLisener r : registerSimStatueLiseners) {
+				r.registerSucceed();
+			}
+		}
+
+		public void NotifyFail(int type) {
+			for (RegisterSimStatueLisener r : registerSimStatueLiseners) {
+				r.registerFail(type);
+			}
+		}
+	}
 
 
+	/**
+	 * 返回最后的Value的长度
+	 *
+	 * @param hexString
+	 * @param position
+	 * @return
+	 */
+	private static LPositon getLengthAndPosition(String hexString, int position) {
+		String firstByteString = hexString.substring(position, position + 2);
+		int i = Integer.parseInt(firstByteString, 16);
+		String hexLength = "";
+		if (((i >>> 7) & 1) == 0) {
+			hexLength = hexString.substring(position, position + 2);
+			position = position + 2;
+		} else {
+			hexLength = hexString.substring(position + 1, position + 4);
+			position = position + 4;
+		}
+		return new LPositon(Integer.parseInt(hexLength, 16), position);
 
-    /**
-     * 返回最后的Value的长度
-     *
-     * @param hexString
-     * @param position
-     * @return
-     */
-    private static LPositon getLengthAndPosition(String hexString, int position) {
-        String firstByteString = hexString.substring(position, position + 2);
-        int i = Integer.parseInt(firstByteString, 16);
-        String hexLength = "";
-        if (((i >>> 7) & 1) == 0) {
-            hexLength = hexString.substring(position, position + 2);
-            position = position + 2;
-        } else {
-            hexLength = hexString.substring(position+1, position + 4);
-            position=position+4;
-        }
-        return new LPositon(Integer.parseInt(hexLength, 16), position);
+	}
 
-    }
-    private static String getTag(String hexString, int position) {
-        return hexString.substring(position, position + 2);
-    }
+	private static String getTag(String hexString, int position) {
+		return hexString.substring(position, position + 2);
+	}
 
 
 }

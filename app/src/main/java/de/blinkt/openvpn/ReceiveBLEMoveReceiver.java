@@ -8,6 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.aixiaoqi.socket.SocketConnection;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -100,7 +101,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						bindCompeleteIntent.setAction(BindDeviceActivity.BIND_COMPELETE);
 						LocalBroadcastManager.getInstance(context).sendBroadcast(bindCompeleteIntent);
 						//测试代码
-						sendMessageToBlueTooth(UP_TO_POWER);
+//						sendMessageToBlueTooth(UP_TO_POWER);
 
 //						sendMessageToBlueTooth("AABBCCDDEEFF");//绑定命令
 //						Thread.sleep(1000);
@@ -291,15 +292,19 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 								}
 							}
 							break;
-						case (byte) 0xDB: case (byte) 0xDA:
-							messages.add(messageFromBlueTooth);
-							if (txValue[3] == txValue[4]) {
-								mStrSimCmdPacket = PacketeUtil.Combination(messages);
-								// 接收到一个完整的数据包,发送到SDK
-								ReceiveDBOperate(mStrSimCmdPacket);
-								messages.clear();
+						case (byte) 0xDB:
+						case (byte) 0xDA:
+							if (IS_TEXT_SIM) {
+								SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+							} else {
+								messages.add(messageFromBlueTooth);
+								if (txValue[3] == txValue[4]) {
+									mStrSimCmdPacket = PacketeUtil.Combination(messages);
+									// 接收到一个完整的数据包,处理信息
+									ReceiveDBOperate(mStrSimCmdPacket);
+									messages.clear();
+								}
 							}
-//							SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth,txValue);
 							break;
 						case (byte) 0xEE:
 							if (!isOpenStepService) {

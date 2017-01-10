@@ -66,7 +66,7 @@ public class ReceiveSocketService extends Service {
     private void reConnect(int count) {
         tcpClient.disconnect();
         initSocket();
-        count++;
+		contactFailCount++;
     }
     public void sendMessage(String s){
         if(tcpClient!=null&&tcpClient.getTransceiver()!=null){
@@ -96,7 +96,6 @@ public class ReceiveSocketService extends Service {
 
         @Override
         public void run() {
-            // 需要做的事:发送消息
             TestProvider.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
         }
     };

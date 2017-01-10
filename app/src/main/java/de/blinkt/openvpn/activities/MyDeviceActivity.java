@@ -24,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.SocketConstant;
+import com.aixiaoqi.socket.TlvAnalyticalUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
@@ -193,12 +195,33 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (mService.mConnectionState == UartService.STATE_CONNECTED) {
 			conStatusLinearLayout.setVisibility(View.VISIBLE);
 			int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
-			if(blueStatus!=0)
-			{
+			if (blueStatus != 0) {
 				setConStatus(blueStatus);
 			}
 		}
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
+
+		TlvAnalyticalUtils.notifysimstatuesubject.attach(new TlvAnalyticalUtils.RegisterSimStatueLisener() {
+			@Override
+			public void registerSucceed() {
+				setConStatus(R.string.index_high_signal);
+			}
+
+			@Override
+			public void registerFail(int type) {
+				switch (type) {
+					case SocketConstant.REGISTER_FAIL:
+						CommonTools.showShortToast(MyDeviceActivity.this, getString(R.string.regist_fail));
+						break;
+					case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
+						CommonTools.showShortToast(MyDeviceActivity.this, getString(R.string.regist_fail_card_invalid));
+						break;
+					case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
+						CommonTools.showShortToast(MyDeviceActivity.this, getString(R.string.regist_fail_card_operators));
+						break;
+				}
+			}
+		});
 	}
 
 	private String deviceAddresstemp;
