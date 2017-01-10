@@ -4,6 +4,9 @@ import android.util.Log;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 
+import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
+import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
+
 /**
  * Created by Administrator on 2016/12/27 0027.
  */
@@ -29,8 +32,23 @@ public class JNIUtil {
         return jniUtil;
     }
     public static void  startSDK(String phonenumber){
-        if(jniUtil!=null)
-            phoneAddress(phonenumber);
+        switch (SocketConstant.REGISTER_STATUE_CODE){
+            case 0:
+                if(jniUtil!=null)
+                    phoneAddress(phonenumber);
+                break;
+            case 1:
+                reStartSDK(phonenumber);
+                break;
+            case 2:
+                sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));
+                sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+            break;
+            default:
+                Log.e("ReconnectBluebooth","RegisterSucceed");
+                break;
+        }
+
     }
     private static void phoneAddress(String phonenumber){
         Log.e("phoneAddress","phoneAddress");

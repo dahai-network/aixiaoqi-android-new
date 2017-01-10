@@ -58,10 +58,11 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
 
+import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
 
-public class ProMainActivity extends BaseNetActivity implements View.OnClickListener,TlvAnalyticalUtils.RegisterSimStatueLisener {
+public class ProMainActivity extends BaseNetActivity implements View.OnClickListener, TlvAnalyticalUtils.RegisterSimStatueLisener {
 
 	private ViewPager mViewPager;
 	private TextView[] tvArray = new TextView[5];
@@ -424,8 +425,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					isClick = false;
 					hidePhoneBottomBar();
 					llArray[position].performClick();
-				}
-				else {
+				} else {
 					if (!isClick) {
 						removeAllStatus();
 						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
@@ -583,13 +583,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 				//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
-				indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+				checkRegisterStatuGoIp();
 				startDataframService();
 				startSocketService();
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						Log.e("phoneAddress","main.start()");
+						Log.e("phoneAddress", "main.start()");
+						REGISTER_STATUE_CODE = 1;
 						JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
 					}
 				}).start();
@@ -613,12 +614,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							}
 						}
 					} else if (txValue[1] == (byte) 0x33) {
-						indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+						checkRegisterStatuGoIp();
 					} else if (txValue[1] == (byte) 0x11) {
 						indexFragment.changeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 					} else if (txValue[1] == (byte) 0xEE) {
 						if (indexFragment.getOrderAdapter().getItemCount() != 0) {
-							indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+							checkRegisterStatuGoIp();
 						} else {
 							indexFragment.changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 						}
@@ -627,4 +628,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		}
 	};
+
+	//是否注册成功，如果是则信号强，反之则信号弱
+	private void checkRegisterStatuGoIp() {
+//		if (REGISTER_STATUE_CODE != 3) {
+//			indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+//		} else {
+//			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+//		}
+	}
 }
