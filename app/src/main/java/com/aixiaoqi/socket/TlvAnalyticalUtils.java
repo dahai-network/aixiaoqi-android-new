@@ -171,7 +171,7 @@ public class TlvAnalyticalUtils {
 	 * 注册中不成功再次注册
 	 */
 	public static void reRegistering(String orData, int tag) {
-		sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));
+		sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));//重置SDK
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(orData);
 		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
