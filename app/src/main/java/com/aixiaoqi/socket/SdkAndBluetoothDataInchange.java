@@ -1,5 +1,6 @@
 package com.aixiaoqi.socket;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -23,7 +24,8 @@ public class SdkAndBluetoothDataInchange {
 														 //SDK接收到消息发送给蓝牙消息的方法
 														 //TODO
 														 Log.e(TAG, "&&& server temp:" + msg);
-														 sendToBluetoothAboutCardInfo(msg);
+														 if(!TextUtils.isEmpty(msg))
+															 sendToBluetoothAboutCardInfo(msg);
 
 
 													 }
@@ -81,8 +83,6 @@ public class SdkAndBluetoothDataInchange {
 			sendToOneServerTemp = sendToOnService;
 			Log.e("Bluetooth", "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
 					+ sendToOneServerTemp);
-			//TODO 从蓝牙发出的数据到SDK
-
 			sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
 			num = 0;
 			Log.e("Bluetooth", "从蓝牙发出的数据" + socketTag + sendToOneServerTemp);
@@ -129,6 +129,7 @@ public class SdkAndBluetoothDataInchange {
 			byte[] value;
 			value = HexStringExchangeBytesUtil.hexStringToBytes("AADB040174");
 			mService.writeRXCharacteristic(value);
+			TlvAnalyticalUtils.isOffToPower=false;
 			Log.e("BLUETOOTH", "SIM POWER UP");
 		} else {
 			byte[] value = HexStringExchangeBytesUtil.hexStringToBytes(temp);

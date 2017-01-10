@@ -4,12 +4,14 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.SharedUtils;
 
 /**
@@ -18,7 +20,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 public class ReceiveSocketService extends Service {
     private final IBinder mBinder = new LocalBinder();
     private int contactFailCount=1;
-    private int discontactCount=1;
+
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -42,12 +44,22 @@ public class ReceiveSocketService extends Service {
         @Override
         public void onConnectFailed() {
             if(contactFailCount<=3){
-                reConnect( contactFailCount);
+                reConnect();
             }
         }
+        private void sendMessage() {
+                byte[] value;
+                value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
+                ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
+                TlvAnalyticalUtils.isOffToPower=false;
+                Log.e("BLUETOOTH", "SIM POWER UP");
 
+        }
         @Override
         public void onReceive(SocketTransceiver transceiver, byte[] s,int length) {
+            if(TlvAnalyticalUtils.isOffToPower){
+                sendMessage();
+            }
             TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s,length));
             if(!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)&&count==0){
                 timer.schedule(task,60000,60000);
@@ -63,10 +75,11 @@ public class ReceiveSocketService extends Service {
 
 
     };
-    private void reConnect(int count) {
+    private void reConnect() {
+        count=0;
         tcpClient.disconnect();
         initSocket();
-		contactFailCount++;
+        contactFailCount++;
     }
     public void sendMessage(String s){
         if(tcpClient!=null&&tcpClient.getTransceiver()!=null){

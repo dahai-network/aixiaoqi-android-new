@@ -28,7 +28,7 @@ public class SocketConstant {
 	public static String[] CONNENCT_VALUE = {"01",//01，请求GoIp模块的值
 			"b4"//101,链接存活时间
 			, "01"//107,是否请求预读数据
-            ,RadixAsciiChange.convertStringToHex(SharedUtils.getInstance().readString(Constant.TOKEN))//120,服务寻址sessionID
+			,RadixAsciiChange.convertStringToHex(SharedUtils.getInstance().readString(Constant.TOKEN))//120,服务寻址sessionID
 //			, RadixAsciiChange.convertStringToHex("43fa381a01a3cd934c71fdc54dcdc2f")//120,服务寻址sessionID
 			, "01"//121,数据链接协议
 			, "757573696d00"//150,uuwifi设备编号vid
@@ -68,4 +68,5 @@ public class SocketConstant {
 	public static final int REGISTER_FAIL = 1;
 	public static final int REGISTER_FAIL_IMSI_IS_NULL = 2;
 	public static final int REGISTER_FAIL_IMSI_IS_ERROR = 3;
+	public static  int REGISTER_STATUE_CODE= 1;//1，表示获取预读取数据没有完成。2，表示注册中，3表示注册成功
 }

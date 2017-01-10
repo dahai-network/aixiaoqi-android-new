@@ -5,8 +5,10 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 
 /**
  * TLV的解析
@@ -15,7 +17,7 @@ public class TlvAnalyticalUtils {
 
 	private static String TAG = "TlvAnalyticalUtils";
 
-
+	public static boolean isOffToPower = false;
 	public static MessagePackageEntity builderMessagePackage(String hexString) {
 		Log.e("TlvAnalyticalUtils", hexString);
 		int position = 0;
@@ -33,6 +35,13 @@ public class TlvAnalyticalUtils {
 			return null;
 		}
 		tag = tag & 127;
+		if(tag!=5){
+			if(System.currentTimeMillis()-registerSimTime>5*60*1000&&isRegisterSucceed){
+				sendMessageToBlueTooth(Constant.OFF_TO_POWER);
+				isOffToPower=true;
+			}
+			registerSimTime=System.currentTimeMillis();
+		}
 		position = position + 8;
 		String sessionId = hexString.substring(position, position + 8);
 		SocketConstant.SESSION_ID = sessionId;
@@ -41,13 +50,25 @@ public class TlvAnalyticalUtils {
 		position = position + 4;
 		String hexStringDatalength = hexString.substring(position, position + 4);
 
-
 		position = position + 4;
 		List<TlvEntity> list = builderTlvList(hexString, hexString.substring(position, hexString.length()), tag);
 		MessagePackageEntity messagePackageEntity = new MessagePackageEntity(list, sessionId, hexStringMessageNumber, hexStringDatalength, responeHeader);
 
 		return messagePackageEntity;
 	}
+	private static void sendMessageToBlueTooth(final String message) {
+		byte[] value;
+		Log.i("toBLue","OFF"+ message);
+		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
+		UartService mService = ICSOpenVPNApplication.uartService;
+		if (mService != null) {
+			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
+				mService.writeRXCharacteristic(value);
+			}
+		}
+	}
+
+
 
 	public static void builderMessagePackageList(String hexString) {
 		String dataLength = hexString.substring(20, 24);
@@ -124,32 +145,21 @@ public class TlvAnalyticalUtils {
 					count = 0;
 				}
 				if (count <= 3) {
-					sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));
-					StringBuilder stringBuilder = new StringBuilder();
-					stringBuilder.append(orData);
-					stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
-					stringBuilder.replace(6, 8, "00");
-					sendToSdkLisener.sendServer(stringBuilder.toString());
-					TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+					reRegistering(orData, tag);
 				}
 			} else if (tag == 5) {
-				try {
-					if (typeParams == 162) {
-						Log.e("RegisterSim", "RegisterSimStatue=" + Integer.parseInt(value, 16));
-						if (Integer.parseInt(value, 16) == 3) {
-							if (registerSimStatueLisener != null)
-								registerSimStatueLisener.registerSucceed();
-						} else if (Integer.parseInt(value, 16) > 4) {
-							if (registerSimStatueLisener != null)
-								registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL);
-
+				if (typeParams == 162) {
+					if (Integer.parseInt(value, 16) == 3) {
+						if (registerSimStatueLisener != null){
+							SocketConstant.REGISTER_STATUE_CODE=3;
+							registerSimStatueLisener.registerSucceed();
+							registerSimTime=System.currentTimeMillis();
+							isRegisterSucceed=true;
 						}
+					} else if (Integer.parseInt(value, 16) > 4) {
+						if (registerSimStatueLisener != null)
+							registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL);
 					}
-				} catch (NullPointerException e) {
-					Log.e(TAG, "typeParams nullpointException");
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 
@@ -157,7 +167,21 @@ public class TlvAnalyticalUtils {
 		}
 		return tlvs;
 	}
+	/**
+	 * 注册中不成功再次注册
+	 */
+	public static void reRegistering(String orData, int tag) {
+		sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(orData);
+		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
+		stringBuilder.replace(6, 8, "00");
+		sendToSdkLisener.sendServer(stringBuilder.toString());
+		TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+	}
 
+	private static boolean isRegisterSucceed=false;
+	private static long registerSimTime;
 	private static long lastClickTime;
 	private static int count = 0;
 
@@ -179,7 +203,6 @@ public class TlvAnalyticalUtils {
 
 	public interface SendToSdkLisener {
 		void send(byte evnindex, int length, byte[] bytes);
-
 		void sendServer(String hexString);
 
 	}
