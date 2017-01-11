@@ -267,6 +267,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
 				mService.disconnect();
+
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
 				//清空缓存的mac地址
