@@ -24,7 +24,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -53,6 +58,7 @@ import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.http.UnBindDeviceHttp;
 import de.blinkt.openvpn.model.BlueToothDeviceEntity;
+import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -64,12 +70,12 @@ import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
+import static android.R.attr.type;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.activities.BindDeviceActivity.FAILT;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
-import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
@@ -183,14 +189,15 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (mService.mConnectionState != UartService.STATE_CONNECTED) {
 			GetBindDeviceHttp http = new GetBindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 			new Thread(http).start();
-		} else {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			sendMessageToBlueTooth(UP_TO_POWER);
 		}
+//		else {
+//			try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			sendMessageToBlueTooth(UP_TO_POWER);
+//		}
 		if (mService.mConnectionState == UartService.STATE_CONNECTED) {
 			conStatusLinearLayout.setVisibility(View.VISIBLE);
 			int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
@@ -199,10 +206,16 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			}
 		}
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
-
+		EventBus.getDefault().register(this);
 	}
 
-
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
+		if (blueStatus != R.string.index_high_signal) {
+		}
+	}
 	private String deviceAddresstemp;
 
 	@Override
@@ -413,11 +426,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						} else if (txValue[1] == (byte) 0x33) {
 							simStatusTextView.setText(getResources().getString(R.string.index_inserted_card));
 							simStatusTextView.setTextColor(ContextCompat.getColor(MyDeviceActivity.this, R.color.select_contacct));
-							sendMessageToBlueTooth(OFF_TO_POWER);
 						} else if (txValue[1] == (byte) 0x11) {
 							simStatusTextView.setText(getResources().getString(R.string.index_un_insert_card));
 							simStatusTextView.setTextColor(ContextCompat.getColor(MyDeviceActivity.this, R.color.gray_text));
-							sendMessageToBlueTooth(OFF_TO_POWER);
 						}
 						break;
 				}
@@ -461,6 +472,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		Log.d(TAG, "onDestroy()");
 		try {
 			LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(UARTStatusChangeReceiver);
+			EventBus.getDefault().unregister(this);
 		} catch (Exception ignore) {
 			Log.e(TAG, ignore.toString());
 		}
@@ -761,4 +773,26 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			conStatusTextView.setCompoundDrawables(null, null, leftDrawable, null);
 		}
 	}
+	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
+	public void onIsSuccessEntity(IsSuccessEntity entity)
+	{
+		if(entity.isSuccess())
+		{
+			setConStatus(R.string.index_high_signal);
+		}else
+		{
+			switch (type) {
+				case SocketConstant.REGISTER_FAIL:
+					CommonTools.showShortToast(this, getString(R.string.regist_fail));
+					break;
+				case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
+					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
+					break;
+				case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
+					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
+					break;
+			}
+		}
+	}
+
 }

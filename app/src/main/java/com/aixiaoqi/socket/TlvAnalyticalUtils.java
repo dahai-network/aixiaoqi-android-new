@@ -2,6 +2,8 @@ package com.aixiaoqi.socket;
 
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.model.IsSuccessEntity;
 
 /**
  * TLV的解析
@@ -18,6 +21,7 @@ public class TlvAnalyticalUtils {
 	private static String TAG = "TlvAnalyticalUtils";
 
 	public static boolean isOffToPower = false;
+
 	public static MessagePackageEntity builderMessagePackage(String hexString) {
 		Log.e("TlvAnalyticalUtils", hexString);
 		int position = 0;
@@ -27,20 +31,26 @@ public class TlvAnalyticalUtils {
 		String responeString = hexString.substring(6, 8);
 		int responeCode = Integer.parseInt(responeString, 16);
 		responeCode = responeCode & 127;
-		if(responeCode==41){
-			registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL);//注册失败,未授权
+		if (responeCode == 41) {
+			IsSuccessEntity entity = new IsSuccessEntity();
+			entity.setFailType(SocketConstant.REGISTER_FAIL);
+			entity.setSuccess(false);
+			EventBus.getDefault().post(entity);//注册失败,未授权
 			return null;
-		}else if(responeCode==39){
-			registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL);//注册失败，无卡可用
+		} else if (responeCode == 39) {
+			IsSuccessEntity entity = new IsSuccessEntity();
+			entity.setFailType(SocketConstant.REGISTER_FAIL);
+			entity.setSuccess(false);
+			EventBus.getDefault().post(entity);//注册失败，无卡可用
 			return null;
 		}
 		tag = tag & 127;
-		if(tag!=5){
-			if(System.currentTimeMillis()-registerSimTime>5*60*1000&&isRegisterSucceed){
+		if (tag != 5) {
+			if (System.currentTimeMillis() - registerSimTime > 5 * 60 * 1000 && isRegisterSucceed) {
 				sendMessageToBlueTooth(Constant.OFF_TO_POWER);
-				isOffToPower=true;
+				isOffToPower = true;
 			}
-			registerSimTime=System.currentTimeMillis();
+			registerSimTime = System.currentTimeMillis();
 		}
 		position = position + 8;
 		String sessionId = hexString.substring(position, position + 8);
@@ -56,9 +66,10 @@ public class TlvAnalyticalUtils {
 
 		return messagePackageEntity;
 	}
+
 	private static void sendMessageToBlueTooth(final String message) {
 		byte[] value;
-		Log.i("toBLue","OFF"+ message);
+		Log.i("toBLue", "OFF" + message);
 		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
 		UartService mService = ICSOpenVPNApplication.uartService;
 		if (mService != null) {
@@ -67,7 +78,6 @@ public class TlvAnalyticalUtils {
 			}
 		}
 	}
-
 
 
 	public static void builderMessagePackageList(String hexString) {
@@ -150,15 +160,17 @@ public class TlvAnalyticalUtils {
 			} else if (tag == 5) {
 				if (typeParams == 162) {
 					if (Integer.parseInt(value, 16) == 3) {
-						if (registerSimStatueLisener != null){
-							SocketConstant.REGISTER_STATUE_CODE=3;
-							registerSimStatueLisener.registerSucceed();
-							registerSimTime=System.currentTimeMillis();
-							isRegisterSucceed=true;
-						}
+							SocketConstant.REGISTER_STATUE_CODE = 3;
+							IsSuccessEntity entity = new IsSuccessEntity();
+							entity.setSuccess(true);
+							EventBus.getDefault().post(entity);
+							registerSimTime = System.currentTimeMillis();
+							isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
-						if (registerSimStatueLisener != null)
-							registerSimStatueLisener.registerFail(SocketConstant.REGISTER_FAIL);
+						IsSuccessEntity entity = new IsSuccessEntity();
+						entity.setFailType(SocketConstant.REGISTER_FAIL);
+						entity.setSuccess(false);
+						EventBus.getDefault().post(entity);
 					}
 				}
 			}
@@ -167,6 +179,7 @@ public class TlvAnalyticalUtils {
 		}
 		return tlvs;
 	}
+
 	/**
 	 * 注册中不成功再次注册
 	 */
@@ -180,7 +193,7 @@ public class TlvAnalyticalUtils {
 		TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 	}
 
-	private static boolean isRegisterSucceed=false;
+	private static boolean isRegisterSucceed = false;
 	private static long registerSimTime;
 	private static long lastClickTime;
 	private static int count = 0;
@@ -201,26 +214,13 @@ public class TlvAnalyticalUtils {
 		sendToSdkLisener = listener;
 	}
 
+
 	public interface SendToSdkLisener {
 		void send(byte evnindex, int length, byte[] bytes);
+
 		void sendServer(String hexString);
 
 	}
-
-	public static RegisterSimStatueLisener registerSimStatueLisener;
-
-	public static void setListener(RegisterSimStatueLisener listener) {
-		registerSimStatueLisener = listener;
-	}
-
-	public interface RegisterSimStatueLisener {
-		void registerSucceed();
-		void registerFail(int type);
-
-	}
-
-
-
 
 	/**
 	 * 返回最后的Value的长度

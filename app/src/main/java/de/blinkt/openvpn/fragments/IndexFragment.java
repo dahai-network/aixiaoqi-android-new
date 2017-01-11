@@ -198,6 +198,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		DSDSTextView.setOnClickListener(this);
 		manager = Glide.with(ICSOpenVPNApplication.getContext());
 		ICSOpenVPNApplication.getInstance().registerReceiver(realStepReceiver, getFilter());
+		changeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
 	}
 
 	private void findById(View view) {
@@ -236,7 +237,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		boughtPackgeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		boughtPackgeRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
 		boughtPackgeRecyclerView.setAdapter(orderAdapter);
-		changeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
 		title.getLeftText().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -382,7 +382,8 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 				if (boughtPackageEntity.getList().size() == 0) {
 					boughtPacketLinearLayout.setVisibility(View.GONE);
 					orderAdapter.clear();
-					if (ICSOpenVPNApplication.uartService.mConnectionState == UartService.STATE_CONNECTED) {
+					if (ICSOpenVPNApplication.uartService != null &&
+							ICSOpenVPNApplication.uartService.mConnectionState == UartService.STATE_CONNECTED) {
 						changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 					}
 					return;

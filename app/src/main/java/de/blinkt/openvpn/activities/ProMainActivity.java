@@ -32,8 +32,11 @@ import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
-import com.aixiaoqi.socket.TlvAnalyticalUtils;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -53,15 +56,18 @@ import de.blinkt.openvpn.fragments.IndexFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
+import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
 
+import static android.R.attr.type;
+import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
 
-public class ProMainActivity extends BaseNetActivity implements View.OnClickListener,TlvAnalyticalUtils.RegisterSimStatueLisener {
+public class ProMainActivity extends BaseNetActivity implements View.OnClickListener {
 
 	private ViewPager mViewPager;
 	private TextView[] tvArray = new TextView[5];
@@ -132,6 +138,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		setListener();
 		initServices();
 		socketConnection = new SocketConnection();
+		//注册eventbus，观察goip注册问题
+		EventBus.getDefault().register(this);
 	}
 
 
@@ -424,8 +432,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					isClick = false;
 					hidePhoneBottomBar();
 					llArray[position].performClick();
-				}
-				else {
+				} else {
 					if (!isClick) {
 						removeAllStatus();
 						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
@@ -484,6 +491,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		accountFragment = null;
 		addressListFragment = null;
 		sportFragment = null;
+		EventBus.getDefault().unregister(this);
 		super.onDestroy();
 	}
 
@@ -544,35 +552,25 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				}
 			};
 
-	@Override
-	public void registerSucceed() {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
-			}
-		});
 
-	}
-
-	@Override
-	public void registerFail(final int type) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				switch (type) {
-					case SocketConstant.REGISTER_FAIL:
-						CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail));
-						break;
-					case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
-						CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail_card_invalid));
-						break;
-					case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
-						CommonTools.showShortToast(ProMainActivity.this, getString(R.string.regist_fail_card_operators));
-						break;
-				}
+	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
+	public void onIsSuccessEntity(IsSuccessEntity entity) {
+		if (entity.isSuccess()) {
+			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+		} else {
+			unbindService(mServiceConnection);
+			switch (type) {
+				case SocketConstant.REGISTER_FAIL:
+					CommonTools.showShortToast(this, getString(R.string.regist_fail));
+					break;
+				case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
+					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
+					break;
+				case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
+					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
+					break;
 			}
-		});
+		}
 
 	}
 
@@ -583,18 +581,17 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 				//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
-				indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+				checkRegisterStatuGoIp();
 				startDataframService();
 				startSocketService();
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						Log.e("phoneAddress","main.start()");
-						SocketConstant.REGISTER_STATUE_CODE=1;
+						Log.e("phoneAddress", "main.start()");
+						REGISTER_STATUE_CODE = 0;
 						JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
 					}
 				}).start();
-				TlvAnalyticalUtils.setListener(ProMainActivity.this);
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
@@ -614,12 +611,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							}
 						}
 					} else if (txValue[1] == (byte) 0x33) {
-						indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+						checkRegisterStatuGoIp();
 					} else if (txValue[1] == (byte) 0x11) {
 						indexFragment.changeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 					} else if (txValue[1] == (byte) 0xEE) {
 						if (indexFragment.getOrderAdapter().getItemCount() != 0) {
-							indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+							checkRegisterStatuGoIp();
 						} else {
 							indexFragment.changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 						}
@@ -628,4 +625,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		}
 	};
+
+	//是否注册成功，如果是则信号强，反之则信号弱
+	private void checkRegisterStatuGoIp() {
+		if (REGISTER_STATUE_CODE != 3) {
+			indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+		} else {
+			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+		}
+	}
 }
