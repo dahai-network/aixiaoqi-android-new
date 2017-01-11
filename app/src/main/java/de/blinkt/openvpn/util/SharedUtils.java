@@ -154,7 +154,7 @@ public class SharedUtils {
 		if (mSharedPreferences == null || !mSharedPreferences.contains(key)) {
 			return 0L;
 		}
-		return mSharedPreferences.getLong(key, 0l);
+		return mSharedPreferences.getLong(key, 0L);
 	}
 
 

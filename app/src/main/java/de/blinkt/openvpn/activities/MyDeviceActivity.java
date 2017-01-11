@@ -24,8 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aixiaoqi.socket.SocketConstant;
-import com.aixiaoqi.socket.TlvAnalyticalUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
@@ -164,7 +162,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	private void initSet() {
 		checkPowerTimer.schedule(checkPowerTask, 100, 60000);
-		mState = mService.mConnectionState;
+		if (mService != null)
+			mState = mService.mConnectionState;
 		macAddressStr = utils.readString(Constant.IMEI);
 		macTextView.setText(macAddressStr);
 		hasLeftViewTitle(R.string.device, 0);

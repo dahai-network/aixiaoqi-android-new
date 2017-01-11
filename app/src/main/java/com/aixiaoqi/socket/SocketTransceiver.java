@@ -118,6 +118,7 @@ public abstract class SocketTransceiver implements Runnable {
 				runFlag = false;
 			}
 		}
+		Log.i("toBLue","发送字符串disconnect");
 		// 断开连接
 		try {
 			in.close();
