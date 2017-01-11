@@ -12,7 +12,7 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 
 /**
  * Socket收发器 通过Socket发送数据，并使用新线程监听Socket接收到的数据
- * 
+ *
  * @author jzj1993
  * @since 2015-2-22
  */
@@ -26,7 +26,7 @@ public abstract class SocketTransceiver implements Runnable {
 
 	/**
 	 * 实例化
-	 * 
+	 *
 	 * @param socket
 	 *            已经建立连接的socket
 	 */
@@ -37,7 +37,7 @@ public abstract class SocketTransceiver implements Runnable {
 
 	/**
 	 * 获取连接到的Socket地址
-	 * 
+	 *
 	 * @return InetAddress对象
 	 */
 	public InetAddress getInetAddress() {
@@ -62,8 +62,13 @@ public abstract class SocketTransceiver implements Runnable {
 	public void stop() {
 		runFlag = false;
 		try {
-			socket.shutdownInput();
-			in.close();
+			if(socket!=null){
+				socket.shutdownInput();
+				in.close();
+				out.close();
+				socket=null;
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -71,7 +76,7 @@ public abstract class SocketTransceiver implements Runnable {
 
 	/**
 	 * 发送字符串
-	 * 
+	 *
 	 * @param s
 	 *            字符串
 	 * @return 发送成功返回true
@@ -106,19 +111,20 @@ public abstract class SocketTransceiver implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 			runFlag = false;
+			Log.i("toBLue","发送字符串");
 		}
 		while (runFlag) {
 			try {
 				int temp = in.read(byteBuffer);
 				if(temp>0){
-				this.onReceive(addr, byteBuffer,temp);
+					this.onReceive(addr, byteBuffer,temp);
 				}
 			} catch (IOException e) {
 				// 连接被断开(被动)
 				runFlag = false;
 			}
 		}
-		Log.i("toBLue","发送字符串disconnect");
+
 		// 断开连接
 		try {
 			in.close();
@@ -137,7 +143,7 @@ public abstract class SocketTransceiver implements Runnable {
 	 * 接收到数据
 	 * <p>
 	 * 注意：此回调是在新线程中执行的
-	 * 
+	 *
 	 * @param addr
 	 *            连接到的Socket地址
 	 * @param s
@@ -149,7 +155,7 @@ public abstract class SocketTransceiver implements Runnable {
 	 * 连接断开
 	 * <p>
 	 * 注意：此回调是在新线程中执行的
-	 * 
+	 *
 	 * @param addr
 	 *            连接到的Socket地址
 	 */

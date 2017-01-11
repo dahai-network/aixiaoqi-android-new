@@ -413,11 +413,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						} else if (txValue[1] == (byte) 0x33) {
 							simStatusTextView.setText(getResources().getString(R.string.index_inserted_card));
 							simStatusTextView.setTextColor(ContextCompat.getColor(MyDeviceActivity.this, R.color.select_contacct));
-							sendMessageToBlueTooth(OFF_TO_POWER);
+//							sendMessageToBlueTooth(OFF_TO_POWER);
 						} else if (txValue[1] == (byte) 0x11) {
 							simStatusTextView.setText(getResources().getString(R.string.index_un_insert_card));
 							simStatusTextView.setTextColor(ContextCompat.getColor(MyDeviceActivity.this, R.color.gray_text));
-							sendMessageToBlueTooth(OFF_TO_POWER);
+//							sendMessageToBlueTooth(OFF_TO_POWER);
 						}
 						break;
 				}

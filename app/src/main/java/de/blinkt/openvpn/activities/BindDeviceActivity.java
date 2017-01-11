@@ -150,12 +150,17 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	protected void onPause() {
 		super.onPause();
 		scanLeDevice(false);
+		if(noDevicedialog!=null&&noDevicedialog.getDialog()!=null){
+			noDevicedialog.getDialog().cancel();
+		}
 	}
+
 
 	@Override
 	public void onStop() {
 		super.onStop();
 		mBluetoothAdapter.stopLeScan(mLeScanCallback);
+
 	}
 
 	@Override
@@ -181,7 +186,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 										return;
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
-									if (device.getName().contains("Xiao")) {
+									if (device.getName().contains(Constant.BLUETOOTH_NAME)) {
 //									  else if (device.getName().contains("unitoys")) {
 										//如果信号强度绝对值大于这个值（距离\）,则配对
 										if (Math.abs(rssi) < 90) {
