@@ -35,6 +35,7 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'no.nordicsemi.android:dfu:1.0.4'
     compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'org.greenrobot:eventbus:3.0.0'
     apt 'com.jakewharton:butterknife-compiler:8.3.0'
 }
 
@@ -61,8 +62,8 @@ android {
         versionCode = 4
         versionName = "1.1.2"
         ndk {
-            abiFilters "armeabi",  "x86", "x86_64", "mips", "arm64-v8a","armeabi-v7a","mips64"
-//            abiFilters "armeabi","armeabi-v7a"
+//            abiFilters "armeabi", "x86", "x86_64", "mips", "arm64-v8a", "armeabi-v7a", "mips64"
+            abiFilters "armeabi", "armeabi-v7a"
 //            moduleName "aixiaoqi"
 //            ldLibs "log", "z", "m"
         }
@@ -77,14 +78,13 @@ android {
 
     }
 
-
-//    sourceSets {
-//        main {
-//            assets.srcDirs = ['src/main/assets']
-//            jniLibs.srcDirs = ['src/main/jniLibs']
-//            jni.srcDirs = [] //disable automatic ndk-build
-//        }
-//    }
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets']
+            jniLibs.srcDirs = ['src/main/jniLibs']
+            jni.srcDirs = [] //disable automatic ndk-build
+        }
+    }
 
     /*
     compileOptions {
@@ -93,13 +93,13 @@ android {
     }*/
     signingConfigs {
         release {
-            storeFile file("E:/debug.keystore")
+            storeFile file("E:/DahaiFile/aixiaoqiFile/aixiaoqiKeyStore/debug.keystore")
             storePassword "dahai1qaz"
             keyAlias "dahai"
             keyPassword "dahai1qaz"
         }
         debug {
-            storeFile file("E:/debug.keystore")
+            storeFile file("E:/DahaiFile/aixiaoqiFile/aixiaoqiKeyStore/debug.keystore")
             storePassword "dahai1qaz"
             keyAlias "dahai"
             keyPassword "dahai1qaz"

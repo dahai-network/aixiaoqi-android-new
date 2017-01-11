@@ -43,6 +43,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
+
 public class BindDeviceActivity extends CommenActivity implements InterfaceCallback, DialogInterfaceTypeBase {
 
 	public static String BIND_COMPELETE = "BIND_COMPELETE";
@@ -150,6 +151,9 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	protected void onPause() {
 		super.onPause();
 		scanLeDevice(false);
+		if(noDevicedialog!=null&&noDevicedialog.getDialog()!=null){
+			noDevicedialog.getDialog().cancel();
+		}
 	}
 
 	@Override
@@ -181,7 +185,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 										return;
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
-									if (device.getName().contains("ZiJian")) {
+									if (device.getName().contains(Constant.BLUETOOTH_NAME)) {
 //									  else if (device.getName().contains("unitoys")) {
 										//如果信号强度绝对值大于这个值（距离\）,则配对
 										if (Math.abs(rssi) < 90) {

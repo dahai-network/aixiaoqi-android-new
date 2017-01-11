@@ -209,13 +209,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		EventBus.getDefault().register(this);
 	}
 
-	@Override
-	protected void onRestart() {
-		super.onRestart();
-		int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
-		if (blueStatus != R.string.index_high_signal) {
-		}
-	}
+
 	private String deviceAddresstemp;
 
 	@Override

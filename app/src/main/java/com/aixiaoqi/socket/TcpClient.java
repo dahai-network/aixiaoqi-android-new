@@ -29,14 +29,14 @@ public abstract class TcpClient implements Runnable {
 	 * 连接建立失败，回调{@code onConnectFailed()}
 	 */
 	public void connect() {
-		Log.e("connect","connect");
+		Log.e("connectSocket","connect");
 		new Thread(this).start();
 	}
 
 	@Override
 	public void run() {
 		try {
-
+			Log.e("initSocket","socket start");
 			SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
 			Socket socket = new Socket();
 			socket.connect(address,30000);

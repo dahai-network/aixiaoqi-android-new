@@ -12,7 +12,6 @@ import java.util.TimerTask;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.util.SharedUtils;
 
 /**
  * Created by Administrator on 2016/12/30 0030.
@@ -20,7 +19,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 public class ReceiveSocketService extends Service {
     private final IBinder mBinder = new LocalBinder();
     private int contactFailCount=1;
-
+    private int disconnectCount=1;
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -38,8 +37,8 @@ public class ReceiveSocketService extends Service {
     TcpClient tcpClient =new TcpClient() {
         @Override
         public void onConnect(SocketTransceiver transceiver) {
-			Log.i("toBLue","正在注册GOIP");
-			createSocketLisener.create();
+            Log.i("toBLue","正在注册GOIP");
+            createSocketLisener.create();
         }
 
         @Override
@@ -47,6 +46,7 @@ public class ReceiveSocketService extends Service {
             if(contactFailCount<=3){
                 reConnect();
             }
+            contactFailCount++;
         }
         private void sendMessage() {
             byte[] value;
@@ -70,9 +70,14 @@ public class ReceiveSocketService extends Service {
 
         @Override
         public void onDisconnect(SocketTransceiver transceiver) {
+            Log.e("BLUETOOTH", "onDisconnect");
             count=0;
-            tcpClient.disconnect();
-            JNIUtil.getInstance().reStartSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
+            if(disconnectCount<=3)
+                reConnect();
+            disconnectCount++;
+//            count=0;
+//            tcpClient.disconnect();
+//            JNIUtil.getInstance().reStartSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
         }
 
 
@@ -81,12 +86,11 @@ public class ReceiveSocketService extends Service {
         count=0;
         tcpClient.disconnect();
         initSocket();
-        contactFailCount++;
+
     }
     public void sendMessage(String s){
-		Log.e("sendMessage","发送到GOIPtcpClient"+(tcpClient!=null)+"\n发送到GOIPtcpClient"+(tcpClient.getTransceiver()!=null));
+        Log.e("sendMessage","发送到GOIPtcpClient"+(tcpClient!=null)+"\n发送到GOIPtcpClient"+(tcpClient.getTransceiver()!=null));
         if(tcpClient!=null&&tcpClient.getTransceiver()!=null){
-
             tcpClient.getTransceiver().send(s);
         }
     }

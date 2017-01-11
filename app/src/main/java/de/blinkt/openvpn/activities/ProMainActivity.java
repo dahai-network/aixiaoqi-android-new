@@ -587,8 +587,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						Log.e("phoneAddress", "main.start()");
-						REGISTER_STATUE_CODE = 0;
+						Log.e("phoneAddress","main.start()");
+						SocketConstant.REGISTER_STATUE_CODE=0;
 						JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
 					}
 				}).start();

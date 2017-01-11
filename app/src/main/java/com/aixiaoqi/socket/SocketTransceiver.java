@@ -12,7 +12,7 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 
 /**
  * Socket收发器 通过Socket发送数据，并使用新线程监听Socket接收到的数据
- * 
+ *
  * @author jzj1993
  * @since 2015-2-22
  */
@@ -26,9 +26,8 @@ public abstract class SocketTransceiver implements Runnable {
 
 	/**
 	 * 实例化
-	 * 
-	 * @param socket
-	 *            已经建立连接的socket
+	 *
+	 * @param socket 已经建立连接的socket
 	 */
 	public SocketTransceiver(Socket socket) {
 		this.socket = socket;
@@ -37,7 +36,7 @@ public abstract class SocketTransceiver implements Runnable {
 
 	/**
 	 * 获取连接到的Socket地址
-	 * 
+	 *
 	 * @return InetAddress对象
 	 */
 	public InetAddress getInetAddress() {
@@ -52,6 +51,7 @@ public abstract class SocketTransceiver implements Runnable {
 	public void start() {
 		runFlag = true;
 		new Thread(this).start();
+
 	}
 
 	/**
@@ -62,8 +62,13 @@ public abstract class SocketTransceiver implements Runnable {
 	public void stop() {
 		runFlag = false;
 		try {
-			socket.shutdownInput();
-			in.close();
+			if (socket != null) {
+				socket.shutdownInput();
+				in.close();
+				out.close();
+				socket = null;
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -71,16 +76,24 @@ public abstract class SocketTransceiver implements Runnable {
 
 	/**
 	 * 发送字符串
-	 * 
-	 * @param s
-	 *            字符串
+	 *
+	 * @param s 字符串
 	 * @return 发送成功返回true
 	 */
 	public boolean send(String s) {
-		Log.i("toBLue","发送字符串out="+(out != null));
+
+		try {
+			if (out == null)
+				out = new DataOutputStream(this.socket.getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+			runFlag = false;
+			this.onDisconnect(addr);
+		}
+		Log.i("toBLue", "发送字符串out=" + (out != null));
 		if (out != null) {
 			try {
-				Log.i("toBLue","发送字符串");
+				Log.i("toBLue", "发送字符串");
 				out.write(HexStringExchangeBytesUtil.hexStringToBytes(s));
 				out.flush();
 				return true;
@@ -98,27 +111,28 @@ public abstract class SocketTransceiver implements Runnable {
 	 */
 	@Override
 	public void run() {
-		byte []byteBuffer = new byte[1024];
+		byte[] byteBuffer = new byte[1024];
 		try {
 			in = new DataInputStream(this.socket.getInputStream());
-			out = new DataOutputStream(this.socket.getOutputStream());
 
+			Log.i("toBLue", "socket接收数据初始化");
 		} catch (IOException e) {
 			e.printStackTrace();
 			runFlag = false;
+			Log.i("toBLue", "Socket 断开");
 		}
 		while (runFlag) {
 			try {
 				int temp = in.read(byteBuffer);
-				if(temp>0){
-				this.onReceive(addr, byteBuffer,temp);
+				if (temp > 0) {
+					this.onReceive(addr, byteBuffer, temp);
 				}
 			} catch (IOException e) {
 				// 连接被断开(被动)
 				runFlag = false;
 			}
 		}
-		Log.i("toBLue","发送字符串disconnect");
+
 		// 断开连接
 		try {
 			in.close();
@@ -137,21 +151,18 @@ public abstract class SocketTransceiver implements Runnable {
 	 * 接收到数据
 	 * <p>
 	 * 注意：此回调是在新线程中执行的
-	 * 
-	 * @param addr
-	 *            连接到的Socket地址
-	 * @param s
-	 *            收到的字符串
+	 *
+	 * @param addr 连接到的Socket地址
+	 * @param s    收到的字符串
 	 */
-	public abstract void onReceive(InetAddress addr, byte[] s,int length);
+	public abstract void onReceive(InetAddress addr, byte[] s, int length);
 
 	/**
 	 * 连接断开
 	 * <p>
 	 * 注意：此回调是在新线程中执行的
-	 * 
-	 * @param addr
-	 *            连接到的Socket地址
+	 *
+	 * @param addr 连接到的Socket地址
 	 */
 	public abstract void onDisconnect(InetAddress addr);
 }

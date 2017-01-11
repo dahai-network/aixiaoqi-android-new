@@ -16,11 +16,12 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
         sendService(header);
     }
     public  void initSocket(ReceiveSocketService receiveSocketService){
+		mReceiveSocketService=receiveSocketService;
+		receiveSocketService.initSocket();
         if(TlvAnalyticalUtils.sendToSdkLisener==null){
             TlvAnalyticalUtils.setListener(this);
         }
-        mReceiveSocketService=receiveSocketService;
-        receiveSocketService.initSocket();
+
     }
     public  int count=0 ;
     public  void sendService(String header){
