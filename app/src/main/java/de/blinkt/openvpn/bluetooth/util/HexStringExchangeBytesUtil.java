@@ -11,13 +11,24 @@ public class HexStringExchangeBytesUtil {
 	 * @return hex string
 	 */
 	public static String bytesToHexString(byte[] src,int length) {
+		if(src == null)
+		{
+			return "";
+		}
 		return bytesToHexString( src,0,length);
 	}
 	public static String bytesToHexString(byte[] src ) {
-
+        if(src == null)
+		{
+			return "";
+		}
 		return bytesToHexString( src,0,src.length);
 	}
 	public static String bytesToHexString(byte[] src, int startPos, int endpos) {
+		if(src == null)
+		{
+			return "";
+		}
 		StringBuilder stringBuilder = new StringBuilder("");
 
 		for (int i = startPos; i < endpos; i++) {

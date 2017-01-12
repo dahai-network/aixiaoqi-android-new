@@ -612,7 +612,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				new Thread(http).start();
 
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(3000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
