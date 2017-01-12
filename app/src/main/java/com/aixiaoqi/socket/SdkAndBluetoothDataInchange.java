@@ -54,21 +54,27 @@ public class SdkAndBluetoothDataInchange {
 	TimerTask timerTaskMessage=new TimerTask() {
 		@Override
 		public void run() {
+
 			if(SocketConstant.REGISTER_STATUE_CODE!=3){
-				if(TextUtils.isEmpty(s)){
+
+				if(System.currentTimeMillis()-getSendBlueToothTime>5000&&!isReceiveBluetoothData){
+					Log.e("timer","接收不到蓝牙数据");
 					IsSuccessEntity entity = new IsSuccessEntity();
 					entity.setType(Constant.REGIST_TYPE);
 					entity.setSuccess(false);
 					EventBus.getDefault().post(entity);
+					isReceiveBluetoothData=true;
 				}
 			}
 		}
 	};
-	String s;
+
+	long getSendBlueToothTime;
 	private int countMessage=0;
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
-		s=HexStringExchangeBytesUtil.bytesToHexString(txValue);
+		isReceiveBluetoothData=true;
 		if(countMessage==0){
+			Log.e("timer","开启定时器");
 			timerMessage.schedule(timerTaskMessage,5000,5000);
 			countMessage++;
 		}
@@ -137,8 +143,10 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 	private String finalTemp;
-
+private boolean isReceiveBluetoothData=true;
 	private void sendToBluetoothAboutCardInfo(String msg) {
+		isReceiveBluetoothData=false;
+		getSendBlueToothTime=System.currentTimeMillis();
 		String temp = "";
 		if (msg.length() > 7) {
 			temp = msg.substring(7);
@@ -173,6 +181,7 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 	private void sendMessage(String temp) {
+
 		if (temp.contains("0x0000")) {
 			byte[] value;
 			value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
