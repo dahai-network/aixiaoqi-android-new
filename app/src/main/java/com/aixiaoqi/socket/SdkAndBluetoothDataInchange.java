@@ -12,7 +12,7 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
  * Created by Administrator on 2017/1/5 0005.
  */
 public class SdkAndBluetoothDataInchange {
-	public static final String TAG = "nRFUART";
+	public static final String TAG = "Blue_Chanl";
 	UartService mService;
 	ArrayList<String> messages;
 	ReceiveDataframSocketService mReceiveDataframSocketService;
@@ -47,7 +47,7 @@ public class SdkAndBluetoothDataInchange {
 		num++;
 		if (num != txValue[4]) {
 			num = 0;
-			Log.e("BlueError", "蓝牙数据出错重发=" + finalTemp);
+			Log.e(TAG, "蓝牙数据出错重发=" + finalTemp);
 			sendToBluetoothAboutCardInfo(finalTemp);
 			return;
 		}
@@ -61,30 +61,30 @@ public class SdkAndBluetoothDataInchange {
 			// 接收到一个完整的数据包,发送到SDK
 			int length = (txValue[2] & 0xff);
 			String sendToOnService = null;
-			Log.e("Bluetooth", "从蓝牙发出的完整数据 mStrSimPowerOnPacket:" + mStrSimPowerOnPacket.length() + "; \n"
+			Log.e(TAG, "从蓝牙发出的完整数据 mStrSimPowerOnPacket:" + mStrSimPowerOnPacket.length() + "; \n"
 					+ mStrSimPowerOnPacket + "\nlength=" + length);
 			if (mStrSimPowerOnPacket.length() >= length) {
 				try {
 					sendToOnService = mStrSimPowerOnPacket.substring(0, length * 2);
 				} catch (StringIndexOutOfBoundsException e) {
-					Log.e("Bluetooth", "catch socketTag:" + socketTag + "; \n"
+					Log.e(TAG, "catch socketTag:" + socketTag + "; \n"
 							+ sendToOneServerTemp);
 					sendToBluetoothAboutCardInfo(finalTemp);
 					return;
 				}
 			} else {
-				Log.e("Bluetooth", "catch else:" + socketTag + "; \n"
+				Log.e(TAG, "catch else:" + socketTag + "; \n"
 						+ sendToOneServerTemp);
 				sendToBluetoothAboutCardInfo(finalTemp);
 				return;
 			}
 			socketTag = mReceiveDataframSocketService.getSorcketTag();
 			sendToOneServerTemp = sendToOnService;
-			Log.e("Bluetooth", "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
+			Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
 					+ sendToOneServerTemp);
 			sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
 			num = 0;
-			Log.e("Bluetooth", "从蓝牙发出的数据" + socketTag + sendToOneServerTemp);
+			Log.e(TAG, "从蓝牙发出的数据" + socketTag + sendToOneServerTemp);
 
 		}
 	}
@@ -115,7 +115,7 @@ public class SdkAndBluetoothDataInchange {
 
 			for (int i = 0; i < messages.length; i++) {
 				Log.e(TAG, "&&& server  message: " + messages[i].toString());
-				Log.e("Bluetooth", "发送到蓝牙的数据" + socketTag + sendToOneServerTemp);
+				Log.e(TAG, "发送到蓝牙的数据" + socketTag + sendToOneServerTemp);
 				sendMessage(messages[i]);
 			}
 		}
@@ -127,7 +127,7 @@ public class SdkAndBluetoothDataInchange {
 			value = HexStringExchangeBytesUtil.hexStringToBytes("AADB040174");
 			mService.writeRXCharacteristic(value);
 			TlvAnalyticalUtils.isOffToPower=false;
-			Log.e("BLUETOOTH", "SIM POWER UP");
+			Log.e(TAG, "SIM发送上电数据");
 		} else {
 			byte[] value = HexStringExchangeBytesUtil.hexStringToBytes(temp);
 			mService.writeRXCharacteristic(value);

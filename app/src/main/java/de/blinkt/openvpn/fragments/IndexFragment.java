@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -476,6 +478,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	//修改蓝牙状态
 	public void changeBluetoothStatus(String leftText, int leftIconId) {
 		if (leftText != null && leftIconId != 0) {
+			Log.e("changeBluetoothStatus","title="+(title==null)+"\nleftText="+leftText+"\nleftIconId="+leftIconId);
 			title.setLeftIvIconAndText(leftIconId, leftText);
 		}
 	}

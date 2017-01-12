@@ -12,6 +12,9 @@ import java.util.TimerTask;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.util.SharedUtils;
+
+import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 
 /**
  * Created by Administrator on 2016/12/30 0030.
@@ -19,7 +22,6 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 public class ReceiveSocketService extends Service {
     private final IBinder mBinder = new LocalBinder();
     private int contactFailCount=1;
-    private int disconnectCount=1;
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -37,7 +39,7 @@ public class ReceiveSocketService extends Service {
     TcpClient tcpClient =new TcpClient() {
         @Override
         public void onConnect(SocketTransceiver transceiver) {
-            Log.i("toBLue","正在注册GOIP");
+            Log.i("Blue_Chanl","正在注册GOIP");
             createSocketLisener.create();
         }
 
@@ -53,7 +55,7 @@ public class ReceiveSocketService extends Service {
             value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
             ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
             TlvAnalyticalUtils.isOffToPower=false;
-            Log.e("BLUETOOTH", "SIM POWER UP");
+            Log.e("Blue_Chanl", "执行上电命令！");
 
         }
         @Override
@@ -70,11 +72,12 @@ public class ReceiveSocketService extends Service {
 
         @Override
         public void onDisconnect(SocketTransceiver transceiver) {
-            Log.e("BLUETOOTH", "onDisconnect");
-            count=0;
-            if(disconnectCount<=3)
-                reConnect();
-            disconnectCount++;
+            Log.e("Blue_Chanl", "断开连接 - onDisconnect");
+
+            SocketConstant.REGISTER_STATUE_CODE=2;
+            sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));
+            reConnect();
+
 //            count=0;
 //            tcpClient.disconnect();
 //            JNIUtil.getInstance().reStartSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
@@ -83,7 +86,6 @@ public class ReceiveSocketService extends Service {
 
     };
     private void reConnect() {
-        count=0;
         tcpClient.disconnect();
         initSocket();
 
@@ -97,7 +99,9 @@ public class ReceiveSocketService extends Service {
 
     @Override
     public void onDestroy() {
+        count=0;
         tcpClient.disconnect();
+        timer.cancel();
         super.onDestroy();
     }
 
@@ -120,4 +124,5 @@ public class ReceiveSocketService extends Service {
             TestProvider.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
         }
     };
+
 }

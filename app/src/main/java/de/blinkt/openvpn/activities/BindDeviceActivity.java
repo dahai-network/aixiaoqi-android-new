@@ -151,9 +151,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	protected void onPause() {
 		super.onPause();
 		scanLeDevice(false);
-		if(noDevicedialog!=null&&noDevicedialog.getDialog()!=null){
-			noDevicedialog.getDialog().cancel();
-		}
+
 	}
 
 	@Override
@@ -165,6 +163,9 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		if(noDevicedialog!=null&&noDevicedialog.getDialog()!=null){
+			noDevicedialog.getDialog().dismiss();
+		}
 		mBluetoothAdapter.stopLeScan(mLeScanCallback);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(bindCompeleteReceiver);
 	}
@@ -230,6 +231,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		if (cmdType == HttpConfigUrl.COMTYPE_ISBIND_DEVICE) {
 			IsBindHttp http = (IsBindHttp) object;
 			if (http.getIsBindEntity().getBindStatus() == 0) {
+				if(mService!=null)
 				mService.connect(deviceAddress);
 				//测试用代码
 				BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddress, utils.readString(Constant.BRACELETVERSION));
