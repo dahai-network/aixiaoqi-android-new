@@ -43,20 +43,27 @@ public class SdkAndBluetoothDataInchange {
 	private String sendToOneServerTemp;
 	private String mStrSimPowerOnPacket = "";
 	byte num = 0;
-
+	private long lastTime;
+	private int count=0;
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
 		num++;
 		if (num != txValue[4]) {
 			try {
-				 Thread.sleep(1000);
+				Thread.sleep(500);
 			}catch (Exception e){
 
 			}
 			num = 0;
 			Log.e(TAG, "蓝牙数据出错重发=" + finalTemp);
-			sendToBluetoothAboutCardInfo(finalTemp);
+			if(System.currentTimeMillis()-lastTime>365*24*60*60*1000l&&System.currentTimeMillis()-lastTime<2000&&count<3){
+				count++;
+				lastTime=System.currentTimeMillis();
+				sendToBluetoothAboutCardInfo(finalTemp);
+			}
 			return;
 		}
+		lastTime=0;
+		count=0;
 		if (messages == null) {
 			messages = new ArrayList<>();
 		}
@@ -121,15 +128,15 @@ public class SdkAndBluetoothDataInchange {
 
 			for (int i = 0; i < messages.length; i++) {
 
-//				if(i>=1){
-//					try {
-//						Log.e(TAG, "发送延迟100ms");
-//						Thread.sleep(200);
-//						Log.e(TAG, "发送延迟200ms");
-//					}catch (Exception e){
-//						Log.e(TAG, "发送延迟300ms");
-//					}
-//				}
+				if(i>=1){
+					try {
+						Log.e(TAG, "发送延迟100ms");
+						Thread.sleep(10);
+						Log.e(TAG, "发送延迟200ms");
+					}catch (Exception e){
+						Log.e(TAG, "发送延迟300ms");
+					}
+				}
 				Log.e(TAG, "&&& server  message: " + messages[i].toString());
 				Log.e(TAG, "发送到蓝牙的数据" + socketTag + sendToOneServerTemp);
 				sendMessage(messages[i]);

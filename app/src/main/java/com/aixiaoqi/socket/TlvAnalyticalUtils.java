@@ -196,7 +196,7 @@ public class TlvAnalyticalUtils {
 		TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 	}
 
-	private static boolean isRegisterSucceed = false;
+	public static boolean isRegisterSucceed = false;
 	public static long registerSimTime;
 	public static long	registerOrTime;
 	private static long lastClickTime;

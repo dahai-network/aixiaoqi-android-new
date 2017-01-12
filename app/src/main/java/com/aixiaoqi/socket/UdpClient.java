@@ -87,6 +87,7 @@ public abstract class UdpClient implements Runnable {
     public  void disconnect(){
         if(datagramSocket!=null){
             datagramSocket.close();
+            datagramSocket=null;
         }
     }
 }
