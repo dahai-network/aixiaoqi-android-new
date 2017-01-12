@@ -89,8 +89,8 @@ public class HttpConfigUrl {
 	public static final String ADD_SELECT_NUMBER_INFO ="OrderByZCSelectionNumber/Add";
 	public static final String BIND_GIFT ="GiftCard/Bind";
 	public static final String ACTIVATE_KINGCARD ="Order/ActivationKindCard";
-
 	public static final String GET_SELECT_NUMBER_URL ="Config/getDWKUrl";
+	public static final String CHECK_IS_HAVE_PACKET ="/Order/CheckUsedExistByPageCategory";
 
 
 
@@ -165,6 +165,7 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_BIND_GIFT = 0x1044;
 	public static final int COMTYPE_ACTIVATE_KINGCARD = 0x1045;
 	public static final int COMTYPE_PACKET_GET = 0x1046;
+	public static final int COMTYPE_CHECK_IS_HAVE_PACKET = 0x1047;
 
 
 }

@@ -56,6 +56,7 @@ import de.blinkt.openvpn.fragments.IndexFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
+import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.CommonTools;
@@ -579,6 +580,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+				IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this,HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET,"1");
 				//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
 				checkRegisterStatuGoIp();
 				try {

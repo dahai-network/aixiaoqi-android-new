@@ -3,7 +3,6 @@ package de.blinkt.openvpn;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -46,7 +45,6 @@ import static de.blinkt.openvpn.constant.Constant.IS_WRITE_CARD_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
-import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.UP_TP_POWER_RECEIVE;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_91;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP1;
@@ -234,15 +232,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 								ArrayList<Integer> sixDayList = StepStrToList(mStrStepHistory);
 								entity.setSixDayList(sixDayList);
 								updateHistoryDate();
-
-								//是否设备内sim卡
-								new Handler().postDelayed(new Runnable() {
-									@Override
-									public void run() {
-										//上电测试是否SIM卡插对
-										sendMessageToBlueTooth(UP_TO_POWER);
-									}
-								}, 1000);
 							}
 
 							break;
