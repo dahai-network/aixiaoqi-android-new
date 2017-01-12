@@ -4,6 +4,7 @@ import android.util.Log;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 
+import static com.aixiaoqi.socket.SocketConstant.EN_APPEVT_CMD_SETRST;
 import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 
@@ -32,6 +33,7 @@ public class JNIUtil {
         return jniUtil;
     }
     public static void  startSDK(String phonenumber){
+		Log.e("phoneAddress","phoneAddress="+SocketConstant.REGISTER_STATUE_CODE);
         switch (SocketConstant.REGISTER_STATUE_CODE){
             case 0:
                 if(jniUtil!=null)
@@ -61,7 +63,7 @@ public class JNIUtil {
 
     public static void  reStartSDK(String phonenumber){
         if(jniUtil!=null)
-            jniUtil.simComEvtApp2Drv((byte)0,(byte)1,0, HexStringExchangeBytesUtil.hexStringToBytes(""));
+            jniUtil.simComEvtApp2Drv((byte)0,Byte.parseByte(EN_APPEVT_CMD_SETRST),0, HexStringExchangeBytesUtil.hexStringToBytes(""));
         phoneAddress(phonenumber);
     }
     public static int matchesPhoneNumber(String phone_number) {

@@ -38,6 +38,7 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
+import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.FIND_VERSION;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
@@ -95,7 +96,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				public void run() {
 					try {
 						Log.i("toBLue", "连接成功");
-						Thread.sleep(1000);
+						Thread.sleep(2000);
 
 						//测试用后删除//结束BindDeviceActivity
 						Intent bindCompeleteIntent = new Intent();
@@ -106,7 +107,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						}
 						Thread.sleep(500);
 						//测试代码
-//						sendMessageToBlueTooth(UP_TO_POWER);
+						sendMessageToBlueTooth(UP_TO_POWER);
+						Thread.sleep(500);
+						//更新时间操作
+						sendMessageToBlueTooth(getBLETime());
 
 //						sendMessageToBlueTooth("AABBCCDDEEFF");//绑定命令
 //						Thread.sleep(1000);
@@ -318,7 +322,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 								isOpenStepService = true;
 							}
 							try {
-								sendMessageToBlueTooth("AADD01DDAA");
+								//绑定流程成功命令
+								sendMessageToBlueTooth(BIND_SUCCESS);
 								Thread.sleep(500);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
@@ -368,7 +373,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		Log.i("toBLue", message);
 		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
 		if (mService != null) {
-			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
+			if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 				mService.writeRXCharacteristic(value);
 			}
 		}

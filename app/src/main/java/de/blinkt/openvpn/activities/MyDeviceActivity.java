@@ -135,8 +135,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	private long SCAN_PERIOD = 10000;//原本120000毫秒
 	private DialogBalance noDevicedialog;
 
-	//这是一正连接蓝牙写卡的receiver暂时不需要。到时候会有demo
-//	private ReceiveSocketService mReceiveSocketService = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -186,19 +184,19 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			statueTextView.setVisibility(View.GONE);
 			skyUpgradeHttp();
 		}
-		if (mService.mConnectionState != UartService.STATE_CONNECTED) {
+		if (mState != UartService.STATE_CONNECTED) {
 			GetBindDeviceHttp http = new GetBindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 			new Thread(http).start();
 		}
-//		else {
-//			try {
-//				Thread.sleep(500);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//			sendMessageToBlueTooth(UP_TO_POWER);
-//		}
-		if (mService.mConnectionState == UartService.STATE_CONNECTED) {
+		else {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			sendMessageToBlueTooth(UP_TO_POWER);
+		}
+		if (mState == UartService.STATE_CONNECTED) {
 			conStatusLinearLayout.setVisibility(View.VISIBLE);
 			int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
 			if (blueStatus != 0) {
@@ -267,7 +265,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
 				mService.disconnect();
-
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
 				//清空缓存的mac地址
@@ -768,14 +765,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			conStatusTextView.setCompoundDrawables(null, null, leftDrawable, null);
 		}
 	}
+
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
-	public void onIsSuccessEntity(IsSuccessEntity entity)
-	{
-		if(entity.isSuccess())
-		{
+	public void onIsSuccessEntity(IsSuccessEntity entity) {
+		if (entity.isSuccess()) {
 			setConStatus(R.string.index_high_signal);
-		}else
-		{
+		} else {
 			switch (type) {
 				case SocketConstant.REGISTER_FAIL:
 					CommonTools.showShortToast(this, getString(R.string.regist_fail));

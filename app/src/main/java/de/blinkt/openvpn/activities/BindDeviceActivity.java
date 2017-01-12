@@ -125,7 +125,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					if (mService.mConnectionState != UartService.STATE_CONNECTED) {
+					if (mService!=null&&mService.mConnectionState != UartService.STATE_CONNECTED) {
 						mBluetoothAdapter.stopLeScan(mLeScanCallback);
 						showDialog();
 					}
@@ -151,7 +151,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	protected void onPause() {
 		super.onPause();
 		scanLeDevice(false);
-		if(noDevicedialog!=null&&noDevicedialog.getDialog()!=null){
+		if (noDevicedialog != null && noDevicedialog.getDialog() != null) {
 			noDevicedialog.getDialog().cancel();
 		}
 	}
@@ -186,7 +186,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
 									if (device.getName().contains(Constant.BLUETOOTH_NAME)) {
-//									  else if (device.getName().contains("unitoys")) {
+//									  if (device.getName().contains("unitoys")) {
 										//如果信号强度绝对值大于这个值（距离\）,则配对
 										if (Math.abs(rssi) < 90) {
 											mBluetoothAdapter.stopLeScan(mLeScanCallback);
@@ -229,7 +229,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_ISBIND_DEVICE) {
 			IsBindHttp http = (IsBindHttp) object;
-			if (http.getIsBindEntity().getBindStatus() == 0) {
+			if (mService != null && http.getIsBindEntity().getBindStatus() == 0) {
 				mService.connect(deviceAddress);
 				//测试用代码
 				BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddress, utils.readString(Constant.BRACELETVERSION));
@@ -242,6 +242,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
+				utils.writeString(Constant.IMEI, deviceAddress);
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
