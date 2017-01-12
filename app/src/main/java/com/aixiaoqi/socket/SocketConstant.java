@@ -68,6 +68,7 @@ public class SocketConstant {
 	public static final int REGISTER_FAIL = 1;
 	public static final int REGISTER_FAIL_IMSI_IS_NULL = 2;
 	public static final int REGISTER_FAIL_IMSI_IS_ERROR = 3;
+	public static final int REGISTER_FAIL_INITIATIVE = 4;
 	public static  int REGISTER_STATUE_CODE= 0;//0，表示还没有开始注册。1，表示获取预读取数据没有完成（已经写卡但未完成）。2，表示注册中，3表示注册成功
 	public static final String TRAN_DATA_TO_SDK="88888888";
 }

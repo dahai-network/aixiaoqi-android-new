@@ -600,8 +600,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				}
 			}
 		} else if (entity.getType() == Constant.REGIST_TYPE) {
-			indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
-			CommonTools.showShortToast(this,getString(R.string.regist_fail_tips));
+			if(entity.getFailType()!=SocketConstant.REGISTER_FAIL_INITIATIVE) {
+				indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
+				CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
+			}
+			destorySocketService();
 		}
 	}
 

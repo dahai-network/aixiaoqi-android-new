@@ -59,6 +59,7 @@ import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.http.UnBindDeviceHttp;
 import de.blinkt.openvpn.model.BlueToothDeviceEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
+import de.blinkt.openvpn.model.PercentEntity;
 import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -110,6 +111,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	LinearLayout findStatusLinearLayout;
 	@BindView(R.id.conStatusTextView)
 	TextView conStatusTextView;
+	@BindView(R.id.percentTextView)
+	TextView percentTextView;
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_SELECT_DEVICE = 1;
@@ -265,6 +268,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
 				mService.disconnect();
+				IsSuccessEntity entity = new IsSuccessEntity();
+				entity.setType(Constant.REGIST_TYPE);
+				entity.setSuccess(false);
+				entity.setFailType(SocketConstant.REGISTER_FAIL_INITIATIVE);
+				EventBus.getDefault().post(entity);
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
 				//清空缓存的mac地址
@@ -781,6 +789,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
 			if (entity.isSuccess()) {
 				setConStatus(R.string.index_high_signal);
+				percentTextView.setVisibility(View.GONE);
 			} else {
 				switch (type) {
 					case SocketConstant.REGISTER_FAIL:
@@ -795,8 +804,20 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				}
 			}
 		} else if (entity.getType() == Constant.REGIST_TYPE) {
-			setConStatus(R.string.index_regist_fail);
+			if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
+				setConStatus(R.string.index_regist_fail);
+			}
 		}
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
+	public void onPercentEntity(PercentEntity entity) {
+		double percent = entity.getPercent();
+		int percentInt = (int) (percent / 1.6);
+		if (percentInt == 100) {
+			percentInt = 98;
+		}
+		percentTextView.setText(percentInt + "%");
 	}
 
 }

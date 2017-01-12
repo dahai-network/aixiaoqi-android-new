@@ -93,7 +93,10 @@ public class SdkAndBluetoothDataInchange {
 			}
 			return;
 		}
-		int percent=Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag())?"-1":mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length()-4,mReceiveDataframSocketService.getSorcketTag().length()));
+		if(percentEntity==null){
+			percentEntity=new PercentEntity();
+		}
+		int percent=Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag())?"-1":mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length()-4,mReceiveDataframSocketService.getSorcketTag().length()-1));
 		percentEntity.setPercent(percent);
 		EventBus.getDefault().post(percentEntity);
 		lastTime=0;
@@ -130,9 +133,7 @@ public class SdkAndBluetoothDataInchange {
 			Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
 					+ sendToOneServerTemp);
 			sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
-			if(percentEntity==null){
-				percentEntity=new PercentEntity();
-			}
+
 			num = 0;
 			Log.e(TAG, "从蓝牙发出的数据" + socketTag + sendToOneServerTemp);
 
