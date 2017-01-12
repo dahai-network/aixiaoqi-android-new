@@ -187,7 +187,7 @@ public class TlvAnalyticalUtils {
 	 */
 	public static void reRegistering(String orData, int tag) {
 		SocketConstant.REGISTER_STATUE_CODE = 2;
-		sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));//重置SDK
+		sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(SocketConstant.TRAN_DATA_TO_SDK));//重置SDK
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(orData);
 		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
