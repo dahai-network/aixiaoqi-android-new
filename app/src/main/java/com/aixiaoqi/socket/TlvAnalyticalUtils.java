@@ -33,12 +33,14 @@ public class TlvAnalyticalUtils {
 		responeCode = responeCode & 127;
 		if (responeCode == 41) {
 			IsSuccessEntity entity = new IsSuccessEntity();
+			entity.setType(Constant.REGIST_CALLBACK_TYPE);
 			entity.setFailType(SocketConstant.REGISTER_FAIL);
 			entity.setSuccess(false);
 			EventBus.getDefault().post(entity);//注册失败,未授权
 			return null;
 		} else if (responeCode == 39) {
 			IsSuccessEntity entity = new IsSuccessEntity();
+			entity.setType(Constant.REGIST_CALLBACK_TYPE);
 			entity.setFailType(SocketConstant.REGISTER_FAIL);
 			entity.setSuccess(false);
 			EventBus.getDefault().post(entity);//注册失败，无卡可用
@@ -162,14 +164,16 @@ public class TlvAnalyticalUtils {
 					if (Integer.parseInt(value, 16) == 3) {
 						SocketConstant.REGISTER_STATUE_CODE = 3;
 						IsSuccessEntity entity = new IsSuccessEntity();
+						entity.setType(Constant.REGIST_CALLBACK_TYPE);
 						entity.setSuccess(true);
 						EventBus.getDefault().post(entity);
 						registerSimTime = System.currentTimeMillis();
-						registerOrTime=System.currentTimeMillis();
+						registerOrTime = System.currentTimeMillis();
 						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
 						SocketConstant.REGISTER_STATUE_CODE = 0;
 						IsSuccessEntity entity = new IsSuccessEntity();
+						entity.setType(Constant.REGIST_CALLBACK_TYPE);
 						entity.setFailType(SocketConstant.REGISTER_FAIL);
 						entity.setSuccess(false);
 						EventBus.getDefault().post(entity);
@@ -198,7 +202,7 @@ public class TlvAnalyticalUtils {
 
 	public static boolean isRegisterSucceed = false;
 	public static long registerSimTime;
-	public static long	registerOrTime;
+	public static long registerOrTime;
 	private static long lastClickTime;
 	private static int count = 0;
 
@@ -251,11 +255,12 @@ public class TlvAnalyticalUtils {
 	private static String getTag(String hexString, int position) {
 		return hexString.substring(position, position + 2);
 	}
-	public static  void  clearData(){
+
+	public static void clearData() {
 		isRegisterSucceed = false;
-		registerSimTime=0;
-		registerOrTime=0;
-		 lastClickTime=0;
+		registerSimTime = 0;
+		registerOrTime = 0;
+		lastClickTime = 0;
 		count = 0;
 	}
 
