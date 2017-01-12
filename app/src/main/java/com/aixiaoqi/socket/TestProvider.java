@@ -5,6 +5,7 @@ import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 
 
@@ -60,6 +61,7 @@ public class TestProvider {
 				}
 			} else {
 				IsSuccessEntity entity = new IsSuccessEntity();
+				entity.setType(Constant.REGIST_CALLBACK_TYPE);
 				entity.setFailType(SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR);
 				entity.setSuccess(false);
 				EventBus.getDefault().post(entity);
@@ -67,6 +69,7 @@ public class TestProvider {
 			}
 		} else {
 			IsSuccessEntity entity = new IsSuccessEntity();
+			entity.setType(Constant.REGIST_CALLBACK_TYPE);
 			entity.setFailType(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 			entity.setSuccess(false);
 			EventBus.getDefault().post(entity);
