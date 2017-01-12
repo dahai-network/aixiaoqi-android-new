@@ -54,9 +54,7 @@ public class ReceiveDataframSocketService extends Service {
         return  udpClient.getSorcketTag();
     }
 
-    public void closeReceiceDataThread(){
-        udpClient.closeReceiceDataThread();
-    }
+
 
     @Override
     public void onDestroy() {

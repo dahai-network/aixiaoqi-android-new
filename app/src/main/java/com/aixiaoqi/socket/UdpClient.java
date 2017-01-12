@@ -73,19 +73,20 @@ public abstract class UdpClient implements Runnable {
             Log.e("UDPSOCKET","addr="+addr.getHostAddress()+"\naddrname="+addr.getHostName()+"\nsendPort="+sendPort);
             datagramSocket.send(sendSocket);
         } catch (SocketException e) {
+            datagramSocket.close();
             datagramSocket=null;
             e.printStackTrace();
         } catch (UnknownHostException e) {
+            datagramSocket.close();
             datagramSocket=null;
             e.printStackTrace();
         } catch (IOException e) {
+            datagramSocket.close();
             datagramSocket=null;
             e.printStackTrace();
         }
     }
-    public  void closeReceiceDataThread(){
-        flag=false;
-    }
+
     public  void disconnect(){
         if(datagramSocket!=null){
             flag=false;
