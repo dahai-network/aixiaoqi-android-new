@@ -187,8 +187,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (mState != UartService.STATE_CONNECTED) {
 			GetBindDeviceHttp http = new GetBindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 			new Thread(http).start();
-		}
-		else {
+		} else {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -418,6 +417,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						} else if (txValue[1] == (byte) 0x33) {
 							simStatusTextView.setText(getResources().getString(R.string.index_inserted_card));
 							simStatusTextView.setTextColor(ContextCompat.getColor(MyDeviceActivity.this, R.color.select_contacct));
+							if (SocketConstant.REGISTER_STATUE_CODE == 1) {
+								setConStatus(R.string.index_registing);
+							}
 						} else if (txValue[1] == (byte) 0x11) {
 							simStatusTextView.setText(getResources().getString(R.string.index_un_insert_card));
 							simStatusTextView.setTextColor(ContextCompat.getColor(MyDeviceActivity.this, R.color.gray_text));
@@ -746,6 +748,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		conStatusResource = conStatus;
 		switch (conStatus) {
 			case R.string.index_no_signal:
+				setLeftDrawable(R.drawable.device_no_signal);
+				break;
+			case R.string.index_registing:
 				setLeftDrawable(R.drawable.device_no_signal);
 				break;
 			case R.string.index_no_packet:

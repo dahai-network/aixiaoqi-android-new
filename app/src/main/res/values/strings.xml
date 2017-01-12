@@ -537,6 +537,7 @@
     <string name="index_no_packet">无套餐</string>
     <string name="index_no_signal">无信号</string>
     <string name="index_high_signal">信号强</string>
+    <string name="index_registing">注册中</string>
     <string name="tips_no_connect">蓝牙未连接，点击开启</string>
     <!--GOIP注册失败原因-->
     <string name="regist_fail">注册卡失败</string>
