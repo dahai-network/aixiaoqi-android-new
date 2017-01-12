@@ -105,9 +105,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						if (!CommonTools.isFastDoubleClick(3000)) {
 							sendMessageToBlueTooth(FIND_VERSION);
 						}
-						Thread.sleep(500);
-						//测试代码
-						sendMessageToBlueTooth(UP_TO_POWER);
+//						Thread.sleep(500);
+//						//测试代码
+//						sendMessageToBlueTooth(UP_TO_POWER);
 						Thread.sleep(500);
 						//更新时间操作
 						sendMessageToBlueTooth(getBLETime());

@@ -526,7 +526,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	private BluetoothAdapter.LeScanCallback mLeScanCallback =
 			new BluetoothAdapter.LeScanCallback() {
-
 				@Override
 				public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
 					runOnUiThread(new Runnable() {
@@ -582,7 +581,20 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 				//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
 				checkRegisterStatuGoIp();
-
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				startDataframService();
+				startSocketService();
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						Log.e("phoneAddress","main.start()");
+						JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
+					}
+				}).start();
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
@@ -603,20 +615,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						}
 					} else if (txValue[1] == (byte) 0x33) {
 						checkRegisterStatuGoIp();
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						startDataframService();
-						startSocketService();
-						new Thread(new Runnable() {
-							@Override
-							public void run() {
-								Log.e("phoneAddress","main.start()");
-								JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
-							}
-						}).start();
 					} else if (txValue[1] == (byte) 0x11) {
 						indexFragment.changeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 					} else if (txValue[1] == (byte) 0xEE) {
