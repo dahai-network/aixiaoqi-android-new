@@ -12,7 +12,6 @@ import java.util.TimerTask;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 
@@ -98,7 +97,7 @@ public class ReceiveSocketService extends Service {
     public void onDestroy() {
         tcpClient.disconnect();
         timer.cancel();
-        SocketConstant.REGISTER_STATUE_CODE=0;
+        SocketConstant.REGISTER_STATUE_CODE=1;
         TlvAnalyticalUtils.clearData();
         TestProvider.clearData();
         super.onDestroy();
