@@ -13,6 +13,7 @@ public class IsSuccessEntity implements Serializable {
 	private boolean isSuccess;
 	//Goip注册失败类型
 	private int failType;
+	private int progressCount;
 
 	public int getType() {
 		return type;
@@ -36,5 +37,13 @@ public class IsSuccessEntity implements Serializable {
 
 	public void setSuccess(boolean success) {
 		isSuccess = success;
+	}
+
+	public int getProgressCount() {
+		return progressCount;
+	}
+
+	public void setProgressCount(int progressCount) {
+		this.progressCount = progressCount;
 	}
 }

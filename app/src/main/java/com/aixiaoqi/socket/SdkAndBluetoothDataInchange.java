@@ -13,6 +13,7 @@ import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.IsSuccessEntity;
+import de.blinkt.openvpn.model.PercentEntity;
 
 /**
  * Created by Administrator on 2017/1/5 0005.
@@ -68,7 +69,6 @@ public class SdkAndBluetoothDataInchange {
 			}
 		}
 	};
-
 	long getSendBlueToothTime;
 	private int countMessage=0;
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
@@ -93,7 +93,9 @@ public class SdkAndBluetoothDataInchange {
 			}
 			return;
 		}
-
+		int percent=Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag())?"-1":mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length()-4,mReceiveDataframSocketService.getSorcketTag().length()));
+		percentEntity.setPercent(percent);
+		EventBus.getDefault().post(percentEntity);
 		lastTime=0;
 		count=0;
 		if (messages == null) {
@@ -128,12 +130,15 @@ public class SdkAndBluetoothDataInchange {
 			Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
 					+ sendToOneServerTemp);
 			sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
+			if(percentEntity==null){
+				percentEntity=new PercentEntity();
+			}
 			num = 0;
 			Log.e(TAG, "从蓝牙发出的数据" + socketTag + sendToOneServerTemp);
 
 		}
 	}
-
+	PercentEntity percentEntity;
 
 	private void sendToSDKAboutBluetoothInfo(final String finalMessage) {
 		if (mReceiveDataframSocketService != null) {
@@ -143,7 +148,7 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 	private String finalTemp;
-private boolean isReceiveBluetoothData=true;
+	private boolean isReceiveBluetoothData=true;
 	private void sendToBluetoothAboutCardInfo(String msg) {
 		isReceiveBluetoothData=false;
 		getSendBlueToothTime=System.currentTimeMillis();
