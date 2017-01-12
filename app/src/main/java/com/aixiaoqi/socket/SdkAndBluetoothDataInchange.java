@@ -60,15 +60,21 @@ public class SdkAndBluetoothDataInchange {
 
 				if(System.currentTimeMillis()-getSendBlueToothTime>5000&&!isReceiveBluetoothData){
 					Log.e("timer","接收不到蓝牙数据");
-					IsSuccessEntity entity = new IsSuccessEntity();
-					entity.setType(Constant.REGIST_TYPE);
-					entity.setSuccess(false);
-					EventBus.getDefault().post(entity);
+					notifyRegisterFail();
 					isReceiveBluetoothData=true;
 				}
 			}
 		}
 	};
+
+	private void notifyRegisterFail() {
+		IsSuccessEntity entity = new IsSuccessEntity();
+		entity.setType(Constant.REGIST_TYPE);
+		entity.setSuccess(false);
+		EventBus.getDefault().post(entity);
+	}
+
+	IsSuccessEntity entity;
 	long getSendBlueToothTime;
 	private int countMessage=0;
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
@@ -86,10 +92,12 @@ public class SdkAndBluetoothDataInchange {
 			}
 			num = 0;
 			Log.e(TAG, "蓝牙数据出错重发=" + finalTemp);
-			if(System.currentTimeMillis()-lastTime>365*24*60*60*1000l&&System.currentTimeMillis()-lastTime<2000&&count<3){
+			if((System.currentTimeMillis()-lastTime>365*24*60*60*1000l||System.currentTimeMillis()-lastTime<2000)&&count<=3){
 				count++;
 				lastTime=System.currentTimeMillis();
 				sendToBluetoothAboutCardInfo(finalTemp);
+			}else if(count>3){
+				notifyRegisterFail();
 			}
 			return;
 		}
