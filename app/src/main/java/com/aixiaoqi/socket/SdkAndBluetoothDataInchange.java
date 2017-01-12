@@ -119,9 +119,21 @@ public class SdkAndBluetoothDataInchange {
 			String[] messages = PacketeUtil.Separate(temp);
 
 			for (int i = 0; i < messages.length; i++) {
+
+//				if(i>=1){
+//					try {
+//						Log.e(TAG, "发送延迟100ms");
+//						Thread.sleep(200);
+//						Log.e(TAG, "发送延迟200ms");
+//					}catch (Exception e){
+//						Log.e(TAG, "发送延迟300ms");
+//					}
+//				}
 				Log.e(TAG, "&&& server  message: " + messages[i].toString());
 				Log.e(TAG, "发送到蓝牙的数据" + socketTag + sendToOneServerTemp);
 				sendMessage(messages[i]);
+
+
 			}
 		}
 	}

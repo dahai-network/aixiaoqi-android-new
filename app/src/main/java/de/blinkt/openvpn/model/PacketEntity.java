@@ -1,12 +1,13 @@
 package de.blinkt.openvpn.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/12/24.
  */
 
-public class PacketEntity {
+public class PacketEntity implements Serializable{
 
 	/**
 	 * totalRows : 1
@@ -32,7 +33,7 @@ public class PacketEntity {
 		this.list = list;
 	}
 
-	public static class ListBean {
+	public static class ListBean implements Serializable{
 		/**
 		 * PackageId : 6e9d162f-ea8d-4625-86f1-3aba1860891b
 		 * PackageName : 200分钟通话时长

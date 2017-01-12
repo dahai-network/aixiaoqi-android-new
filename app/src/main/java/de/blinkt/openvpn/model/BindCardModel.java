@@ -1,10 +1,12 @@
 package de.blinkt.openvpn.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/12/23.
  */
 
-public class BindCardModel {
+public class BindCardModel implements Serializable{
 	/**
 	 * CardNum : string,卡号
 	 */

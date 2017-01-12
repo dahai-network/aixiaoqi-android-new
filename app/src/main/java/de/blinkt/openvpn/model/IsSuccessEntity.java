@@ -1,10 +1,12 @@
 package de.blinkt.openvpn.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/1/11.
  */
 
-public class IsSuccessEntity {
+public class IsSuccessEntity  implements Serializable{
 	private boolean isSuccess;
 	//Goip注册失败类型
 	private int failType;

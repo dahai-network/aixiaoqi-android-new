@@ -2,12 +2,13 @@ package com.aixiaoqi.socket;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/12/10 0010.
  */
-public class MessagePackageEntity {
+public class MessagePackageEntity implements Serializable{
     protected String hexStringSessionId;//会话ID
     protected String hexStringMessageNumber;//消息序号
     protected String hexStringDatalength;//数据长度

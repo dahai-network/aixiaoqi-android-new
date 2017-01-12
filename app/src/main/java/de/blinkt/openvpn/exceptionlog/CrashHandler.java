@@ -97,18 +97,18 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 			} catch (InterruptedException e) {
 				Log.e(TAG, "error : ", e);
 			}
-			Intent intent = new Intent(application.getApplicationContext(), LaunchActivity.class);
+//			Intent intent = new Intent(application.getApplicationContext(), LaunchActivity.class);
 
 
 
-			PendingIntent restartIntent = PendingIntent.getActivity(
-					application.getApplicationContext(), 0, intent,
-					Intent.FLAG_ACTIVITY_NEW_TASK);
-			//退出程序
-			AlarmManager mgr = (AlarmManager)application.getSystemService(Context.ALARM_SERVICE);
-			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
-					restartIntent); // 1秒钟后重启应用
-			application.AppExit();
+//			PendingIntent restartIntent = PendingIntent.getActivity(
+//					application.getApplicationContext(), 0, intent,
+//					Intent.FLAG_ACTIVITY_NEW_TASK);
+//			//退出程序
+//			AlarmManager mgr = (AlarmManager)application.getSystemService(Context.ALARM_SERVICE);
+//			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
+//					restartIntent); // 1秒钟后重启应用
+//			application.AppExit();
 			//退出程序
 
 
