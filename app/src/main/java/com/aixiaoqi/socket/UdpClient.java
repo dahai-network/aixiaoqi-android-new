@@ -1,5 +1,7 @@
 package com.aixiaoqi.socket;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -22,7 +24,7 @@ public abstract class UdpClient implements Runnable {
     @Override
     public void run() {
         try {
-            DatagramSocket socket = new DatagramSocket(4567);
+            DatagramSocket socket = new DatagramSocket();
             byte data[] = new byte[1024];
             DatagramPacket packet = new DatagramPacket(data, data.length);
             while (flag) {
@@ -65,6 +67,7 @@ public abstract class UdpClient implements Runnable {
             InetAddress addr = InetAddress.getByName(sendAddress);
             byte[] data = msg.getBytes();
             DatagramPacket sendSocket = new DatagramPacket(data, data.length, addr,sendPort);
+            Log.e("UDPSOCKET","addr="+addr.getHostAddress()+"\naddrname="+addr.getHostName()+"\nsendPort="+sendPort);
             datagramSocket.send(sendSocket);
         } catch (SocketException e) {
             datagramSocket=null;
