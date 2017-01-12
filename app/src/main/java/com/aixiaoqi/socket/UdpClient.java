@@ -24,7 +24,7 @@ public abstract class UdpClient implements Runnable {
     @Override
     public void run() {
         try {
-            DatagramSocket socket = new DatagramSocket();
+            DatagramSocket socket = new DatagramSocket(4567);
             byte data[] = new byte[1024];
             DatagramPacket packet = new DatagramPacket(data, data.length);
             while (flag) {

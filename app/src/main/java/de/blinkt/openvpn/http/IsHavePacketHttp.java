@@ -27,7 +27,7 @@ public class IsHavePacketHttp extends BaseHttp {
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.CHECKUSEDEXISTBYPAGECATEGORY;
+		slaverDomain_ = HttpConfigUrl.CHECK_IS_HAVE_PACKET;
 		params.put("PackageCategory", PackageCategory);
 	}
 

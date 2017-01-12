@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -45,7 +44,6 @@ import de.blinkt.openvpn.activities.MyPackageActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.WebViewActivity;
-import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.BannerHttp;
@@ -256,6 +254,8 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 					status = R.string.index_no_signal;
 				} else if (getString(R.string.index_high_signal).equals(getBlutoothStatus())) {
 					status = R.string.index_high_signal;
+				} else if (getString(R.string.index_registing).equals(getBlutoothStatus())) {
+					status = R.string.index_registing;
 				}
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, status);
 				startActivity(intent);
@@ -384,10 +384,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 				if (boughtPackageEntity.getList().size() == 0) {
 					boughtPacketLinearLayout.setVisibility(View.GONE);
 					orderAdapter.clear();
-					if (ICSOpenVPNApplication.uartService != null &&
-							ICSOpenVPNApplication.uartService.mConnectionState == UartService.STATE_CONNECTED) {
-						changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
-					}
 					return;
 				} else {
 					boughtPacketLinearLayout.setVisibility(View.VISIBLE);
