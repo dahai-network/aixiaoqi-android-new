@@ -251,6 +251,12 @@ public class TlvAnalyticalUtils {
 	private static String getTag(String hexString, int position) {
 		return hexString.substring(position, position + 2);
 	}
-
+	public static  void  clearData(){
+		isRegisterSucceed = false;
+		registerSimTime=0;
+		registerOrTime=0;
+		 lastClickTime=0;
+		count = 0;
+	}
 
 }

@@ -4,6 +4,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
@@ -28,7 +30,6 @@ public class SdkAndBluetoothDataInchange {
 														 if(!TextUtils.isEmpty(msg))
 															 sendToBluetoothAboutCardInfo(msg);
 
-
 													 }
 
 												 }
@@ -45,13 +46,31 @@ public class SdkAndBluetoothDataInchange {
 	byte num = 0;
 	private long lastTime;
 	private int count=0;
+
+	Timer timerMessage=new Timer();
+	TimerTask timerTaskMessage=new TimerTask() {
+		@Override
+		public void run() {
+			if(SocketConstant.REGISTER_STATUE_CODE!=3){
+				if(TextUtils.isEmpty(s)){
+
+				}
+			}
+		}
+	};
+	String s;
+	private int countMessage=0;
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
+		s=HexStringExchangeBytesUtil.bytesToHexString(txValue);
+		if(countMessage==0){
+			timerMessage.schedule(timerTaskMessage,5000,5000);
+			countMessage++;
+		}
 		num++;
 		if (num != txValue[4]) {
 			try {
 				Thread.sleep(500);
 			}catch (Exception e){
-
 			}
 			num = 0;
 			Log.e(TAG, "蓝牙数据出错重发=" + finalTemp);
@@ -62,6 +81,7 @@ public class SdkAndBluetoothDataInchange {
 			}
 			return;
 		}
+
 		lastTime=0;
 		count=0;
 		if (messages == null) {

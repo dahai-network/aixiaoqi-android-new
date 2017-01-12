@@ -62,5 +62,6 @@ public class ReceiveDataframSocketService extends Service {
     public void onDestroy() {
         super.onDestroy();
         udpClient.disconnect();
+        udpClient=null;
     }
 }

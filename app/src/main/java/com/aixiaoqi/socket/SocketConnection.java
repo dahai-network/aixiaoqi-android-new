@@ -37,6 +37,7 @@ public class SocketConnection implements ServiceConnection {
     public void onServiceDisconnected(ComponentName name) {
         if("aixiaoqi.socket.ReceiveDataframSocketService".equals(name.getClassName())){
             mReceiveDataframSocketService = null;
+            sdkAndBluetoothDataInchange=null;
         }else if("qixiaoqi.socket.ReceiveSocketService".equals(name.getClassName())){
             mReceiveSocketService = null;
         }

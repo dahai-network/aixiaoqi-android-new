@@ -78,9 +78,6 @@ public class ReceiveSocketService extends Service {
             sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));
             reConnect();
 
-//            count=0;
-//            tcpClient.disconnect();
-//            JNIUtil.getInstance().reStartSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
         }
 
 
@@ -99,11 +96,11 @@ public class ReceiveSocketService extends Service {
 
     @Override
     public void onDestroy() {
-        count=0;
         tcpClient.disconnect();
-        SocketConstant.REGISTER_STATUE_CODE=0;
         timer.cancel();
-        timer=null;
+        SocketConstant.REGISTER_STATUE_CODE=0;
+        TlvAnalyticalUtils.clearData();
+        TestProvider.clearData();
         super.onDestroy();
     }
 
@@ -113,8 +110,6 @@ public class ReceiveSocketService extends Service {
     }
     public interface CreateSocketLisener {
         void create();
-
-
     }
 
     int count=0;

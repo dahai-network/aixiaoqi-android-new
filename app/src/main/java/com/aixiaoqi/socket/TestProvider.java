@@ -104,5 +104,10 @@ public class TestProvider {
 		}
 	}
 
+	public static  void  clearData(){
+		sendYiZhengService=null;
+		isCreate=false;
+		isIccid=false;
+	}
 
 }
