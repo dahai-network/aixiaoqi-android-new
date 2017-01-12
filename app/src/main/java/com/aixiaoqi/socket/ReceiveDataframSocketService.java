@@ -57,4 +57,10 @@ public class ReceiveDataframSocketService extends Service {
     public void closeReceiceDataThread(){
         udpClient.closeReceiceDataThread();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        udpClient.disconnect();
+    }
 }

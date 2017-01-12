@@ -372,6 +372,7 @@ public class UartService extends Service implements Serializable {
 	public void writeRXCharacteristic(byte[] value) {
 		//如果mBluetoothGatt为空，意味着连接中断，所以不允许继续传输数据
 		if (mBluetoothGatt == null) {
+			Log.e("Blue_Chanl","蓝牙已断开，发送失败！");
 			return;
 		}
 		if (RxService == null) {
@@ -392,7 +393,7 @@ public class UartService extends Service implements Serializable {
 		RxChar.setValue(value);
 		boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
 
-		Log.d(TAG, "write TXchar - status=" + status);
+		Log.e("Blue_Chanl","write TXchar - status=" + status);
 	}
 
 	private void showMessage(String msg) {

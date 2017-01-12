@@ -160,13 +160,15 @@ public class TlvAnalyticalUtils {
 			} else if (tag == 5) {
 				if (typeParams == 162) {
 					if (Integer.parseInt(value, 16) == 3) {
-							SocketConstant.REGISTER_STATUE_CODE = 3;
-							IsSuccessEntity entity = new IsSuccessEntity();
-							entity.setSuccess(true);
-							EventBus.getDefault().post(entity);
-							registerSimTime = System.currentTimeMillis();
-							isRegisterSucceed = true;
+						SocketConstant.REGISTER_STATUE_CODE = 3;
+						IsSuccessEntity entity = new IsSuccessEntity();
+						entity.setSuccess(true);
+						EventBus.getDefault().post(entity);
+						registerSimTime = System.currentTimeMillis();
+						registerOrTime=System.currentTimeMillis();
+						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
+						SocketConstant.REGISTER_STATUE_CODE = 0;
 						IsSuccessEntity entity = new IsSuccessEntity();
 						entity.setFailType(SocketConstant.REGISTER_FAIL);
 						entity.setSuccess(false);
@@ -184,6 +186,7 @@ public class TlvAnalyticalUtils {
 	 * 注册中不成功再次注册
 	 */
 	public static void reRegistering(String orData, int tag) {
+		SocketConstant.REGISTER_STATUE_CODE = 2;
 		sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));//重置SDK
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(orData);
@@ -194,7 +197,8 @@ public class TlvAnalyticalUtils {
 	}
 
 	private static boolean isRegisterSucceed = false;
-	private static long registerSimTime;
+	public static long registerSimTime;
+	public static long	registerOrTime;
 	private static long lastClickTime;
 	private static int count = 0;
 

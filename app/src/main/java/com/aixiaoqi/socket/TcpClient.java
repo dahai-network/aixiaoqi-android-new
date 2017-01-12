@@ -2,14 +2,17 @@ package com.aixiaoqi.socket;
 
 import android.util.Log;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * TCP Socket客户端
- * 
+ *
  * @author jzj1993
  * @since 2015-2-22
  */
@@ -33,33 +36,63 @@ public abstract class TcpClient implements Runnable {
 		new Thread(this).start();
 	}
 
+	Timer timerSocket=new Timer();
+	TimerTask taskSocket=new TimerTask() {
+		@Override
+		public void run() {
+			Log.e("Blue_Chanl","执行了定时器任务，connect="+connect);
+			if(!connect){
+				try {
+					connectSocket();
+				} catch (Exception e) {
+					e.printStackTrace();
+					TcpClient.this.onConnectFailed();
+				}
+			}
+		}
+	};
+	private int socketStartCount=0;
 	@Override
 	public void run() {
 		try {
 			Log.e("initSocket","socket start");
-			SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
-			Socket socket = new Socket();
-			socket.connect(address,30000);
-			socket.setTcpNoDelay(true);
-			transceiver = new SocketTransceiver(socket) {
-
-				@Override
-				public void onReceive(InetAddress addr, byte[] s,int length) {
-					TcpClient.this.onReceive(this,s,length);
+			if(!connect){
+				if(socketStartCount==0){
+					timerSocket.schedule(taskSocket,5*60*1000,5*60*1000);
 				}
+				socketStartCount++;
+				connectSocket();
 
-				@Override
-				public void onDisconnect(InetAddress addr) {
-					connect = false;
-					TcpClient.this.onDisconnect(this);
-				}
-			};
-			transceiver.start();
-			connect = true;
-			this.onConnect(transceiver);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.onConnectFailed();
+		}
+	}
+
+	private void connectSocket() throws IOException {
+		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
+		Socket socket = new Socket();
+		socket.connect(address,30000);
+		socket.setTcpNoDelay(true);
+		transceiver = new SocketTransceiver(socket) {
+
+			@Override
+			public void onReceive(InetAddress addr, byte[] s, int length) {
+				TcpClient.this.onReceive(this,s,length);
+			}
+
+			@Override
+			public void onDisconnect(InetAddress addr) {
+				connect = false;
+				TcpClient.this.onDisconnect(this);
+			}
+		};
+		transceiver.start();
+		connect = true;
+		if(SocketConstant.REGISTER_STATUE_CODE!=3||System.currentTimeMillis()-TlvAnalyticalUtils.registerOrTime>60*1000){
+			TlvAnalyticalUtils.registerOrTime=System.currentTimeMillis();
+			this.onConnect(transceiver);
 		}
 	}
 
@@ -77,7 +110,7 @@ public abstract class TcpClient implements Runnable {
 
 	/**
 	 * 判断是否连接
-	 * 
+	 *
 	 * @return 当前处于连接状态，则返回true
 	 */
 	public boolean isConnected() {
@@ -86,7 +119,7 @@ public abstract class TcpClient implements Runnable {
 
 	/**
 	 * 获取Socket收发器
-	 * 
+	 *
 	 * @return 未连接则返回null
 	 */
 	public SocketTransceiver getTransceiver() {
@@ -95,7 +128,7 @@ public abstract class TcpClient implements Runnable {
 
 	/**
 	 * 连接建立
-	 * 
+	 *
 	 * @param transceiver
 	 *            SocketTransceiver对象
 	 */
@@ -110,7 +143,7 @@ public abstract class TcpClient implements Runnable {
 	 * 接收到数据
 	 * <p>
 	 * 注意：此回调是在新线程中执行的
-	 * 
+	 *
 	 * @param transceiver
 	 *            SocketTransceiver对象
 	 * @param s
@@ -122,7 +155,7 @@ public abstract class TcpClient implements Runnable {
 	 * 连接断开
 	 * <p>
 	 * 注意：此回调是在新线程中执行的
-	 * 
+	 *
 	 * @param transceiver
 	 *            SocketTransceiver对象
 	 */

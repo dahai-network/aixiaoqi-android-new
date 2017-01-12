@@ -63,7 +63,7 @@ public class LaunchActivity extends BaseActivity   {
 
 						toLogin();
 					}
-				} catch (InterruptedException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					Log.e("LaunchActivity  e=","e.printStackTrace()");
 					toLogin();

@@ -97,7 +97,6 @@ public class TestProvider {
 			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = hex;
 			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preDataEntity.getLenString();
 			sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
-
 		} else if (SocketConstant.EN_APPEVT_SIMDATA.equals(preDataEntity.getEvtIndex())) {
 			SocketConstant.SDK_VALUE = hex;
 			sendYiZhengService.sendGoip(SocketConstant.PRE_DATA);

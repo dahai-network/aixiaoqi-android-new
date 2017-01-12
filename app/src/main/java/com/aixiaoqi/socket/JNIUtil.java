@@ -33,7 +33,7 @@ public class JNIUtil {
         return jniUtil;
     }
     public static void  startSDK(String phonenumber){
-		Log.e("phoneAddress","phoneAddress="+SocketConstant.REGISTER_STATUE_CODE);
+        Log.e("Blue_Chanl","启动startSDK - REGISTER_STATUE_CODE="+SocketConstant.REGISTER_STATUE_CODE);
         switch (SocketConstant.REGISTER_STATUE_CODE){
             case 0:
                 if(jniUtil!=null)

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -477,7 +478,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	//修改蓝牙状态
 	public void changeBluetoothStatus(String leftText, int leftIconId) {
 		if (leftText != null && leftIconId != 0 && title != null) {
-			Log.e("title", "title=" + title);
+			Log.e("changeBluetoothStatus","title="+(title==null)+"\nleftText="+leftText+"\nleftIconId="+leftIconId);
 			title.setLeftIvIconAndText(leftIconId, leftText);
 		}
 	}

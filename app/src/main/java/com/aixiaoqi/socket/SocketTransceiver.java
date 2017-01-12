@@ -66,7 +66,6 @@ public abstract class SocketTransceiver implements Runnable {
 				socket.shutdownInput();
 				in.close();
 				out.close();
-				socket = null;
 			}
 
 		} catch (Exception e) {
@@ -137,6 +136,7 @@ public abstract class SocketTransceiver implements Runnable {
 		try {
 			in.close();
 			out.close();
+
 			socket.close();
 			in = null;
 			out = null;
