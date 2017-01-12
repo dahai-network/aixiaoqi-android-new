@@ -66,7 +66,6 @@ public class PictureAdapter extends PagerAdapter {
 			 *
 			 * 而后续,这个方法仅被执行一次,并且执行的是预加载下一页的请求.
 			 * */
-			Log.e("TAG", "position=" + position);
 			if (initPosition == -1) {
 				/**
 				 * 初始化状态
@@ -112,8 +111,6 @@ public class PictureAdapter extends PagerAdapter {
 				}
 				topPosition = position;
 			}
-			Log.e("TAG", "topPosition=" + topPosition);
-			Log.e("TAG", "initPosition=" + initPosition);
 			/**
 			 * 只用这句话应该会出现问题
 			 * */

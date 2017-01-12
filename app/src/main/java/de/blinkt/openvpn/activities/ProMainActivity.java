@@ -481,7 +481,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		bleMoveReceiver = null;
 		stopService(new Intent(this, CallPhoneService.class));
 		//关闭服务并设置为null
-		unbindService(mServiceConnection);
+
+		destorySocketService();
 		if (mService != null)
 			mService.stopSelf();
 		mService = null;
@@ -495,6 +496,17 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		sportFragment = null;
 		EventBus.getDefault().unregister(this);
 		super.onDestroy();
+	}
+
+	private void destorySocketService() {
+		if(ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())||ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
+		unbindService(socketConnection);
+		if(SocketConnection.mReceiveDataframSocketService!=null){
+            SocketConnection.mReceiveDataframSocketService.stopSelf();
+        }
+		if(SocketConnection.mReceiveSocketService!=null){
+			SocketConnection.mReceiveSocketService.stopSelf();
+		}
 	}
 
 	@Override
@@ -573,7 +585,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		if (entity.isSuccess()) {
 			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 		} else {
-			unbindService(mServiceConnection);
+			destorySocketService();
 			switch (type) {
 				case SocketConstant.REGISTER_FAIL:
 					CommonTools.showShortToast(this, getString(R.string.regist_fail));

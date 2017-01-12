@@ -76,7 +76,6 @@ public class UartService extends Service implements Serializable {
 //	public static final UUID TX_CHAR_UUID2 = UUID.fromString("6E400004-B5A3-F393-E0A9-E50E24DCCA9F");
 //	public static final UUID TX_CHAR_UUID3 = UUID.fromString("6E400005-B5A3-F393-E0A9-E50E24DCCA9F");
 
-
 	// Implements callback methods for GATT events that the app cares about.  For example,
 	// Implements callback methods for GATT events that the app cares about.  For example,
 	// connection change and services discovered.
@@ -372,7 +371,7 @@ public class UartService extends Service implements Serializable {
 	public void writeRXCharacteristic(byte[] value) {
 		//如果mBluetoothGatt为空，意味着连接中断，所以不允许继续传输数据
 		if (mBluetoothGatt == null) {
-			Log.e("Blue_Chanl","蓝牙已断开，发送失败！");
+			Log.e("Blue_Chanl", "蓝牙已断开，发送失败！");
 			return;
 		}
 		if (RxService == null) {
@@ -393,7 +392,16 @@ public class UartService extends Service implements Serializable {
 		RxChar.setValue(value);
 		boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
 
-		Log.e("Blue_Chanl","write TXchar - status=" + status);
+		Log.e("Blue_Chanl", "write TXchar - status=" + status);
+		if (!status) {
+			try {
+				Thread.sleep(500);
+				status = mBluetoothGatt.writeCharacteristic(RxChar);
+				Log.e("Blue_Chanl", "重发：write TXchar - status=" + status);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void showMessage(String msg) {

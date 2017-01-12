@@ -47,6 +47,11 @@ public class SdkAndBluetoothDataInchange {
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
 		num++;
 		if (num != txValue[4]) {
+			try {
+				 Thread.sleep(1000);
+			}catch (Exception e){
+
+			}
 			num = 0;
 			Log.e(TAG, "蓝牙数据出错重发=" + finalTemp);
 			sendToBluetoothAboutCardInfo(finalTemp);
@@ -107,7 +112,7 @@ public class SdkAndBluetoothDataInchange {
 		} else {
 			temp = msg;
 		}
-		finalTemp = temp;
+		finalTemp = msg;
 		if (temp.contains("0x0000")) {
 			sendMessage(temp);
 		} else {

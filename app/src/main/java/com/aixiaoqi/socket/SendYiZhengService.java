@@ -5,6 +5,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+
 /**
  * Created by Administrator on 2017/1/4 0004.
  */
@@ -73,11 +75,14 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
 
     @Override
     public void send(byte evnindex,int length, byte[] bytes) {
+        Log.e("sendSDK","sendSDK="+ HexStringExchangeBytesUtil.bytesToHexString(bytes));
         JNIUtil.getInstance().simComEvtApp2Drv((byte)0,evnindex,length,bytes);
     }
 
     @Override
     public void sendServer(String hexString) {
+        Log.e("sendYISerivce","sendYISerivce="+ hexString);
+
         mReceiveSocketService.sendMessage(hexString);
     }
 
