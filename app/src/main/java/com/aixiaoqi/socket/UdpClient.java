@@ -24,12 +24,13 @@ public abstract class UdpClient implements Runnable {
     @Override
     public void run() {
         try {
-            DatagramSocket socket = new DatagramSocket();
+            DatagramSocket socket = new DatagramSocket(4567);
             byte data[] = new byte[1024];
             DatagramPacket packet = new DatagramPacket(data, data.length);
             while (flag) {
                 socket.receive(packet);
                 sendPort=packet.getPort();
+                Log.e("UDPSOCKET","sendPort="+sendPort);
                 String receiveMsg = new String(packet.getData(), 0, packet.getLength());
                 String tag = receiveMsg.substring(0,7);
                 //如果这次的标签与上次一样则选择过滤，如果不一样就把从SDK那里发过来的数据发个蓝牙
