@@ -631,7 +631,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	//是否注册成功，如果是则信号强，反之则信号弱
 	private void checkRegisterStatuGoIp() {
-		if (REGISTER_STATUE_CODE != 3) {
+		if(REGISTER_STATUE_CODE == 1)
+		{
+			indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+		}
+		else if (REGISTER_STATUE_CODE != 3) {
 			indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
 		} else {
 			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);

@@ -14,7 +14,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -526,8 +525,8 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 						float entityKm = Float.valueOf(newEntity.getKM());
 						float entityKcal = Float.valueOf(newEntity.getKcal());
 						if (kmResult != null && kcResult != null) {
-							int kmInt = Integer.valueOf(kmResult);
-							int kcInt = Integer.valueOf(kcResult);
+							float kmInt = Float.valueOf(kmResult);
+							float kcInt = Float.valueOf(kcResult);
 							if (newEntity != null) {
 								kmTextView.setText(kmInt + entityKm + "");
 								kcalTextView.setText(entityKcal + kcInt + "");
