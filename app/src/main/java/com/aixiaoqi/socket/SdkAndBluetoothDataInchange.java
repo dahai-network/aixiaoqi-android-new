@@ -3,6 +3,8 @@ package com.aixiaoqi.socket;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,6 +12,7 @@ import java.util.TimerTask;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.model.IsSuccessEntity;
 
 /**
  * Created by Administrator on 2017/1/5 0005.
@@ -53,7 +56,10 @@ public class SdkAndBluetoothDataInchange {
 		public void run() {
 			if(SocketConstant.REGISTER_STATUE_CODE!=3){
 				if(TextUtils.isEmpty(s)){
-
+					IsSuccessEntity entity = new IsSuccessEntity();
+					entity.setType(Constant.REGIST_TYPE);
+					entity.setSuccess(false);
+					EventBus.getDefault().post(entity);
 				}
 			}
 		}
