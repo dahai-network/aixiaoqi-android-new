@@ -499,12 +499,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private void destorySocketService() {
-		if(ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())||ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
-		unbindService(socketConnection);
-		if(SocketConnection.mReceiveDataframSocketService!=null){
-            SocketConnection.mReceiveDataframSocketService.stopSelf();
-        }
-		if(SocketConnection.mReceiveSocketService!=null){
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName()) || ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
+			unbindService(socketConnection);
+		if (SocketConnection.mReceiveDataframSocketService != null) {
+			SocketConnection.mReceiveDataframSocketService.stopSelf();
+		}
+		if (SocketConnection.mReceiveSocketService != null) {
 			SocketConnection.mReceiveSocketService.stopSelf();
 		}
 	}
@@ -582,24 +582,29 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(IsSuccessEntity entity) {
-		if (entity.isSuccess()) {
-			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
-		} else {
-			destorySocketService();
-			switch (type) {
-				case SocketConstant.REGISTER_FAIL:
-					CommonTools.showShortToast(this, getString(R.string.regist_fail));
-					break;
-				case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
-					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
-					break;
-				case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
-					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
-					break;
+		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
+			if (entity.isSuccess()) {
+				indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+			} else {
+				destorySocketService();
+				switch (type) {
+					case SocketConstant.REGISTER_FAIL:
+						CommonTools.showShortToast(this, getString(R.string.regist_fail));
+						break;
+					case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
+						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
+						break;
+					case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
+						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
+						break;
+				}
 			}
+		} else if (entity.getType() == Constant.REGIST_TYPE) {
+			indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
+			CommonTools.showShortToast(this,getString(R.string.regist_fail_tips));
 		}
-
 	}
+
 
 	//用于改变indexFragment状态的Receiver
 	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {

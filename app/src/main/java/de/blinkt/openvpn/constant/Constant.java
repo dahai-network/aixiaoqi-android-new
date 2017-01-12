@@ -5,7 +5,7 @@ package de.blinkt.openvpn.constant;
  */
 public class Constant {
 	public static final boolean IS_DEBUG = true;
-	public static final String BLUETOOTH_NAME = "YeBo";
+	public static final String BLUETOOTH_NAME = "Xiao";
 	//购买套餐数量限制
 	public static final int LIMIT_COUNT = 30;
 	//保存登录信息
@@ -76,6 +76,9 @@ public class Constant {
 	public static boolean IS_TEXT_SIM = true;
 	//是否连接到GOIP（默认true）
 	public static boolean IS_RECEIVE_GOIP = true;
+	//注册卡回调类型
+	public static final int REGIST_CALLBACK_TYPE = 0;
+	public static final int REGIST_TYPE = 1 ;
 
 	/**
 	 * 支付宝支付业务：入参app_id

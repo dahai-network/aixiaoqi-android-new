@@ -752,6 +752,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			case R.string.index_no_signal:
 				setLeftDrawable(R.drawable.device_no_signal);
 				break;
+			case R.string.index_regist_fail:
+				setLeftDrawable(R.drawable.device_no_signal);
+				break;
 			case R.string.index_registing:
 				setLeftDrawable(R.drawable.device_no_signal);
 				break;
@@ -775,20 +778,24 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(IsSuccessEntity entity) {
-		if (entity.isSuccess()) {
-			setConStatus(R.string.index_high_signal);
-		} else {
-			switch (type) {
-				case SocketConstant.REGISTER_FAIL:
-					CommonTools.showShortToast(this, getString(R.string.regist_fail));
-					break;
-				case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
-					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
-					break;
-				case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
-					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
-					break;
+		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
+			if (entity.isSuccess()) {
+				setConStatus(R.string.index_high_signal);
+			} else {
+				switch (type) {
+					case SocketConstant.REGISTER_FAIL:
+						CommonTools.showShortToast(this, getString(R.string.regist_fail));
+						break;
+					case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
+						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
+						break;
+					case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
+						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
+						break;
+				}
 			}
+		} else if (entity.getType() == Constant.REGIST_TYPE) {
+			setConStatus(R.string.index_regist_fail);
 		}
 	}
 
