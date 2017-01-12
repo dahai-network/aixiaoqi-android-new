@@ -187,14 +187,15 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (mState != UartService.STATE_CONNECTED) {
 			GetBindDeviceHttp http = new GetBindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 			new Thread(http).start();
-		} else {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			sendMessageToBlueTooth(UP_TO_POWER);
 		}
+//		else {
+//			try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			sendMessageToBlueTooth(UP_TO_POWER);
+//		}
 		if (mState == UartService.STATE_CONNECTED) {
 			conStatusLinearLayout.setVisibility(View.VISIBLE);
 			int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
