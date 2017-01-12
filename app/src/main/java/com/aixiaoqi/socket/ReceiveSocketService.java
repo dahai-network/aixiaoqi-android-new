@@ -101,7 +101,9 @@ public class ReceiveSocketService extends Service {
     public void onDestroy() {
         count=0;
         tcpClient.disconnect();
+        SocketConstant.REGISTER_STATUE_CODE=0;
         timer.cancel();
+        timer=null;
         super.onDestroy();
     }
 

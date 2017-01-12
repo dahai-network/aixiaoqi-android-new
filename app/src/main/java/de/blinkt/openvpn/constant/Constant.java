@@ -5,7 +5,7 @@ package de.blinkt.openvpn.constant;
  */
 public class Constant {
 	public static final boolean IS_DEBUG = true;
-	public static final String BLUETOOTH_NAME = "Xiao";
+	public static final String BLUETOOTH_NAME = "YeBo";
 	//购买套餐数量限制
 	public static final int LIMIT_COUNT = 30;
 	//保存登录信息
