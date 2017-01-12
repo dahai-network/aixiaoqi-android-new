@@ -57,6 +57,7 @@ import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
+import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.CommonTools;
@@ -524,6 +525,20 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			} else {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
 			}
+		} else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
+			if (object.getStatus() == 1) {
+				IsHavePacketHttp isHavePacketHttp = (IsHavePacketHttp) object;
+				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
+				if (entity.getUsed() == 1) {
+					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+				} else {
+					//检测是否有套餐，没有责显示新状态
+					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
+					indexFragment.changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
+				}
+			} else {
+				CommonTools.showShortToast(this, object.getMsg());
+			}
 		}
 	}
 
@@ -592,20 +607,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
-				IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this,HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET,"1");
-				//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
-				checkRegisterStatuGoIp();
+				//当有通话套餐的时候才允许注册操作
+				IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "1");
+				new Thread(http).start();
+
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
 				startDataframService();
 				startSocketService();
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						Log.e("phoneAddress","main.start()");
+						Log.e("phoneAddress", "main.start()");
 						JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
 					}
 				}).start();
@@ -620,19 +637,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				if (txValue[0] == (byte) 0xBB) {
 					if (txValue[1] == (byte) 0x01) {
 						if (txValue[3] == (byte) 0x03) {
-							//检测是否有套餐，没有责显示新状态
-							if (indexFragment.getOrderAdapter().getItemCount() == 0) {
-								SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-							} else {
-								indexFragment.changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
-							}
 						}
 					} else if (txValue[1] == (byte) 0x33) {
 						checkRegisterStatuGoIp();
 					} else if (txValue[1] == (byte) 0x11) {
 						indexFragment.changeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 					} else if (txValue[1] == (byte) 0xEE) {
-						if (indexFragment.getOrderAdapter().getItemCount() != 0) {
+						if (SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
 							checkRegisterStatuGoIp();
 						} else {
 							indexFragment.changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
@@ -645,11 +656,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	//是否注册成功，如果是则信号强，反之则信号弱
 	private void checkRegisterStatuGoIp() {
-		if(REGISTER_STATUE_CODE == 1)
-		{
+		if (REGISTER_STATUE_CODE == 1) {
 			indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
-		}
-		else if (REGISTER_STATUE_CODE != 3) {
+		} else if (REGISTER_STATUE_CODE != 3) {
 			indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
 		} else {
 			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);

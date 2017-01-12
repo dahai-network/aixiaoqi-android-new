@@ -738,6 +738,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void showDialog() {
+		scanLeDevice(false);
 		//不能按返回键，只能二选其一
 		noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, NOT_YET_REARCH);
 		noDevicedialog.setCanClickBack(false);

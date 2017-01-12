@@ -11,13 +11,13 @@ public class IsHavePacketEntity implements Serializable{
 	 * Used : 0不存在/1存在
 	 */
 
-	private String Used;
+	private int Used;
 
-	public String getUsed() {
+	public int getUsed() {
 		return Used;
 	}
 
-	public void setUsed(String Used) {
+	public void setUsed(int Used) {
 		this.Used = Used;
 	}
 }
