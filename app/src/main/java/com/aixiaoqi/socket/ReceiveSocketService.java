@@ -98,7 +98,7 @@ public class ReceiveSocketService extends Service {
     public void onDestroy() {
         tcpClient.disconnect();
         timer.cancel();
-        SocketConstant.REGISTER_STATUE_CODE=0;
+        SocketConstant.REGISTER_STATUE_CODE=1;
         TlvAnalyticalUtils.clearData();
         TestProvider.clearData();
         super.onDestroy();
