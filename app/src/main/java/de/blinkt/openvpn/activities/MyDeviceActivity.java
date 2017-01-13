@@ -80,7 +80,6 @@ import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
-import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
@@ -100,8 +99,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	LinearLayout flowPayLinearLayout;
 	@BindView(R.id.unBindButton)
 	Button unBindButton;
-	@BindView(R.id.simStatusTextView)
-	TextView simStatusTextView;
+	@BindView(R.id.resetDeviceTextView)
+	TextView resetDeviceTextView;
 	@BindView(R.id.sinking)
 	MySinkingView sinking;
 	//重连次数记录
@@ -201,16 +200,18 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (mState != UartService.STATE_CONNECTED) {
 			GetBindDeviceHttp http = new GetBindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 			new Thread(http).start();
-		} else {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (blueStatus != R.string.index_registing) {
-				sendMessageToBlueTooth(UP_TO_POWER);
-			}
 		}
+
+//		else {
+//			try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			if (blueStatus != R.string.index_registing) {
+//				sendMessageToBlueTooth(UP_TO_POWER);
+//			}
+//		}
 
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
 		EventBus.getDefault().register(this);
@@ -255,20 +256,19 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 
-	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.findStatusLinearLayout, R.id.simStatusTextView, R.id.statueTextView})
+	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.findStatusLinearLayout, R.id.resetDeviceTextView, R.id.statueTextView})
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.unBindButton:
-
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
 				sinking.setVisibility(View.GONE);
 				noConnectImageView.setVisibility(View.VISIBLE);
 				statueTextView.setVisibility(View.VISIBLE);
+				resetDeviceTextView.setVisibility(View.GONE);
+				conStatusLinearLayout.setVisibility(View.GONE);
 				firmwareTextView.setText("");
 				macTextView.setText("");
-				simStatusTextView.setText("");
-				conStatusLinearLayout.setVisibility(View.GONE);
 				utils.delete(Constant.IMEI);
 				utils.delete(Constant.BRACELETVERSION);
 				sendMessageToBlueTooth("AAABCDEFAA");
@@ -313,9 +313,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					sendMessageToBlueTooth(FIND_DEVICE);
 				}
 				break;
-			case R.id.simStatusTextView:
-				if (!CommonTools.isFastDoubleClick(2000)) {
-					sendMessageToBlueTooth(UP_TO_POWER);
+			case R.id.resetDeviceTextView:
+				if (!CommonTools.isFastDoubleClick(5000)) {
+					sendMessageToBlueTooth(RESTORATION);
 				}
 				break;
 			case R.id.statueTextView:
@@ -455,14 +455,10 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						} else if (txValue[1] == (byte) 0x04) {
 							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
 						} else if (txValue[1] == (byte) 0x33) {
-							simStatusTextView.setText(getResources().getString(R.string.index_inserted_card));
-							simStatusTextView.setTextColor(ContextCompat.getColor(MyDeviceActivity.this, R.color.select_contacct));
 							if (SocketConstant.REGISTER_STATUE_CODE == 1) {
 								setConStatus(R.string.index_registing);
 							}
 						} else if (txValue[1] == (byte) 0x11) {
-							simStatusTextView.setText(getResources().getString(R.string.index_un_insert_card));
-							simStatusTextView.setTextColor(ContextCompat.getColor(MyDeviceActivity.this, R.color.gray_text));
 							showNoCardDialog();
 						}
 						break;
@@ -790,6 +786,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	public void setConStatus(int conStatus) {
 		conStatusTextView.setText(getResources().getString(conStatus));
 		conStatusResource = conStatus;
+		conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 		switch (conStatus) {
 			case R.string.index_connecting:
 				setLeftDrawable(-1);

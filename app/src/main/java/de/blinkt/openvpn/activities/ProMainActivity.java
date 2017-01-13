@@ -489,7 +489,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		stopService(new Intent(this, CallPhoneService.class));
 		//关闭服务并设置为null
 
-		destorySocketService();
+		destorySocketService(1000);
+		if(ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())){
+			unbindService(socketUdpConnection);
+			if (SocketConnection.mReceiveDataframSocketService != null) {
+				SocketConnection.mReceiveDataframSocketService.stopSelf();
+			}
+		}
 		if (mService != null)
 			mService.stopSelf();
 		mService = null;
@@ -505,16 +511,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		super.onDestroy();
 	}
 
-	private void destorySocketService() {
+	private void destorySocketService(int type) {
 		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
 			unbindService(socketTcpConnection);
-//		if (SocketConnection.mReceiveDataframSocketService != null) {
-//			SocketConnection.mReceiveDataframSocketService.stopSelf();
-//		}
 		if (SocketConnection.mReceiveSocketService != null) {
 			SocketConnection.mReceiveSocketService.stopSelf();
 		}
-		if (SocketConstant.REGISTER_STATUE_CODE != 0) {
+		if (SocketConstant.REGISTER_STATUE_CODE != 0&&type==SocketConstant.REGISTER_FAIL_INITIATIVE) {
 			SocketConstant.REGISTER_STATUE_CODE = 1;
 		}
 	}
@@ -597,7 +600,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			if (entity.isSuccess()) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 			} else {
-				destorySocketService();
+				destorySocketService(type);
 				switch (type) {
 					case SocketConstant.REGISTER_FAIL:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail));
@@ -615,7 +618,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
 				CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
 			}
-			destorySocketService();
+			destorySocketService(type);
 		}
 	}
 

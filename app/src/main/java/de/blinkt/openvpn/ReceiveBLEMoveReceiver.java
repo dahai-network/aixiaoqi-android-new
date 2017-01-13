@@ -499,13 +499,21 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
-		CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), errorMessage);
-		Log.i("test", "http.getMsg:" + errorMessage);
+		try {
+			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), errorMessage);
+			Log.i("test", "http.getMsg:" + errorMessage);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void noNet() {
-		CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), context.getResources().getString(R.string.no_wifi));
+		try {
+			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), context.getResources().getString(R.string.no_wifi));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getBLETime() {
