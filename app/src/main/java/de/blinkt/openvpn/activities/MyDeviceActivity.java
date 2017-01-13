@@ -80,7 +80,6 @@ import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
-import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
@@ -201,16 +200,18 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (mState != UartService.STATE_CONNECTED) {
 			GetBindDeviceHttp http = new GetBindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 			new Thread(http).start();
-		} else {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (blueStatus != R.string.index_registing) {
-				sendMessageToBlueTooth(UP_TO_POWER);
-			}
 		}
+
+//		else {
+//			try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			if (blueStatus != R.string.index_registing) {
+//				sendMessageToBlueTooth(UP_TO_POWER);
+//			}
+//		}
 
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
 		EventBus.getDefault().register(this);
