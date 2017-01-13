@@ -253,6 +253,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.unBindButton:
+
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
 				sinking.setVisibility(View.GONE);
@@ -267,6 +268,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				sendMessageToBlueTooth("AAABCDEFAA");
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
+
 				mService.disconnect();
 				IsSuccessEntity entity = new IsSuccessEntity();
 				entity.setType(Constant.REGIST_TYPE);

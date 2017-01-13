@@ -22,14 +22,18 @@ public abstract class UdpClient implements Runnable {
     private int sendPort;
     private String sendAddress = "127.0.0.1";
     private String tag = null;
+    private int port=4567;
     @Override
     public void run() {
         try {
-            if(socket==null)
-                socket = new DatagramSocket(4567);
+            if(socket==null){
+                socket = new DatagramSocket(port);
+//                port++;
+            }
             byte data[] = new byte[1024];
             DatagramPacket packet = new DatagramPacket(data, data.length);
             while (flag) {
+                if(socket!=null&&socket.isConnected()&&!socket.isClosed())
                 socket.receive(packet);
                 sendPort=packet.getPort();
                 Log.e("UDPSOCKET","sendPort="+sendPort);
@@ -42,7 +46,11 @@ public abstract class UdpClient implements Runnable {
                     sendToBluetoothMsg(receiveMsg);
                 }
             }
-            socket.close();
+            if(socket!=null){
+                socket.disconnect();
+                socket.close();
+                socket=null;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             flag=false;
@@ -90,9 +98,12 @@ public abstract class UdpClient implements Runnable {
     public  void disconnect(){
         if(datagramSocket!=null){
             flag=false;
-            datagramSocket.close();
+
+            socket.disconnect();
             socket.close();
             socket=null;
+            datagramSocket.disconnect();
+            datagramSocket.close();
             datagramSocket=null;
         }
     }
