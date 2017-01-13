@@ -63,6 +63,7 @@ import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
+import de.blinkt.openvpn.views.dialog.DialogBalance;
 
 import static android.R.attr.type;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
@@ -100,6 +101,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private long RECONNECT_TIME = 180000;
 	SocketConnection socketUdpConnection;
 	SocketConnection socketTcpConnection;
+	private DialogBalance cardRuleBreakDialog;
+
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
 		return super.getLastCustomNonConfigurationInstance();
@@ -165,16 +168,16 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private void startSocketService() {
-		if(!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
 			Intent receiveSdkIntent = new Intent(this, ReceiveSocketService.class);
 			bindService(receiveSdkIntent, socketTcpConnection, Context.BIND_AUTO_CREATE);
 		}
 	}
 
 	private void startDataframService() {
-		if(!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())){
-		Intent receiveSdkIntent = new Intent(this, ReceiveDataframSocketService.class);
-		bindService(receiveSdkIntent, socketUdpConnection, Context.BIND_AUTO_CREATE);
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
+			Intent receiveSdkIntent = new Intent(this, ReceiveDataframSocketService.class);
+			bindService(receiveSdkIntent, socketUdpConnection, Context.BIND_AUTO_CREATE);
 		}
 
 	}
@@ -511,8 +514,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		if (SocketConnection.mReceiveSocketService != null) {
 			SocketConnection.mReceiveSocketService.stopSelf();
 		}
-		if(SocketConstant.REGISTER_STATUE_CODE!=0){
-			SocketConstant.REGISTER_STATUE_CODE=1;
+		if (SocketConstant.REGISTER_STATUE_CODE != 0) {
+			SocketConstant.REGISTER_STATUE_CODE = 1;
 		}
 	}
 
@@ -537,10 +540,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				IsHavePacketHttp isHavePacketHttp = (IsHavePacketHttp) object;
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
+					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
 					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 				} else {
 					//检测是否有套餐，没有责显示新状态
-					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
+					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
 					indexFragment.changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 				}
 			} else {
@@ -607,7 +611,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				}
 			}
 		} else if (entity.getType() == Constant.REGIST_TYPE) {
-			if(entity.getFailType()!=SocketConstant.REGISTER_FAIL_INITIATIVE) {
+			if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
 				CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
 			}

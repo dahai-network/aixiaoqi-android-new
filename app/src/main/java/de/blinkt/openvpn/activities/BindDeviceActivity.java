@@ -20,6 +20,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -30,6 +33,7 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.DeviceAdapter;
 import de.blinkt.openvpn.activities.Base.CommenActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
+import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -38,6 +42,7 @@ import de.blinkt.openvpn.http.BindDeviceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.IsBindHttp;
+import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
@@ -189,7 +194,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 									if (device.getName().contains(Constant.BLUETOOTH_NAME)) {
 //									  if (device.getName().contains("unitoys")) {
 										//如果信号强度绝对值大于这个值（距离\）,则配对
-										if (Math.abs(rssi) < 90) {
+										if (Math.abs(rssi) < 75) {
 											mBluetoothAdapter.stopLeScan(mLeScanCallback);
 											deviceAddress = device.getAddress();
 											IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, device.getAddress());
@@ -233,20 +238,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			if (http.getIsBindEntity().getBindStatus() == 0) {
 				if (mService != null)
 					mService.connect(deviceAddress);
-//				new Thread(new Runnable() {
-//					@Override
-//					public void run() {
-//						try {
-//							Thread.sleep(2100);
-//						} catch (InterruptedException e) {
-//							e.printStackTrace();
-//						}
-//						EventBus.getDefault().post();
-//					}
-//				}).start();
-
-				BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddress, utils.readString(Constant.BRACELETVERSION));
-				new Thread(bindDevicehttp).start();
 			} else {
 				CommonTools.showShortToast(this, "该设备已经绑定过了！");
 			}
@@ -313,6 +304,15 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(BIND_COMPELETE);
 		return filter;
+	}
+	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
+	public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
+		String type = entity.getBlueType();
+		if(type == BluetoothConstant.BLUE_VERSION)
+		{
+			BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddress, utils.readString(Constant.BRACELETVERSION));
+			new Thread(bindDevicehttp).start();
+		}
 	}
 
 }

@@ -12,23 +12,25 @@ import java.net.UnknownHostException;
 /**
  * Created by Administrator on 2016/12/30 0030.
  */
+
 public abstract class UdpClient implements Runnable {
 
 
-    private String TAG = "ReceiveSocketService";
-    private boolean flag ;
-    DatagramSocket datagramSocket;
-    DatagramSocket socket;
-    private int sendPort;
-    private String sendAddress = "127.0.0.1";
-    private String tag = null;
-    private int port=4567;
 
-    @Override
-    public void run() {
-        try {
-            if(socket==null){
-                socket = new DatagramSocket(port);
+	private String TAG = "ReceiveSocketService";
+	private boolean flag;
+	DatagramSocket datagramSocket;
+	DatagramSocket socket;
+	private int sendPort;
+	private String sendAddress = "127.0.0.1";
+	private String tag = null;
+	private int port = 4567;
+
+	@Override
+	public void run() {
+		try {
+			if (socket == null) {
+				socket = new DatagramSocket(port);
 //                port++;
             }
             byte data[] = new byte[1024];
@@ -73,31 +75,31 @@ public abstract class UdpClient implements Runnable {
         new Thread(this).start();
     }
 
-    public void sendToSdkMessage(String msg){
-        try {
-            if (datagramSocket == null) {
-                datagramSocket = new DatagramSocket(null);
-                datagramSocket.setReuseAddress(true);
-            }
-            InetAddress addr = InetAddress.getByName(sendAddress);
-            byte[] data = msg.getBytes();
-            DatagramPacket sendSocket = new DatagramPacket(data, data.length, addr,sendPort);
-            Log.e("UDPSOCKET","addr="+addr.getHostAddress()+"\naddrname="+addr.getHostName()+"\nsendPort="+sendPort);
-            datagramSocket.send(sendSocket);
-        } catch (SocketException e) {
-            datagramSocket.close();
-            datagramSocket=null;
-            e.printStackTrace();
-        } catch (UnknownHostException e) {
-            datagramSocket.close();
-            datagramSocket=null;
-            e.printStackTrace();
-        } catch (IOException e) {
-            datagramSocket.close();
-            datagramSocket=null;
-            e.printStackTrace();
-        }
-    }
+	public void sendToSdkMessage(String msg) {
+		try {
+			if (datagramSocket == null) {
+				datagramSocket = new DatagramSocket(null);
+				datagramSocket.setReuseAddress(true);
+			}
+			InetAddress addr = InetAddress.getByName(sendAddress);
+			byte[] data = msg.getBytes();
+			DatagramPacket sendSocket = new DatagramPacket(data, data.length, addr, sendPort);
+			Log.e("UDPSOCKET", "addr=" + addr.getHostAddress() + "\naddrname=" + addr.getHostName() + "\nsendPort=" + sendPort);
+			datagramSocket.send(sendSocket);
+		} catch (SocketException e) {
+			datagramSocket.close();
+			datagramSocket = null;
+			e.printStackTrace();
+		} catch (UnknownHostException e) {
+			datagramSocket.close();
+			datagramSocket = null;
+			e.printStackTrace();
+		} catch (IOException e) {
+			datagramSocket.close();
+			datagramSocket = null;
+			e.printStackTrace();
+		}
+	}
 
 
     public  void disconnect(){
