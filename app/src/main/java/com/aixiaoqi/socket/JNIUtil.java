@@ -43,7 +43,9 @@ public class JNIUtil {
                 reStartSDK(phonenumber);
                 break;
             case 2:
+                if(sendToSdkLisener!=null)
                 sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));
+                if(sendYiZhengService!=null)
                 sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
             break;
             default:
@@ -64,7 +66,7 @@ public class JNIUtil {
     public static void  reStartSDK(String phonenumber){
         if(jniUtil!=null)
             jniUtil.simComEvtApp2Drv((byte)0,Byte.parseByte(EN_APPEVT_CMD_SETRST),0, HexStringExchangeBytesUtil.hexStringToBytes(SocketConstant.TRAN_DATA_TO_SDK));
-        phoneAddress(phonenumber);
+//        phoneAddress(phonenumber);
     }
     public static int matchesPhoneNumber(String phone_number) {
 

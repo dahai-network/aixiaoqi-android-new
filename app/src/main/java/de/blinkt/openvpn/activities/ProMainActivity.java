@@ -507,6 +507,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		if (SocketConnection.mReceiveSocketService != null) {
 			SocketConnection.mReceiveSocketService.stopSelf();
 		}
+		if(SocketConstant.REGISTER_STATUE_CODE!=0){
+			SocketConstant.REGISTER_STATUE_CODE=1;
+		}
 	}
 
 	@Override

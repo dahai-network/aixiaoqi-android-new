@@ -64,8 +64,10 @@ public abstract class SocketTransceiver implements Runnable {
 		try {
 			if (socket != null) {
 				socket.shutdownInput();
-				in.close();
-				out.close();
+				if(in!=null)
+					in.close();
+				if(out!=null)
+					out.close();
 			}
 
 		} catch (Exception e) {

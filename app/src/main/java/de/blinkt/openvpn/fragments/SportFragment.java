@@ -141,6 +141,15 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 	}
 
 	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		if(!isVisibleToUser){
+			if(llDialogCalendar!=null)
+			llDialogCalendar.setVisibility(View.GONE);
+		}
+	}
+
+	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.tv_show_month_view:

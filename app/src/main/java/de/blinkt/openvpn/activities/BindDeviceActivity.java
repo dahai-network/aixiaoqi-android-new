@@ -151,7 +151,9 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	protected void onPause() {
 		super.onPause();
 		scanLeDevice(false);
-
+		if(noDevicedialog!=null&&noDevicedialog.getDialog()!=null){
+			noDevicedialog.getDialog().dismiss();
+		}
 	}
 
 	@Override
@@ -163,9 +165,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if(noDevicedialog!=null&&noDevicedialog.getDialog()!=null){
-			noDevicedialog.getDialog().dismiss();
-		}
+
 		mBluetoothAdapter.stopLeScan(mLeScanCallback);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(bindCompeleteReceiver);
 	}
