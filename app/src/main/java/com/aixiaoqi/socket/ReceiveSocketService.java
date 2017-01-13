@@ -73,8 +73,6 @@ public class ReceiveSocketService extends Service {
         @Override
         public void onDisconnect(SocketTransceiver transceiver) {
             Log.e("Blue_Chanl", "断开连接 - onDisconnect");
-
-            SocketConstant.REGISTER_STATUE_CODE=2;
             sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));
             reConnect();
 

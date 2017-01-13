@@ -98,8 +98,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	IndexFragment indexFragment;
 	//重连时间
 	private long RECONNECT_TIME = 180000;
-	SocketConnection socketConnection;
-
+	SocketConnection socketUdpConnection;
+	SocketConnection socketTcpConnection;
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
 		return super.getLastCustomNonConfigurationInstance();
@@ -139,7 +139,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		addListener();
 		setListener();
 		initServices();
-		socketConnection = new SocketConnection();
+		socketUdpConnection = new SocketConnection();
+		socketTcpConnection = new SocketConnection();
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
 	}
@@ -164,14 +165,17 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private void startSocketService() {
-		Intent receiveSdkIntent = new Intent(this, ReceiveSocketService.class);
-		bindService(receiveSdkIntent, socketConnection, Context.BIND_AUTO_CREATE);
-
+		if(!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+			Intent receiveSdkIntent = new Intent(this, ReceiveSocketService.class);
+			bindService(receiveSdkIntent, socketTcpConnection, Context.BIND_AUTO_CREATE);
+		}
 	}
 
 	private void startDataframService() {
+		if(!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())){
 		Intent receiveSdkIntent = new Intent(this, ReceiveDataframSocketService.class);
-		bindService(receiveSdkIntent, socketConnection, Context.BIND_AUTO_CREATE);
+		bindService(receiveSdkIntent, socketUdpConnection, Context.BIND_AUTO_CREATE);
+		}
 
 	}
 
@@ -499,11 +503,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private void destorySocketService() {
-		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName()) || ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
-			unbindService(socketConnection);
-		if (SocketConnection.mReceiveDataframSocketService != null) {
-			SocketConnection.mReceiveDataframSocketService.stopSelf();
-		}
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
+			unbindService(socketTcpConnection);
+//		if (SocketConnection.mReceiveDataframSocketService != null) {
+//			SocketConnection.mReceiveDataframSocketService.stopSelf();
+//		}
 		if (SocketConnection.mReceiveSocketService != null) {
 			SocketConnection.mReceiveSocketService.stopSelf();
 		}

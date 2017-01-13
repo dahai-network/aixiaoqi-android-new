@@ -94,13 +94,14 @@ public class SdkAndBluetoothDataInchange {
 
 			if((System.currentTimeMillis()-lastTime>365*24*60*60*1000l||System.currentTimeMillis()-lastTime<2000)&&count<=3){
 				Log.e(TAG, "蓝牙数据出错重发=" + finalTemp+"\ncount="+count);
-				count++;
+
 				lastTime=System.currentTimeMillis();
 				sendToBluetoothAboutCardInfo(finalTemp);
 			}else if(count>3){
 				Log.e(TAG, "蓝牙数据出错重发   注册失败" );
 				notifyRegisterFail();
 			}
+			count++;
 			return;
 		}
 		if(percentEntity==null){

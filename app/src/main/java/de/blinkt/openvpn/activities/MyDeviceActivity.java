@@ -2,7 +2,9 @@ package de.blinkt.openvpn.activities;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -279,6 +281,23 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				new Thread(http).start();
 				//清空缓存的mac地址
 				ReceiveBLEMoveReceiver.isConnect = false;
+
+//				Intent intent = new Intent(application.getApplicationContext(), LaunchActivity.class);
+//
+//
+//
+//				PendingIntent restartIntent = PendingIntent.getActivity(
+//						application.getApplicationContext(), 0, intent,
+//						Intent.FLAG_ACTIVITY_NEW_TASK);
+//				//退出程序
+//				AlarmManager mgr = (AlarmManager)application.getSystemService(Context.ALARM_SERVICE);
+//				mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
+//						restartIntent); // 1秒钟后重启应用
+//				application.AppExit();
+////				退出程序
+//
+//
+//				System.exit(1);
 				break;
 			case R.id.callPayLinearLayout:
 				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION))) {
