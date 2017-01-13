@@ -46,6 +46,7 @@ import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -58,6 +59,7 @@ import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.http.UnBindDeviceHttp;
 import de.blinkt.openvpn.model.BlueToothDeviceEntity;
+import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 import de.blinkt.openvpn.service.DfuService;
@@ -77,6 +79,7 @@ import static de.blinkt.openvpn.activities.BindDeviceActivity.FAILT;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
+import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
@@ -137,6 +140,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	private String macAddressStr;
 	private long SCAN_PERIOD = 10000;//原本120000毫秒
 	private DialogBalance noDevicedialog;
+	private DialogBalance cardRuleBreakDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -424,6 +428,10 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 								//收到版本号后获取历史步数
 								sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
 								Log.i("toBLue", "已收到版本号");
+								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
+								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
+								entity.setSuccess(true);
+								EventBus.getDefault().post(entity);
 							}
 						} else if (txValue[1] == (byte) 0x04) {
 							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
@@ -436,6 +444,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						} else if (txValue[1] == (byte) 0x11) {
 							simStatusTextView.setText(getResources().getString(R.string.index_un_insert_card));
 							simStatusTextView.setTextColor(ContextCompat.getColor(MyDeviceActivity.this, R.color.gray_text));
+							showNoCardDialog();
 						}
 						break;
 				}
@@ -627,7 +636,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			//友盟方法统计
 			MobclickAgent.onEvent(context, CLICKBINDDEVICE);
 			clickFindBracelet();
-		} else if (type == DOWNLOAD_SKY_UPGRADE) {
+		}
+		else if(type == 3)
+		{
+			sendMessageToBlueTooth(RESTORATION);
+		}
+		else if (type == DOWNLOAD_SKY_UPGRADE) {
 			if (!TextUtils.isEmpty(url))
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKDEVICEUPGRADE);
@@ -761,6 +775,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		conStatusTextView.setText(getResources().getString(conStatus));
 		conStatusResource = conStatus;
 		switch (conStatus) {
+			case R.string.index_connecting:
+				setLeftDrawable(-1);
+				break;
 			case R.string.index_no_signal:
 				setLeftDrawable(R.drawable.device_no_signal);
 				break;
@@ -781,10 +798,14 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void setLeftDrawable(int resId) {
-		Drawable leftDrawable = getResources().getDrawable(resId);
-		if (leftDrawable != null) {
-			leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
-			conStatusTextView.setCompoundDrawables(null, null, leftDrawable, null);
+		if (resId != -1) {
+			Drawable leftDrawable = getResources().getDrawable(resId);
+			if (leftDrawable != null) {
+				leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+				conStatusTextView.setCompoundDrawables(null, null, leftDrawable, null);
+			}
+		} else {
+			conStatusTextView.setCompoundDrawables(null, null, null, null);
 		}
 	}
 
@@ -827,5 +848,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		}
 		percentTextView.setText(percentInt + "%");
 	}
+	private void showNoCardDialog() {
+		//不能按返回键，只能二选其一
+		cardRuleBreakDialog = new DialogBalance(MyDeviceActivity.this, MyDeviceActivity.this, R.layout.dialog_balance, 3);
+		cardRuleBreakDialog.setCanClickBack(false);
+		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));
+	}
+
 
 }

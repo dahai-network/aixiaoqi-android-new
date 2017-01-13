@@ -121,10 +121,11 @@ public class BeforeGoingAboradActivity extends BaseNetActivity implements XRecyc
 					NoNetRelativeLayout.setVisibility(View.GONE);
 					orderListRecylerView.setVisibility(View.VISIBLE);
 					if (pageNumber == 1) {
-
 						if (bean.getList().size() < 20) {
 							orderAdapter.addAll(bean.getList());
 							orderListRecylerView.noMoreLoading();
+						}else {
+							orderAdapter.addAll(bean.getList());
 						}
 
 					} else {
