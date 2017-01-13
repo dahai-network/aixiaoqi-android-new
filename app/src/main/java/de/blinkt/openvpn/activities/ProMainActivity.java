@@ -45,7 +45,6 @@ import cn.com.johnson.adapter.FragmentAdapter;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -65,15 +64,13 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
-import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static android.R.attr.type;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
-import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
 
-public class ProMainActivity extends BaseNetActivity implements View.OnClickListener, DialogInterfaceTypeBase {
+public class ProMainActivity extends BaseNetActivity implements View.OnClickListener {
 
 	private ViewPager mViewPager;
 	private TextView[] tvArray = new TextView[5];
@@ -102,7 +99,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	IndexFragment indexFragment;
 	//重连时间
 	private long RECONNECT_TIME = 180000;
-	SocketConnection socketConnection;
+	SocketConnection socketUdpConnection;
+	SocketConnection socketTcpConnection;
 	private DialogBalance cardRuleBreakDialog;
 
 	@Override
@@ -144,7 +142,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		addListener();
 		setListener();
 		initServices();
-		socketConnection = new SocketConnection();
+		socketUdpConnection = new SocketConnection();
+		socketTcpConnection = new SocketConnection();
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
 	}
@@ -171,15 +170,16 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private void startSocketService() {
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
 			Intent receiveSdkIntent = new Intent(this, ReceiveSocketService.class);
-			bindService(receiveSdkIntent, socketConnection, Context.BIND_AUTO_CREATE);
+			bindService(receiveSdkIntent, socketTcpConnection, Context.BIND_AUTO_CREATE);
 		}
 	}
 
 	private void startDataframService() {
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
 			Intent receiveSdkIntent = new Intent(this, ReceiveDataframSocketService.class);
-			bindService(receiveSdkIntent, socketConnection, Context.BIND_AUTO_CREATE);
+			bindService(receiveSdkIntent, socketUdpConnection, Context.BIND_AUTO_CREATE);
 		}
+
 	}
 
 	public LinearLayout getLlArrayToSport() {
@@ -506,11 +506,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private void destorySocketService() {
-		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName()) || ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
-			unbindService(socketConnection);
-		if (SocketConnection.mReceiveDataframSocketService != null) {
-			SocketConnection.mReceiveDataframSocketService.stopSelf();
-		}
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
+			unbindService(socketTcpConnection);
+//		if (SocketConnection.mReceiveDataframSocketService != null) {
+//			SocketConnection.mReceiveDataframSocketService.stopSelf();
+//		}
 		if (SocketConnection.mReceiveSocketService != null) {
 			SocketConnection.mReceiveSocketService.stopSelf();
 		}
@@ -540,10 +540,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				IsHavePacketHttp isHavePacketHttp = (IsHavePacketHttp) object;
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
+					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
 					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 				} else {
 					//检测是否有套餐，没有责显示新状态
-					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
+					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
 					indexFragment.changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 				}
 			} else {
@@ -660,7 +661,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						checkRegisterStatuGoIp();
 					} else if (txValue[1] == (byte) 0x11) {
 						indexFragment.changeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
-						showDialog();
 					} else if (txValue[1] == (byte) 0xEE) {
 						if (SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
 							checkRegisterStatuGoIp();
@@ -681,36 +681,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
 		} else {
 			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
-		}
-	}
-
-	private void showDialog() {
-		//不能按返回键，只能二选其一
-		cardRuleBreakDialog = new DialogBalance(ProMainActivity.this, ProMainActivity.this, R.layout.dialog_balance, 2);
-		cardRuleBreakDialog.setCanClickBack(false);
-		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));
-	}
-
-	@Override
-	public void dialogText(int type, String text) {
-		if (type == 2) {
-			sendMessageToBlueTooth(RESTORATION);
-		}
-	}
-
-	private void sendMessageToBlueTooth(final String message) {
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		byte[] value;
-		Log.i("toBLue", message);
-		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-		if (mService != null) {
-			if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
-				mService.writeRXCharacteristic(value);
-			}
 		}
 	}
 }

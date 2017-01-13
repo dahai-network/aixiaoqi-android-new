@@ -59,7 +59,7 @@ public class ReceiveDataframSocketService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        udpClient.disconnect();
-        udpClient=null;
+//        udpClient.disconnect();
+//        udpClient=null;
     }
 }

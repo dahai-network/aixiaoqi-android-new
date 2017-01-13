@@ -172,6 +172,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void initSet() {
+		int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
 		checkPowerTimer.schedule(checkPowerTask, 100, 60000);
 		if (mService != null)
 			mState = mService.mConnectionState;
@@ -191,25 +192,26 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			statueTextView.setVisibility(View.GONE);
 			skyUpgradeHttp();
 		}
-		if (mState != UartService.STATE_CONNECTED) {
-			GetBindDeviceHttp http = new GetBindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
-			new Thread(http).start();
-		}
-//		else {
-//			try {
-//				Thread.sleep(500);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//			sendMessageToBlueTooth(UP_TO_POWER);
-//		}
 		if (mState == UartService.STATE_CONNECTED) {
 			conStatusLinearLayout.setVisibility(View.VISIBLE);
-			int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
 			if (blueStatus != 0) {
 				setConStatus(blueStatus);
 			}
 		}
+		if (mState != UartService.STATE_CONNECTED) {
+			GetBindDeviceHttp http = new GetBindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
+			new Thread(http).start();
+		} else {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (blueStatus != R.string.index_registing) {
+				sendMessageToBlueTooth(UP_TO_POWER);
+			}
+		}
+
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
 		EventBus.getDefault().register(this);
 	}
@@ -283,6 +285,23 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				new Thread(http).start();
 				//清空缓存的mac地址
 				ReceiveBLEMoveReceiver.isConnect = false;
+
+//				Intent intent = new Intent(application.getApplicationContext(), LaunchActivity.class);
+//
+//
+//
+//				PendingIntent restartIntent = PendingIntent.getActivity(
+//						application.getApplicationContext(), 0, intent,
+//						Intent.FLAG_ACTIVITY_NEW_TASK);
+//				//退出程序
+//				AlarmManager mgr = (AlarmManager)application.getSystemService(Context.ALARM_SERVICE);
+//				mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
+//						restartIntent); // 1秒钟后重启应用
+//				application.AppExit();
+////				退出程序
+//
+//
+//				System.exit(1);
 				break;
 			case R.id.callPayLinearLayout:
 				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION))) {
@@ -351,7 +370,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						IS_TEXT_SIM = true;
 						dismissProgress();
 						setView();
-						if (!utils.readBoolean(Constant.ISHAVEORDER)) {
+						if (utils.readBoolean(Constant.ISHAVEORDER)) {
 							setConStatus(R.string.index_no_signal);
 						} else {
 							setConStatus(R.string.index_no_packet);
@@ -636,12 +655,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			//友盟方法统计
 			MobclickAgent.onEvent(context, CLICKBINDDEVICE);
 			clickFindBracelet();
-		}
-		else if(type == 3)
-		{
+		} else if (type == 3) {
 			sendMessageToBlueTooth(RESTORATION);
-		}
-		else if (type == DOWNLOAD_SKY_UPGRADE) {
+		} else if (type == DOWNLOAD_SKY_UPGRADE) {
 			if (!TextUtils.isEmpty(url))
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKDEVICEUPGRADE);
@@ -839,15 +855,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	public void onPercentEntity(PercentEntity entity) {
 		double percent = entity.getPercent();
 		int percentInt = (int) (percent / 1.6);
-		if (percentInt > 100) {
-			percentTextView.setVisibility(View.GONE);
-			return;
-		}
-		if (percentInt == 100) {
+		if (percentInt >= 100) {
 			percentInt = 98;
 		}
 		percentTextView.setText(percentInt + "%");
 	}
+
 	private void showNoCardDialog() {
 		//不能按返回键，只能二选其一
 		cardRuleBreakDialog = new DialogBalance(MyDeviceActivity.this, MyDeviceActivity.this, R.layout.dialog_balance, 3);
