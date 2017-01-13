@@ -66,6 +66,7 @@
         <meta-data
             android:name="com.tencent.rdm.uuid"
             android:value="6a4c151b-706a-41c0-b96e-40738e64c1ad"/>
+
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="58393022bbea837e4b0005e9"/>

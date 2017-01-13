@@ -92,6 +92,7 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 			case R.id.ll_upgrade:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKVERSIONUPGRADE);
+
 				Beta.checkUpgrade();
 				break;
 			case R.id.exitBtn:

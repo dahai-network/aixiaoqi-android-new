@@ -90,10 +90,10 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				initUpgrade();
+
 			}
 		}).start();
-
+		initUpgrade();
 		searchContact();
 	}
 
