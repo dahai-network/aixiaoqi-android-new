@@ -23,6 +23,7 @@ public abstract class UdpClient implements Runnable {
     private String sendAddress = "127.0.0.1";
     private String tag = null;
     private int port=4567;
+
     @Override
     public void run() {
         try {
@@ -33,13 +34,16 @@ public abstract class UdpClient implements Runnable {
             byte data[] = new byte[1024];
             DatagramPacket packet = new DatagramPacket(data, data.length);
             while (flag) {
-
                     socket.receive(packet);
                     sendPort=packet.getPort();
                     String receiveMsg = new String(packet.getData(), 0, packet.getLength());
                     String tag = receiveMsg.substring(0,7);
                     //如果这次的标签与上次一样则选择过滤，如果不一样就把从SDK那里发过来的数据发个蓝牙
-                    SocketConstant.REGISTER_STATUE_CODE=1;
+                    if(SocketConstant.REGISTER_STATUE_CODE==0){
+                        SocketConstant.REGISTER_STATUE_CODE=1;
+                    }
+
+                    Log.e("Blue_Chanl","收到原始UDP消息："+receiveMsg);
                     if (!tag.equals(getSorcketTag())) {
                         setSorketTag(tag);
                         sendToBluetoothMsg(receiveMsg);
@@ -94,6 +98,7 @@ public abstract class UdpClient implements Runnable {
             e.printStackTrace();
         }
     }
+
 
     public  void disconnect(){
         if(datagramSocket!=null){

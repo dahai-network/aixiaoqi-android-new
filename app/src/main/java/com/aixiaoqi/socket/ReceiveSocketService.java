@@ -13,6 +13,7 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 
+import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 
 /**
@@ -72,7 +73,7 @@ public class ReceiveSocketService extends Service {
         @Override
         public void onDisconnect(SocketTransceiver transceiver) {
             Log.e("Blue_Chanl", "断开连接 - onDisconnect");
-            sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(""));
+            sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
             reConnect();
 
         }
