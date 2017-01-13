@@ -44,6 +44,7 @@ import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.IS_WRITE_CARD_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR;
+import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.UP_TP_POWER_RECEIVE;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_91;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP1;
@@ -100,9 +101,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						bindCompeleteIntent.setAction(BindDeviceActivity.BIND_COMPELETE);
 						LocalBroadcastManager.getInstance(context).sendBroadcast(bindCompeleteIntent);
 						sendMessageToBlueTooth(FIND_VERSION);
-//						Thread.sleep(500);
-//						//测试代码
-//						sendMessageToBlueTooth(UP_TO_POWER);
+						Thread.sleep(500);
+						//测试代码
+						sendMessageToBlueTooth(UP_TO_POWER);
 						Thread.sleep(500);
 						//更新时间操作
 						sendMessageToBlueTooth(getBLETime());
@@ -499,13 +500,21 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
-		CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), errorMessage);
-		Log.i("test", "http.getMsg:" + errorMessage);
+		try {
+			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), errorMessage);
+			Log.i("test", "http.getMsg:" + errorMessage);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void noNet() {
-		CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), context.getResources().getString(R.string.no_wifi));
+		try {
+			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), context.getResources().getString(R.string.no_wifi));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getBLETime() {
