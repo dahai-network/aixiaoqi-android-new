@@ -170,7 +170,6 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 		SharedUtils sharedUtils = SharedUtils.getInstance();
 		sharedUtils.delete(Constant.TOKEN);
 		sharedUtils.delete(Constant.PHONE_NUMBER_LIST);
-		sharedUtils.delete(Constant.USER_NAME);
 		sharedUtils.delete(Constant.PASSWORD);
 		sharedUtils.writeBoolean(Constant.ISFIRSTIN, true);
 

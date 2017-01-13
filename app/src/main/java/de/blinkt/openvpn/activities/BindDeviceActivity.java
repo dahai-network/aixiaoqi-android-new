@@ -125,7 +125,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					if (mService!=null&&mService.mConnectionState != UartService.STATE_CONNECTED) {
+					if (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED) {
 						mBluetoothAdapter.stopLeScan(mLeScanCallback);
 						showDialog();
 					}
@@ -231,9 +231,20 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		if (cmdType == HttpConfigUrl.COMTYPE_ISBIND_DEVICE) {
 			IsBindHttp http = (IsBindHttp) object;
 			if (http.getIsBindEntity().getBindStatus() == 0) {
-				if(mService!=null)
-				mService.connect(deviceAddress);
-				//测试用代码
+				if (mService != null)
+					mService.connect(deviceAddress);
+//				new Thread(new Runnable() {
+//					@Override
+//					public void run() {
+//						try {
+//							Thread.sleep(2100);
+//						} catch (InterruptedException e) {
+//							e.printStackTrace();
+//						}
+//						EventBus.getDefault().post();
+//					}
+//				}).start();
+
 				BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddress, utils.readString(Constant.BRACELETVERSION));
 				new Thread(bindDevicehttp).start();
 			} else {

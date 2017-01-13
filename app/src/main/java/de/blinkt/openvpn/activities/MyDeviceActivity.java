@@ -305,7 +305,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				}
 				break;
 			case R.id.findStatusLinearLayout:
-				sendMessageToBlueTooth(FIND_DEVICE);
+				if (!CommonTools.isFastDoubleClick(2000)) {
+					sendMessageToBlueTooth(FIND_DEVICE);
+				}
 				break;
 			case R.id.simStatusTextView:
 				if (!CommonTools.isFastDoubleClick(2000)) {
@@ -810,7 +812,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
 			if (entity.isSuccess()) {
 				setConStatus(R.string.index_high_signal);
-				percentTextView.setVisibility(View.GONE);
 			} else {
 				switch (type) {
 					case SocketConstant.REGISTER_FAIL:
@@ -829,12 +830,17 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				setConStatus(R.string.index_regist_fail);
 			}
 		}
+		percentTextView.setVisibility(View.GONE);
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onPercentEntity(PercentEntity entity) {
 		double percent = entity.getPercent();
 		int percentInt = (int) (percent / 1.6);
+		if (percentInt > 100) {
+			percentTextView.setVisibility(View.GONE);
+			return;
+		}
 		if (percentInt == 100) {
 			percentInt = 98;
 		}

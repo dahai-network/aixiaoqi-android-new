@@ -12,15 +12,18 @@ import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
  * Created by Administrator on 2016/12/27 0027.
  */
 public class JNIUtil {
-    static  JNIUtil jniUtil;
-    private static final String libSoName = "aixiaoqi";
-    public native void getCardInfo() ;
+	static JNIUtil jniUtil;
+	private static final String libSoName = "aixiaoqi";
 
-    public native void main(byte simType) ;
-    public native void simComEvtApp2Drv(byte chn,byte index,int length ,byte[] pData);
-    static {
-        System.loadLibrary(libSoName);
-    }
+	public native void getCardInfo();
+
+	public native void main(byte simType);
+
+	public native void simComEvtApp2Drv(byte chn, byte index, int length, byte[] pData);
+
+	static {
+		System.loadLibrary(libSoName);
+	}
 
     public static JNIUtil  getInstance(){
         synchronized (SendYiZhengService.class){
@@ -53,15 +56,19 @@ public class JNIUtil {
                 break;
         }
 
-    }
-    private static void phoneAddress(String phonenumber){
-        Log.e("phoneAddress","phoneAddress");
-        if(matchesPhoneNumber(phonenumber)==1||matchesPhoneNumber(phonenumber)==2)
-            jniUtil.main((byte)1);
-        else if(matchesPhoneNumber(phonenumber)==3){
-            jniUtil.main((byte)2);
-        }
-    }
+	}
+
+	private static void phoneAddress(String phonenumber) {
+		Log.e("phoneAddress", "phoneAddress");
+		try {if (matchesPhoneNumber(phonenumber) == 1 || matchesPhoneNumber(phonenumber) == 2)
+				jniUtil.main((byte) 1);
+			else if (matchesPhoneNumber(phonenumber) == 3) {
+				jniUtil.main((byte) 2);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
     public static void  reStartSDK(String phonenumber){
         if(jniUtil!=null)

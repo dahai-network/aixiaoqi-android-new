@@ -12,7 +12,6 @@ import java.util.TimerTask;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 
