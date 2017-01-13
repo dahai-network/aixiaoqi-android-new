@@ -100,9 +100,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						Intent bindCompeleteIntent = new Intent();
 						bindCompeleteIntent.setAction(BindDeviceActivity.BIND_COMPELETE);
 						LocalBroadcastManager.getInstance(context).sendBroadcast(bindCompeleteIntent);
-						if (!CommonTools.isFastDoubleClick(3000)) {
-							sendMessageToBlueTooth(FIND_VERSION);
-						}
+						sendMessageToBlueTooth(FIND_VERSION);
 //						Thread.sleep(500);
 //						//测试代码
 //						sendMessageToBlueTooth(UP_TO_POWER);
@@ -150,7 +148,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			if (sendStepThread != null && !sendStepThread.isInterrupted())
 				sendStepThread.interrupt();
 			//如果保存的IMEI没有的话，那么就是在MyDevice里面，在Mydevice里面会有连接操作
-			Log.d(TAG, "IMEI="+TextUtils.isEmpty(utils.readString(Constant.IMEI))+"\nisConnect="+ICSOpenVPNApplication.isConnect);
+			Log.d(TAG, "IMEI=" + TextUtils.isEmpty(utils.readString(Constant.IMEI)) + "\nisConnect=" + ICSOpenVPNApplication.isConnect);
 			if (!TextUtils.isEmpty(utils.readString(Constant.IMEI)) && ICSOpenVPNApplication.isConnect) {
 				//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 				// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备

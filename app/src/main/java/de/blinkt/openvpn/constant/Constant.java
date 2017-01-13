@@ -60,7 +60,7 @@ public class Constant {
 	public static final String OFF_TO_POWER = "AADC040173";//断点指令
 	public static final String REAL_TIME_STEPS = "AA010401AE ";//实时步数
 	public static final String HISTORICAL_STEPS = "AA030401AC";//历史步数
-	public static final String FIND_DEVICE = "AA0604O1A9";//查找手环
+	public static final String FIND_DEVICE = "AA060401A9";//查找手环
 	public static final String FIND_VERSION = "AA0A01A1";//版本号
 	public static final String RESTORATION = "AA112233AA";//复位命令
 	public static final String BIND_SUCCESS = "AADD01DDAA";//复位命令
