@@ -53,7 +53,7 @@ public class SocketConstant {
 	public static String CONNECTION = "108a0400";
 	public static String PRE_DATA = "108a9000";
 	public static final String SESSION_ID_TEMP = "00000000";
-	public static final String hostIP = "120.25.91.50";
+	public static final String hostIP = "120.25.161.113";
 	public static final int port = 20016;
 
 	public static final String EN_APPEVT_NONE = "00";
