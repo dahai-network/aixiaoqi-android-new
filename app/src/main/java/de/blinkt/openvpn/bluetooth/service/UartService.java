@@ -75,7 +75,6 @@ public class UartService extends Service implements Serializable {
 	public static final UUID TX_CHAR_UUID1 = UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
 //	public static final UUID TX_CHAR_UUID2 = UUID.fromString("6E400004-B5A3-F393-E0A9-E50E24DCCA9F");
 //	public static final UUID TX_CHAR_UUID3 = UUID.fromString("6E400005-B5A3-F393-E0A9-E50E24DCCA9F");
-
 	private List<BluetoothGattService> BluetoothGattServices;
 	// Implements callback methods for GATT events that the app cares about.  For example,
 	// Implements callback methods for GATT events that the app cares about.  For example,
@@ -275,6 +274,7 @@ public class UartService extends Service implements Serializable {
 		}
 		mBluetoothGatt.disconnect();
 		mConnectionState = STATE_DISCONNECTED;
+		close();
 //		mBluetoothGatt.close();
 	}
 
@@ -346,21 +346,21 @@ public class UartService extends Service implements Serializable {
 		BluetoothGattService RxService = null;
 		RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
 		Log.i("getService", "获取服务："+RxService);
-//		if (RxService == null) {
-//			int j = 0;
-//			for (int i = 0; i < BluetoothGattServices.size(); i++) {
-//				Log.i("getService", "获取服务群"+ ++ j);
-//				RxService = BluetoothGattServices.get(i);
-//				if (RxService != null&&RxService.getCharacteristic(TX_CHAR_UUID1)!=null) {
-//					if(i==BluetoothGattServices.size()-1)
-//					{
-//						RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
-//					}
-//					break;
-//				}
-//			}
-//
-//		}
+		if (RxService == null) {
+			int j = 0;
+			for (int i = 0; i < BluetoothGattServices.size(); i++) {
+				Log.i("getService", "获取服务群"+ ++ j);
+				RxService = BluetoothGattServices.get(i);
+				if (RxService != null&&RxService.getCharacteristic(TX_CHAR_UUID1)!=null) {
+					if(i==BluetoothGattServices.size()-1)
+					{
+						RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
+					}
+					break;
+				}
+			}
+
+		}
 		if (RxService == null) {
 			showMessage("Rx service not found!");
 			broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);

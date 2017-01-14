@@ -5,6 +5,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
+          xmlns:uses-featureandroid="http://schemas.android.com/apk/res-auto"
           package="cn.com.aixiaoqi">
 
     <!-- <uses-sdk android:minSdkVersion="18"/> -->
@@ -14,6 +15,9 @@
         android:protectionLevel="signature"/>
 
 
+    <uses-featureandroid
+        android:name="android.hardware.bluetooth_le"
+        android:required="true"/>
 
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
@@ -298,6 +302,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
+
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true"
@@ -380,6 +385,7 @@
         <service
             android:name="com.aixiaoqi.socket.ReceiveSocketService"
             android:enabled="true"/>
+
         <activity
             android:name="de.blinkt.openvpn.activities.OutsideActivity"
             android:label="@string/title_activity_outside"

@@ -274,7 +274,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				sendMessageToBlueTooth("AAABCDEFAA");
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
-
 				mService.disconnect();
 				IsSuccessEntity entity = new IsSuccessEntity();
 				entity.setType(Constant.REGIST_TYPE);
@@ -442,11 +441,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 							utils.writeString(Constant.BRACELETVERSION, Integer.parseInt(String.valueOf(txValue[2]), 16) + "");
 							firmwareTextView.setText(Integer.parseInt(String.valueOf(txValue[2]), 16) + "");
 							if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-								BindDeviceHttp bindDevicehttp = new BindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddresstemp, utils.readString(Constant.BRACELETVERSION));
-								new Thread(bindDevicehttp).start();
 								//收到版本号后获取历史步数
 								sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
-								Log.i("toBLue", "已收到版本号");
 								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
 								entity.setSuccess(true);

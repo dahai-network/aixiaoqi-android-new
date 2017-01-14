@@ -124,7 +124,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 
 
 	private void scanLeDevice(final boolean enable) {
-
 		if (enable) {
 			// Stops scanning after a pre-defined scan period.
 			mHandler.postDelayed(new Runnable() {
@@ -156,7 +155,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	protected void onPause() {
 		super.onPause();
 		scanLeDevice(false);
-		if(noDevicedialog!=null&&noDevicedialog.getDialog()!=null){
+		if (noDevicedialog != null && noDevicedialog.getDialog() != null) {
 			noDevicedialog.getDialog().dismiss();
 		}
 	}
@@ -194,7 +193,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 									if (device.getName().contains(Constant.BLUETOOTH_NAME)) {
 //									  if (device.getName().contains("unitoys")) {
 										//如果信号强度绝对值大于这个值（距离\）,则配对
-										if (Math.abs(rssi) < 90) {
+										if (Math.abs(rssi) < 70) {
 											mBluetoothAdapter.stopLeScan(mLeScanCallback);
 											deviceAddress = device.getAddress();
 											IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, device.getAddress());
@@ -305,11 +304,11 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		filter.addAction(BIND_COMPELETE);
 		return filter;
 	}
+
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
 		String type = entity.getBlueType();
-		if(type == BluetoothConstant.BLUE_VERSION)
-		{
+		if (type == BluetoothConstant.BLUE_VERSION) {
 			BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddress, utils.readString(Constant.BRACELETVERSION));
 			new Thread(bindDevicehttp).start();
 		}

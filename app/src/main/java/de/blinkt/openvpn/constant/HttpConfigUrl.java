@@ -91,6 +91,7 @@ public class HttpConfigUrl {
 	public static final String ACTIVATE_KINGCARD ="Order/ActivationKindCard";
 	public static final String GET_SELECT_NUMBER_URL ="Config/getDWKUrl";
 	public static final String CHECK_IS_HAVE_PACKET ="/Order/CheckUsedExistByPageCategory";
+	public static final String GET_SECURITY_CONFIG ="/Config/GetSecurityConfig";
 
 
 
@@ -166,6 +167,6 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_ACTIVATE_KINGCARD = 0x1045;
 	public static final int COMTYPE_PACKET_GET = 0x1046;
 	public static final int COMTYPE_CHECK_IS_HAVE_PACKET = 0x1047;
-
+	public static final int COMTYPE_GET_SECURITY_CONFIG = 0x1048;
 
 }

@@ -27,7 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
@@ -39,6 +38,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.FragmentAdapter;
@@ -102,6 +102,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	SocketConnection socketUdpConnection;
 	SocketConnection socketTcpConnection;
 	private DialogBalance cardRuleBreakDialog;
+	private UUID[] uuids;
 
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
@@ -127,7 +128,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 
 		public void onServiceDisconnected(ComponentName classname) {
-			////     mService.disconnect(mDevice);
+			//mService.disconnect(mDevice);
 			mService = null;
 		}
 	};
@@ -546,20 +547,20 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
 //					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 					//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							startDataframService();
-							startSocketService();
-							try {
-								Thread.sleep(5000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-							Log.e("phoneAddress", "main.start()");
-							JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
-						}
-					}).start();
+//					new Thread(new Runnable() {
+//						@Override
+//						public void run() {
+//							startDataframService();
+//							startSocketService();
+//							try {
+//								Thread.sleep(5000);
+//							} catch (InterruptedException e) {
+//								e.printStackTrace();
+//							}
+//							Log.e("phoneAddress", "main.start()");
+//							JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
+//						}
+//					}).start();
 				} else {
 					//检测是否有套餐，没有责显示新状态
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
