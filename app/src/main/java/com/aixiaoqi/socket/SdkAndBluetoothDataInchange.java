@@ -162,6 +162,7 @@ public class SdkAndBluetoothDataInchange {
 	private String finalTemp;
 	private boolean isReceiveBluetoothData=true;
 	private void sendToBluetoothAboutCardInfo(String msg) {
+		Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + msg);
 		isReceiveBluetoothData=false;
 		getSendBlueToothTime=System.currentTimeMillis();
 		String temp = "";
@@ -172,9 +173,9 @@ public class SdkAndBluetoothDataInchange {
 		}
 		finalTemp = msg;
 		if (temp.contains("0x0000")) {
+			Log.e(TAG, "&&& server temp:" + temp);
 			sendMessage(temp);
 		} else {
-			Log.e(TAG, "&&& server temp:" + temp);
 			String[] messages = PacketeUtil.Separate(temp);
 
 			for (int i = 0; i < messages.length; i++) {

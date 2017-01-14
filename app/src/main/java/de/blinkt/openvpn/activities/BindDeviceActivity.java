@@ -194,7 +194,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 									if (device.getName().contains(Constant.BLUETOOTH_NAME)) {
 //									  if (device.getName().contains("unitoys")) {
 										//如果信号强度绝对值大于这个值（距离\）,则配对
-										if (Math.abs(rssi) < 75) {
+										if (Math.abs(rssi) < 90) {
 											mBluetoothAdapter.stopLeScan(mLeScanCallback);
 											deviceAddress = device.getAddress();
 											IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, device.getAddress());

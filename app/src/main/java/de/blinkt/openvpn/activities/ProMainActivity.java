@@ -544,7 +544,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+//					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+					//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							startDataframService();
+							startSocketService();
+							try {
+								Thread.sleep(5000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							Log.e("phoneAddress", "main.start()");
+							JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
+						}
+					}).start();
 				} else {
 					//检测是否有套餐，没有责显示新状态
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
@@ -632,22 +647,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				//当有通话套餐的时候才允许注册操作
 				IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "1");
 				new Thread(http).start();
-
-				try {
-					Thread.sleep(3000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
-				startDataframService();
-				startSocketService();
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						Log.e("phoneAddress", "main.start()");
-						JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
-					}
-				}).start();
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
