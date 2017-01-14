@@ -13,6 +13,9 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 
+import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
+import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
+
 /**
  * TLV的解析
  */
@@ -133,6 +136,10 @@ public class TlvAnalyticalUtils {
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
 					}
 				} else if (typeParams == 199) {
+					if(REGISTER_STATUE_CODE==2)
+						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
+
+					SocketConstant.REGISTER_STATUE_CODE = 2;
 					String rpValue = "000100163b9f94801fc78031e073fe211b573786609b30800119";
 					StringBuilder stringBuilder = new StringBuilder();
 					stringBuilder.append(rpValue);
@@ -162,7 +169,7 @@ public class TlvAnalyticalUtils {
 			} else if (tag == 5) {
 				if (typeParams == 162) {
 					if (Integer.parseInt(value, 16) == 3) {
-						SocketConstant.REGISTER_STATUE_CODE = 3;
+						REGISTER_STATUE_CODE = 3;
 						IsSuccessEntity entity = new IsSuccessEntity();
 						entity.setType(Constant.REGIST_CALLBACK_TYPE);
 						entity.setSuccess(true);
@@ -171,7 +178,7 @@ public class TlvAnalyticalUtils {
 						registerOrTime = System.currentTimeMillis();
 						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
-						SocketConstant.REGISTER_STATUE_CODE = 0;
+						REGISTER_STATUE_CODE = 0;
 						IsSuccessEntity entity = new IsSuccessEntity();
 						entity.setType(Constant.REGIST_CALLBACK_TYPE);
 						entity.setFailType(SocketConstant.REGISTER_FAIL);
@@ -190,7 +197,7 @@ public class TlvAnalyticalUtils {
 	 * 注册中不成功再次注册
 	 */
 	public static void reRegistering(String orData, int tag) {
-		sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(SocketConstant.TRAN_DATA_TO_SDK));//重置SDK
+		sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));//重置SDK
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(orData);
 		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));

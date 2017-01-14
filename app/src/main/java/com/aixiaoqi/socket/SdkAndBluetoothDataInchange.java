@@ -189,7 +189,6 @@ public class SdkAndBluetoothDataInchange {
 					}
 				}
 				Log.e(TAG, "&&& server  message: " + messages[i].toString());
-				Log.e(TAG, "发送到蓝牙的数据" + socketTag + sendToOneServerTemp);
 				sendMessage(messages[i]);
 
 
