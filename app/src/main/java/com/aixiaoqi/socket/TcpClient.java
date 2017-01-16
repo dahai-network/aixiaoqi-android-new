@@ -1,5 +1,6 @@
 package com.aixiaoqi.socket;
 
+import android.app.AlarmManager;
 import android.util.Log;
 
 import java.io.IOException;
@@ -10,11 +11,7 @@ import java.net.SocketAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import de.blinkt.openvpn.constant.HttpConfigUrl;
-import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.GetHostAndPortHttp;
-import de.blinkt.openvpn.http.InterfaceCallback;
-import de.blinkt.openvpn.model.GetHostAndPortEntity;
+import static android.content.Context.ALARM_SERVICE;
 
 /**
  * TCP Socket客户端
@@ -22,7 +19,7 @@ import de.blinkt.openvpn.model.GetHostAndPortEntity;
  * @author jzj1993
  * @since 2015-2-22
  */
-public abstract class TcpClient implements Runnable, InterfaceCallback {
+public abstract class TcpClient implements Runnable {
 
 
 	private boolean connect = false;
@@ -38,16 +35,16 @@ public abstract class TcpClient implements Runnable, InterfaceCallback {
 	 * 连接建立失败，回调{@code onConnectFailed()}
 	 */
 	public void connect() {
-		Log.e("connectSocket", "connect");
+		Log.e("connectSocket","connect");
 		new Thread(this).start();
 	}
 
-	Timer timerSocket = new Timer();
-	TimerTask taskSocket = new TimerTask() {
+	Timer timerSocket=new Timer();
+	TimerTask taskSocket=new TimerTask() {
 		@Override
 		public void run() {
-			Log.e("Blue_Chanl", "执行了定时器任务，connect=" + connect);
-			if (!connect) {
+			Log.e("Blue_Chanl","执行了定时器任务，connect="+connect);
+			if(!connect){
 				try {
 					connectSocket();
 				} catch (Exception e) {
@@ -57,15 +54,15 @@ public abstract class TcpClient implements Runnable, InterfaceCallback {
 			}
 		}
 	};
-	private int socketStartCount = 0;
-
+	private int socketStartCount=0;
 	@Override
 	public void run() {
 		try {
-			Log.e("initSocket", "socket start");
-			if (!connect) {
-				if (socketStartCount == 0) {
-					timerSocket.schedule(taskSocket, 5 * 60 * 1000, 5 * 60 * 1000);
+			Log.e("initSocket","socket start");
+			if(!connect){
+				if(socketStartCount==0){
+
+					timerSocket.schedule(taskSocket,5*60*1000,5*60*1000);
 				}
 				socketStartCount++;
 				connectSocket();
@@ -77,9 +74,30 @@ public abstract class TcpClient implements Runnable, InterfaceCallback {
 		}
 	}
 
-	private void connectSocket() {
-		GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
-		new Thread(http).start();
+	private void connectSocket() throws IOException {
+		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
+		Socket socket = new Socket();
+		socket.connect(address,30000);
+		socket.setTcpNoDelay(true);
+		transceiver = new SocketTransceiver(socket) {
+
+			@Override
+			public void onReceive(InetAddress addr, byte[] s, int length) {
+				TcpClient.this.onReceive(this,s,length);
+			}
+
+			@Override
+			public void onDisconnect(InetAddress addr) {
+				connect = false;
+				TcpClient.this.onDisconnect(this);
+			}
+		};
+		transceiver.start();
+		connect = true;
+		if(SocketConstant.REGISTER_STATUE_CODE!=3||System.currentTimeMillis()-TlvAnalyticalUtils.registerOrTime>60*1000){
+			TlvAnalyticalUtils.registerOrTime=System.currentTimeMillis();
+			this.onConnect(transceiver);
+		}
 	}
 
 	/**
@@ -115,7 +133,8 @@ public abstract class TcpClient implements Runnable, InterfaceCallback {
 	/**
 	 * 连接建立
 	 *
-	 * @param transceiver SocketTransceiver对象
+	 * @param transceiver
+	 *            SocketTransceiver对象
 	 */
 	public abstract void onConnect(SocketTransceiver transceiver);
 
@@ -129,62 +148,20 @@ public abstract class TcpClient implements Runnable, InterfaceCallback {
 	 * <p>
 	 * 注意：此回调是在新线程中执行的
 	 *
-	 * @param transceiver SocketTransceiver对象
-	 * @param s           字符串
+	 * @param transceiver
+	 *            SocketTransceiver对象
+	 * @param s
+	 *            字符串
 	 */
-	public abstract void onReceive(SocketTransceiver transceiver, byte[] s, int length);
+	public abstract void onReceive(SocketTransceiver transceiver, byte[] s,int length);
 
 	/**
 	 * 连接断开
 	 * <p>
 	 * 注意：此回调是在新线程中执行的
 	 *
-	 * @param transceiver SocketTransceiver对象
+	 * @param transceiver
+	 *            SocketTransceiver对象
 	 */
 	public abstract void onDisconnect(SocketTransceiver transceiver);
-
-	@Override
-	public void rightComplete(int cmdType, CommonHttp object) {
-		GetHostAndPortHttp http = (GetHostAndPortHttp) object;
-		GetHostAndPortEntity entity = http.getGetHostAndPortEntity();
-		String hostIP = entity.getVswServer().getIp();
-		int hostPort = entity.getVswServer().getPort();
-		SocketAddress address = new InetSocketAddress(hostIP, hostPort);
-		Socket socket = new Socket();
-		try {
-			socket.connect(address, 30000);
-			socket.setTcpNoDelay(true);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		transceiver = new SocketTransceiver(socket) {
-
-			@Override
-			public void onReceive(InetAddress addr, byte[] s, int length) {
-				TcpClient.this.onReceive(this, s, length);
-			}
-
-			@Override
-			public void onDisconnect(InetAddress addr) {
-				connect = false;
-				TcpClient.this.onDisconnect(this);
-			}
-		};
-		transceiver.start();
-		connect = true;
-		if (SocketConstant.REGISTER_STATUE_CODE != 3 || System.currentTimeMillis() - TlvAnalyticalUtils.registerOrTime > 60 * 1000) {
-			TlvAnalyticalUtils.registerOrTime = System.currentTimeMillis();
-			this.onConnect(transceiver);
-		}
-	}
-
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
-
-	}
-
-	@Override
-	public void noNet() {
-
-	}
 }

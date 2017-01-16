@@ -10,9 +10,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -27,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
@@ -127,6 +130,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			searchBLE();
 		}
 
+
 		public void onServiceDisconnected(ComponentName classname) {
 			//mService.disconnect(mDevice);
 			mService = null;
@@ -148,6 +152,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
 	}
+
+
 
 
 	private void searchBLE() {
@@ -545,22 +551,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-//					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
-					//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
-//					new Thread(new Runnable() {
-//						@Override
-//						public void run() {
-//							startDataframService();
-//							startSocketService();
-//							try {
-//								Thread.sleep(5000);
-//							} catch (InterruptedException e) {
-//								e.printStackTrace();
-//							}
-//							Log.e("phoneAddress", "main.start()");
-//							JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
-//						}
-//					}).start();
+					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+//					测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							startDataframService();
+							startSocketService();
+							try {
+								Thread.sleep(5000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							Log.e("phoneAddress", "main.start()");
+							JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
+						}
+					}).start();
 				} else {
 					//检测是否有套餐，没有责显示新状态
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);

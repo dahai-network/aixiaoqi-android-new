@@ -7,6 +7,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.aixiaoqi.socket.SocketConnection;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -288,7 +289,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						case (byte) 0xDB:
 						case (byte) 0xDA:
 							if (IS_TEXT_SIM) {
-//								SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+								SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
 							} else {
 								messages.add(messageFromBlueTooth);
 								if (txValue[3] == txValue[4]) {
