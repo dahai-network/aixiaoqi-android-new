@@ -274,6 +274,7 @@ public class UartService extends Service implements Serializable {
 		}
 		mBluetoothGatt.disconnect();
 		mConnectionState = STATE_DISCONNECTED;
+		broadcastUpdate(ACTION_GATT_DISCONNECTED);
 		close();
 //		mBluetoothGatt.close();
 	}

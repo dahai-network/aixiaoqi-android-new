@@ -78,6 +78,7 @@
         android:visibility="gone"
         android:text="@string/has_alarm_clock_tip"
         android:gravity="center"
+        android:layout_below="@id/alarm_clock_rv"
         android:textColor="@color/white"
         android:background="@drawable/circle_ret"/>
     <LinearLayout

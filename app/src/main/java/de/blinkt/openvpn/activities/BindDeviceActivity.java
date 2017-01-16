@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -112,6 +113,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	private void initSet() {
 		//初始化广播，用于蓝牙操作后跳出界面
 		LocalBroadcastManager.getInstance(this).registerReceiver(bindCompeleteReceiver, getFilter());
+		EventBus.getDefault().register(this);
 	}
 
 	private void initList() {
@@ -172,6 +174,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 
 		mBluetoothAdapter.stopLeScan(mLeScanCallback);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(bindCompeleteReceiver);
+		EventBus.getDefault().unregister(this);
 	}
 
 	private BluetoothAdapter.LeScanCallback mLeScanCallback =
@@ -196,6 +199,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 										if (Math.abs(rssi) < 70) {
 											mBluetoothAdapter.stopLeScan(mLeScanCallback);
 											deviceAddress = device.getAddress();
+											utils.writeString(Constant.IMEI, deviceAddress);
 											IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, device.getAddress());
 											new Thread(http).start();
 										}
@@ -227,6 +231,8 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 
 	@OnClick(R.id.stopImageView)
 	public void onClick() {
+		mService.disconnect();
+		scanLeDevice(false);
 		finish();
 	}
 
@@ -246,6 +252,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				utils.writeString(Constant.IMEI, deviceAddress);
+				Intent result = new Intent();
+				result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, deviceAddress);
+				BindDeviceActivity.this.setResult(Activity.RESULT_OK, result);
+				BindDeviceActivity.this.finish();
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}

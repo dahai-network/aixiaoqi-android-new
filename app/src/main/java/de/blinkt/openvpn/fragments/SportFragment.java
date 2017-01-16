@@ -143,9 +143,9 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
-		if(!isVisibleToUser){
-			if(llDialogCalendar!=null)
-			llDialogCalendar.setVisibility(View.GONE);
+		if (!isVisibleToUser) {
+			if (llDialogCalendar != null)
+				llDialogCalendar.setVisibility(View.GONE);
 		}
 	}
 
@@ -177,12 +177,12 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 
 	public void showDialogCalendar() {
 		llDialogCalendar.setVisibility(View.VISIBLE);
-		if(!TimeDialog.endsWith(getString(R.string.month))){
-			tvShowMonthView.setText(TimeDialog+getString(R.string.month));
-		}else{
+		if (!TimeDialog.endsWith(getString(R.string.month))) {
+			tvShowMonthView.setText(TimeDialog + getString(R.string.month));
+		} else {
 			tvShowMonthView.setText(TimeDialog);
 		}
-		String stringRecordTime = Integer.parseInt(TimeDialog.substring(0, 4)) + "-" +TimeDialog.substring(5, 7) + "-" + "01" + " 12:00:00";
+		String stringRecordTime = Integer.parseInt(TimeDialog.substring(0, 4)) + "-" + TimeDialog.substring(5, 7) + "-" + "01" + " 12:00:00";
 		List<Integer> listDate = new ArrayList<>();
 		listDate.add(defaultCustomDate.day);
 		views[viewPager.getCurrentItem() % views.length].setList(listDate);
@@ -263,12 +263,12 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 		}
 		String monthString;
 		if (month < 10) {
-			monthString = "0" + (month+1);
+			monthString = "0" + (month + 1);
 		} else {
-			monthString =  (month+1)+"";
+			monthString = (month + 1) + "";
 		}
 
-		tvMonth.setText(monthString + getString(R.string.month) + dayString+getString(R.string.daliy));
+		tvMonth.setText(monthString + getString(R.string.month) + dayString + getString(R.string.daliy));
 		TimeDialog = calendar.get(Calendar.YEAR) + getString(R.string.year) + monthString + getString(R.string.month);
 		initSportData(calendar, month, day);
 		CustomViewPagerAdapter<CalendarView> viewPagerAdapter = new CustomViewPagerAdapter<>(views);
@@ -348,7 +348,7 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 		} else {
 			dayString = day + "";
 		}
-		tvMonth.setText(monthString + getString(R.string.month) + dayString+getString(R.string.daliy));
+		tvMonth.setText(monthString + getString(R.string.month) + dayString + getString(R.string.daliy));
 	}
 
 	@Override
@@ -359,7 +359,7 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 	@Override
 	public void clickDate(CustomDate date) {
 		//友盟方法统计
-		if(!NetworkUtils.isNetworkAvailable(getActivity())){
+		if (!NetworkUtils.isNetworkAvailable(getActivity())) {
 			CommonTools.showShortToast(getActivity(), getString(R.string.no_wifi));
 			return;
 		}
@@ -455,7 +455,7 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 							weightInt = Integer.parseInt(weigth);
 						}
 					}
-					double weightDouble = weightInt *((allStep) * 0.683 / 1000) * 1.036;
+					double weightDouble = weightInt * ((allStep) * 0.683 / 1000) * 1.036;
 					kcResult = df.format(weightDouble);
 					kcalTextView.setText(kcResult);
 					sportDataAdapter.addAll(sportPeriodHttp.getSportPeriodEntity().getTimePeriods());
@@ -478,10 +478,9 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 				for (int i = 0; list != null && i < list.size(); i++) {
 					listDate.add(Integer.parseInt(DateUtils.getDateToString(Long.parseLong(list.get(i).getDate())).substring(8, 10)));
 				}
-				String strMonth=tvShowMonthView.getText().toString();
-				if(!TextUtils.isEmpty(strMonth)&&defaultCustomDate.month==Integer.parseInt(tvShowMonthView.getText().toString().substring(5, 7))&&defaultCustomDate.year==Integer.parseInt(tvShowMonthView.getText().toString().substring(0, 4)))
-				{
-					if(!listDate.contains(defaultCustomDate.day)){
+				String strMonth = tvShowMonthView.getText().toString();
+				if (!TextUtils.isEmpty(strMonth) && defaultCustomDate.month == Integer.parseInt(tvShowMonthView.getText().toString().substring(5, 7)) && defaultCustomDate.year == Integer.parseInt(tvShowMonthView.getText().toString().substring(0, 4))) {
+					if (!listDate.contains(defaultCustomDate.day)) {
 						listDate.add(defaultCustomDate.day);
 					}
 				}
@@ -533,19 +532,20 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 						TimePeriodsEntity newEntity = sportDataAdapter.changeStepData(currentStep);
 						float entityKm = Float.valueOf(newEntity.getKM());
 						float entityKcal = Float.valueOf(newEntity.getKcal());
+						DecimalFormat format = new DecimalFormat("0.0");
 						if (kmResult != null && kcResult != null) {
 							float kmInt = Float.valueOf(kmResult);
 							float kcInt = Float.valueOf(kcResult);
 							if (newEntity != null) {
-								kmTextView.setText(kmInt + entityKm + "");
-								kcalTextView.setText(entityKcal + kcInt + "");
+								kmTextView.setText(format.format(kmInt + entityKm));
+								kcalTextView.setText(format.format(entityKcal + kcInt));
 							} else {
-								kmTextView.setText(kmResult);
-								kcalTextView.setText(kcResult);
+								kmTextView.setText(format.format(kmResult));
+								kcalTextView.setText(format.format(kcResult));
 							}
 						} else {
-							kmTextView.setText(entityKm + "");
-							kcalTextView.setText(entityKcal + "");
+							kmTextView.setText(format.format(entityKm));
+							kcalTextView.setText(format.format(entityKcal));
 						}
 						sportDataAdapter.notifyDataSetChanged();
 						sportNoDataLinearLayout.setVisibility(View.GONE);

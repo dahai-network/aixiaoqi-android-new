@@ -11,7 +11,6 @@ import java.net.SocketAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static android.content.Context.ALARM_SERVICE;
 
 /**
  * TCP Socket客户端
@@ -61,7 +60,6 @@ public abstract class TcpClient implements Runnable {
 			Log.e("initSocket","socket start");
 			if(!connect){
 				if(socketStartCount==0){
-
 					timerSocket.schedule(taskSocket,5*60*1000,5*60*1000);
 				}
 				socketStartCount++;

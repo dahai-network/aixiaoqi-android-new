@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
 
@@ -288,18 +289,30 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				break;
 			case R.id.callPayLinearLayout:
 				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION))) {
+					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
 					skyUpgradeHttp();
 				}
 				break;
 			case R.id.findStatusLinearLayout:
-				if (!CommonTools.isFastDoubleClick(2000)) {
-					sendMessageToBlueTooth(FIND_DEVICE);
-				}
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						if (!CommonTools.isFastDoubleClick(2000)) {
+							sendMessageToBlueTooth(FIND_DEVICE);
+						}
+					}
+				}).start();
+
 				break;
 			case R.id.resetDeviceTextView:
-				if (!CommonTools.isFastDoubleClick(5000)) {
-					sendMessageToBlueTooth(RESTORATION);
-				}
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						if (!CommonTools.isFastDoubleClick(5000)) {
+							sendMessageToBlueTooth(RESTORATION);
+						}
+					}
+				}).start();
 				break;
 			case R.id.statueTextView:
 				clickFindBracelet();
@@ -353,10 +366,30 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						IS_TEXT_SIM = true;
 						dismissProgress();
 						setView();
-						if (utils.readBoolean(Constant.ISHAVEORDER)) {
+						if (utils.readBoolean(Constant.ISHAVEORDER, true)) {
 							setConStatus(R.string.index_no_signal);
 						} else {
 							setConStatus(R.string.index_no_packet);
+						}
+						if (retryTime != 0) {
+							//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
+							new Thread(new Runnable() {
+								@Override
+								public void run() {
+									IsSuccessEntity entity = new IsSuccessEntity();
+									entity.setType(Constant.BLUE_CONNECTED_INT);
+									entity.setSuccess(true);
+									EventBus.getDefault().post(entity);
+									try {
+										Thread.sleep(5000);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
+									Log.e("phoneAddress", "main.start()");
+									JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
+								}
+							}).start();
+							retryTime = 0;
 						}
 					}
 				});
@@ -424,7 +457,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						} else if (txValue[1] == (byte) 0x0A) {
 							utils.writeString(Constant.BRACELETVERSION, Integer.parseInt(String.valueOf(txValue[2]), 16) + "");
 							firmwareTextView.setText(Integer.parseInt(String.valueOf(txValue[2]), 16) + "");
-							if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 								//收到版本号后获取历史步数
 								sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
 								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
@@ -452,6 +485,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		int electricityInt = utils.readInt(ELECTRICITY);
 		noConnectImageView.setVisibility(View.GONE);
 		sinking.setVisibility(View.VISIBLE);
+		resetDeviceTextView.setVisibility(View.VISIBLE);
 		if (electricityInt != 0) {
 			sinking.setPercent(((float) electricityInt) / 100);
 		} else {
@@ -727,6 +761,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 											Intent result = new Intent();
 											result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, device.getAddress());
 //										checkIsBindDevie(device);
+											utils.writeString(Constant.IMEI, macAddressStr);
 											mService.connect(macAddressStr);
 										}
 									}
@@ -832,6 +867,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	public void onPercentEntity(PercentEntity entity) {
 		double percent = entity.getPercent();
 		int percentInt = (int) (percent / 1.6);
+		Log.i(TAG, "写卡进度：" + percentInt + "%");
 		if (percentInt >= 100) {
 			percentInt = 98;
 		}

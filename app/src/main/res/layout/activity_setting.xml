@@ -5,49 +5,50 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
+
     <TextView
         android:id="@+id/contactUsTextView"
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_40dp"
-        android:gravity="center_vertical"
+        android:layout_marginTop="15dp"
         android:background="@drawable/call_phone_selector"
+        android:drawableRight="@drawable/arrow"
+        android:gravity="center_vertical"
         android:paddingLeft="@dimen/padding_15dp"
         android:paddingRight="@dimen/padding_15dp"
-        android:drawableRight="@drawable/arrow"
         android:text="@string/contact_us"/>
 
 
-
-
     <View
-      style="@style/horizontal_line_view"
+        style="@style/horizontal_line_view"
         />
+
     <TextView
         android:id="@+id/userFeedbackTextView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_40dp"
-        android:gravity="center_vertical"
         android:background="@drawable/call_phone_selector"
+        android:drawableRight="@drawable/arrow"
+        android:gravity="center_vertical"
         android:paddingLeft="@dimen/padding_15dp"
         android:paddingRight="@dimen/padding_15dp"
-        android:drawableRight="@drawable/arrow"
         android:text="@string/user_feedback"/>
 
 
     <View
         style="@style/horizontal_line_view"
         />
+
     <TextView
         android:id="@+id/agreementUsTextView"
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_40dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/call_phone_selector"
+        android:drawableRight="@drawable/arrow"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/padding_15dp"
         android:paddingRight="@dimen/padding_15dp"
-        android:background="@drawable/call_phone_selector"
-        android:drawableRight="@drawable/arrow"
         android:text="@string/agreement"/>
 
 
@@ -56,14 +57,14 @@
         />
 
     <LinearLayout
+        android:id="@+id/ll_upgrade"
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_40dp"
-        android:id="@+id/ll_upgrade"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
         android:background="@drawable/call_phone_selector"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
 
         <TextView
@@ -78,8 +79,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1.01"
-            android:textSize="15dp"
             android:textColor="@color/app_version"
+            android:textSize="15dp"
             />
     </LinearLayout>
 
@@ -89,12 +90,12 @@
 
 
     <Button
-        android:layout_marginTop="@dimen/padding_15dp"
-        android:layout_marginRight="@dimen/padding_20dp"
         android:id="@+id/exitBtn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_40dp"
         android:layout_marginLeft="@dimen/padding_20dp"
+        android:layout_marginRight="@dimen/padding_20dp"
+        android:layout_marginTop="@dimen/padding_15dp"
         android:background="@drawable/circle_green_ret"
         android:text="@string/exit"
         android:textColor="@android:color/white"
