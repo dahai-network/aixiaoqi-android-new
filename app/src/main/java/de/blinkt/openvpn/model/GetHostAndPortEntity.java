@@ -1,10 +1,12 @@
 package de.blinkt.openvpn.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/1/14.
  */
 
-public class GetHostAndPortEntity {
+public class GetHostAndPortEntity implements Serializable{
 
 	/**
 	 * Out : {"AsteriskIp":"120.25.161.113","AsteriskPort":"65060","PublicPassword":"e40c3d9e04df371e329d8cda24ecc367"}
@@ -40,7 +42,7 @@ public class GetHostAndPortEntity {
 		this.VswServer = VswServer;
 	}
 
-	public static class OutBean {
+	public static class OutBean implements  Serializable{
 		/**
 		 * AsteriskIp : 120.25.161.113
 		 * AsteriskPort : 65060
@@ -76,7 +78,7 @@ public class GetHostAndPortEntity {
 		}
 	}
 
-	public static class InBean {
+	public static class InBean implements  Serializable{
 		/**
 		 * AsteriskIp : 115.29.41.39
 		 * AsteriskPort : 5060
@@ -102,7 +104,7 @@ public class GetHostAndPortEntity {
 		}
 	}
 
-	public static class VswServerBean {
+	public static class VswServerBean implements  Serializable{
 		/**
 		 * Ip : 120.76.240.82
 		 * Port : 5089

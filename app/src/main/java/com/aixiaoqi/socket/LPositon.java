@@ -1,9 +1,11 @@
 package com.aixiaoqi.socket;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/12/12 0012.
  */
-public class LPositon {
+public class LPositon implements Serializable{
 
     private int vL;
     private int position;

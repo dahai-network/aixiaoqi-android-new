@@ -102,6 +102,7 @@
 
     -keep class de.blinkt.openvpn.model.** { *; }
 
+    -keep class com.aixiaoqi.socket.*
 
     #如果引用了v4或者v7包
     -dontwarn android.support.**
@@ -214,3 +215,6 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(Java.lang.Throwable);
 }
+#爱小器内部特殊类和so库避免混淆
+ -dontwarn  com.aixiaoqi.**
+     -keep class com.aixiaoqi.** { *;}

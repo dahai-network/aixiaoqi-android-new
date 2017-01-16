@@ -10,6 +10,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.util.CommonTools;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTOURUSEEMAIL;
@@ -33,7 +34,7 @@ public class ContactUsActivity extends BaseActivity implements View.OnClickListe
 
 	private void initSet() {
 		setContentView(R.layout.activity_contact_us);
-		hasLeftViewTitle(R.string.connect_us,0);
+		hasLeftViewTitle(R.string.connect_us, 0);
 		emailLinearLayout = (TextView) findViewById(R.id.emailLinearLayout);
 		phoneLinearLayout = (TextView) findViewById(R.id.phoneLinearLayout);
 		weixinLinearLayout = (TextView) findViewById(R.id.weixinLinearLayout);
@@ -56,16 +57,19 @@ public class ContactUsActivity extends BaseActivity implements View.OnClickListe
 				startActivity(Intent.createChooser(intent, "请选择邮件类应用"));
 				break;
 			case R.id.phoneLinearLayout:
-				//友盟方法统计
-				MobclickAgent.onEvent(context, CLICKCONTACTOURUSEPHONE);
-				Intent phoneIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getResources().getString(R.string.service_phone)));
-				startActivity(phoneIntent);
+				if (!CommonTools.isFastDoubleClick(4000)) {
+					//友盟方法统计
+					MobclickAgent.onEvent(context, CLICKCONTACTOURUSEPHONE);
+					Intent phoneIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getResources().getString(R.string.service_phone)));
+					startActivity(phoneIntent);
+				}
 				break;
 			case R.id.weixinLinearLayout:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKCONTACTOURUSEWEIXINHAO);
 				Intent mmintent = getPackageManager().getLaunchIntentForPackage("com.tencent.mm");
-				startActivity(mmintent);
+				if (mmintent != null)
+					startActivity(mmintent);
 				break;
 		}
 	}

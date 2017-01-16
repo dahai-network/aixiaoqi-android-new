@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
@@ -56,6 +57,7 @@ import de.blinkt.openvpn.fragments.IndexFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
+import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
@@ -491,7 +493,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		//关闭服务并设置为null
 
 		destorySocketService(1000);
-		if(ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())){
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
 			unbindService(socketUdpConnection);
 			if (SocketConnection.mReceiveDataframSocketService != null) {
 				SocketConnection.mReceiveDataframSocketService.stopSelf();
@@ -518,7 +520,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		if (SocketConnection.mReceiveSocketService != null) {
 			SocketConnection.mReceiveSocketService.stopSelf();
 		}
-		if (SocketConstant.REGISTER_STATUE_CODE != 0&&type==SocketConstant.REGISTER_FAIL_INITIATIVE) {
+		if (SocketConstant.REGISTER_STATUE_CODE != 0 && type == SocketConstant.REGISTER_FAIL_INITIATIVE) {
 			SocketConstant.REGISTER_STATUE_CODE = 1;
 		}
 	}
@@ -546,30 +548,43 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				if (entity.getUsed() == 1) {
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
 //					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
-					//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
-//					new Thread(new Runnable() {
-//						@Override
-//						public void run() {
-//							startDataframService();
-//							startSocketService();
-//							try {
-//								Thread.sleep(5000);
-//							} catch (InterruptedException e) {
-//								e.printStackTrace();
-//							}
-//							Log.e("phoneAddress", "main.start()");
-//							JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
-//						}
-//					}).start();
+					GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
+					new Thread(http).start();
+					indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
 				} else {
 					//检测是否有套餐，没有责显示新状态
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
 					indexFragment.changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 				}
+			}
+		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
+			GetHostAndPortHttp http = (GetHostAndPortHttp) object;
+			if (http.getStatus() == 1) {
+				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
+					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
+					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
+
+					//运行注册流程
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							startDataframService();
+							startSocketService();
+							try {
+								Thread.sleep(5000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							Log.e("phoneAddress", "main.start()");
+							JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
+						}
+					}).start();
+				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 		}
+
 	}
 
 	private void scanLeDevice(final boolean enable) {
@@ -635,6 +650,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
 			}
 			destorySocketService(type);
+		} else if (entity.getType() == Constant.BLUE_CONNECTED_INT) {
+			startDataframService();
+			startSocketService();
 		}
 	}
 

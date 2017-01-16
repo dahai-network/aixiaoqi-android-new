@@ -7,6 +7,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.aixiaoqi.socket.SocketConnection;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.ActivateActivity;
-import de.blinkt.openvpn.activities.BindDeviceActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
@@ -92,19 +92,17 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				public void run() {
 					try {
 						Log.i("toBLue", "连接成功");
-						Thread.sleep(8000);
+						Thread.sleep(7500);
 
-						//测试用后删除//结束BindDeviceActivity
-						Intent bindCompeleteIntent = new Intent();
-						bindCompeleteIntent.setAction(BindDeviceActivity.BIND_COMPELETE);
-						LocalBroadcastManager.getInstance(context).sendBroadcast(bindCompeleteIntent);
-						sendMessageToBlueTooth(FIND_VERSION);
 //						Thread.sleep(500);
 //						//测试代码
 //						sendMessageToBlueTooth(UP_TO_POWER);
-						Thread.sleep(500);
 						//更新时间操作
 						sendMessageToBlueTooth(getBLETime());
+						Thread.sleep(500);
+						if (!CommonTools.isFastDoubleClick(3000)) {
+							sendMessageToBlueTooth(FIND_VERSION);
+						}
 
 //						sendMessageToBlueTooth("AABBCCDDEEFF");//绑定命令
 //						Thread.sleep(1000);
@@ -241,9 +239,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							resetOrderStr = null;
 							if (sendStepThread != null)
 								sendStepThread = null;
-							if (!CommonTools.isFastDoubleClick(3000)) {
-								sendMessageToBlueTooth(FIND_VERSION);
-							}
 							if (!isOpenStepService) {
 								Intent updateStepIntent = new Intent(context, UpdateStepService.class);
 								context.startService(updateStepIntent);
@@ -288,7 +283,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						case (byte) 0xDB:
 						case (byte) 0xDA:
 							if (IS_TEXT_SIM) {
-//								SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+								SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
 							} else {
 								messages.add(messageFromBlueTooth);
 								if (txValue[3] == txValue[4]) {

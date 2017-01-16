@@ -79,6 +79,8 @@ public class Constant {
 	//注册卡回调类型
 	public static final int REGIST_CALLBACK_TYPE = 0;
 	public static final int REGIST_TYPE = 1 ;
+	//蓝牙连接状态int
+	public static final int BLUE_CONNECTED_INT = 2;
 
 	/**
 	 * 支付宝支付业务：入参app_id
