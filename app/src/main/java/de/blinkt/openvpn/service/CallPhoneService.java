@@ -1,10 +1,12 @@
 package de.blinkt.openvpn.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import java.util.Timer;
@@ -53,13 +55,20 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
     public void onCreate() {
         super.onCreate();
         httpToken();
+        setWifiDormancy();
     }
     private void httpToken(){
         sharedUtils = SharedUtils.getInstance();
         CheckTokenHttp http = new CheckTokenHttp(this, HttpConfigUrl.COMTYPE_CHECKTOKEN);
         new Thread(http).start();
     }
-
+    public void setWifiDormancy( ){
+        int wifiSleepValue= Settings.System.getInt(getContentResolver(),Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+        Log.e("wifiSleepValue","wifiSleepValue="+wifiSleepValue);
+        Settings.System.putInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_NEVER);
+        int wifiSleepValue1= Settings.System.getInt(getContentResolver(),Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+        Log.e("wifiSleepValue1","wifiSleepValue1="+wifiSleepValue1);
+    }
     private void registSipForReceive() {
         SharedUtils sharedUtils = SharedUtils.getInstance();
         String	 username = sharedUtils.readString(Constant.USER_NAME);

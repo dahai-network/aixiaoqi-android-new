@@ -10,9 +10,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -128,6 +130,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			searchBLE();
 		}
 
+
 		public void onServiceDisconnected(ComponentName classname) {
 			//mService.disconnect(mDevice);
 			mService = null;
@@ -149,6 +152,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
 	}
+
+
 
 
 	private void searchBLE() {
@@ -550,6 +555,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
 					new Thread(http).start();
 					indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+
 				} else {
 					//检测是否有套餐，没有责显示新状态
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);

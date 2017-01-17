@@ -1,5 +1,6 @@
 package com.aixiaoqi.socket;
 
+import android.app.AlarmManager;
 import android.util.Log;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 /**
  * TCP Socket客户端

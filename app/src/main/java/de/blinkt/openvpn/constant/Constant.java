@@ -4,7 +4,7 @@ package de.blinkt.openvpn.constant;
  * Created by Administrator on 2016/9/8 0008.
  */
 public class Constant {
-	public static final boolean IS_DEBUG = true;
+	public static final boolean IS_DEBUG = false;
 	public static final String BLUETOOTH_NAME = "unitoys";
 	//购买套餐数量限制
 	public static final int LIMIT_COUNT = 30;
