@@ -24,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
 
@@ -374,23 +373,23 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 							setConStatus(R.string.index_no_packet);
 						}
 						if (retryTime != 0) {
-							//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
-							new Thread(new Runnable() {
-								@Override
-								public void run() {
-									IsSuccessEntity entity = new IsSuccessEntity();
-									entity.setType(Constant.BLUE_CONNECTED_INT);
-									entity.setSuccess(true);
-									EventBus.getDefault().post(entity);
-									try {
-										Thread.sleep(5000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-									Log.e("phoneAddress", "main.start()");
-									JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
-								}
-							}).start();
+//							//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
+//							new Thread(new Runnable() {
+//								@Override
+//								public void run() {
+//									IsSuccessEntity entity = new IsSuccessEntity();
+//									entity.setType(Constant.BLUE_CONNECTED_INT);
+//									entity.setSuccess(true);
+//									EventBus.getDefault().post(entity);
+//									try {
+//										Thread.sleep(5000);
+//									} catch (InterruptedException e) {
+//										e.printStackTrace();
+//									}
+//									Log.e("phoneAddress", "main.start()");
+//									JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
+//								}
+//							}).start();
 							retryTime = 0;
 						}
 					}
