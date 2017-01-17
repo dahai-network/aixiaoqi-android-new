@@ -50,19 +50,10 @@ public class ReceiveSocketService extends Service {
             }
             contactFailCount++;
         }
-        private void sendMessage() {
-            byte[] value;
-            value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
-            ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
-            TlvAnalyticalUtils.isOffToPower=false;
-            Log.e("Blue_Chanl", "执行上电命令！");
 
-        }
+
         @Override
         public void onReceive(SocketTransceiver transceiver, byte[] s,int length) {
-            if(TlvAnalyticalUtils.isOffToPower){
-                sendMessage();
-            }
             TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s,length));
             if(!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)&&count==0){
                 timer.schedule(task,60000,60000);

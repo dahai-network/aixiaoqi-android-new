@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DialogUtils;
@@ -78,6 +79,7 @@ public class DialogUpgrade extends DialogBase{
         @Override
         public void onDfuCompleted( String deviceAddress) {
             mTextPercentage.setText(R.string.dfu_status_completed);
+            MyDeviceActivity.isUpgrade=false;
             dialog.dismiss();
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             new Handler().postDelayed(new Runnable() {
@@ -92,7 +94,7 @@ public class DialogUpgrade extends DialogBase{
 
         @Override
         public void onDfuAborted( String deviceAddress) {
-
+            MyDeviceActivity.isUpgrade=false;
             mTextPercentage.setText(R.string.dfu_status_aborted);
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             new Handler().postDelayed(new Runnable() {
@@ -121,7 +123,7 @@ public class DialogUpgrade extends DialogBase{
         @Override
         public void onError(final String deviceAddress, final int error, final int errorType, final String message) {
             CommonTools.showShortToast(context, message);
-
+            MyDeviceActivity.isUpgrade=false;
             // We have to wait a bit before canceling notification. This is called before DfuService creates the last notification.
             new Handler().postDelayed(new Runnable() {
                 @Override

@@ -255,7 +255,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				break;
 		}
 	}
-
+	public static boolean  isUpgrade=false;
 
 	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.findStatusLinearLayout, R.id.resetDeviceTextView, R.id.statueTextView})
 	public void onClick(View v) {
@@ -288,9 +288,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 				break;
 			case R.id.callPayLinearLayout:
-				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION))) {
+				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION))&&!isUpgrade) {
 					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
 					skyUpgradeHttp();
+				}else if(isUpgrade){
+					showDialogUpgrade();
 				}
 				break;
 			case R.id.findStatusLinearLayout:
@@ -515,6 +517,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	public void onDestroy() {
 		super.onDestroy();
 		Log.d(TAG, "onDestroy()");
+		isUpgrade=false;
+		if (isDfuServiceRunning()) {
+			stopService(new Intent(this, DfuService.class));
+		}
+
 		try {
 			LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(UARTStatusChangeReceiver);
 			EventBus.getDefault().unregister(this);
@@ -572,12 +579,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		} else if (cmdType == HttpConfigUrl.COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE) {
 			DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = (DownloadSkyUpgradePackageHttp) object;
 			if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
-				Set<BluetoothDevice> devices = mBtAdapter.getBondedDevices();
-				Iterator<BluetoothDevice> iterator = devices.iterator();
-				while (iterator.hasNext()) {
-					unpairDevice(iterator.next());
-
-				}
 				sendMessageToBlueTooth("AA080401A7");
 				uploadToBlueTooth();
 			} else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
@@ -608,7 +609,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (isDfuServiceRunning()) {
 			return;
 		}
+		isUpgrade=true;
 		showDialogUpgrade();
+
 		final DfuServiceInitiator starter = new DfuServiceInitiator(utils.readString(Constant.IMEI));
 		if (Environment.getExternalStorageState().equals(
 				Environment.MEDIA_MOUNTED)) {
@@ -632,6 +635,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void showDialogUpgrade() {
+		isUpgrade=true;
 		upgradeDialog.show();
 	}
 
@@ -668,10 +672,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		} else if (type == 3) {
 			sendMessageToBlueTooth(RESTORATION);
 		} else if (type == DOWNLOAD_SKY_UPGRADE) {
-			if (!TextUtils.isEmpty(url))
+			if (!TextUtils.isEmpty(url)){
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKDEVICEUPGRADE);
-			downloadSkyUpgradePackageHttp(url);
+				downloadSkyUpgradePackageHttp(url);
+			}
 		} else if (type == NOT_YET_REARCH) {
 			scanLeDevice(true);
 		} else {
@@ -681,11 +686,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 
 	private boolean isDfuServiceRunning() {
-		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-		for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if (DfuService.class.getName().equals(service.service.getClassName())) {
-				return true;
-			}
+		if(ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName())){
+			return true;
 		}
 		return false;
 	}
