@@ -27,7 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
@@ -564,21 +563,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
 
-					//运行注册流程
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							startDataframService();
-							startSocketService();
-							try {
-								Thread.sleep(5000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-							Log.e("phoneAddress", "main.start()");
-							JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
-						}
-					}).start();
+//					//运行注册流程
+//					new Thread(new Runnable() {
+//						@Override
+//						public void run() {
+//							startDataframService();
+//							startSocketService();
+//							try {
+//								Thread.sleep(5000);
+//							} catch (InterruptedException e) {
+//								e.printStackTrace();
+//							}
+//							Log.e("phoneAddress", "main.start()");
+//							JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
+//						}
+//					}).start();
 				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
@@ -664,7 +663,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 				//当有通话套餐的时候才允许注册操作
-				IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "1");
+				IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 				new Thread(http).start();
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);

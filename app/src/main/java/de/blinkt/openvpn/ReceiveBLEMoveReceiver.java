@@ -77,7 +77,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	private boolean isOpenStepService = false;
 	//复位命令存储
 	private String resetOrderStr = null;
-	private boolean repeatReceive33 = false;
 
 	public void onReceive(final Context context, Intent intent) {
 		final String action = intent.getAction();
@@ -272,12 +271,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //									repeatReceive33 = false;
 //								}
 //							}, 30000);
-							if (!repeatReceive33) {
-								//当上电完成则需要发送写卡命令
-								if (!IS_TEXT_SIM) {
-									sendMessageSeparate("A0A40000023F00");
-									repeatReceive33 = true;
-								}
+							//当上电完成则需要发送写卡命令
+							if (!IS_TEXT_SIM) {
+								sendMessageSeparate("A0A40000023F00");
 							}
 							break;
 						case (byte) 0xDB:
@@ -360,13 +356,15 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 	SharedUtils utils = SharedUtils.getInstance();
 	public static boolean isGetnullCardid = false;//是否获取空卡数据
+	//接收的最后一句代码（写卡方面）
+	private String lastReceveString = "";
 
 	//写卡流程
 	private void ReceiveDBOperate(String mStrSimCmdPacket) {
 		Log.i("test", "写卡收回：" + mStrSimCmdPacket);
+		lastReceveString = mStrSimCmdPacket;
 //		if (TextUtils.isEmpty(utils.readString(Constant.WRITE_CARD_ID))) {
 //			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "写卡失败，没有写卡ID");
-//			repeatReceive33 = false;
 //		}
 		if (mStrSimCmdPacket.contains(WRITE_CARD_STEP1)) {
 			if (isGetnullCardid) {
@@ -401,7 +399,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				&& mStrSimCmdPacket.contains(RECEIVE_NULL_CARD_CHAR)) {
 			if (isGetnullCardid) {
 				if (mStrSimCmdPacket.length() > 20) {
-					repeatReceive33 = false;
 					mStrSimCmdPacket = mStrSimCmdPacket.substring(4, 20);
 					Log.i("Bluetooth", "空卡序列号:" + mStrSimCmdPacket);
 					Intent intent = new Intent();
@@ -410,7 +407,15 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 				}
 			}
+		} else {
+			if (isGetnullCardid) {
+				Intent intent = new Intent();
+				intent.setAction(ActivateActivity.FINISH_ACTIVITY);
+				intent.setAction(MyOrderDetailActivity.FINISH_PROCESS);
+				LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+			}
 		}
+
 	}
 
 	public String reverse(String str) {
@@ -478,7 +483,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKACTIVECARD, map);
 				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活成功！");
-				repeatReceive33 = false;
 				orderStatus = 1;
 				Intent intent = new Intent();
 				intent.setAction(ActivateActivity.FINISH_ACTIVITY);
