@@ -15,6 +15,7 @@ import de.blinkt.openvpn.model.IsSuccessEntity;
 
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
+import static de.blinkt.openvpn.constant.Constant.IS_UP_TO_POWER;
 
 /**
  * TLV的解析
@@ -23,7 +24,6 @@ public class TlvAnalyticalUtils {
 
 	private static String TAG = "TlvAnalyticalUtils";
 
-	public static boolean isOffToPower = false;
 
 	public static MessagePackageEntity builderMessagePackage(String hexString) {
 		Log.e("TlvAnalyticalUtils", hexString);
@@ -53,7 +53,7 @@ public class TlvAnalyticalUtils {
 		if (tag != 5) {
 			if (System.currentTimeMillis() - registerSimTime > 5 * 60 * 1000 && isRegisterSucceed) {
 				sendMessageToBlueTooth(Constant.OFF_TO_POWER);
-				isOffToPower = true;
+
 			}
 			registerSimTime = System.currentTimeMillis();
 		}
@@ -74,7 +74,6 @@ public class TlvAnalyticalUtils {
 
 	private static void sendMessageToBlueTooth(final String message) {
 		byte[] value;
-		Log.i("toBLue", "OFF" + message);
 		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
 		UartService mService = ICSOpenVPNApplication.uartService;
 		if (mService != null) {
@@ -132,13 +131,22 @@ public class TlvAnalyticalUtils {
 				}
 				if ("00".equals(tempTag)) {
 					if (typeParams == 199) {
+						upToPower();
+						IS_UP_TO_POWER = true;
+						Log.e("upToPower","upToPower");
+						try {
+							Thread.sleep(1500);
+						}catch ( Exception e){
+
+						}
+						Log.e("upToPower1","upToPower1");
 						byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
 					}
 				} else if (typeParams == 199) {
-					if(REGISTER_STATUE_CODE==2)
+					if(REGISTER_STATUE_CODE==2){//第一次是010101的时候不去复位SDK,第二次的时候才对SDK进行复位
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
-
+					}
 					SocketConstant.REGISTER_STATUE_CODE = 2;
 					String rpValue = "000100163b9f94801fc78031e073fe211b573786609b30800119";
 					StringBuilder stringBuilder = new StringBuilder();
@@ -192,7 +200,11 @@ public class TlvAnalyticalUtils {
 		}
 		return tlvs;
 	}
-
+	private static void upToPower() {
+		byte[] value;
+		value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
+		ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
+	}
 	/**
 	 * 注册中不成功再次注册
 	 */

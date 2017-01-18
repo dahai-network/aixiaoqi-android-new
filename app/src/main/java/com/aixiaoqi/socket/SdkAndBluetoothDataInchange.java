@@ -15,6 +15,8 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 
+import static de.blinkt.openvpn.constant.Constant.IS_UP_TO_POWER;
+
 /**
  * Created by Administrator on 2017/1/5 0005.
  */
@@ -143,10 +145,15 @@ public class SdkAndBluetoothDataInchange {
 			sendToOneServerTemp = sendToOnService;
 			Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
 					+ sendToOneServerTemp);
+			//如果是上电命令则忽略
+			if(IS_UP_TO_POWER){
+				Log.e(TAG, "忽略的上电指令！");
+				IS_UP_TO_POWER=false;
+				return;
+			}
 			sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
 
 			num = 0;
-			Log.e(TAG, "从蓝牙发出的数据" + socketTag + sendToOneServerTemp);
 
 		}
 	}
@@ -203,7 +210,6 @@ public class SdkAndBluetoothDataInchange {
 			byte[] value;
 			value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
 			mService.writeRXCharacteristic(value);
-			TlvAnalyticalUtils.isOffToPower=false;
 			Log.e(TAG, "SIM发送上电数据");
 		} else {
 			byte[] value = HexStringExchangeBytesUtil.hexStringToBytes(temp);

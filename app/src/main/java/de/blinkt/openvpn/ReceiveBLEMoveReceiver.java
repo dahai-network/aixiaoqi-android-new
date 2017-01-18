@@ -40,6 +40,7 @@ import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.FIND_VERSION;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
+import static de.blinkt.openvpn.constant.Constant.IS_UP_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.IS_WRITE_CARD_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR;
@@ -275,9 +276,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							if (!IS_TEXT_SIM) {
 								sendMessageSeparate("A0A40000023F00");
 							}
+
 							break;
 						case (byte) 0xDB:
 						case (byte) 0xDA:
+
 							if (IS_TEXT_SIM) {
 								SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
 							} else {

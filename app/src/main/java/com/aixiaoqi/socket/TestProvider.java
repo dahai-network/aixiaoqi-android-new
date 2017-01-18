@@ -5,7 +5,9 @@ import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 
 
@@ -14,8 +16,13 @@ public class TestProvider {
 	static PreDataEntity preDataEntity = new PreDataEntity();
 	static IccidEntity iccidEntity = new IccidEntity();
 	static SendYiZhengService sendYiZhengService;
-
+	private static void offToPower() {
+		byte[] value;
+		value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.OFF_TO_POWER);
+		ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
+	}
 	public static void getCardInfo(String info) {
+
 		String indexString = info.substring(2, 4);
 
 		if (null == info) {
@@ -25,6 +32,7 @@ public class TestProvider {
 			sendYiZhengService = new SendYiZhengService();
 		}
 		if (SocketConstant.EN_APPEVT_PRDATA.equals(indexString) || SocketConstant.EN_APPEVT_SIMDATA.equals(indexString)) {
+			offToPower();
 			preDataSplit(info);
 		} else if (SocketConstant.EN_APPEVT_SIMINFO.equals(indexString)) {
 			iccidDataSplit(info);
