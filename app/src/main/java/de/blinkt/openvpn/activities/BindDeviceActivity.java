@@ -4,18 +4,13 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -24,7 +19,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,7 +46,6 @@ import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 public class BindDeviceActivity extends CommenActivity implements InterfaceCallback, DialogInterfaceTypeBase {
 
-	public static String BIND_COMPELETE = "BIND_COMPELETE";
 	public static int FAILT = 4;
 	@BindView(R.id.stopImageView)
 	ImageView stopImageView;
@@ -72,21 +65,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	private int REQUEST_ENABLE_BT = 2;
 	private String TAG = "BindDeviceActivity";
 	private UartService mService = ICSOpenVPNApplication.uartService;
-	private BroadcastReceiver bindCompeleteReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			connectedRelativeLayout.setVisibility(View.VISIBLE);
-			new Handler().postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					Intent result = new Intent();
-					result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, deviceAddress);
-					BindDeviceActivity.this.setResult(Activity.RESULT_OK, result);
-					BindDeviceActivity.this.finish();
-				}
-			}, 2000);
-		}
-	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +74,9 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		initSet();
 		mHandler = new Handler();
 		if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {//没有发现设备
-
+			CommonTools.showShortToast(this, getString(R.string.bluetooth_ble_not_support));
+			finish();
+			return;
 		}
 		final BluetoothManager bluetoothManager =
 				(BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -111,15 +91,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	}
 
 	private void initSet() {
-		//初始化广播，用于蓝牙操作后跳出界面
-		LocalBroadcastManager.getInstance(this).registerReceiver(bindCompeleteReceiver, getFilter());
 		EventBus.getDefault().register(this);
 	}
 
 	private void initList() {
-		if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-			deviceAddress = utils.readString(Constant.IMEI);
-		}
 		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 		startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 	}
@@ -142,7 +117,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 
 		} else {
 			mBluetoothAdapter.stopLeScan(mLeScanCallback);
-
 		}
 
 	}
@@ -162,18 +136,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		}
 	}
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		mBluetoothAdapter.stopLeScan(mLeScanCallback);
-	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-
-		mBluetoothAdapter.stopLeScan(mLeScanCallback);
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(bindCompeleteReceiver);
 		EventBus.getDefault().unregister(this);
 	}
 
@@ -194,10 +160,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
 									if (device.getName().contains(Constant.BLUETOOTH_NAME)) {
-//									  if (device.getName().contains("unitoys")) {
 										//如果信号强度绝对值大于这个值（距离\）,则配对
-										if (Math.abs(rssi) < 75) {
-											mBluetoothAdapter.stopLeScan(mLeScanCallback);
+										if (Math.abs(rssi) < 90) {
+											//找到设备后停止搜索蓝牙
+											scanLeDevice(false);
 											deviceAddress = device.getAddress();
 											utils.writeString(Constant.IMEI, deviceAddress);
 											IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, device.getAddress());
@@ -211,27 +177,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 				}
 			};
 
-	private void checkIsBindDevie(BluetoothDevice device) {
-		try {
-			// 连接建立之前的先配对
-			if (device.getBondState() == BluetoothDevice.BOND_NONE) {
-				Method creMethod = BluetoothDevice.class
-						.getMethod("createBond");
-				Log.e("TAG", "开始配对");
-				creMethod.invoke(device);
-			} else {
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			//DisplayMessage("无法配对！");
-			e.printStackTrace();
-		}
 
-	}
 
 	@OnClick(R.id.stopImageView)
 	public void onClick() {
-		mService.disconnect();
 		scanLeDevice(false);
 		finish();
 	}
@@ -245,20 +194,19 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 					mService.connect(deviceAddress);
 			} else {
 				CommonTools.showShortToast(this, "该设备已经绑定过了！");
+				finish();
 			}
-		}
-		//测试用代码
-		else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
+		} else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				utils.writeString(Constant.IMEI, deviceAddress);
 				Intent result = new Intent();
 				result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, deviceAddress);
 				BindDeviceActivity.this.setResult(Activity.RESULT_OK, result);
-				BindDeviceActivity.this.finish();
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
+			finish();
 		}
 	}
 
@@ -288,16 +236,9 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_ENABLE_BT) {
 			if (resultCode == Activity.RESULT_OK) {
-//				Toast.makeText(this, "重新搜索", Toast.LENGTH_SHORT).show();
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						final BluetoothManager bluetoothManager =
-								(BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-						mBluetoothAdapter = bluetoothManager.getAdapter();
-						if (mBluetoothAdapter == null) {
-							return;
-						}
 						scanLeDevice(true);
 					}
 				}).start();
@@ -309,11 +250,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		}
 	}
 
-	public IntentFilter getFilter() {
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(BIND_COMPELETE);
-		return filter;
-	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onVersionEntity(BluetoothMessageCallBackEntity entity) {

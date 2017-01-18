@@ -25,7 +25,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.AlarmClockAdapter;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
@@ -35,7 +34,6 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.DeleteAlarmClockHttp;
 import de.blinkt.openvpn.http.FindAlarmClockHttp;
-import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.UpdateAlarmClockStatueHttp;
 import de.blinkt.openvpn.model.AlarmClockEntity;
 import de.blinkt.openvpn.util.BLECheckBitUtil;
@@ -278,7 +276,7 @@ private boolean	isDoubleClick=false;
 	public void onDel(int pos) {
 		//友盟方法统计
 		MobclickAgent.onEvent(context, CLICKDELETEALARM);
-		String delStr = "AA070F0" + pos + "0000000000000000000000";
+		String delStr = "AA07080" + pos + "00000000";
 		position = pos;
 		deleteAlarmClock(alarmClockAdapter.getItem(pos).getAlarmClockId());
 		//发送到蓝牙，删除闹钟

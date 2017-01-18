@@ -10,11 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -62,6 +60,7 @@ import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
+import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -152,8 +151,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
 	}
-
-
 
 
 	private void searchBLE() {
@@ -661,6 +658,23 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	}
 
+	@Subscribe(threadMode = ThreadMode.BACKGROUND)//非UI线程
+	public void onServiceOperation(ServiceOperationEntity entity) {
+		switch (entity.getOperationType()) {
+			case ServiceOperationEntity.REMOVE_SERVICE:
+				if (entity.getServiceName() == UartService.class.getName()) {
+					Log.i(TAG, "关闭UartService");
+					unbindService(mServiceConnection);
+				}
+				break;
+			case ServiceOperationEntity.CREATE_SERVICE:
+				if (entity.getServiceName() == UartService.class.getName()) {
+					Log.i(TAG, "开启UartService");
+					initServices();
+				}
+				break;
+		}
+	}
 
 	//用于改变indexFragment状态的Receiver
 	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {

@@ -48,7 +48,6 @@ public class UartService extends Service implements Serializable {
 
 	private BluetoothManager mBluetoothManager;
 	private BluetoothAdapter mBluetoothAdapter;
-	private String mBluetoothDeviceAddress;
 	private BluetoothGatt mBluetoothGatt;
 	public int mConnectionState = STATE_DISCONNECTED;
 
@@ -73,7 +72,7 @@ public class UartService extends Service implements Serializable {
 	public static final UUID RX_SERVICE_UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
 	public static final UUID RX_CHAR_UUID = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E");
 	public static final UUID TX_CHAR_UUID1 = UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
-//	public static final UUID TX_CHAR_UUID2 = UUID.fromString("6E400004-B5A3-F393-E0A9-E50E24DCCA9F");
+	//	public static final UUID TX_CHAR_UUID2 = UUID.fromString("6E400004-B5A3-F393-E0A9-E50E24DCCA9F");
 //	public static final UUID TX_CHAR_UUID3 = UUID.fromString("6E400005-B5A3-F393-E0A9-E50E24DCCA9F");
 	private List<BluetoothGattService> BluetoothGattServices;
 	// Implements callback methods for GATT events that the app cares about.  For example,
@@ -255,7 +254,6 @@ public class UartService extends Service implements Serializable {
 		// parameter to false.
 		mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
 		Log.d(TAG, "Trying to create a new connection.");
-		mBluetoothDeviceAddress = address;
 		mConnectionState = STATE_CONNECTING;
 		return true;
 	}
@@ -289,7 +287,7 @@ public class UartService extends Service implements Serializable {
 			return;
 		}
 		Log.w(TAG, "mBluetoothGatt closed");
-		mBluetoothDeviceAddress = null;
+		refreshDeviceCache();
 		mBluetoothGatt.close();
 		mBluetoothGatt = null;
 	}
@@ -346,15 +344,14 @@ public class UartService extends Service implements Serializable {
 		}
 		BluetoothGattService RxService = null;
 		RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
-		Log.i("getService", "获取服务："+RxService);
+		Log.i("getService", "获取服务：" + RxService);
 		if (RxService == null) {
 			int j = 0;
 			for (int i = 0; i < BluetoothGattServices.size(); i++) {
-				Log.i("getService", "获取服务群"+ ++ j);
+				Log.i("getService", "获取服务群" + ++j);
 				RxService = BluetoothGattServices.get(i);
-				if (RxService != null&&RxService.getCharacteristic(TX_CHAR_UUID1)!=null) {
-					if(i==BluetoothGattServices.size()-1)
-					{
+				if (RxService != null && RxService.getCharacteristic(TX_CHAR_UUID1) != null) {
+					if (i == BluetoothGattServices.size() - 1) {
 						RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
 					}
 					break;
@@ -367,6 +364,7 @@ public class UartService extends Service implements Serializable {
 			broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
 			return;
 		}
+
 		setDescriptor(RxService, TX_CHAR_UUID1);
 //		setDescriptor(RxService, TX_CHAR_UUID2);
 //		setDescriptor(RxService, TX_CHAR_UUID3);
@@ -457,5 +455,17 @@ public class UartService extends Service implements Serializable {
 	public boolean isConnecttingBlueTooth() {
 		return mConnectionState == STATE_CONNECTING;
 	}
+
+	/**
+	 * * Clears the internal cache and forces a refresh of the services from the
+	 * * remote device.
+	 */
+	public void refreshDeviceCache() {
+		//关闭蓝牙
+		mBluetoothAdapter.enable();
+		//打开蓝牙
+		mBluetoothAdapter.enable();
+	}
+
 
 }

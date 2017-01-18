@@ -309,6 +309,7 @@ public class TipUserOptionActivity extends BaseActivity implements InterfaceCall
 				finish();
 			} else {
 				CommonTools.showShortToast(this, getResources().getString(R.string.change_remind_config_fail));
+				finish();
 			}
 
 		}

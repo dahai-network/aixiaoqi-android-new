@@ -59,7 +59,7 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 	LinearLayout lableLinearLayout;
 	public static int ALARM_REPEAT = 1;
 	public static int ALARM_LABLE = 2;
-	private byte[] alarmBytes = new byte[15];
+	private byte[] alarmBytes = new byte[8];
 	private ArrayList<String> repeatDayList = new ArrayList<>();
 
 	//传入值，用于更新闹钟
@@ -123,7 +123,7 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 			alarmPosition = intent.getIntExtra(ALARM_CLOCK_POSITION, -1);
 		}
 
-		hasAllViewTitle(R.string.alarm,R.string.save_alarm,R.string.cancel,false);
+		hasAllViewTitle(R.string.alarm, R.string.save_alarm, R.string.cancel, false);
 
 
 		//拼接蓝牙字符串
@@ -143,15 +143,10 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 //						+ lableTextView.getText().toString());
 		//友盟方法统计
 		MobclickAgent.onEvent(context, CLICKSAVEADDALARM);
-
-//		if (pickerscrlllviewMorningOrAfterNoon.getCurrentString().equals(getResources().getString(R.string.morning))) {
-//			alarmBytes[13] = Byte.valueOf(addZero(pickerscrlllviewHour.getCurrentString()));
-//		} else {
-//			alarmBytes[13] = (byte) (Byte.valueOf(addZero(pickerscrlllviewHour.getCurrentString())) + (byte) 0x0C);
-//		}
-		alarmBytes[14] = Byte.valueOf(addZero(pickerscrlllviewMiunue.getCurrentString()));
+		alarmBytes[6] = Byte.valueOf(addZero(pickerscrlllviewHour.getCurrentString()));
+		alarmBytes[7] = Byte.valueOf(addZero(pickerscrlllviewMiunue.getCurrentString()));
 		String alarmCheckStr = HexStringExchangeBytesUtil.bytesToHexString(new byte[]{BLECheckBitUtil.getXor(alarmBytes)});
-		Log.i("test", HexStringExchangeBytesUtil.bytesToHexString(alarmBytes) + alarmCheckStr);
+		Log.i("test", "闹钟：" + HexStringExchangeBytesUtil.bytesToHexString(alarmBytes) + alarmCheckStr);
 		sendMessageToBlueTooth(HexStringExchangeBytesUtil.bytesToHexString(alarmBytes) + alarmCheckStr);
 		if (alarmClockEntity != null) {
 			handler.sendEmptyMessage(UPDATE_ALARM);
@@ -164,25 +159,20 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 //		bytesList.add("AA070F"+alarmClockEntity.getPosition()+"0101");
 		alarmBytes[0] = (byte) 0xAA;
 		alarmBytes[1] = (byte) 0x07;
-		alarmBytes[2] = (byte) 0x0F;
+		alarmBytes[2] = (byte) 0x08;
 		if (alarmPosition == -1) {
 			alarmBytes[3] = (byte) alarmClockEntity.getPosition();
 		} else {
 			alarmBytes[3] = (byte) alarmPosition;
 		}
+		//周几和是否打开闹钟
 		alarmBytes[4] = (byte) 0x01;
-		alarmBytes[5] = (byte) 0x01;
-		//重复周几
+		//是否重复
+		alarmBytes[5] = (byte) 0x80;
+		//时
 		alarmBytes[6] = (byte) 0x00;
+		//分
 		alarmBytes[7] = (byte) 0x00;
-		alarmBytes[8] = (byte) 0x00;
-		alarmBytes[9] = (byte) 0x00;
-		alarmBytes[10] = (byte) 0x00;
-		alarmBytes[11] = (byte) 0x00;
-		alarmBytes[12] = (byte) 0x00;
-		//重复时间
-		alarmBytes[13] = (byte) 0x00;
-		alarmBytes[14] = (byte) 0x00;
 	}
 
 	private void addSroll() {
@@ -190,25 +180,25 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 		ArrayList<String> listHour = new ArrayList<>();
 		ArrayList<String> listMin = new ArrayList<>();
 		for (int i = 1; i <= 24; i++) {
-			if(i<10){
-				listHour.add("0"+i );
-			}else{
+			if (i < 10) {
+				listHour.add("0" + i);
+			} else {
 				listHour.add(i + "");
 			}
 		}
 		for (int i = 0; i < 60; i++) {
-			if(i<10){
-				listMin.add("0"+i);
-			}else{
-				listMin.add(i+"");
+			if (i < 10) {
+				listMin.add("0" + i);
+			} else {
+				listMin.add(i + "");
 			}
 		}
 		pickerscrlllviewHour.setData(listHour);
 		pickerscrlllviewMiunue.setData(listMin);
 		pickerscrlllviewHour.setColor(0x007aff);
 		pickerscrlllviewMiunue.setColor(0x007aff);
-		pickerscrlllviewHour.setUnit(" 小时");
-		pickerscrlllviewMiunue.setUnit(" 分钟");
+		pickerscrlllviewHour.setUnit(" " + getString(R.string.hour_single));
+		pickerscrlllviewMiunue.setUnit(" " + getString(R.string.minute));
 		if (alarmClockEntity != null) {
 			String timeStr = alarmClockEntity.getTime();
 			String[] times = timeStr.split(":");
@@ -229,7 +219,7 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 
 		} else {
 			Calendar calendar = Calendar.getInstance();
-			pickerscrlllviewHour.setSelected(calendar.get(Calendar.HOUR) - 1);
+			pickerscrlllviewHour.setSelected(calendar.get(Calendar.HOUR_OF_DAY) - 1);
 			pickerscrlllviewMiunue.setSelected(calendar.get(Calendar.MINUTE));
 		}
 
@@ -292,31 +282,31 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 			switch (jday) {
 				case 0:
 					weekStr.append(" " + mContext.getResources().getString(R.string.Monday));
-					alarmBytes[6] = 0x01;
+					alarmBytes[4] |= 0x01;
 					break;
 				case 1:
 					weekStr.append(" " + mContext.getResources().getString(R.string.Tuesday));
-					alarmBytes[7] = 0x01;
+					alarmBytes[4] |= 0x02;
 					break;
 				case 2:
 					weekStr.append(" " + mContext.getResources().getString(R.string.Wednesday));
-					alarmBytes[8] = 0x01;
+					alarmBytes[4] |= 0x04;
 					break;
 				case 3:
 					weekStr.append(" " + mContext.getResources().getString(R.string.Thursday));
-					alarmBytes[9] = 0x01;
+					alarmBytes[4] |= 0x08;
 					break;
 				case 4:
 					weekStr.append(" " + mContext.getResources().getString(R.string.Friday));
-					alarmBytes[10] = 0x01;
+					alarmBytes[4] |= 0x10;
 					break;
 				case 5:
 					weekStr.append(" " + mContext.getResources().getString(R.string.Saturday));
-					alarmBytes[11] = 0x01;
+					alarmBytes[4] |= 0x20;
 					break;
 				case 6:
 					weekStr.append(" " + mContext.getResources().getString(R.string.Sunday));
-					alarmBytes[12] = 0x01;
+					alarmBytes[4] |= 0x40;
 					break;
 			}
 
@@ -326,9 +316,7 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 
 	//清空星期时间
 	private void clearAlarmWeek() {
-		for (int i = 6; i <= 12; i++) {
-			alarmBytes[i] = 0;
-		}
+		alarmBytes[4] = (byte) 0x80;
 	}
 
 	@Override

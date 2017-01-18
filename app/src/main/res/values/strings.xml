@@ -130,6 +130,7 @@
     <string name="minute">分钟</string>
     <string name="second">秒</string>
     <string name="hour">小时</string>
+    <string name="hour_single">时</string>
     <string name="edit_head">修改头像</string>
     <string name="basic_information">基本资料</string>
     <string name="body_information">体型资料</string>
@@ -541,6 +542,7 @@
     <string name="index_regist_fail">注册失败</string>
     <string name="index_registing">注册中</string>
     <string name="tips_no_connect">蓝牙未连接，点击开启</string>
+    <string name="bluetooth_ble_not_support">十分抱歉，您的手机不支持低功耗蓝牙</string>
     <!--GOIP注册失败原因-->
     <string name="regist_fail">注册卡失败</string>
     <string name="regist_fail_card_invalid">注册卡失败，无效卡</string>

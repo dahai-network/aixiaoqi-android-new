@@ -62,6 +62,7 @@ import de.blinkt.openvpn.model.BlueToothDeviceEntity;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
+import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -189,29 +190,15 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				sinking.setPercent(0f);
 			}
 			statueTextView.setVisibility(View.GONE);
-			skyUpgradeHttp();
-		}
-		if (mState == UartService.STATE_CONNECTED) {
 			conStatusLinearLayout.setVisibility(View.VISIBLE);
 			if (blueStatus != 0) {
 				setConStatus(blueStatus);
 			}
-		}
-		if (mState != UartService.STATE_CONNECTED) {
+			skyUpgradeHttp();
+		} else {
 			GetBindDeviceHttp http = new GetBindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 			new Thread(http).start();
 		}
-
-//		else {
-//			try {
-//				Thread.sleep(500);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//			if (blueStatus != R.string.index_registing) {
-//				sendMessageToBlueTooth(UP_TO_POWER);
-//			}
-//		}
 
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
 		EventBus.getDefault().register(this);
@@ -275,11 +262,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
 				mService.disconnect();
-				IsSuccessEntity entity = new IsSuccessEntity();
-				entity.setType(Constant.REGIST_TYPE);
-				entity.setSuccess(false);
-				entity.setFailType(SocketConstant.REGISTER_FAIL_INITIATIVE);
-				EventBus.getDefault().post(entity);
+				//传出注册失败
+				registFail();
+				//重启Uart服务
+				restartUartService();
+
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
 				//清空缓存的mac地址
@@ -317,6 +304,34 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				clickFindBracelet();
 				break;
 		}
+	}
+
+	private void registFail() {
+		IsSuccessEntity entity = new IsSuccessEntity();
+		entity.setType(Constant.REGIST_TYPE);
+		entity.setSuccess(false);
+		entity.setFailType(SocketConstant.REGISTER_FAIL_INITIATIVE);
+		EventBus.getDefault().post(entity);
+	}
+
+	private void restartUartService() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				//关闭UartService服务
+				ServiceOperationEntity serviceOperationEntity = new ServiceOperationEntity();
+				serviceOperationEntity.setServiceName(UartService.class.getName());
+				serviceOperationEntity.setOperationType(ServiceOperationEntity.REMOVE_SERVICE);
+				EventBus.getDefault().post(serviceOperationEntity);
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				serviceOperationEntity.setOperationType(ServiceOperationEntity.CREATE_SERVICE);
+				EventBus.getDefault().post(serviceOperationEntity);
+			}
+		}).start();
 	}
 
 	private void clickFindBracelet() {
@@ -719,6 +734,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	//我的设备内如果有已储存设备的话，那么开始扫描已有设备进行连接，不用进入绑定流程啦！
 	private void scanLeDevice(boolean enable) {
+		if (mService.mConnectionState == UartService.STATE_CONNECTED) {
+			return;
+		}
 		if (enable) {
 			// Stops scanning after a pre-defined scan period.
 			new Handler().postDelayed(new Runnable() {

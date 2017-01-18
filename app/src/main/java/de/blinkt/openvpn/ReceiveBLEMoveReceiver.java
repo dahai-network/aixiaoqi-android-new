@@ -91,7 +91,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				public void run() {
 					try {
 						Log.i("toBLue", "连接成功");
-						Thread.sleep(7500);
+						Thread.sleep(3000);
 
 //						Thread.sleep(500);
 //						//测试代码
@@ -155,7 +155,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				mService.connect(utils.readString(Constant.IMEI));
 			} else {
 				Log.d(TAG, "UART_DISCONNECT_MSG");
-				mService.close();
+				mService.disconnect();
 			}
 		}
 		if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
