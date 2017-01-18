@@ -40,10 +40,9 @@ import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.FIND_VERSION;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
-import static de.blinkt.openvpn.constant.Constant.IS_UP_TO_POWER;
-import static de.blinkt.openvpn.constant.Constant.IS_WRITE_CARD_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR;
+import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.UP_TP_POWER_RECEIVE;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_91;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP1;
@@ -78,6 +77,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	private boolean isOpenStepService = false;
 	//复位命令存储
 	private String resetOrderStr = null;
+	//是否获取空卡序列号，如果是则发送到广播与服务器进行处理后发给蓝牙设备
+	private String nullCardId = null;
 
 	public void onReceive(final Context context, Intent intent) {
 		final String action = intent.getAction();
@@ -274,13 +275,17 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //							}, 30000);
 							//当上电完成则需要发送写卡命令
 							if (!IS_TEXT_SIM) {
-								sendMessageSeparate("A0A40000023F00");
+								//空卡ID是否不为空，若不为空则
+								if (nullCardId != null) {
+									Log.i(TAG, "nullcardid上电返回");
+								} else {
+									sendMessageSeparate("A0A40000023F00");
+								}
 							}
 
 							break;
 						case (byte) 0xDB:
 						case (byte) 0xDA:
-
 							if (IS_TEXT_SIM) {
 								SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
 							} else {
@@ -342,11 +347,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	}
 
 	private void sendMessageToBlueTooth(final String message) {
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(500);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 		byte[] value;
 		Log.i("toBLue", message);
 		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
@@ -387,12 +392,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			sendMessageSeparate("A01400000C810301130082028281830100");
 		} else if (mStrSimCmdPacket.contains(WRITE_CARD_STEP11)) {
 			activationLocalCompletedHttp();
-		} else if (mStrSimCmdPacket.contains("9000") && mStrSimCmdPacket.contains(IS_WRITE_CARD_SUCCESS)) {
+		} else if (mStrSimCmdPacket.startsWith("9000")) {
 			if (isGetnullCardid) {
 				//新型写卡完成
 				activationLocalCompletedHttp();
 				sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 				isGetnullCardid = false;
+				nullCardId = null;
 				return;
 			}
 		} else if (mStrSimCmdPacket.contains(UP_TP_POWER_RECEIVE)) {
@@ -404,10 +410,23 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				if (mStrSimCmdPacket.length() > 20) {
 					mStrSimCmdPacket = mStrSimCmdPacket.substring(4, 20);
 					Log.i("Bluetooth", "空卡序列号:" + mStrSimCmdPacket);
-					Intent intent = new Intent();
-					intent.putExtra("nullcardNumber", mStrSimCmdPacket);
-					intent.setAction(MyOrderDetailActivity.FIND_NULL_CARD_ID);
-					LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+					nullCardId = mStrSimCmdPacket;
+					//重新上电清空
+					sendMessageToBlueTooth(UP_TO_POWER);
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(500);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							Intent findNullCardIntent = new Intent();
+							findNullCardIntent.putExtra("nullcardNumber", nullCardId);
+							findNullCardIntent.setAction(MyOrderDetailActivity.FIND_NULL_CARD_ID);
+							LocalBroadcastManager.getInstance(context).sendBroadcast(findNullCardIntent);
+						}
+					}).start();
 				}
 			}
 		} else {

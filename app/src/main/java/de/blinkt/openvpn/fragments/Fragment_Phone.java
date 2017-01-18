@@ -20,8 +20,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.aixiaoqi.socket.SocketConstant;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,11 +53,9 @@ import de.blinkt.openvpn.views.T9TelephoneDialpadView;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
-import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
-import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
 
 
-public class Fragment_Phone extends Fragment implements View.OnClickListener,InterfaceCallback,T9TelephoneDialpadView.OnT9TelephoneDialpadView,RecyclerBaseAdapter.OnItemClickListener,QueryCompleteListener<ContactRecodeEntity>,DialogInterfaceTypeBase{
+public class Fragment_Phone extends Fragment implements InterfaceCallback,T9TelephoneDialpadView.OnT9TelephoneDialpadView,RecyclerBaseAdapter.OnItemClickListener,QueryCompleteListener<ContactRecodeEntity>,DialogInterfaceTypeBase{
 
 
 	private static Fragment_Phone fragment;
@@ -68,6 +64,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	T9TelephoneDialpadView t9dialpadview;
 	public	ImageView dial_delete_btn;
 	TextView tv_no_permission;
+
 	ContactRecodeAdapter contactRecodeAdapter;
 	public SQLiteDatabase sqliteDB;
 	public DatabaseDAO dao;
@@ -78,14 +75,6 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 
 		}
 		return fragment;
-	}
-
-
-
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-
 	}
 
 	@Override
@@ -99,6 +88,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 		rvContactRecode = ((RecyclerView) view.findViewById(R.id.rv_contact_recode));
 		t9dialpadview = ((T9TelephoneDialpadView) view.findViewById(R.id.t9dialpadview));
 		tv_no_permission = ((TextView) view.findViewById(R.id.tv_no_permission));
+
 		inited();
 	}
 
@@ -106,7 +96,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 		contactRecodeEntity = new ContactRecodeEntity();
 		contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
 		contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
-		showCellPhoneDialog();
+		requestTimeHttp();
 		closedialClicked();
 	}
 
@@ -227,55 +217,18 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 		}
 	};
 	ContactRecodeEntity contactRecodeEntity;
+	boolean flagClick=true;
 	@Override
 	public void onItemClick(View view, Object data) {
 
-		if(noWifi()){
+		if(flagClick&&noWifi()){
 			contactRecodeEntity = (ContactRecodeEntity) data;
-			showCellPhoneDialog();
-		}
-	}
-
-	private void showCellPhoneDialog(){
-		ProMainActivity.showCellPhoneDialogBackground.setVisibility(View.VISIBLE);
-		ProMainActivity.showCellPhoneDialogBackground.setOnClickListener(this);
-		ProMainActivity.cellPhoneLinearlayout.setOnClickListener(this);
-		ProMainActivity.networkPhoneTv.setOnClickListener(this);
-		ProMainActivity.cancelPhone.setOnClickListener(this);
-		ProMainActivity.simRegisterPhoneTv.setOnClickListener(this);
-	}
-	private  void hideCellPhoneDialog(){
-		ProMainActivity.showCellPhoneDialogBackground.setVisibility(View.GONE);
-	}
-
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()){
-			case R.id.show_cell_phone_dialog_background:
-				break;
-			case R.id.cell_phone_linearlayout:
-				break;
-			case R.id.network_phone_tv:
-				if(CommonTools.isFastDoubleClick(500)){
-					return;
-				}
-				requestTimeHttp();
-				break;
-			case R.id.cancel_phone:
-				hideCellPhoneDialog();
-				break;
-			case R.id.sim_register_phone_tv:
-				if(SocketConstant.REGISTER_STATUE_CODE==3){
-					simCellPhone();
-				}else{
-					CommonTools.showShortToast(getActivity(),getString(R.string.sim_register_phone_tip));
-				}
-				break;
+			requestTimeHttp();
 		}
 	}
 
 	private void requestTimeHttp() {
+		flagClick=false;
 		OnlyCallHttp onlyCallHttp = new OnlyCallHttp(this, HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME);
 		new Thread(onlyCallHttp).start();
 	}
@@ -334,7 +287,6 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 			hidePhoneBottomBar();
 		}
 	}
-
 
 	public void notifyCellPhoneFragment(String curCharacter) {
 		if (!TextUtils.isEmpty(curCharacter)) {
@@ -426,12 +378,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 		getActivity().startActivity(intent);
 	}
 
-	private void simCellPhone(){
-		Intent intent=new Intent(getActivity(),CallPhoneNewActivity.class);
-		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO,contactRecodeEntity);
-		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,SIM_CELL_PHONE);
-		getActivity().startActivity(intent);
-	}
+
 
 
 	public String curInputStr;
@@ -440,13 +387,13 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME) {
+			flagClick=true;
 			OnlyCallHttp onlyCallHttp = (OnlyCallHttp) object;
 			if (1 == onlyCallHttp.getStatus()) {
 				OnlyCallModel onlyCallModel = onlyCallHttp.getOnlyCallModel();
 				if (!onlyCallModel.getMaximumPhoneCallTime().equals("0")) {
 					Intent intent=new Intent(getActivity(),CallPhoneNewActivity.class);
 					intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO,contactRecodeEntity);
-					intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,NETWORK_CELL_PHONE);
 					intent.putExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME,onlyCallModel.getMaximumPhoneCallTime());
 					getActivity().startActivity(intent);
 				}else{
@@ -460,11 +407,12 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
-
+		flagClick=true;
 	}
 
 	@Override
 	public void noNet() {
+		flagClick=true;
 		CommonTools.showShortToast(getActivity(),getResources().getString(R.string.no_wifi));
 
 	}
@@ -474,6 +422,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 		public void onReceive(Context context, Intent intent) {
 			String action= intent.getAction();
 			if(ReceiveCallActivity.UPDATE_CONTACT_REDORE.equals(action)){
+				flagClick=true;
 				ContactRecodeEntity contactRecodeEntity=(ContactRecodeEntity)intent.getSerializableExtra(IntentPutKeyConstant.CONTACT_RECODE_ENTITY);
 				mAllList.add(0,contactRecodeEntity);
 				contactRecodeAdapter.add(0,contactRecodeEntity);
