@@ -10,12 +10,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
@@ -34,6 +36,7 @@ import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
 import de.blinkt.openvpn.model.SmsEntity;
 import de.blinkt.openvpn.util.AssetsDatabaseManager;
+import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DatabaseDAO;
 import de.blinkt.openvpn.util.PhoneNumberZero;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -41,6 +44,7 @@ import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
+import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTDETAILCALL;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTDETAILEDIT;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTDETAILSMS;
@@ -52,7 +56,11 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKDETELECONTACT;
  */
 public class ContactDetailActivity extends BaseNetActivity implements View.OnClickListener, DialogInterfaceTypeBase {
 	ImageView contactHeader;
-
+	public  LinearLayout showCellPhoneDialogBackground;
+	public  LinearLayout cellPhoneLinearlayout;
+	public  TextView networkPhoneTv;
+	public  TextView cancelPhone;
+	public  TextView simRegisterPhoneTv;
 	TextView contactName;
 	LinearLayout llPhoneInfo;
 	TextView deletePhone;
@@ -102,6 +110,17 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 	private void initTitle() {
 
 		hasAllViewTitle(R.string.contact_personal_center, R.string.edit, 0, false);
+
+	}
+
+	@Override
+	protected void hasOnlyLeftViewOption() {
+		titleBar.getLeftText().setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finishActivity();
+			}
+		});
 	}
 
 	public boolean isExist;
@@ -119,6 +138,11 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 		contactName = (TextView) findViewById(R.id.contact_name);
 		llPhoneInfo = (LinearLayout) findViewById(R.id.ll_phone_info);
 		deletePhone = (TextView) findViewById(R.id.delete_phone);
+		showCellPhoneDialogBackground = (LinearLayout) findViewById(R.id.show_cell_phone_dialog_background);
+		cellPhoneLinearlayout = (LinearLayout) findViewById(R.id.cell_phone_linearlayout);
+		networkPhoneTv = (TextView) findViewById(R.id.network_phone_tv);
+		simRegisterPhoneTv = (TextView) findViewById(R.id.sim_register_phone_tv);
+		cancelPhone = (TextView) findViewById(R.id.cancel_phone);
 		setData(contactBean);
 		if (!TextUtils.isEmpty(selectContactPeople) || !TextUtils.isEmpty(selectContactPeopleDetail) || !TextUtils.isEmpty(getIntent().getStringExtra(IntentPutKeyConstant.SMS_DETAIL_INFO))) {
 			deletePhone.setVisibility(View.GONE);
@@ -169,7 +193,8 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 					contactRecodeEntity = new ContactRecodeEntity();
 					contactRecodeEntity.setPhoneNumber(deleteprefix("-",phonenum));
 					contactRecodeEntity.setName(contactName.getText().toString());
-					requestTimeHttp();
+//					requestTimeHttp();
+					showCellPhoneDialog();
 				}
 			});
 			sendMessage.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +203,7 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 					//友盟方法统计
 					MobclickAgent.onEvent(context, CLICKCONTACTDETAILSMS);
 					SmsEntity smsEntity = new SmsEntity();
-				smsEntity.setFm(SharedUtils.getInstance().readString(Constant.USER_NAME));
+					smsEntity.setFm(SharedUtils.getInstance().readString(Constant.USER_NAME));
 					smsEntity.setTo(phonenum);
 					smsEntity.setRealName(contactName.getText().toString());
 					toActivity(new Intent(ContactDetailActivity.this, SMSAcivity.class).putExtra(IntentPutKeyConstant.SMS_LIST_KEY, smsEntity));
@@ -202,17 +227,64 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 		}
 	}
 
+	private void showCellPhoneDialog(){
+		showCellPhoneDialogBackground.setVisibility(View.VISIBLE);
+		showCellPhoneDialogBackground.setOnClickListener(this);
+		cellPhoneLinearlayout.setOnClickListener(this);
+		networkPhoneTv.setOnClickListener(this);
+		cancelPhone.setOnClickListener(this);
+		simRegisterPhoneTv.setOnClickListener(this);
+	}
+	private  void hideCellPhoneDialog(){
+		showCellPhoneDialogBackground.setVisibility(View.GONE);
+	}
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()){
+			case R.id.show_cell_phone_dialog_background:
+				break;
+			case R.id.cell_phone_linearlayout:
+				break;
+			case R.id.network_phone_tv:
+				if(CommonTools.isFastDoubleClick(500)){
+					return;
+				}
+				requestTimeHttp();
+				break;
+			case R.id.cancel_phone:
+				hideCellPhoneDialog();
+				break;
+			case R.id.sim_register_phone_tv:
+				if(SocketConstant.REGISTER_STATUE_CODE==3){
+					simCellPhone();
+				}else{
+					CommonTools.showShortToast(this,getString(R.string.sim_register_phone_tip));
+				}
+				break;
+			case R.id.delete_phone:
+				//友盟方法统计
+				MobclickAgent.onEvent(context, CLICKDETELECONTACT);
+				deleteDialog();
+				break;
+		}
+	}
+	private void simCellPhone(){
+		Intent intent=new Intent(this,CallPhoneNewActivity.class);
+		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO,contactRecodeEntity);
+		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,SIM_CELL_PHONE);
+		startActivity(intent);
+	}
 	private String deleteprefix(String type,String s) {
 		String phoneNumber;
 		if(s.replace(type,"").startsWith("+86")){
 
-            phoneNumber= s.substring(3, s.length());
+			phoneNumber= s.substring(3, s.length());
 
-        }else if(s.replace(type,"").startsWith("86")){
-            phoneNumber= s.substring(2, s.length());
-        }else{
-            phoneNumber= s;
-        }
+		}else if(s.replace(type,"").startsWith("86")){
+			phoneNumber= s.substring(2, s.length());
+		}else{
+			phoneNumber= s;
+		}
 		return phoneNumber;
 	}
 
@@ -227,16 +299,7 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 		deletePhone.setOnClickListener(this);
 	}
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.delete_phone:
-				//友盟方法统计
-				MobclickAgent.onEvent(context, CLICKDETELECONTACT);
-				deleteDialog();
-				break;
-		}
-	}
+
 
 	@Override
 	protected void onClickRightView() {
@@ -315,6 +378,22 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 		}
 	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			finishActivity();
+
+		}
+		return true;
+	}
+
+	private void finishActivity() {
+		if(showCellPhoneDialogBackground.getVisibility()!= View.VISIBLE){
+			finish();
+		}else{
+			showCellPhoneDialogBackground.setVisibility(View.GONE);
+		}
+	}
 
 	@Override
 	public void dialogText(int type, String text) {

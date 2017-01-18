@@ -591,7 +591,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 								e.printStackTrace();
 							}
 							Log.e("phoneAddress", "main.start()");
-							JNIUtil.getInstance().startSDK();
+							JNIUtil.getInstance().startSDK(1);
 						}
 					}).start();
 				}

@@ -586,8 +586,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
 			if (skyUpgradeHttp.getStatus() == 1) {
 				if (skyUpgradeHttp.getUpgradeEntity() != null) {
-					url = skyUpgradeHttp.getUpgradeEntity().getUrl();
-					showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
+					if(skyUpgradeHttp.getUpgradeEntity().getVersion()>Integer.parseInt(utils.readString(Constant.BRACELETVERSION))){
+						url = skyUpgradeHttp.getUpgradeEntity().getUrl();
+						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
+					}else{
+						CommonTools.showShortToast(this,getString(R.string.last_version));
+					}
 				}
 			}
 
@@ -602,15 +606,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		}
 	}
 
-	private void unpairDevice(BluetoothDevice device) {
-		try {
-			Method m = device.getClass()
-					.getMethod("removeBond", (Class[]) null);
-			m.invoke(device, (Object[]) null);
-		} catch (Exception e) {
-
-		}
-	}
 
 	String url;
 

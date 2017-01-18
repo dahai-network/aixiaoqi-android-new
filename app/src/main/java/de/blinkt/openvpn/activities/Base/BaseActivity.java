@@ -43,7 +43,7 @@ public class BaseActivity extends CommenActivity {
 		}
 	}
 
-	private void hasOnlyLeftViewOption() {
+	protected void hasOnlyLeftViewOption() {
 		titleBar.getLeftText().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

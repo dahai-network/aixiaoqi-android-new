@@ -1,11 +1,13 @@
 package de.blinkt.openvpn.constant;
 
+import de.blinkt.openvpn.util.SharedUtils;
+
 /**
  * Created by Administrator on 2016/9/8 0008.
  */
 public class Constant {
 	public static final boolean IS_DEBUG = true;
-	public static final String BLUETOOTH_NAME = "unitoys";
+	public static final String BLUETOOTH_NAME = "AAA";
 	//购买套餐数量限制
 	public static final int LIMIT_COUNT = 30;
 
@@ -137,7 +139,7 @@ public class Constant {
 	public static final String GET_NULLCARDID = "9f0f";
 
 	public static final String DOWNLOAD_PATH = "/sdcard/aixiaoqi/upload.zip";
-	public static final String UPLOAD_PATH = "/aixiaoqi/upload.zip";
+	public static  String UPLOAD_PATH = "/aixiaoqi/upload.zip"+"_"+ SharedUtils.getInstance().readString(Constant.BRACELETVERSION);
 	public static final String DOWNLOAD_SUCCEED = "succeed";
 	public static final String DOWNLOAD_FAIL = "fail";
 

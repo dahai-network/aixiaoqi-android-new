@@ -59,6 +59,10 @@ public class TlvAnalyticalUtils {
 		}
 		position = position + 8;
 		String sessionId = hexString.substring(position, position + 8);
+		if(!SocketConstant.SESSION_ID.equals(sessionId)&&!SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)){
+			SocketConstant.SESSION_ID = sessionId;
+			return null;
+		}
 		SocketConstant.SESSION_ID = sessionId;
 		position = position + 8;
 		String hexStringMessageNumber = hexString.substring(position, position + 4);
