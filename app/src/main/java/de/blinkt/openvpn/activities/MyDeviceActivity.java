@@ -612,7 +612,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	private void showDialogGOUpgrade(String desc) {
 		//不能按返回键，只能二选其一
 		DialogBalance Upgrade = new DialogBalance(this, MyDeviceActivity.this, R.layout.dialog_balance, DOWNLOAD_SKY_UPGRADE);
-		Upgrade.changeText(desc, getResources().getString(R.string.upgrade));
+		Upgrade.changeText(desc, getResources().getString(R.string.upgrade),1);
 	}
 
 	private void uploadToBlueTooth() {

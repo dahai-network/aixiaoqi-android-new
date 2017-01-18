@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:background="@drawable/dialog_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_background"
     >
 
     <TextView
@@ -12,11 +12,25 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/padding_25dp"
         android:textSize="@dimen/little_16"
+        android:paddingRight="@dimen/padding_15dp"
+        android:paddingLeft="@dimen/padding_15dp"
         android:paddingBottom="@dimen/padding_25dp"
         android:gravity="center"
         android:text="@string/balance_rechange"
         />
 
+    <TextView
+        android:id="@+id/upgradeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/padding_25dp"
+        android:textSize="@dimen/little_16"
+        android:visibility="gone"
+        android:paddingBottom="@dimen/padding_25dp"
+        android:paddingRight="@dimen/padding_15dp"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:text="@string/balance_rechange"
+        />
     <View
         style="@style/horizontal_line_view"
         />

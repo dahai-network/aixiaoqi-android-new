@@ -35,18 +35,10 @@ public class TlvAnalyticalUtils {
 		int responeCode = Integer.parseInt(responeString, 16);
 		responeCode = responeCode & 127;
 		if (responeCode == 41) {
-			IsSuccessEntity entity = new IsSuccessEntity();
-			entity.setType(Constant.REGIST_CALLBACK_TYPE);
-			entity.setFailType(SocketConstant.REGISTER_FAIL);
-			entity.setSuccess(false);
-			EventBus.getDefault().post(entity);//注册失败,未授权
+			registerFail();
 			return null;
 		} else if (responeCode == 39) {
-			IsSuccessEntity entity = new IsSuccessEntity();
-			entity.setType(Constant.REGIST_CALLBACK_TYPE);
-			entity.setFailType(SocketConstant.REGISTER_FAIL);
-			entity.setSuccess(false);
-			EventBus.getDefault().post(entity);//注册失败，无卡可用
+			registerFail();
 			return null;
 		}
 		tag = tag & 127;
@@ -192,11 +184,7 @@ public class TlvAnalyticalUtils {
 						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
 						REGISTER_STATUE_CODE = 0;
-						IsSuccessEntity entity = new IsSuccessEntity();
-						entity.setType(Constant.REGIST_CALLBACK_TYPE);
-						entity.setFailType(SocketConstant.REGISTER_FAIL);
-						entity.setSuccess(false);
-						EventBus.getDefault().post(entity);
+						registerFail();
 					}
 				}
 			}
@@ -205,6 +193,15 @@ public class TlvAnalyticalUtils {
 		}
 		return tlvs;
 	}
+
+	private static void registerFail() {
+		IsSuccessEntity entity = new IsSuccessEntity();
+		entity.setType(Constant.REGIST_CALLBACK_TYPE);
+		entity.setFailType(SocketConstant.REGISTER_FAIL);
+		entity.setSuccess(false);
+		EventBus.getDefault().post(entity);
+	}
+
 	public static void upToPower() {
 		IS_UP_TO_POWER = true;
 		byte[] value;

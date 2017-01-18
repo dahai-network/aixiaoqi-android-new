@@ -107,7 +107,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private long RECONNECT_TIME = 180000;
 	SocketConnection socketUdpConnection;
 	SocketConnection socketTcpConnection;
-
+	public static String STOP_CELL_PHONE_SERVICE = "stopservice";
 
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
@@ -234,6 +234,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
 		intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
 		intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+		intentFilter.addAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
 		return intentFilter;
 	}
 
@@ -305,7 +306,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (mBluetoothAdapter == null) {
 							return;
 						}
-						while (mService.mConnectionState != UartService.STATE_CONNECTED) {
+						while (mService!=null&&mService.mConnectionState != UartService.STATE_CONNECTED) {
 							try {
 								scanDeviceFiveSecond();
 								Thread.sleep(RECONNECT_TIME);
@@ -431,12 +432,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			tvArray[i].setTextColor(getResources().getColor(R.color.bottom_bar_text_normal));
 		}
 	}
-
+Intent intentCallPhone;
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(CallPhoneService.class.getName()))
-			startService(new Intent(this, CallPhoneService.class));
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(CallPhoneService.class.getName())){
+			intentCallPhone=new Intent(this, CallPhoneService.class);
+			startService(intentCallPhone);
+		}
 
 	}
 
@@ -489,7 +492,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			if(showCellPhoneDialogBackground.getVisibility()!=View.VISIBLE){
-			moveTaskToBack(false);
+				moveTaskToBack(false);
 			}else{
 				showCellPhoneDialogBackground.setVisibility(View.GONE);
 			}
@@ -498,12 +501,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		return true;
 	}
 
+
+
 	@Override
 	protected void onDestroy() {
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
 		bleMoveReceiver = null;
-		stopService(new Intent(this, CallPhoneService.class));
+		stopService(intentCallPhone);
 		//关闭服务并设置为null
 
 		destorySocketService(1000);
@@ -578,7 +583,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
-
+					if(SocketConstant.REGISTER_STATUE_CODE==2){
+						indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+					}else if(SocketConstant.REGISTER_STATUE_CODE==3){
+						indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+					}
 					//运行注册流程
 					new Thread(new Runnable() {
 						@Override
@@ -642,6 +651,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(IsSuccessEntity entity) {
+		Log.e("registerType","registerType="+entity.getType());
 		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
 			if (entity.isSuccess()) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
@@ -723,6 +733,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						}
 					}
 				}
+			}
+
+			if(action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)){
+				stopService(intentCallPhone);
+
 			}
 		}
 	};
