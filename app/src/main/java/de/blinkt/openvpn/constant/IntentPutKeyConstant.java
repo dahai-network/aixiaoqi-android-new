@@ -29,6 +29,7 @@ public class IntentPutKeyConstant {
     public static final String PAYMENT_OF_TERMS="paymentOfTerms";
     public static final String HOW_TO_USE="howToUse";
     public static final String  DEVICE="device";
+    public static final String CELL_PHONE_TYPE="cell_phone_type";
     //个人中心
     public static final String TIP_TYPE="tiptype";
 

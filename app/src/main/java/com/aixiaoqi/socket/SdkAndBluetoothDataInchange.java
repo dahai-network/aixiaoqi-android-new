@@ -15,6 +15,8 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 
+import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
+import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 import static de.blinkt.openvpn.constant.Constant.IS_UP_TO_POWER;
 
 /**
@@ -62,8 +64,17 @@ public class SdkAndBluetoothDataInchange {
 
 				if(System.currentTimeMillis()-getSendBlueToothTime>5000&&!isReceiveBluetoothData){
 					Log.e("timer","接收不到蓝牙数据");
-					notifyRegisterFail();
-					isReceiveBluetoothData=true;
+//					notifyRegisterFail();
+					if(SocketConstant.REGISTER_STATUE_CODE==1){
+						JNIUtil.startSDK();
+					}else if(SocketConstant.REGISTER_STATUE_CODE==2){
+						TlvAnalyticalUtils.upToPower();
+						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
+
+					}
+
+//					sendToBluetoothAboutCardInfo(finalTemp);
+
 				}
 			}
 		}
@@ -119,10 +130,14 @@ public class SdkAndBluetoothDataInchange {
 		}
 		messages.add(temp);
 		if (txValue[3] == txValue[4]) {
+
 			mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
 
 			// 接收到一个完整的数据包,发送到SDK
 			int length = (txValue[2] & 0xff);
+			if(num>=19 && length<252){
+				length+=255;
+			}
 			String sendToOnService = null;
 			Log.e(TAG, "从蓝牙发出的完整数据 mStrSimPowerOnPacket:" + mStrSimPowerOnPacket.length() + "; \n"
 					+ mStrSimPowerOnPacket + "\nlength=" + length);
@@ -145,10 +160,13 @@ public class SdkAndBluetoothDataInchange {
 			sendToOneServerTemp = sendToOnService;
 			Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
 					+ sendToOneServerTemp);
+
 			//如果是上电命令则忽略
 			if(IS_UP_TO_POWER){
 				Log.e(TAG, "忽略的上电指令！");
 				IS_UP_TO_POWER=false;
+				num=0;
+				messages.clear();
 				return;
 			}
 			sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
@@ -189,11 +207,11 @@ public class SdkAndBluetoothDataInchange {
 
 				if(i>=1){
 					try {
-						Log.e(TAG, "发送延迟100ms");
-						Thread.sleep(10);
-						Log.e(TAG, "发送延迟200ms");
+						//Log.e(TAG, "发送延迟60ms");
+						//Thread.sleep(60);
+						//Log.e(TAG, "发送延迟60ms");
 					}catch (Exception e){
-						Log.e(TAG, "发送延迟300ms");
+
 					}
 				}
 				Log.e(TAG, "&&& server  message: " + messages[i].toString());

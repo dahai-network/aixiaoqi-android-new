@@ -10,11 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -29,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
@@ -40,7 +39,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.FragmentAdapter;
@@ -66,7 +64,6 @@ import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
-import de.blinkt.openvpn.views.dialog.DialogBalance;
 
 import static android.R.attr.type;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
@@ -81,6 +78,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	int viewPagerCurrentPageIndex = 0;
 	public static LinearLayout bottom_bar_linearLayout;
 	public static LinearLayout phone_linearLayout;
+	public static LinearLayout showCellPhoneDialogBackground;
+	public static LinearLayout cellPhoneLinearlayout;
+	public static TextView networkPhoneTv;
+	public static TextView cancelPhone;
+	public static TextView simRegisterPhoneTv;
 	public static LinearLayout[] llArray = new LinearLayout[5];
 	private ImageView phoneNumberImageView;
 	private ImageView callImageView;
@@ -104,8 +106,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private long RECONNECT_TIME = 180000;
 	SocketConnection socketUdpConnection;
 	SocketConnection socketTcpConnection;
-	private DialogBalance cardRuleBreakDialog;
-	private UUID[] uuids;
+
 
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
@@ -218,6 +219,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		ivArray[4] = (ImageView) findViewById(R.id.accountImageView);
 		ivArray[2] = (ImageView) findViewById(R.id.addressListImageView);
 		ivArray[3] = (ImageView) findViewById(R.id.sportImageView);
+		showCellPhoneDialogBackground = (LinearLayout) findViewById(R.id.show_cell_phone_dialog_background);
+		cellPhoneLinearlayout = (LinearLayout) findViewById(R.id.cell_phone_linearlayout);
+		networkPhoneTv = (TextView) findViewById(R.id.network_phone_tv);
+		simRegisterPhoneTv = (TextView) findViewById(R.id.sim_register_phone_tv);
+		cancelPhone = (TextView) findViewById(R.id.cancel_phone);
+
 		removeAllStatus();
 	}
 
@@ -482,7 +489,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if(showCellPhoneDialogBackground.getVisibility()!=View.VISIBLE){
 			moveTaskToBack(false);
+			}else{
+				showCellPhoneDialogBackground.setVisibility(View.GONE);
+			}
 
 		}
 		return true;
@@ -551,7 +562,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-//					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+//
 					GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
 					new Thread(http).start();
 					indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
@@ -569,21 +580,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
 
-//					//运行注册流程
-//					new Thread(new Runnable() {
-//						@Override
-//						public void run() {
-//							startDataframService();
-//							startSocketService();
-//							try {
-//								Thread.sleep(5000);
-//							} catch (InterruptedException e) {
-//								e.printStackTrace();
-//							}
-//							Log.e("phoneAddress", "main.start()");
-//							JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
-//						}
-//					}).start();
+					//运行注册流程
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							startDataframService();
+							startSocketService();
+							try {
+								Thread.sleep(5000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							Log.e("phoneAddress", "main.start()");
+							JNIUtil.getInstance().startSDK();
+						}
+					}).start();
 				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
@@ -669,6 +680,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 				//当有通话套餐的时候才允许注册操作
+
 				IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 				new Thread(http).start();
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
@@ -709,4 +721,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 		}
 	}
+
+
 }

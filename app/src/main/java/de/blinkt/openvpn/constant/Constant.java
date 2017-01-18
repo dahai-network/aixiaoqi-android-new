@@ -150,5 +150,6 @@ public class Constant {
 	//是否有订单参数
 	public static final String ISHAVEORDER = "ishaveorder";
 
-
+	public static final int NETWORK_CELL_PHONE=1;
+	public static final int SIM_CELL_PHONE=2;
 }

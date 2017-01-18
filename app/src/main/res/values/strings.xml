@@ -257,7 +257,9 @@
     <string name="engine_initialization">SIP 引擎初始化</string>
     <string name="engine_end">SIP 引擎初始化完成</string>
     <string name="engine_fail">SIP 引擎初始化失败</string>
-
+    <string name="network_phone">网络电话</string>
+    <string name="sim_register_phone">手环电话</string>
+    <string name="sim_register_phone_tip">手环内SIM未注册成功，请前往设备里边去注册成功在使用</string>
     <!--提交订单-->
     <string name="commit_order">提交订单</string>
     <string name="buy_days">购买天数</string>
