@@ -117,9 +117,11 @@ public class TlvAnalyticalUtils {
 			int typeParams = Integer.parseInt(_hexTag, 16);
 			if (tag == 4) {
 
-				if (typeParams == 2 || typeParams == 122 || typeParams == 160 || typeParams == 170 || typeParams == 171 || typeParams == 172 || typeParams == 180 || typeParams == 190 || typeParams == 191 || typeParams == 197) {
+				if (typeParams == 160) {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
-
+					SocketConstant.REGISTER_REMOTE_ADDRESS=value.substring(value.indexOf("_")+1,value.lastIndexOf("."));
+					SocketConstant.REGISTER_ROMOTE_PORT=value.substring(value.lastIndexOf(".")+1,value.length());
+					Log.e("RemoteAddress","REGISTER_REMOTE_ADDRESS="+SocketConstant.REGISTER_REMOTE_ADDRESS+"\nREGISTER_ROMOTE_PORT"+SocketConstant.REGISTER_ROMOTE_PORT);
 				}
 			} else if (tag == 16) {
 				if (typeParams == 1) {
@@ -132,7 +134,6 @@ public class TlvAnalyticalUtils {
 				if ("00".equals(tempTag)) {
 					if (typeParams == 199) {
 						upToPower();
-						IS_UP_TO_POWER = true;
 						Log.e("upToPower","upToPower");
 						try {
 							Thread.sleep(1500);
@@ -200,7 +201,8 @@ public class TlvAnalyticalUtils {
 		}
 		return tlvs;
 	}
-	private static void upToPower() {
+	public static void upToPower() {
+		IS_UP_TO_POWER = true;
 		byte[] value;
 		value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
 		ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
@@ -216,7 +218,7 @@ public class TlvAnalyticalUtils {
 		stringBuilder.replace(6, 8, "00");
 		sendToSdkLisener.sendServer(stringBuilder.toString());
 		if(TestProvider.sendYiZhengService!=null)
-		TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 	}
 
 	public static boolean isRegisterSucceed = false;

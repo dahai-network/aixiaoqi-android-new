@@ -3,6 +3,8 @@ package com.aixiaoqi.socket;
 import android.util.Log;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.aixiaoqi.socket.SocketConstant.EN_APPEVT_CMD_SETRST;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
@@ -36,15 +38,16 @@ public class JNIUtil {
         }
         return jniUtil;
     }
-    public static void  startSDK(String phonenumber){
+    public static void  startSDK(){
         Log.e("Blue_Chanl","启动startSDK - REGISTER_STATUE_CODE="+SocketConstant.REGISTER_STATUE_CODE);
+        String phoneNumber=  SharedUtils.getInstance().readString(Constant.USER_NAME);
         switch (SocketConstant.REGISTER_STATUE_CODE){
             case 0:
                 if(jniUtil!=null)
-                    phoneAddress(phonenumber);
+                    phoneAddress(phoneNumber);
                 break;
             case 1:
-                reStartSDK(phonenumber);
+                reStartSDK(phoneNumber);
                 break;
             case 2:
                 if(sendToSdkLisener!=null)

@@ -375,9 +375,7 @@
         <service
             android:name="de.blinkt.openvpn.bluetooth.service.UartService"
             android:enabled="true"/>
-        <service
-            android:name="de.blinkt.openvpn.bluetooth.service.ReceiveSocketService"
-            android:enabled="true"/>
+
         <service
             android:name="de.blinkt.openvpn.service.CallPhoneService"
             android:enabled="true"/>

@@ -20,7 +20,7 @@
 
     <color name="background_tab_pressed">#1AFFFFFF</color>
     <color name="mine_layout_stroke">#DBDBDB</color>
-
+    <color name="cell_phone_background">#a0404040</color>
     <color name="versiontitle">#404040</color>
     <color name="versionline">#dbe7ee</color>
     <color name="versioncontent">#7d7d7d</color>
@@ -93,4 +93,7 @@
     <color name="color_2d2d2d">#2d2d2d</color>
     <color name="color_373737">#373737</color>
     <color name="color_7d8698">#7d8698</color>
+    <color name="color_2bbf55">#2bbf55</color>
+    <color name="color_dddddd">#dddddd</color>
+    <color name="color_1892df">#1892df</color>
 </resources>

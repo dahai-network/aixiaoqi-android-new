@@ -124,6 +124,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	private static final int UART_PROFILE_DISCONNECTED = 21;
 	public static final String BLUESTATUSFROMPROMAIN = "bluestatusfrompromain";
 	private static int conStatusResource = R.string.index_connecting;
+
 	private TimerTask checkPowerTask = new TimerTask() {
 		@Override
 		public void run() {
