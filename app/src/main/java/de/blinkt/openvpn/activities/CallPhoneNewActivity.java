@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
+import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
 
 import cn.com.aixiaoqi.R;
@@ -50,12 +51,13 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	Chronometer timer;
 	String maxinumPhoneCallTime;
 	ConnectedReceive connectedReceive;
-
+int cellPhoneType;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_callphone);
+		cellPhoneType=getIntent().getIntExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,-1);
 		initView();
 		initData();
 		addListener();
@@ -124,9 +126,11 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 		if (info.getPhoneNumber().startsWith("sip:")) {
 			ICSOpenVPNApplication.the_sipengineReceive.MakeUrlCall(info.getPhoneNumber());
-		} else {
+		} else if(cellPhoneType==Constant.NETWORK_CELL_PHONE){
 			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("981" + deleteprefix("-",info.getPhoneNumber()) + "#" + maxinumPhoneCallTime);
 
+		}else if(cellPhoneType==Constant.SIM_CELL_PHONE){
+			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",info.getPhoneNumber()) );
 		}
 	}
 	private String deleteprefix(String type,String s) {

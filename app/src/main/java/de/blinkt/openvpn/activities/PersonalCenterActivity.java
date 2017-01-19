@@ -375,6 +375,7 @@ public class PersonalCenterActivity extends BaseActivity implements InterfaceCal
 					if (hasSdcard()) {
 						File tempFile = new File(Environment.getExternalStorageDirectory()
 								+ "/" + IMAGE_FILE_NAME);
+						tempFile.mkdirs();
 						cropRawPhoto(Uri.fromFile(tempFile));
 
 					} else {

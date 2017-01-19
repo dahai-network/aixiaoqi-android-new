@@ -135,7 +135,7 @@ public class Constant {
 	//获取空卡流程
 	public static final String GET_NULLCARDID = "9f0f";
 
-	public static final String DOWNLOAD_PATH = "/sdcard/aixiaoqi/upload.zip";
+	public static final String DOWNLOAD_PATH = "/sdcard/aixiaoqi";
 	public static  String UPLOAD_PATH = "/aixiaoqi/upload.zip";
 	public static final String DOWNLOAD_SUCCEED = "succeed";
 	public static final String DOWNLOAD_FAIL = "fail";

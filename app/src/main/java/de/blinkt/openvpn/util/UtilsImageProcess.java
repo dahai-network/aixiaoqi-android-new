@@ -24,10 +24,18 @@ public class UtilsImageProcess {
 		//在SD卡上创建目录
 		File tmpDir = new File(Environment.getExternalStorageDirectory() + "/aixoaqi");
 		if (!tmpDir.exists()) {
-			tmpDir.mkdir();
+			tmpDir.mkdirs();
 		}
 
 		File img = new File(tmpDir.getAbsolutePath() + "test.png");
+		if(!img.exists()){
+			try {
+
+				img.createNewFile();
+			}catch (Exception e){
+
+			}
+		}
 		try {
 			FileOutputStream fos = new FileOutputStream(img);
 			bm.compress(Bitmap.CompressFormat.PNG, 85, fos);
@@ -51,13 +59,21 @@ public class UtilsImageProcess {
 
 		File tmpDir = new File(Environment.getExternalStorageDirectory(), "/aixiaoqi");
 		if (!tmpDir.exists()) {
-			tmpDir.mkdir();
+			tmpDir.mkdirs();
 		}
 		File img1 = new File(tmpDir.getAbsolutePath() + "/test.png");
 		if (img1.exists()) {
 			img1.delete();
 		}
 		File img = new File(tmpDir.getAbsolutePath() + "/test.png");
+		if(!img.exists()){
+			try {
+
+				img.createNewFile();
+			}catch (Exception e){
+
+			}
+		}
 		try {
 			FileOutputStream fos = new FileOutputStream(img);
 			bm.compress(Bitmap.CompressFormat.PNG, 100, fos);
@@ -82,7 +98,7 @@ public class UtilsImageProcess {
 			is = context.getContentResolver().openInputStream(uri);
 			Bitmap bitmap = BitmapFactory.decodeStream(is);
 			if(is!=null)
-			is.close();
+				is.close();
 			return saveBitmap(bitmap);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -93,22 +109,7 @@ public class UtilsImageProcess {
 		}
 	}
 
-	/**
-	 * 在拍摄照片之前生成一个文件路径Uri，保证拍出来的照片没有被压缩太小,用日期作为文件名，确保唯一性
-	 */
-	public static String getSavePath() {
-		String saveDir = Environment.getExternalStorageDirectory() + "/org.chenlijian.test";
-		File dir = new File(saveDir);
-		if (!dir.exists()) {
-			dir.mkdir();
-		}
-		Date date = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss",
-				Locale.getDefault());
-		String fileName = saveDir + "/" + formatter.format(date) + ".png";
 
-		return fileName;
-	}
 
 	/**
 	 * 计算图片的缩放值

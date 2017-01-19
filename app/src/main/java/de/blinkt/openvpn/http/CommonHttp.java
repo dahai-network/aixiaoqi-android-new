@@ -182,9 +182,19 @@ public abstract class CommonHttp implements Callback, Runnable {
 
 
 	private void Download(Response response) {
-		File file = new File(Constant.DOWNLOAD_PATH);
+		File fileDir = new File(Constant.DOWNLOAD_PATH);
 		//此处可以增加判断文件是否存在的逻辑
+		if(!fileDir.exists()){
+			fileDir.mkdirs();
+		}
+		File file = new File(fileDir,"/upload.zip");
+		if(!file.exists()){
+			try {
+				file.createNewFile();
+			}catch (Exception e){
 
+			}
+		}
 		InputStream is = null;
 		byte[] buf = new byte[2048];
 		int len = 0;

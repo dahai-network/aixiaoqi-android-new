@@ -603,6 +603,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = (DownloadSkyUpgradePackageHttp) object;
 			if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				sendMessageToBlueTooth("AA080401A7");
+				try {
+					Thread.sleep(1000);
+				}catch (Exception e){
+
+				}
 				uploadToBlueTooth();
 			} else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				CommonTools.showShortToast(this, Constant.DOWNLOAD_FAIL);
