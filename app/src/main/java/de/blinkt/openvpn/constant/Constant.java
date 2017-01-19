@@ -6,8 +6,8 @@ import de.blinkt.openvpn.util.SharedUtils;
  * Created by Administrator on 2016/9/8 0008.
  */
 public class Constant {
-	public static final boolean IS_DEBUG = true;
-	public static final String BLUETOOTH_NAME = "AAA";
+	public static final boolean IS_DEBUG = false;
+	public static final String BLUETOOTH_NAME = "unitoys";
 	//购买套餐数量限制
 	public static final int LIMIT_COUNT = 30;
 
@@ -59,7 +59,7 @@ public class Constant {
 	public static final String CALL_MISSED = "未接";
 	//蓝牙指令
 	public static final String CONNECT_TO_DEVICE = "AABBCCDDEEFF";//连接指令
-	public static final String UP_TO_POWER = "AADB040174";//上电指令
+	public static final String UP_TO_POWER = "AADB040172";//上电指令
 	public static final String OFF_TO_POWER = "AADC040173";//断点指令
 	public static final String REAL_TIME_STEPS = "AA010401AE ";//实时步数
 	public static final String HISTORICAL_STEPS = "AA030401AC";//历史步数
@@ -125,7 +125,6 @@ public class Constant {
 
 	//写卡流程
 	public static final String RECEIVE_NULL_CARD_CHAR = "0344";
-	public static final String IS_WRITE_CARD_SUCCESS = "6e001";
 	public static final String UP_TP_POWER_RECEIVE = "c78031e073fe21";
 	public static final String WRITE_CARD_STEP1 = "9f1";
 	public static final String WRITE_CARD_91 = "91";
@@ -151,7 +150,7 @@ public class Constant {
 	public static final int ADD_PHONE_NUMBER = 105;
 	//是否有订单参数
 	public static final String ISHAVEORDER = "ishaveorder";
-
 	public static final int NETWORK_CELL_PHONE=1;
 	public static final int SIM_CELL_PHONE=2;
+
 }

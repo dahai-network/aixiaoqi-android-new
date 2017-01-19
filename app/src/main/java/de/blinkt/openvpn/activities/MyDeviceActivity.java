@@ -1,7 +1,6 @@
 package de.blinkt.openvpn.activities;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -33,8 +32,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -124,7 +121,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	private static final int UART_PROFILE_DISCONNECTED = 21;
 	public static final String BLUESTATUSFROMPROMAIN = "bluestatusfrompromain";
 	private static int conStatusResource = R.string.index_connecting;
-
 	private TimerTask checkPowerTask = new TimerTask() {
 		@Override
 		public void run() {
@@ -242,7 +238,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				break;
 		}
 	}
-	public static boolean  isUpgrade=false;
+
+	public static boolean isUpgrade = false;
 
 	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.findStatusLinearLayout, R.id.resetDeviceTextView, R.id.statueTextView})
 	public void onClick(View v) {
@@ -262,23 +259,20 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				sendMessageToBlueTooth("AAABCDEFAA");
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
+				ReceiveBLEMoveReceiver.isConnect = false;
 				mService.disconnect();
 				//传出注册失败
 				registFail();
 				//重启Uart服务
 				restartUartService();
-
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
-				//清空缓存的mac地址
-				ReceiveBLEMoveReceiver.isConnect = false;
-
 				break;
 			case R.id.callPayLinearLayout:
-				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION))&&!isUpgrade) {
+				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION)) && !isUpgrade) {
 					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
 					skyUpgradeHttp();
-				}else if(isUpgrade){
+				} else if (isUpgrade) {
 					showDialogUpgrade();
 				}
 				break;
@@ -286,7 +280,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						if (!CommonTools.isFastDoubleClick(2000)) {
+						if (!CommonTools.isFastDoubleClick(3000)) {
 							sendMessageToBlueTooth(FIND_DEVICE);
 						}
 					}
@@ -422,7 +416,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 								sinking.setVisibility(View.GONE);
 								noConnectImageView.setVisibility(View.VISIBLE);
 								statueTextView.setVisibility(View.VISIBLE);
-								ICSOpenVPNApplication.isConnect = false;
 								return;
 							}
 							if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
@@ -532,7 +525,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	public void onDestroy() {
 		super.onDestroy();
 		Log.d(TAG, "onDestroy()");
-		isUpgrade=false;
+		isUpgrade = false;
 		if (isDfuServiceRunning()) {
 			stopService(new Intent(this, DfuService.class));
 		}
@@ -619,7 +612,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (isDfuServiceRunning()) {
 			return;
 		}
-		isUpgrade=true;
+		isUpgrade = true;
 		showDialogUpgrade();
 
 		final DfuServiceInitiator starter = new DfuServiceInitiator(utils.readString(Constant.IMEI));
@@ -645,7 +638,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void showDialogUpgrade() {
-		isUpgrade=true;
+		isUpgrade = true;
 		upgradeDialog.show();
 	}
 
@@ -682,7 +675,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		} else if (type == 3) {
 			sendMessageToBlueTooth(RESTORATION);
 		} else if (type == DOWNLOAD_SKY_UPGRADE) {
-			if (!TextUtils.isEmpty(url)){
+			if (!TextUtils.isEmpty(url)) {
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKDEVICEUPGRADE);
 				downloadSkyUpgradePackageHttp(url);
@@ -696,7 +689,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 
 	private boolean isDfuServiceRunning() {
-		if(ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName())){
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName())) {
 			return true;
 		}
 		return false;

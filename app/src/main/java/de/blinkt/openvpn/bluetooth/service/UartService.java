@@ -346,20 +346,6 @@ public class UartService extends Service implements Serializable {
 		RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
 		Log.i("getService", "获取服务：" + RxService);
 		if (RxService == null) {
-			int j = 0;
-			for (int i = 0; i < BluetoothGattServices.size(); i++) {
-				Log.i("getService", "获取服务群" + ++j);
-				RxService = BluetoothGattServices.get(i);
-				if (RxService != null && RxService.getCharacteristic(TX_CHAR_UUID1) != null) {
-					if (i == BluetoothGattServices.size() - 1) {
-						RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
-					}
-					break;
-				}
-			}
-
-		}
-		if (RxService == null) {
 			showMessage("Rx service not found!");
 			broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
 			return;
@@ -395,6 +381,8 @@ public class UartService extends Service implements Serializable {
 		//如果mBluetoothGatt为空，意味着连接中断，所以不允许继续传输数据
 		if (mBluetoothGatt == null) {
 			Log.e("Blue_Chanl", "蓝牙已断开，发送失败！");
+			mConnectionState = STATE_DISCONNECTED;
+			broadcastUpdate(ACTION_GATT_DISCONNECTED);
 			return;
 		}
 		if (RxService == null) {

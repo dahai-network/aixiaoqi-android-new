@@ -1,6 +1,5 @@
 package de.blinkt.openvpn.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;

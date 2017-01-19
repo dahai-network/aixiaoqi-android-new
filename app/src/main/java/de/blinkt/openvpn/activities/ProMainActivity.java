@@ -566,7 +566,7 @@ Intent intentCallPhone;
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-//
+//					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 					GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
 					new Thread(http).start();
 					indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
@@ -656,8 +656,8 @@ Intent intentCallPhone;
 			if (entity.isSuccess()) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 			} else {
-				destorySocketService(type);
-				switch (type) {
+				destorySocketService(entity.getFailType());
+				switch (entity.getFailType()) {
 					case SocketConstant.REGISTER_FAIL:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail));
 						break;
@@ -706,7 +706,6 @@ Intent intentCallPhone;
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 				//当有通话套餐的时候才允许注册操作
-
 				IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 				new Thread(http).start();
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
@@ -752,6 +751,4 @@ Intent intentCallPhone;
 			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 		}
 	}
-
-
 }

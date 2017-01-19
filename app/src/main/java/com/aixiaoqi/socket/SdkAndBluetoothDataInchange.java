@@ -15,10 +15,6 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 
-import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
-import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
-import static de.blinkt.openvpn.constant.Constant.IS_UP_TO_POWER;
-
 /**
  * Created by Administrator on 2017/1/5 0005.
  */
@@ -152,13 +148,13 @@ public class SdkAndBluetoothDataInchange {
 					+ sendToOneServerTemp);
 
 			//如果是上电命令则忽略
-			if(IS_UP_TO_POWER){
-				Log.e(TAG, "忽略的上电指令！");
-				IS_UP_TO_POWER=false;
-				num=0;
-				messages.clear();
-				return;
-			}
+//			if(IS_UP_TO_POWER){
+//				Log.e(TAG, "忽略的上电指令！");
+//				IS_UP_TO_POWER=false;
+//				num=0;
+//				messages.clear();
+//				return;
+//			}
 			sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
 
 			num = 0;

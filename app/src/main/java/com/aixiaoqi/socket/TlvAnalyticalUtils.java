@@ -15,7 +15,6 @@ import de.blinkt.openvpn.model.IsSuccessEntity;
 
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
-import static de.blinkt.openvpn.constant.Constant.IS_UP_TO_POWER;
 
 /**
  * TLV的解析
@@ -130,13 +129,7 @@ public class TlvAnalyticalUtils {
 				if ("00".equals(tempTag)) {
 					if (typeParams == 199) {
 						upToPower();
-						Log.e("upToPower","upToPower");
-						try {
-							Thread.sleep(1500);
-						}catch ( Exception e){
 
-						}
-						Log.e("upToPower1","upToPower1");
 						byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
 					}
@@ -203,7 +196,6 @@ public class TlvAnalyticalUtils {
 	}
 
 	public static void upToPower() {
-		IS_UP_TO_POWER = true;
 		byte[] value;
 		value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
 		ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
