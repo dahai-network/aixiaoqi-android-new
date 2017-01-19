@@ -649,6 +649,7 @@ Intent intentCallPhone;
 									}
 									Log.i("test", "deviceName:" + device.getName());
 									if (deviceAddress.equals(device.getAddress())) {
+										scanLeDevice(false);
 										mService.connect(deviceAddress);
 									}
 								}

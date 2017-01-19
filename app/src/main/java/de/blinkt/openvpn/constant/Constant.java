@@ -1,7 +1,5 @@
 package de.blinkt.openvpn.constant;
 
-import de.blinkt.openvpn.util.SharedUtils;
-
 /**
  * Created by Administrator on 2016/9/8 0008.
  */
@@ -153,4 +151,5 @@ public class Constant {
 	public static final int NETWORK_CELL_PHONE=1;
 	public static final int SIM_CELL_PHONE=2;
 
+	public static final int RIIS = 75;
 }
