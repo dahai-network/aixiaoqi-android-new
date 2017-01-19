@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -144,21 +145,27 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_device);
 		ButterKnife.bind(this);
+		Log.e(TAG,"t0="+System.currentTimeMillis());
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBtAdapter == null) {
 //			Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
 			finish();
 			return;
 		}
+		Log.e(TAG,"t1="+System.currentTimeMillis());
 		initSet();
+		Log.e(TAG,"t2="+System.currentTimeMillis());
 		serviceInit();
+		Log.e(TAG,"t3="+System.currentTimeMillis());
 		initDialogUpgrade();
+		Log.e(TAG,"t4="+System.currentTimeMillis());
 	}
 
 
 	DfuProgressListener mDfuProgressListener;
 
 	private void skyUpgradeHttp() {
+		Log.e(TAG,"skyUpgradeHttp");
 		long beforeRequestTime = utils.readLong(Constant.UPGRADE_INTERVAL);
 		if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
 		{
@@ -169,6 +176,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void initSet() {
+		Log.e(TAG,"initSet");
+
 		int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
 		checkPowerTimer.schedule(checkPowerTask, 100, 60000);
 		if (mService != null)
@@ -199,6 +208,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
 		EventBus.getDefault().register(this);
+
 	}
 
 
@@ -214,7 +224,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					deviceAddresstemp = deviceAddress;
 					macTextView.setText(deviceAddresstemp);
 					utils.writeString(Constant.IMEI, deviceAddress);
-
 					conStatusLinearLayout.setVisibility(View.VISIBLE);
 					setConStatus(conStatusResource);
 					firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
@@ -273,7 +282,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
 					skyUpgradeHttp();
 				} else if (isUpgrade) {
-					showDialogUpgrade();
+					if(upgradeDialog!=null&&!upgradeDialog.isShowing()){
+						showDialogUpgrade();
+					}
 				}
 				break;
 			case R.id.findStatusLinearLayout:
@@ -304,6 +315,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void registFail() {
+		Log.e(TAG,"registFail");
 		IsSuccessEntity entity = new IsSuccessEntity();
 		entity.setType(Constant.REGIST_TYPE);
 		entity.setSuccess(false);
@@ -332,6 +344,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void clickFindBracelet() {
+		Log.e(TAG,"clickFindBracelet");
 		if (mBtAdapter != null) {
 			scanLeDevice(false);
 			Intent intent = new Intent(MyDeviceActivity.this, BindDeviceActivity.class);
@@ -357,7 +370,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	private void sendMessageToBlueTooth(final String message) {
 		byte[] value;
-		Log.i("toBLue", message);
+		Log.i("TAG", "sendMessageToBlueTooth="+message);
 		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
 		mService.writeRXCharacteristic(value);
 	}
@@ -491,6 +504,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	};
 
 	private void setView() {
+
 		dismissProgress();
 		int electricityInt = utils.readInt(ELECTRICITY);
 		noConnectImageView.setVisibility(View.GONE);
@@ -517,6 +531,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	@Override
 	protected void onPause() {
+		Log.d(TAG, "onResume");
 		super.onPause();
 		DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
 	}
@@ -541,6 +556,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
+		Log.d(TAG, "rightComplete");
 		if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
 			BindDeviceHttp http = (BindDeviceHttp) object;
 			if (http.getStatus() == 1) {
@@ -603,17 +619,21 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	String url;
 
 	private void showDialogGOUpgrade(String desc) {
+		Log.d(TAG, "showDialogGOUpgrade");
 		//不能按返回键，只能二选其一
 		DialogBalance Upgrade = new DialogBalance(this, MyDeviceActivity.this, R.layout.dialog_balance, DOWNLOAD_SKY_UPGRADE);
 		Upgrade.changeText(desc, getResources().getString(R.string.upgrade),1);
 	}
 
 	private void uploadToBlueTooth() {
+		Log.d(TAG, "uploadToBlueTooth");
 		if (isDfuServiceRunning()) {
 			return;
 		}
 		isUpgrade = true;
-		showDialogUpgrade();
+		if(noDevicedialog!=null&&!noDevicedialog.getDialog().isShowing()){
+			showDialogUpgrade();
+		}
 
 		final DfuServiceInitiator starter = new DfuServiceInitiator(utils.readString(Constant.IMEI));
 		if (Environment.getExternalStorageState().equals(
@@ -631,6 +651,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 
 	private void initDialogUpgrade() {
+		Log.d(TAG, "initDialogUpgrade");
 		DialogUpgrade dialogUpgrade = new DialogUpgrade(this, MyDeviceActivity.this, R.layout.dialog_upgrade, 3);
 		upgradeDialog = dialogUpgrade.getDialogUpgrade();
 		mDfuProgressListener = dialogUpgrade.getDfuProgressListener();
@@ -638,6 +659,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void showDialogUpgrade() {
+		Log.d(TAG, "showDialogUpgrade");
 		isUpgrade = true;
 		upgradeDialog.show();
 	}
@@ -847,6 +869,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(IsSuccessEntity entity) {
+		Log.e(TAG,"onIsSuccessEntity");
 		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
 			if (entity.isSuccess()) {
 				setConStatus(R.string.index_high_signal);
@@ -873,6 +896,10 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onPercentEntity(PercentEntity entity) {
+		if(SocketConstant.REGISTER_STATUE_CODE==3){
+			percentTextView.setVisibility(View.GONE);
+			return;
+		}
 		double percent = entity.getPercent();
 		int percentInt = (int) (percent / 1.6);
 		Log.i(TAG, "写卡进度：" + percentInt + "%");

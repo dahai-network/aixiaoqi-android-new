@@ -45,7 +45,6 @@ public abstract class UdpClient implements Runnable {
                         SocketConstant.REGISTER_STATUE_CODE=1;
                     }
 
-                    Log.e("Blue_Chanl","收到原始UDP消息："+receiveMsg);
                     if (!tag.equals(getSorcketTag())) {
                         setSorketTag(tag);
                         sendToBluetoothMsg(receiveMsg);

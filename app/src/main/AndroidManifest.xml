@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="${JPUSH_PKGNAME}.permission.JPUSH_MESSAGE"/>
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
     <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
@@ -303,7 +304,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="no.nordicsemi.android.action.DFU_UPLOAD"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>

@@ -239,7 +239,8 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 		sharedUtils.delete(Constant.PHONE_NUMBER_LIST);
 		sharedUtils.delete(Constant.PASSWORD);
 		sharedUtils.writeBoolean(Constant.ISFIRSTIN, true);
-
+		sharedUtils.delete(Constant.JPUSH_ALIAS);
+		sharedUtils.delete(Constant.TEL);
 		//友盟账号统计
 		MobclickAgent.onProfileSignOff();
 		Intent intent = new Intent();
