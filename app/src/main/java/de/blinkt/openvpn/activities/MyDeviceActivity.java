@@ -277,9 +277,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
 					skyUpgradeHttp();
 				} else if (isUpgrade) {
-					if(upgradeDialog!=null&&!upgradeDialog.isShowing()){
-						showDialogUpgrade();
-					}
+					showSkyUpgrade();
 				}
 				break;
 			case R.id.findStatusLinearLayout:
@@ -631,9 +629,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			return;
 		}
 		isUpgrade = true;
-		if(noDevicedialog!=null&&!noDevicedialog.getDialog().isShowing()){
-			showDialogUpgrade();
-		}
+		showSkyUpgrade();
 
 		final DfuServiceInitiator starter = new DfuServiceInitiator(utils.readString(Constant.IMEI));
 		if (Environment.getExternalStorageState().equals(
@@ -645,6 +641,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			starter.start(this, DfuService.class);
 		}
 
+	}
+
+	private void showSkyUpgrade() {
+		if(upgradeDialog!=null&&!upgradeDialog.isShowing()){
+			showDialogUpgrade();
+		}
 	}
 
 	Dialog upgradeDialog;
