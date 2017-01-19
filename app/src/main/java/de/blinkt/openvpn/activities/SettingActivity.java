@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -13,10 +14,15 @@ import android.widget.TextView;
 import com.tencent.bugly.beta.Beta;
 import com.umeng.analytics.MobclickAgent;
 
+import java.lang.ref.WeakReference;
+import java.util.Set;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 import cn.qfishphone.sipengine.SipEngineCore;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.constant.Constant;
@@ -28,6 +34,7 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.ExitHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
@@ -54,7 +61,7 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 	@BindView(R.id.exitBtn)
 	Button exitBtn;
 	private SipEngineCore sipEngineCore;
-
+	private static final int MSG_SET_ALIAS = 1001;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -165,8 +172,67 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 	 * 退出操作
 	 */
 
+	private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+
+		@Override
+		public void gotResult(int code, String alias, Set<String> tags) {
+
+			SharedUtils sharedUtils = SharedUtils.getInstance();
+
+			switch (code) {
+				case 0:
+					sharedUtils.writeString(Constant.JPUSH_ALIAS,
+							Constant.JPUSH_ALIAS_SUCCESS);
+					break;
+
+				case 6002:
+
+					if (NetworkUtils.isNetworkAvailable(ICSOpenVPNApplication.getContext())) {
+						handler.sendMessageDelayed(handler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+					}
+					break;
+
+				default:
+
+
+			}
+
+
+		}
+
+	};
+
+	private final JpushHandler handler = new JpushHandler(mAliasCallback);
+
+	private static class JpushHandler extends Handler {
+
+		private final WeakReference<TagAliasCallback> callback;
+
+		public JpushHandler(TagAliasCallback mAliasCallback) {
+			this.callback = new WeakReference<>(mAliasCallback);
+		}
+
+		@Override
+		public void handleMessage(android.os.Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+				case MSG_SET_ALIAS:
+					JPushInterface.setAliasAndTags(ICSOpenVPNApplication.getContext(), (String) msg.obj, null, callback.get());
+					break;
+				default:
+			}
+		}
+
+	}
+
+	private void setAlias() {
+		String alias = "";
+		handler.sendMessage(handler.obtainMessage(MSG_SET_ALIAS, alias));
+	}
+
 	private void exitOperate() {
 		//友盟方法统计
+		setAlias();
 		MobclickAgent.onEvent(context, CLICKEXITLOGIN);
 		SharedUtils sharedUtils = SharedUtils.getInstance();
 		sharedUtils.delete(Constant.TOKEN);
