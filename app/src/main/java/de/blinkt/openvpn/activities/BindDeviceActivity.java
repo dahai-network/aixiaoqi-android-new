@@ -161,7 +161,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
 									if (device.getName().contains(Constant.BLUETOOTH_NAME)) {
 										//如果信号强度绝对值大于这个值（距离\）,则配对
-										if (Math.abs(rssi) < 75) {
+										if (Math.abs(rssi) < Constant.RIIS) {
 											//找到设备后停止搜索蓝牙
 											scanLeDevice(false);
 											deviceAddress = device.getAddress();

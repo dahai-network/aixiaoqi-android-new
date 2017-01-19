@@ -71,7 +71,6 @@ import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
-import static android.R.attr.type;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.activities.BindDeviceActivity.FAILT;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
@@ -851,7 +850,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			if (entity.isSuccess()) {
 				setConStatus(R.string.index_high_signal);
 			} else {
-				switch (type) {
+				switch (entity.getFailType()) {
 					case SocketConstant.REGISTER_FAIL:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail));
 						break;
