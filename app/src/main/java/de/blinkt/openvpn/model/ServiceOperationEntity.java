@@ -1,11 +1,13 @@
 package de.blinkt.openvpn.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/1/18.
  * 服务操作类，用于提供给EventBus作为操作
  */
 
-public class ServiceOperationEntity {
+public class ServiceOperationEntity implements Serializable{
 	//服务操作常量(删除)
 	public static final int REMOVE_SERVICE = 0;
 	//服务操作常量（创建）

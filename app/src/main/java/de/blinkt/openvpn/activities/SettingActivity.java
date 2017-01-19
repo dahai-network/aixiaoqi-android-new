@@ -178,11 +178,14 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 		MobclickAgent.onProfileSignOff();
 		Intent intent = new Intent();
 		intent.setAction(SportFragment.CLEARSPORTDATA);
+		intent.setAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
 		ICSOpenVPNApplication.uartService.disconnect();
 		ICSOpenVPNApplication.getInstance().sendBroadcast(intent);
-		ICSOpenVPNApplication.getInstance().finishAllActivity();
+		finish();
 		toActivity(LoginMainActivity.class);
 	}
+
+
 
 	@Override
 	public void dialogText(int type, String text) {

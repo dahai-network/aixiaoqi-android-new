@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
@@ -38,7 +39,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.FragmentAdapter;
@@ -65,7 +65,6 @@ import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
-import de.blinkt.openvpn.views.dialog.DialogBalance;
 
 import static android.R.attr.type;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
@@ -80,6 +79,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	int viewPagerCurrentPageIndex = 0;
 	public static LinearLayout bottom_bar_linearLayout;
 	public static LinearLayout phone_linearLayout;
+	public static LinearLayout showCellPhoneDialogBackground;
+	public static LinearLayout cellPhoneLinearlayout;
+	public static TextView networkPhoneTv;
+	public static TextView cancelPhone;
+	public static TextView simRegisterPhoneTv;
 	public static LinearLayout[] llArray = new LinearLayout[5];
 	private ImageView phoneNumberImageView;
 	private ImageView callImageView;
@@ -103,8 +107,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private long RECONNECT_TIME = 180000;
 	SocketConnection socketUdpConnection;
 	SocketConnection socketTcpConnection;
-	private DialogBalance cardRuleBreakDialog;
-	private UUID[] uuids;
+	public static String STOP_CELL_PHONE_SERVICE = "stopservice";
 
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
@@ -215,6 +218,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		ivArray[4] = (ImageView) findViewById(R.id.accountImageView);
 		ivArray[2] = (ImageView) findViewById(R.id.addressListImageView);
 		ivArray[3] = (ImageView) findViewById(R.id.sportImageView);
+		showCellPhoneDialogBackground = (LinearLayout) findViewById(R.id.show_cell_phone_dialog_background);
+		cellPhoneLinearlayout = (LinearLayout) findViewById(R.id.cell_phone_linearlayout);
+		networkPhoneTv = (TextView) findViewById(R.id.network_phone_tv);
+		simRegisterPhoneTv = (TextView) findViewById(R.id.sim_register_phone_tv);
+		cancelPhone = (TextView) findViewById(R.id.cancel_phone);
+
 		removeAllStatus();
 	}
 
@@ -225,6 +234,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
 		intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
 		intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+		intentFilter.addAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
 		return intentFilter;
 	}
 
@@ -296,7 +306,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (mBluetoothAdapter == null) {
 							return;
 						}
-						while (mService.mConnectionState != UartService.STATE_CONNECTED) {
+						while (mService!=null&&mService.mConnectionState != UartService.STATE_CONNECTED) {
 							try {
 								scanDeviceFiveSecond();
 								Thread.sleep(RECONNECT_TIME);
@@ -422,12 +432,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			tvArray[i].setTextColor(getResources().getColor(R.color.bottom_bar_text_normal));
 		}
 	}
-
+Intent intentCallPhone;
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(CallPhoneService.class.getName()))
-			startService(new Intent(this, CallPhoneService.class));
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(CallPhoneService.class.getName())){
+			intentCallPhone=new Intent(this, CallPhoneService.class);
+			startService(intentCallPhone);
+		}
 
 	}
 
@@ -479,18 +491,24 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			moveTaskToBack(false);
+			if(showCellPhoneDialogBackground.getVisibility()!=View.VISIBLE){
+				moveTaskToBack(false);
+			}else{
+				showCellPhoneDialogBackground.setVisibility(View.GONE);
+			}
 
 		}
 		return true;
 	}
+
+
 
 	@Override
 	protected void onDestroy() {
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
 		bleMoveReceiver = null;
-		stopService(new Intent(this, CallPhoneService.class));
+		stopService(intentCallPhone);
 		//关闭服务并设置为null
 
 		destorySocketService(1000);
@@ -565,22 +583,26 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
-
-//					//运行注册流程
-//					new Thread(new Runnable() {
-//						@Override
-//						public void run() {
-//							startDataframService();
-//							startSocketService();
-//							try {
-//								Thread.sleep(5000);
-//							} catch (InterruptedException e) {
-//								e.printStackTrace();
-//							}
-//							Log.e("phoneAddress", "main.start()");
-//							JNIUtil.getInstance().startSDK();
-//						}
-//					}).start();
+					if(SocketConstant.REGISTER_STATUE_CODE==2){
+						indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+					}else if(SocketConstant.REGISTER_STATUE_CODE==3){
+						indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+					}
+					//运行注册流程
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							startDataframService();
+							startSocketService();
+							try {
+								Thread.sleep(5000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							Log.e("phoneAddress", "main.start()");
+							JNIUtil.getInstance().startSDK(1);
+						}
+					}).start();
 				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
@@ -629,6 +651,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(IsSuccessEntity entity) {
+		Log.e("registerType","registerType="+entity.getType());
 		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
 			if (entity.isSuccess()) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
@@ -709,6 +732,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						}
 					}
 				}
+			}
+
+			if(action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)){
+				stopService(intentCallPhone);
+
 			}
 		}
 	};

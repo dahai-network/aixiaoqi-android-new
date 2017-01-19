@@ -579,8 +579,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
 			if (skyUpgradeHttp.getStatus() == 1) {
 				if (skyUpgradeHttp.getUpgradeEntity() != null) {
-					url = skyUpgradeHttp.getUpgradeEntity().getUrl();
-					showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
+					if(skyUpgradeHttp.getUpgradeEntity().getVersion()>Integer.parseInt(utils.readString(Constant.BRACELETVERSION))){
+						url = skyUpgradeHttp.getUpgradeEntity().getUrl();
+						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
+					}else{
+						CommonTools.showShortToast(this,getString(R.string.last_version));
+					}
 				}
 			}
 
@@ -595,22 +599,13 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		}
 	}
 
-	private void unpairDevice(BluetoothDevice device) {
-		try {
-			Method m = device.getClass()
-					.getMethod("removeBond", (Class[]) null);
-			m.invoke(device, (Object[]) null);
-		} catch (Exception e) {
-
-		}
-	}
 
 	String url;
 
 	private void showDialogGOUpgrade(String desc) {
 		//不能按返回键，只能二选其一
 		DialogBalance Upgrade = new DialogBalance(this, MyDeviceActivity.this, R.layout.dialog_balance, DOWNLOAD_SKY_UPGRADE);
-		Upgrade.changeText(desc, getResources().getString(R.string.upgrade));
+		Upgrade.changeText(desc, getResources().getString(R.string.upgrade),1);
 	}
 
 	private void uploadToBlueTooth() {

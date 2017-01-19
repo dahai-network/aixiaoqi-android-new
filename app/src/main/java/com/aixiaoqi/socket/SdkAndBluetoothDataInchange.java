@@ -15,10 +15,6 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 
-import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
-import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
-import static de.blinkt.openvpn.constant.Constant.IS_UP_TO_POWER;
-
 /**
  * Created by Administrator on 2017/1/5 0005.
  */
@@ -64,17 +60,7 @@ public class SdkAndBluetoothDataInchange {
 
 				if(System.currentTimeMillis()-getSendBlueToothTime>5000&&!isReceiveBluetoothData){
 					Log.e("timer","接收不到蓝牙数据");
-//					notifyRegisterFail();
-					if(SocketConstant.REGISTER_STATUE_CODE==1){
-						JNIUtil.startSDK();
-					}else if(SocketConstant.REGISTER_STATUE_CODE==2){
-						TlvAnalyticalUtils.upToPower();
-						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
-
-					}
-
-//					sendToBluetoothAboutCardInfo(finalTemp);
-
+				JNIUtil.startSDK(2);
 				}
 			}
 		}
@@ -110,7 +96,7 @@ public class SdkAndBluetoothDataInchange {
 
 				lastTime=System.currentTimeMillis();
 				sendToBluetoothAboutCardInfo(finalTemp);
-			}else if(count>3){
+			}else if(count>3&&count<5){
 				Log.e(TAG, "蓝牙数据出错重发   注册失败" );
 				notifyRegisterFail();
 			}
@@ -162,13 +148,13 @@ public class SdkAndBluetoothDataInchange {
 					+ sendToOneServerTemp);
 
 			//如果是上电命令则忽略
-			if(IS_UP_TO_POWER){
-				Log.e(TAG, "忽略的上电指令！");
-				IS_UP_TO_POWER=false;
-				num=0;
-				messages.clear();
-				return;
-			}
+//			if(IS_UP_TO_POWER){
+//				Log.e(TAG, "忽略的上电指令！");
+//				IS_UP_TO_POWER=false;
+//				num=0;
+//				messages.clear();
+//				return;
+//			}
 			sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
 
 			num = 0;
@@ -226,7 +212,7 @@ public class SdkAndBluetoothDataInchange {
 
 		if (temp.contains("0x0000")) {
 			byte[] value;
-			value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
+			value = HexStringExchangeBytesUtil.hexStringToBytes("AADB040174");
 			mService.writeRXCharacteristic(value);
 			Log.e(TAG, "SIM发送上电数据");
 		} else {

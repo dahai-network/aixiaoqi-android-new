@@ -38,7 +38,7 @@ public class JNIUtil {
         }
         return jniUtil;
     }
-    public static void  startSDK(){
+    public static void  startSDK(int reconnectType){//0,默认为0，表示正常情况。1表示蓝牙断开,2接收不到蓝牙数据。3表示Tcp断开
         Log.e("Blue_Chanl","启动startSDK - REGISTER_STATUE_CODE="+SocketConstant.REGISTER_STATUE_CODE);
         String phoneNumber=  SharedUtils.getInstance().readString(Constant.USER_NAME);
         switch (SocketConstant.REGISTER_STATUE_CODE){
@@ -47,14 +47,20 @@ public class JNIUtil {
                     phoneAddress(phoneNumber);
                 break;
             case 1:
-                reStartSDK(phoneNumber);
+                reStartSDK();
                 break;
             case 2:
-                if(sendToSdkLisener!=null)
-                sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
-                if(sendYiZhengService!=null)
-                sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+                if(reconnectType==1||reconnectType==2){
+                reSDK();
+                }
+
             break;
+            case 3:
+                if(reconnectType==2){
+                    reSDK();
+                }
+
+                break;
             default:
                 Log.e("ReconnectBluebooth","RegisterSucceed");
                 break;
@@ -62,7 +68,12 @@ public class JNIUtil {
 
 	}
 
-	private static void phoneAddress(String phonenumber) {
+    private static void reSDK( ) {
+        if(sendToSdkLisener!=null)
+        sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
+    }
+
+    private static void phoneAddress(String phonenumber) {
 		Log.e("phoneAddress", "phoneAddress");
 		try {if (matchesPhoneNumber(phonenumber) == 1 || matchesPhoneNumber(phonenumber) == 2)
 				jniUtil.main((byte) 1);
@@ -74,10 +85,9 @@ public class JNIUtil {
 		}
 	}
 
-    public static void  reStartSDK(String phonenumber){
+    public static void  reStartSDK( ){
         if(jniUtil!=null)
             jniUtil.simComEvtApp2Drv((byte)0,Byte.parseByte(EN_APPEVT_CMD_SETRST),0 , HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
-//        phoneAddress(phonenumber);
     }
     public static int matchesPhoneNumber(String phone_number) {
 

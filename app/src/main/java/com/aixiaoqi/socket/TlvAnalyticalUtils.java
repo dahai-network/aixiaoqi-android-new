@@ -15,7 +15,6 @@ import de.blinkt.openvpn.model.IsSuccessEntity;
 
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
-import static de.blinkt.openvpn.constant.Constant.IS_UP_TO_POWER;
 
 /**
  * TLV的解析
@@ -35,18 +34,10 @@ public class TlvAnalyticalUtils {
 		int responeCode = Integer.parseInt(responeString, 16);
 		responeCode = responeCode & 127;
 		if (responeCode == 41) {
-			IsSuccessEntity entity = new IsSuccessEntity();
-			entity.setType(Constant.REGIST_CALLBACK_TYPE);
-			entity.setFailType(SocketConstant.REGISTER_FAIL);
-			entity.setSuccess(false);
-			EventBus.getDefault().post(entity);//注册失败,未授权
+			registerFail();
 			return null;
 		} else if (responeCode == 39) {
-			IsSuccessEntity entity = new IsSuccessEntity();
-			entity.setType(Constant.REGIST_CALLBACK_TYPE);
-			entity.setFailType(SocketConstant.REGISTER_FAIL);
-			entity.setSuccess(false);
-			EventBus.getDefault().post(entity);//注册失败，无卡可用
+			registerFail();
 			return null;
 		}
 		tag = tag & 127;
@@ -59,6 +50,10 @@ public class TlvAnalyticalUtils {
 		}
 		position = position + 8;
 		String sessionId = hexString.substring(position, position + 8);
+		if(!SocketConstant.SESSION_ID.equals(sessionId)&&!SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)){
+			SocketConstant.SESSION_ID = sessionId;
+			return null;
+		}
 		SocketConstant.SESSION_ID = sessionId;
 		position = position + 8;
 		String hexStringMessageNumber = hexString.substring(position, position + 4);
@@ -119,9 +114,9 @@ public class TlvAnalyticalUtils {
 
 				if (typeParams == 160) {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
-					SocketConstant.REGISTER_REMOTE_ADDRESS = value.substring(value.indexOf("_") + 1, value.lastIndexOf("."));
-					SocketConstant.REGISTER_ROMOTE_PORT = value.substring(value.lastIndexOf(".") + 1, value.length());
-					Log.e("RemoteAddress", "REGISTER_REMOTE_ADDRESS=" + SocketConstant.REGISTER_REMOTE_ADDRESS + "\nREGISTER_ROMOTE_PORT" + SocketConstant.REGISTER_ROMOTE_PORT);
+					SocketConstant.REGISTER_REMOTE_ADDRESS=value.substring(value.indexOf("_")+1,value.lastIndexOf("."));
+					SocketConstant.REGISTER_ROMOTE_PORT=value.substring(value.lastIndexOf(".")+1,value.length());
+					Log.e("RemoteAddress","REGISTER_REMOTE_ADDRESS="+SocketConstant.REGISTER_REMOTE_ADDRESS+"\nREGISTER_ROMOTE_PORT"+SocketConstant.REGISTER_ROMOTE_PORT);
 				}
 			} else if (tag == 16) {
 				if (typeParams == 1) {
@@ -134,18 +129,12 @@ public class TlvAnalyticalUtils {
 				if ("00".equals(tempTag)) {
 					if (typeParams == 199) {
 						upToPower();
-						Log.e("upToPower", "upToPower");
-						try {
-							Thread.sleep(1500);
-						} catch (Exception e) {
 
-						}
-						Log.e("upToPower1", "upToPower1");
 						byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
 					}
 				} else if (typeParams == 199) {
-					if (REGISTER_STATUE_CODE == 2) {//第一次是010101的时候不去复位SDK,第二次的时候才对SDK进行复位
+					if(REGISTER_STATUE_CODE==2){//第一次是010101的时候不去复位SDK,第二次的时候才对SDK进行复位
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 					}
 					SocketConstant.REGISTER_STATUE_CODE = 2;
@@ -188,11 +177,7 @@ public class TlvAnalyticalUtils {
 						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
 						REGISTER_STATUE_CODE = 0;
-						IsSuccessEntity entity = new IsSuccessEntity();
-						entity.setType(Constant.REGIST_CALLBACK_TYPE);
-						entity.setFailType(SocketConstant.REGISTER_FAIL);
-						entity.setSuccess(false);
-						EventBus.getDefault().post(entity);
+						registerFail();
 					}
 				}
 			}
@@ -202,13 +187,19 @@ public class TlvAnalyticalUtils {
 		return tlvs;
 	}
 
+	private static void registerFail() {
+		IsSuccessEntity entity = new IsSuccessEntity();
+		entity.setType(Constant.REGIST_CALLBACK_TYPE);
+		entity.setFailType(SocketConstant.REGISTER_FAIL);
+		entity.setSuccess(false);
+		EventBus.getDefault().post(entity);
+	}
+
 	public static void upToPower() {
-		IS_UP_TO_POWER = true;
 		byte[] value;
 		value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
 		ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
 	}
-
 	/**
 	 * 注册中不成功再次注册
 	 */
@@ -219,7 +210,7 @@ public class TlvAnalyticalUtils {
 		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
 		stringBuilder.replace(6, 8, "00");
 		sendToSdkLisener.sendServer(stringBuilder.toString());
-		if (TestProvider.sendYiZhengService != null)
+		if(TestProvider.sendYiZhengService!=null)
 			TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 	}
 

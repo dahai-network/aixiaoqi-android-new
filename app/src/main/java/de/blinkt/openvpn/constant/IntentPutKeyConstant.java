@@ -35,7 +35,7 @@ public class IntentPutKeyConstant {
     public static final String PROVINCE="province";
     public static final String CITY="city";
 
-
+	public static final String CELL_PHONE_TYPE="cell_phone_type";
     public static final String REALNAME="real_name";
     public static  final String ID_CARD_NUMBER="id_card_number";
     public static final String SELECT_NUMBER="select_number";
