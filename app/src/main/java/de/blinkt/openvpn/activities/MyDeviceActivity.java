@@ -144,20 +144,16 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_device);
 		ButterKnife.bind(this);
-		Log.e(TAG,"t0="+System.currentTimeMillis());
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBtAdapter == null) {
 //			Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
 			finish();
 			return;
 		}
-		Log.e(TAG,"t1="+System.currentTimeMillis());
 		initSet();
-		Log.e(TAG,"t2="+System.currentTimeMillis());
 		serviceInit();
-		Log.e(TAG,"t3="+System.currentTimeMillis());
 		initDialogUpgrade();
-		Log.e(TAG,"t4="+System.currentTimeMillis());
+
 	}
 
 
@@ -914,6 +910,4 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		cardRuleBreakDialog.setCanClickBack(false);
 		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));
 	}
-
-
 }
