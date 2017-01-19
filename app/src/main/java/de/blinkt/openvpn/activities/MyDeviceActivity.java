@@ -9,10 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -160,7 +158,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	DfuProgressListener mDfuProgressListener;
 
 	private void skyUpgradeHttp() {
-		Log.e(TAG,"skyUpgradeHttp");
+		Log.e(TAG, "skyUpgradeHttp");
 		long beforeRequestTime = utils.readLong(Constant.UPGRADE_INTERVAL);
 		if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
 		{
@@ -171,7 +169,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void initSet() {
-		Log.e(TAG,"initSet");
+		Log.e(TAG, "initSet");
 
 		int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
 		checkPowerTimer.schedule(checkPowerTask, 100, 60000);
@@ -277,7 +275,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
 					skyUpgradeHttp();
 				} else if (isUpgrade) {
-					if(upgradeDialog!=null&&!upgradeDialog.isShowing()){
+					if (upgradeDialog != null && !upgradeDialog.isShowing()) {
 						showDialogUpgrade();
 					}
 				}
@@ -310,7 +308,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void registFail() {
-		Log.e(TAG,"registFail");
+		Log.e(TAG, "registFail");
 		IsSuccessEntity entity = new IsSuccessEntity();
 		entity.setType(Constant.REGIST_TYPE);
 		entity.setSuccess(false);
@@ -339,7 +337,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void clickFindBracelet() {
-		Log.e(TAG,"clickFindBracelet");
+		Log.e(TAG, "clickFindBracelet");
 		if (mBtAdapter != null) {
 			scanLeDevice(false);
 			Intent intent = new Intent(MyDeviceActivity.this, BindDeviceActivity.class);
@@ -365,7 +363,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	private void sendMessageToBlueTooth(final String message) {
 		byte[] value;
-		Log.i("TAG", "sendMessageToBlueTooth="+message);
+		Log.i("TAG", "sendMessageToBlueTooth=" + message);
 		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
 		mService.writeRXCharacteristic(value);
 	}
@@ -605,7 +603,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				sendMessageToBlueTooth("AA080401A7");
 				try {
 					Thread.sleep(1000);
-				}catch (Exception e){
+				} catch (Exception e) {
 
 				}
 				uploadToBlueTooth();
@@ -631,7 +629,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			return;
 		}
 		isUpgrade = true;
-		if(noDevicedialog!=null&&!noDevicedialog.getDialog().isShowing()){
+		if (noDevicedialog != null && !noDevicedialog.getDialog().isShowing()) {
 			showDialogUpgrade();
 		}
 
@@ -757,17 +755,18 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		}
 		if (enable) {
 			// Stops scanning after a pre-defined scan period.
-			new Handler().postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					if (mService.mConnectionState != UartService.STATE_CONNECTED) {
-						mBtAdapter.stopLeScan(mLeScanCallback);
-						showDialog();
-					}
-				}
-			}, SCAN_PERIOD);
-
 			mBtAdapter.startLeScan(mLeScanCallback);
+			try {
+				Thread.sleep(SCAN_PERIOD);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (mService.mConnectionState != UartService.STATE_CONNECTED) {
+				mBtAdapter.stopLeScan(mLeScanCallback);
+				showDialog();
+			}else{
+				mBtAdapter.stopLeScan(mLeScanCallback);
+			}
 		} else {
 			mBtAdapter.stopLeScan(mLeScanCallback);
 		}
@@ -792,7 +791,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
 									if (macAddressStr != null) {
 										if (macAddressStr.equals(device.getAddress())) {
-											mBtAdapter.stopLeScan(mLeScanCallback);
+											scanLeDevice(false);
 											Intent result = new Intent();
 											result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, device.getAddress());
 //										checkIsBindDevie(device);
@@ -874,7 +873,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(IsSuccessEntity entity) {
-		Log.e(TAG,"onIsSuccessEntity");
+		Log.e(TAG, "onIsSuccessEntity");
 		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
 			if (entity.isSuccess()) {
 				setConStatus(R.string.index_high_signal);
@@ -901,7 +900,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onPercentEntity(PercentEntity entity) {
-		if(SocketConstant.REGISTER_STATUE_CODE==3){
+		if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 			percentTextView.setVisibility(View.GONE);
 			return;
 		}
