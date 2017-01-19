@@ -376,21 +376,20 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
-				runOnUiThread(new Runnable() {
 
-					public void run() {
-						mState = UART_PROFILE_CONNECTED;
-						//测试代码
-						unBindButton.setVisibility(View.VISIBLE);
-						IS_TEXT_SIM = true;
-						dismissProgress();
-						setView();
-						if (utils.readBoolean(Constant.ISHAVEORDER, true)) {
-							setConStatus(R.string.index_no_signal);
-						} else {
-							setConStatus(R.string.index_no_packet);
-						}
-						if (retryTime != 0) {
+
+				mState = UART_PROFILE_CONNECTED;
+				//测试代码
+				unBindButton.setVisibility(View.VISIBLE);
+				IS_TEXT_SIM = true;
+				dismissProgress();
+				setView();
+				if (utils.readBoolean(Constant.ISHAVEORDER, true)) {
+					setConStatus(R.string.index_no_signal);
+				} else {
+					setConStatus(R.string.index_no_packet);
+				}
+				if (retryTime != 0) {
 //							//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
 //							new Thread(new Runnable() {
 //								@Override
@@ -408,54 +407,50 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 //									JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
 //								}
 //							}).start();
-							retryTime = 0;
-						}
-					}
-				});
+					retryTime = 0;
+				}
 			}
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-				runOnUiThread(new Runnable() {
-					public void run() {
-						mState = UART_PROFILE_DISCONNECTED;
-						if (ICSOpenVPNApplication.isConnect) {
-							retryTime++;
-							if (retryTime > 20) {
-								sinking.setVisibility(View.GONE);
-								noConnectImageView.setVisibility(View.VISIBLE);
-								statueTextView.setVisibility(View.VISIBLE);
-								return;
-							}
-							if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-								connectThread = new Thread(new Runnable() {
-									@Override
-									public void run() {
-										//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
-										// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
-										try {
-											Thread.sleep(2000);
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										}
-										mService.connect(deviceAddresstemp);
-									}
-								});
-								connectThread.start();
-								setConStatus(R.string.index_connecting);
-								showProgress("正在重新连接");
 
-							}
-						} else {
-							unBindButton.setVisibility(View.GONE);
-							utils.delete(Constant.IMEI);
-							macTextView.setText("");
-							sinking.setVisibility(View.GONE);
-							noConnectImageView.setVisibility(View.VISIBLE);
-							statueTextView.setVisibility(View.VISIBLE);
-							CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
-						}
+				mState = UART_PROFILE_DISCONNECTED;
+				if (ICSOpenVPNApplication.isConnect) {
+					retryTime++;
+					if (retryTime > 20) {
+						sinking.setVisibility(View.GONE);
+						noConnectImageView.setVisibility(View.VISIBLE);
+						statueTextView.setVisibility(View.VISIBLE);
+						return;
 					}
-				});
+					if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+						connectThread = new Thread(new Runnable() {
+							@Override
+							public void run() {
+								//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
+								// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
+								try {
+									Thread.sleep(2000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+								mService.connect(deviceAddresstemp);
+							}
+						});
+						connectThread.start();
+						setConStatus(R.string.index_connecting);
+						showProgress("正在重新连接");
+
+					}
+				} else {
+					unBindButton.setVisibility(View.GONE);
+					utils.delete(Constant.IMEI);
+					macTextView.setText("");
+					sinking.setVisibility(View.GONE);
+					noConnectImageView.setVisibility(View.VISIBLE);
+					statueTextView.setVisibility(View.VISIBLE);
+					CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
+				}
+
 			}
 			if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 
@@ -582,7 +577,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				unBindButton.setVisibility(View.VISIBLE);
 				//当接口调用完毕后，扫描设备，打开状态栏
 				conStatusLinearLayout.setVisibility(View.VISIBLE);
-				scanLeDevice(true);
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						scanLeDevice(true);
+					}
+				}).start();
 			} else {
 				clickFindBracelet();
 			}
@@ -590,11 +590,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
 			if (skyUpgradeHttp.getStatus() == 1) {
 				if (skyUpgradeHttp.getUpgradeEntity() != null) {
-					if(skyUpgradeHttp.getUpgradeEntity().getVersion()>Integer.parseInt(utils.readString(Constant.BRACELETVERSION))){
+					if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Integer.parseInt(utils.readString(Constant.BRACELETVERSION))) {
 						url = skyUpgradeHttp.getUpgradeEntity().getUrl();
 						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
-					}else{
-						CommonTools.showShortToast(this,getString(R.string.last_version));
+					} else {
+						CommonTools.showShortToast(this, getString(R.string.last_version));
 					}
 				}
 			}
@@ -617,7 +617,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		Log.d(TAG, "showDialogGOUpgrade");
 		//不能按返回键，只能二选其一
 		DialogBalance Upgrade = new DialogBalance(this, MyDeviceActivity.this, R.layout.dialog_balance, DOWNLOAD_SKY_UPGRADE);
-		Upgrade.changeText(desc, getResources().getString(R.string.upgrade),1);
+		Upgrade.changeText(desc, getResources().getString(R.string.upgrade), 1);
 	}
 
 	private void uploadToBlueTooth() {
@@ -698,7 +698,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				downloadSkyUpgradePackageHttp(url);
 			}
 		} else if (type == NOT_YET_REARCH) {
-			scanLeDevice(true);
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					scanLeDevice(true);
+				}
+			}).start();
 		} else {
 			onBackPressed();
 		}
