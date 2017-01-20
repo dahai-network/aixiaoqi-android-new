@@ -62,6 +62,7 @@ import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
+import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
@@ -144,25 +145,23 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pro_main);
-		Log.e(TAG,"t0="+System.currentTimeMillis());
+		Log.e(TAG, "t0=" + System.currentTimeMillis());
 		findViewById();
-		Log.e(TAG,"t1="+System.currentTimeMillis());
+		Log.e(TAG, "t1=" + System.currentTimeMillis());
 		initFragment();
-		Log.e(TAG,"t2="+System.currentTimeMillis());
+		Log.e(TAG, "t2=" + System.currentTimeMillis());
 		addListener();
-		Log.e(TAG,"t3="+System.currentTimeMillis());
+		Log.e(TAG, "t3=" + System.currentTimeMillis());
 		setListener();
-		Log.e(TAG,"t4="+System.currentTimeMillis());
+		Log.e(TAG, "t4=" + System.currentTimeMillis());
 		initServices();
-		Log.e(TAG,"t5="+System.currentTimeMillis());
+		Log.e(TAG, "t5=" + System.currentTimeMillis());
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
-		Log.e(TAG,"t6="+System.currentTimeMillis());
+		Log.e(TAG, "t6=" + System.currentTimeMillis());
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
-		Log.e(TAG,"t7="+System.currentTimeMillis());
-
-
+		Log.e(TAG, "t7=" + System.currentTimeMillis());
 	}
 
 
@@ -316,7 +315,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (mBluetoothAdapter == null) {
 							return;
 						}
-						while (mService!=null&&mService.mConnectionState != UartService.STATE_CONNECTED) {
+						while (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED) {
 							try {
 								scanDeviceFiveSecond();
 								Thread.sleep(RECONNECT_TIME);
@@ -442,12 +441,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			tvArray[i].setTextColor(getResources().getColor(R.color.bottom_bar_text_normal));
 		}
 	}
-Intent intentCallPhone;
+
+	Intent intentCallPhone;
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(CallPhoneService.class.getName())){
-			intentCallPhone=new Intent(this, CallPhoneService.class);
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(CallPhoneService.class.getName())) {
+			intentCallPhone = new Intent(this, CallPhoneService.class);
 			startService(intentCallPhone);
 		}
 
@@ -501,16 +502,15 @@ Intent intentCallPhone;
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if(showCellPhoneDialogBackground.getVisibility()!=View.VISIBLE){
+			if (showCellPhoneDialogBackground.getVisibility() != View.VISIBLE) {
 				moveTaskToBack(false);
-			}else{
+			} else {
 				showCellPhoneDialogBackground.setVisibility(View.GONE);
 			}
 
 		}
 		return true;
 	}
-
 
 
 	@Override
@@ -522,6 +522,10 @@ Intent intentCallPhone;
 		//关闭服务并设置为null
 
 		destorySocketService(1000);
+		if (isDfuServiceRunning()) {
+			stopService(new Intent(this, DfuService.class));
+		}
+
 		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
 			unbindService(socketUdpConnection);
 			if (SocketConnection.mReceiveDataframSocketService != null) {
@@ -593,9 +597,9 @@ Intent intentCallPhone;
 				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
-					if(SocketConstant.REGISTER_STATUE_CODE==2){
+					if (SocketConstant.REGISTER_STATUE_CODE == 2) {
 						indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
-					}else if(SocketConstant.REGISTER_STATUE_CODE==3){
+					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 						indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 					}
 					//运行注册流程
@@ -622,7 +626,7 @@ Intent intentCallPhone;
 	}
 
 	private void scanLeDevice(final boolean enable) {
-		Log.e(TAG,"scanLeDevice");
+		Log.e(TAG, "scanLeDevice");
 		if (enable) {
 			mBluetoothAdapter.startLeScan(mLeScanCallback);
 		} else {
@@ -663,7 +667,7 @@ Intent intentCallPhone;
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(IsSuccessEntity entity) {
-		Log.e(TAG,"registerType="+entity.getType());
+		Log.e(TAG, "registerType=" + entity.getType());
 		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
 			if (entity.isSuccess()) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
@@ -746,7 +750,7 @@ Intent intentCallPhone;
 				}
 			}
 
-			if(action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)){
+			if (action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)) {
 				stopService(intentCallPhone);
 
 			}
@@ -762,5 +766,12 @@ Intent intentCallPhone;
 		} else {
 			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 		}
+	}
+
+	private boolean isDfuServiceRunning() {
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName())) {
+			return true;
+		}
+		return false;
 	}
 }

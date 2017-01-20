@@ -642,7 +642,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void showSkyUpgrade() {
-		if(upgradeDialog!=null&&!upgradeDialog.isShowing()){
+		if (upgradeDialog != null && !upgradeDialog.isShowing()) {
 			showDialogUpgrade();
 		}
 	}
@@ -766,7 +766,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			if (mService.mConnectionState != UartService.STATE_CONNECTED) {
 				mBtAdapter.stopLeScan(mLeScanCallback);
 				showDialog();
-			}else{
+			} else {
 				mBtAdapter.stopLeScan(mLeScanCallback);
 			}
 		} else {

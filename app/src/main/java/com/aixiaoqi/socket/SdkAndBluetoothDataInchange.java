@@ -212,7 +212,7 @@ public class SdkAndBluetoothDataInchange {
 
 		if (temp.contains("0x0000")) {
 			byte[] value;
-			value = HexStringExchangeBytesUtil.hexStringToBytes("AADB040174");
+			value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
 			mService.writeRXCharacteristic(value);
 			Log.e(TAG, "SIM发送上电数据");
 		} else {

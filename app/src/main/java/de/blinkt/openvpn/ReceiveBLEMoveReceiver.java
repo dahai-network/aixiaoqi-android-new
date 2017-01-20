@@ -31,6 +31,7 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.HistoryStepHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.ReportRealtimeStepHttp;
+import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.SportStepEntity;
 import de.blinkt.openvpn.service.UpdateStepService;
 import de.blinkt.openvpn.util.BLECheckBitUtil;
@@ -109,12 +110,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //						Thread.sleep(500);
 //						//测试代码
 //						sendMessageToBlueTooth(UP_TO_POWER);
-						//更新时间操作
-						sendMessageToBlueTooth(getBLETime());
-						Thread.sleep(500);
 						if (!CommonTools.isFastDoubleClick(3000)) {
 							sendMessageToBlueTooth(FIND_VERSION);
 						}
+						Thread.sleep(1000);
+						//更新时间操作
+						sendMessageToBlueTooth(getBLETime());
 
 //						sendMessageToBlueTooth("AABBCCDDEEFF");//绑定命令
 //						Thread.sleep(1000);
@@ -302,7 +303,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											sendMessageSeparate("A0A40000023F00");
 										}
 									}
-
+									break;
+								case (byte) 0x0A:
+									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
+										Log.i(TAG,"老版本设备，修改上电命令");
+										Constant.UP_TO_POWER = "AADB040174";
+									}
 									break;
 								case (byte) 0xDB:
 								case (byte) 0xDA:
@@ -608,6 +614,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		} else {
 			return "" + date;
 		}
+	}
+
+	//检查版本号后获取是否可以空中升级
+	private void skyUpgradeHttp() {
+		Log.e(TAG, "skyUpgradeHttp");
+		SkyUpgradeHttp skyUpgradeHttp = new SkyUpgradeHttp(this, HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, utils.readString(Constant.BRACELETVERSION));
+		new Thread(skyUpgradeHttp).start();
 	}
 
 }

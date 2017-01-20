@@ -21,7 +21,6 @@ import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
  */
 public class TlvAnalyticalUtils {
 
-	private static String TAG = "TlvAnalyticalUtils";
 
 
 	public static MessagePackageEntity builderMessagePackage(String hexString) {

@@ -6,6 +6,7 @@ package de.blinkt.openvpn.constant;
 public class Constant {
 	public static final boolean IS_DEBUG = true;
 	public static final String BLUETOOTH_NAME = "unitoys";
+//	public static final String BLUETOOTH_NAME = "ZiJian";
 	//购买套餐数量限制
 	public static final int LIMIT_COUNT = 30;
 
@@ -31,6 +32,8 @@ public class Constant {
 	public static final String PUBLIC_PASSWORD = "publicpassword";
 	public static final String IMEI = "BraceletIMEI";
 	public static final String BRACELETVERSION = "BraceletVersion";
+	//旧版本蓝牙设备
+	public static final int OLD_VERSION_DEVICE = 2;
 	public static final String ELECTRICITY = "electricity";
 	public static final String REALTIMESTEP = "realtimestep";
 
@@ -57,7 +60,7 @@ public class Constant {
 	public static final String CALL_MISSED = "未接";
 	//蓝牙指令
 	public static final String CONNECT_TO_DEVICE = "AABBCCDDEEFF";//连接指令
-	public static final String UP_TO_POWER = "AADB040172";//上电指令
+	public static String UP_TO_POWER = "AADB040172";//上电指令
 	public static final String OFF_TO_POWER = "AADC040173";//断点指令
 	public static final String REAL_TIME_STEPS = "AA010401AE ";//实时步数
 	public static final String HISTORICAL_STEPS = "AA030401AC";//历史步数
@@ -81,7 +84,7 @@ public class Constant {
 	public static boolean IS_RECEIVE_GOIP = true;
 	//注册卡回调类型
 	public static final int REGIST_CALLBACK_TYPE = 0;
-	public static final int REGIST_TYPE = 1 ;
+	public static final int REGIST_TYPE = 1;
 	//蓝牙连接状态int
 	public static final int BLUE_CONNECTED_INT = 2;
 
@@ -136,7 +139,7 @@ public class Constant {
 	public static final String GET_NULLCARDID = "9f0f";
 
 	public static final String DOWNLOAD_PATH = "/sdcard/aixiaoqi";
-	public static  String UPLOAD_PATH = "/aixiaoqi/upload.zip";
+	public static String UPLOAD_PATH = "/aixiaoqi/upload.zip";
 	public static final String DOWNLOAD_SUCCEED = "succeed";
 	public static final String DOWNLOAD_FAIL = "fail";
 
@@ -148,8 +151,8 @@ public class Constant {
 	public static final int ADD_PHONE_NUMBER = 105;
 	//是否有订单参数
 	public static final String ISHAVEORDER = "ishaveorder";
-	public static final int NETWORK_CELL_PHONE=1;
-	public static final int SIM_CELL_PHONE=2;
+	public static final int NETWORK_CELL_PHONE = 1;
+	public static final int SIM_CELL_PHONE = 2;
 
 	public static final int RIIS = 75;
 }

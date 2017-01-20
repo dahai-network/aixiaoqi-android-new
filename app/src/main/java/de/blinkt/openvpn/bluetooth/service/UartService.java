@@ -287,7 +287,6 @@ public class UartService extends Service implements Serializable {
 			return;
 		}
 		Log.w(TAG, "mBluetoothGatt closed");
-		refreshDeviceCache();
 		mBluetoothGatt.close();
 		mBluetoothGatt = null;
 	}
