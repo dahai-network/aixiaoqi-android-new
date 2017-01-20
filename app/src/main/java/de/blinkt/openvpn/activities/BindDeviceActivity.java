@@ -69,10 +69,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_bind_device);
-		ButterKnife.bind(this);
-		initSet();
-		mHandler = new Handler();
 		if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {//没有发现设备
 			CommonTools.showShortToast(this, getString(R.string.bluetooth_ble_not_support));
 			finish();
@@ -87,6 +83,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			finish();
 			return;
 		}
+		setContentView(R.layout.activity_bind_device);
+		ButterKnife.bind(this);
+		initSet();
+		mHandler = new Handler();
 		initList();
 	}
 
@@ -131,7 +131,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	protected void onPause() {
 		super.onPause();
 		scanLeDevice(false);
-		if (noDevicedialog != null && noDevicedialog.getDialog() != null) {
+		if (noDevicedialog != null && noDevicedialog.getDialog() != null&&noDevicedialog.getDialog().isShowing()) {
 			noDevicedialog.getDialog().dismiss();
 		}
 	}

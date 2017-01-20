@@ -1,9 +1,14 @@
 package com.aixiaoqi.socket;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.util.Timer;
@@ -13,6 +18,7 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 
+import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 
@@ -22,6 +28,8 @@ import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 public class ReceiveSocketService extends Service {
     private final IBinder mBinder = new LocalBinder();
     private int contactFailCount=1;
+    PendingIntent sender;
+    AlarmManager am;
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -56,8 +64,14 @@ public class ReceiveSocketService extends Service {
         public void onReceive(SocketTransceiver transceiver, byte[] s,int length) {
             TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s,length));
             if(!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)&&count==0){
-                timer.schedule(task,60000,60000);
+//                timer.schedule(task,60000,60000);
                 count=count+1;
+                Log.e("onReceive", "开启定时器");
+                Intent intent=new Intent(ReceiveSocketService.this,AutoReceiver.class);
+                intent.setAction(HEARTBEAT_PACKET_TIMER);
+                sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
+                am = (AlarmManager)getSystemService(ALARM_SERVICE);
+                am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 60*1000, sender);
             }
         }
 
@@ -86,8 +100,7 @@ public class ReceiveSocketService extends Service {
     @Override
     public void onDestroy() {
         tcpClient.disconnect();
-
-        timer.cancel();
+        am.cancel(sender);
         TlvAnalyticalUtils.clearData();
         TestProvider.clearData();
         if( SocketConstant.REGISTER_STATUE_CODE!=0){
@@ -105,13 +118,8 @@ public class ReceiveSocketService extends Service {
     }
 
     int count=0;
-    Timer timer = new Timer();
-    TimerTask task = new TimerTask() {
 
-        @Override
-        public void run() {
-            TestProvider.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
-        }
-    };
+
+
 
 }

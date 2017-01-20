@@ -14,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -185,14 +186,16 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 		String stringRecordTime = Integer.parseInt(TimeDialog.substring(0, 4)) + "-" + TimeDialog.substring(5, 7) + "-" + "01" + " 12:00:00";
 		List<Integer> listDate = new ArrayList<>();
 		listDate.add(defaultCustomDate.day);
-		views[viewPager.getCurrentItem() % views.length].setList(listDate);
+		views[viewPager.getCurrentItem() % views.length].setList(listDate,clickYear,clickMonth,clickDay);
 		views[viewPager.getCurrentItem() % views.length].initDate(Integer.parseInt(TimeDialog.substring(0, 4)), Integer.parseInt(TimeDialog.substring(5, 7)), 1);
 
 		long timeRecordStamp = DateUtils.getStringToDate(stringRecordTime);
 		String recordTime = String.valueOf(timeRecordStamp / 1000);
 		SportRecordHttp(recordTime);
 	}
-
+	int clickDay=-100;
+	int clickYear=-100;
+	int clickMonth=-100;
 
 	Handler mhandler = new Handler() {
 		@Override
@@ -364,7 +367,10 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 			return;
 		}
 		MobclickAgent.onEvent(getActivity(), SELECTSPECIFIEDDAYSPORTDATA);
-		defaultCustomDate = date;
+//		defaultCustomDate = date;
+		clickYear=date.year;
+		clickMonth=date.month;
+		clickDay=date.day;
 		llDialogCalendar.setVisibility(View.GONE);
 		setShowDateText(date.year, date.month, date.day);
 		String stringTime = date.year + "-" + date.month + "-" + date.day + " 00:00:00";
@@ -479,12 +485,15 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 					listDate.add(Integer.parseInt(DateUtils.getDateToString(Long.parseLong(list.get(i).getDate())).substring(8, 10)));
 				}
 				String strMonth = tvShowMonthView.getText().toString();
-				if (!TextUtils.isEmpty(strMonth) && defaultCustomDate.month == Integer.parseInt(tvShowMonthView.getText().toString().substring(5, 7)) && defaultCustomDate.year == Integer.parseInt(tvShowMonthView.getText().toString().substring(0, 4))) {
+				Log.e("CalenderView","month="+strMonth);
+				Log.e("CalenderView","month="+defaultCustomDate.month+"year="+defaultCustomDate.year+"day="+defaultCustomDate.day);
+				if (!TextUtils.isEmpty(strMonth) && defaultCustomDate.month == Integer.parseInt(strMonth.substring(5, 7)) && defaultCustomDate.year == Integer.parseInt(strMonth.substring(0, 4))) {
+					Log.e("CalenderView","month="+strMonth);
 					if (!listDate.contains(defaultCustomDate.day)) {
 						listDate.add(defaultCustomDate.day);
 					}
 				}
-				views[viewPager.getCurrentItem() % views.length].setList(listDate);
+				views[viewPager.getCurrentItem() % views.length].setList(listDate,clickYear,clickMonth,clickDay);
 			}
 		}
 	}

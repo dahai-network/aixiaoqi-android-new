@@ -59,7 +59,7 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
 
     private   void updateConnection(List<TlvEntity> yiZhengTlvList) {
         TlvEntity yiZhengTlv=new TlvEntity("01","00");
-        TlvEntity yiZhengTlv1=new TlvEntity("65","b4");
+        TlvEntity yiZhengTlv1=new TlvEntity(Integer.toHexString(101)+"",Integer.toHexString(180)+"");
         yiZhengTlvList.add(yiZhengTlv);
         yiZhengTlvList.add(yiZhengTlv1);
     }
