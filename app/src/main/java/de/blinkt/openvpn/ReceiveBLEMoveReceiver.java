@@ -304,12 +304,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										}
 									}
 									break;
-								case (byte) 0x0A:
-									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
-										Log.i(TAG,"老版本设备，修改上电命令");
-										Constant.UP_TO_POWER = "AADB040174";
-									}
-									break;
+//								case (byte) 0x0A:
+//									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
+//										Log.i(TAG,"老版本设备，修改上电命令");
+//										Constant.UP_TO_POWER = "AADB040174";
+//									}
+//									break;
 								case (byte) 0xDB:
 								case (byte) 0xDA:
 									if (IS_TEXT_SIM) {

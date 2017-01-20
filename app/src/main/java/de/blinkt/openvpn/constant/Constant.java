@@ -61,6 +61,7 @@ public class Constant {
 	//蓝牙指令
 	public static final String CONNECT_TO_DEVICE = "AABBCCDDEEFF";//连接指令
 	public static String UP_TO_POWER = "AADB040172";//上电指令
+	public static String UP_TO_POWER_HAVE_DETAIL = "AADB040174";//上电指令,具有详细卡信息
 	public static final String OFF_TO_POWER = "AADC040173";//断点指令
 	public static final String REAL_TIME_STEPS = "AA010401AE ";//实时步数
 	public static final String HISTORICAL_STEPS = "AA030401AC";//历史步数

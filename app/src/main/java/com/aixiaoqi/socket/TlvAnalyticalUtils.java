@@ -22,7 +22,6 @@ import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
 public class TlvAnalyticalUtils {
 
 
-
 	public static MessagePackageEntity builderMessagePackage(String hexString) {
 		Log.e("TlvAnalyticalUtils", hexString);
 		int position = 0;
@@ -49,7 +48,7 @@ public class TlvAnalyticalUtils {
 		}
 		position = position + 8;
 		String sessionId = hexString.substring(position, position + 8);
-		if(!SocketConstant.SESSION_ID.equals(sessionId)&&!SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)){
+		if (!SocketConstant.SESSION_ID.equals(sessionId) && !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
 			SocketConstant.SESSION_ID = sessionId;
 			return null;
 		}
@@ -113,9 +112,9 @@ public class TlvAnalyticalUtils {
 
 				if (typeParams == 160) {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
-					SocketConstant.REGISTER_REMOTE_ADDRESS=value.substring(value.indexOf("_")+1,value.lastIndexOf("."));
-					SocketConstant.REGISTER_ROMOTE_PORT=value.substring(value.lastIndexOf(".")+1,value.length());
-					Log.e("RemoteAddress","REGISTER_REMOTE_ADDRESS="+SocketConstant.REGISTER_REMOTE_ADDRESS+"\nREGISTER_ROMOTE_PORT"+SocketConstant.REGISTER_ROMOTE_PORT);
+					SocketConstant.REGISTER_REMOTE_ADDRESS = value.substring(value.indexOf("_") + 1, value.lastIndexOf("."));
+					SocketConstant.REGISTER_ROMOTE_PORT = value.substring(value.lastIndexOf(".") + 1, value.length());
+					Log.e("RemoteAddress", "REGISTER_REMOTE_ADDRESS=" + SocketConstant.REGISTER_REMOTE_ADDRESS + "\nREGISTER_ROMOTE_PORT" + SocketConstant.REGISTER_ROMOTE_PORT);
 				}
 			} else if (tag == 16) {
 				if (typeParams == 1) {
@@ -133,7 +132,7 @@ public class TlvAnalyticalUtils {
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
 					}
 				} else if (typeParams == 199) {
-					if(REGISTER_STATUE_CODE==2){//第一次是010101的时候不去复位SDK,第二次的时候才对SDK进行复位
+					if (REGISTER_STATUE_CODE == 2) {//第一次是010101的时候不去复位SDK,第二次的时候才对SDK进行复位
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 					}
 					SocketConstant.REGISTER_STATUE_CODE = 2;
@@ -196,9 +195,10 @@ public class TlvAnalyticalUtils {
 
 	public static void upToPower() {
 		byte[] value;
-		value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
+		value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER_HAVE_DETAIL);
 		ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
 	}
+
 	/**
 	 * 注册中不成功再次注册
 	 */
@@ -209,7 +209,7 @@ public class TlvAnalyticalUtils {
 		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
 		stringBuilder.replace(6, 8, "00");
 		sendToSdkLisener.sendServer(stringBuilder.toString());
-		if(TestProvider.sendYiZhengService!=null)
+		if (TestProvider.sendYiZhengService != null)
 			TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 	}
 
