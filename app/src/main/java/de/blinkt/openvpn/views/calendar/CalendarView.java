@@ -76,9 +76,20 @@ public class CalendarView extends View {
 
 
 	List<Integer> clickList = new ArrayList<>();
-
+	int defaultDay=-1;
+	int defaultYear=-1;
+	int defaultMonth=-1;
 	public void setList(List<Integer> clickList) {
-		invalidate();
+
+		this.clickList.clear();
+		this.clickList = clickList;
+		fillDate();
+	}
+
+	public void setList(List<Integer> clickList,int defaultYear,int defaultMonth,int defaultDay) {
+		this.defaultDay=defaultDay;
+		this.defaultMonth=defaultMonth;
+		this.defaultYear=defaultYear;
 		this.clickList.clear();
 		this.clickList = clickList;
 		fillDate();
@@ -170,6 +181,7 @@ public class CalendarView extends View {
 	}
 
 	private void measureClickCell(int col, int row) {
+		invalidate();
 		int firstDayWeek = DateUtil.getWeekDayFromDate(mShowDate.year, mShowDate.month);
 		CalendarView.Row[] localRows = rows;
 		List<Integer> localClickList = clickList;
@@ -186,10 +198,10 @@ public class CalendarView extends View {
 					mClickCell = new Cell(localRows[row].cells[col].date,
 							localRows[row].cells[col].state, localRows[row].cells[col].i,
 							localRows[row].cells[col].j);
-					localRows[row].cells[col].state = State.CLICK_DAY;
+//					localRows[row].cells[col].state = State.CLICK_DAY;
 					CustomDate date = localRows[row].cells[col].date;
 					mCallBack.clickDate(date);
-					invalidate();
+
 					break;
 				}
 			}
@@ -270,9 +282,9 @@ public class CalendarView extends View {
 
 
 	private void fillDate() {
-
-		fillMonthDate();
 		invalidate();
+		fillMonthDate();
+//		invalidate();
 	}
 
 	private void fillMonthDate() {
@@ -284,6 +296,7 @@ public class CalendarView extends View {
 		int currentYear = calendar.get(Calendar.YEAR);
 		int currentDay =calendar.get(Calendar.DAY_OF_MONTH);
 		int day = 0;
+//		Log.e("CalenderView","year="+mShowDate.year+","+currentYear+"month="+mShowDate.month+","+currentMonth+"day="+day+","+currentDay);
 		for (int j = 0; j < TOTAL_ROW; j++) {
 			rows[j] = new Row(j);
 			Col:
@@ -298,7 +311,11 @@ public class CalendarView extends View {
 								CustomDate date = CustomDate.modifiDayForObject(mShowDate, day);
 								mClickCell = new Cell(date, State.CURRENT_MONTH_DAY, i, j);
 								rows[j].cells[i] = new Cell(date, State.CLICK_TODAY, i, j);
-							} else {
+							} else if(mShowDate.year == defaultYear && mShowDate.month == defaultMonth&&day==defaultDay){
+								CustomDate date = CustomDate.modifiDayForObject(mShowDate, day);
+								mClickCell = new Cell(date, State.CURRENT_MONTH_DAY, i, j);
+								rows[j].cells[i] = new Cell(date, State.CLICK_DAY, i, j);
+							}else {
 								CustomDate date = CustomDate.modifiDayForObject(mShowDate, day);
 								rows[j].cells[i] = new Cell(date, State.CURRENT_MONTH_DAY, i, j);
 							}

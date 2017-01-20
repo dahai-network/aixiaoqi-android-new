@@ -147,14 +147,6 @@ public class SdkAndBluetoothDataInchange {
 			Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
 					+ sendToOneServerTemp);
 
-			//如果是上电命令则忽略
-//			if(IS_UP_TO_POWER){
-//				Log.e(TAG, "忽略的上电指令！");
-//				IS_UP_TO_POWER=false;
-//				num=0;
-//				messages.clear();
-//				return;
-//			}
 			sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
 
 			num = 0;
@@ -191,15 +183,15 @@ public class SdkAndBluetoothDataInchange {
 
 			for (int i = 0; i < messages.length; i++) {
 
-				if(i>=1){
-					try {
-						//Log.e(TAG, "发送延迟60ms");
-						//Thread.sleep(60);
-						//Log.e(TAG, "发送延迟60ms");
-					}catch (Exception e){
-
-					}
-				}
+//				if(i>=1){
+//					try {
+//						//Log.e(TAG, "发送延迟60ms");
+//						//Thread.sleep(60);
+//						//Log.e(TAG, "发送延迟60ms");
+//					}catch (Exception e){
+//
+//					}
+//				}
 				Log.e(TAG, "&&& server  message: " + messages[i].toString());
 				sendMessage(messages[i]);
 
