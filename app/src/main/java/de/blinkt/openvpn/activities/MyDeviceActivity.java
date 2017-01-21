@@ -353,7 +353,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		final IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
 		intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
-		intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
 		intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
 		intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
 		return intentFilter;
@@ -418,7 +417,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						statueTextView.setVisibility(View.VISIBLE);
 						return;
 					}
-					if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 						connectThread = new Thread(new Runnable() {
 							@Override
 							public void run() {
@@ -435,8 +433,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						connectThread.start();
 						setConStatus(R.string.index_connecting);
 						showProgress("正在重新连接");
-
-					}
 				} else {
 					unBindButton.setVisibility(View.GONE);
 					utils.delete(Constant.IMEI);
@@ -790,7 +786,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 									if (device.getName() == null) {
 										return;
 									}
-									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
+									Log.i("test", "find the device:" + device.getName() +"mac:"+device.getAddress()+ ",rssi :" + rssi);
 									if (macAddressStr != null) {
 										if (macAddressStr.equals(device.getAddress())) {
 											scanLeDevice(false);

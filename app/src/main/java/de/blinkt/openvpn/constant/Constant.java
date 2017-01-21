@@ -68,7 +68,7 @@ public class Constant {
 	public static final String FIND_DEVICE = "AA060401A9";//查找手环
 	public static final String FIND_VERSION = "AA0A01A1";//版本号
 	public static final String RESTORATION = "AA112233AA";//复位命令
-	public static final String BIND_SUCCESS = "AADD01DDAA";//复位命令
+	public static final String BIND_SUCCESS = "AADD01DDAA";//绑定成功命令
 	//ICCID标记
 	public static final String ICCID = "ICCID";
 	//来电，短信，微信，QQ通知开关标记
