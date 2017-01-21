@@ -110,13 +110,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //						Thread.sleep(500);
 //						//测试代码
 //						sendMessageToBlueTooth(UP_TO_POWER);
+
+						//更新时间操作
+						sendMessageToBlueTooth(getBLETime());
+						Thread.sleep(1000);
 						if (!CommonTools.isFastDoubleClick(3000)) {
 							sendMessageToBlueTooth(FIND_VERSION);
 						}
-						Thread.sleep(1000);
-						//更新时间操作
-						sendMessageToBlueTooth(getBLETime());
-
 //						sendMessageToBlueTooth("AABBCCDDEEFF");//绑定命令
 //						Thread.sleep(1000);
 //						if (!isConnect) {
@@ -304,12 +304,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										}
 									}
 									break;
-//								case (byte) 0x0A:
+								case (byte) 0x0A:
 //									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
 //									}
-//									break;
+									Log.i(TAG, "固件版本号：" + Integer.parseInt(String.valueOf(txValue[2]), 16));
+									utils.writeString(Constant.BRACELETVERSION, Integer.parseInt(String.valueOf(txValue[2]), 16) + "");
+									break;
 								case (byte) 0xDB:
 								case (byte) 0xDA:
 									if (IS_TEXT_SIM) {

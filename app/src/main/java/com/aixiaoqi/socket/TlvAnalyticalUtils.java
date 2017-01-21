@@ -195,7 +195,7 @@ public class TlvAnalyticalUtils {
 
 	public static void upToPower() {
 		byte[] value;
-		value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER_HAVE_DETAIL);
+		value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER);
 		ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
 	}
 
