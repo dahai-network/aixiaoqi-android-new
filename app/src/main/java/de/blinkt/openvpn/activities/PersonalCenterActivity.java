@@ -386,7 +386,6 @@ public class PersonalCenterActivity extends BaseActivity implements InterfaceCal
 					break;
 
 				case CODE_RESULT_REQUEST:
-
 					if (intent != null) {
 						setImageToHeadView(intent);
 					}
@@ -502,7 +501,10 @@ public class PersonalCenterActivity extends BaseActivity implements InterfaceCal
 
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
-
+		if (cmdType == HttpConfigUrl.COMTYPE_UPLOAD_HEADER) {
+			if(!TextUtils.isEmpty(errorMessage))
+			CommonTools.showShortToast(this,errorMessage);
+		}
 	}
 
 	@Override

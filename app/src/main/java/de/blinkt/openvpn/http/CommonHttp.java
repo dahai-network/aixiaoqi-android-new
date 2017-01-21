@@ -39,6 +39,7 @@ import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -412,6 +413,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			for (String key : set) {
 				builder.addFormDataPart(key, System.currentTimeMillis() + ".png", RequestBody.create(MEDIA_TYPE_PNG, new File(params.get(key))));
 			}
+
 
 			RequestBody requestBody = builder.build();
 			Request request;

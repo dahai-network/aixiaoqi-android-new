@@ -145,23 +145,23 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pro_main);
-		Log.e(TAG, "t0=" + System.currentTimeMillis());
+
 		findViewById();
-		Log.e(TAG, "t1=" + System.currentTimeMillis());
+
 		initFragment();
-		Log.e(TAG, "t2=" + System.currentTimeMillis());
+
 		addListener();
-		Log.e(TAG, "t3=" + System.currentTimeMillis());
+
 		setListener();
-		Log.e(TAG, "t4=" + System.currentTimeMillis());
+
 		initServices();
-		Log.e(TAG, "t5=" + System.currentTimeMillis());
+
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
-		Log.e(TAG, "t6=" + System.currentTimeMillis());
+
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
-		Log.e(TAG, "t7=" + System.currentTimeMillis());
+
 	}
 
 
