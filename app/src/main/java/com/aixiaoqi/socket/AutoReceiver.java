@@ -11,18 +11,25 @@ import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
  * Created by Administrator on 2017/1/20 0020.
  */
 
-public class AutoReceiver  extends BroadcastReceiver {
+public class AutoReceiver extends BroadcastReceiver {
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Log.e("onReceive", "定时器进来了");
-        if (intent.getAction().equals(HEARTBEAT_PACKET_TIMER)) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    TestProvider.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
-                }
-            }).start();
-        }
-    }
+	private String TAG = "AutoReceiver";
+
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		Log.e("onReceive", "定时器进来了");
+		if (intent.getAction().equals(HEARTBEAT_PACKET_TIMER)) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					if (TestProvider.sendYiZhengService != null) {
+						TestProvider.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
+					} else {
+						Log.e(TAG, "AutoReceiver 异常！");
+					}
+
+				}
+			}).start();
+		}
+	}
 }

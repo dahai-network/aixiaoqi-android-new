@@ -652,7 +652,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 										return;
 									}
 									Log.i("test", "deviceName:" + device.getName());
-									if (deviceAddress.equals(device.getAddress())) {
+									if (deviceAddress.equalsIgnoreCase(device.getAddress())) {
 										scanLeDevice(false);
 										mService.connect(deviceAddress);
 									}
@@ -721,9 +721,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
-				//当有通话套餐的时候才允许注册操作
-				IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
-				new Thread(http).start();
+				if (!CommonTools.isFastDoubleClick(5000)) {
+					//当有通话套餐的时候才允许注册操作
+					IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
+					new Thread(http).start();
+				}
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
