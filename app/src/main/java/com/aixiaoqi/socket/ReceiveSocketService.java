@@ -118,6 +118,4 @@ public class ReceiveSocketService extends Service {
 	}
 
 	int count = 0;
-
-
 }

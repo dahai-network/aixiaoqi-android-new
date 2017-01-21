@@ -20,12 +20,13 @@
     <uses-feature
         android:name="android.hardware.location.gps"
         android:required="true"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.NFC"/>
     <uses-permission android:name="${JPUSH_PKGNAME}.permission.JPUSH_MESSAGE"/>
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
     <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
@@ -270,12 +271,15 @@
                 <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="com.aixiaoqi.socket.AutoReceiver" android:label="@string/app_name">
+        <receiver
+            android:name="com.aixiaoqi.socket.AutoReceiver"
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </receiver>
+
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -379,7 +383,8 @@
 
         <service
             android:name="de.blinkt.openvpn.bluetooth.service.UartService"
-            android:enabled="true"/>
+            android:enabled="true"
+            />
 
         <service
             android:name="de.blinkt.openvpn.service.CallPhoneService"

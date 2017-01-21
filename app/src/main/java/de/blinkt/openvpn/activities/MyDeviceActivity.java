@@ -75,6 +75,7 @@ import static de.blinkt.openvpn.activities.BindDeviceActivity.FAILT;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
+import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
@@ -203,7 +204,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		EventBus.getDefault().register(this);
 
 	}
-
 
 	private String deviceAddresstemp;
 
@@ -371,8 +371,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
-
-
 				mState = UART_PROFILE_CONNECTED;
 				//测试代码
 				unBindButton.setVisibility(View.VISIBLE);
@@ -415,24 +413,28 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						sinking.setVisibility(View.GONE);
 						noConnectImageView.setVisibility(View.VISIBLE);
 						statueTextView.setVisibility(View.VISIBLE);
+						unBindButton.setVisibility(View.GONE);
+						utils.delete(Constant.IMEI);
+						macTextView.setText("");
+						CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 						return;
 					}
-						connectThread = new Thread(new Runnable() {
-							@Override
-							public void run() {
-								//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
-								// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
-								try {
-									Thread.sleep(2000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-								mService.connect(deviceAddresstemp);
+					connectThread = new Thread(new Runnable() {
+						@Override
+						public void run() {
+							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
+							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
+							try {
+								Thread.sleep(2000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
 							}
-						});
-						connectThread.start();
-						setConStatus(R.string.index_connecting);
-						showProgress("正在重新连接");
+							mService.connect(deviceAddresstemp);
+						}
+					});
+					connectThread.start();
+					setConStatus(R.string.index_connecting);
+					showProgress("正在重新连接");
 				} else {
 					unBindButton.setVisibility(View.GONE);
 					utils.delete(Constant.IMEI);
@@ -477,7 +479,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 								setConStatus(R.string.index_registing);
 							}
 						} else if (txValue[1] == (byte) 0x11) {
+							//百分比TextView设置为0
+//							percentTextView.setText("");
 							showNoCardDialog();
+							sendMessageToBlueTooth(OFF_TO_POWER);
+							setConStatus(R.string.index_un_insert_card);
 						}
 						break;
 				}
@@ -486,7 +492,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	};
 
 	private void setView() {
-
 		dismissProgress();
 		int electricityInt = utils.readInt(ELECTRICITY);
 		noConnectImageView.setVisibility(View.GONE);
@@ -569,12 +574,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				unBindButton.setVisibility(View.VISIBLE);
 				//当接口调用完毕后，扫描设备，打开状态栏
 				conStatusLinearLayout.setVisibility(View.VISIBLE);
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						scanLeDevice(true);
-					}
-				}).start();
+				scanLeDevice(true);
 			} else {
 				clickFindBracelet();
 			}
@@ -699,12 +699,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				downloadSkyUpgradePackageHttp(url);
 			}
 		} else if (type == NOT_YET_REARCH) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					scanLeDevice(true);
-				}
-			}).start();
+			scanLeDevice(true);
 		} else {
 			onBackPressed();
 		}
@@ -747,28 +742,37 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	//我的设备内如果有已储存设备的话，那么开始扫描已有设备进行连接，不用进入绑定流程啦！
-	private void scanLeDevice(boolean enable) {
-		if (mService.mConnectionState == UartService.STATE_CONNECTED) {
-			return;
-		}
-		if (enable) {
-			// Stops scanning after a pre-defined scan period.
-			mBtAdapter.startLeScan(mLeScanCallback);
-			try {
-				Thread.sleep(SCAN_PERIOD);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+	private void scanLeDevice(final boolean enable) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if (mService.mConnectionState == UartService.STATE_CONNECTED) {
+					return;
+				}
+				if (enable) {
+					// Stops scanning after a pre-defined scan period.
+					mBtAdapter.startLeScan(mLeScanCallback);
+					try {
+						Thread.sleep(SCAN_PERIOD);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					if (mService.mConnectionState != UartService.STATE_CONNECTED) {
+						mBtAdapter.stopLeScan(mLeScanCallback);
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								showDialog();
+							}
+						});
+					} else {
+						mBtAdapter.stopLeScan(mLeScanCallback);
+					}
+				} else {
+					mBtAdapter.stopLeScan(mLeScanCallback);
+				}
 			}
-			if (mService.mConnectionState != UartService.STATE_CONNECTED) {
-				mBtAdapter.stopLeScan(mLeScanCallback);
-				showDialog();
-			} else {
-				mBtAdapter.stopLeScan(mLeScanCallback);
-			}
-		} else {
-			mBtAdapter.stopLeScan(mLeScanCallback);
-		}
-
+		}).start();
 	}
 
 	private BluetoothAdapter.LeScanCallback mLeScanCallback =
@@ -786,9 +790,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 									if (device.getName() == null) {
 										return;
 									}
-									Log.i("test", "find the device:" + device.getName() +"mac:"+device.getAddress()+ ",rssi :" + rssi);
+									Log.i("test", "find the device:" + device.getName() + "mac:" + device.getAddress() + ",rssi :" + rssi);
 									if (macAddressStr != null) {
-										if (macAddressStr.equals(device.getAddress())) {
+										if (macAddressStr.equalsIgnoreCase(device.getAddress())) {
 											scanLeDevice(false);
 											Intent result = new Intent();
 											result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, device.getAddress());
@@ -837,18 +841,27 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		switch (conStatus) {
 			case R.string.index_connecting:
 				setLeftDrawable(-1);
+				percentTextView.setText("");
 				break;
 			case R.string.index_no_signal:
 				setLeftDrawable(R.drawable.device_no_signal);
+				percentTextView.setText("0%");
 				break;
 			case R.string.index_regist_fail:
 				setLeftDrawable(R.drawable.device_no_signal);
+				percentTextView.setText("");
 				break;
 			case R.string.index_registing:
 				setLeftDrawable(R.drawable.device_no_signal);
+				percentTextView.setText("");
 				break;
 			case R.string.index_no_packet:
 				setLeftDrawable(R.drawable.device_no_packet);
+				percentTextView.setText("");
+				break;
+			case R.string.index_un_insert_card:
+				setLeftDrawable(R.drawable.device_no_packet);
+				percentTextView.setText("");
 				break;
 			case R.string.index_high_signal:
 				setLeftDrawable(R.drawable.device_high_signal);

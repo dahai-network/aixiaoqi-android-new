@@ -112,8 +112,8 @@ public class UartService extends Service implements Serializable {
 		public void onServicesDiscovered(BluetoothGatt gatt, int status) {
 			if (status == BluetoothGatt.GATT_SUCCESS) {
 				Log.w(TAG, "mBluetoothGatt = " + mBluetoothGatt);
-				BluetoothGattServices = mBluetoothGatt.getServices();
-				Log.e("getService", "mBluetoothGatt size = " + BluetoothGattServices.size());
+//				BluetoothGattServices = mBluetoothGatt.getServices();
+//				Log.e("getService", "mBluetoothGatt size = " + BluetoothGattServices.size());
 				broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
 			} else {
 				Log.w(TAG, "onServicesDiscovered received: " + status);

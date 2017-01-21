@@ -201,8 +201,12 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 	private void sendMessage(String temp) {
-
 		if (temp.contains("0x0000")) {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			byte[] value;
 			value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER_HAVE_DETAIL);
 			mService.writeRXCharacteristic(value);

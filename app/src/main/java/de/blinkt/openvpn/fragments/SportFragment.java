@@ -187,16 +187,17 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 		String stringRecordTime = Integer.parseInt(TimeDialog.substring(0, 4)) + "-" + TimeDialog.substring(5, 7) + "-" + "01" + " 12:00:00";
 		List<Integer> listDate = new ArrayList<>();
 		listDate.add(defaultCustomDate.day);
-		views[viewPager.getCurrentItem() % views.length].setList(listDate,clickYear,clickMonth,clickDay);
+		views[viewPager.getCurrentItem() % views.length].setList(listDate, clickYear, clickMonth, clickDay);
 		views[viewPager.getCurrentItem() % views.length].initDate(Integer.parseInt(TimeDialog.substring(0, 4)), Integer.parseInt(TimeDialog.substring(5, 7)), 1);
 
 		long timeRecordStamp = DateUtils.getStringToDate(stringRecordTime);
 		String recordTime = String.valueOf(timeRecordStamp / 1000);
 		SportRecordHttp(recordTime);
 	}
-	int clickDay=-100;
-	int clickYear=-100;
-	int clickMonth=-100;
+
+	int clickDay = -100;
+	int clickYear = -100;
+	int clickMonth = -100;
 
 	Handler mhandler = new Handler() {
 		@Override
@@ -249,7 +250,6 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 
 
 	private void init() {
-
 		builder = new CalendarViewBuilder();
 		defaultCustomDate = new CustomDate();
 		views = builder.createMassCalendarViews(getActivity(), 5, this);
@@ -341,8 +341,8 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 	}
 
 	public void setShowDateText(int year, int month, int day) {
-		String monthString=calenderFormat(month);
-		String dayString=calenderFormat(day);
+		String monthString = calenderFormat(month);
+		String dayString = calenderFormat(day);
 
 		tvMonth.setText(monthString + getString(R.string.month) + dayString + getString(R.string.daliy));
 	}
@@ -361,9 +361,9 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 		}
 		MobclickAgent.onEvent(getActivity(), SELECTSPECIFIEDDAYSPORTDATA);
 //		defaultCustomDate = date;
-		clickYear=date.year;
-		clickMonth=date.month;
-		clickDay=date.day;
+		clickYear = date.year;
+		clickMonth = date.month;
+		clickDay = date.day;
 		llDialogCalendar.setVisibility(View.GONE);
 		setShowDateText(date.year, date.month, date.day);
 		String stringTime = date.year + "-" + date.month + "-" + date.day + " 00:00:00";
@@ -389,7 +389,6 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 	}
 
 	private void SportRecordHttp(String time) {
-
 		SportRecordDateHttp sportRecordDateHttp = new SportRecordDateHttp(this, HttpConfigUrl.COMTYPE_SPORT_GET_RECORD_DATE, time);
 		new Thread(sportRecordDateHttp).start();
 	}
@@ -472,15 +471,15 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 					listDate.add(Integer.parseInt(DateUtils.getDateToString(Long.parseLong(list.get(i).getDate())).substring(8, 10)));
 				}
 				String strMonth = tvShowMonthView.getText().toString();
-				Log.e("CalenderView","month="+strMonth);
-				Log.e("CalenderView","month="+defaultCustomDate.month+"year="+defaultCustomDate.year+"day="+defaultCustomDate.day);
+				Log.e("CalenderView", "month=" + strMonth);
+				Log.e("CalenderView", "month=" + defaultCustomDate.month + "year=" + defaultCustomDate.year + "day=" + defaultCustomDate.day);
 				if (!TextUtils.isEmpty(strMonth) && defaultCustomDate.month == Integer.parseInt(strMonth.substring(5, 7)) && defaultCustomDate.year == Integer.parseInt(strMonth.substring(0, 4))) {
-					Log.e("CalenderView","month="+strMonth);
+					Log.e("CalenderView", "month=" + strMonth);
 					if (!listDate.contains(defaultCustomDate.day)) {
 						listDate.add(defaultCustomDate.day);
 					}
 				}
-				views[viewPager.getCurrentItem() % views.length].setList(listDate,clickYear,clickMonth,clickDay);
+				views[viewPager.getCurrentItem() % views.length].setList(listDate, clickYear, clickMonth, clickDay);
 			}
 		}
 	}

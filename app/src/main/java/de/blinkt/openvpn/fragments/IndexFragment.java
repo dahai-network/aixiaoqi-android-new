@@ -251,7 +251,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 				} else if (getActivity().getResources().getString(R.string.index_no_packet).equals(getBlutoothStatus())) {
 					status = R.string.index_no_packet;
 				} else if (getString(R.string.index_un_insert_card).equals(getBlutoothStatus())) {
-					status = R.string.index_no_signal;
+					status = R.string.index_un_insert_card;
 				} else if (getString(R.string.index_high_signal).equals(getBlutoothStatus())) {
 					status = R.string.index_high_signal;
 				} else if (getString(R.string.index_registing).equals(getBlutoothStatus())) {
@@ -474,13 +474,13 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	//修改蓝牙状态
 	public void changeBluetoothStatus(String leftText, int leftIconId) {
 		if (leftText != null && leftIconId != 0 && title != null) {
-			Log.e("changeBluetoothStatus","title="+(title==null)+"\nleftText="+leftText+"\nleftIconId="+leftIconId);
+			Log.e("changeBluetoothStatus", "title=" + (title == null) + "\nleftText=" + leftText + "\nleftIconId=" + leftIconId);
 			title.setLeftIvIconAndText(leftIconId, leftText);
 		}
 	}
 
 	//获取蓝牙状态
 	public String getBlutoothStatus() {
-		return title.getLeftText().getText().toString();
+		return title != null ? title.getLeftText().getText().toString() : "";
 	}
 }
