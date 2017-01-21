@@ -30,7 +30,7 @@ public class CalendarView extends View {
 	private int mViewHight;
 	private int mCellSpace;
 	private Row rows[] = new Row[TOTAL_ROW];
-	private static CustomDate mShowDate;//
+	public static CustomDate mShowDate;//
 	private CallBack mCallBack;//
 	private int touchSlop;
 	private boolean callBackCellSpace;
@@ -328,10 +328,10 @@ public class CalendarView extends View {
 				}
 
 
-			}
-		}
 	}
 
+}
+}
 	public void update() {
 		fillDate();
 		mCallBack.changeDate(mShowDate);
@@ -343,7 +343,7 @@ public class CalendarView extends View {
 //		Calendar calendar = Calendar.getInstance();
 //		int month = calendar.get(Calendar.MONTH)+1;
 //		int year = calendar.get(Calendar.YEAR);
-
+//
 //		if(year==mShowDate.year&&month==mShowDate.month){
 //			return;
 //		}

@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -258,12 +259,7 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 		defaultCustomDate.day = day;
 		defaultCustomDate.month = month + 1;
 		defaultCustomDate.year = calendar.get(Calendar.YEAR);
-		String dayString;
-		if (day < 10) {
-			dayString = "0" + day;
-		} else {
-			dayString = day + "";
-		}
+		String dayString = calenderFormat(day);
 		String monthString;
 		if (month < 10) {
 			monthString = "0" + (month + 1);
@@ -285,6 +281,17 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 		sportDataRecylerView.setAdapter(sportDataAdapter);
 		setHeader(sportDataRecylerView);
 		ICSOpenVPNApplication.getInstance().registerReceiver(realStepReceiver, getFilter());
+	}
+
+	@NonNull
+	private String calenderFormat(int calender) {
+		String dayString;
+		if (calender < 10) {
+			dayString = "0" + calender;
+		} else {
+			dayString = calender + "";
+		}
+		return dayString;
 	}
 
 	private void setHeader(ViewGroup view) {
@@ -329,28 +336,14 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 	}
 
 	public void setShowDateViewText(int year, int month, int day) {
-		String monthString;
-		if (month < 10) {
-			monthString = "0" + month;
-		} else {
-			monthString = month + "";
-		}
+		String monthString = calenderFormat(month);
 		tvShowMonthView.setText(year + getString(R.string.year) + monthString + getString(R.string.month));
 	}
 
 	public void setShowDateText(int year, int month, int day) {
-		String monthString;
-		String dayString;
-		if (month < 10) {
-			monthString = "0" + month;
-		} else {
-			monthString = month + "";
-		}
-		if (day < 10) {
-			dayString = "0" + day;
-		} else {
-			dayString = day + "";
-		}
+		String monthString=calenderFormat(month);
+		String dayString=calenderFormat(day);
+
 		tvMonth.setText(monthString + getString(R.string.month) + dayString + getString(R.string.daliy));
 	}
 
@@ -374,14 +367,8 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 		llDialogCalendar.setVisibility(View.GONE);
 		setShowDateText(date.year, date.month, date.day);
 		String stringTime = date.year + "-" + date.month + "-" + date.day + " 00:00:00";
-		String month;
-		if (date.month < 10) {
-			month = "0" + date.month;
-		} else {
-			month = date.month + "";
-		}
+		String month = calenderFormat(date.month);
 		TimeDialog = date.year + getString(R.string.year) + month;
-
 		long timeStamp = DateUtils.getStringToDate(stringTime);
 		String time = String.valueOf(timeStamp / 1000);
 		SportPeriodHttp(time);

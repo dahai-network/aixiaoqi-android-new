@@ -1,6 +1,11 @@
 package de.blinkt.openvpn.views.calendar;
 
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
+
+import java.util.Calendar;
+
+import static de.blinkt.openvpn.views.calendar.CalendarView.mShowDate;
 
 public class CalendarViewPagerLisenter implements OnPageChangeListener {
 
@@ -17,11 +22,13 @@ public class CalendarViewPagerLisenter implements OnPageChangeListener {
 	public void onPageSelected(int arg0) {
 
 
+
 		measureDirection(arg0);
 		updateCalendarView(arg0);
 	}
 
 	private void updateCalendarView(int arg0) {
+
 		if(mDirection == SildeDirection.RIGHT){
 			mShowViews[arg0 % mShowViews.length].nextMonth();
 		}else if(mDirection == SildeDirection.LEFT){
@@ -39,7 +46,6 @@ public class CalendarViewPagerLisenter implements OnPageChangeListener {
 
 		if (arg0 > mCurrIndex) {
 			mDirection = SildeDirection.RIGHT;
-
 		} else if (arg0 < mCurrIndex) {
 			mDirection = SildeDirection.LEFT;
 		}
@@ -48,10 +54,12 @@ public class CalendarViewPagerLisenter implements OnPageChangeListener {
 
 	@Override
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
+
 	}
 
 	@Override
 	public void onPageScrollStateChanged(int arg0) {
+
 	}
 
 
