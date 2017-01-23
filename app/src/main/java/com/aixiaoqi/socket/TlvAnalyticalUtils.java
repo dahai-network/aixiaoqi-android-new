@@ -209,8 +209,16 @@ public class TlvAnalyticalUtils {
 		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
 		stringBuilder.replace(6, 8, "00");
 		sendToSdkLisener.sendServer(stringBuilder.toString());
-		if (TestProvider.sendYiZhengService != null)
+		if (TestProvider.sendYiZhengService != null){
+			try {
+
+				Thread.sleep(2000);
+			}catch (Exception e){
+
+			}
+			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
 			TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+		}
 	}
 
 	public static boolean isRegisterSucceed = false;
