@@ -186,21 +186,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	}
 
-	private void reStartTcpSocket(){
-		if(SocketConstant.REGISTER_STATUE_CODE==2||SocketConstant.REGISTER_STATUE_CODE==3){
-			startSocketService();
-			TestProvider.isIccid=true;
-			TestProvider.isCreate=true;
-			if(TestProvider.sendYiZhengService==null){
-				TestProvider.sendYiZhengService=new SendYiZhengService();
-			}
-			TestProvider.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
-		}else if(SocketConstant.REGISTER_STATUE_CODE==1){
-			JNIUtil.startSDK(1);
-		}
-
-
-	}
+//	private void reStartTcpSocket(){
+//		if(SocketConstant.REGISTER_STATUE_CODE==2||SocketConstant.REGISTER_STATUE_CODE==3){
+//			startSocketService();
+//			TestProvider.isIccid=true;
+//			TestProvider.isCreate=true;
+//			if(TestProvider.sendYiZhengService==null){
+//				TestProvider.sendYiZhengService=new SendYiZhengService();
+//			}
+//			TestProvider.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+//		}else if(SocketConstant.REGISTER_STATUE_CODE==1){
+//			JNIUtil.startSDK(1);
+//		}
+//
+//
+//	}
 
 	private void startDataframService() {
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
@@ -544,6 +544,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				SocketConnection.mReceiveDataframSocketService.stopSelf();
 			}
 		}
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())){
+			unbindService(socketTcpConnection);
+			if (SocketConnection.mReceiveSocketService != null) {
+				SocketConnection.mReceiveSocketService.stopSelf();
+			}
+		}
 		if (mService != null)
 			mService.stopSelf();
 		mService = null;
@@ -560,11 +566,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private void destorySocketService(int type) {
-		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
-			unbindService(socketTcpConnection);
-		if (SocketConnection.mReceiveSocketService != null) {
-			SocketConnection.mReceiveSocketService.stopSelf();
-		}
 		if (SocketConstant.REGISTER_STATUE_CODE != 0 && type == SocketConstant.REGISTER_FAIL_INITIATIVE) {
 			SocketConstant.REGISTER_STATUE_CODE = 1;
 		}
