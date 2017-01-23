@@ -10,6 +10,7 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.util.CommonTools;
 
 import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
@@ -48,6 +49,7 @@ private static String TAG="ReceiveSocketService";
 
 		@Override
 		public void onConnectFailed() {
+			CommonTools.delayTime(2000);
 			if (contactFailCount <= 3) {
 				reConnect();
 			}
@@ -73,13 +75,14 @@ private static String TAG="ReceiveSocketService";
 		@Override
 		public void onDisconnect(SocketTransceiver transceiver) {
 			Log.e("Blue_Chanl", "断开连接 - onDisconnect");
+			CommonTools.delayTime(2000);
 			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 			reConnect();
 
 		}
-
-
 	};
+
+
 
 	private void reConnect() {
 		tcpClient.disconnect();

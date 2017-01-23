@@ -114,4 +114,13 @@ public class CommonTools {
 	public static boolean isNotBlank(ArrayList<Object> list) {
 		return null != list && list.size() > 0;
 	}
+
+	public static  void delayTime(int time) {
+		try {
+
+			Thread.sleep(time);
+		}catch (InterruptedException e){
+
+		}
+	}
 }

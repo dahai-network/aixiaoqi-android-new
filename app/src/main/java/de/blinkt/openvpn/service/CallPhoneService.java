@@ -163,12 +163,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
         else
             Log.e(TAG,"媒体连接成功 模式 P2P");
 
-        try {
-
-            Thread.sleep(1000);
-        }catch (Exception e){
-
-        }
+        CommonTools.delayTime(1000);
         Intent intent = new Intent();
         intent.setAction(waitConnected);
         sendBroadcast(intent);

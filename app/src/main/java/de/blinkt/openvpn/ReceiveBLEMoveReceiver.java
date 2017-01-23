@@ -164,11 +164,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					if (!TextUtils.isEmpty(utils.readString(Constant.IMEI)) && ICSOpenVPNApplication.isConnect) {
 						//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 						// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+					CommonTools.delayTime(2000);
 						mService.connect(utils.readString(Constant.IMEI));
 					} else {
 						Log.d(TAG, "UART_DISCONNECT_MSG");
@@ -446,11 +442,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					new Thread(new Runnable() {
 						@Override
 						public void run() {
-							try {
-								Thread.sleep(500);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
+						CommonTools.delayTime(500);
 							Intent findNullCardIntent = new Intent();
 							findNullCardIntent.putExtra("nullcardNumber", nullCardId);
 							findNullCardIntent.setAction(MyOrderDetailActivity.FIND_NULL_CARD_ID);

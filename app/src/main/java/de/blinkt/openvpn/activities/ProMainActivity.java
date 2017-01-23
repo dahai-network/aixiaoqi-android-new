@@ -107,7 +107,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	SportFragment sportFragment;
 	IndexFragment indexFragment;
 	//重连时间
-	private long RECONNECT_TIME = 180000;
+	private int RECONNECT_TIME = 180000;
 	SocketConnection socketUdpConnection;
 	SocketConnection socketTcpConnection;
 	public static String STOP_CELL_PHONE_SERVICE = "stopservice";
@@ -328,12 +328,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							return;
 						}
 						while (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED) {
-							try {
-								scanDeviceFiveSecond();
-								Thread.sleep(RECONNECT_TIME);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
+							scanDeviceFiveSecond();
+							CommonTools.delayTime(RECONNECT_TIME);
+
 						}
 
 					}
@@ -621,11 +618,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						public void run() {
 							startDataframService();
 							startSocketService();
-							try {
-								Thread.sleep(5000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
+							CommonTools.delayTime(5000);
 							Log.e("phoneAddress", "main.start()");
 							JNIUtil.getInstance().startSDK(1);
 						}

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.util.CommonTools;
 
 
 /**
@@ -69,13 +70,8 @@ public class PointProgressBar extends LinearLayout {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				try {
-					Thread.sleep(100);
-					handler.sendEmptyMessage(0);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-
+				CommonTools.delayTime(100);
+				handler.sendEmptyMessage(0);
 			}
 		}).start();
 

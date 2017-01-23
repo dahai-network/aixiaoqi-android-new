@@ -33,6 +33,7 @@ import de.blinkt.openvpn.activities.LoginMainActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
 /**
@@ -92,11 +93,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 			//如果用户没有处理则让系统默认的异常处理器来处理
 			mDefaultHandler.uncaughtException(thread, ex);
 		} else {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				Log.e(TAG, "error : ", e);
-			}
+			CommonTools.delayTime(100);
 //			Intent intent = new Intent(application.getApplicationContext(), LaunchActivity.class);
 
 

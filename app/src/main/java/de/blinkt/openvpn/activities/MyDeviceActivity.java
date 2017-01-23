@@ -134,7 +134,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	private UartService mService = ICSOpenVPNApplication.uartService;
 	private Timer checkPowerTimer = new Timer();
 	private String macAddressStr;
-	private long SCAN_PERIOD = 10000;//原本120000毫秒
+	private int SCAN_PERIOD = 10000;//原本120000毫秒
 	private DialogBalance noDevicedialog;
 	private DialogBalance cardRuleBreakDialog;
 
@@ -323,11 +323,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				serviceOperationEntity.setServiceName(UartService.class.getName());
 				serviceOperationEntity.setOperationType(ServiceOperationEntity.REMOVE_SERVICE);
 				EventBus.getDefault().post(serviceOperationEntity);
-				try {
-					Thread.sleep(200);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				CommonTools.delayTime(200);
 				serviceOperationEntity.setOperationType(ServiceOperationEntity.CREATE_SERVICE);
 				EventBus.getDefault().post(serviceOperationEntity);
 			}
@@ -424,11 +420,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						public void run() {
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
-							try {
-								Thread.sleep(2000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
+							CommonTools.delayTime(2000);
 							mService.connect(deviceAddresstemp);
 						}
 					});
@@ -595,11 +587,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = (DownloadSkyUpgradePackageHttp) object;
 			if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				sendMessageToBlueTooth("AA080401A7");
-				try {
-					Thread.sleep(1000);
-				} catch (Exception e) {
-
-				}
+				CommonTools.delayTime(1000);
 				uploadToBlueTooth();
 			} else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				CommonTools.showShortToast(this, Constant.DOWNLOAD_FAIL);
@@ -726,12 +714,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				while (percent >= slowPercent[0]) {
 					sinking.setPercent(slowPercent[0]);
 					slowPercent[0] += 0.01f;
-					try {
-						Thread.sleep(40);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-
+					CommonTools.delayTime(40);
 				}
 				slowPercent[0] = percent;
 				sinking.setPercent(slowPercent[0]);
@@ -752,11 +735,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				if (enable) {
 					// Stops scanning after a pre-defined scan period.
 					mBtAdapter.startLeScan(mLeScanCallback);
-					try {
-						Thread.sleep(SCAN_PERIOD);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					CommonTools.delayTime(SCAN_PERIOD);
 					if (mService.mConnectionState != UartService.STATE_CONNECTED) {
 						mBtAdapter.stopLeScan(mLeScanCallback);
 						runOnUiThread(new Runnable() {
