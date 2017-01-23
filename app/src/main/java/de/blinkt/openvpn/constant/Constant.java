@@ -59,7 +59,6 @@ public class Constant {
 	public static final String CALL_OUTGOING = "拨出";
 	public static final String CALL_MISSED = "未接";
 	//蓝牙指令
-	public static final String CONNECT_TO_DEVICE = "AABBCCDDEEFF";//连接指令
 	public static String UP_TO_POWER = "AADB040172";//上电指令
 	public static String UP_TO_POWER_HAVE_DETAIL = "AADB040174";//上电指令,具有详细卡信息
 	public static final String OFF_TO_POWER = "AADC040173";//断点指令
@@ -78,11 +77,8 @@ public class Constant {
 	public static final String WEIXIN_REMIND = "NotificaWeChat";
 	public static final String QQ_REMIND = "NotificaQQ";
 
-	public static boolean IS_UP_TO_POWER = false;
 	//是否打开写卡流程，如果没有打开则是测试SIM卡是否连接上，如果否则为写卡流程，可以连接到GOIP
 	public static boolean IS_TEXT_SIM = true;
-	//是否连接到GOIP（默认true）
-	public static boolean IS_RECEIVE_GOIP = true;
 	//注册卡回调类型
 	public static final int REGIST_CALLBACK_TYPE = 0;
 	public static final int REGIST_TYPE = 1;

@@ -167,16 +167,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 					}
 				}
 			});
-//			this.dial_delete_btn.setOnLongClickListener(new View.OnLongClickListener() {
-//				@Override
-//				public boolean onLongClick(View v) {
-//					onDialInputTextChanged("");
-//					t9dialpadview.mT9InputEt.setText("");
-//					hidePhoneBottomBar();
-//					clickPhoneLinearLayout();
-//					return true;
-//				}
-//			});
+
 		}
 
 
