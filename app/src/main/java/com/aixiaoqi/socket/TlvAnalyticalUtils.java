@@ -39,13 +39,6 @@ public class TlvAnalyticalUtils {
 			return null;
 		}
 		tag = tag & 127;
-		if (tag != 5) {
-			if (System.currentTimeMillis() - registerSimTime > 5 * 60 * 1000 && isRegisterSucceed) {
-				sendMessageToBlueTooth(Constant.OFF_TO_POWER);
-
-			}
-			registerSimTime = System.currentTimeMillis();
-		}
 		position = position + 8;
 		String sessionId = hexString.substring(position, position + 8);
 		if(tag==4){
@@ -135,10 +128,10 @@ public class TlvAnalyticalUtils {
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
 					}
 				} else if (typeParams == 199) {
-					if (REGISTER_STATUE_CODE == 2) {//第一次是010101的时候不去复位SDK,第二次的时候才对SDK进行复位
-						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
-					}
-					SocketConstant.REGISTER_STATUE_CODE = 2;
+//					if (REGISTER_STATUE_CODE == 2) {//第一次是010101的时候不去复位SDK,第二次的时候才对SDK进行复位
+//						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
+//					}
+
 					String rpValue = "000100163b9f94801fc78031e073fe211b573786609b30800119";
 					StringBuilder stringBuilder = new StringBuilder();
 					stringBuilder.append(rpValue);
@@ -173,7 +166,6 @@ public class TlvAnalyticalUtils {
 						entity.setType(Constant.REGIST_CALLBACK_TYPE);
 						entity.setSuccess(true);
 						EventBus.getDefault().post(entity);
-						registerSimTime = System.currentTimeMillis();
 						registerOrTime = System.currentTimeMillis();
 						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
@@ -225,7 +217,6 @@ public class TlvAnalyticalUtils {
 	}
 
 	public static boolean isRegisterSucceed = false;
-	public static long registerSimTime;
 	public static long registerOrTime;
 	private static long lastClickTime;
 	private static int count = 0;
@@ -282,7 +273,6 @@ public class TlvAnalyticalUtils {
 
 	public static void clearData() {
 		isRegisterSucceed = false;
-		registerSimTime = 0;
 		registerOrTime = 0;
 		lastClickTime = 0;
 		count = 0;

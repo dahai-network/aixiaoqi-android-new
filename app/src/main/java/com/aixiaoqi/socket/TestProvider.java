@@ -10,6 +10,8 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 
+import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
+
 
 public class TestProvider {
 
@@ -108,6 +110,7 @@ public class TestProvider {
 			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = hex;
 			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preDataEntity.getLenString();
 			sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+			REGISTER_STATUE_CODE = 2;
 		} else if (SocketConstant.EN_APPEVT_SIMDATA.equals(preDataEntity.getEvtIndex())) {
 			SocketConstant.SDK_VALUE = hex;
 			sendYiZhengService.sendGoip(SocketConstant.PRE_DATA);
