@@ -265,8 +265,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				mService.disconnect();
 				//传出注册失败
 				registFail();
-				//重启Uart服务
-				restartUartService();
+//				//重启Uart服务
+//				restartUartService();
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
 				break;
