@@ -64,9 +64,9 @@ public abstract class SocketTransceiver implements Runnable {
 		try {
 			if (socket != null) {
 				socket.shutdownInput();
-				if(in!=null)
+				if (in != null)
 					in.close();
-				if(out!=null)
+				if (out != null)
 					out.close();
 			}
 
@@ -115,7 +115,6 @@ public abstract class SocketTransceiver implements Runnable {
 		byte[] byteBuffer = new byte[1024];
 		try {
 			in = new DataInputStream(this.socket.getInputStream());
-
 			Log.i("toBLue", "socket接收数据初始化");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -145,6 +144,8 @@ public abstract class SocketTransceiver implements Runnable {
 			out = null;
 			socket = null;
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		this.onDisconnect(addr);
