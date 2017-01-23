@@ -39,6 +39,7 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
+import static de.blinkt.openvpn.constant.Constant.ANDROID_TARGET;
 import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.FIND_VERSION;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
@@ -117,6 +118,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						if (!CommonTools.isFastDoubleClick(3000)) {
 							sendMessageToBlueTooth(FIND_VERSION);
 						}
+						Thread.sleep(1000);
+						//android 标记，给蓝牙设备标记是否是android设备用的
+						sendMessageToBlueTooth(ANDROID_TARGET);
 //						sendMessageToBlueTooth("AABBCCDDEEFF");//绑定命令
 //						Thread.sleep(1000);
 //						if (!isConnect) {

@@ -31,7 +31,7 @@ public class SdkAndBluetoothDataInchange {
 														 //SDK接收到消息发送给蓝牙消息的方法
 														 //TODO
 														 Log.e(TAG, "&&& server temp:" + msg);
-														 if(!TextUtils.isEmpty(msg))
+														 if (!TextUtils.isEmpty(msg))
 															 sendToBluetoothAboutCardInfo(msg);
 
 													 }
@@ -49,18 +49,18 @@ public class SdkAndBluetoothDataInchange {
 	private String mStrSimPowerOnPacket = "";
 	byte num = 0;
 	private long lastTime;
-	private int count=0;
+	private int count = 0;
 
-	Timer timerMessage=new Timer();
-	TimerTask timerTaskMessage=new TimerTask() {
+	Timer timerMessage = new Timer();
+	TimerTask timerTaskMessage = new TimerTask() {
 		@Override
 		public void run() {
 
-			if(SocketConstant.REGISTER_STATUE_CODE!=3){
+			if (SocketConstant.REGISTER_STATUE_CODE != 3) {
 
-				if(System.currentTimeMillis()-getSendBlueToothTime>5000&&!isReceiveBluetoothData){
-					Log.e("timer","接收不到蓝牙数据");
-				JNIUtil.startSDK(2);
+				if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData) {
+					Log.e("timer", "接收不到蓝牙数据");
+					JNIUtil.startSDK(2);
 				}
 			}
 		}
@@ -75,42 +75,43 @@ public class SdkAndBluetoothDataInchange {
 
 	IsSuccessEntity entity;
 	long getSendBlueToothTime;
-	private int countMessage=0;
+	private int countMessage = 0;
+
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
-		isReceiveBluetoothData=true;
-		if(countMessage==0){
-			Log.e("timer","开启定时器");
-			timerMessage.schedule(timerTaskMessage,5000,5000);
+		isReceiveBluetoothData = true;
+		if (countMessage == 0) {
+			Log.e("timer", "开启定时器");
+			timerMessage.schedule(timerTaskMessage, 5000, 5000);
 			countMessage++;
 		}
 		num++;
 		if (num != txValue[4]) {
 			try {
 				Thread.sleep(500);
-			}catch (Exception e){
+			} catch (Exception e) {
 			}
 			num = 0;
 
-			if((System.currentTimeMillis()-lastTime>365*24*60*60*1000l||System.currentTimeMillis()-lastTime<2000)&&count<=3){
-				Log.e(TAG, "蓝牙数据出错重发=" + finalTemp+"\ncount="+count);
+			if ((System.currentTimeMillis() - lastTime > 365 * 24 * 60 * 60 * 1000l || System.currentTimeMillis() - lastTime < 2000) && count <= 3) {
+				Log.e(TAG, "蓝牙数据出错重发=" + finalTemp + "\ncount=" + count);
 
-				lastTime=System.currentTimeMillis();
+				lastTime = System.currentTimeMillis();
 				sendToBluetoothAboutCardInfo(finalTemp);
-			}else if(count>3&&count<5){
-				Log.e(TAG, "蓝牙数据出错重发   注册失败" );
+			} else if (count > 3 && count < 5) {
+				Log.e(TAG, "蓝牙数据出错重发   注册失败");
 				notifyRegisterFail();
 			}
 			count++;
 			return;
 		}
-		if(percentEntity==null){
-			percentEntity=new PercentEntity();
+		if (percentEntity == null) {
+			percentEntity = new PercentEntity();
 		}
-		int percent=Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag())?"-1":mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length()-4,mReceiveDataframSocketService.getSorcketTag().length()-1));
+		int percent = Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag()) ? "-1" : mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length() - 4, mReceiveDataframSocketService.getSorcketTag().length() - 1));
 		percentEntity.setPercent(percent);
 		EventBus.getDefault().post(percentEntity);
-		lastTime=0;
-		count=0;
+		lastTime = 0;
+		count = 0;
 		if (messages == null) {
 			messages = new ArrayList<>();
 		}
@@ -121,8 +122,8 @@ public class SdkAndBluetoothDataInchange {
 
 			// 接收到一个完整的数据包,发送到SDK
 			int length = (txValue[2] & 0xff);
-			if(num>=19 && length<252){
-				length+=255;
+			if (num >= 19 && length < 252) {
+				length += 255;
 			}
 			String sendToOnService = null;
 			Log.e(TAG, "从蓝牙发出的完整数据 mStrSimPowerOnPacket:" + mStrSimPowerOnPacket.length() + "; \n"
@@ -153,6 +154,7 @@ public class SdkAndBluetoothDataInchange {
 
 		}
 	}
+
 	PercentEntity percentEntity;
 
 	private void sendToSDKAboutBluetoothInfo(final String finalMessage) {
@@ -163,11 +165,12 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 	private String finalTemp;
-	private boolean isReceiveBluetoothData=true;
+	private boolean isReceiveBluetoothData = true;
+
 	private void sendToBluetoothAboutCardInfo(String msg) {
 		Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + msg);
-		isReceiveBluetoothData=false;
-		getSendBlueToothTime=System.currentTimeMillis();
+		isReceiveBluetoothData = false;
+		getSendBlueToothTime = System.currentTimeMillis();
 		String temp = "";
 		if (msg.length() > 7) {
 			temp = msg.substring(7);
@@ -212,8 +215,10 @@ public class SdkAndBluetoothDataInchange {
 			mService.writeRXCharacteristic(value);
 			Log.e(TAG, "SIM发送上电数据");
 		} else {
-			byte[] value = HexStringExchangeBytesUtil.hexStringToBytes(temp);
-			mService.writeRXCharacteristic(value);
+			if (mService != null) {
+				byte[] value = HexStringExchangeBytesUtil.hexStringToBytes(temp);
+				mService.writeRXCharacteristic(value);
+			}
 		}
 	}
 }

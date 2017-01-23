@@ -4,7 +4,7 @@ package de.blinkt.openvpn.constant;
  * Created by Administrator on 2016/9/8 0008.
  */
 public class Constant {
-	public static final boolean IS_DEBUG = false;
+	public static final boolean IS_DEBUG = true;
 //	public static final String BLUETOOTH_NAME = "unitoys";
 	public static final String BLUETOOTH_NAME = "ZiJian";
 	//购买套餐数量限制
@@ -68,6 +68,7 @@ public class Constant {
 	public static final String FIND_VERSION = "AA0A01A1";//版本号
 	public static final String RESTORATION = "AA112233AA";//复位命令
 	public static final String BIND_SUCCESS = "AADD01DDAA";//绑定成功命令
+	public static final String ANDROID_TARGET = "AA010500AE";//绑定成功命令
 	//ICCID标记
 	public static final String ICCID = "ICCID";
 	//来电，短信，微信，QQ通知开关标记

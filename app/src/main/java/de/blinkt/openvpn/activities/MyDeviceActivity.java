@@ -790,7 +790,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 									if (device.getName() == null) {
 										return;
 									}
-									Log.i("test", "find the device:" + device.getName() + "mac:" + device.getAddress() + ",rssi :" + rssi);
+									Log.i("test", "find the device:" + device.getName() + "mac:" + device.getAddress() +"macAddressStr:" + macAddressStr+ ",rssi :" + rssi);
 									if (macAddressStr != null) {
 										if (macAddressStr.equalsIgnoreCase(device.getAddress())) {
 											scanLeDevice(false);
@@ -914,6 +914,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 			percentTextView.setVisibility(View.GONE);
 			return;
+		} else {
+			percentTextView.setVisibility(View.VISIBLE);
 		}
 		double percent = entity.getPercent();
 		int percentInt = (int) (percent / 1.6);
