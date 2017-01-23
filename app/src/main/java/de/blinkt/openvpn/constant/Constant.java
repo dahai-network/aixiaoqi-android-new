@@ -5,7 +5,7 @@ package de.blinkt.openvpn.constant;
  */
 public class Constant {
 	public static final boolean IS_DEBUG = true;
-//	public static final String BLUETOOTH_NAME = "unitoys";
+	//	public static final String BLUETOOTH_NAME = "unitoys";
 	public static final String BLUETOOTH_NAME = "ZiJian";
 	//购买套餐数量限制
 	public static final int LIMIT_COUNT = 30;
@@ -81,7 +81,6 @@ public class Constant {
 	public static boolean IS_TEXT_SIM = true;
 	//注册卡回调类型
 	public static final int REGIST_CALLBACK_TYPE = 0;
-	public static final int REGIST_TYPE = 1;
 	//蓝牙连接状态int
 	public static final int BLUE_CONNECTED_INT = 2;
 

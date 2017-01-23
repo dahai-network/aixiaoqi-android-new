@@ -68,7 +68,7 @@ public class SdkAndBluetoothDataInchange {
 
 	private void notifyRegisterFail() {
 		IsSuccessEntity entity = new IsSuccessEntity();
-		entity.setType(Constant.REGIST_TYPE);
+		entity.setType(Constant.REGIST_CALLBACK_TYPE);
 		entity.setSuccess(false);
 		EventBus.getDefault().post(entity);
 	}

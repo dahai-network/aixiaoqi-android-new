@@ -308,7 +308,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	private void registFail() {
 		Log.e(TAG, "registFail");
 		IsSuccessEntity entity = new IsSuccessEntity();
-		entity.setType(Constant.REGIST_TYPE);
+		entity.setType(Constant.REGIST_CALLBACK_TYPE);
 		entity.setSuccess(false);
 		entity.setFailType(SocketConstant.REGISTER_FAIL_INITIATIVE);
 		EventBus.getDefault().post(entity);
@@ -790,7 +790,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 									if (device.getName() == null) {
 										return;
 									}
-									Log.i("test", "find the device:" + device.getName() + "mac:" + device.getAddress() +"macAddressStr:" + macAddressStr+ ",rssi :" + rssi);
+									Log.i("test", "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
 									if (macAddressStr != null) {
 										if (macAddressStr.equalsIgnoreCase(device.getAddress())) {
 											scanLeDevice(false);
@@ -899,11 +899,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
 						break;
+					default:
+						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
+							setConStatus(R.string.index_regist_fail);
+						}
+						break;
 				}
-			}
-		} else if (entity.getType() == Constant.REGIST_TYPE) {
-			if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
-				setConStatus(R.string.index_regist_fail);
 			}
 		}
 		percentTextView.setVisibility(View.GONE);
