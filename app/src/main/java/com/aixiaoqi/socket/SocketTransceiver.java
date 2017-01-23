@@ -99,7 +99,6 @@ public abstract class SocketTransceiver implements Runnable {
 				out.flush();
 				return true;
 			} catch (Exception e) {
-
 				e.printStackTrace();
 				this.onDisconnect(addr);
 			}

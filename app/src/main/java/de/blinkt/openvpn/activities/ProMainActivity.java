@@ -30,10 +30,8 @@ import android.widget.Toast;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
-import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
-import com.aixiaoqi.socket.TestProvider;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -69,7 +67,6 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
 
-import static android.R.attr.type;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
@@ -530,7 +527,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		stopService(intentCallPhone);
 		//关闭服务并设置为null
 
-		destorySocketService(1000);
 		if (isDfuServiceRunning()) {
 			stopService(new Intent(this, DfuService.class));
 		}
@@ -541,7 +537,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				SocketConnection.mReceiveDataframSocketService.stopSelf();
 			}
 		}
-		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())){
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
 			unbindService(socketTcpConnection);
 			if (SocketConnection.mReceiveSocketService != null) {
 				SocketConnection.mReceiveSocketService.stopSelf();
@@ -562,8 +558,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		super.onDestroy();
 	}
 
-	private void destorySocketService(int type) {
-		if (SocketConstant.REGISTER_STATUE_CODE != 0 && type == SocketConstant.REGISTER_FAIL_INITIATIVE) {
+	private void destorySocketService() {
+		if (SocketConstant.REGISTER_STATUE_CODE != 0) {
 			SocketConstant.REGISTER_STATUE_CODE = 1;
 		}
 	}
@@ -678,7 +674,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			if (entity.isSuccess()) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 			} else {
-				destorySocketService(entity.getFailType());
+				destorySocketService();
 				switch (entity.getFailType()) {
 					case SocketConstant.REGISTER_FAIL:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail));
@@ -689,14 +685,15 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
 						break;
+					default:
+						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
+							indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
+							CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
+						}
+						destorySocketService();
+						break;
 				}
 			}
-		} else if (entity.getType() == Constant.REGIST_TYPE) {
-			if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
-				indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
-				CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
-			}
-			destorySocketService(entity.getFailType());
 		} else if (entity.getType() == Constant.BLUE_CONNECTED_INT) {
 			startDataframService();
 			startSocketService();

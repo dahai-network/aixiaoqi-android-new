@@ -27,6 +27,7 @@
         android:text="@string/please_close_to_the_phone"
         android:textColor="@color/login_bottom_line"
         android:textSize="10sp"
+        android:visibility="gone"
         />
 
 
