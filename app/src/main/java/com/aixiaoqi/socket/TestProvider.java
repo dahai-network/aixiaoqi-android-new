@@ -58,11 +58,11 @@ public class TestProvider {
 			}
 		}
 		String imsi = iccidEntity.getImmsi().trim();
+		Log.e("preDataSplit", "ICCID:" + iccidEntity.getIccid() + "\nIMMSI:" + iccidEntity.getImmsi());
 		if (!TextUtils.isEmpty(imsi)) {
 			if (imsi.startsWith("46000") || imsi.startsWith("46001") || imsi.startsWith("46002") || imsi.startsWith("46003") || imsi.startsWith("46007")) {//因为移动网络编号46000下的IMSI已经用完，所以虚拟了一个46002编号，134/159号段使用了此编号
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
-				Log.e("preDataSplit", "ICCID:" + iccidEntity.getIccid() + "\nIMMSI:" + iccidEntity.getImmsi());
 				isIccid = true;
 				if (isCreate && isIccid) {
 					sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
@@ -70,7 +70,7 @@ public class TestProvider {
 			} else {
 				IsSuccessEntity entity = new IsSuccessEntity();
 				entity.setType(Constant.REGIST_CALLBACK_TYPE);
-				entity.setFailType(SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR);
+				entity.setFailType(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 				entity.setSuccess(false);
 				EventBus.getDefault().post(entity);
 				return;

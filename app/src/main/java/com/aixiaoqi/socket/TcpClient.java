@@ -106,7 +106,6 @@ public abstract class TcpClient implements Runnable {
 	public void disconnect() {
 		if (transceiver != null) {
 			transceiver.stop();
-
 			transceiver = null;
 		}
 	}

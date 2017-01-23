@@ -134,14 +134,19 @@ public abstract class SocketTransceiver implements Runnable {
 
 		// 断开连接
 		try {
-			in.close();
-			out.close();
+
+			if(in!=null){
+				in.close();
+				in = null;
+			}
+			if(out!=null){
+				out.close();
+				out = null;
+			}
+			if(socket!=null){
 			socket.close();
-			if(in!=null)
-			in = null;
-			if(out!=null)
-			out = null;
 			socket = null;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
