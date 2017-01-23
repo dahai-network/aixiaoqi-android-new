@@ -108,7 +108,6 @@ class AudioDeviceAndroid {
             e.printStackTrace();
             return -1;
         }
-
         _isRecording = true;
         return 0;
     }

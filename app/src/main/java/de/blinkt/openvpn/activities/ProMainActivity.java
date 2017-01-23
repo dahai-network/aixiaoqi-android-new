@@ -30,8 +30,10 @@ import android.widget.Toast;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
+import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
+import com.aixiaoqi.socket.TestProvider;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -145,17 +147,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pro_main);
-
 		findViewById();
-
 		initFragment();
-
 		addListener();
-
 		setListener();
-
 		initServices();
-
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
 
@@ -188,6 +184,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			Intent receiveSdkIntent = new Intent(this, ReceiveSocketService.class);
 			bindService(receiveSdkIntent, socketTcpConnection, Context.BIND_AUTO_CREATE);
 		}
+	}
+
+	private void reStartTcpSocket(){
+		if(SocketConstant.REGISTER_STATUE_CODE==2||SocketConstant.REGISTER_STATUE_CODE==3){
+			startSocketService();
+			TestProvider.isIccid=true;
+			TestProvider.isCreate=true;
+			if(TestProvider.sendYiZhengService==null){
+				TestProvider.sendYiZhengService=new SendYiZhengService();
+			}
+			TestProvider.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+		}else if(SocketConstant.REGISTER_STATUE_CODE==1){
+			JNIUtil.startSDK(1);
+		}
+
+
 	}
 
 	private void startDataframService() {
@@ -690,7 +702,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
 				CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
 			}
-			destorySocketService(type);
+			destorySocketService(entity.getFailType());
 		} else if (entity.getType() == Constant.BLUE_CONNECTED_INT) {
 			startDataframService();
 			startSocketService();

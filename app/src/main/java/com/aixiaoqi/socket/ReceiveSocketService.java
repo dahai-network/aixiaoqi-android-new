@@ -23,7 +23,7 @@ public class ReceiveSocketService extends Service {
 	private int contactFailCount = 1;
 	PendingIntent sender;
 	AlarmManager am;
-
+private static String TAG="ReceiveSocketService";
 	@Override
 	public IBinder onBind(Intent intent) {
 		return mBinder;
@@ -96,7 +96,10 @@ public class ReceiveSocketService extends Service {
 
 	@Override
 	public void onDestroy() {
+		Log.e(TAG,"onDestroy()");
 		tcpClient.disconnect();
+		tcpClient=null;
+		Log.e(TAG,"tcpClient=null"+(tcpClient==null));
 		if (am != null)
 			am.cancel(sender);
 		TlvAnalyticalUtils.clearData();

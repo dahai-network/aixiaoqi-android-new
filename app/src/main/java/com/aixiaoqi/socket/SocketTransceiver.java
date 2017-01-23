@@ -138,9 +138,10 @@ public abstract class SocketTransceiver implements Runnable {
 		try {
 			in.close();
 			out.close();
-
 			socket.close();
+			if(in!=null)
 			in = null;
+			if(out!=null)
 			out = null;
 			socket = null;
 		} catch (IOException e) {

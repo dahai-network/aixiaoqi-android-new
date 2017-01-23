@@ -26,7 +26,9 @@ public class SocketConnection implements ServiceConnection {
 			if(sdkAndBluetoothDataInchange==null) {
                 sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
             }
+            if(ICSOpenVPNApplication.uartService!=null){
             sdkAndBluetoothDataInchange.initReceiveDataframSocketService(mReceiveDataframSocketService, ICSOpenVPNApplication.uartService);
+            }
         }else if(service instanceof ReceiveSocketService.LocalBinder ){
             mReceiveSocketService = ((ReceiveSocketService.LocalBinder) service)
                     .getService();

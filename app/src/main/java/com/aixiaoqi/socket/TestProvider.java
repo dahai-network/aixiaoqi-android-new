@@ -15,7 +15,7 @@ public class TestProvider {
 
 	static PreDataEntity preDataEntity = new PreDataEntity();
 	static IccidEntity iccidEntity = new IccidEntity();
-	static SendYiZhengService sendYiZhengService;
+	public static SendYiZhengService sendYiZhengService;
 	private static void offToPower() {
 		byte[] value;
 		value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.OFF_TO_POWER);
@@ -39,8 +39,8 @@ public class TestProvider {
 		}
 	}
 
-	private static boolean isCreate = false;
-	private static boolean isIccid = false;
+	public static boolean isCreate = false;
+	public static boolean isIccid = false;
 
 
 	private static void iccidDataSplit(String item) {
