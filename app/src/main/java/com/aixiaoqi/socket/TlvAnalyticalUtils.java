@@ -51,7 +51,7 @@ public class TlvAnalyticalUtils {
 		if(tag==4){
 		SocketConstant.SESSION_ID = sessionId;
 		}
-		if (!SocketConstant.SESSION_ID.equals(sessionId) && !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
+		else if (!SocketConstant.SESSION_ID.equals(sessionId) && !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
 //			SocketConstant.SESSION_ID = sessionId;
 			return null;
 		}
