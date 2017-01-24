@@ -4,9 +4,9 @@ package de.blinkt.openvpn.constant;
  * Created by Administrator on 2016/9/8 0008.
  */
 public class Constant {
-	public static final boolean IS_DEBUG = true;
-	//	public static final String BLUETOOTH_NAME = "unitoys";
-	public static final String BLUETOOTH_NAME = "ZiJian";
+	public static final boolean IS_DEBUG = false;
+		public static final String BLUETOOTH_NAME = "unitoys";
+//	public static final String BLUETOOTH_NAME = "ZiJian";
 	//购买套餐数量限制
 	public static final int LIMIT_COUNT = 30;
 	//保存登录信息
@@ -32,9 +32,9 @@ public class Constant {
 	public static final String IMEI = "BraceletIMEI";
 	public static final String BRACELETVERSION = "BraceletVersion";
 	//旧版本蓝牙设备
-	public static final int OLD_VERSION_DEVICE = 2;
+
 	public static final String ELECTRICITY = "electricity";
-	public static final String REALTIMESTEP = "realtimestep";
+
 
 	public static final String PHONE_NUMBER_LIST = "phone_number_list";
 	//更新请求的时间间隔（一小时提示一次升级）

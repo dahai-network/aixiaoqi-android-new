@@ -356,16 +356,6 @@ public class ArcProgress extends View {
 			canvas.drawText(text, (getWidth() - textPaint.measureText(text)) / 2.0f, textBaseline, textPaint);
 		}
 
-//        if(arcBottomHeight == 0) {
-//            float radius = getWidth() / 2f;
-//            float angle = (360 - arcAngle) / 2f;
-//            arcBottomHeight = radius * (float) (1 - Math.cos(angle / 180 * Math.PI));
-//        }
-//        if (!TextUtils.isEmpty(getBottomText())) {
-//            textPaint.setTextSize(bottomTextSize);
-//            float bottomTextBaseline = getHeight() - arcBottomHeight - (textPaint.descent() + textPaint.ascent()) / 2;
-//            canvas.drawText(getBottomText(), (getWidth() - textPaint.measureText(getBottomText())) / 2.0f, bottomTextBaseline, textPaint);
-//        }
 	}
 
 	@Override

@@ -32,41 +32,10 @@ public class NetworkUtils {
 			}
 		}
 
-//		CommonTools.showShortToast(context,context.getString(R.string.no_wifi));
 		return false;
 	}
 
-	/**
-	 * 检测网络速度
-	 */
-//	private long getTotalRxBytes() {
-//		return TrafficStats.getUidRxBytes(ICSOpenVPNApplication.getInstance().getApplicationInfo().uid)==TrafficStats.UNSUPPORTED ? 0 :(TrafficStats.getTotalRxBytes()/1024);//转为KB
-//	}
-//	private void showNetSpeed() {
-//
-//		long nowTotalRxBytes = getTotalRxBytes();
-//		long nowTimeStamp = System.currentTimeMillis();
-//		long speed = ((nowTotalRxBytes - lastTotalRxBytes) * 1000 / (nowTimeStamp - lastTimeStamp));//毫秒转换
-//
-//		lastTimeStamp = nowTimeStamp;
-//		lastTotalRxBytes = nowTotalRxBytes;
-//
-//		Message msg = mHandler.obtainMessage();
-//		msg.what = 100;
-//		msg.obj = String.valueOf(speed) + " kb/s";
-//
-//		mHandler.sendMessage(msg);//更新界面
-//	}
-//	private long lastTotalRxBytes = 0;
-//	private long lastTimeStamp = 0;
-//
-//
-//	TimerTask task = new TimerTask() {
-//		@Override
-//		public void run() {
-//			showNetSpeed();
-//		}
-//	};
+
 
 
 	/**

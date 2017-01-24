@@ -25,10 +25,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKKEYCALLPHONE;
 
 public class T9TelephoneDialpadView extends LinearLayout implements
         OnClickListener {
-    private static final char DIAL_1_SECOND_MEANING = ' ';
-    private static final char DIAL_X_SECOND_MEANING = ',';
-    private static final char DIAL_0_SECOND_MEANING = '+';
-    private static final char DIAL_J_SECOND_MEANING = ';';
+
 
     /**
      * Interface definition for a callback to be invoked when a
@@ -101,20 +98,6 @@ public class T9TelephoneDialpadView extends LinearLayout implements
             v.setOnClickListener(this);
         }
 
-        /**
-         * set long click listener for button('1','*','0','#')
-         * */
-//        View view1 = mDialpadView.findViewById(R.id.dialNum1);
-//        view1.setOnLongClickListener(this);
-//
-//        View viewX = mDialpadView.findViewById(R.id.dialx);
-//        viewX.setOnLongClickListener(this);
-//
-//        View viewO = mDialpadView.findViewById(R.id.dialNum0);
-//        viewO.setOnLongClickListener(this);
-//
-//        View viewJ = mDialpadView.findViewById(R.id.dialj);
-//        viewJ.setOnLongClickListener(this);
 
         mT9InputEt.addTextChangedListener(new TextWatcher() {
 
@@ -176,19 +159,6 @@ public class T9TelephoneDialpadView extends LinearLayout implements
 
     }
 
-//    @Override
-//    public boolean onLongClick(View v) {
-//        if (v.getId() == R.id.dialNum1) {
-//            addSingleDialCharacter(String.valueOf(DIAL_1_SECOND_MEANING));
-//        } else if (v.getId() == R.id.dialx) {
-//            addSingleDialCharacter(String.valueOf(DIAL_X_SECOND_MEANING));
-//        } else if (v.getId() == R.id.dialNum0) {
-//            addSingleDialCharacter(String.valueOf(DIAL_0_SECOND_MEANING));
-//        } else if (v.getId() == R.id.dialj) {
-//            addSingleDialCharacter(String.valueOf(DIAL_J_SECOND_MEANING));
-//        }
-//        return true;
-//    }
 
     public void setOnT9TelephoneDialpadView(
             OnT9TelephoneDialpadView onT9TelephoneDialpadView) {

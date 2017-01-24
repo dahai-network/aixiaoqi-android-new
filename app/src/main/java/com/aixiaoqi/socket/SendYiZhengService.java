@@ -14,7 +14,6 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
     ReceiveSocketService mReceiveSocketService;
 
     public   void sendGoip(String header){
-        //TODO 根据消息头组装数据发送到一正服务器
         sendService(header);
     }
     public  void initSocket(ReceiveSocketService receiveSocketService){

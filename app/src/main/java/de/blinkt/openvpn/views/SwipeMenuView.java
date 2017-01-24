@@ -43,7 +43,7 @@ public class SwipeMenuView extends ViewGroup {
     private static boolean isTouching;
 
     private VelocityTracker mVelocityTracker;//滑动速度变量
-    private android.util.Log LogUtils;
+
 
     private boolean isIos = true;//IOS类型的开关
 

@@ -23,14 +23,14 @@ public class PinYinConverNumber {
     public  String getNameNum(String name) {
 
         try {
+            StringBuilder stringBuilder=new StringBuilder();
+
             if (name != null && name.length() != 0) {
-                int len = name.length();
-                char[] nums = new char[len];
-                for (int i = 0; i < len; i++) {
-                    String tmp = name.substring(i);
-                    nums[i] = getOneNumFromAlpha(characterParser.getSelling(tmp).toLowerCase().charAt(0));
+                String litterName= characterParser.getSelling(name).toLowerCase();
+                for (int i = 0; i < litterName.length(); i++) {
+                    stringBuilder.append(getOneNumFromAlpha(litterName.charAt(0)));
                 }
-                return new String(nums);
+                return  stringBuilder.toString();
             }
         } catch (Exception e) {
             e.printStackTrace();
