@@ -30,8 +30,6 @@ import de.blinkt.openvpn.http.ActivationLocalCompletedHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.HistoryStepHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
-import de.blinkt.openvpn.http.ReportRealtimeStepHttp;
-import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.SportStepEntity;
 import de.blinkt.openvpn.service.UpdateStepService;
 import de.blinkt.openvpn.util.BLECheckBitUtil;
@@ -106,7 +104,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				public void run() {
 					try {
 						Log.i("toBLue", "连接成功");
-						Thread.sleep(3000);
+						Thread.sleep(5000);
 
 //						//测试代码
 						sendMessageToBlueTooth(UP_TO_POWER);
@@ -167,11 +165,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					if (!TextUtils.isEmpty(utils.readString(Constant.IMEI)) && ICSOpenVPNApplication.isConnect) {
 						//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 						// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+					CommonTools.delayTime(2000);
 						mService.connect(utils.readString(Constant.IMEI));
 					} else {
 						Log.d(TAG, "UART_DISCONNECT_MSG");
@@ -335,13 +329,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										context.startService(updateStepIntent);
 										isOpenStepService = true;
 									}
-									try {
-										//绑定流程成功命令
-										sendMessageToBlueTooth(BIND_SUCCESS);
-										Thread.sleep(500);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
+									//绑定流程成功命令
+									sendMessageToBlueTooth(BIND_SUCCESS);
+									CommonTools.delayTime(500);
 									//更新时间操作
 									sendMessageToBlueTooth(getBLETime());
 									isConnect = true;
@@ -356,7 +346,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							break;
 
 						default:
-							updateMessage(messageFromBlueTooth);
+//							updateMessage(messageFromBlueTooth);
 							break;
 					}
 				}
@@ -380,11 +370,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	}
 
 	private void sendMessageToBlueTooth(final String message) {
-//		try {
-//			Thread.sleep(500);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 		byte[] value;
 		Log.i("toBLue", message);
 		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
@@ -449,11 +434,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					new Thread(new Runnable() {
 						@Override
 						public void run() {
-							try {
-								Thread.sleep(500);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
+						CommonTools.delayTime(500);
 							Intent findNullCardIntent = new Intent();
 							findNullCardIntent.putExtra("nullcardNumber", nullCardId);
 							findNullCardIntent.setAction(MyOrderDetailActivity.FIND_NULL_CARD_ID);
@@ -504,20 +485,16 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		return dayList;
 	}
 
-	private void saveRealTimeStep(long currentTimeLong, int currentStepInt) {
-		updateRealTimeStep(currentTimeLong, currentStepInt);
-	}
 
-
-	//上传到服务器
-	private void updateRealTimeStep(long currentTimeLong, int currentStepInt) {
-		ReportRealtimeStepHttp http = new ReportRealtimeStepHttp(this, HttpConfigUrl.COMTYPE_SPORT_REPORT_REALTIME_STEP, currentStepInt, currentTimeLong);
-		new Thread(http).start();
-	}
-
-	private void updateMessage(final String finalMessage) {
-
-	}
+//	//上传到服务器
+//	private void updateRealTimeStep(long currentTimeLong, int currentStepInt) {
+//		ReportRealtimeStepHttp http = new ReportRealtimeStepHttp(this, HttpConfigUrl.COMTYPE_SPORT_REPORT_REALTIME_STEP, currentStepInt, currentTimeLong);
+//		new Thread(http).start();
+//	}
+//
+//	private void updateMessage(final String finalMessage) {
+//
+//	}
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
@@ -621,11 +598,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		}
 	}
 
-	//检查版本号后获取是否可以空中升级
-	private void skyUpgradeHttp() {
-		Log.e(TAG, "skyUpgradeHttp");
-		SkyUpgradeHttp skyUpgradeHttp = new SkyUpgradeHttp(this, HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, utils.readString(Constant.BRACELETVERSION));
-		new Thread(skyUpgradeHttp).start();
-	}
+
 
 }

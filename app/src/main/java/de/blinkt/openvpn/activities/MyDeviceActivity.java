@@ -16,6 +16,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -96,22 +99,22 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	LinearLayout flowPayLinearLayout;
 	@BindView(R.id.unBindButton)
 	Button unBindButton;
-	@BindView(R.id.resetDeviceTextView)
-	TextView resetDeviceTextView;
+	//	@BindView(R.id.resetDeviceTextView)
+//	TextView resetDeviceTextView;
 	@BindView(R.id.sinking)
 	MySinkingView sinking;
 	//重连次数记录
 	int retryTime = 0;
 	@BindView(R.id.simStatusLinearLayout)
 	LinearLayout simStatusLinearLayout;
-	@BindView(R.id.conStatusLinearLayout)
-	LinearLayout conStatusLinearLayout;
 	@BindView(R.id.findStatusLinearLayout)
 	LinearLayout findStatusLinearLayout;
 	@BindView(R.id.conStatusTextView)
 	TextView conStatusTextView;
 	@BindView(R.id.percentTextView)
 	TextView percentTextView;
+	@BindView(R.id.register_sim_statue)
+	ImageView registerSimStatu;
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_SELECT_DEVICE = 1;
@@ -134,9 +137,10 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	private UartService mService = ICSOpenVPNApplication.uartService;
 	private Timer checkPowerTimer = new Timer();
 	private String macAddressStr;
-	private long SCAN_PERIOD = 10000;//原本120000毫秒
+	private int SCAN_PERIOD = 10000;//原本120000毫秒
 	private DialogBalance noDevicedialog;
 	private DialogBalance cardRuleBreakDialog;
+	Animation RegisterStatueAnim;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -152,9 +156,23 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		initSet();
 		serviceInit();
 		initDialogUpgrade();
-
+		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 	}
 
+	public void stopAnim() {
+		registerSimStatu.setEnabled(true);
+		RegisterStatueAnim.reset();
+		registerSimStatu.clearAnimation();
+		registerSimStatu.setBackgroundResource(R.drawable.registering);
+	}
+
+	public void startAnim() {
+		registerSimStatu.setEnabled(false);
+		RegisterStatueAnim.reset();
+		registerSimStatu.clearAnimation();
+		registerSimStatu.setBackgroundResource(R.drawable.registering);
+		registerSimStatu.startAnimation(RegisterStatueAnim);
+	}
 
 	DfuProgressListener mDfuProgressListener;
 
@@ -190,7 +208,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				sinking.setPercent(0f);
 			}
 			statueTextView.setVisibility(View.GONE);
-			conStatusLinearLayout.setVisibility(View.VISIBLE);
 			if (blueStatus != 0) {
 				setConStatus(blueStatus);
 			}
@@ -217,7 +234,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					deviceAddresstemp = deviceAddress;
 					macTextView.setText(deviceAddresstemp);
 					utils.writeString(Constant.IMEI, deviceAddress);
-					conStatusLinearLayout.setVisibility(View.VISIBLE);
 					setConStatus(conStatusResource);
 					firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
 
@@ -243,7 +259,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	public static boolean isUpgrade = false;
 
-	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.findStatusLinearLayout, R.id.resetDeviceTextView, R.id.statueTextView})
+	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.register_sim_statue, R.id.findStatusLinearLayout, R.id.statueTextView})
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.unBindButton:
@@ -252,8 +268,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				sinking.setVisibility(View.GONE);
 				noConnectImageView.setVisibility(View.VISIBLE);
 				statueTextView.setVisibility(View.VISIBLE);
-				resetDeviceTextView.setVisibility(View.GONE);
-				conStatusLinearLayout.setVisibility(View.GONE);
+//				resetDeviceTextView.setVisibility(View.GONE);
 				firmwareTextView.setText("");
 				macTextView.setText("");
 				utils.delete(Constant.IMEI);
@@ -279,6 +294,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				}
 				break;
 			case R.id.findStatusLinearLayout:
+
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -289,20 +305,30 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				}).start();
 
 				break;
-			case R.id.resetDeviceTextView:
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						if (!CommonTools.isFastDoubleClick(5000)) {
-							sendMessageToBlueTooth(RESTORATION);
-						}
-					}
-				}).start();
+			case R.id.register_sim_statue:
+				startRotateAnimate();
 				break;
+//			case R.id.resetDeviceTextView:
+//				new Thread(new Runnable() {
+//					@Override
+//					public void run() {
+//						if (!CommonTools.isFastDoubleClick(5000)) {
+//							sendMessageToBlueTooth(RESTORATION);
+//						}
+//					}
+//				}).start();
+//				break;
 			case R.id.statueTextView:
 				clickFindBracelet();
 				break;
 		}
+	}
+    //开始旋转动画
+	private void startRotateAnimate() {
+		Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_rotate_register_statue);
+		LinearInterpolator lin = new LinearInterpolator();
+		operatingAnim.setInterpolator(lin);
+		registerSimStatu.startAnimation(operatingAnim);
 	}
 
 	private void registFail() {
@@ -323,11 +349,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				serviceOperationEntity.setServiceName(UartService.class.getName());
 				serviceOperationEntity.setOperationType(ServiceOperationEntity.REMOVE_SERVICE);
 				EventBus.getDefault().post(serviceOperationEntity);
-				try {
-					Thread.sleep(200);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				CommonTools.delayTime(200);
 				serviceOperationEntity.setOperationType(ServiceOperationEntity.CREATE_SERVICE);
 				EventBus.getDefault().post(serviceOperationEntity);
 			}
@@ -424,11 +446,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						public void run() {
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
-							try {
-								Thread.sleep(2000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
+							CommonTools.delayTime(2000);
 							mService.connect(deviceAddresstemp);
 						}
 					});
@@ -496,7 +514,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		int electricityInt = utils.readInt(ELECTRICITY);
 		noConnectImageView.setVisibility(View.GONE);
 		sinking.setVisibility(View.VISIBLE);
-		resetDeviceTextView.setVisibility(View.VISIBLE);
+//		resetDeviceTextView.setVisibility(View.VISIBLE);
 		if (electricityInt != 0) {
 			sinking.setPercent(((float) electricityInt) / 100);
 		} else {
@@ -573,7 +591,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				utils.writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
 				unBindButton.setVisibility(View.VISIBLE);
 				//当接口调用完毕后，扫描设备，打开状态栏
-				conStatusLinearLayout.setVisibility(View.VISIBLE);
 				scanLeDevice(true);
 			} else {
 				clickFindBracelet();
@@ -595,11 +612,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = (DownloadSkyUpgradePackageHttp) object;
 			if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				sendMessageToBlueTooth("AA080401A7");
-				try {
-					Thread.sleep(1000);
-				} catch (Exception e) {
-
-				}
+				CommonTools.delayTime(1000);
 				uploadToBlueTooth();
 			} else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				CommonTools.showShortToast(this, Constant.DOWNLOAD_FAIL);
@@ -726,12 +739,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				while (percent >= slowPercent[0]) {
 					sinking.setPercent(slowPercent[0]);
 					slowPercent[0] += 0.01f;
-					try {
-						Thread.sleep(40);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-
+					CommonTools.delayTime(40);
 				}
 				slowPercent[0] = percent;
 				sinking.setPercent(slowPercent[0]);
@@ -752,11 +760,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				if (enable) {
 					// Stops scanning after a pre-defined scan period.
 					mBtAdapter.startLeScan(mLeScanCallback);
-					try {
-						Thread.sleep(SCAN_PERIOD);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					CommonTools.delayTime(SCAN_PERIOD);
 					if (mService.mConnectionState != UartService.STATE_CONNECTED) {
 						mBtAdapter.stopLeScan(mLeScanCallback);
 						runOnUiThread(new Runnable() {

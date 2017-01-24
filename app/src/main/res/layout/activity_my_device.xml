@@ -68,32 +68,6 @@
             android:textColor="@color/black"/>
 
         <TextView
-            android:id="@+id/resetDeviceTextView"
-            android:layout_width="80dp"
-            android:layout_height="30dp"
-            android:background="@drawable/login_btn"
-            android:gravity="center"
-            android:text="@string/reset_device"
-            android:textColor="@color/white"
-            />
-    </LinearLayout>
-
-    <View
-        style="@style/horizontal_line_view"
-        />
-
-    <LinearLayout
-        android:id="@+id/conStatusLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-
-        <TextView
             android:id="@+id/conStatusTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,11 +75,22 @@
             android:textColor="@color/gray_text"
             />
 
+        <ImageView
+            android:id="@+id/register_sim_statue"
+            android:layout_width="24dp"
+            android:layout_height="@dimen/padding_20dp"
+            android:layout_marginRight="@dimen/padding_5dp"
+            android:background="@drawable/registering"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            />
+
+
         <TextView
             android:id="@+id/percentTextView"
-            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textColor="@color/gray_text"
             />
     </LinearLayout>
@@ -113,6 +98,7 @@
     <View
         style="@style/horizontal_line_view"
         />
+
 
     <View
         style="@style/horizontal_line_view"

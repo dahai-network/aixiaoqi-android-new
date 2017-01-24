@@ -1,12 +1,11 @@
 package de.blinkt.openvpn.util;
 
-import java.util.ArrayList;
-
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.TypedValue;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class CommonTools {
 
@@ -113,5 +112,14 @@ public class CommonTools {
 
 	public static boolean isNotBlank(ArrayList<Object> list) {
 		return null != list && list.size() > 0;
+	}
+
+	public static  void delayTime(int time) {
+		try {
+
+			Thread.sleep(time);
+		}catch (InterruptedException e){
+
+		}
 	}
 }

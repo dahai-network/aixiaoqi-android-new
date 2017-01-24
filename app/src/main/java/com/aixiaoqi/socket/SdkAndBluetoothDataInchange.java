@@ -14,6 +14,7 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
+import de.blinkt.openvpn.util.CommonTools;
 
 /**
  * Created by Administrator on 2017/1/5 0005.
@@ -58,8 +59,10 @@ public class SdkAndBluetoothDataInchange {
 
 			if (SocketConstant.REGISTER_STATUE_CODE != 3) {
 
+
 				if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData) {
 					Log.e("timer", "接收不到蓝牙数据");
+
 					JNIUtil.startSDK(2);
 				}
 			}
@@ -86,10 +89,9 @@ public class SdkAndBluetoothDataInchange {
 		}
 		num++;
 		if (num != txValue[4]) {
-			try {
-				Thread.sleep(500);
-			} catch (Exception e) {
-			}
+
+			CommonTools.delayTime(500);
+
 			num = 0;
 
 			if ((System.currentTimeMillis() - lastTime > 365 * 24 * 60 * 60 * 1000l || System.currentTimeMillis() - lastTime < 2000) && count <= 3) {
@@ -205,15 +207,11 @@ public class SdkAndBluetoothDataInchange {
 
 	private void sendMessage(String temp) {
 		if (temp.contains("0x0000")) {
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			CommonTools.delayTime(2000);
 			byte[] value;
-			value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER_HAVE_DETAIL);
+			value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER_ONLY_DETAIL);
 			mService.writeRXCharacteristic(value);
-			Log.e(TAG, "SIM发送上电数据");
+			Log.e(TAG, "SIM发送上电数据（只有详细卡信息）");
 		} else {
 			if (mService != null) {
 				byte[] value = HexStringExchangeBytesUtil.hexStringToBytes(temp);

@@ -37,9 +37,8 @@
         android:layout_alignBottom="@id/packageNameTextView"
         android:layout_toRightOf="@id/packageNameTextView"
         android:text="20$"
-        android:layout_marginRight="@dimen/padding_5dp"
-        android:minWidth="@dimen/padding_25dp"
         android:layout_toLeftOf="@+id/stateTextView"
+        android:layout_marginRight="@dimen/padding_5dp"
         android:textColor="@color/order_money"
         android:textStyle="bold"
         />
@@ -50,9 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginTop="@dimen/padding_10dp"
-        android:drawableLeft="@drawable/un_effective"
         android:text="已激活"
-        android:textColor="@color/order_item"
         android:textSize="14sp"
         />
 

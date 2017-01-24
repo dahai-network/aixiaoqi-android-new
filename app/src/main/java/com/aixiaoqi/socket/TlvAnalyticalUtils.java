@@ -12,6 +12,7 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.IsSuccessEntity;
+import de.blinkt.openvpn.util.CommonTools;
 
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
@@ -205,12 +206,7 @@ public class TlvAnalyticalUtils {
 		stringBuilder.replace(6, 8, "00");
 		sendToSdkLisener.sendServer(stringBuilder.toString());
 		if (TestProvider.sendYiZhengService != null){
-			try {
-
-				Thread.sleep(2000);
-			}catch (Exception e){
-
-			}
+			CommonTools.delayTime(2000);
 			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
 			TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}

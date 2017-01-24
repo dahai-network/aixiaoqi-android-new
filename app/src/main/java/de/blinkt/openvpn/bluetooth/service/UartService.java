@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.UUID;
 
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.util.CommonTools;
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -91,11 +92,7 @@ public class UartService extends Service implements Serializable {
 				broadcastUpdate(intentAction);
 				Log.i(TAG, "Connected to GATT server.");
 				// Attempts to discover services after successful connection.
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				CommonTools.delayTime(1000);
 				boolean isFindServiceSuccess = mBluetoothGatt.discoverServices();
 				Log.i(TAG, "Attempting to start service discovery:" + isFindServiceSuccess);
 
@@ -357,11 +354,7 @@ public class UartService extends Service implements Serializable {
 
 	//用于某个接收的UUID写入mBluetoothGatt的监听callback里面。在onCharacteristicChanged()会产生响应
 	public void setDescriptor(BluetoothGattService rxService, UUID uuid) {
-		try {
-			Thread.sleep(150);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		CommonTools.delayTime(150);
 		BluetoothGattCharacteristic TxChar = rxService.getCharacteristic(uuid);
 		if (TxChar == null) {
 			showMessage("Tx charateristic not found!");
