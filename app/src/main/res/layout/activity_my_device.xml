@@ -75,8 +75,8 @@
             />
         <ImageView
             android:id="@+id/register_sim_statue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="@dimen/padding_20dp"
             android:background="@drawable/registering"
             android:gravity="center_vertical"
             android:layout_marginRight="@dimen/padding_5dp"
