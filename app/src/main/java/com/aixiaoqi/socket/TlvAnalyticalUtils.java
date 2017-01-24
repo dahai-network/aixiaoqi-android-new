@@ -147,9 +147,9 @@ public class TlvAnalyticalUtils {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
 				}
 			} else if (tag == 15) {
-				if (System.currentTimeMillis() - lastClickTime > 365 * 24 * 60 * 60 * 1000l || isFast(90 * 60 * 1000)) {
-					if (!isFast(90 * 60 * 1000)) {
-						isFast(90 * 60 * 1000);
+				if (System.currentTimeMillis() - lastClickTime > 365 * 24 * 60 * 60 * 1000l || isFast(5 * 60 * 1000)) {
+					if (!isFast(5 * 60 * 1000)) {
+						isFast(5 * 60 * 1000);
 					}
 					count++;
 				} else {

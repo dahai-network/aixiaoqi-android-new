@@ -168,7 +168,7 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 		//周几和是否打开闹钟
 		alarmBytes[4] = (byte) 0x01;
 		//是否重复
-		alarmBytes[5] = (byte) 0x80;
+		alarmBytes[5] = (byte) 0x01;
 		//时
 		alarmBytes[6] = (byte) 0x00;
 		//分
