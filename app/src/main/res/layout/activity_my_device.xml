@@ -66,6 +66,7 @@
             android:layout_weight="1"
             android:text="@string/sim_indevice"
             android:textColor="@color/black"/>
+
         <TextView
             android:id="@+id/conStatusTextView"
             android:layout_width="wrap_content"
@@ -73,21 +74,23 @@
             android:text="@string/index_connecting"
             android:textColor="@color/gray_text"
             />
+
         <ImageView
             android:id="@+id/register_sim_statue"
             android:layout_width="24dp"
             android:layout_height="@dimen/padding_20dp"
+            android:layout_marginRight="@dimen/padding_5dp"
             android:background="@drawable/registering"
             android:gravity="center_vertical"
-            android:layout_marginRight="@dimen/padding_5dp"
+            android:visibility="gone"
             />
 
 
         <TextView
             android:id="@+id/percentTextView"
-            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textColor="@color/gray_text"
             />
     </LinearLayout>
@@ -95,7 +98,6 @@
     <View
         style="@style/horizontal_line_view"
         />
-
 
 
     <View

@@ -1,12 +1,11 @@
 package de.blinkt.openvpn.util;
 
-import java.util.ArrayList;
-
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.TypedValue;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class CommonTools {
 

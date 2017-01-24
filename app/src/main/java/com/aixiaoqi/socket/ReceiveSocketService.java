@@ -44,6 +44,7 @@ public class ReceiveSocketService extends Service {
 		@Override
 		public void onConnect(SocketTransceiver transceiver) {
 			Log.i("Blue_Chanl", "正在注册GOIP");
+			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
 			createSocketLisener.create();
 		}
 

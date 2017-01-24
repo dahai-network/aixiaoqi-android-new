@@ -724,11 +724,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
-				if (!CommonTools.isFastDoubleClick(5000)) {
-					//当有通话套餐的时候才允许注册操作
-					IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
-					new Thread(http).start();
-				}
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
@@ -742,6 +737,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (txValue[3] == (byte) 0x03) {
 						}
 					} else if (txValue[1] == (byte) 0x33) {
+						if (!CommonTools.isFastDoubleClick(5000)) {
+							//当有通话套餐的时候才允许注册操作
+							IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
+							new Thread(http).start();
+						}
 						checkRegisterStatuGoIp();
 					} else if (txValue[1] == (byte) 0x11) {
 						indexFragment.changeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);

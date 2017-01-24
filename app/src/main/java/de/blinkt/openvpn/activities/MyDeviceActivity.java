@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -113,7 +114,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	@BindView(R.id.percentTextView)
 	TextView percentTextView;
 	@BindView(R.id.register_sim_statue)
-	ImageView	registerSimStatu;
+	ImageView registerSimStatu;
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_SELECT_DEVICE = 1;
@@ -140,6 +141,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	private DialogBalance noDevicedialog;
 	private DialogBalance cardRuleBreakDialog;
 	Animation RegisterStatueAnim;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -154,12 +156,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		initSet();
 		serviceInit();
 		initDialogUpgrade();
-		RegisterStatueAnim  = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
+		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 	}
 
 	public void stopAnim() {
 		registerSimStatu.setEnabled(true);
-		RegisterStatueAnim .reset();
+		RegisterStatueAnim.reset();
 		registerSimStatu.clearAnimation();
 		registerSimStatu.setBackgroundResource(R.drawable.registering);
 	}
@@ -171,6 +173,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		registerSimStatu.setBackgroundResource(R.drawable.registering);
 		registerSimStatu.startAnimation(RegisterStatueAnim);
 	}
+
 	DfuProgressListener mDfuProgressListener;
 
 	private void skyUpgradeHttp() {
@@ -256,7 +259,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	public static boolean isUpgrade = false;
 
-	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout,R.id.register_sim_statue, R.id.findStatusLinearLayout, R.id.statueTextView})
+	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.register_sim_statue, R.id.findStatusLinearLayout, R.id.statueTextView})
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.unBindButton:
@@ -303,7 +306,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 				break;
 			case R.id.register_sim_statue:
-
+				startRotateAnimate();
 				break;
 //			case R.id.resetDeviceTextView:
 //				new Thread(new Runnable() {
@@ -319,6 +322,13 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				clickFindBracelet();
 				break;
 		}
+	}
+    //开始旋转动画
+	private void startRotateAnimate() {
+		Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_rotate_register_statue);
+		LinearInterpolator lin = new LinearInterpolator();
+		operatingAnim.setInterpolator(lin);
+		registerSimStatu.startAnimation(operatingAnim);
 	}
 
 	private void registFail() {

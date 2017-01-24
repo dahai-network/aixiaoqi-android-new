@@ -209,9 +209,9 @@ public class SdkAndBluetoothDataInchange {
 		if (temp.contains("0x0000")) {
 			CommonTools.delayTime(2000);
 			byte[] value;
-			value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER_HAVE_DETAIL);
+			value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER_ONLY_DETAIL);
 			mService.writeRXCharacteristic(value);
-			Log.e(TAG, "SIM发送上电数据");
+			Log.e(TAG, "SIM发送上电数据（只有详细卡信息）");
 		} else {
 			if (mService != null) {
 				byte[] value = HexStringExchangeBytesUtil.hexStringToBytes(temp);
