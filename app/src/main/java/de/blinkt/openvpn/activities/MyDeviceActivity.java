@@ -16,6 +16,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -96,22 +98,22 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	LinearLayout flowPayLinearLayout;
 	@BindView(R.id.unBindButton)
 	Button unBindButton;
-	@BindView(R.id.resetDeviceTextView)
-	TextView resetDeviceTextView;
+	//	@BindView(R.id.resetDeviceTextView)
+//	TextView resetDeviceTextView;
 	@BindView(R.id.sinking)
 	MySinkingView sinking;
 	//重连次数记录
 	int retryTime = 0;
 	@BindView(R.id.simStatusLinearLayout)
 	LinearLayout simStatusLinearLayout;
-	@BindView(R.id.conStatusLinearLayout)
-	LinearLayout conStatusLinearLayout;
 	@BindView(R.id.findStatusLinearLayout)
 	LinearLayout findStatusLinearLayout;
 	@BindView(R.id.conStatusTextView)
 	TextView conStatusTextView;
 	@BindView(R.id.percentTextView)
 	TextView percentTextView;
+	@BindView(R.id.register_sim_statue)
+	ImageView	registerSimStatu;
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_SELECT_DEVICE = 1;
@@ -137,7 +139,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	private int SCAN_PERIOD = 10000;//原本120000毫秒
 	private DialogBalance noDevicedialog;
 	private DialogBalance cardRuleBreakDialog;
-
+	Animation RegisterStatueAnim;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -152,10 +154,23 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		initSet();
 		serviceInit();
 		initDialogUpgrade();
-
+		RegisterStatueAnim  = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 	}
 
+	public void stopAnim() {
+		registerSimStatu.setEnabled(true);
+		RegisterStatueAnim .reset();
+		registerSimStatu.clearAnimation();
+		registerSimStatu.setBackgroundResource(R.drawable.registering);
+	}
 
+	public void startAnim() {
+		registerSimStatu.setEnabled(false);
+		RegisterStatueAnim.reset();
+		registerSimStatu.clearAnimation();
+		registerSimStatu.setBackgroundResource(R.drawable.registering);
+		registerSimStatu.startAnimation(RegisterStatueAnim);
+	}
 	DfuProgressListener mDfuProgressListener;
 
 	private void skyUpgradeHttp() {
@@ -190,7 +205,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				sinking.setPercent(0f);
 			}
 			statueTextView.setVisibility(View.GONE);
-			conStatusLinearLayout.setVisibility(View.VISIBLE);
 			if (blueStatus != 0) {
 				setConStatus(blueStatus);
 			}
@@ -217,7 +231,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					deviceAddresstemp = deviceAddress;
 					macTextView.setText(deviceAddresstemp);
 					utils.writeString(Constant.IMEI, deviceAddress);
-					conStatusLinearLayout.setVisibility(View.VISIBLE);
 					setConStatus(conStatusResource);
 					firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
 
@@ -243,7 +256,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	public static boolean isUpgrade = false;
 
-	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.findStatusLinearLayout, R.id.resetDeviceTextView, R.id.statueTextView})
+	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout,R.id.register_sim_statue, R.id.findStatusLinearLayout, R.id.statueTextView})
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.unBindButton:
@@ -252,8 +265,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				sinking.setVisibility(View.GONE);
 				noConnectImageView.setVisibility(View.VISIBLE);
 				statueTextView.setVisibility(View.VISIBLE);
-				resetDeviceTextView.setVisibility(View.GONE);
-				conStatusLinearLayout.setVisibility(View.GONE);
+//				resetDeviceTextView.setVisibility(View.GONE);
 				firmwareTextView.setText("");
 				macTextView.setText("");
 				utils.delete(Constant.IMEI);
@@ -279,6 +291,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				}
 				break;
 			case R.id.findStatusLinearLayout:
+
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -289,16 +302,19 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				}).start();
 
 				break;
-			case R.id.resetDeviceTextView:
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						if (!CommonTools.isFastDoubleClick(5000)) {
-							sendMessageToBlueTooth(RESTORATION);
-						}
-					}
-				}).start();
+			case R.id.register_sim_statue:
+
 				break;
+//			case R.id.resetDeviceTextView:
+//				new Thread(new Runnable() {
+//					@Override
+//					public void run() {
+//						if (!CommonTools.isFastDoubleClick(5000)) {
+//							sendMessageToBlueTooth(RESTORATION);
+//						}
+//					}
+//				}).start();
+//				break;
 			case R.id.statueTextView:
 				clickFindBracelet();
 				break;
@@ -488,7 +504,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		int electricityInt = utils.readInt(ELECTRICITY);
 		noConnectImageView.setVisibility(View.GONE);
 		sinking.setVisibility(View.VISIBLE);
-		resetDeviceTextView.setVisibility(View.VISIBLE);
+//		resetDeviceTextView.setVisibility(View.VISIBLE);
 		if (electricityInt != 0) {
 			sinking.setPercent(((float) electricityInt) / 100);
 		} else {
@@ -565,7 +581,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				utils.writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
 				unBindButton.setVisibility(View.VISIBLE);
 				//当接口调用完毕后，扫描设备，打开状态栏
-				conStatusLinearLayout.setVisibility(View.VISIBLE);
 				scanLeDevice(true);
 			} else {
 				clickFindBracelet();
