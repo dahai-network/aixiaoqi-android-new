@@ -64,7 +64,6 @@
         android:textColor="@color/order_item"
         android:textSize="11sp"
         />
-
     <View
         style="@style/horizontal_line_view"
         android:layout_below="@id/packetImageView"

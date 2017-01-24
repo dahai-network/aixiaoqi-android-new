@@ -33,6 +33,11 @@ public class BaseActivity extends CommenActivity {
 		}
 	}
 
+	/**
+	 *
+	 * @param id  表示标题id
+	 * @param leftTextId  当leftTextId<0时，左边的标签是默认的返回键，大于零时，表示自定义的值
+     */
 	protected  void hasLeftViewTitle(int id,int leftTextId){
 		titleBar.setTextTitle(getString(id));
 		hasOnlyLeftViewOption();

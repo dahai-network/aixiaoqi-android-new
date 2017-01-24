@@ -332,13 +332,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										context.startService(updateStepIntent);
 										isOpenStepService = true;
 									}
-									try {
-										//绑定流程成功命令
-										sendMessageToBlueTooth(BIND_SUCCESS);
-										Thread.sleep(500);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
+									//绑定流程成功命令
+									sendMessageToBlueTooth(BIND_SUCCESS);
+									CommonTools.delayTime(500);
 									//更新时间操作
 									sendMessageToBlueTooth(getBLETime());
 									isConnect = true;
@@ -353,7 +349,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							break;
 
 						default:
-							updateMessage(messageFromBlueTooth);
+//							updateMessage(messageFromBlueTooth);
 							break;
 					}
 				}
@@ -377,11 +373,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	}
 
 	private void sendMessageToBlueTooth(final String message) {
-//		try {
-//			Thread.sleep(500);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 		byte[] value;
 		Log.i("toBLue", message);
 		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
@@ -497,20 +488,16 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		return dayList;
 	}
 
-	private void saveRealTimeStep(long currentTimeLong, int currentStepInt) {
-		updateRealTimeStep(currentTimeLong, currentStepInt);
-	}
 
-
-	//上传到服务器
-	private void updateRealTimeStep(long currentTimeLong, int currentStepInt) {
-		ReportRealtimeStepHttp http = new ReportRealtimeStepHttp(this, HttpConfigUrl.COMTYPE_SPORT_REPORT_REALTIME_STEP, currentStepInt, currentTimeLong);
-		new Thread(http).start();
-	}
-
-	private void updateMessage(final String finalMessage) {
-
-	}
+//	//上传到服务器
+//	private void updateRealTimeStep(long currentTimeLong, int currentStepInt) {
+//		ReportRealtimeStepHttp http = new ReportRealtimeStepHttp(this, HttpConfigUrl.COMTYPE_SPORT_REPORT_REALTIME_STEP, currentStepInt, currentTimeLong);
+//		new Thread(http).start();
+//	}
+//
+//	private void updateMessage(final String finalMessage) {
+//
+//	}
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
@@ -614,11 +601,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		}
 	}
 
-	//检查版本号后获取是否可以空中升级
-	private void skyUpgradeHttp() {
-		Log.e(TAG, "skyUpgradeHttp");
-		SkyUpgradeHttp skyUpgradeHttp = new SkyUpgradeHttp(this, HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, utils.readString(Constant.BRACELETVERSION));
-		new Thread(skyUpgradeHttp).start();
-	}
+
 
 }
