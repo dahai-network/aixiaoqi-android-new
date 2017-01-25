@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -80,6 +79,7 @@ import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
+import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
@@ -114,7 +114,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	@BindView(R.id.percentTextView)
 	TextView percentTextView;
 	@BindView(R.id.register_sim_statue)
-	ImageView registerSimStatu;
+	Button registerSimStatu;
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_SELECT_DEVICE = 1;
@@ -156,7 +156,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		initSet();
 		serviceInit();
 		initDialogUpgrade();
-		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
+
 	}
 
 	public void stopAnim() {
@@ -167,6 +167,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	public void startAnim() {
+		registerSimStatu.setVisibility(View.VISIBLE);
 		registerSimStatu.setEnabled(false);
 		RegisterStatueAnim.reset();
 		registerSimStatu.clearAnimation();
@@ -189,12 +190,14 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	private void initSet() {
 		Log.e(TAG, "initSet");
-
 		int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
+		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 		checkPowerTimer.schedule(checkPowerTask, 100, 60000);
 		if (mService != null)
 			mState = mService.mConnectionState;
 		macAddressStr = utils.readString(Constant.IMEI);
+		if (macAddressStr != null)
+			macAddressStr = macAddressStr.toUpperCase();
 		macTextView.setText(macAddressStr);
 		hasLeftViewTitle(R.string.device, 0);
 		if (mState == UartService.STATE_CONNECTED) {
@@ -219,7 +222,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
 		EventBus.getDefault().register(this);
-
+		//如果是在注册中才能打开动画
+		if ((SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 2)
+				&& conStatusTextView.getText().toString().equals(getResources().getString(R.string.index_registing))) {
+			startAnim();
+		}
 	}
 
 	private String deviceAddresstemp;
@@ -271,6 +278,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 //				resetDeviceTextView.setVisibility(View.GONE);
 				firmwareTextView.setText("");
 				macTextView.setText("");
+				registerSimStatu.setVisibility(View.GONE);
 				utils.delete(Constant.IMEI);
 				utils.delete(Constant.BRACELETVERSION);
 				sendMessageToBlueTooth("AAABCDEFAA");
@@ -284,6 +292,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 //				restartUartService();
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
+				stopAnim();
 				break;
 			case R.id.callPayLinearLayout:
 				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION)) && !isUpgrade) {
@@ -306,7 +315,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 				break;
 			case R.id.register_sim_statue:
-				startRotateAnimate();
+				if (SocketConstant.REGISTER_STATUE_CODE != 3) {
+					startAnim();
+					sendMessageToBlueTooth(UP_TO_POWER);
+				} else {
+					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
+				}
 				break;
 //			case R.id.resetDeviceTextView:
 //				new Thread(new Runnable() {
@@ -322,13 +336,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				clickFindBracelet();
 				break;
 		}
-	}
-    //开始旋转动画
-	private void startRotateAnimate() {
-		Animation operatingAnim = AnimationUtils.loadAnimation(this, R.anim.anim_rotate_register_statue);
-		LinearInterpolator lin = new LinearInterpolator();
-		operatingAnim.setInterpolator(lin);
-		registerSimStatu.startAnimation(operatingAnim);
 	}
 
 	private void registFail() {
@@ -399,6 +406,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				IS_TEXT_SIM = true;
 				dismissProgress();
 				setView();
+				setConStatus(R.string.index_registing);
 				if (utils.readBoolean(Constant.ISHAVEORDER, true)) {
 					setConStatus(R.string.index_no_signal);
 				} else {
@@ -457,6 +465,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					unBindButton.setVisibility(View.GONE);
 					utils.delete(Constant.IMEI);
 					macTextView.setText("");
+					registerSimStatu.setVisibility(View.GONE);
 					sinking.setVisibility(View.GONE);
 					noConnectImageView.setVisibility(View.VISIBLE);
 					statueTextView.setVisibility(View.VISIBLE);
@@ -493,15 +502,16 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						} else if (txValue[1] == (byte) 0x04) {
 							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
 						} else if (txValue[1] == (byte) 0x33) {
-							if (SocketConstant.REGISTER_STATUE_CODE == 1) {
-								setConStatus(R.string.index_registing);
-							}
+//							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
+							setConStatus(R.string.index_registing);
+//							}
 						} else if (txValue[1] == (byte) 0x11) {
 							//百分比TextView设置为0
 //							percentTextView.setText("");
 							showNoCardDialog();
 							sendMessageToBlueTooth(OFF_TO_POWER);
 							setConStatus(R.string.index_un_insert_card);
+							stopAnim();
 						}
 						break;
 				}
@@ -581,6 +591,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			utils.delete(Constant.BRACELETVERSION);
 			utils.delete(ELECTRICITY);
 			CommonTools.showShortToast(this, "已解绑设备");
+			setConStatus(R.string.index_unbind);
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
 			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
 			//网络获取看有没有存储IMEI设备号,如果没有绑定过则去绑定流程
@@ -844,31 +855,36 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 		switch (conStatus) {
 			case R.string.index_connecting:
-				setLeftDrawable(-1);
+//				setLeftDrawable(-1);
 				percentTextView.setText("");
 				break;
 			case R.string.index_no_signal:
-				setLeftDrawable(R.drawable.device_no_signal);
+//				setLeftDrawable(R.drawable.device_no_signal);
 				percentTextView.setText("0%");
 				break;
 			case R.string.index_regist_fail:
-				setLeftDrawable(R.drawable.device_no_signal);
+//				setLeftDrawable(R.drawable.device_no_signal);
 				percentTextView.setText("");
 				break;
 			case R.string.index_registing:
-				setLeftDrawable(R.drawable.device_no_signal);
+//				setLeftDrawable(R.drawable.device_no_signal);
+				percentTextView.setText("");
+				registerSimStatu.setEnabled(false);
+				break;
+			case R.string.index_unbind:
+//				setLeftDrawable(R.drawable.device_no_signal);
 				percentTextView.setText("");
 				break;
 			case R.string.index_no_packet:
-				setLeftDrawable(R.drawable.device_no_packet);
+//				setLeftDrawable(R.drawable.device_no_packet);
 				percentTextView.setText("");
 				break;
 			case R.string.index_un_insert_card:
-				setLeftDrawable(R.drawable.device_no_packet);
+//				setLeftDrawable(R.drawable.device_no_packet);
 				percentTextView.setText("");
 				break;
 			case R.string.index_high_signal:
-				setLeftDrawable(R.drawable.device_high_signal);
+//				setLeftDrawable(R.drawable.device_high_signal);
 				conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 				break;
 		}
@@ -892,6 +908,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
 			if (entity.isSuccess()) {
 				setConStatus(R.string.index_high_signal);
+				stopAnim();
 			} else {
 				switch (entity.getFailType()) {
 					case SocketConstant.REGISTER_FAIL:

@@ -75,23 +75,22 @@
             android:textColor="@color/gray_text"
             />
 
-        <ImageView
-            android:id="@+id/register_sim_statue"
-            android:layout_width="24dp"
-            android:layout_height="@dimen/padding_20dp"
-            android:layout_marginRight="@dimen/padding_5dp"
-            android:background="@drawable/registering"
-            android:gravity="center_vertical"
-            android:visibility="gone"
-            />
-
-
         <TextView
             android:id="@+id/percentTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_5dp"
             android:gravity="center"
             android:textColor="@color/gray_text"
+            />
+
+        <Button
+            android:id="@+id/register_sim_statue"
+            android:layout_width="24dp"
+            android:layout_height="@dimen/padding_20dp"
+            android:layout_marginLeft="@dimen/padding_5dp"
+            android:background="@d rawable/registering"
+            android:gravity="center_vertical"
             />
     </LinearLayout>
 
