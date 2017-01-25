@@ -51,7 +51,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	Chronometer timer;
 	String maxinumPhoneCallTime;
 	ConnectedReceive connectedReceive;
-int cellPhoneType;
+	int cellPhoneType;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -123,7 +123,6 @@ int cellPhoneType;
 
 	private void callPhone() {
 		ContactRecodeEntity info = (ContactRecodeEntity) getIntent().getSerializableExtra(IntentPutKeyConstant.DATA_CALLINFO);
-
 		if (info.getPhoneNumber().startsWith("sip:")) {
 			ICSOpenVPNApplication.the_sipengineReceive.MakeUrlCall(info.getPhoneNumber());
 		} else if(cellPhoneType==Constant.NETWORK_CELL_PHONE){
@@ -134,6 +133,9 @@ int cellPhoneType;
 		}
 	}
 	private String deleteprefix(String type,String s) {
+		if(TextUtils.isEmpty(s)){
+			return "";
+		}
 		String phoneNumber;
 		if(s.replace(type,"").startsWith("+86")){
 

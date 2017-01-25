@@ -32,7 +32,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="20$"
-        android:layout_toLeftOf="@+id/stateTextView"
         android:layout_marginRight="@dimen/padding_5dp"
         android:layout_toRightOf="@id/packageNameTextView"
         android:textColor="@color/order_money"

@@ -89,6 +89,9 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 		holder.itemView.setTag(contactRecodeEntity);
 	}
 	private String deleteprefix(String type,String s) {
+		if(TextUtils.isEmpty(s)){
+			return "";
+		}
 		String phoneNumber;
 		if(s.replace(type,"").startsWith("+86")){
 
