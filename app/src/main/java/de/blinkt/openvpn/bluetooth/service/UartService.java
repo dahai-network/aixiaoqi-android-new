@@ -270,6 +270,7 @@ public class UartService extends Service implements Serializable {
 		mBluetoothGatt.disconnect();
 		mConnectionState = STATE_DISCONNECTED;
 		broadcastUpdate(ACTION_GATT_DISCONNECTED);
+//		refreshDeviceCache();
 		close();
 //		mBluetoothGatt.close();
 	}
@@ -442,7 +443,7 @@ public class UartService extends Service implements Serializable {
 	 */
 	public void refreshDeviceCache() {
 		//关闭蓝牙
-		mBluetoothAdapter.enable();
+		mBluetoothAdapter.disable();
 		//打开蓝牙
 		mBluetoothAdapter.enable();
 	}

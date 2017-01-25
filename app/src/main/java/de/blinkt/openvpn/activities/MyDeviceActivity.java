@@ -190,6 +190,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 	private void initSet() {
 		Log.e(TAG, "initSet");
+
 		int blueStatus = getIntent().getIntExtra(BLUESTATUSFROMPROMAIN, R.string.index_connecting);
 		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 		checkPowerTimer.schedule(checkPowerTask, 100, 60000);
@@ -288,7 +289,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				mService.disconnect();
 				//传出注册失败
 				registFail();
-//				//重启Uart服务
+				//重启Uart服务
 //				restartUartService();
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
@@ -348,6 +349,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void restartUartService() {
+		Log.i(TAG, "restart Uart服务");
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -465,7 +467,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					unBindButton.setVisibility(View.GONE);
 					utils.delete(Constant.IMEI);
 					macTextView.setText("");
-					registerSimStatu.setVisibility(View.GONE);
 					sinking.setVisibility(View.GONE);
 					noConnectImageView.setVisibility(View.VISIBLE);
 					statueTextView.setVisibility(View.VISIBLE);
@@ -489,7 +490,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						} else if (txValue[1] == (byte) 0x05) {
 							setView();
 						} else if (txValue[1] == (byte) 0x0A) {
-							utils.writeString(Constant.BRACELETVERSION, Integer.parseInt(String.valueOf(txValue[2]), 16) + "");
+							utils.writeString(Constant.BRACELETVERSION, txValue[2] + "");
 							firmwareTextView.setText(Integer.parseInt(String.valueOf(txValue[2]), 16) + "");
 							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 								//收到版本号后获取历史步数
@@ -504,6 +505,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						} else if (txValue[1] == (byte) 0x33) {
 //							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
 							setConStatus(R.string.index_registing);
+							startAnim();
 //							}
 						} else if (txValue[1] == (byte) 0x11) {
 							//百分比TextView设置为0

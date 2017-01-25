@@ -6,8 +6,8 @@ package de.blinkt.openvpn.constant;
 public class Constant {
 
 	public static final boolean IS_DEBUG = true;
-//		public static final String BLUETOOTH_NAME = "unitoys";
-	public static final String BLUETOOTH_NAME = "ZiJian";
+	public static final String BLUETOOTH_NAME = "unitoys";
+//	public static final String BLUETOOTH_NAME = "ZiJian";
 
 	//购买套餐数量限制
 	public static final int LIMIT_COUNT = 30;
@@ -154,4 +154,6 @@ public class Constant {
 	public static final int SIM_CELL_PHONE = 2;
 
 	public static final int RIIS = 75;
+	//蓝牙操作时间限制（5秒内不可重复操作）
+	public static final int REPEAT_OPERATE = 5000;
 }

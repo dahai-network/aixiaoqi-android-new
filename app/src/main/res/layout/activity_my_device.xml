@@ -89,7 +89,7 @@
             android:layout_width="24dp"
             android:layout_height="@dimen/padding_20dp"
             android:layout_marginLeft="@dimen/padding_5dp"
-            android:background="@d rawable/registering"
+            android:background="@drawable/registering"
             android:gravity="center_vertical"
             />
     </LinearLayout>
