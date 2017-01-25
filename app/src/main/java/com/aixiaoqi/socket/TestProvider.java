@@ -106,7 +106,6 @@ public class TestProvider {
 		preDataEntity.setPreDataString(item.substring(8, item.length()));
 		String hex = preDataEntity.getPreDataString();
 		if (SocketConstant.EN_APPEVT_PRDATA.equals(preDataEntity.getEvtIndex())) {
-//			SocketConstant.REGISTER_STATUE_CODE = 2;
 			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = hex;
 			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preDataEntity.getLenString();
 			sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);

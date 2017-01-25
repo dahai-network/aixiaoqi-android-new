@@ -13,6 +13,7 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.util.CommonTools;
 
 import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
+import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 
@@ -84,6 +85,7 @@ public class ReceiveSocketService extends Service {
 	private void disConnectReconnect() {
 		CommonTools.delayTime(2000);
 		if(!tcpClient.isConnected()) {
+			REGISTER_STATUE_CODE = 2;
 			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 			reConnect();
 		}
