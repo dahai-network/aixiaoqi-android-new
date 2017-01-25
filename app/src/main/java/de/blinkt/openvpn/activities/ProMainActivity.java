@@ -571,6 +571,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			if (object.getStatus() == 1) {
 				if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
 					deviceAddress = getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI();
+					if (deviceAddress != null)
+						deviceAddress = deviceAddress.toUpperCase();
 					SharedUtils utils = SharedUtils.getInstance();
 					utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI());
 					utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
@@ -645,22 +647,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-//									addDevice(device,rssi);
-									if (device.getName() == null) {
-										return;
-									}
-									Log.i("test", "deviceName:" + device.getName());
-									if (deviceAddress.equalsIgnoreCase(device.getAddress())) {
-										scanLeDevice(false);
-										mService.connect(deviceAddress);
-									}
-								}
-							});
-
+							if (device.getName() == null) {
+								return;
+							}
+							Log.i("test", "deviceName:" + device.getName());
+							if (deviceAddress.equalsIgnoreCase(device.getAddress())) {
+								scanLeDevice(false);
+								mService.connect(deviceAddress);
+							}
 						}
 					});
 				}
