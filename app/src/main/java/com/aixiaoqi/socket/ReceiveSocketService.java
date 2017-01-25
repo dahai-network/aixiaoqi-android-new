@@ -38,6 +38,7 @@ public class ReceiveSocketService extends Service {
 	}
 
 	public void initSocket() {
+
 		tcpClient.connect();
 	}
 
@@ -75,7 +76,7 @@ public class ReceiveSocketService extends Service {
 
 	private void connectFailReconnect() {
 		CommonTools.delayTime(2000);
-		if(!tcpClient.isConnected()){
+		if(tcpClient!=null&&!tcpClient.isConnected()){
 			if (contactFailCount <= 3) {
 				reConnect();
 			}
@@ -84,7 +85,7 @@ public class ReceiveSocketService extends Service {
 	}
 	private void disConnectReconnect() {
 		CommonTools.delayTime(2000);
-		if(!tcpClient.isConnected()) {
+		if(tcpClient!=null&&!tcpClient.isConnected()) {
 			REGISTER_STATUE_CODE = 2;
 			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 			reConnect();
@@ -93,14 +94,14 @@ public class ReceiveSocketService extends Service {
 	private void createHeartBeatPackage() {
 		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0) {
 //                timer.schedule(task,60000,60000);
-            count = count + 1;
-            Log.e("onReceive", "开启定时器");
-            Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
-            intent.setAction(HEARTBEAT_PACKET_TIMER);
-            sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
-            am = (AlarmManager) getSystemService(ALARM_SERVICE);
-            am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 60 * 1000, sender);
-        }
+			count = count + 1;
+			Log.e("onReceive", "开启定时器");
+			Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
+			intent.setAction(HEARTBEAT_PACKET_TIMER);
+			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
+			am = (AlarmManager) getSystemService(ALARM_SERVICE);
+			am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 60 * 1000, sender);
+		}
 	}
 
 
@@ -120,8 +121,10 @@ public class ReceiveSocketService extends Service {
 	@Override
 	public void onDestroy() {
 		Log.e(TAG,"onDestroy()");
-		tcpClient.disconnect();
-		tcpClient=null;
+		if(tcpClient!=null){
+			tcpClient.disconnect();
+			tcpClient=null;
+		}
 		Log.e(TAG,"tcpClient=null"+(tcpClient==null));
 		if (am != null){
 			am.cancel(sender);

@@ -278,7 +278,6 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				new Handler().postDelayed(new Runnable() {
 					@Override
 					public void run() {
-
 						CallPhoneNewActivity.this.finish();
 					}
 				}, 2000);
