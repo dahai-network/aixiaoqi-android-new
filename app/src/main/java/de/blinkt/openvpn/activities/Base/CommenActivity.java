@@ -111,7 +111,6 @@ public class CommenActivity  extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         dismissProgress();
     }
 }

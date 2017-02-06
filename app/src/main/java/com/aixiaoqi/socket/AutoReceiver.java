@@ -17,7 +17,7 @@ public class AutoReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.e("onReceive", "定时器进来了");
+
 		if (intent.getAction().equals(HEARTBEAT_PACKET_TIMER)) {
 			new Thread(new Runnable() {
 				@Override

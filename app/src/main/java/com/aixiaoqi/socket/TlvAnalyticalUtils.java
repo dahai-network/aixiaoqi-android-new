@@ -62,16 +62,17 @@ public class TlvAnalyticalUtils {
 		return messagePackageEntity;
 	}
 
-	private static void sendMessageToBlueTooth(final String message) {
-		byte[] value;
-		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-		UartService mService = ICSOpenVPNApplication.uartService;
-		if (mService != null) {
-			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
-				mService.writeRXCharacteristic(value);
-			}
-		}
-	}
+//	private static void sendMessageToBlueTooth(final String message) {
+//		byte[] value;
+//		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
+//		UartService m0.
+// Service = ICSOpenVPNApplication.uartService;
+//		if (mService != null) {
+//			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
+//				mService.writeRXCharacteristic(value);
+//			}
+//		}
+//	}
 
 
 	public static void builderMessagePackageList(String hexString) {
