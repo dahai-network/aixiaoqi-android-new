@@ -30,7 +30,9 @@ public class SharedUtils {
 	public static SharedUtils getInstance() {
 		if (mSharedUtils == null) {
 			synchronized (SharedUtils.class) {
-				mSharedUtils = new SharedUtils();
+				if(mSharedUtils==null){
+					mSharedUtils = new SharedUtils();
+				}
 			}
 		}
 		return mSharedUtils;
@@ -48,7 +50,7 @@ public class SharedUtils {
 			Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
 			while (iterator.hasNext()) {
 				Entry<String, Object> entry = iterator.next();
-			String key=	entry.getKey();
+				String key=	entry.getKey();
 				Object obj = entry.getValue();
 				if (obj instanceof String) {
 					editor.putString(key, obj.toString());

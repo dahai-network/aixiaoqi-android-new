@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -331,36 +332,39 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			LoginHttp loginHttp = (LoginHttp) object;
 			if (loginHttp.getStatus() == 1) {
 				LoginEntity entity = loginHttp.getLoginModel();
-				sharedUtils.writeString(Constant.USER_NAME, entity.getTel());
-				sharedUtils.writeString(Constant.PASSWORD, pwdEdit.getText().toString());
-				sharedUtils.writeString(Constant.TOKEN, entity.getToken());
-				sharedUtils.writeString(Constant.USER_HEAD, entity.getUserHead());
-				sharedUtils.writeString(Constant.NICK_NAME, entity.getNickName());
-				sharedUtils.writeString(Constant.HEIGHT, entity.getHeight());
-				sharedUtils.writeString(Constant.WEIGHT, entity.getWeight());
-				sharedUtils.writeString(Constant.SOPRT_TARGET, entity.getMovingTarget());
-				sharedUtils.writeString(Constant.IMEI, entity.getBraceletIMEI());
-				sharedUtils.writeString(Constant.BRACELETVERSION, entity.getBraceletVersion());
-				sharedUtils.writeInt(Constant.COMING_TEL_REMIND, entity.getNotificaCall());
-				sharedUtils.writeInt(Constant.MESSAGE_REMIND, entity.getNotificaSMS());
-				sharedUtils.writeInt(Constant.WEIXIN_REMIND, entity.getNotificaWeChat());
-				sharedUtils.writeInt(Constant.QQ_REMIND, entity.getNotificaQQ());
-				sharedUtils.writeInt(Constant.LIFT_WRIST, entity.getNotificaQQ());
-				sharedUtils.writeBoolean(Constant.ISFIRSTIN,false);
-				if (!TextUtils.isEmpty(entity.getBirthday())) {
-					sharedUtils.writeString(Constant.BRITHDAY, DateUtils.getDateToString(Long.parseLong(entity.getBirthday()) * 1000).substring(0, 7).replace("-", "年"));
-				}
-				sharedUtils.writeString(Constant.GENDER, entity.getSex());
-				//写入登陆天数，如果十五天没有登陆过则重新登录
-				sharedUtils.writeLong(Constant.LOGIN_DATA, System.currentTimeMillis());
-				sharedUtils.writeLong(Constant.CONFIG_TIME, System.currentTimeMillis());
 
-				if (!usernameEdit.getText().toString().equals(sharedUtils.readString(Constant.TEL)) || !Constant.JPUSH_ALIAS_SUCCESS.equals(sharedUtils.readString(Constant.JPUSH_ALIAS))) {
-					setAlias();
-				}
-				SecurityConfigHttp securityConfigHttp = new SecurityConfigHttp(this, HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
-				new Thread(securityConfigHttp).start();
+				if(entity!=null) {
+					sharedUtils.writeString(Constant.USER_NAME, entity.getTel());
+					sharedUtils.writeString(Constant.PASSWORD, pwdEdit.getText().toString());
+					sharedUtils.writeString(Constant.TOKEN, entity.getToken());
+					sharedUtils.writeString(Constant.USER_HEAD, entity.getUserHead());
+					sharedUtils.writeString(Constant.NICK_NAME, entity.getNickName());
+					sharedUtils.writeString(Constant.HEIGHT, entity.getHeight());
+					sharedUtils.writeString(Constant.WEIGHT, entity.getWeight());
+					sharedUtils.writeString(Constant.SOPRT_TARGET, entity.getMovingTarget());
+					sharedUtils.writeString(Constant.IMEI, entity.getBraceletIMEI());
+					sharedUtils.writeString(Constant.BRACELETVERSION, entity.getBraceletVersion());
+					sharedUtils.writeInt(Constant.COMING_TEL_REMIND, entity.getNotificaCall());
+					sharedUtils.writeInt(Constant.MESSAGE_REMIND, entity.getNotificaSMS());
+					sharedUtils.writeInt(Constant.WEIXIN_REMIND, entity.getNotificaWeChat());
+					sharedUtils.writeInt(Constant.QQ_REMIND, entity.getNotificaQQ());
+					sharedUtils.writeInt(Constant.LIFT_WRIST, entity.getNotificaQQ());
+					sharedUtils.writeBoolean(Constant.ISFIRSTIN, false);
+					Log.e("token","token="+entity.getToken());
+					if (!TextUtils.isEmpty(entity.getBirthday())) {
+						sharedUtils.writeString(Constant.BRITHDAY, DateUtils.getDateToString(Long.parseLong(entity.getBirthday()) * 1000).substring(0, 7).replace("-", "年"));
+					}
+					sharedUtils.writeString(Constant.GENDER, entity.getSex());
+					//写入登陆天数，如果十五天没有登陆过则重新登录
+					sharedUtils.writeLong(Constant.LOGIN_DATA, System.currentTimeMillis());
+					sharedUtils.writeLong(Constant.CONFIG_TIME, System.currentTimeMillis());
 
+					if (!usernameEdit.getText().toString().equals(sharedUtils.readString(Constant.TEL)) || !Constant.JPUSH_ALIAS_SUCCESS.equals(sharedUtils.readString(Constant.JPUSH_ALIAS))) {
+						setAlias();
+					}
+					SecurityConfigHttp securityConfigHttp = new SecurityConfigHttp(this, HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
+					new Thread(securityConfigHttp).start();
+				}
 			} else {
 				CommonTools.showShortToast(this, loginHttp.getMsg());
 				dismissProgress();

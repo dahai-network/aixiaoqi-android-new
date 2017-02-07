@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Created by Administrator on 2016/12/10 0010.
+ * 消息包
  */
 public class MessagePackageEntity implements Serializable{
     protected String hexStringSessionId;//会话ID
