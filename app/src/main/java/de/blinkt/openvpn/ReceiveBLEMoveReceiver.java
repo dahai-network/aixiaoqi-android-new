@@ -105,7 +105,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				public void run() {
 					try {
 						Log.i("toBLue", "连接成功");
-						Thread.sleep(6000);
+						Thread.sleep(5000);
 
 //						//测试代码
 						sendMessageToBlueTooth(UP_TO_POWER);
