@@ -120,16 +120,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			mService = ((UartService.LocalBinder) rawBinder).getService();
 			//存在Application供全局使用
 			ICSOpenVPNApplication.uartService = mService;
-			bleMoveReceiver = new ReceiveBLEMoveReceiver();
-			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(bleMoveReceiver, makeGattUpdateIntentFilter());
-			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(updateIndexTitleReceiver, makeGattUpdateIntentFilter());
 			Log.d(TAG, "onServiceConnected mService= " + mService);
 			if (!mService.initialize()) {
 				Log.d(TAG, "Unable to initialize Bluetooth");
 				finish();
 			}
-			//打开蓝牙服务后开始搜索
-			searchBLE();
+
 		}
 
 
@@ -148,6 +144,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		initFragment();
 		addListener();
 		setListener();
+		initBrocast();
 		initServices();
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
@@ -155,6 +152,16 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
 
+	}
+
+	private void initBrocast() {
+		if (bleMoveReceiver == null) {
+			bleMoveReceiver = new ReceiveBLEMoveReceiver();
+			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(bleMoveReceiver, makeGattUpdateIntentFilter());
+			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(updateIndexTitleReceiver, makeGattUpdateIntentFilter());
+			//打开蓝牙服务后开始搜索
+			searchBLE();
+		}
 	}
 
 
@@ -172,8 +179,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
 	private void initServices() {
-		Intent bindIntent = new Intent(this, UartService.class);
-		bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+			Log.i(TAG, "开启UartService");
+			Intent bindIntent = new Intent(this, UartService.class);
+			bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+		}
 	}
 
 	private void startSocketService() {
@@ -705,7 +715,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				break;
 			case ServiceOperationEntity.CREATE_SERVICE:
 				if (entity.getServiceName() == UartService.class.getName()) {
-					Log.i(TAG, "开启UartService");
 					initServices();
 				}
 				break;
@@ -731,7 +740,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (txValue[3] == (byte) 0x03) {
 						}
 					} else if (txValue[1] == (byte) 0x33) {
-						if (!CommonTools.isFastDoubleClick(5000)) {
+						if (!CommonTools.isFastDoubleClick(Constant.REPEAT_OPERATE)) {
 							//当有通话套餐的时候才允许注册操作
 							IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 							new Thread(http).start();

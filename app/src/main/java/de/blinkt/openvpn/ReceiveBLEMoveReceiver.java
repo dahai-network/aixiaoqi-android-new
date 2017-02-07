@@ -3,6 +3,7 @@ package de.blinkt.openvpn;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
@@ -104,7 +105,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				public void run() {
 					try {
 						Log.i("toBLue", "连接成功");
-						Thread.sleep(5000);
+						Thread.sleep(6000);
 
 //						//测试代码
 						sendMessageToBlueTooth(UP_TO_POWER);
@@ -147,7 +148,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					}
 				}
 			});
-			sendStepThread.start();
+			//五秒内不可以再次启动
+			if (!CommonTools.isFastDoubleClick(1000)) {
+				sendStepThread.start();
+			}
 		}
 
 		if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
@@ -167,13 +171,17 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						mService.connect(utils.readString(Constant.IMEI));
 					} else {
 						Log.d(TAG, "UART_DISCONNECT_MSG");
-						mService.disconnect();
 					}
 				}
 			}).start();
 		}
 		if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
 			mService.enableTXNotification();
+			//如果版本号小于android N
+			if (Build.VERSION.SDK_INT < 24) {
+				boolean isSuccess = mService.ensureServiceChangedEnabled();
+				Log.i(TAG, "ensureServiceChangedEnabled:" + isSuccess);
+			}
 		}
 		if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 			final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
@@ -290,12 +298,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //								}
 //							}, 30000);
 									//当上电完成则需要发送写卡命令
-									if (!IS_TEXT_SIM) {
-										//空卡ID是否不为空，若不为空则
-										if (nullCardId != null) {
-											Log.i(TAG, "nullcardid上电返回");
-										} else {
-											sendMessageSeparate("A0A40000023F00");
+									if (!CommonTools.isFastDoubleClick(Constant.REPEAT_OPERATE)) {
+										if (!IS_TEXT_SIM) {
+											//空卡ID是否不为空，若不为空则
+											if (nullCardId != null) {
+												Log.i(TAG, "nullcardid上电返回");
+											} else {
+												sendMessageSeparate("A0A40000023F00");
+											}
 										}
 									}
 									break;
@@ -322,11 +332,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									}
 									break;
 								case (byte) 0xEE:
-									if (!isOpenStepService) {
-										Intent updateStepIntent = new Intent(context, UpdateStepService.class);
-										context.startService(updateStepIntent);
-										isOpenStepService = true;
-									}
 									//绑定流程成功命令
 									sendMessageToBlueTooth(BIND_SUCCESS);
 									CommonTools.delayTime(500);
@@ -348,7 +353,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							break;
 					}
 				}
-			}).start();
+			}
+
+			).
+
+					start();
 		}
 		if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)) {
 			mService.disconnect();

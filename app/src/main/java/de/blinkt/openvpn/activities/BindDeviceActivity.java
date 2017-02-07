@@ -19,13 +19,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
-import cn.com.johnson.adapter.DeviceAdapter;
 import de.blinkt.openvpn.activities.Base.CommenActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.BluetoothConstant;
@@ -54,11 +58,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	@BindView(R.id.connectedRelativeLayout)
 	RelativeLayout connectedRelativeLayout;
 	private Handler mHandler;
+	private Handler findDeviceHandler;
+	private Map deviceMap = new HashMap();
 	private BluetoothAdapter mBluetoothAdapter;
-	List<BluetoothDevice> deviceList;
-
-	private DeviceAdapter deviceAdapter;
-	private static final long SCAN_PERIOD = 10000; //120 seconds
+	private static final long SCAN_PERIOD = 120000; //120 seconds
 	private String deviceAddress = "";
 	SharedUtils utils = SharedUtils.getInstance();
 	private DialogBalance noDevicedialog;
@@ -87,6 +90,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		ButterKnife.bind(this);
 		initSet();
 		mHandler = new Handler();
+		findDeviceHandler = new Handler();
 		initList();
 	}
 
@@ -106,7 +110,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					if (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED) {
+					if (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED && !isStartFindDeviceDelay) {
 						mBluetoothAdapter.stopLeScan(mLeScanCallback);
 						showDialog();
 					}
@@ -131,7 +135,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	protected void onPause() {
 		super.onPause();
 		scanLeDevice(false);
-		if (noDevicedialog != null && noDevicedialog.getDialog() != null&&noDevicedialog.getDialog().isShowing()) {
+		if (noDevicedialog != null && noDevicedialog.getDialog() != null && noDevicedialog.getDialog().isShowing()) {
 			noDevicedialog.getDialog().dismiss();
 		}
 	}
@@ -143,6 +147,8 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		EventBus.getDefault().unregister(this);
 	}
 
+	//是否打开找到设备的计时器
+	private boolean isStartFindDeviceDelay;
 	private BluetoothAdapter.LeScanCallback mLeScanCallback =
 			new BluetoothAdapter.LeScanCallback() {
 
@@ -160,14 +166,34 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
 									if (device.getName().contains(Constant.BLUETOOTH_NAME)) {
-										//如果信号强度绝对值大于这个值（距离\）,则配对
-										if (Math.abs(rssi) < Constant.RIIS) {
-											//找到设备后停止搜索蓝牙
-											scanLeDevice(false);
-											deviceAddress = device.getAddress();
-											utils.writeString(Constant.IMEI, deviceAddress);
-											IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, device.getAddress());
-											new Thread(http).start();
+										deviceMap.put(device.getAddress(), rssi);
+										if (!isStartFindDeviceDelay) {
+											findDeviceHandler.postDelayed(new Runnable() {
+												@Override
+												public void run() {
+													List<Map.Entry<String, Integer>> infos =
+															new ArrayList<>(deviceMap.entrySet());
+													Collections.sort(infos, new Comparator<Map.Entry<String, Integer>>() {
+														public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+															return (o2.getValue() - o1.getValue());
+//																return (o1.getKey()).toString().compareTo(o2.getKey());
+														}
+													});
+													for (int i = 0; i < infos.size(); i++) {
+														String id = infos.get(i).toString();
+														Log.i(TAG, "排序后：" + id);
+													}
+													//排序后连接操作
+													scanLeDevice(false);
+													deviceAddress = infos.get(0).getKey();
+													utils.writeString(Constant.IMEI, deviceAddress);
+													IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, device.getAddress());
+													new Thread(http).start();
+
+													isStartFindDeviceDelay = false;
+												}
+											}, 5000);
+											isStartFindDeviceDelay = true;
 										}
 									}
 								}
@@ -176,7 +202,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 					});
 				}
 			};
-
 
 
 	@OnClick(R.id.stopImageView)

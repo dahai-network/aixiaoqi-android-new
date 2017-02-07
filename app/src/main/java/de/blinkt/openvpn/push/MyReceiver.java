@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
@@ -17,10 +16,6 @@ import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.File;
-import java.util.Iterator;
-import java.util.Set;
 
 import cn.com.aixiaoqi.R;
 import cn.jpush.android.api.JPushInterface;
