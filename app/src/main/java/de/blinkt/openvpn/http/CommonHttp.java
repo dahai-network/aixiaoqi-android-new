@@ -216,7 +216,12 @@ public abstract class CommonHttp implements Callback, Runnable {
 //                }
 			}
 			fos.flush();
+			if(downloadLen<contentLen&&file.isFile()&&file.exists()){
+				file.delete();
+				right(Constant.DOWNLOAD_FAIL);
+			}else{
 			right(Constant.DOWNLOAD_SUCCEED);
+			}
 		} catch (Exception e) {
 			right(Constant.DOWNLOAD_FAIL);
 			e.printStackTrace();

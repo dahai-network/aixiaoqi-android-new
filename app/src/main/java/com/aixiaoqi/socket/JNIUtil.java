@@ -47,7 +47,7 @@ public class JNIUtil {
 		switch (SocketConstant.REGISTER_STATUE_CODE) {
 			case 0:
 				if (jniUtil != null)
-					phoneAddress(phoneNumber);
+					phoneAddressAndStartSDK(phoneNumber);
 				break;
 			case 1:
 				reStartSDK();
@@ -76,7 +76,7 @@ public class JNIUtil {
 			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 	}
 
-	private static void phoneAddress(String phonenumber) {
+	private static void phoneAddressAndStartSDK(String phonenumber) {
 		Log.e("phoneAddress", "phoneAddress");
 		try {
 			if (matchesPhoneNumber(phonenumber) == 1 || matchesPhoneNumber(phonenumber) == 2)
