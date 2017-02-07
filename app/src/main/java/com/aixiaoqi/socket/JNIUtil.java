@@ -29,13 +29,15 @@ public class JNIUtil {
 	}
 
 	public static JNIUtil getInstance() {
-		synchronized (SendYiZhengService.class) {
-			if (jniUtil == null) {
-				synchronized (SendYiZhengService.class) {
+
+		if (jniUtil == null) {
+			synchronized (JNIUtil.class) {
+				if(jniUtil==null){
 					jniUtil = new JNIUtil();
 				}
 			}
 		}
+
 		return jniUtil;
 	}
 
