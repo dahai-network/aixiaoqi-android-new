@@ -8,6 +8,7 @@ import android.util.Log;
 
 /**
  * Created by Administrator on 2016/12/31 0031.
+ * UDP 服务
  */
 public class ReceiveDataframSocketService extends Service {
     private MessageOutLisener listener;
@@ -22,6 +23,7 @@ public class ReceiveDataframSocketService extends Service {
             return ReceiveDataframSocketService.this;
         }
     }
+    //初始化udp
     public void initDataframSocketService(){
         udpClient.start();
     }

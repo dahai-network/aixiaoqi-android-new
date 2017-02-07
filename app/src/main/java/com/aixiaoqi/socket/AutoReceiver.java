@@ -9,6 +9,8 @@ import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 
 /**
  * Created by Administrator on 2017/1/20 0020.
+ * 系统定时发送心跳包
+ *
  */
 
 public class AutoReceiver extends BroadcastReceiver {

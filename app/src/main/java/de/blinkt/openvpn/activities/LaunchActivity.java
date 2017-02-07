@@ -42,6 +42,7 @@ public class LaunchActivity extends BaseActivity   {
 				try {
 					sharedUtils = SharedUtils.getInstance();
 					String token = sharedUtils.readString(Constant.TOKEN);
+					Log.e("tokenlaunch","token="+token);
 					Thread.sleep(1000);
 					if (!TextUtils.isEmpty(token)) {
 						if (System.currentTimeMillis() - sharedUtils.readLong(Constant.LOGIN_DATA) > (15*60 * 60 * 24 * 1000)){

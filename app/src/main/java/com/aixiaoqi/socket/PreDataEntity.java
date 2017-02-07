@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Created by Administrator on 2016/12/24 0024.
+ * 预读取数据
  */
 public class PreDataEntity implements Serializable {
     private String chnString;

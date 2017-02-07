@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 /**
  * Created by Administrator on 2017/1/4 0004.
+ * 十六进制与ASCII相互转换
  */
 public class RadixAsciiChange {
 
