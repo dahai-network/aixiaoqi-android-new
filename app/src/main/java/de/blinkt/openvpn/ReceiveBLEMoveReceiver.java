@@ -3,6 +3,7 @@ package de.blinkt.openvpn;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
@@ -104,7 +105,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				public void run() {
 					try {
 						Log.i("toBLue", "连接成功");
-						Thread.sleep(5000);
+						Thread.sleep(6000);
 
 //						//测试代码
 						sendMessageToBlueTooth(UP_TO_POWER);
@@ -175,8 +176,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			}).start();
 		}
 		if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
-			if (!CommonTools.isFastDoubleClick(2000))
-				mService.enableTXNotification();
+			mService.enableTXNotification();
+			//如果版本号小于android N
+			if (Build.VERSION.SDK_INT < 24) {
+				boolean isSuccess = mService.ensureServiceChangedEnabled();
+				Log.i(TAG, "ensureServiceChangedEnabled:" + isSuccess);
+			}
 		}
 		if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 			final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);

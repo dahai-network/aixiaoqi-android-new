@@ -491,7 +491,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 							setView();
 						} else if (txValue[1] == (byte) 0x0A) {
 							utils.writeString(Constant.BRACELETVERSION, txValue[2] + "");
-							firmwareTextView.setText(Integer.parseInt(String.valueOf(txValue[2]), 16) + "");
+							firmwareTextView.setText(txValue[2] + "");
 							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 								//收到版本号后获取历史步数
 								sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);

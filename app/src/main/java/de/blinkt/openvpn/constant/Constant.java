@@ -70,7 +70,7 @@ public class Constant {
 	public static final String FIND_VERSION = "AA0A01A1";//版本号
 	public static final String RESTORATION = "AA112233AA";//复位命令
 	public static final String BIND_SUCCESS = "AADD01DDAA";//绑定成功命令
-	public static final String ANDROID_TARGET = "AA010500AE";//绑定成功命令
+	public static final String ANDROID_TARGET = "AA010400AF";//绑定成功命令
 	//ICCID标记
 	public static final String ICCID = "ICCID";
 	//来电，短信，微信，QQ通知开关标记
@@ -153,7 +153,6 @@ public class Constant {
 	public static final int NETWORK_CELL_PHONE = 1;
 	public static final int SIM_CELL_PHONE = 2;
 
-	public static final int RIIS = 75;
 	//蓝牙操作时间限制（5秒内不可重复操作）
 	public static final int REPEAT_OPERATE = 5000;
 }

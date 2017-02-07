@@ -73,6 +73,9 @@ public class UartService extends Service implements Serializable {
 	public static final UUID RX_SERVICE_UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
 	public static final UUID RX_CHAR_UUID = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E");
 	public static final UUID TX_CHAR_UUID1 = UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
+	//GATT通用特征值
+	private final static UUID GENERIC_ATTRIBUTE_SERVICE = UUID.fromString("00001801-0000-1000-8000-00805f9b34fb");
+	private final static UUID SERVICE_CHANGED_CHARACTERISTIC = UUID.fromString("00002A05-0000-1000-8000-00805f9b34fb");
 	//	public static final UUID TX_CHAR_UUID2 = UUID.fromString("6E400004-B5A3-F393-E0A9-E50E24DCCA9F");
 //	public static final UUID TX_CHAR_UUID3 = UUID.fromString("6E400005-B5A3-F393-E0A9-E50E24DCCA9F");
 	private List<BluetoothGattService> BluetoothGattServices;
@@ -122,9 +125,7 @@ public class UartService extends Service implements Serializable {
 		public void onCharacteristicRead(BluetoothGatt gatt,
 										 BluetoothGattCharacteristic characteristic,
 										 int status) {
-			if (status == BluetoothGatt.GATT_SUCCESS) {
-				broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
-			}
+			broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
 		}
 
 		@Override
@@ -133,8 +134,6 @@ public class UartService extends Service implements Serializable {
 			broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
 		}
 	};
-	private BluetoothGattService RxService;
-	private BluetoothGattDescriptor descriptor;
 
 	//发送广播
 	private void broadcastUpdate(final String action) {
@@ -353,6 +352,33 @@ public class UartService extends Service implements Serializable {
 //		setDescriptor(RxService, TX_CHAR_UUID3);
 	}
 
+	/**
+	 * When the device is bonded and has the Generic Attribute service and the Service Changed characteristic this method enables indications on this characteristic.
+	 * In case one of the requirements is not fulfilled this method returns <code>false</code>.
+	 *
+	 * @return <code>true</code> when the request has been sent, <code>false</code> when the device is not bonded, does not have the Generic Attribute service, the GA service does not have
+	 * the Service Changed characteristic or this characteristic does not have the CCCD.
+	 */
+	public boolean ensureServiceChangedEnabled() {
+		final BluetoothGatt gatt = mBluetoothGatt;
+		if (gatt == null)
+			return false;
+
+		// The Service Changed indications have sense only on bonded devices
+		final BluetoothDevice device = gatt.getDevice();
+		if (device.getBondState() != BluetoothDevice.BOND_BONDED)
+			return false;
+
+		final BluetoothGattService gaService = gatt.getService(GENERIC_ATTRIBUTE_SERVICE);
+		if (gaService == null)
+			return false;
+
+		final BluetoothGattCharacteristic scCharacteristic = gaService.getCharacteristic(SERVICE_CHANGED_CHARACTERISTIC);
+		if (scCharacteristic == null)
+			return false;
+		return true;
+	}
+
 	//用于某个接收的UUID写入mBluetoothGatt的监听callback里面。在onCharacteristicChanged()会产生响应
 	public void setDescriptor(BluetoothGattService rxService, UUID uuid) {
 		CommonTools.delayTime(150);
@@ -364,20 +390,21 @@ public class UartService extends Service implements Serializable {
 		}
 		mBluetoothGatt.setCharacteristicNotification(TxChar, true);
 
-		descriptor = TxChar.getDescriptor(CCCD);
+		BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
 		descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 //		mBluetoothGatt.readDescriptor(descriptor);
 		mBluetoothGatt.writeDescriptor(descriptor);
 	}
 
-	public void writeRXCharacteristic(byte[] value) {
+	public boolean writeRXCharacteristic(byte[] value) {
 		//如果mBluetoothGatt为空，意味着连接中断，所以不允许继续传输数据
 		if (mBluetoothGatt == null) {
 			Log.e("Blue_Chanl", "蓝牙已断开，发送失败！");
 			mConnectionState = STATE_DISCONNECTED;
 			broadcastUpdate(ACTION_GATT_DISCONNECTED);
-			return;
+			return false;
 		}
+		BluetoothGattService RxService = null;
 		if (RxService == null) {
 			RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
 		}
@@ -385,13 +412,16 @@ public class UartService extends Service implements Serializable {
 		if (RxService == null) {
 			showMessage("Rx service not found!");
 			broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
-			return;
+			return false;
 		}
-		BluetoothGattCharacteristic RxChar = RxService.getCharacteristic(RX_CHAR_UUID);
+		BluetoothGattCharacteristic RxChar = null;
+		if (RxChar == null) {
+			RxChar = RxService.getCharacteristic(RX_CHAR_UUID);
+		}
 		if (RxChar == null) {
 			showMessage("Rx charateristic not found!");
 			broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
-			return;
+			return false;
 		}
 		RxChar.setValue(value);
 		boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
@@ -406,6 +436,7 @@ public class UartService extends Service implements Serializable {
 				e.printStackTrace();
 			}
 		}
+		return true;
 	}
 
 	private void showMessage(String msg) {
