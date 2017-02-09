@@ -58,6 +58,7 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
+import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
@@ -706,6 +707,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	}
 
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
+		indexFragment.changeBluetoothStatus(getString(entity.getStatusInt()), entity.getStatusDrawableInt());
+	}
+
 	@Subscribe(threadMode = ThreadMode.BACKGROUND)//非UI线程
 	public void onServiceOperation(ServiceOperationEntity entity) {
 		switch (entity.getOperationType()) {
@@ -742,7 +748,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (txValue[3] == (byte) 0x03) {
 						}
 					} else if (txValue[1] == (byte) 0x33) {
-						if (!CommonTools.isFastDoubleClick(Constant.REPEAT_OPERATE)&&IS_TEXT_SIM) {
+						if (!CommonTools.isFastDoubleClick(Constant.REPEAT_OPERATE) && IS_TEXT_SIM) {
 							//当有通话套餐的时候才允许注册操作
 							IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 							new Thread(http).start();
@@ -762,7 +768,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 			if (action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)) {
 				stopService(intentCallPhone);
-
 			}
 		}
 	};

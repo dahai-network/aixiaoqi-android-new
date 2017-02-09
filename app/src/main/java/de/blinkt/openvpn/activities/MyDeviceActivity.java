@@ -58,6 +58,7 @@ import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.http.UnBindDeviceHttp;
 import de.blinkt.openvpn.model.BlueToothDeviceEntity;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
+import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
@@ -73,6 +74,8 @@ import no.nordicsemi.android.dfu.DfuServiceInitiator;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
+import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
+import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
 import static de.blinkt.openvpn.activities.BindDeviceActivity.FAILT;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
@@ -315,7 +318,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 				break;
 			case R.id.register_sim_statue:
-				//TODO 处理异常
+				//如果激活卡成功后，刷新按钮点击需要将标记激活
+				isGetnullCardid = true;
+				nullCardId = null;
 				//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
 				//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 				if (SocketConstant.REGISTER_STATUE_CODE != 3) {
@@ -494,8 +499,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 							utils.writeString(Constant.BRACELETVERSION, txValue[2] + "");
 							firmwareTextView.setText(txValue[2] + "");
 							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-								//收到版本号后获取历史步数
-								sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
 								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
 								entity.setSuccess(true);
@@ -814,7 +817,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 											scanLeDevice(false);
 											Intent result = new Intent();
 											result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, device.getAddress());
-//										checkIsBindDevie(device);
+//										    checkIsBindDevie(device);
 											utils.writeString(Constant.IMEI, macAddressStr);
 											mService.connect(macAddressStr);
 										}
@@ -860,6 +863,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			case R.string.index_connecting:
 //				setLeftDrawable(-1);
 				percentTextView.setText("");
+				break;
+			case R.string.index_aixiaoqicard:
+//				setLeftDrawable(-1);
+				percentTextView.setText("");
+				stopAnim();
 				break;
 			case R.string.index_no_signal:
 //				setLeftDrawable(R.drawable.device_no_signal);
@@ -935,6 +943,11 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			}
 		}
 		percentTextView.setVisibility(View.GONE);
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
+		setConStatus(entity.getStatusInt());
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程

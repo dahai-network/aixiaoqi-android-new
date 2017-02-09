@@ -10,6 +10,7 @@ import static com.aixiaoqi.socket.SocketConstant.EN_APPEVT_CMD_SETRST;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
 import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
+import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 
 /**
  * Created by Administrator on 2016/12/27 0027.
@@ -33,7 +34,7 @@ public class JNIUtil {
 
 		if (jniUtil == null) {
 			synchronized (JNIUtil.class) {
-				if(jniUtil==null){
+				if (jniUtil == null) {
 					jniUtil = new JNIUtil();
 				}
 			}
@@ -44,9 +45,12 @@ public class JNIUtil {
 
 	/**
 	 * 开启SDK，重启SDK。
-	 * @param reconnectType  0,默认为0，表示正常情况。1表示蓝牙断开,2接收不到蓝牙数据。3表示Tcp断开
-     */
+	 *
+	 * @param reconnectType 0,默认为0，表示正常情况。1表示蓝牙断开,2接收不到蓝牙数据。3表示Tcp断开
+	 */
 	public static void startSDK(int reconnectType) {
+		if (!IS_TEXT_SIM) return;
+
 		Log.e("Blue_Chanl", "启动startSDK - REGISTER_STATUE_CODE=" + SocketConstant.REGISTER_STATUE_CODE);
 		String phoneNumber = SharedUtils.getInstance().readString(Constant.USER_NAME);
 		switch (SocketConstant.REGISTER_STATUE_CODE) {

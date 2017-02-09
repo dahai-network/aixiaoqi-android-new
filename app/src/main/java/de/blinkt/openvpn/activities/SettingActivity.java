@@ -62,6 +62,7 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 	Button exitBtn;
 	private SipEngineCore sipEngineCore;
 	private static final int MSG_SET_ALIAS = 1001;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -144,7 +145,7 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 							sipEngineCore = ICSOpenVPNApplication.the_sipengineReceive;
 							sipEngineCore.DeRegisterSipAccount();
 							sipEngineCore.CoreTerminate();
-							ICSOpenVPNApplication.the_sipengineReceive=null;
+							ICSOpenVPNApplication.the_sipengineReceive = null;
 						}
 					}
 				}).start();
@@ -155,7 +156,6 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 		}
 
 	}
-
 
 
 	@Override
@@ -241,6 +241,7 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 		sharedUtils.writeBoolean(Constant.ISFIRSTIN, true);
 		sharedUtils.delete(Constant.JPUSH_ALIAS);
 		sharedUtils.delete(Constant.TEL);
+		sharedUtils.delete(Constant.NULLCARD_SERIALNUMBER);
 		//友盟账号统计
 		MobclickAgent.onProfileSignOff();
 		Intent intent = new Intent();
@@ -251,7 +252,6 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 		finish();
 		toActivity(LoginMainActivity.class);
 	}
-
 
 
 	@Override
