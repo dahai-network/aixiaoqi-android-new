@@ -99,13 +99,15 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			Log.d(TAG, "UART_CONNECT_MSG");
 			mState = UART_PROFILE_CONNECTED;
 			ICSOpenVPNApplication.isConnect = true;
+			IS_TEXT_SIM = false;
+			isGetnullCardid = true;
 
 			sendStepThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					try {
+						Thread.sleep(3000);
 						Log.i("toBLue", "连接成功");
-						Thread.sleep(5000);
 
 //						//测试代码
 						sendMessageToBlueTooth(UP_TO_POWER);
@@ -157,6 +159,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 			isConnect = false;
 			mState = UART_PROFILE_DISCONNECTED;
+			nullCardId = null;
 			if (sendStepThread != null && !sendStepThread.isInterrupted())
 				sendStepThread.interrupt();
 			//如果保存的IMEI没有的话，那么就是在MyDevice里面，在Mydevice里面会有连接操作
@@ -298,12 +301,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //								}
 //							}, 30000);
 									//当上电完成则需要发送写卡命令
+									Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
 									if (!CommonTools.isFastDoubleClick(Constant.REPEAT_OPERATE)) {
 										if (!IS_TEXT_SIM) {
 											//空卡ID是否不为空，若不为空则
 											if (nullCardId != null) {
 												Log.i(TAG, "nullcardid上电返回");
 											} else {
+												Log.i(TAG, "发送A0A40000023F00");
 												sendMessageSeparate("A0A40000023F00");
 											}
 										}
@@ -433,11 +438,18 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				&& mStrSimCmdPacket.contains(RECEIVE_NULL_CARD_CHAR)) {
 			if (isGetnullCardid) {
 				if (mStrSimCmdPacket.length() > 20) {
+					if (!mStrSimCmdPacket.startsWith("0344")) {
+						Log.i("Bluetooth", "写卡流程··················" + mStrSimCmdPacket);
+						IS_TEXT_SIM = true;
+						isGetnullCardid = false;
+						sendMessageToBlueTooth(UP_TO_POWER);
+						return;
+					}
 					mStrSimCmdPacket = mStrSimCmdPacket.substring(4, 20);
 					Log.i("Bluetooth", "空卡序列号:" + mStrSimCmdPacket);
 					nullCardId = mStrSimCmdPacket;
 					//重新上电清空
-					sendMessageToBlueTooth(UP_TO_POWER);
+					sendMessageToBlueTooth(OFF_TO_POWER);
 					new Thread(new Runnable() {
 						@Override
 						public void run() {

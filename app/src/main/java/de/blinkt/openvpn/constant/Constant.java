@@ -154,5 +154,5 @@ public class Constant {
 	public static final int SIM_CELL_PHONE = 2;
 
 	//蓝牙操作时间限制（5秒内不可重复操作）
-	public static final int REPEAT_OPERATE = 5000;
+	public static final int REPEAT_OPERATE = 2500;
 }

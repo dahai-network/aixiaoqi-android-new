@@ -214,11 +214,12 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_ISBIND_DEVICE) {
 			IsBindHttp http = (IsBindHttp) object;
-			if (http.getIsBindEntity().getBindStatus() == 0) {
+			if (http.getIsBindEntity().getBindStatus() == 0 && http.getStatus() == 1) {
 				if (mService != null)
 					mService.connect(deviceAddress);
 			} else {
-				CommonTools.showShortToast(this, "该设备已经绑定过了！");
+//				CommonTools.showShortToast(this, "该设备已经绑定过了！");
+				CommonTools.showShortToast(this, http.getMsg());
 				finish();
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {

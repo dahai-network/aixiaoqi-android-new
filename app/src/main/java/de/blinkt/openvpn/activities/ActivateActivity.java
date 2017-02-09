@@ -177,7 +177,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 		OrderActivationHttp orderActivationHttp = new OrderActivationHttp(this, HttpConfigUrl.COMTYPE_ORDER_ACTIVATION, orderId, effectTime);
 		new Thread(orderActivationHttp).start();
 	}
-
+    //获取写卡数据，然后发给蓝牙写卡
 	private void orderDataHttp(String nullcardNumber) {
 		OrderDataHttp orderDataHttp = new OrderDataHttp(this, HttpConfigUrl.COMTYPE_ORDER_DATA, orderId, nullcardNumber);
 		new Thread(orderDataHttp).start();
@@ -212,7 +212,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				ReceiveBLEMoveReceiver.isGetnullCardid = true;
 				sendMessageToBlueTooth(Constant.UP_TO_POWER);
 			} else {
-				CommonTools.showShortToast(this,orderActivationHttp.getMsg());
+				CommonTools.showShortToast(this, orderActivationHttp.getMsg());
 				sureTextView.setEnabled(true);
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_ORDER_DATA) {

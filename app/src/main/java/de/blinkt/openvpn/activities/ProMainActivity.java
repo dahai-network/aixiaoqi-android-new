@@ -68,6 +68,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
 
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
+import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
 
@@ -740,12 +741,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (txValue[3] == (byte) 0x03) {
 						}
 					} else if (txValue[1] == (byte) 0x33) {
-						if (!CommonTools.isFastDoubleClick(Constant.REPEAT_OPERATE)) {
+						if (!CommonTools.isFastDoubleClick(Constant.REPEAT_OPERATE)&&IS_TEXT_SIM) {
 							//当有通话套餐的时候才允许注册操作
 							IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 							new Thread(http).start();
+							checkRegisterStatuGoIp();
 						}
-						checkRegisterStatuGoIp();
 					} else if (txValue[1] == (byte) 0x11) {
 						indexFragment.changeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 					} else if (txValue[1] == (byte) 0xEE) {

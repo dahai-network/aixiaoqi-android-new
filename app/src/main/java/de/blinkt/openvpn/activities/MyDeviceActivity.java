@@ -76,7 +76,6 @@ import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.activities.BindDeviceActivity.FAILT;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
-import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
@@ -405,7 +404,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				mState = UART_PROFILE_CONNECTED;
 				//测试代码
 				unBindButton.setVisibility(View.VISIBLE);
-				IS_TEXT_SIM = true;
 				dismissProgress();
 				setView();
 				setConStatus(R.string.index_registing);
