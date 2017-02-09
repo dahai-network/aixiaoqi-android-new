@@ -19,6 +19,7 @@ import java.util.TimerTask;
 
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -69,35 +70,25 @@ public class NotificationMonitor extends NotificationListenerService {
 			Log.i(TAG, "获取到通知 包名：" + res.activityInfo.packageName);
 			if (sbn.getPackageName().equals(res.activityInfo.packageName) && utils.readInt(Constant.MESSAGE_REMIND) == 1) {
 				if (isComeMessage) {
-					sendMessageToBlueTooth("AA2204018D");//发送给手环短信通知
+					SendCommandToBluetooth.sendMessageToBlueTooth("AA2204018D");//发送给手环短信通知
 					isComeMessage = false;
 				}
 			} else if (sbn.getPackageName().equals("com.tencent.mm") && utils.readInt(Constant.WEIXIN_REMIND) == 1)//如果是微信
 			{
 				if (isQQCalling) {
-					sendMessageToBlueTooth("AA440401EB");
+					SendCommandToBluetooth.sendMessageToBlueTooth("AA440401EB");
 					isQQCalling = false;
 				}
 			} else if (sbn.getPackageName().equals("com.tencent.mobileqq") && utils.readInt(Constant.QQ_REMIND) == 1) {
 				if (isWeixinCalling) {
-					sendMessageToBlueTooth("AA3304019C");
+					SendCommandToBluetooth.sendMessageToBlueTooth("AA3304019C");
 					isWeixinCalling = false;
 				}
 			}
 		}
 	}
 
-	private static void sendMessageToBlueTooth(final String message) {
-		byte[] value;
-		Log.i("toBLue", message);
-		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-		uartService = ICSOpenVPNApplication.uartService;
-		if (uartService != null) {
-			if (uartService.mConnectionState == UartService.STATE_CONNECTED) {
-				uartService.writeRXCharacteristic(value);
-			}
-		}
-	}
+
 
 	@Override
 	public void onNotificationRemoved(StatusBarNotification sbn) {
@@ -124,7 +115,7 @@ public class NotificationMonitor extends NotificationListenerService {
 				if (isComeMessage) {
 					Log.i(TAG, "收到短信");
 					Toast.makeText(context, "收到短信", Toast.LENGTH_LONG).show();
-					sendMessageToBlueTooth("AA2204018D");//发送给手环短信通知
+					SendCommandToBluetooth.sendMessageToBlueTooth("AA2204018D");//发送给手环短信通知
 					isComeMessage = false;
 				}
 			} else {
@@ -146,20 +137,20 @@ public class NotificationMonitor extends NotificationListenerService {
 					case TelephonyManager.CALL_STATE_IDLE:
 						if (isHangup && utils.readInt(Constant.COMING_TEL_REMIND) == 1) {
 							System.out.println("挂断");
-							sendMessageToBlueTooth("AA110400BF");//发送给手环挂断通知
+							SendCommandToBluetooth.sendMessageToBlueTooth("AA110400BF");//发送给手环挂断通知
 							isHangup = false;
 							isRepeat = true;
 						}
 						break;
 					case TelephonyManager.CALL_STATE_OFFHOOK:
 						System.out.println("接听");
-						sendMessageToBlueTooth("AA110400BF");//发送给手环接听通知
+						SendCommandToBluetooth.sendMessageToBlueTooth("AA110400BF");//发送给手环接听通知
 						isRepeat = true;
 						break;
 					case TelephonyManager.CALL_STATE_RINGING:
 						if (isIncome && utils.readInt(Constant.COMING_TEL_REMIND) == 1 && isRepeat) {
 							System.out.println("响铃:来电号码" + incomingNumber);
-							sendMessageToBlueTooth("AA110401BE");//发送给手环来电通知
+							SendCommandToBluetooth.sendMessageToBlueTooth("AA110401BE");//发送给手环来电通知
 							isIncome = false;
 							isRepeat = false;
 						}

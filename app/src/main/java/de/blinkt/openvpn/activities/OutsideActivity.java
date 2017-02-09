@@ -207,22 +207,7 @@ public class OutsideActivity extends BaseActivity implements ViewPager.OnPageCha
 //		}
 //	};
 //
-//	private void sendMessageToBlueTooth(final String message) {
-//		byte[] value;
-//		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-//		Log.i("toBLue", message);
-//		if (mService != null) {
-//			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
-//				mService.writeRXCharacteristic(value);
-//			} else {
-//				CommonTools.showShortToast(this, "设备已断开，请重新连接");
-//				dismissProgress();
-//			}
-//		} else {
-//			CommonTools.showShortToast(this, "请打开我的设备绑定设备");
-//			dismissProgress();
-//		}
-//	}
+
 
 	private void openCallTransferHttp() {
 		String iccId = SharedUtils.getInstance().readString(Constant.ICCID);

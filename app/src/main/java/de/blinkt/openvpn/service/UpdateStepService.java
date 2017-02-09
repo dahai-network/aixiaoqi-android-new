@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
@@ -22,15 +23,7 @@ public class UpdateStepService extends Service implements InterfaceCallback {
 	//是否第一次请求，如果是，则隔一分钟后请求实时步数
 	private boolean isFirstRequestBoolean = true;
 
-	private void sendMessageToBlueTooth(final String message) {
-		byte[] value;
-		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-		if (mService != null) {
-			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
-				mService.writeRXCharacteristic(value);
-			}
-		}
-	}
+
 
 	@Override
 	public void onCreate() {
@@ -49,7 +42,7 @@ public class UpdateStepService extends Service implements InterfaceCallback {
 							Thread.sleep(1000 * 60 * 30);
 						}
 //						sendHandler.sendEmptyMessage(0);
-						sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
+						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

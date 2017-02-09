@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
 
@@ -44,6 +45,7 @@ import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -72,6 +74,7 @@ import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
+import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.activities.BindDeviceActivity.FAILT;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
@@ -282,7 +285,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				registerSimStatu.setVisibility(View.GONE);
 				utils.delete(Constant.IMEI);
 				utils.delete(Constant.BRACELETVERSION);
-				sendMessageToBlueTooth("AAABCDEFAA");
+				SendCommandToBluetooth.sendMessageToBlueTooth("AAABCDEFAA");
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
 				ReceiveBLEMoveReceiver.isConnect = false;
@@ -309,7 +312,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 					@Override
 					public void run() {
 						if (!CommonTools.isFastDoubleClick(3000)) {
-							sendMessageToBlueTooth(FIND_DEVICE);
+							SendCommandToBluetooth.sendMessageToBlueTooth(FIND_DEVICE);
 						}
 					}
 				}).start();
@@ -317,25 +320,34 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				break;
 			case R.id.register_sim_statue:
 				//TODO 处理异常
+				//如没有没插卡检测插卡并且提示用户重启手环。
 				//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
 				//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
+
+
+				if(!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER,false)&&!CommonTools.isFastDoubleClick(1000)){
+					//通知主界面请求是否有套餐
+				}else if(TextUtils.isEmpty(SocketConstant.hostIP)){
+//请求端口号
+				}else if(SocketConstant.REGISTER_STATUE_CODE==1){
+					//重新注册
+					JNIUtil.startSDK(0);
+				}else if(SocketConstant.REGISTER_STATUE_CODE==2){
+//从预读取数据那里重新注册
+					if(sendYiZhengService!=null)
+						sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+				}else if(SocketConstant.REGISTER_STATUE_CODE==3){
+					//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
+					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
+				}
 				if (SocketConstant.REGISTER_STATUE_CODE != 3) {
 					startAnim();
-					sendMessageToBlueTooth(UP_TO_POWER);
+					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 				} else {
 					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
 				}
 				break;
-//			case R.id.resetDeviceTextView:
-//				new Thread(new Runnable() {
-//					@Override
-//					public void run() {
-//						if (!CommonTools.isFastDoubleClick(5000)) {
-//							sendMessageToBlueTooth(RESTORATION);
-//						}
-//					}
-//				}).start();
-//				break;
+
 			case R.id.statueTextView:
 				clickFindBracelet();
 				break;
@@ -392,12 +404,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		return intentFilter;
 	}
 
-	private void sendMessageToBlueTooth(final String message) {
-		byte[] value;
-		Log.i("TAG", "sendMessageToBlueTooth=" + message);
-		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-		mService.writeRXCharacteristic(value);
-	}
+
 
 	private Thread connectThread;
 	private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
@@ -497,7 +504,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 							firmwareTextView.setText(txValue[2] + "");
 							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 								//收到版本号后获取历史步数
-								sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
+								SendCommandToBluetooth.sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
 								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
 								entity.setSuccess(true);
@@ -514,7 +521,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 							//百分比TextView设置为0
 //							percentTextView.setText("");
 							showNoCardDialog();
-							sendMessageToBlueTooth(OFF_TO_POWER);
+							SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
 							setConStatus(R.string.index_un_insert_card);
 							stopAnim();
 						}
@@ -627,7 +634,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		} else if (cmdType == HttpConfigUrl.COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE) {
 			DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = (DownloadSkyUpgradePackageHttp) object;
 			if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
-				sendMessageToBlueTooth("AA080401A7");
+				SendCommandToBluetooth.sendMessageToBlueTooth("AA080401A7");
 				CommonTools.delayTime(1000);
 				uploadToBlueTooth();
 			} else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
@@ -720,7 +727,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 			MobclickAgent.onEvent(context, CLICKBINDDEVICE);
 			clickFindBracelet();
 		} else if (type == 3) {
-			sendMessageToBlueTooth(RESTORATION);
+			SendCommandToBluetooth.sendMessageToBlueTooth(RESTORATION);
 		} else if (type == DOWNLOAD_SKY_UPGRADE) {
 			if (!TextUtils.isEmpty(url)) {
 				//友盟方法统计
@@ -919,6 +926,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				percentTextView.setVisibility(View.GONE);
 				setConStatus(R.string.index_regist_fail);
 				switch (entity.getFailType()) {
+					case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
+						CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
+						break;
 					case SocketConstant.REGISTER_FAIL:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail));
 						break;

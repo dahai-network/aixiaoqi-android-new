@@ -22,8 +22,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -43,7 +45,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKALARMTAG;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKREPEATDAY;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKSAVEADDALARM;
 
-public class SetAlarmActivity extends BaseActivity implements InterfaceCallback {
+public class SetAlarmActivity extends BaseNetActivity  {
 
 	@BindView(R.id.pickerscrlllviewHour)
 	PickerScrollView pickerscrlllviewHour;
@@ -147,7 +149,7 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 		alarmBytes[7] = Byte.valueOf(addZero(pickerscrlllviewMiunue.getCurrentString()));
 		String alarmCheckStr = HexStringExchangeBytesUtil.bytesToHexString(new byte[]{BLECheckBitUtil.getXor(alarmBytes)});
 		Log.i("test", "闹钟：" + HexStringExchangeBytesUtil.bytesToHexString(alarmBytes) + alarmCheckStr);
-		sendMessageToBlueTooth(HexStringExchangeBytesUtil.bytesToHexString(alarmBytes) + alarmCheckStr);
+		SendCommandToBluetooth.sendMessageToBlueTooth(HexStringExchangeBytesUtil.bytesToHexString(alarmBytes) + alarmCheckStr);
 		if (alarmClockEntity != null) {
 			handler.sendEmptyMessage(UPDATE_ALARM);
 		} else {
@@ -325,7 +327,6 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 			if (object.getStatus() == 1) {
 				AddAlarmHttp http = (AddAlarmHttp) object;
 				AlarmClockEntity alarmClockEntity = http.getAlarmClockEntity();
-
 				Intent intent = new Intent();
 				intent.putExtra(IntentPutKeyConstant.ALARM_CLOCK_ENTITY, alarmClockEntity);
 				setResult(AlarmClockActivity.ADD_CLICK, intent);
@@ -345,28 +346,8 @@ public class SetAlarmActivity extends BaseActivity implements InterfaceCallback 
 		}
 	}
 
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
-		CommonTools.showShortToast(this, errorMessage);
-	}
-
-	@Override
-	public void noNet() {
-		CommonTools.showShortToast(this, getResources().getString(R.string.no_wifi));
-	}
 
 
-	private void sendMessageToBlueTooth(final String message) {
-		byte[] value;
-		Log.i("toBLue", message);
-		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-		UartService mService = ICSOpenVPNApplication.uartService;
-		if (mService != null) {
-			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
-				mService.writeRXCharacteristic(value);
-			}
-		}
-	}
 
 	//为发送的数据添加0，如果小于15
 	private String addZero(String date) {

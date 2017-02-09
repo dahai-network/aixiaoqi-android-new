@@ -21,6 +21,7 @@ import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -188,7 +189,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	@Override
 	public void dialogText(int type, String text) {
 		if (type == 2) {
-			sendMessageToBlueTooth("AA112233AA");
+			SendCommandToBluetooth.sendMessageToBlueTooth("AA112233AA");
 		} else if (type == 0) {
 			if (System.currentTimeMillis() > DateUtils.getStringToDate(text + " 00:00:00")) {
 				CommonTools.showShortToast(this, getString(R.string.less_current_time));
@@ -210,7 +211,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				ReceiveBLEMoveReceiver.orderStatus = 4;
 				showProgress("正在激活");
 				ReceiveBLEMoveReceiver.isGetnullCardid = true;
-				sendMessageToBlueTooth(Constant.UP_TO_POWER);
+				SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
 			} else {
 				CommonTools.showShortToast(this,orderActivationHttp.getMsg());
 				sureTextView.setEnabled(true);
@@ -229,26 +230,13 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 		String[] messages = PacketeUtil.Separate(message);
 		int length = messages.length;
 		for (int i = 0; i < length; i++) {
-			sendMessageToBlueTooth(messages[i]);
+			if(!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])){
+				dismissProgress();
+			}
 		}
 	}
 
-	private void sendMessageToBlueTooth(final String message) {
-		byte[] value;
-		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-		Log.i("toBLue", message);
-		if (mService != null) {
-			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
-				mService.writeRXCharacteristic(value);
-			} else {
-				CommonTools.showShortToast(this, "设备已断开，请重新连接");
-				dismissProgress();
-			}
-		} else {
-			CommonTools.showShortToast(this, "请打开我的设备绑定设备");
-			dismissProgress();
-		}
-	}
+
 
 	private void showDialog() {
 		//不能按返回键，只能二选其一

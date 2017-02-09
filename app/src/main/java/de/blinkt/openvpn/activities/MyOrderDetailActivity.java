@@ -30,6 +30,7 @@ import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -256,26 +257,13 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 		String[] messages = PacketeUtil.Separate(message);
 		int length = messages.length;
 		for (int i = 0; i < length; i++) {
-			sendMessageToBlueTooth(messages[i]);
-		}
-	}
-
-	private void sendMessageToBlueTooth(final String message) {
-		byte[] value;
-		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-		Log.i("toBLue", message);
-		if (mService != null) {
-			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
-				mService.writeRXCharacteristic(value);
-			} else {
+			if(!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])){
 				CommonTools.showShortToast(MyOrderDetailActivity.this, "设备已断开，请重新连接");
 				dismissProgress();
 			}
-		} else {
-			CommonTools.showShortToast(MyOrderDetailActivity.this, "请打开我的设备绑定设备");
-			dismissProgress();
 		}
 	}
+
 
 	private void createViews() {
 		setContentView(R.layout.activity_myorder_detail);
@@ -357,7 +345,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 					orderStatus = 4;
 					showProgress("正在激活");
 					ReceiveBLEMoveReceiver.isGetnullCardid = true;
-					sendMessageToBlueTooth(UP_TO_POWER);
+					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 				}
 				break;
 			case R.id.retryTextView:
@@ -388,7 +376,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 	@Override
 	public void dialogText(int type, String text) {
 		if (type == 2) {
-			sendMessageToBlueTooth("AA112233AA");
+			SendCommandToBluetooth.sendMessageToBlueTooth("AA112233AA");
 		}
 	}
 }

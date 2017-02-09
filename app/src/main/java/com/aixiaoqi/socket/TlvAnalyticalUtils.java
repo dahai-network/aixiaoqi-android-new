@@ -9,6 +9,7 @@ import java.util.List;
 
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.IsSuccessEntity;
@@ -62,18 +63,6 @@ public class TlvAnalyticalUtils {
 		return messagePackageEntity;
 	}
 
-//	private static void sendMessageToBlueTooth(final String message) {
-//		byte[] value;
-//		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-//		UartService m0.
-// Service = ICSOpenVPNApplication.uartService;
-//		if (mService != null) {
-//			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
-//				mService.writeRXCharacteristic(value);
-//			}
-//		}
-//	}
-
 
 	public static void builderMessagePackageList(String hexString) {
 		String dataLength = hexString.substring(20, 24);
@@ -124,7 +113,7 @@ public class TlvAnalyticalUtils {
 				}
 				if ("00".equals(tempTag)) {
 					if (typeParams == 199) {
-						upToPower();
+						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_USED_TO_SDK);
 
 						byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
@@ -190,11 +179,6 @@ public class TlvAnalyticalUtils {
 		EventBus.getDefault().post(entity);
 	}
 
-	public static void upToPower() {
-		byte[] value;
-		value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER_USED_TO_SDK);
-		ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
-	}
 
 	/**
 	 * 注册中不成功再次注册

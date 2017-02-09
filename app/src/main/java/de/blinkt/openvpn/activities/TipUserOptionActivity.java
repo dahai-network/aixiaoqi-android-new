@@ -28,6 +28,7 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -323,18 +324,13 @@ public class TipUserOptionActivity extends BaseActivity implements InterfaceCall
 			String enableComingTel = "0" + utils.readInt(Constant.COMING_TEL_REMIND);
 			String enableMessage = "0" + utils.readInt(Constant.MESSAGE_REMIND);
 			String blueStr = "AA0D07" + enableComingTel + enableMessage + enableWeixin + enableQQ;
-			sendMessageToBlueTooth(blueStr +
+			SendCommandToBluetooth.sendMessageToBlueTooth(blueStr +
 					HexStringExchangeBytesUtil.bytesToHexString(new byte[]{BLECheckBitUtil.getXor(HexStringExchangeBytesUtil.hexStringToBytes(blueStr))})
 			);
 		}
 	}
 
-	private void sendMessageToBlueTooth(final String message) {
-		byte[] value;
-		Log.i("toBLue", message);
-		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-		ICSOpenVPNApplication.uartService.writeRXCharacteristic(value);
-	}
+
 
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {

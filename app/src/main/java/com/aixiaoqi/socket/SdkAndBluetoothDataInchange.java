@@ -12,6 +12,7 @@ import java.util.TimerTask;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
@@ -53,18 +54,24 @@ public class SdkAndBluetoothDataInchange {
 	private long lastTime;
 	private int count = 0;
 
-	Timer timerMessage = new Timer();
+	Timer timerMessage ;
 	TimerTask timerTaskMessage = new TimerTask() {
 		@Override
 		public void run() {
 
 			if (SocketConstant.REGISTER_STATUE_CODE != 3) {
-
-
-				if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData) {
+				if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
 					Log.e("timer", "接收不到蓝牙数据");
-//TODO 可能陷入死循环
 					JNIUtil.startSDK(2);
+					notCanReceiveBluetoothDataCount++;
+				}else{
+					notifyRegisterFail();
+					if(timerMessage!=null){
+						timerMessage.cancel();
+						timerMessage=null;
+					}
+					notCanReceiveBluetoothDataCount=0;
+					countMessage=0;
 				}
 			}
 		}
@@ -80,11 +87,14 @@ public class SdkAndBluetoothDataInchange {
 
 	long getSendBlueToothTime;
 	private int countMessage = 0;
-
+	private int notCanReceiveBluetoothDataCount = 0;
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
 		isReceiveBluetoothData = true;
-		if (countMessage == 0) {
+		if (countMessage ==0) {
 			Log.e("timer", "开启定时器");
+			if(timerMessage==null){
+				timerMessage= new Timer();
+			}
 			timerMessage.schedule(timerTaskMessage, 5000, 5000);
 			countMessage++;
 		}
@@ -200,9 +210,7 @@ public class SdkAndBluetoothDataInchange {
 	private void sendMessage(String temp) {
 		if (temp.contains("0x0000")) {
 			CommonTools.delayTime(2000);
-			byte[] value;
-			value = HexStringExchangeBytesUtil.hexStringToBytes(Constant.UP_TO_POWER_DETAIL);
-			mService.writeRXCharacteristic(value);
+			SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_DETAIL);
 			Log.e(TAG, "SIM发送上电数据（只有详细卡信息）");
 		} else {
 			if (mService != null) {

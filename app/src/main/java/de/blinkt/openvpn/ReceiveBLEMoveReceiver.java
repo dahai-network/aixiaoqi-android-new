@@ -23,6 +23,7 @@ import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -108,15 +109,16 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						Thread.sleep(5000);
 
 //						//测试代码
-						sendMessageToBlueTooth(UP_TO_POWER);
+						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+//						Thread.sleep(500);
+//						//android 标记，给蓝牙设备标记是否是android设备用的
+//						SendCommandToBluetooth.sendMessageToBlueTooth(ANDROID_TARGET);
 						Thread.sleep(500);
 						//更新时间操作
-						sendMessageToBlueTooth(getBLETime());
+						SendCommandToBluetooth.sendMessageToBlueTooth(getBLETime());
 						Thread.sleep(500);
-						sendMessageToBlueTooth(FIND_VERSION);
-						Thread.sleep(500);
-						//android 标记，给蓝牙设备标记是否是android设备用的
-						sendMessageToBlueTooth(ANDROID_TARGET);
+						SendCommandToBluetooth.sendMessageToBlueTooth(FIND_VERSION);
+
 //						sendMessageToBlueTooth("AABBCCDDEEFF");//绑定命令
 //						Thread.sleep(1000);
 //						if (!isConnect) {
@@ -333,10 +335,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									break;
 								case (byte) 0xEE:
 									//绑定流程成功命令
-									sendMessageToBlueTooth(BIND_SUCCESS);
+									CommonTools.delayTime(500);
+									//android 标记，给蓝牙设备标记是否是android设备用的
+									SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
 									CommonTools.delayTime(500);
 									//更新时间操作
-									sendMessageToBlueTooth(getBLETime());
+//									Thread.sleep(500);
+									//android 标记，给蓝牙设备标记是否是android设备用的
+									SendCommandToBluetooth.sendMessageToBlueTooth(getBLETime());
 									isConnect = true;
 									if (sendStepThread != null)
 										sendStepThread = null;
@@ -372,20 +378,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		String[] messages = PacketeUtil.Separate(message);
 		int length = messages.length;
 		for (int i = 0; i < length; i++) {
-			sendMessageToBlueTooth(messages[i]);
+			SendCommandToBluetooth.sendMessageToBlueTooth(messages[i]);
 		}
 	}
 
-	private void sendMessageToBlueTooth(final String message) {
-		byte[] value;
-		Log.i("toBLue", message);
-		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-		if (mService != null) {
-			if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
-				mService.writeRXCharacteristic(value);
-			}
-		}
-	}
+
 
 	SharedUtils utils = SharedUtils.getInstance();
 	public static boolean isGetnullCardid = false;//是否获取空卡数据
@@ -421,7 +418,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			if (isGetnullCardid) {
 				//新型写卡完成
 				activationLocalCompletedHttp();
-				sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
+				SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 				isGetnullCardid = false;
 				nullCardId = null;
 				return;
@@ -437,7 +434,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					Log.i("Bluetooth", "空卡序列号:" + mStrSimCmdPacket);
 					nullCardId = mStrSimCmdPacket;
 					//重新上电清空
-					sendMessageToBlueTooth(UP_TO_POWER);
+					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 					new Thread(new Runnable() {
 						@Override
 						public void run() {
