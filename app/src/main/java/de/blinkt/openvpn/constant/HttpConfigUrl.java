@@ -92,7 +92,7 @@ public class HttpConfigUrl {
 	public static final String GET_SELECT_NUMBER_URL ="Config/getDWKUrl";
 	public static final String CHECK_IS_HAVE_PACKET ="/Order/CheckUsedExistByPageCategory";
 	public static final String GET_SECURITY_CONFIG ="/Config/GetSecurityConfig";
-
+	public static final String GET_DEVICE_SIM_REG_STATUES ="/DeviceBracelet/GetRegStatus";
 	public static final String PACKET_GET ="Package/Get";
 	public static final int COMTYPE_LOGIN = 0x0001;
 	public static final int COMTYPE_SECURITY_CONFIG = 0x0002;
@@ -119,7 +119,6 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_UPLOAD_HEADER = 0x0020;
 	public static final int COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE = 0x0037;
 	public static final int COMTYPE_DEVICE_BRACELET_OTA = 0x0036;
-
 	public static final int COMTYPE_CANCEL_CALL_TRANSFER = 0x0037;
 	public static final int COMTYPE_OPEN_CALL_TRANSFER = 0x0038;
 	public static final int COMTYPE_SEND_RETRY_FOR_ERROR = 0x0039;
@@ -135,6 +134,7 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_GET_SELECT_NUMBER=0x0049;
 	public static final int COMTYPE_ADD_SELECT_NUMBER_INFO=0x0050;
 	public static final int  COMTYPE_GET_SELECT_NUMBER_URL =0x0051;
+	public static final int  COMTYPE_GET_DEVICE_SIM_REG_STATUES =0x0052;
 	public static final int COMTYPE_POST_MODIFY_NICK = 0x1001;
 	public static final int COMTYPE_POST_MODIFY_GENDER = 0x1002;
 	public static final int COMTYPE_POST_MODIFY_AGE = 0x1003;

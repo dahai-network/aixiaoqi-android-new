@@ -15,6 +15,7 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.util.CommonTools;
 
+import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
 
@@ -34,10 +35,10 @@ public class TlvAnalyticalUtils {
 		int responeCode = Integer.parseInt(responeString, 16);
 		responeCode = responeCode & 127;
 		if (responeCode == 41) {
-			registerFail();
+			registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
 			return null;
 		} else if (responeCode == 39) {
-			registerFail();
+			registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
 			return null;
 		}
 		tag = tag & 127;
@@ -114,7 +115,6 @@ public class TlvAnalyticalUtils {
 				if ("00".equals(tempTag)) {
 					if (typeParams == 199) {
 						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_USED_TO_SDK);
-
 						byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
 					}
@@ -161,7 +161,7 @@ public class TlvAnalyticalUtils {
 						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
 						REGISTER_STATUE_CODE = 2;
-						registerFail();
+						registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
 					}
 				}
 			}
@@ -171,13 +171,7 @@ public class TlvAnalyticalUtils {
 		return tlvs;
 	}
 
-	private static void registerFail() {
-		IsSuccessEntity entity = new IsSuccessEntity();
-		entity.setType(Constant.REGIST_CALLBACK_TYPE);
-		entity.setFailType(SocketConstant.REGISTER_FAIL);
-		entity.setSuccess(false);
-		EventBus.getDefault().post(entity);
-	}
+
 
 
 	/**

@@ -9,9 +9,14 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.util.CommonTools;
 
+import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
@@ -67,7 +72,6 @@ public class ReceiveSocketService extends Service {
 		@Override
 		public void onDisconnect(SocketTransceiver transceiver) {
 			Log.e("Blue_Chanl", "断开连接 - onDisconnect");
-
 			disConnectReconnect();
 		}
 
@@ -79,10 +83,17 @@ public class ReceiveSocketService extends Service {
 		if(tcpClient!=null&&!tcpClient.isConnected()){
 			if (contactFailCount <= 3) {
 				reConnect();
+				contactFailCount++;
+			}else{
+				//TODO 创建失败，停止注册
+//				contactFailCount=0;
+//				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
 			}
-			contactFailCount++;
+
 		}
 	}
+
+
 	private void disConnectReconnect() {
 		CommonTools.delayTime(2000);
 		if(tcpClient!=null&&!tcpClient.isConnected()) {

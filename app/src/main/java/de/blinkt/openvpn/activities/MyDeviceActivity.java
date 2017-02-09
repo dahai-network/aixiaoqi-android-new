@@ -43,6 +43,7 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
@@ -55,6 +56,7 @@ import de.blinkt.openvpn.http.BindDeviceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.DownloadSkyUpgradePackageHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
+import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.http.UnBindDeviceHttp;
@@ -87,7 +89,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
 
-public class MyDeviceActivity extends BaseActivity implements InterfaceCallback, DialogInterfaceTypeBase, View.OnClickListener {
+public class MyDeviceActivity extends BaseNetActivity implements DialogInterfaceTypeBase, View.OnClickListener {
 	@BindView(R.id.noConnectImageView)
 	ImageView noConnectImageView;
 	@BindView(R.id.statueTextView)
@@ -159,7 +161,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 		initSet();
 		serviceInit();
 		initDialogUpgrade();
-
 	}
 
 	public void stopAnim() {
@@ -324,34 +325,43 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
 				//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
-
+				startAnim();
 				if(!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER,false)&&!CommonTools.isFastDoubleClick(1000)){
 					//通知主界面请求是否有套餐
 				}else if(TextUtils.isEmpty(SocketConstant.hostIP)){
-//请求端口号
+                    //请求端口号
 				}else if(SocketConstant.REGISTER_STATUE_CODE==1){
 					//重新注册
 					JNIUtil.startSDK(0);
 				}else if(SocketConstant.REGISTER_STATUE_CODE==2){
-//从预读取数据那里重新注册
-					if(sendYiZhengService!=null)
-						sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+                 //从预读取数据那里重新注册
+					connectGoip();
 				}else if(SocketConstant.REGISTER_STATUE_CODE==3){
 					//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
-					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
+					getDeviceSimRegStatues();
 				}
-				if (SocketConstant.REGISTER_STATUE_CODE != 3) {
-					startAnim();
-					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
-				} else {
-					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
-				}
+//				if (SocketConstant.REGISTER_STATUE_CODE != 3) {
+//
+//					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+//				} else {
+//					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
+//				}
 				break;
 
 			case R.id.statueTextView:
 				clickFindBracelet();
 				break;
 		}
+	}
+
+	private void getDeviceSimRegStatues() {
+		GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp=new GetDeviceSimRegStatuesHttp(this, HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES);
+		new Thread(getDeviceSimRegStatuesHttp).start();
+	}
+
+	private void connectGoip() {
+		if(sendYiZhengService!=null)
+            sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 	}
 
 	private void registFail() {
@@ -639,6 +649,12 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				uploadToBlueTooth();
 			} else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				CommonTools.showShortToast(this, Constant.DOWNLOAD_FAIL);
+			}
+		}else if(cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES){
+			if(object.getStatus()!=1){
+				connectGoip();
+			}else{
+				CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
 			}
 		}
 	}
