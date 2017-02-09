@@ -604,7 +604,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
 
 				} else {
-					//检测是否有套餐，没有责显示新状态
+					//TODO 没有通知到设备界面
+					//如果是没有套餐，则通知我的设备界面更新状态并且停止转动
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
 					indexFragment.changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 				}

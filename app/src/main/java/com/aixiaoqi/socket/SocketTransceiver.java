@@ -90,6 +90,7 @@ public abstract class SocketTransceiver implements Runnable {
 			e.printStackTrace();
 			runFlag = false;
 			this.onDisconnect(addr);
+			return false;
 		}
 		Log.i("toBLue", "发送字符串out=" + (out != null));
 		if (out != null) {
@@ -144,8 +145,8 @@ public abstract class SocketTransceiver implements Runnable {
 				out = null;
 			}
 			if(socket!=null){
-			socket.close();
-			socket = null;
+				socket.close();
+				socket = null;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

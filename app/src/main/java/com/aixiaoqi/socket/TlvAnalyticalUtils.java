@@ -171,7 +171,7 @@ public class TlvAnalyticalUtils {
 						registerOrTime = System.currentTimeMillis();
 						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
-						REGISTER_STATUE_CODE = 0;
+						REGISTER_STATUE_CODE = 2;
 						registerFail();
 					}
 				}

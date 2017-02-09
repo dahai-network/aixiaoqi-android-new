@@ -9,6 +9,7 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.IsSuccessEntity;
+import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 
@@ -65,30 +66,56 @@ public class TestProvider {
 			if (imsi.startsWith("46000") || imsi.startsWith("46001") || imsi.startsWith("46002") || imsi.startsWith("46003") || imsi.startsWith("46007")) {//因为移动网络编号46000下的IMSI已经用完，所以虚拟了一个46002编号，134/159号段使用了此编号
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
-				isIccid = true;
-				if (isCreate && isIccid) {
-					sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+				String token=SharedUtils.getInstance().readString(Constant.TOKEN);
+				if(TextUtils.isEmpty(token)){
+					notifiUI(SocketConstant.TOKEN_IS_NULL);
+				}else{
+					SocketConstant.CONNENCT_VALUE[3] =RadixAsciiChange.convertStringToHex(token);
+					REGISTER_STATUE_CODE = 2;
+					isIccid = true;
+					sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+					if (isCreate && isIccid) {
+						sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+					}
 				}
 			} else {
-				IsSuccessEntity entity = new IsSuccessEntity();
-				entity.setType(Constant.REGIST_CALLBACK_TYPE);
-				entity.setFailType(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
-				entity.setSuccess(false);
-				EventBus.getDefault().post(entity);
-				return;
+				notifiUI(SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR);
 			}
 		} else {
-			IsSuccessEntity entity = new IsSuccessEntity();
-			entity.setType(Constant.REGIST_CALLBACK_TYPE);
-			entity.setFailType(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
-			entity.setSuccess(false);
-			EventBus.getDefault().post(entity);
-			return;
+			notifiUI(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
+
 		}
+	}
+
+	private static void notifiUI(int type) {
+		IsSuccessEntity entity = new IsSuccessEntity();
+		entity.setType(Constant.REGIST_CALLBACK_TYPE);
+		entity.setFailType(type);
+		entity.setSuccess(false);
+		EventBus.getDefault().post(entity);
 	}
 
 	private static void preDataSplit(String item) {
 
+		createTcpSucceedAndConnectionGOIP();
+		preDataEntity.setChnString(item.substring(0, 2));
+		preDataEntity.setEvtIndex(item.substring(2, 4));
+		preDataEntity.setLenString(item.substring(4, 8));
+		preDataEntity.setPreDataString(item.substring(8, item.length()));
+		String hex = preDataEntity.getPreDataString();
+		if (SocketConstant.EN_APPEVT_PRDATA.equals(preDataEntity.getEvtIndex())) {
+			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = hex;
+			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preDataEntity.getLenString();
+
+
+		} else if (SocketConstant.EN_APPEVT_SIMDATA.equals(preDataEntity.getEvtIndex())) {
+			SocketConstant.SDK_VALUE = hex;
+			sendYiZhengService.sendGoip(SocketConstant.PRE_DATA);
+
+		}
+	}
+
+	private static void createTcpSucceedAndConnectionGOIP() {
 		SocketConnection.mReceiveSocketService.setListener(new ReceiveSocketService.CreateSocketLisener() {
 			@Override
 			public void create() {
@@ -100,21 +127,6 @@ public class TestProvider {
 			}
 
 		});
-		preDataEntity.setChnString(item.substring(0, 2));
-		preDataEntity.setEvtIndex(item.substring(2, 4));
-		preDataEntity.setLenString(item.substring(4, 8));
-		preDataEntity.setPreDataString(item.substring(8, item.length()));
-		String hex = preDataEntity.getPreDataString();
-		if (SocketConstant.EN_APPEVT_PRDATA.equals(preDataEntity.getEvtIndex())) {
-			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = hex;
-			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preDataEntity.getLenString();
-			sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
-			REGISTER_STATUE_CODE = 2;
-		} else if (SocketConstant.EN_APPEVT_SIMDATA.equals(preDataEntity.getEvtIndex())) {
-			SocketConstant.SDK_VALUE = hex;
-			sendYiZhengService.sendGoip(SocketConstant.PRE_DATA);
-
-		}
 	}
 
 	public static  void  clearData(){

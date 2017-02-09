@@ -316,6 +316,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 
 				break;
 			case R.id.register_sim_statue:
+				//TODO 处理异常
+				//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
+				//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 				if (SocketConstant.REGISTER_STATUE_CODE != 3) {
 					startAnim();
 					sendMessageToBlueTooth(UP_TO_POWER);
@@ -912,6 +915,9 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				setConStatus(R.string.index_high_signal);
 				stopAnim();
 			} else {
+				stopAnim();
+				percentTextView.setVisibility(View.GONE);
+				setConStatus(R.string.index_regist_fail);
 				switch (entity.getFailType()) {
 					case SocketConstant.REGISTER_FAIL:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail));

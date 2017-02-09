@@ -33,8 +33,8 @@ public class SdkAndBluetoothDataInchange {
 														 //SDK接收到消息发送给蓝牙消息的方法
 														 //TODO
 														 Log.e(TAG, "&&& server temp:" + msg);
-														 if (!TextUtils.isEmpty(msg))
-															 sendToBluetoothAboutCardInfo(msg);
+
+														 sendToBluetoothAboutCardInfo(msg);
 
 													 }
 
@@ -63,7 +63,7 @@ public class SdkAndBluetoothDataInchange {
 
 				if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData) {
 					Log.e("timer", "接收不到蓝牙数据");
-
+//TODO 可能陷入死循环
 					JNIUtil.startSDK(2);
 				}
 			}
@@ -73,11 +73,11 @@ public class SdkAndBluetoothDataInchange {
 	private void notifyRegisterFail() {
 		IsSuccessEntity entity = new IsSuccessEntity();
 		entity.setType(Constant.REGIST_CALLBACK_TYPE);
+		entity.setFailType(SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
 		entity.setSuccess(false);
 		EventBus.getDefault().post(entity);
 	}
 
-	IsSuccessEntity entity;
 	long getSendBlueToothTime;
 	private int countMessage = 0;
 
@@ -99,6 +99,7 @@ public class SdkAndBluetoothDataInchange {
 				Log.e(TAG, "蓝牙数据出错重发=" + finalTemp + "\ncount=" + count);
 
 				lastTime = System.currentTimeMillis();
+
 				sendToBluetoothAboutCardInfo(finalTemp);
 			} else if (count > 3 && count < 5) {
 				Log.e(TAG, "蓝牙数据出错重发   注册失败");
@@ -171,6 +172,9 @@ public class SdkAndBluetoothDataInchange {
 	private boolean isReceiveBluetoothData = true;
 
 	private void sendToBluetoothAboutCardInfo(String msg) {
+		if(TextUtils.isEmpty(msg)){
+			return;
+		}
 		Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + msg);
 		isReceiveBluetoothData = false;
 		getSendBlueToothTime = System.currentTimeMillis();
@@ -186,22 +190,9 @@ public class SdkAndBluetoothDataInchange {
 			sendMessage(temp);
 		} else {
 			String[] messages = PacketeUtil.Separate(temp);
-
 			for (int i = 0; i < messages.length; i++) {
-
-//				if(i>=1){
-//					try {
-//						//Log.e(TAG, "发送延迟60ms");
-//						//Thread.sleep(60);
-//						//Log.e(TAG, "发送延迟60ms");
-//					}catch (Exception e){
-//
-//					}
-//				}
 				Log.e(TAG, "&&& server  message: " + messages[i].toString());
 				sendMessage(messages[i]);
-
-
 			}
 		}
 	}

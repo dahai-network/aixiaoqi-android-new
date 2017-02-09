@@ -13,6 +13,7 @@ import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 
 /**
  * Created by Administrator on 2016/12/27 0027.
+ * 跟SDK打交道
  */
 public class JNIUtil {
 	static JNIUtil jniUtil;
@@ -41,7 +42,11 @@ public class JNIUtil {
 		return jniUtil;
 	}
 
-	public static void startSDK(int reconnectType) {//0,默认为0，表示正常情况。1表示蓝牙断开,2接收不到蓝牙数据。3表示Tcp断开
+	/**
+	 * 开启SDK，重启SDK。
+	 * @param reconnectType  0,默认为0，表示正常情况。1表示蓝牙断开,2接收不到蓝牙数据。3表示Tcp断开
+     */
+	public static void startSDK(int reconnectType) {
 		Log.e("Blue_Chanl", "启动startSDK - REGISTER_STATUE_CODE=" + SocketConstant.REGISTER_STATUE_CODE);
 		String phoneNumber = SharedUtils.getInstance().readString(Constant.USER_NAME);
 		switch (SocketConstant.REGISTER_STATUE_CODE) {
