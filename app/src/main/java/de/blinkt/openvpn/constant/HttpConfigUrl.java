@@ -93,8 +93,6 @@ public class HttpConfigUrl {
 	public static final String CHECK_IS_HAVE_PACKET ="/Order/CheckUsedExistByPageCategory";
 	public static final String GET_SECURITY_CONFIG ="/Config/GetSecurityConfig";
 
-
-
 	public static final String PACKET_GET ="Package/Get";
 	public static final int COMTYPE_LOGIN = 0x0001;
 	public static final int COMTYPE_SECURITY_CONFIG = 0x0002;

@@ -129,7 +129,11 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("981" + deleteprefix("-",info.getPhoneNumber()) + "#" + maxinumPhoneCallTime);
 
 		}else if(cellPhoneType==Constant.SIM_CELL_PHONE){
+			try{
 			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",info.getPhoneNumber()) );
+			}catch (Exception e){
+
+			}
 		}
 	}
 	private String deleteprefix(String type,String s) {

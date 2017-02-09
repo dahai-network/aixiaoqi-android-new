@@ -93,7 +93,6 @@ public class ReceiveSocketService extends Service {
 	}
 	private void createHeartBeatPackage() {
 		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0) {
-//                timer.schedule(task,60000,60000);
 			count = count + 1;
 			Log.e("onReceive", "开启定时器");
 			Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
