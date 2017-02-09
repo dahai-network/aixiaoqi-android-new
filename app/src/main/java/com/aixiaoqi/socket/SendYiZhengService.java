@@ -70,9 +70,6 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
         for(int i = 0; i< SocketConstant.CONNENCT_TAG.length; i++){
             TlvEntity yiZhengTlv=new TlvEntity(SocketConstant.CONNENCT_TAG[i], SocketConstant.CONNENCT_VALUE[i]);
             yiZhengTlvList.add(yiZhengTlv);
-//            if(SocketConstant.CONNENCT_TAG[i].equals("78")){
-//                CommonTools.showShortToast(ICSOpenVPNApplication.getContext(),SocketConstant.CONNENCT_VALUE[i]);
-//            }
             Log.e("connection","Tag"+ SocketConstant.CONNENCT_TAG[i]+"\nvalue="+ SocketConstant.CONNENCT_VALUE[i]);
         }
     }

@@ -33,6 +33,7 @@ import de.blinkt.openvpn.activities.SettingActivity;
 import de.blinkt.openvpn.activities.TipUserOptionActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -167,10 +168,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 		new Thread(http).start();
 		if (utils.readInt(Constant.LIFT_WRIST) == 1) {
 			liftWristTextView.setText(getResources().getString(R.string.opened));
-			sendMessageToBlueTooth("AA0C0401A3");
+			SendCommandToBluetooth.sendMessageToBlueTooth("AA0C0401A3");
 		} else {
 			liftWristTextView.setText(getResources().getString(R.string.unopened));
-			sendMessageToBlueTooth("AA0C0400A2");
+			SendCommandToBluetooth.sendMessageToBlueTooth("AA0C0400A2");
 		}
 		if (utils.readInt(Constant.COMING_TEL_REMIND) == 1) {
 			tvComingTelTip.setText(getResources().getString(R.string.opened));
@@ -328,17 +329,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	public void onClick() {
 	}
 
-	private void sendMessageToBlueTooth(final String message) {
-		UartService mService = ICSOpenVPNApplication.uartService;
-		if (mService != null) {
-			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
-				byte[] value;
-				Log.i("toBLue", message);
-				value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-				mService.writeRXCharacteristic(value);
-			}
-		}
-	}
+
 
 	public String getBleStatus() {
 		return bleStatus;

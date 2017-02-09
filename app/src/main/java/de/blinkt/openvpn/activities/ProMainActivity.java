@@ -683,6 +683,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			} else {
 				destorySocketService();
 				switch (entity.getFailType()) {
+					case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
+						CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
 					case SocketConstant.REGISTER_FAIL:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail));
 						break;
@@ -697,7 +699,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
 							CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
 						}
-						destorySocketService();
+//						destorySocketService();
 						break;
 				}
 			}
@@ -748,7 +750,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (txValue[3] == (byte) 0x03) {
 						}
 					} else if (txValue[1] == (byte) 0x33) {
-						if (!CommonTools.isFastDoubleClick(Constant.REPEAT_OPERATE) && IS_TEXT_SIM) {
+						if (IS_TEXT_SIM) {
 							//当有通话套餐的时候才允许注册操作
 							IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 							new Thread(http).start();
