@@ -31,12 +31,14 @@ import de.blinkt.openvpn.http.OrderActivationHttp;
 import de.blinkt.openvpn.http.OrderDataHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
+import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.dialog.DialogYearMonthDayPicker;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
+import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVEPACKAGE;
 
@@ -74,7 +76,6 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(MyOrderDetailActivity.FINISH_PROCESS);
 		filter.addAction(MyOrderDetailActivity.CARD_RULE_BREAK);
-		filter.addAction(MyOrderDetailActivity.FIND_NULL_CARD_ID);
 		return filter;
 	}
 
@@ -123,8 +124,6 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 			if (TextUtils.equals(intent.getAction(), MyOrderDetailActivity.CARD_RULE_BREAK)) {
 				dismissProgress();
 				showDialog();
-			} else if (TextUtils.equals(intent.getAction(), MyOrderDetailActivity.FIND_NULL_CARD_ID)) {
-				orderDataHttp(intent.getStringExtra("nullcardNumber"));
 			} else {
 				if (ReceiveBLEMoveReceiver.orderStatus == 4) {
 					HashMap<String, String> map = new HashMap<>();
@@ -179,9 +178,14 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 		new Thread(orderActivationHttp).start();
 	}
 
+	//获取写卡数据，然后发给蓝牙写卡
 	private void orderDataHttp(String nullcardNumber) {
-		OrderDataHttp orderDataHttp = new OrderDataHttp(this, HttpConfigUrl.COMTYPE_ORDER_DATA, orderId, nullcardNumber);
-		new Thread(orderDataHttp).start();
+		if (nullcardNumber != null) {
+			OrderDataHttp orderDataHttp = new OrderDataHttp(this, HttpConfigUrl.COMTYPE_ORDER_DATA, orderId, nullcardNumber);
+			new Thread(orderDataHttp).start();
+		} else {
+			CommonTools.showShortToast(this, getString(R.string.no_nullcard_id));
+		}
 	}
 
 	private String effectTime;
@@ -210,10 +214,10 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				IS_TEXT_SIM = false;
 				ReceiveBLEMoveReceiver.orderStatus = 4;
 				showProgress("正在激活");
-				ReceiveBLEMoveReceiver.isGetnullCardid = true;
 				SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
+				orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
 			} else {
-				CommonTools.showShortToast(this,orderActivationHttp.getMsg());
+				CommonTools.showShortToast(this, orderActivationHttp.getMsg());
 				sureTextView.setEnabled(true);
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_ORDER_DATA) {

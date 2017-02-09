@@ -33,11 +33,9 @@ public class Constant {
 	public static final String PUBLIC_PASSWORD = "publicpassword";
 	public static final String IMEI = "BraceletIMEI";
 	public static final String BRACELETVERSION = "BraceletVersion";
+	public static final String NULLCARD_SERIALNUMBER = "NULLCARD_SERIALNUMBER";
 	//旧版本蓝牙设备
-
 	public static final String ELECTRICITY = "electricity";
-
-
 	public static final String PHONE_NUMBER_LIST = "phone_number_list";
 	//更新请求的时间间隔（一小时提示一次升级）
 	public static final String UPGRADE_INTERVAL = "upgrade_interval";
@@ -67,10 +65,11 @@ public class Constant {
 	public static final String REAL_TIME_STEPS = "AA010401AE ";//实时步数
 	public static final String HISTORICAL_STEPS = "AA030401AC";//历史步数
 	public static final String FIND_DEVICE = "AA060401A9";//查找手环
-	public static final String FIND_VERSION = "AA0A01A1";//版本号
+//	public static final String FIND_VERSION = "AA0A01A1";//版本号
+			public static final String FIND_VERSION = "AA0A0401A5";//版本号（以后的版本）
 	public static final String RESTORATION = "AA112233AA";//复位命令
 	public static final String BIND_SUCCESS = "AADD01DDAA";//绑定成功命令
-	public static final String ANDROID_TARGET = "AA010400AF";//绑定成功命令
+//		public static final String ANDROID_TARGET = "AA010400AF";//绑定成功命令
 	//ICCID标记
 	public static final String ICCID = "ICCID";
 	//来电，短信，微信，QQ通知开关标记
@@ -81,7 +80,7 @@ public class Constant {
 	public static final String QQ_REMIND = "NotificaQQ";
 
 	//是否打开写卡流程，如果没有打开则是测试SIM卡是否连接上，如果否则为写卡流程，可以连接到GOIP
-	public static boolean IS_TEXT_SIM = true;
+	public static boolean IS_TEXT_SIM = false;
 	//注册卡回调类型
 	public static final int REGIST_CALLBACK_TYPE = 0;
 	//蓝牙连接状态int
@@ -154,5 +153,5 @@ public class Constant {
 	public static final int SIM_CELL_PHONE = 2;
 
 	//蓝牙操作时间限制（5秒内不可重复操作）
-	public static final int REPEAT_OPERATE = 5000;
+	public static final int REPEAT_OPERATE = 2500;
 }

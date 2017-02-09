@@ -62,6 +62,7 @@ import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.http.UnBindDeviceHttp;
 import de.blinkt.openvpn.model.BlueToothDeviceEntity;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
+import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
@@ -78,10 +79,11 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
+import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
+import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
 import static de.blinkt.openvpn.activities.BindDeviceActivity.FAILT;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
-import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
@@ -320,6 +322,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 				break;
 			case R.id.register_sim_statue:
+				//如果激活卡成功后，刷新按钮点击需要将标记激活
+				isGetnullCardid = true;
+				nullCardId = null;
 				//TODO 处理异常
 				//如没有没插卡检测插卡并且提示用户重启手环。
 				//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
@@ -425,7 +430,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				mState = UART_PROFILE_CONNECTED;
 				//测试代码
 				unBindButton.setVisibility(View.VISIBLE);
-				IS_TEXT_SIM = true;
 				dismissProgress();
 				setView();
 				setConStatus(R.string.index_registing);
@@ -513,8 +517,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							utils.writeString(Constant.BRACELETVERSION, txValue[2] + "");
 							firmwareTextView.setText(txValue[2] + "");
 							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-								//收到版本号后获取历史步数
-								SendCommandToBluetooth.sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
 								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
 								entity.setSuccess(true);
@@ -839,7 +841,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 											scanLeDevice(false);
 											Intent result = new Intent();
 											result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, device.getAddress());
-//										checkIsBindDevie(device);
+//										    checkIsBindDevie(device);
 											utils.writeString(Constant.IMEI, macAddressStr);
 											mService.connect(macAddressStr);
 										}
@@ -885,6 +887,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			case R.string.index_connecting:
 //				setLeftDrawable(-1);
 				percentTextView.setText("");
+				break;
+			case R.string.index_aixiaoqicard:
+//				setLeftDrawable(-1);
+				percentTextView.setText("");
+				stopAnim();
 				break;
 			case R.string.index_no_signal:
 //				setLeftDrawable(R.drawable.device_no_signal);
@@ -963,6 +970,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 		}
 		percentTextView.setVisibility(View.GONE);
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
+		setConStatus(entity.getStatusInt());
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程

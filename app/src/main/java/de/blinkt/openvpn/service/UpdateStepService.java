@@ -20,8 +20,6 @@ import de.blinkt.openvpn.http.InterfaceCallback;
 public class UpdateStepService extends Service implements InterfaceCallback {
 
 	private UartService mService = ICSOpenVPNApplication.uartService;
-	//是否第一次请求，如果是，则隔一分钟后请求实时步数
-	private boolean isFirstRequestBoolean = true;
 
 
 
@@ -32,16 +30,9 @@ public class UpdateStepService extends Service implements InterfaceCallback {
 			@Override
 			public void run() {
 				while (true) {
-
 					try {
-						if (isFirstRequestBoolean) {
-							Thread.sleep(1000 * 10);
-							isFirstRequestBoolean = false;
-						} else {
-							//十分钟上传一次数据
-							Thread.sleep(1000 * 60 * 30);
-						}
-//						sendHandler.sendEmptyMessage(0);
+						//十分钟上传一次数据
+						Thread.sleep(1000 * 60 * 10);
 						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
 					} catch (InterruptedException e) {
 						e.printStackTrace();

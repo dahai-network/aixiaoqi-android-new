@@ -31,6 +31,7 @@ import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -42,6 +43,7 @@ import de.blinkt.openvpn.http.OrderDataHttp;
 import de.blinkt.openvpn.model.OrderEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
+import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
@@ -57,7 +59,6 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 
 	public static String FINISH_PROCESS = "finish";
 	public static String CARD_RULE_BREAK = "card_rule_break";
-	public static String FIND_NULL_CARD_ID = "find_null_card_id";
 	@BindView(R.id.countryImageView)
 	ImageView countryImageView;
 	@BindView(R.id.packageNameTextView)
@@ -197,7 +198,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 		} else if (cmdType == HttpConfigUrl.COMTYPE_ORDER_DATA) {
 			OrderDataHttp orderDataHttp = (OrderDataHttp) object;
 			if (orderDataHttp.getStatus() == 1) {
-				Log.i("cardNumber","写卡ID:"+orderDataHttp.getOrderDataEntity().getData());
+				Log.i("cardNumber", "写卡ID:" + orderDataHttp.getOrderDataEntity().getData());
 				sendMessageSeparate(orderDataHttp.getOrderDataEntity().getData());
 			} else {
 				CommonTools.showShortToast(MyOrderDetailActivity.this, orderDataHttp.getMsg());
@@ -229,10 +230,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 			if (TextUtils.equals(intent.getAction(), CARD_RULE_BREAK)) {
 				dismissProgress();
 				showDialog();
-			} else if (TextUtils.equals(intent.getAction(), FIND_NULL_CARD_ID)) {
-				orderDataHttp(intent.getStringExtra("nullcardNumber"));
-			}
-			else if (TextUtils.equals(intent.getAction(), FINISH_PROCESS)) {
+			} else if (TextUtils.equals(intent.getAction(), FINISH_PROCESS)) {
 				if (ReceiveBLEMoveReceiver.orderStatus == 4) {
 					HashMap<String, String> map = new HashMap<>();
 					map.put("statue", 0 + "");
@@ -276,7 +274,6 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(MyOrderDetailActivity.FINISH_PROCESS);
 		filter.addAction(MyOrderDetailActivity.CARD_RULE_BREAK);
-		filter.addAction(MyOrderDetailActivity.FIND_NULL_CARD_ID);
 		return filter;
 	}
 
@@ -344,8 +341,8 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 					IS_TEXT_SIM = false;
 					orderStatus = 4;
 					showProgress("正在激活");
-					ReceiveBLEMoveReceiver.isGetnullCardid = true;
 					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+					orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
 				}
 				break;
 			case R.id.retryTextView:
@@ -360,9 +357,11 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 	public static String OrderID;
 
 	private void orderDataHttp(String nullcardNumber) {
-		if(nullcardNumber!=null) {
+		if (nullcardNumber != null) {
 			OrderDataHttp orderDataHttp = new OrderDataHttp(this, HttpConfigUrl.COMTYPE_ORDER_DATA, bean.getOrderID(), nullcardNumber);
 			new Thread(orderDataHttp).start();
+		} else {
+			CommonTools.showShortToast(this, getString(R.string.no_nullcard_id));
 		}
 	}
 

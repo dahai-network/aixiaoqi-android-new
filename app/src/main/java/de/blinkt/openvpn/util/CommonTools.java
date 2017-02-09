@@ -2,6 +2,7 @@ package de.blinkt.openvpn.util;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.util.TypedValue;
 import android.widget.Toast;
 
@@ -58,10 +59,10 @@ public class CommonTools {
 	 * @return
 	 */
 	public static int getStatusBarHeight(Context context) {
-		Class<?> c ;
+		Class<?> c;
 		Object obj;
-		java.lang.reflect.Field field ;
-		int x ;
+		java.lang.reflect.Field field;
+		int x;
 		int statusBarHeight = 0;
 		try {
 			c = Class.forName("com.android.internal.R$dimen");
@@ -81,6 +82,7 @@ public class CommonTools {
 	public static boolean isFastDoubleClick(int maxTime) {
 		long time = System.currentTimeMillis();
 		long timeD = time - lastClickTime;
+		Log.i("timetest", "time:" + time + ",timeD:" + timeD);
 		if (0 < timeD && timeD < maxTime) {
 			return true;
 		}
@@ -114,11 +116,11 @@ public class CommonTools {
 		return null != list && list.size() > 0;
 	}
 
-	public static  void delayTime(int time) {
+	public static void delayTime(int time) {
 		try {
 
 			Thread.sleep(time);
-		}catch (InterruptedException e){
+		} catch (InterruptedException e) {
 
 		}
 	}
