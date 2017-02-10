@@ -44,6 +44,7 @@ public class TestProvider {
 
 
 	private static void iccidDataSplit(String item) {
+		Log.e("preDataSplit", "ICCID:" + item);
 		iccidEntity.setChnString(item.substring(0, 2));
 		iccidEntity.setEvtIndex(item.substring(2, 4));
 		iccidEntity.setLenString(item.substring(4, 8));
@@ -57,7 +58,13 @@ public class TestProvider {
 				iccidEntity.setImmsi(iccidArray1[1]);
 			}
 		}
-		String imsi = iccidEntity.getImmsi().trim();
+		String imsi;
+		if(!TextUtils.isEmpty(iccidEntity.getImmsi()))
+		 imsi = iccidEntity.getImmsi().trim();
+		else{
+			notifiUI(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
+			return;
+		}
 		Log.e("preDataSplit", "ICCID:" + iccidEntity.getIccid() + "\nIMMSI:" + iccidEntity.getImmsi());
 		if (!TextUtils.isEmpty(imsi)) {
 			if (imsi.startsWith("46000") || imsi.startsWith("46001") || imsi.startsWith("46002") || imsi.startsWith("46003") || imsi.startsWith("46007")) {//因为移动网络编号46000下的IMSI已经用完，所以虚拟了一个46002编号，134/159号段使用了此编号

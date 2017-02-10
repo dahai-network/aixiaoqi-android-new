@@ -64,7 +64,7 @@ public class SdkAndBluetoothDataInchange {
 					Log.e("timer", "接收不到蓝牙数据");
 					JNIUtil.startSDK(2);
 					notCanReceiveBluetoothDataCount++;
-				}else{
+				}else if(notCanReceiveBluetoothDataCount>=3){
 					notifyRegisterFail();
 					if(timerMessage!=null){
 						timerMessage.cancel();
@@ -90,13 +90,16 @@ public class SdkAndBluetoothDataInchange {
 	private int notCanReceiveBluetoothDataCount = 0;
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
 		isReceiveBluetoothData = true;
-		if (countMessage ==0) {
-			Log.e("timer", "开启定时器");
-			if(timerMessage==null){
-				timerMessage= new Timer();
+		synchronized (this){
+			if (countMessage ==0) {
+				Log.e("timer", "开启定时器");
+				countMessage++;
+				if(timerMessage==null){
+					timerMessage= new Timer();
+				}
+				timerMessage.schedule(timerTaskMessage, 5000, 5000);
+
 			}
-			timerMessage.schedule(timerTaskMessage, 5000, 5000);
-			countMessage++;
 		}
 		num++;
 		if (num != txValue[4]) {

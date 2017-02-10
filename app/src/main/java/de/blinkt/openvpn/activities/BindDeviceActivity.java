@@ -230,7 +230,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 				result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, deviceAddress);
 				BindDeviceActivity.this.setResult(Activity.RESULT_OK, result);
 			} else {
-				mService.disconnect();
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 			finish();
