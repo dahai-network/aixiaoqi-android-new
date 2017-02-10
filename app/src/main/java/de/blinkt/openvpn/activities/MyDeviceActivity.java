@@ -57,7 +57,6 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.DownloadSkyUpgradePackageHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
-import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.http.UnBindDeviceHttp;
 import de.blinkt.openvpn.model.BlueToothDeviceEntity;
@@ -87,7 +86,6 @@ import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
-import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
@@ -174,7 +172,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	public void startAnim() {
-		registerSimStatu.setVisibility(View.VISIBLE);
+		if (!registerSimStatu.isEnabled()) return;
 		registerSimStatu.setEnabled(false);
 		RegisterStatueAnim.reset();
 		registerSimStatu.clearAnimation();
@@ -335,12 +333,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if(!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER,false)&&!CommonTools.isFastDoubleClick(1000)){
 					//通知主界面请求是否有套餐
 				}else if(TextUtils.isEmpty(SocketConstant.hostIP)){
-					//请求端口号
+                    //请求端口号
 				}else if(SocketConstant.REGISTER_STATUE_CODE==1){
 					//重新注册
 					JNIUtil.startSDK(0);
 				}else if(SocketConstant.REGISTER_STATUE_CODE==2){
-					//从预读取数据那里重新注册
+                 //从预读取数据那里重新注册
 					connectGoip();
 				}else if(SocketConstant.REGISTER_STATUE_CODE==3){
 					//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
@@ -355,6 +353,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				break;
 
 			case R.id.statueTextView:
+				//当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
+				registerSimStatu.setVisibility(View.VISIBLE);
 				clickFindBracelet();
 				break;
 		}
@@ -417,7 +417,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 
-
 	private Thread connectThread;
 	private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
 
@@ -429,7 +428,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				unBindButton.setVisibility(View.VISIBLE);
 				dismissProgress();
 				setView();
-				setConStatus(R.string.index_registing);
 				if (utils.readBoolean(Constant.ISHAVEORDER, true)) {
 					setConStatus(R.string.index_no_signal);
 				} else {
@@ -522,10 +520,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						} else if (txValue[1] == (byte) 0x04) {
 							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
 						} else if (txValue[1] == (byte) 0x33) {
-//							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
-							setConStatus(R.string.index_registing);
-							startAnim();
-//							}
+							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
+								setConStatus(R.string.index_registing);
+								startAnim();
+							}
 						} else if (txValue[1] == (byte) 0x11) {
 							//百分比TextView设置为0
 //							percentTextView.setText("");
@@ -636,6 +634,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
 					} else {
 						CommonTools.showShortToast(this, getString(R.string.last_version));
+						stopAnim();
 					}
 				}
 			}
@@ -649,10 +648,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			} else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				CommonTools.showShortToast(this, Constant.DOWNLOAD_FAIL);
 			}
-		}else if(cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES){
-			if(object.getStatus()!=1){
+			//检测是否在线
+		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES) {
+			if (object.getStatus() != 1) {
 				connectGoip();
-			}else{
+			} else {
+				stopAnim();
 				CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
 			}
 		}
@@ -877,6 +878,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	public void setConStatus(int conStatus) {
+		Log.i(TAG, "状态：" + getString(conStatus) + ",id:" + conStatus);
 		conStatusTextView.setText(getResources().getString(conStatus));
 		conStatusResource = conStatus;
 		conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
@@ -901,7 +903,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			case R.string.index_registing:
 //				setLeftDrawable(R.drawable.device_no_signal);
 				percentTextView.setText("");
-				registerSimStatu.setEnabled(false);
+				startAnim();
 				break;
 			case R.string.index_unbind:
 //				setLeftDrawable(R.drawable.device_no_signal);

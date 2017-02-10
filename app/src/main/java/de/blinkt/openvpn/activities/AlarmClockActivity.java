@@ -7,7 +7,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +27,7 @@ import cn.com.johnson.adapter.AlarmClockAdapter;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -280,7 +280,7 @@ private boolean	isDoubleClick=false;
 		position = pos;
 		deleteAlarmClock(alarmClockAdapter.getItem(pos).getAlarmClockId());
 		//发送到蓝牙，删除闹钟
-		sendMessageToBlueTooth(delStr + HexStringExchangeBytesUtil.bytesToHexString(new byte[]{BLECheckBitUtil.getXor(HexStringExchangeBytesUtil.hexStringToBytes(delStr))}));
+		SendCommandToBluetooth.sendMessageToBlueTooth(delStr + HexStringExchangeBytesUtil.bytesToHexString(new byte[]{BLECheckBitUtil.getXor(HexStringExchangeBytesUtil.hexStringToBytes(delStr))}));
 	}
 
 	@Override
@@ -314,19 +314,6 @@ private boolean	isDoubleClick=false;
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_ALARM_CLOCK_STATUE) {
 			CommonTools.showShortToast(this, object.getMsg());
-		}
-	}
-
-
-	private void sendMessageToBlueTooth(final String message) {
-		byte[] value;
-		Log.i("toBLue", message);
-		value = HexStringExchangeBytesUtil.hexStringToBytes(message);
-		UartService mService = ICSOpenVPNApplication.uartService;
-		if (mService != null) {
-			if (mService.mConnectionState == UartService.STATE_CONNECTED) {
-				mService.writeRXCharacteristic(value);
-			}
 		}
 	}
 }
