@@ -44,7 +44,6 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
@@ -172,7 +171,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	public void startAnim() {
-		registerSimStatu.setVisibility(View.VISIBLE);
 		registerSimStatu.setEnabled(false);
 		RegisterStatueAnim.reset();
 		registerSimStatu.clearAnimation();
@@ -329,19 +327,18 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
 				//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
-
-				if(!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER,false)&&!CommonTools.isFastDoubleClick(1000)){
+				if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER, false) && !CommonTools.isFastDoubleClick(1000)) {
 					//通知主界面请求是否有套餐
-				}else if(TextUtils.isEmpty(SocketConstant.hostIP)){
-//请求端口号
-				}else if(SocketConstant.REGISTER_STATUE_CODE==1){
+				} else if (TextUtils.isEmpty(SocketConstant.hostIP)) {
+					//请求端口号
+				} else if (SocketConstant.REGISTER_STATUE_CODE == 1) {
 					//重新注册
 					JNIUtil.startSDK(0);
-				}else if(SocketConstant.REGISTER_STATUE_CODE==2){
-//从预读取数据那里重新注册
-					if(sendYiZhengService!=null)
+				} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
+					//从预读取数据那里重新注册
+					if (sendYiZhengService != null)
 						sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-				}else if(SocketConstant.REGISTER_STATUE_CODE==3){
+				} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 					//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
 					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
 				}
@@ -354,6 +351,8 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				break;
 
 			case R.id.statueTextView:
+				//当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
+				registerSimStatu.setVisibility(View.VISIBLE);
 				clickFindBracelet();
 				break;
 		}
@@ -410,7 +409,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 
-
 	private Thread connectThread;
 	private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
 
@@ -422,7 +420,6 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 				unBindButton.setVisibility(View.VISIBLE);
 				dismissProgress();
 				setView();
-				setConStatus(R.string.index_registing);
 				if (utils.readBoolean(Constant.ISHAVEORDER, true)) {
 					setConStatus(R.string.index_no_signal);
 				} else {
@@ -515,10 +512,10 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 						} else if (txValue[1] == (byte) 0x04) {
 							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
 						} else if (txValue[1] == (byte) 0x33) {
-//							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
-							setConStatus(R.string.index_registing);
-							startAnim();
-//							}
+							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
+								setConStatus(R.string.index_registing);
+								startAnim();
+							}
 						} else if (txValue[1] == (byte) 0x11) {
 							//百分比TextView设置为0
 //							percentTextView.setText("");
@@ -864,6 +861,7 @@ public class MyDeviceActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	public void setConStatus(int conStatus) {
+		Log.i(TAG, "状态：" + getString(conStatus) + ",id:" + conStatus);
 		conStatusTextView.setText(getResources().getString(conStatus));
 		conStatusResource = conStatus;
 		conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
