@@ -195,21 +195,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	}
 
-//	private void reStartTcpSocket(){
-//		if(SocketConstant.REGISTER_STATUE_CODE==2||SocketConstant.REGISTER_STATUE_CODE==3){
-//			startSocketService();
-//			TestProvider.isIccid=true;
-//			TestProvider.isCreate=true;
-//			if(TestProvider.sendYiZhengService==null){
-//				TestProvider.sendYiZhengService=new SendYiZhengService();
-//			}
-//			TestProvider.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
-//		}else if(SocketConstant.REGISTER_STATUE_CODE==1){
-//			JNIUtil.startSDK(1);
-//		}
-//
-//
-//	}
 
 	private void startDataframService() {
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
@@ -708,8 +693,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					case SocketConstant.TCP_DISCONNECT:
 						//更改为注册中
 						indexFragment.changeBluetoothStatus(getString(R.string.index_registing));
-						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
 						break;
+					case SocketConstant.REGISTER_FAIL_INITIATIVE:
+						//更改为注册中
+						unbindTcpService();
+						indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect));
+
 					default:
 						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
 							indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
