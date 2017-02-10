@@ -181,7 +181,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
 	private void initServices() {
-		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
 			Log.i(TAG, "开启UartService");
 			Intent bindIntent = new Intent(this, UartService.class);
 			bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
@@ -549,12 +549,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				SocketConnection.mReceiveDataframSocketService.stopSelf();
 			}
 		}
-		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
-			unbindService(socketTcpConnection);
-			if (SocketConnection.mReceiveSocketService != null) {
-				SocketConnection.mReceiveSocketService.stopSelf();
-			}
-		}
+		unbindTcpService();
 		if (mService != null)
 			mService.stopSelf();
 		mService = null;
@@ -568,6 +563,15 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		sportFragment = null;
 		EventBus.getDefault().unregister(this);
 		super.onDestroy();
+	}
+
+	private void unbindTcpService() {
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+			unbindService(socketTcpConnection);
+			if (SocketConnection.mReceiveSocketService != null) {
+				SocketConnection.mReceiveSocketService.stopSelf();
+			}
+		}
 	}
 
 	private void destorySocketService() {
@@ -681,7 +685,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			if (entity.isSuccess()) {
 				indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 			} else {
-				destorySocketService();
+				indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail));
 				switch (entity.getFailType()) {
 					case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 						CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
@@ -694,12 +698,23 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
 						break;
+					case SocketConstant.NOT_NETWORK:
+						CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
+						break;
+					case SocketConstant.START_TCP_FAIL:
+						unbindTcpService();
+						CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
+						break;
+					case SocketConstant.TCP_DISCONNECT:
+						//更改为注册中
+						indexFragment.changeBluetoothStatus(getString(R.string.index_registing));
+						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
+						break;
 					default:
 						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
 							indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
 							CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
 						}
-//						destorySocketService();
 						break;
 				}
 			}

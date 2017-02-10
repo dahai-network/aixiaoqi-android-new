@@ -480,7 +480,12 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			title.setLeftIvIconAndText(leftIconId, leftText);
 		}
 	}
-
+	public void changeBluetoothStatus(String leftText) {
+		if (leftText != null  && title != null) {
+			Log.e("changeBluetoothStatus", "title=" + (title == null) + "\nleftText=" + leftText );
+			title.setLeftBtnText(leftText);
+		}
+	}
 	//获取蓝牙状态
 	public String getBlutoothStatus() {
 		return title != null ? title.getLeftText().getText().toString() : "";

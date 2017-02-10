@@ -10,8 +10,10 @@ import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.IsSuccessEntity;
+import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 
+import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 
 
@@ -60,7 +62,7 @@ public class TestProvider {
 		}
 		String imsi;
 		if(!TextUtils.isEmpty(iccidEntity.getImmsi()))
-		 imsi = iccidEntity.getImmsi().trim();
+			imsi = iccidEntity.getImmsi().trim();
 		else{
 			notifiUI(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 			return;
@@ -77,9 +79,13 @@ public class TestProvider {
 					SocketConstant.CONNENCT_VALUE[3] =RadixAsciiChange.convertStringToHex(token);
 					REGISTER_STATUE_CODE = 2;
 					isIccid = true;
-					sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
-					if (isCreate && isIccid) {
-						sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+					if(NetworkUtils.isNetworkAvailable(ICSOpenVPNApplication.getContext())){
+						sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+						if (isCreate && isIccid) {
+							sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+						}
+					}else{
+						notifiUI(SocketConstant.NOT_NETWORK);
 					}
 				}
 			} else {
@@ -92,11 +98,7 @@ public class TestProvider {
 	}
 
 	private static void notifiUI(int type) {
-		IsSuccessEntity entity = new IsSuccessEntity();
-		entity.setType(Constant.REGIST_CALLBACK_TYPE);
-		entity.setFailType(type);
-		entity.setSuccess(false);
-		EventBus.getDefault().post(entity);
+		registerFail(Constant.REGIST_CALLBACK_TYPE,type);
 	}
 
 	private static void preDataSplit(String item) {
