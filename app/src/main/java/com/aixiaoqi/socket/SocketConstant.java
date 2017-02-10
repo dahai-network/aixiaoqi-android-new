@@ -73,7 +73,9 @@ public class SocketConstant {
 	public static final int REGISTER_FAIL_INITIATIVE = 4;//如果主动解除绑定那么不显示注册失败
 	public static final int TOKEN_IS_NULL = 5;
 	public static final int NOT_CAN_RECEVIE_BLUETOOTH_DATA = 6;
-
+	public static final int NOT_NETWORK = 7;//注册到GOIP时没有网络
+	public static final int START_TCP_FAIL = 8;//开启TCP失败
+	public static final int TCP_DISCONNECT = 9;//TCP断开
 	public static int REGISTER_STATUE_CODE = 0;//0，表示还没有开始注册。1，表示获取预读取数据没有完成（已经写卡但未完成）。2，表示注册中，3表示注册成功
 	public static final String TRAN_DATA_TO_SDK = "88888888";
 

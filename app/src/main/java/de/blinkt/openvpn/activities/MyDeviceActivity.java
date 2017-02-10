@@ -42,8 +42,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
+import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
@@ -74,6 +76,7 @@ import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
+import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
@@ -327,17 +330,17 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
 				startAnim();
-				if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER, false) && !CommonTools.isFastDoubleClick(1000)) {
+				if(!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER,false)&&!CommonTools.isFastDoubleClick(1000)){
 					//通知主界面请求是否有套餐
-				} else if (TextUtils.isEmpty(SocketConstant.hostIP)) {
-					//请求端口号
-				} else if (SocketConstant.REGISTER_STATUE_CODE == 1) {
+				}else if(TextUtils.isEmpty(SocketConstant.hostIP)){
+                    //请求端口号
+				}else if(SocketConstant.REGISTER_STATUE_CODE==1){
 					//重新注册
 					JNIUtil.startSDK(0);
-				} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
-					//从预读取数据那里重新注册
+				}else if(SocketConstant.REGISTER_STATUE_CODE==2){
+                 //从预读取数据那里重新注册
 					connectGoip();
-				} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+				}else if(SocketConstant.REGISTER_STATUE_CODE==3){
 					//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
 					getDeviceSimRegStatues();
 				}
@@ -358,22 +361,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	private void getDeviceSimRegStatues() {
-		GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp = new GetDeviceSimRegStatuesHttp(this, HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES);
+		GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp=new GetDeviceSimRegStatuesHttp(this, HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES);
 		new Thread(getDeviceSimRegStatuesHttp).start();
 	}
 
 	private void connectGoip() {
-		if (sendYiZhengService != null)
+		if(sendYiZhengService!=null)
 			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 	}
 
 	private void registFail() {
 		Log.e(TAG, "registFail");
-		IsSuccessEntity entity = new IsSuccessEntity();
-		entity.setType(Constant.REGIST_CALLBACK_TYPE);
-		entity.setSuccess(false);
-		entity.setFailType(SocketConstant.REGISTER_FAIL_INITIATIVE);
-		EventBus.getDefault().post(entity);
+		registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL_INITIATIVE);
 	}
 
 	private void restartUartService() {
@@ -961,6 +960,16 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
 						break;
+					case SocketConstant.NOT_NETWORK:
+						CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
+						break;
+					case SocketConstant.START_TCP_FAIL:
+						CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
+						break;
+					case SocketConstant.TCP_DISCONNECT:
+						startAnim();
+						setConStatus(R.string.index_registing);
+						break;
 					default:
 						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
 							setConStatus(R.string.index_regist_fail);
@@ -979,7 +988,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onPercentEntity(PercentEntity entity) {
-		startAnim();
 		if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 			percentTextView.setVisibility(View.GONE);
 			return;

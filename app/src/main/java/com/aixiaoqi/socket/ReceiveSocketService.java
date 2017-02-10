@@ -85,9 +85,8 @@ public class ReceiveSocketService extends Service {
 				reConnect();
 				contactFailCount++;
 			}else{
-				//TODO 创建失败，停止注册
-//				contactFailCount=0;
-//				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
+				contactFailCount=0;
+				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.START_TCP_FAIL);
 			}
 
 		}
@@ -97,7 +96,10 @@ public class ReceiveSocketService extends Service {
 	private void disConnectReconnect() {
 		CommonTools.delayTime(2000);
 		if(tcpClient!=null&&!tcpClient.isConnected()) {
+			if(REGISTER_STATUE_CODE==3){
 			REGISTER_STATUE_CODE = 2;
+				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.TCP_DISCONNECT);
+			}
 			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 			reConnect();
 		}
