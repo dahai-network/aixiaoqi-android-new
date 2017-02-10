@@ -552,7 +552,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 		statueTextView.setVisibility(View.GONE);
 		if (macTextView.getText().length() == 0) {
-			macTextView.setText(deviceAddresstemp);
+			if (deviceAddresstemp.length() != 0) {
+				macTextView.setText(deviceAddresstemp);
+			} else {
+				macTextView.setText(utils.readString(Constant.IMEI));
+			}
 		}
 	}
 
@@ -597,12 +601,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (http.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				//保存设备后在本地保存mac地址
-				if (!TextUtils.isEmpty(deviceAddresstemp)) {
-					utils.writeString(Constant.IMEI, deviceAddresstemp);
-					macTextView.setText(deviceAddresstemp);
-				} else {
-					macTextView.setText(utils.readString(Constant.IMEI));
-				}
+				utils.writeString(Constant.IMEI, deviceAddresstemp);
+				macTextView.setText(deviceAddresstemp);
 			} else {
 				CommonTools.showShortToast(this, http.getMsg());
 			}
