@@ -79,7 +79,7 @@ public class ReceiveSocketService extends Service {
 	};
 
 	private void connectFailReconnect() {
-		CommonTools.delayTime(2000);
+		CommonTools.delayTime(5000);
 		if(tcpClient!=null&&!tcpClient.isConnected()){
 			if (contactFailCount <= 3) {
 				reConnect();
@@ -97,7 +97,8 @@ public class ReceiveSocketService extends Service {
 	private boolean isDisconnect=false;
 	private void disConnectReconnect() {
 		isDisconnect=true;
-		CommonTools.delayTime(2000);
+//		cancelTimer();
+		CommonTools.delayTime(5000);
 		if(tcpClient!=null&&!tcpClient.isConnected()) {
 			if(REGISTER_STATUE_CODE==3){
 				REGISTER_STATUE_CODE = 2;
@@ -141,16 +142,20 @@ public class ReceiveSocketService extends Service {
 			tcpClient=null;
 		}
 		Log.e(TAG,"tcpClient=null"+(tcpClient==null));
-		if (am != null){
-			am.cancel(sender);
-			am=null;
-		}
+		cancelTimer();
 		TlvAnalyticalUtils.clearData();
 		TestProvider.clearData();
 		if (SocketConstant.REGISTER_STATUE_CODE != 0) {
 			SocketConstant.REGISTER_STATUE_CODE = 1;
 		}
 		super.onDestroy();
+	}
+
+	private void cancelTimer() {
+		if (am != null){
+			am.cancel(sender);
+			am=null;
+		}
 	}
 
 	CreateSocketLisener createSocketLisener;

@@ -147,6 +147,7 @@ public class TlvAnalyticalUtils {
 					count = 0;
 				}
 				if (count <= 3) {
+					REGISTER_STATUE_CODE = 2;
 					reRegistering(orData, tag);
 				}
 			} else if (tag == 5) {
