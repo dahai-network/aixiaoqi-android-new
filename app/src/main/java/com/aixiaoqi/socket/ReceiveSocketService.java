@@ -138,6 +138,7 @@ public class ReceiveSocketService extends Service {
 	public void onDestroy() {
 		Log.e(TAG,"onDestroy()");
 		if(tcpClient!=null){
+			tcpClient.closeTimer();
 			tcpClient.disconnect();
 			tcpClient=null;
 		}

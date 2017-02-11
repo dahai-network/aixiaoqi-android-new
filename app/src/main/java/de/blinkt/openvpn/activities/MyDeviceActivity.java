@@ -279,6 +279,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if(CommonTools.isFastDoubleClick(1000)){
 					return;
 				}
+				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
 
@@ -320,7 +321,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						//从预读取数据那里重新注册
 						connectGoip();
 					} else {
-
+						registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
 					}
 
 				} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
@@ -576,7 +577,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if(object.getStatus()==1){
 
 				stopAnim();
-				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
+
 				sinking.setVisibility(View.GONE);
 				unBindButton.setVisibility(View.GONE);
 				noConnectImageView.setVisibility(View.VISIBLE);
@@ -957,6 +958,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					case SocketConstant.TCP_DISCONNECT:
 						startAnim();
 						setConStatus(R.string.index_registing);
+						break;
+					case SocketConstant.RESTART_TCP:
+
 						break;
 					default:
 						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {

@@ -65,8 +65,8 @@ public class Constant {
 	public static final String REAL_TIME_STEPS = "AA010401AE ";//实时步数
 	public static final String HISTORICAL_STEPS = "AA030401AC";//历史步数
 	public static final String FIND_DEVICE = "AA060401A9";//查找手环
-	//	public static final String FIND_VERSION = "AA0A01A1";//版本号
-	public static final String FIND_VERSION = "AA0A0401A5";//版本号（以后的版本）
+		public static final String FIND_VERSION = "AA0A01A1";//版本号
+//	public static final String FIND_VERSION = "AA0A0401A5";//版本号（以后的版本）
 	public static final String RESTORATION = "AA112233AA";//复位命令
 	public static final String BIND_SUCCESS = "AADD01DDAA";//绑定成功命令
 	//		public static final String ANDROID_TARGET = "AA010400AF";//绑定成功命令

@@ -38,8 +38,8 @@ public abstract class TcpClient implements Runnable {
 		new Thread(this).start();
 	}
 
-	Timer timerSocket=new Timer();
-	TimerTask taskSocket=new TimerTask() {
+	private Timer timerSocket=new Timer();
+	private TimerTask taskSocket=new TimerTask() {
 		@Override
 		public void run() {
 			Log.e("Blue_Chanl","执行了定时器任务，connect="+connect);
@@ -110,6 +110,15 @@ public abstract class TcpClient implements Runnable {
 		}
 	}
 
+	public void closeTimer(){
+		connect=false;
+		socketStartCount=0;
+		if(timerSocket!=null){
+			timerSocket.cancel();
+			timerSocket=null;
+		}
+
+	}
 	/**
 	 * 判断是否连接
 	 *

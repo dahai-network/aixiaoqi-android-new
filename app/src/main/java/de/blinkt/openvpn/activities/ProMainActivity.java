@@ -30,8 +30,10 @@ import android.widget.Toast;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
+import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
+import com.aixiaoqi.socket.TestProvider;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -700,6 +702,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						destorySocketService();
 						indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect));
 						break;
+					case SocketConstant.RESTART_TCP:
+						startSocketService();
+						if(TestProvider.sendYiZhengService==null){
+							TestProvider.sendYiZhengService= new SendYiZhengService();
+						}
+						startTcpSocket();
+						break;
 					default:
 						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
 							indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
@@ -712,6 +721,20 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			startDataframService();
 			startSocketService();
 		}
+	}
+	private int bindtime=0;
+	private void startTcpSocket() {
+		if(SocketConnection.mReceiveSocketService==null){
+			CommonTools.delayTime(1000);
+			if(bindtime>15){
+				return;
+			}
+			bindtime++;
+			startTcpSocket();
+		}
+		bindtime=0;
+		if(TestProvider.sendYiZhengService!=null)
+			TestProvider.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)
@@ -775,6 +798,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 			if (action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)) {
 				stopService(intentCallPhone);
+				unbindTcpService();
+				destorySocketService();
 			}
 		}
 	};

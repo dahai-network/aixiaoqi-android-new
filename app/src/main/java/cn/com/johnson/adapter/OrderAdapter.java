@@ -9,6 +9,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -322,13 +323,13 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKINDEXORDER);
 				clickPosition = getPosition();
+				Log.e("onClick","clickPosition="+clickPosition);
 				CallTimeOrderDetailActitivy.launch(context, data.get(getPosition()).getOrderID());
 			}
 		}
 	}
 
 	class KingCardViewHolder extends RecyclerView.ViewHolder {
-
 		@BindView(R.id.packetImageView)
 		ImageView packetImageView;
 		@BindView(R.id.packageNameTextView)
@@ -352,7 +353,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		public void onClick(View view) {
 			if (isHaveHeader) {
 				clickPosition = getPosition() - 1;
-				KingCardDetailActivity.launch(context, data.get(getPosition() - 1).getOrderID(), data.get(getPosition()).getOrderStatus());
+				KingCardDetailActivity.launch(context, data.get(getPosition() - 1).getOrderID(), data.get(getPosition()-1).getOrderStatus());
 			} else {
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKINDEXORDER);
