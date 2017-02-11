@@ -574,9 +574,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		Log.d(TAG, "rightComplete");
 		 if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
 			if(object.getStatus()==1){
+
 				stopAnim();
 				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
-
 				sinking.setVisibility(View.GONE);
 				unBindButton.setVisibility(View.GONE);
 				noConnectImageView.setVisibility(View.VISIBLE);

@@ -18,6 +18,8 @@ import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 import de.blinkt.openvpn.util.CommonTools;
 
+import static com.aixiaoqi.socket.EventBusUtil.registerFail;
+
 /**
  * Created by Administrator on 2017/1/5 0005.
  */
@@ -65,6 +67,7 @@ public class SdkAndBluetoothDataInchange {
 					JNIUtil.startSDK(2);
 					notCanReceiveBluetoothDataCount++;
 				}else if(notCanReceiveBluetoothDataCount>=3){
+					Log.e("timer", "注册失败");
 					notifyRegisterFail();
 					if(timerMessage!=null){
 						timerMessage.cancel();
@@ -78,11 +81,7 @@ public class SdkAndBluetoothDataInchange {
 	};
 
 	private void notifyRegisterFail() {
-		IsSuccessEntity entity = new IsSuccessEntity();
-		entity.setType(Constant.REGIST_CALLBACK_TYPE);
-		entity.setFailType(SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
-		entity.setSuccess(false);
-		EventBus.getDefault().post(entity);
+		registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
 	}
 
 	long getSendBlueToothTime;
@@ -129,6 +128,7 @@ public class SdkAndBluetoothDataInchange {
 		EventBus.getDefault().post(percentEntity);
 		lastTime = 0;
 		count = 0;
+		notCanReceiveBluetoothDataCount=0;
 		if (messages == null) {
 			messages = new ArrayList<>();
 		}

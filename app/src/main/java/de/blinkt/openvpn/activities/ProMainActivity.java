@@ -697,8 +697,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					case SocketConstant.REGISTER_FAIL_INITIATIVE:
 						//更改为注册中
 						unbindTcpService();
+						destorySocketService();
 						indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect));
-
+						break;
 					default:
 						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
 							indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
