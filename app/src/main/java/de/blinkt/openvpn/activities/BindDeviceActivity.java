@@ -187,7 +187,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 													scanLeDevice(false);
 													deviceAddress = infos.get(0).getKey();
 													utils.writeString(Constant.IMEI, deviceAddress);
-													IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, device.getAddress());
+													IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
 													new Thread(http).start();
 
 													isStartFindDeviceDelay = false;
@@ -232,8 +232,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
-			finish();
-			finish();
 			finish();
 		}
 	}

@@ -274,29 +274,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.unBindButton:
-				//友盟方法统计
-				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
-				sinking.setVisibility(View.GONE);
-				noConnectImageView.setVisibility(View.VISIBLE);
-				statueTextView.setVisibility(View.VISIBLE);
-//				resetDeviceTextView.setVisibility(View.GONE);
-				firmwareTextView.setText("");
-				macTextView.setText("");
-				registerSimStatu.setVisibility(View.GONE);
-				utils.delete(Constant.IMEI);
-				utils.delete(Constant.BRACELETVERSION);
-				SendCommandToBluetooth.sendMessageToBlueTooth("AAABCDEFAA");
-				//判断是否再次重连的标记
-				ICSOpenVPNApplication.isConnect = false;
-				ReceiveBLEMoveReceiver.isConnect = false;
-				mService.disconnect();
-				//传出注册失败
-				registFail();
 				//重启Uart服务
 //				restartUartService();
+				if(CommonTools.isFastDoubleClick(1000)){
+					return;
+				}
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
-				stopAnim();
+
 				break;
 			case R.id.callPayLinearLayout:
 				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION)) && !isUpgrade) {
@@ -587,12 +572,33 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 		Log.d(TAG, "rightComplete");
-		if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
-			utils.delete(Constant.IMEI);
-			utils.delete(Constant.BRACELETVERSION);
-			utils.delete(ELECTRICITY);
-			CommonTools.showShortToast(this, "已解绑设备");
-			setConStatus(R.string.index_unbind);
+		 if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
+			if(object.getStatus()==1){
+				stopAnim();
+				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
+
+				sinking.setVisibility(View.GONE);
+				unBindButton.setVisibility(View.GONE);
+				noConnectImageView.setVisibility(View.VISIBLE);
+				statueTextView.setVisibility(View.VISIBLE);
+				firmwareTextView.setText("");
+				macTextView.setText("");
+				registerSimStatu.setVisibility(View.GONE);
+				utils.delete(Constant.IMEI);
+				utils.delete(Constant.BRACELETVERSION);
+				SendCommandToBluetooth.sendMessageToBlueTooth("AAABCDEFAA");
+				//判断是否再次重连的标记
+				ICSOpenVPNApplication.isConnect = false;
+				ReceiveBLEMoveReceiver.isConnect = false;
+				mService.disconnect();
+				//传出注册失败
+				utils.delete(ELECTRICITY);
+				registFail();
+				CommonTools.showShortToast(this, "已解绑设备");
+				setConStatus(R.string.index_unbind);
+			}else{
+				CommonTools.showShortToast(this, object.getMsg());
+			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
 			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
 			//网络获取看有没有存储IMEI设备号,如果没有绑定过则去绑定流程
@@ -926,7 +932,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				setConStatus(R.string.index_high_signal);
 				stopAnim();
 			} else {
-				stopAnim();
+				if(entity.getFailType()!=SocketConstant.START_TCP_FAIL)
+					stopAnim();
 				percentTextView.setVisibility(View.GONE);
 				setConStatus(R.string.index_regist_fail);
 				switch (entity.getFailType()) {

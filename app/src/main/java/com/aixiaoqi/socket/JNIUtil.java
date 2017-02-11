@@ -8,7 +8,6 @@ import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.aixiaoqi.socket.SocketConstant.EN_APPEVT_CMD_SETRST;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
-import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 
