@@ -455,10 +455,15 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		} else {
 			//如果上一条是9f0f那么这个非0344的就是非爱小器卡
 			if (lastReceiveString.contains(GET_NULLCARDID)) {
-				Log.i("Bluetooth", "注册流程" + mStrSimCmdPacket);
+				Log.i("Bluetooth", "进入注册流程");
 				ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-				entity.setStatusInt(R.string.index_registing);
-				entity.setStatusDrawableInt(R.drawable.index_no_signal);
+				if (SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER, false)) {
+					entity.setStatusInt(R.string.index_registing);
+					entity.setStatusDrawableInt(R.drawable.index_no_signal);
+				} else {
+					entity.setStatusInt(R.string.index_no_packet);
+					entity.setStatusDrawableInt(R.drawable.index_no_packet);
+				}
 				EventBus.getDefault().post(entity);
 				IS_TEXT_SIM = true;
 				isGetnullCardid = false;

@@ -233,6 +233,8 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 			finish();
+			finish();
+			finish();
 		}
 	}
 
@@ -280,7 +282,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
 		String type = entity.getBlueType();
-		if (type == BluetoothConstant.BLUE_VERSION) {
+		if (type == BluetoothConstant.BLUE_VERSION && !CommonTools.isFastDoubleClick(1000)) {
 			BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddress, utils.readString(Constant.BRACELETVERSION));
 			new Thread(bindDevicehttp).start();
 		}

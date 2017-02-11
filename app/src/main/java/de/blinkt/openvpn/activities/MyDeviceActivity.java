@@ -24,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aixiaoqi.socket.JNIUtil;
+import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
 
@@ -42,17 +42,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.http.BindDeviceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.DownloadSkyUpgradePackageHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
@@ -86,6 +83,7 @@ import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
+import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
@@ -330,26 +328,20 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
 				startAnim();
-				if(!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER,false)&&!CommonTools.isFastDoubleClick(1000)){
-					//通知主界面请求是否有套餐
-				}else if(TextUtils.isEmpty(SocketConstant.hostIP)){
-                    //请求端口号
-				}else if(SocketConstant.REGISTER_STATUE_CODE==1){
-					//重新注册
-					JNIUtil.startSDK(0);
-				}else if(SocketConstant.REGISTER_STATUE_CODE==2){
-                 //从预读取数据那里重新注册
-					connectGoip();
-				}else if(SocketConstant.REGISTER_STATUE_CODE==3){
+				if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
+					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+				} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
+					if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+						//从预读取数据那里重新注册
+						connectGoip();
+					} else {
+
+					}
+
+				} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 					//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
 					getDeviceSimRegStatues();
 				}
-//				if (SocketConstant.REGISTER_STATUE_CODE != 3) {
-//
-//					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
-//				} else {
-//					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
-//				}
 				break;
 
 			case R.id.statueTextView:
@@ -361,18 +353,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	private void getDeviceSimRegStatues() {
-		GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp=new GetDeviceSimRegStatuesHttp(this, HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES);
+		GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp = new GetDeviceSimRegStatuesHttp(this, HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES);
 		new Thread(getDeviceSimRegStatuesHttp).start();
 	}
 
 	private void connectGoip() {
-		if(sendYiZhengService!=null)
+		if (sendYiZhengService != null)
 			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 	}
 
 	private void registFail() {
 		Log.e(TAG, "registFail");
-		registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL_INITIATIVE);
+		registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.REGISTER_FAIL_INITIATIVE);
 	}
 
 	private void restartUartService() {
@@ -551,7 +543,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 		statueTextView.setVisibility(View.GONE);
 		if (macTextView.getText().length() == 0) {
-			if (deviceAddresstemp.length() != 0) {
+			if (deviceAddresstemp != null && deviceAddresstemp.length() != 0) {
 				macTextView.setText(deviceAddresstemp);
 			} else {
 				macTextView.setText(utils.readString(Constant.IMEI));
@@ -595,17 +587,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 		Log.d(TAG, "rightComplete");
-		if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
-			BindDeviceHttp http = (BindDeviceHttp) object;
-			if (http.getStatus() == 1) {
-				Log.i("test", "保存设备名成功");
-				//保存设备后在本地保存mac地址
-				utils.writeString(Constant.IMEI, deviceAddresstemp);
-				macTextView.setText(deviceAddresstemp);
-			} else {
-				CommonTools.showShortToast(this, http.getMsg());
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
+		if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
 			utils.delete(Constant.IMEI);
 			utils.delete(Constant.BRACELETVERSION);
 			utils.delete(ELECTRICITY);
@@ -793,7 +775,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if (mService.mConnectionState == UartService.STATE_CONNECTED) {
+				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 					return;
 				}
 				if (enable) {
