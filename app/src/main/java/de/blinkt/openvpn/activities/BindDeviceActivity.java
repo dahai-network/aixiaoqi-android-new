@@ -233,6 +233,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 			finish();
+			finish();
 		}
 	}
 
