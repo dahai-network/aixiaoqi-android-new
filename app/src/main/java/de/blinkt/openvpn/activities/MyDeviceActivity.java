@@ -587,7 +587,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				registerSimStatu.setVisibility(View.GONE);
 				utils.delete(Constant.IMEI);
 				utils.delete(Constant.BRACELETVERSION);
-				SendCommandToBluetooth.sendMessageToBlueTooth("AAABCDEFAA");
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
 				ReceiveBLEMoveReceiver.isConnect = false;

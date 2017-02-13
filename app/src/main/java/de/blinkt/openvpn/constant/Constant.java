@@ -124,7 +124,6 @@ public class Constant {
 
 	//写卡流程
 	public static final String RECEIVE_NULL_CARD_CHAR = "0344";
-	public static final String UP_TP_POWER_RECEIVE = "c78031e073fe21";
 	public static final String WRITE_CARD_STEP1 = "9f1";
 	public static final String WRITE_CARD_91 = "91";
 	public static final String WRITE_CARD_STEP4 = "d03281030125";
