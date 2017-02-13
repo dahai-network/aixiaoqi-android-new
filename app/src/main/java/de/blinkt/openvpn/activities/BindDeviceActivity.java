@@ -220,19 +220,21 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 				}
 			} else {
 				CommonTools.showShortToast(this, "该设备已经绑定过了！");
+				scanLeDevice(false);
 				finish();
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
+			Log.i(TAG, "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				utils.writeString(Constant.IMEI, deviceAddress);
 				Intent result = new Intent();
 				result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, deviceAddress);
-				BindDeviceActivity.this.setResult(Activity.RESULT_OK, result);
+				setResult(Activity.RESULT_OK, result);
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
-			finish();
+			scanLeDevice(false);
 			finish();
 		}
 	}
@@ -282,9 +284,9 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
 		String type = entity.getBlueType();
 		if (type == BluetoothConstant.BLUE_VERSION && !CommonTools.isFastDoubleClick(1000)) {
-			BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddress, utils.readString(Constant.BRACELETVERSION));
+			Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType());
+			BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, utils.readString(Constant.IMEI), utils.readString(Constant.BRACELETVERSION));
 			new Thread(bindDevicehttp).start();
 		}
 	}
-
 }

@@ -1,6 +1,5 @@
 package com.aixiaoqi.socket;
 
-import android.app.AlarmManager;
 import android.util.Log;
 
 import java.io.IOException;

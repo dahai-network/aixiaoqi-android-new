@@ -276,7 +276,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			case R.id.unBindButton:
 				//重启Uart服务
 //				restartUartService();
-				if(CommonTools.isFastDoubleClick(1000)){
+				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
 				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
@@ -487,9 +487,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						} else if (txValue[1] == (byte) 0x05) {
 							setView();
 						} else if (txValue[1] == (byte) 0x0A) {
+							Log.i(TAG, "版本号:" + txValue[2]);
+
 							utils.writeString(Constant.BRACELETVERSION, txValue[2] + "");
 							firmwareTextView.setText(txValue[2] + "");
 							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+								Log.i(TAG, "进入版本号:" + txValue[2]);
 								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
 								entity.setSuccess(true);
@@ -573,11 +576,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 		Log.d(TAG, "rightComplete");
-		 if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
-			if(object.getStatus()==1){
-
+		if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
+			if (object.getStatus() == 1) {
 				stopAnim();
-
 				sinking.setVisibility(View.GONE);
 				unBindButton.setVisibility(View.GONE);
 				noConnectImageView.setVisibility(View.VISIBLE);
@@ -596,7 +597,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				registFail();
 				CommonTools.showShortToast(this, "已解绑设备");
 				setConStatus(R.string.index_unbind);
-			}else{
+			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
@@ -932,7 +933,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				setConStatus(R.string.index_high_signal);
 				stopAnim();
 			} else {
-				if(entity.getFailType()!=SocketConstant.START_TCP_FAIL)
+				if (entity.getFailType() != SocketConstant.START_TCP_FAIL)
 					stopAnim();
 				percentTextView.setVisibility(View.GONE);
 				setConStatus(R.string.index_regist_fail);
