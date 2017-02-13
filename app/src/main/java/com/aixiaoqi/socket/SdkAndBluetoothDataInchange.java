@@ -52,7 +52,7 @@ public class SdkAndBluetoothDataInchange {
 	private String socketTag = "0";
 	private String sendToOneServerTemp;
 	private String mStrSimPowerOnPacket = "";
-	byte num = 0;
+	//	byte num = 0;
 	private long lastTime;
 	private int count = 0;
 
@@ -99,27 +99,8 @@ public class SdkAndBluetoothDataInchange {
 				timerMessage.schedule(timerTaskMessage, 5000, 5000);
 
 			}
-		}
-		num++;
-		if (num != txValue[4]) {
 
-			CommonTools.delayTime(500);
 
-			num = 0;
-
-			if ((System.currentTimeMillis() - lastTime > 365 * 24 * 60 * 60 * 1000l || System.currentTimeMillis() - lastTime < 2000) && count <= 3) {
-				Log.e(TAG, "蓝牙数据出错重发=" + finalTemp + "\ncount=" + count);
-
-				lastTime = System.currentTimeMillis();
-
-				sendToBluetoothAboutCardInfo(finalTemp);
-			} else if (count > 3 && count < 5) {
-				Log.e(TAG, "蓝牙数据出错重发   注册失败");
-				notifyRegisterFail();
-			}
-			count++;
-			return;
-		}
 		if (percentEntity == null) {
 			percentEntity = new PercentEntity();
 		}
@@ -134,12 +115,16 @@ public class SdkAndBluetoothDataInchange {
 		}
 		messages.add(temp);
 		if (txValue[3] == txValue[4]) {
-
+			if(messages.size()<txValue[4]){
+				sendToBluetoothAboutCardInfo(finalTemp);
+				return;
+			}
+			sortMessage();
 			mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
 
 			// 接收到一个完整的数据包,发送到SDK
 			int length = (txValue[2] & 0xff);
-			if (num >= 19 && length < 252) {
+			if (messages.size() >= 19 && length < 252) {
 				length += 255;
 			}
 			String sendToOnService = null;
@@ -167,9 +152,26 @@ public class SdkAndBluetoothDataInchange {
 
 			sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
 
-			num = 0;
-
 		}
+		}
+	}
+
+	private void sortMessage() {
+		if(messages.size()>1){
+            ArrayList<String> messagesList=new ArrayList<>();
+            int z=0;
+            for(int i=0;i<messages.size();i++){
+                for(int j=i+1;j<messages.size();j++){
+                    if(Byte.parseByte(messages.get(j).substring(6,8))==i+1){
+                        z=j;
+                        break;
+                    }
+                }
+                messagesList.add(messages.get(z));
+            }
+            messages.clear();
+            messages=messagesList;
+        }
 	}
 
 	PercentEntity percentEntity;
@@ -186,6 +188,7 @@ public class SdkAndBluetoothDataInchange {
 
 	private void sendToBluetoothAboutCardInfo(String msg) {
 		if(TextUtils.isEmpty(msg)){
+			registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
 			return;
 		}
 		Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + msg);
