@@ -480,20 +480,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 							firmwareTextView.setText(txValue[2] + "");
 							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-								Log.i(TAG, "进入版本号:" + txValue[2]);
-								Log.i(TAG, "进入版本号:" + txValue[2]);
 								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
 								entity.setBraceletversion(txValue[2] + "");
 								entity.setSuccess(true);
 								EventBus.getDefault().post(entity);
+								Log.i(TAG, "进入版本号:" + txValue[2]);
 							}
 						} else if (txValue[1] == (byte) 0x04) {
 							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
 						} else if (txValue[1] == (byte) 0x33) {
 							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
 								sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
-								startAnim();
 							}
 						} else if (txValue[1] == (byte) 0x11) {
 							//百分比TextView设置为0
@@ -901,7 +899,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	public void setConStatus(String conStatus) {
-		Log.i(TAG, "状态：" + conStatus + ",id:" + conStatus);
+		Log.i(TAG, "状态：" + conStatus);
 		conStatusTextView.setText(conStatus);
 		conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 		if (conStatus.equals(getString(R.string.index_connecting))) {

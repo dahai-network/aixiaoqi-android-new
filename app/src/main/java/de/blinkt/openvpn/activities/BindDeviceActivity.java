@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,7 +32,6 @@ import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
-import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.BindDeviceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
@@ -85,15 +83,11 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			return;
 		}
 		setContentView(R.layout.activity_bind_device);
+		EventBus.getDefault().register(this);
 		ButterKnife.bind(this);
-		initSet();
 		mHandler = new Handler();
 		findDeviceHandler = new Handler();
 		scanLeDevice(true);
-	}
-
-	private void initSet() {
-		EventBus.getDefault().register(this);
 	}
 
 	private void scanLeDevice(final boolean enable) {
@@ -217,8 +211,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
 			Log.i(TAG, "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
-			Intent result = new Intent(this, MyDeviceActivity.class);
-			result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, deviceAddress);
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				utils.writeString(Constant.IMEI, deviceAddress);
@@ -257,7 +249,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
 		String type = entity.getBlueType();
-		if (type == BluetoothConstant.BLUE_VERSION && !CommonTools.isFastDoubleClick(1000)) {
+		if (type == BluetoothConstant.BLUE_VERSION && !CommonTools.isFastDoubleClick(300)) {
 			Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + utils.readString(Constant.IMEI) + ",版本号：" + utils.readString(Constant.BRACELETVERSION));
 			BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, utils.readString(Constant.IMEI), entity.getBraceletversion());
 			new Thread(bindDevicehttp).start();
