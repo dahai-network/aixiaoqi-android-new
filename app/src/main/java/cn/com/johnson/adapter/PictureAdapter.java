@@ -51,9 +51,10 @@ public class PictureAdapter extends PagerAdapter {
 	 */
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
-
 		if (images.size() <= 1) {
-			ImageView imageView = images.get(topPosition);
+			container.removeAllViews();
+			ImageView imageView = images.get(0);
+			removeChildView(imageView);
 			container.addView(imageView);
 			return imageView;
 		} else {
@@ -119,13 +120,17 @@ public class PictureAdapter extends PagerAdapter {
 //            position = position + images.size();
 //        }
 			ImageView imageView = images.get(initPosition);
-			ViewParent parent = imageView.getParent();
-			if (parent != null) {
-				ViewGroup viewGroup = (ViewGroup) parent;
-				viewGroup.removeView(imageView);
-			}
+			removeChildView(imageView);
 			container.addView(imageView);
 			return imageView;
 		}
+	}
+
+	private void removeChildView(ImageView imageView) {
+		ViewParent parent = imageView.getParent();
+		if (parent != null) {
+            ViewGroup viewGroup = (ViewGroup) parent;
+            viewGroup.removeView(imageView);
+        }
 	}
 }
