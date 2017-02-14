@@ -42,6 +42,7 @@ public class ReceiveSocketService extends Service {
 		}
 	}
 
+
 	public void initSocket() {
 
 		tcpClient.connect();
@@ -65,7 +66,9 @@ public class ReceiveSocketService extends Service {
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
+			Log.e("Blue_Chanl", "接收数据 - onReceive");
 			TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s, length));
+			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
 		}
 
@@ -77,16 +80,17 @@ public class ReceiveSocketService extends Service {
 
 
 	};
-
+	//首次创建连接失败，重试三次还不成功，则断开连接，并且提示注册失败。
 	private void connectFailReconnect() {
-		CommonTools.delayTime(5000);
-		if(tcpClient!=null&&!tcpClient.isConnected()){
-			if (contactFailCount <= 3) {
-				reConnect();
-				contactFailCount++;
-			}else{
-				contactFailCount=0;
-				if(!isDisconnect){
+
+		if(!isDisconnect){
+			CommonTools.delayTime(5000);
+			if(tcpClient!=null&&!tcpClient.isConnected()){
+				if (contactFailCount <= 3) {
+					reConnect();
+					contactFailCount++;
+				}else{
+					contactFailCount=0;
 					registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.START_TCP_FAIL);
 				}
 			}
@@ -95,6 +99,7 @@ public class ReceiveSocketService extends Service {
 	}
 
 	private boolean isDisconnect=false;
+	//断开连接，如果注册成功，需要重新注册，并且改变注册状态
 	private void disConnectReconnect() {
 		isDisconnect=true;
 //		cancelTimer();
@@ -109,6 +114,7 @@ public class ReceiveSocketService extends Service {
 		}
 	}
 	private void createHeartBeatPackage() {
+		Log.e(TAG,"count="+count+"\nSocketConstant.SESSION_ID_TEMP"+SocketConstant.SESSION_ID_TEMP+"\nSocketConstant.SESSION_ID="+SocketConstant.SESSION_ID+(SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
 		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0) {
 			count = count + 1;
 			Log.e("onReceive", "开启定时器");
@@ -128,7 +134,10 @@ public class ReceiveSocketService extends Service {
 	}
 
 	public void sendMessage(String s) {
+		Log.e("sendMessage", s);
+		Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
 		Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null) + "\n发送到GOIPtcpClient" + (tcpClient.getTransceiver() != null));
+
 		if (tcpClient != null && tcpClient.getTransceiver() != null) {
 			tcpClient.getTransceiver().send(s);
 		}
@@ -137,15 +146,20 @@ public class ReceiveSocketService extends Service {
 	@Override
 	public void onDestroy() {
 		Log.e(TAG,"onDestroy()");
+		if(SocketConnection.sdkAndBluetoothDataInchange!=null)
+			SocketConnection.sdkAndBluetoothDataInchange.closeReceviceBlueData();
 		if(tcpClient!=null){
 			tcpClient.closeTimer();
 			tcpClient.disconnect();
-			tcpClient=null;
+//			tcpClient=null;
 		}
 		Log.e(TAG,"tcpClient=null"+(tcpClient==null));
+		count=0;
+		SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
 		cancelTimer();
 		TlvAnalyticalUtils.clearData();
 		TestProvider.clearData();
+
 		if (SocketConstant.REGISTER_STATUE_CODE != 0) {
 			SocketConstant.REGISTER_STATUE_CODE = 1;
 		}

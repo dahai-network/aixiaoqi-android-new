@@ -913,6 +913,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			percentTextView.setText("");
 		} else if (conStatus.equals(getString(R.string.index_registing))) {
 			percentTextView.setText("");
+			registerSimStatu.setVisibility(View.VISIBLE);
 			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_unbind))) {
 			percentTextView.setText("");

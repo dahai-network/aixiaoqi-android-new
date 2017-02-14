@@ -523,6 +523,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
 		bleMoveReceiver = null;
+		if(intentCallPhone!=null)
 		stopService(intentCallPhone);
 		//关闭服务并设置为null
 
@@ -557,6 +558,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			unbindService(socketTcpConnection);
 			if (SocketConnection.mReceiveSocketService != null) {
 				SocketConnection.mReceiveSocketService.stopSelf();
+				SocketConnection.mReceiveSocketService=null;
 			}
 		}
 	}
@@ -620,6 +622,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						public void run() {
 							startDataframService();
 							startSocketService();
+							bindTcpSucceed();
 							CommonTools.delayTime(5000);
 							Log.e("phoneAddress", "main.start()");
 							JNIUtil.getInstance().startSDK(1);
@@ -726,7 +729,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private int bindtime = 0;
 
 	private void startTcpSocket() {
-		if (SocketConnection.mReceiveSocketService == null) {
+		bindTcpSucceed();
+		if(TestProvider.sendYiZhengService!=null)
+			TestProvider.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+	}
+
+	private void bindTcpSucceed(){
+		if(SocketConnection.mReceiveSocketService==null){
 			CommonTools.delayTime(1000);
 			if (bindtime > 15) {
 				return;
@@ -734,9 +743,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			bindtime++;
 			startTcpSocket();
 		}
-		bindtime = 0;
-		if (TestProvider.sendYiZhengService != null)
-			TestProvider.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+		bindtime=0;
 	}
 
 	/**
