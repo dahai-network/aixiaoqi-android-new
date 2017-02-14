@@ -241,7 +241,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
-				int status = 0;
+				int status = R.string.index_connecting;
 				if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBlutoothStatus())) {
 					status = R.string.index_no_signal;
 				} else if (getActivity().getResources().getString(R.string.index_connecting).equals(getBlutoothStatus())) {
@@ -259,7 +259,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 				} else if (getString(R.string.index_aixiaoqicard).equals(getBlutoothStatus())) {
 					status = R.string.index_aixiaoqicard;
 				}
-				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, status);
+				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
 				startActivity(intent);
 			}
 		});
@@ -291,16 +291,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	private void getIndexBanner() {
 		BannerHttp http = new BannerHttp(this, HttpConfigUrl.COMTYPE_INDEX_BANNER);
 		new Thread(http).start();
-	}
-
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
 	}
 
 	@Override
@@ -480,12 +470,14 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			title.setLeftIvIconAndText(leftIconId, leftText);
 		}
 	}
+
 	public void changeBluetoothStatus(String leftText) {
-		if (leftText != null  && title != null) {
-			Log.e("changeBluetoothStatus", "title=" + (title == null) + "\nleftText=" + leftText );
+		if (leftText != null && title != null) {
+			Log.e("changeBluetoothStatus", "title=" + (title == null) + "\nleftText=" + leftText);
 			title.setLeftBtnText(leftText);
 		}
 	}
+
 	//获取蓝牙状态
 	public String getBlutoothStatus() {
 		return title != null ? title.getLeftText().getText().toString() : "";

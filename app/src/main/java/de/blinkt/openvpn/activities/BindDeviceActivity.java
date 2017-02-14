@@ -1,6 +1,5 @@
 package de.blinkt.openvpn.activities;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -13,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -91,18 +89,12 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		initSet();
 		mHandler = new Handler();
 		findDeviceHandler = new Handler();
-		initList();
+		scanLeDevice(true);
 	}
 
 	private void initSet() {
 		EventBus.getDefault().register(this);
 	}
-
-	private void initList() {
-		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-		startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-	}
-
 
 	private void scanLeDevice(final boolean enable) {
 		if (enable) {
@@ -225,16 +217,14 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
 			Log.i(TAG, "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
+			Intent result = new Intent(this, MyDeviceActivity.class);
+			result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, deviceAddress);
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				utils.writeString(Constant.IMEI, deviceAddress);
-				Intent result = new Intent();
-				result.putExtra(IntentPutKeyConstant.DEVICE_ADDRESS, deviceAddress);
-				setResult(Activity.RESULT_OK, result);
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
-			scanLeDevice(false);
 			finish();
 		}
 	}
@@ -252,40 +242,24 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	@Override
 	public void dialogText(int type, String text) {
 		if (type == 2) {
-			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					scanLeDevice(true);
+				}
+			}).start();
 		} else {
 			onBackPressed();
 			finish();
 		}
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == REQUEST_ENABLE_BT) {
-			if (resultCode == Activity.RESULT_OK) {
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						scanLeDevice(true);
-					}
-				}).start();
-			} else {
-				Log.d(TAG, "BT not enabled");
-				Toast.makeText(this, "蓝牙未打开", Toast.LENGTH_SHORT).show();
-				finish();
-			}
-		}
-	}
-
-
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
 		String type = entity.getBlueType();
 		if (type == BluetoothConstant.BLUE_VERSION && !CommonTools.isFastDoubleClick(1000)) {
-			Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType());
-			BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, utils.readString(Constant.IMEI), utils.readString(Constant.BRACELETVERSION));
+			Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + utils.readString(Constant.IMEI) + ",版本号：" + utils.readString(Constant.BRACELETVERSION));
+			BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, utils.readString(Constant.IMEI), entity.getBraceletversion());
 			new Thread(bindDevicehttp).start();
 		}
 	}

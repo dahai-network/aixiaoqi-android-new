@@ -334,7 +334,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			} else {
 				Log.d(TAG, "BT not enabled");
 				Toast.makeText(this, "蓝牙未打开", Toast.LENGTH_SHORT).show();
-				indexFragment.changeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
 			}
 		}
 	}
@@ -347,7 +347,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				indexFragment.changeBluetoothStatus(getResources().getString(R.string.index_connecting), R.drawable.index_connecting);
+				sendEventBusChangeBluetoothStatus(getResources().getString(R.string.index_connecting), R.drawable.index_connecting);
 				if (stopHandler == null) {
 					stopHandler = new Handler();
 				}
@@ -359,7 +359,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							@Override
 							public void run() {
 								if (indexFragment.getBlutoothStatus().equals(getResources().getString(R.string.index_unconnect)))
-									indexFragment.changeBluetoothStatus(getResources().getString(R.string.index_unconnect), R.drawable.index_unconnect);
+									sendEventBusChangeBluetoothStatus(getResources().getString(R.string.index_unconnect), R.drawable.index_unconnect);
 							}
 						});
 					}
@@ -583,7 +583,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 				}
 			} else {
-				indexFragment.changeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
 			if (object.getStatus() == 1) {
@@ -591,16 +591,16 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-//					indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+//					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 					GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
 					new Thread(http).start();
-					indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
 
 				} else {
 					//TODO 没有通知到设备界面
 					//如果是没有套餐，则通知我的设备界面更新状态并且停止转动
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
-					indexFragment.changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 				}
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
@@ -610,9 +610,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
 					if (SocketConstant.REGISTER_STATUE_CODE == 2) {
-						indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-						indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 					}
 					//运行注册流程
 					new Thread(new Runnable() {
@@ -670,9 +670,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		Log.e(TAG, "registerType=" + entity.getType());
 		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
 			if (entity.isSuccess()) {
-				indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 			} else {
-				indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail));
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
 				switch (entity.getFailType()) {
 					case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 						CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
@@ -694,24 +694,24 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						break;
 					case SocketConstant.TCP_DISCONNECT:
 						//更改为注册中
-						indexFragment.changeBluetoothStatus(getString(R.string.index_registing));
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 						break;
 					case SocketConstant.REGISTER_FAIL_INITIATIVE:
 						//更改为注册中
 						unbindTcpService();
 						destorySocketService();
-						indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect));
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 						break;
 					case SocketConstant.RESTART_TCP:
 						startSocketService();
-						if(TestProvider.sendYiZhengService==null){
-							TestProvider.sendYiZhengService= new SendYiZhengService();
+						if (TestProvider.sendYiZhengService == null) {
+							TestProvider.sendYiZhengService = new SendYiZhengService();
 						}
 						startTcpSocket();
 						break;
 					default:
 						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
-							indexFragment.changeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
+							sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
 							CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
 						}
 						break;
@@ -722,24 +722,36 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			startSocketService();
 		}
 	}
-	private int bindtime=0;
+
+	private int bindtime = 0;
+
 	private void startTcpSocket() {
-		if(SocketConnection.mReceiveSocketService==null){
+		if (SocketConnection.mReceiveSocketService == null) {
 			CommonTools.delayTime(1000);
-			if(bindtime>15){
+			if (bindtime > 15) {
 				return;
 			}
 			bindtime++;
 			startTcpSocket();
 		}
-		bindtime=0;
-		if(TestProvider.sendYiZhengService!=null)
+		bindtime = 0;
+		if (TestProvider.sendYiZhengService != null)
 			TestProvider.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+	}
+
+	/**
+	 * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
+	 */
+	private void sendEventBusChangeBluetoothStatus(String status, int statusDrawableInt) {
+		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
+		entity.setStatus(status);
+		entity.setStatusDrawableInt(statusDrawableInt);
+		EventBus.getDefault().post(entity);
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)
 	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
-		indexFragment.changeBluetoothStatus(getString(entity.getStatusInt()), entity.getStatusDrawableInt());
+		indexFragment.changeBluetoothStatus(entity.getStatus(), entity.getStatusDrawableInt());
 	}
 
 	@Subscribe(threadMode = ThreadMode.BACKGROUND)//非UI线程
@@ -766,7 +778,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-				indexFragment.changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 				final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
 				//判断是否是分包（BB开头的包）
@@ -785,12 +797,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							checkRegisterStatuGoIp();
 						}
 					} else if (txValue[1] == (byte) 0x11) {
-						indexFragment.changeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 					} else if (txValue[1] == (byte) 0xEE) {
 						if (SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
 							checkRegisterStatuGoIp();
 						} else {
-							indexFragment.changeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
+							sendEventBusChangeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 						}
 					}
 				}
@@ -807,11 +819,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	//是否注册成功，如果是则信号强，反之则信号弱
 	private void checkRegisterStatuGoIp() {
 		if (REGISTER_STATUE_CODE == 1) {
-			indexFragment.changeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+			sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 		} else if (REGISTER_STATUE_CODE != 3) {
-			indexFragment.changeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+			sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
 		} else {
-			indexFragment.changeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+			sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 		}
 	}
 

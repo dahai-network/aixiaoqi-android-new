@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class BluetoothMessageCallBackEntity implements Serializable{
 	private String blueType;
+	private String braceletversion;
 	private boolean isSuccess;
 
 	public String getBlueType() {
@@ -26,5 +27,11 @@ public class BluetoothMessageCallBackEntity implements Serializable{
 		isSuccess = success;
 	}
 
+	public String getBraceletversion() {
+		return braceletversion;
+	}
 
+	public void setBraceletversion(String braceletversion) {
+		this.braceletversion = braceletversion;
+	}
 }

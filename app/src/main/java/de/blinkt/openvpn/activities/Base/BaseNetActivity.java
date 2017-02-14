@@ -10,7 +10,6 @@ import de.blinkt.openvpn.util.CommonTools;
  */
 public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 
-
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 

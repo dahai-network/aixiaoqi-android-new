@@ -1,19 +1,19 @@
 package de.blinkt.openvpn.model;
 
 /**
- * Created by Administrator on 2017/2/9.
+ * Created by wzj on 2017/2/9.
  * 修改连接状态
  */
 public class ChangeConnectStatusEntity {
-	private int statusInt;
+	private String status;
 	private int statusDrawableInt;
 
-	public int getStatusInt() {
-		return statusInt;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setStatusInt(int statusInt) {
-		this.statusInt = statusInt;
+	public void setStatus(String statusInt) {
+		this.status = statusInt;
 	}
 
 	public int getStatusDrawableInt() {

@@ -41,7 +41,6 @@ import de.blinkt.openvpn.util.BLECheckBitUtil;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
-import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.FIND_VERSION;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
@@ -61,6 +60,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements InterfaceCallback {
 
 	private UartService mService = null;
+	private Context context;
 	private static final int UART_PROFILE_CONNECTED = 20;
 	private static final int UART_PROFILE_DISCONNECTED = 21;
 	private int mState = UART_PROFILE_DISCONNECTED;
@@ -96,6 +96,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 
 	public void onReceive(final Context context, Intent intent) {
+		this.context = context;
 		final String action = intent.getAction();
 		mService = ICSOpenVPNApplication.uartService;
 		if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
@@ -434,7 +435,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							//获取完空卡序列号后获取步数
 							SendCommandToBluetooth.sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
 							ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-							entity.setStatusInt(R.string.index_aixiaoqicard);
+							entity.setStatus(context.getString(R.string.index_aixiaoqicard));
 							entity.setStatusDrawableInt(R.drawable.index_no_signal);
 							EventBus.getDefault().post(entity);
 						}
@@ -460,10 +461,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		Log.i("Bluetooth", "进入注册流程");
 		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
 		if (SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER, false)) {
-			entity.setStatusInt(R.string.index_registing);
+			entity.setStatus(context.getString(R.string.index_registing));
 			entity.setStatusDrawableInt(R.drawable.index_no_signal);
 		} else {
-			entity.setStatusInt(R.string.index_no_packet);
+			entity.setStatus(context.getString(R.string.index_no_packet));
 			entity.setStatusDrawableInt(R.drawable.index_no_packet);
 		}
 		EventBus.getDefault().post(entity);

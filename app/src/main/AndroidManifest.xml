@@ -199,6 +199,7 @@
         <activity
             android:name="de.blinkt.openvpn.activities.BindDeviceActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Light.NoTitleBar">
         </activity>
         <activity
