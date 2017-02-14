@@ -7,11 +7,11 @@ import android.text.TextUtils;
  * 十六进制与ASCII相互转换
  */
 public class RadixAsciiChange {
-
+    //十六进制转化为ASCII
     public static String convertHexToString(String hex) {
-if(TextUtils.isEmpty(hex)){
-	return "";
-}
+        if(TextUtils.isEmpty(hex)){
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         StringBuilder temp = new StringBuilder();
         for (int i = 0; i < hex.length() - 1; i += 2) {
@@ -23,11 +23,11 @@ if(TextUtils.isEmpty(hex)){
         return sb.toString();
     }
 
-
+    //ASCII转化为16进制
     public static String convertStringToHex(String str){
-		if(TextUtils.isEmpty(str)){
-			return "";
-		}
+        if(TextUtils.isEmpty(str)){
+            return "";
+        }
         char[] chars = str.toCharArray();
         StringBuffer hex = new StringBuffer();
         for(int i = 0; i < chars.length; i++){

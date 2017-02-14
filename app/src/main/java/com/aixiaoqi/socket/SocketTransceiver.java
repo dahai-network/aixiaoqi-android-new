@@ -64,10 +64,6 @@ public abstract class SocketTransceiver implements Runnable {
 		try {
 			if (socket != null) {
 				socket.shutdownInput();
-				if (in != null)
-					in.close();
-				if (out != null)
-					out.close();
 			}
 
 		} catch (Exception e) {
@@ -84,18 +80,21 @@ public abstract class SocketTransceiver implements Runnable {
 	public boolean send(String s) {
 
 		try {
+			Log.e("toBLue", "发送字符串out1=" + (out != null));
 			if (out == null)
 				out = new DataOutputStream(this.socket.getOutputStream());
+			Log.e("toBLue", "发送字符串out2=" + (out != null));
 		} catch (IOException e) {
 			e.printStackTrace();
+			Log.e("toBLue", "发送字符串IOException=" + e.getMessage());
 			runFlag = false;
 			this.onDisconnect(addr);
 			return false;
 		}
-		Log.i("toBLue", "发送字符串out=" + (out != null));
+		Log.e("toBLue", "发送字符串out3=" + (out != null));
 		if (out != null) {
 			try {
-				Log.i("toBLue", "发送字符串");
+				Log.e("toBLue", "发送字符串");
 				out.write(HexStringExchangeBytesUtil.hexStringToBytes(s));
 				out.flush();
 				return true;
@@ -115,11 +114,11 @@ public abstract class SocketTransceiver implements Runnable {
 		byte[] byteBuffer = new byte[1024];
 		try {
 			in = new DataInputStream(this.socket.getInputStream());
-			Log.i("toBLue", "socket接收数据初始化");
+			Log.e("toBLue", "socket接收数据初始化");
 		} catch (IOException e) {
 			e.printStackTrace();
 			runFlag = false;
-			Log.i("toBLue", "Socket 断开");
+			Log.e("toBLue", "Socket 断开");
 		}
 		while (runFlag) {
 			try {
@@ -148,6 +147,7 @@ public abstract class SocketTransceiver implements Runnable {
 				socket.close();
 				socket = null;
 			}
+			Log.e("toBLue", "socket接收数据初始化=" + (socket != null));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {

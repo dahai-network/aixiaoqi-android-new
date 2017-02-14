@@ -83,7 +83,7 @@ public class SdkAndBluetoothDataInchange {
 	private void notifyRegisterFail() {
 		registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
 	}
-
+	private boolean isWholeDataPackage=false;
 	long getSendBlueToothTime;
 	private int countMessage = 0;
 	private int notCanReceiveBluetoothDataCount = 0;
@@ -101,77 +101,90 @@ public class SdkAndBluetoothDataInchange {
 			}
 
 
-		if (percentEntity == null) {
-			percentEntity = new PercentEntity();
-		}
-		int percent = Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag()) ? "-1" : mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length() - 4, mReceiveDataframSocketService.getSorcketTag().length() - 1));
-		percentEntity.setPercent(percent);
-		EventBus.getDefault().post(percentEntity);
-		lastTime = 0;
-		count = 0;
-		notCanReceiveBluetoothDataCount=0;
-		if (messages == null) {
-			messages = new ArrayList<>();
-		}
-		messages.add(temp);
-		if (txValue[3] == txValue[4]) {
-			if(messages.size()<txValue[4]){
-				sendToBluetoothAboutCardInfo(finalTemp);
+			if (percentEntity == null) {
+				percentEntity = new PercentEntity();
+			}
+			int percent = Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag()) ? "-1" : mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length() - 4, mReceiveDataframSocketService.getSorcketTag().length() - 1));
+			percentEntity.setPercent(percent);
+			EventBus.getDefault().post(percentEntity);
+			lastTime = 0;
+			count = 0;
+			notCanReceiveBluetoothDataCount=0;
+			if (messages == null) {
+				messages = new ArrayList<>();
+			}
+			messages.add(temp);
+			Log.e(TAG, "txValue[3]:" + txValue[3] + "\ntxValue[4]:" + txValue[4]+"\ntxValue[3] == txValue[4]"+(txValue[3] == txValue[4]));
+			if(messages.size()<txValue[3]){
+				if(txValue[3] == txValue[4]){
+					isWholeDataPackage=true;
+				}
 				return;
 			}
-			sortMessage();
-			mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
+			if (isWholeDataPackage||txValue[3] == txValue[4]) {
+				isWholeDataPackage=false;
+				Log.e(TAG, "messages:" + messages.size() );
+				if(messages.size()<txValue[3]){
+					sendToBluetoothAboutCardInfo(finalTemp);
+					return;
+				}
+				sortMessage();
+				mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
 
-			// 接收到一个完整的数据包,发送到SDK
-			int length = (txValue[2] & 0xff);
-			if (messages.size() >= 19 && length < 252) {
-				length += 255;
-			}
-			String sendToOnService = null;
-			Log.e(TAG, "从蓝牙发出的完整数据 mStrSimPowerOnPacket:" + mStrSimPowerOnPacket.length() + "; \n"
-					+ mStrSimPowerOnPacket + "\nlength=" + length);
-			if (mStrSimPowerOnPacket.length() >= length) {
-				try {
-					sendToOnService = mStrSimPowerOnPacket.substring(0, length * 2);
-				} catch (StringIndexOutOfBoundsException e) {
-					Log.e(TAG, "catch socketTag:" + socketTag + "; \n"
+				// 接收到一个完整的数据包,发送到SDK
+				int length = (txValue[2] & 0xff);
+				if (messages.size() >= 19 && length < 252) {
+					length += 255;
+				}
+				String sendToOnService = null;
+				Log.e(TAG, "从蓝牙发出的完整数据 mStrSimPowerOnPacket:" + mStrSimPowerOnPacket.length() + "; \n"
+						+ mStrSimPowerOnPacket + "\nlength=" + length);
+				if (mStrSimPowerOnPacket.length() >= length) {
+					try {
+						sendToOnService = mStrSimPowerOnPacket.substring(0, length * 2);
+					} catch (StringIndexOutOfBoundsException e) {
+						Log.e(TAG, "catch socketTag:" + socketTag + "; \n"
+								+ sendToOneServerTemp);
+						sendToBluetoothAboutCardInfo(finalTemp);
+						return;
+					}
+				} else {
+					Log.e(TAG, "catch else:" + socketTag + "; \n"
 							+ sendToOneServerTemp);
 					sendToBluetoothAboutCardInfo(finalTemp);
 					return;
 				}
-			} else {
-				Log.e(TAG, "catch else:" + socketTag + "; \n"
+				socketTag = mReceiveDataframSocketService.getSorcketTag();
+				sendToOneServerTemp = sendToOnService;
+				Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
 						+ sendToOneServerTemp);
-				sendToBluetoothAboutCardInfo(finalTemp);
-				return;
+
+				sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
+
 			}
-			socketTag = mReceiveDataframSocketService.getSorcketTag();
-			sendToOneServerTemp = sendToOnService;
-			Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
-					+ sendToOneServerTemp);
-
-			sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
-
-		}
 		}
 	}
 
 	private void sortMessage() {
 		if(messages.size()>1){
-            ArrayList<String> messagesList=new ArrayList<>();
-            int z=0;
-            for(int i=0;i<messages.size();i++){
-                for(int j=i+1;j<messages.size();j++){
-                    if(Byte.parseByte(messages.get(j).substring(6,8))==i+1){
-                        z=j;
-                        break;
-                    }
-                }
-                messagesList.add(messages.get(z));
-            }
-            messages.clear();
-            messages=messagesList;
-        }
+			ArrayList<String> messagesList=new ArrayList<>();
+			int z=0;
+			for(int i=0;i<messages.size();i++){
+				for(int j=0;j<messages.size();j++){
+					if(Integer.parseInt(messages.get(j).substring(8,10),16)==i+1){
+						z=j;
+						break;
+					}
+				}
+				messagesList.add(messages.get(z));
+			}
+			messages.clear();
+			messages=messagesList;
+			for(int i=0;i<messages.size();i++){
+				Log.e("messages","messages="+messages.get(i));
+			}
+			Log.e("messages","===========================");
+		}
 	}
 
 	PercentEntity percentEntity;
@@ -223,6 +236,13 @@ public class SdkAndBluetoothDataInchange {
 				byte[] value = HexStringExchangeBytesUtil.hexStringToBytes(temp);
 				mService.writeRXCharacteristic(value);
 			}
+		}
+	}
+
+	public  void closeReceviceBlueData(){
+		if(timerMessage!=null){
+			timerMessage.cancel();
+			timerMessage=null;
 		}
 	}
 }

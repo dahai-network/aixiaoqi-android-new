@@ -75,7 +75,6 @@ public class TlvAnalyticalUtils {
 			builderMessagePackage(hexString);
 		}
 	}
-
 	private static List<TlvEntity> builderTlvList(String orData, String hexString, int tag) {
 		int position = 0;
 		String tempTag = "";

@@ -81,6 +81,7 @@ public abstract class TcpClient implements Runnable {
 
 			@Override
 			public void onReceive(InetAddress addr, byte[] s, int length) {
+
 				TcpClient.this.onReceive(this,s,length);
 			}
 
