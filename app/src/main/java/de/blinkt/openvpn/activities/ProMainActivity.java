@@ -797,7 +797,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (txValue[3] == (byte) 0x03) {
 						}
 					} else if (txValue[1] == (byte) 0x33) {
-						if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(1000)) {
+						if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
 							//当有通话套餐的时候才允许注册操作
 							IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 							new Thread(http).start();

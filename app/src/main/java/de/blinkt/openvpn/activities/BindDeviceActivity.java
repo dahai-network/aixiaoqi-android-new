@@ -38,6 +38,7 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
+import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
@@ -214,6 +215,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				utils.writeString(Constant.IMEI, deviceAddress);
+				ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
+				entity.setStatus(getString(R.string.index_registing));
+				entity.setStatusDrawableInt(R.drawable.index_no_signal);
+				EventBus.getDefault().post(entity);
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
