@@ -597,7 +597,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
 					new Thread(http).start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
-
 				} else {
 					//TODO 没有通知到设备界面
 					//如果是没有套餐，则通知我的设备界面更新状态并且停止转动
@@ -785,6 +784,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+				Log.i(TAG,"被主动断掉连接！");
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 				final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);

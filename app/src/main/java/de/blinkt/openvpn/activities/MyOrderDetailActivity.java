@@ -28,7 +28,6 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
@@ -113,6 +112,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 	private boolean isCreateView = false;
 	private UartService mService = ICSOpenVPNApplication.uartService;
 	private DialogBalance cardRuleBreakDialog;
+	private boolean isActivateSuccess = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -237,6 +237,8 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 					//友盟方法统计
 					MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
 					CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活失败！请检查你的SIM卡是否是爱小器SIM卡");
+				} else {
+					isActivateSuccess = true;
 				}
 				GetOrderByIdHttp http = new GetOrderByIdHttp(MyOrderDetailActivity.this, HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID, getIntent().getStringExtra("id"));
 				new Thread(http).start();
@@ -255,7 +257,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 		String[] messages = PacketeUtil.Separate(message);
 		int length = messages.length;
 		for (int i = 0; i < length; i++) {
-			if(!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])){
+			if (!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])) {
 				CommonTools.showShortToast(MyOrderDetailActivity.this, "设备已断开，请重新连接");
 				dismissProgress();
 			}
@@ -341,6 +343,25 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 					IS_TEXT_SIM = false;
 					orderStatus = 4;
 					showProgress("正在激活");
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(20000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							if (!isActivateSuccess) {
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										dismissProgress();
+										CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
+									}
+								});
+							}
+						}
+					}).start();
 					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 					orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
 				}

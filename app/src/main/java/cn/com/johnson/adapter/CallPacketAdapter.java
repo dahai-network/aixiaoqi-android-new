@@ -68,8 +68,6 @@ public class CallPacketAdapter extends RecyclerView.Adapter<CallPacketAdapter.Vi
 		return data != null ? data.size() : 0;
 	}
 
-
-
 	class ViewHolder extends RecyclerView.ViewHolder {
 		@BindView(R.id.nameTextView)
 		TextView nameTextView;

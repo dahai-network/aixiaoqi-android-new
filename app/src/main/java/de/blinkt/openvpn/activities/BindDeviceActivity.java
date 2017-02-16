@@ -216,9 +216,11 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 				Log.i("test", "保存设备名成功");
 				utils.writeString(Constant.IMEI, deviceAddress);
 				ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-				entity.setStatus(getString(R.string.index_registing));
-				entity.setStatusDrawableInt(R.drawable.index_no_signal);
-				EventBus.getDefault().post(entity);
+				if (!utils.readBoolean(Constant.ISHAVEORDER, true)) {
+					entity.setStatus(getString(R.string.index_no_packet));
+					entity.setStatusDrawableInt(R.drawable.index_no_packet);
+					EventBus.getDefault().post(entity);
+				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}

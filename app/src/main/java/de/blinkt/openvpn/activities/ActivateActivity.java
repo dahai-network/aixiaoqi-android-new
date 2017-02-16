@@ -7,19 +7,18 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
+import java.util.TimerTask;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
@@ -38,7 +37,6 @@ import de.blinkt.openvpn.views.dialog.DialogYearMonthDayPicker;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
-import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVEPACKAGE;
 
@@ -53,6 +51,21 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	TextView sureTextView;
 	private String orderId;
 	private UartService mService = ICSOpenVPNApplication.uartService;
+	private boolean isActivateSuccess = false;
+	private TimerTask task = new TimerTask() {
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(20000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (isActivateSuccess) {
+				dismissProgress();
+				CommonTools.showShortToast(ActivateActivity.this, getString(R.string.activate_fail));
+			}
+		}
+	};
 
 	public static void launch(Context context) {
 		Intent intent = new Intent(context, ActivateActivity.class);
@@ -131,6 +144,8 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 					//友盟方法统计
 					MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
 					CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活失败，请重试!");
+				}else{
+					isActivateSuccess = true;
 				}
 				dismissProgress();
 				finish();
@@ -214,6 +229,25 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				IS_TEXT_SIM = false;
 				ReceiveBLEMoveReceiver.orderStatus = 4;
 				showProgress("正在激活");
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(20000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						if (!isActivateSuccess) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									dismissProgress();
+									CommonTools.showShortToast(ActivateActivity.this, getString(R.string.activate_fail));
+								}
+							});
+						}
+					}
+				}).start();
 				SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
 				orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
 			} else {
@@ -234,12 +268,11 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 		String[] messages = PacketeUtil.Separate(message);
 		int length = messages.length;
 		for (int i = 0; i < length; i++) {
-			if(!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])){
+			if (!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])) {
 				dismissProgress();
 			}
 		}
 	}
-
 
 
 	private void showDialog() {

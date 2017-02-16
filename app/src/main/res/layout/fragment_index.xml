@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
     >
 
     <de.blinkt.openvpn.views.TitleBar
@@ -16,8 +16,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/gray_back"
-        android:scrollbars="none"
-        android:scrollY="@dimen/padding_50dp">
+        android:fillViewport="true"
+        android:scrollY="@dimen/padding_50dp"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/scrollLinearlayout"
@@ -36,50 +37,52 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white">
+
                 <TextView
                     android:id="@+id/inlandTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_horizontal"
-                    android:drawableTop="@drawable/index_inland_save"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/index_inland_save"
+                    android:gravity="center_horizontal"
                     android:text="@string/inland_set"
                     android:textSize="14sp"/>
+
                 <TextView
                     android:id="@+id/foreignTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_horizontal"
-                    android:drawableTop="@drawable/index_internetional_save"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/index_internetional_save"
+                    android:gravity="center_horizontal"
                     android:text="@string/foreign_set"
                     android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/DSDSTextView"
-                    android:drawableTop="@drawable/index_tutorial"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_horizontal"
                     android:layout_marginBottom="8dp"
-                    android:visibility="gone"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/index_tutorial"
+                    android:gravity="center_horizontal"
                     android:text="@string/DSDS"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/callPacketTextView"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:drawableTop="@drawable/index_call_packet"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/index_call_packet"
                     android:gravity="center_horizontal"
                     android:text="@string/communication_packet"
                     android:textSize="14sp"/>
@@ -288,16 +291,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:paddingTop="8dp"
                     android:paddingRight="7.5dp"
+                    android:paddingTop="8dp"
                     android:text="@string/more"
                     android:textSize="14sp"
                     />
 
 
-
-
             </RelativeLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/boughtPackgeRecyclerView"
                 android:layout_width="match_parent"
@@ -310,7 +312,6 @@
                 android:layout_marginTop="4.5dp"
                 android:background="@color/white"
                 >
-
 
 
                 <TextView
@@ -326,16 +327,17 @@
                     android:id="@+id/hotMessageMoreTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
                     android:layout_alignParentRight="true"
-                    android:text="@string/more"
                     android:paddingRight="7.5dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/more"
                     android:textSize="14sp"
                     />
+
                 <View
-                    android:layout_marginTop="@dimen/padding"
-                    android:layout_below="@id/hotMessageMoreTextView"
                     style="@style/horizontal_line_view"
+                    android:layout_below="@id/hotMessageMoreTextView"
+                    android:layout_marginTop="@dimen/padding"
                     />
             </RelativeLayout>
         </LinearLayout>

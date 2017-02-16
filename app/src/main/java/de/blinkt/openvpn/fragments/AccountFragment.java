@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +30,6 @@ import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
 import de.blinkt.openvpn.activities.SettingActivity;
 import de.blinkt.openvpn.activities.TipUserOptionActivity;
-import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -234,7 +231,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				} else if (getString(R.string.index_high_signal).equals(getBleStatus())) {
 					status = R.string.index_high_signal;
 				}
-				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, status);
+				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
 				break;
 			case R.id.tv_setting:
 				//友盟方法统计

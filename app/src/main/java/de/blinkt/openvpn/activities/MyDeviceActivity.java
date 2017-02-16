@@ -926,14 +926,17 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_unbind))) {
 			percentTextView.setText("");
 		} else if (conStatus.equals(getString(R.string.index_no_packet))) {
+			stopAnim();
 			percentTextView.setText("");
 			registerSimStatu.setVisibility(GONE);
 		} else if (conStatus.equals(getString(R.string.index_un_insert_card))) {
 			percentTextView.setText("");
 		} else if (conStatus.equals(getString(R.string.index_high_signal))) {
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
+			percentTextView.setText("");
 		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
 			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
 		}
 	}
 

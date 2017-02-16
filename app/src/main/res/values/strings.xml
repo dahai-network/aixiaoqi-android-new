@@ -555,4 +555,5 @@
     <string name="regist_fail_card_operators">注册卡失败，不是三大运营商的SIM卡</string>
     <string name="regist_fail_tips">注册失败，请重试</string>
     <string name="check_net_work_reconnect">请检查网络是否正常，并重试</string>
+    <string name="activate_fail">激活失败，请重试</string>
 </resources>

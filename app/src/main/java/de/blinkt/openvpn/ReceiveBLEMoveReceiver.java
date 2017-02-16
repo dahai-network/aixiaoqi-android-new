@@ -441,6 +441,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						}
 					}
 				} else {
+					if (mStrSimCmdPacket.startsWith("9000")) {
+						//新型写卡完成
+						handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
+						SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
+						isGetnullCardid = false;
+						nullCardId = null;
+						return;
+					}
 					registFlowPath();
 				}
 				break;

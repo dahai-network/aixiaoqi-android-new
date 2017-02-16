@@ -74,6 +74,7 @@ import static de.blinkt.openvpn.fragments.SportFragment.REFRESHSTEP;
 
 public class IndexFragment extends Fragment implements View.OnClickListener, ScrollViewPager.OnImageItemClickListener, InterfaceCallback {
 
+	private String TAG = "IndexFragment";
 	private TextView inlandTextView;
 
 	private TextView foreignTextView;
@@ -102,6 +103,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	private TextView totalKmTextView;
 	private TextView totalDayTextView;
 	private TextView totalKalTextView;
+	private View view;
 	private TitleBar title;
 
 
@@ -114,13 +116,24 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		params.width = width;
 		params.height = scrollViewPagerLayout.getHeight();
 		images_layout.setLayoutParams(params);
-		viewPager = new ScrollViewPager(getActivity());
-		initImageRounds();
-		viewPager.setImages(pageViews);
-		viewPager.setAdapter(new PictureAdapter(pageViews));
-		viewPager.setCurrentItem(Integer.MAX_VALUE / 2);
-		images_layout.addView(viewPager);
-		viewPager.setOnImageItemClickListener(this);
+		if (pageViews.size() == 1) {
+			pageViews.get(0).setLayoutParams(params);
+			images_layout.addView(pageViews.get(0));
+			images_layout.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					WebViewActivity.launch(getActivity(), bannerData.get(0).getUrl(), bannerData.get(0).getTitle());
+				}
+			});
+		} else {
+			viewPager = new ScrollViewPager(getActivity());
+			initImageRounds();
+			viewPager.setImages(pageViews);
+			viewPager.setAdapter(new PictureAdapter(pageViews));
+			viewPager.setCurrentItem(Integer.MAX_VALUE / 2);
+			images_layout.addView(viewPager);
+			viewPager.setOnImageItemClickListener(this);
+		}
 		scrollViewPagerLayout.addView(headerView);
 	}
 
@@ -141,6 +154,10 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			dots_layout.setVisibility(View.INVISIBLE);
 		}
 		int size = pageViews.size();
+		//如果出现两张图，会出现异常，所以先复制成4张图，再将点改成两个
+		if (bannerData.size() == 2) {
+			size /= 2;
+		}
 		for (int i = 0; i < size; i++) {
 			ImageView round = new ImageView(getActivity());
 			/**
@@ -175,7 +192,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View view = inflater.inflate(R.layout.fragment_index, container, false);
+		view = inflater.inflate(R.layout.fragment_index, container, false);
 		ButterKnife.bind(this, view);
 		findById(view);
 		return view;
@@ -348,6 +365,10 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 
 	@Override
 	public void onItemClick(int itemPosition) {
+		//如果出现itemPosition大于当前数据就意味着有2张图片*2，所以要减去2
+		if (itemPosition >= bannerData.size()) {
+			itemPosition %= 2;
+		}
 		String urlStr = bannerData.get(itemPosition).getUrl();
 		if (!TextUtils.isEmpty(urlStr)) {
 			//友盟方法统计
@@ -362,12 +383,14 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			BannerHttp http = (BannerHttp) object;
 			bannerData = http.getBannerList();
 			int size = bannerData.size();
-			for (int i = 0; i < size; i++) {
-				ImageView imageView = new ImageView(getActivity());
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				manager.load(bannerData.get(i).getImage()).into(imageView);
-				pageViews.add(imageView);
+			if (bannerData.size() == 2) {
+				for (int j = 0; j < 2; j++) {
+					addPageViews(size);
+				}
+			} else {
+				addPageViews(size);
 			}
+
 			addHeader();
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_ORDER) {
 			BoughtPacketHttp http = (BoughtPacketHttp) object;
@@ -418,6 +441,16 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		}
 	}
 
+	private void addPageViews(int size) {
+		for (int i = 0; i < size; i++) {
+			ImageView imageView = new ImageView(getActivity());
+			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+			manager.load(bannerData.get(i).getImage()).into(imageView);
+			Log.i(TAG, "首页图片：" + bannerData.get(i).getImage());
+			pageViews.add(imageView);
+		}
+	}
+
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 
@@ -456,7 +489,8 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		//当页面跳出的时候停止轮播
 		if (viewPager != null) {
 			if (isVisibleToUser) {
-				viewPager.openLoop();
+				if (pageViews.size() > 1)
+					viewPager.openLoop();
 			} else {
 				viewPager.stopLoop();
 			}
@@ -465,6 +499,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 
 	//修改蓝牙状态
 	public void changeBluetoothStatus(String leftText, int leftIconId) {
+		if(title == null) title = (TitleBar) view.findViewById(R.id.title);
 		if (leftText != null && leftIconId != 0 && title != null) {
 			Log.e("changeBluetoothStatus", "title=" + (title == null) + "\nleftText=" + leftText + "\nleftIconId=" + leftIconId);
 			title.setLeftIvIconAndText(leftIconId, leftText);
@@ -472,6 +507,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	}
 
 	public void changeBluetoothStatus(String leftText) {
+		if(title == null) title = (TitleBar) view.findViewById(R.id.title);
 		if (leftText != null && title != null) {
 			Log.e("changeBluetoothStatus", "title=" + (title == null) + "\nleftText=" + leftText);
 			title.setLeftBtnText(leftText);
