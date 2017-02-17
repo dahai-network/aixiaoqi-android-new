@@ -48,7 +48,7 @@ public class JNIUtil {
 	 * @param reconnectType 0,默认为0，表示正常情况。1表示蓝牙断开,2接收不到蓝牙数据。3表示Tcp断开
 	 */
 	public static void startSDK(int reconnectType) {
-		if (!IS_TEXT_SIM) return;
+//		if (!IS_TEXT_SIM) return;
 
 		Log.e("Blue_Chanl", "启动startSDK - REGISTER_STATUE_CODE=" + SocketConstant.REGISTER_STATUE_CODE);
 		String phoneNumber = SharedUtils.getInstance().readString(Constant.USER_NAME);

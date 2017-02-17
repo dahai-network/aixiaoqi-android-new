@@ -1,6 +1,10 @@
 package de.blinkt.openvpn.bluetooth.util;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+
+import de.blinkt.openvpn.constant.Constant;
 
 /**
  * 用于分包组包（包信息去除不要，并把有效数据放在一个大包里面。）
@@ -50,6 +54,32 @@ public class PacketeUtil {
 		return packets;
 
 	}
+	public static String[] Separate(String message,String type) {
+		String[] packets;
+		if(message.length()/2<=15){
+			packets=new String[1];
+			packets[0]= "88800"+Integer.parseInt((message.length()/2+2)+"",16)+type+message;
+
+		}else{
+			int totalNum=((message.length()-15*2)%(2*17)!=0?((message.length()-15*2)/(17*2)+1):(message.length()-15*2)/(17*2))+1;
+			Log.e("PacketeUtil","totalNum="+totalNum);
+			packets=new String[totalNum];
+			for(int i=0;i<totalNum;i++){
+				if(i==0){
+					packets[i]= "880011"+type+message.substring(0,15*2);
+				}
+				else if(i==totalNum-1){
+					packets[i]= String.format("88%02X%02X",0x80+i ,(message.length()-(15*2+17*2*(i-1)))/2)+message.substring(15*2+17*2*(i-1),message.length());
+				}else{
+					packets[i]= String.format("88%02X%02X", i,17)+message.substring(15*2,15*2+17*2*i);
+				}
+				Log.e("PacketeUtil","packets["+i+"]="+packets[i]);
+			}
+
+		}
+
+		return packets;
+	}
 
 	//组包
 	public static String Combination(ArrayList<String> message) {
@@ -57,7 +87,12 @@ public class PacketeUtil {
 		StringBuilder builder = new StringBuilder();
 		int size = message.size();
 		for (int i = 0; i < size; i++) {
-			String eachCombindMessage = message.get(i).substring(10, message.get(i).length());
+			String eachCombindMessage;
+			if((Integer.parseInt(message.get(i).substring(2,4),16)&127)==0){
+				eachCombindMessage = message.get(i).substring(10, message.get(i).length());
+			}else{
+				eachCombindMessage = message.get(i).substring(6, message.get(i).length());
+			}
 			builder.append(eachCombindMessage);
 		}
 		return builder.toString();

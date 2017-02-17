@@ -77,7 +77,7 @@ public class CommonTools {
 		return statusBarHeight;
 	}
 
-	private static long lastClickTime;
+	public static long lastClickTime;
 
 	public static boolean isFastDoubleClick(int maxTime) {
 		long time = System.currentTimeMillis();

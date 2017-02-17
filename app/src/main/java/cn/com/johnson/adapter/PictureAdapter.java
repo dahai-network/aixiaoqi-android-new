@@ -52,8 +52,7 @@ public class PictureAdapter extends PagerAdapter {
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 		if (images.size() <= 1) {
-			container.removeAllViews();
-			ImageView imageView = images.get(0);
+			ImageView imageView = images.get(position);
 			removeChildView(imageView);
 			container.addView(imageView);
 			return imageView;

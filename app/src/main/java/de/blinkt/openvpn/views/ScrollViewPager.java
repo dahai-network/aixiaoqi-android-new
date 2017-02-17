@@ -94,7 +94,6 @@ public class ScrollViewPager extends ViewPager {
 
         @Override
         public void onPageSelected(int position) {
-
             /**
              * 改变小圆点的状态
              * 三种情况:
@@ -228,10 +227,12 @@ public class ScrollViewPager extends ViewPager {
                             isScollStop=true;
                         }
                         if (!stopLoopTag) {
+
                             Message message = Message.obtain();
                             message.what = 10;
                             message.arg1 = getCurrentItem() + 1;
                             mHandler.sendMessage(message);
+
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();

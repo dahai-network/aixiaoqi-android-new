@@ -123,6 +123,10 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 	private void callPhone() {
 		ContactRecodeEntity info = (ContactRecodeEntity) getIntent().getSerializableExtra(IntentPutKeyConstant.DATA_CALLINFO);
+		if(TextUtils.isEmpty(info.getPhoneNumber())){
+			CommonTools.showShortToast(this, "电话号码不能为空");
+			return;
+		}
 		if (info.getPhoneNumber().startsWith("sip:")) {
 			ICSOpenVPNApplication.the_sipengineReceive.MakeUrlCall(info.getPhoneNumber());
 		} else if(cellPhoneType==Constant.NETWORK_CELL_PHONE){

@@ -322,7 +322,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 	private void setAlias() {
 		SharedUtils sharedUtils = SharedUtils.getInstance();
-		String alias = "aixiaoqi" + sharedUtils.readString(Constant.USER_NAME);
+		String alias = "aixiaoqi" + sharedUtils.readString(Constant.TOKEN);
 		handler.sendMessage(handler.obtainMessage(MSG_SET_ALIAS, alias));
 	}
 

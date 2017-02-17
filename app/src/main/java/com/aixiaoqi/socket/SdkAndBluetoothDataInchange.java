@@ -69,12 +69,8 @@ public class SdkAndBluetoothDataInchange {
 				}else if(notCanReceiveBluetoothDataCount>=3){
 					Log.e("timer", "注册失败");
 					notifyRegisterFail();
-					if(timerMessage!=null){
-						timerMessage.cancel();
-						timerMessage=null;
-					}
+					clearTimer();
 					notCanReceiveBluetoothDataCount=0;
-					countMessage=0;
 				}
 			}
 		}
@@ -83,22 +79,24 @@ public class SdkAndBluetoothDataInchange {
 	private void notifyRegisterFail() {
 		registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
 	}
-	private boolean isWholeDataPackage=false;
+	private boolean isWholeDataPackage=false;//怕最后一个包搞混了
 	long getSendBlueToothTime;
 	private int countMessage = 0;
 	private int notCanReceiveBluetoothDataCount = 0;
+	private String finalTemp;//保存上一次发给蓝牙的数据，以免出错，需要重发
+	private boolean isReceiveBluetoothData = true;//判断5s内是否接收完成，没有完成则重新发送
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
-		isReceiveBluetoothData = true;
-		synchronized (this){
-			if (countMessage ==0) {
-				Log.e("timer", "开启定时器");
-				countMessage++;
-				if(timerMessage==null){
-					timerMessage= new Timer();
-				}
-				timerMessage.schedule(timerTaskMessage, 5000, 5000);
 
-			}
+		synchronized (this){
+//			if (countMessage ==0) {
+//				Log.e("timer", "开启定时器");
+//				countMessage++;
+//				if(timerMessage==null){
+//					timerMessage= new Timer();
+//				}
+//				timerMessage.schedule(timerTaskMessage, 5000, 5000);
+//
+//			}
 
 
 			if (percentEntity == null) {
@@ -114,17 +112,21 @@ public class SdkAndBluetoothDataInchange {
 				messages = new ArrayList<>();
 			}
 			messages.add(temp);
-			Log.e(TAG, "txValue[3]:" + txValue[3] + "\ntxValue[4]:" + txValue[4]+"\ntxValue[3] == txValue[4]"+(txValue[3] == txValue[4]));
-			if(messages.size()<txValue[3]){
-				if(txValue[3] == txValue[4]){
+			int lengthData=(txValue[1]&0x7f)+1;
+			int dataStatue=txValue[1]&0x80;
+			if(messages.size()<lengthData){
+				if(dataStatue== 0x80){
 					isWholeDataPackage=true;
 				}
 				return;
 			}
-			if (isWholeDataPackage||txValue[3] == txValue[4]) {
+
+			if (isWholeDataPackage||dataStatue==0x80) {
+
+				isReceiveBluetoothData = true;
 				isWholeDataPackage=false;
 				Log.e(TAG, "messages:" + messages.size() );
-				if(messages.size()<txValue[3]){
+				if(messages.size()<lengthData){
 					sendToBluetoothAboutCardInfo(finalTemp);
 					return;
 				}
@@ -132,34 +134,34 @@ public class SdkAndBluetoothDataInchange {
 				mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
 
 				// 接收到一个完整的数据包,发送到SDK
-				int length = (txValue[2] & 0xff);
-				if (messages.size() >= 19 && length < 252) {
-					length += 255;
-				}
-				String sendToOnService = null;
-				Log.e(TAG, "从蓝牙发出的完整数据 mStrSimPowerOnPacket:" + mStrSimPowerOnPacket.length() + "; \n"
-						+ mStrSimPowerOnPacket + "\nlength=" + length);
-				if (mStrSimPowerOnPacket.length() >= length) {
-					try {
-						sendToOnService = mStrSimPowerOnPacket.substring(0, length * 2);
-					} catch (StringIndexOutOfBoundsException e) {
-						Log.e(TAG, "catch socketTag:" + socketTag + "; \n"
-								+ sendToOneServerTemp);
-						sendToBluetoothAboutCardInfo(finalTemp);
-						return;
-					}
-				} else {
-					Log.e(TAG, "catch else:" + socketTag + "; \n"
-							+ sendToOneServerTemp);
-					sendToBluetoothAboutCardInfo(finalTemp);
-					return;
-				}
+//				int length = (txValue[2] & 0xff);
+//				if (messages.size() >= 127 && length < 252) {
+//					length += 255;
+//				}
+//				String sendToOnService = null;
+//				Log.e(TAG, "从蓝牙发出的完整数据 mStrSimPowerOnPacket:" + mStrSimPowerOnPacket.length() + "; \n"
+//						+ mStrSimPowerOnPacket + "\nlength=" + length);
+//				if (mStrSimPowerOnPacket.length() >= length) {
+//					try {
+//						sendToOnService = mStrSimPowerOnPacket.substring(0, length * 2);
+//					} catch (StringIndexOutOfBoundsException e) {
+//						Log.e(TAG, "catch socketTag:" + socketTag + "; \n"
+//								+ sendToOneServerTemp);
+//						sendToBluetoothAboutCardInfo(finalTemp);
+//						return;
+//					}
+//				} else {
+//					Log.e(TAG, "catch else:" + socketTag + "; \n"
+//							+ sendToOneServerTemp);
+//					sendToBluetoothAboutCardInfo(finalTemp);
+//					return;
+//				}
 				socketTag = mReceiveDataframSocketService.getSorcketTag();
-				sendToOneServerTemp = sendToOnService;
+//				sendToOneServerTemp = sendToOnService;
 				Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
-						+ sendToOneServerTemp);
+						+ mStrSimPowerOnPacket);
 
-				sendToSDKAboutBluetoothInfo(socketTag + sendToOneServerTemp);
+				sendToSDKAboutBluetoothInfo(socketTag + mStrSimPowerOnPacket);
 
 			}
 		}
@@ -171,8 +173,10 @@ public class SdkAndBluetoothDataInchange {
 			int z=0;
 			for(int i=0;i<messages.size();i++){
 				for(int j=0;j<messages.size();j++){
-					if(Integer.parseInt(messages.get(j).substring(8,10),16)==i+1){
+					Log.e("messages","messages()"+(Integer.parseInt(messages.get(j).substring(2,4),16)&127)+"  i="+i);
+					if((Integer.parseInt(messages.get(j).substring(2,4),16)&127)==i){
 						z=j;
+						Log.e("messages","messagesz"+z);
 						break;
 					}
 				}
@@ -196,8 +200,7 @@ public class SdkAndBluetoothDataInchange {
 		messages.clear();
 	}
 
-	private String finalTemp;
-	private boolean isReceiveBluetoothData = true;
+
 
 	private void sendToBluetoothAboutCardInfo(String msg) {
 		if(TextUtils.isEmpty(msg)){
@@ -218,7 +221,8 @@ public class SdkAndBluetoothDataInchange {
 			Log.e(TAG, "&&& server temp:" + temp);
 			sendMessage(temp);
 		} else {
-			String[] messages = PacketeUtil.Separate(temp);
+			Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + temp);
+			String[] messages = PacketeUtil.Separate(temp,Constant.SIM_DATA);
 			for (int i = 0; i < messages.length; i++) {
 				Log.e(TAG, "&&& server  message: " + messages[i].toString());
 				sendMessage(messages[i]);
@@ -240,9 +244,18 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 	public  void closeReceviceBlueData(){
+		clearTimer();
+	}
+
+	private void clearTimer() {
 		if(timerMessage!=null){
 			timerMessage.cancel();
 			timerMessage=null;
 		}
+		if(timerTaskMessage!=null){
+			timerTaskMessage.cancel();
+			timerTaskMessage=null;
+		}
+		countMessage=0;
 	}
 }
