@@ -36,13 +36,10 @@ import de.blinkt.openvpn.http.HistoryStepHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.SportStepEntity;
-import de.blinkt.openvpn.service.UpdateStepService;
-import de.blinkt.openvpn.util.BLECheckBitUtil;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
-import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
-import static de.blinkt.openvpn.constant.Constant.FIND_VERSION;
+import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
@@ -82,7 +79,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	public static String nullCardId = null;
 	private int UPDATE_HISTORY_DATE = 1;
 	private int WRITE_CARD_COMPLETE = 2;
-	private String dataType ;//发出数据以后需要把dataType重置为-1；
+	private String dataType;//发出数据以后需要把dataType重置为-1；
 	private Handler handler = new Handler() {
 		@Override
 		public void dispatchMessage(Message msg) {
@@ -122,7 +119,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						Thread.sleep(500);
 						//android 标记，给蓝牙设备标记是否是android设备用的
 //						sendMessageToBlueTooth(ANDROID_TARGET);
-						SendCommandToBluetooth.sendMessageToBlueTooth(FIND_VERSION);
+						SendCommandToBluetooth.sendMessageToBlueTooth(BASIC_MESSAGE);
 
 //						sendMessageToBlueTooth("AABBCCDDEEFF");//绑定命令
 //						Thread.sleep(1000);
@@ -205,10 +202,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //						return;
 //
 //					}
-					int dataID = Integer.parseInt(messageFromBlueTooth.substring(2,4) + "", 16) &127;
-					Log.e("Blue_Chanl", "txValue[1]"+Integer.parseInt(messageFromBlueTooth.substring(2,4) + "", 16) +"dataID：" + dataID);
+					int dataID = Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) & 127;
+					Log.e("Blue_Chanl", "txValue[1]" + Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) + "dataID：" + dataID);
 					if (dataID == 0) {
-						dataType = messageFromBlueTooth.substring(6,10);
+						dataType = messageFromBlueTooth.substring(6, 10);
 					}
 //					else if(dataType==-1&&dataID!=0){
 //						//第一个包发过来的顺序错了，需要重新发送数据到蓝牙
@@ -327,7 +324,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										}
 //									}
 //									break;
-								case 0100 + "":
+								case "0100":
 //									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
@@ -640,11 +637,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		int second = calendar.get(Calendar.SECOND);
 
 
-		bleTime = "AA020A" + addZero(toHex(year)) + addZero(toHex(mouth)) + addZero(toHex(day))
-				+ addZero("" + week) + addZero(toHex(hour)) + addZero(toHex(minute)) + addZero(toHex(second));
-		byte[] check = HexStringExchangeBytesUtil.hexStringToBytes(bleTime);
-		String checkBleStr = HexStringExchangeBytesUtil.bytesToHexString(new byte[]{BLECheckBitUtil.getXor(check)});
-		bleTime += addZero(checkBleStr);
+		bleTime = "8880090500" + addZero(toHex(year)) + addZero(toHex(mouth)) + addZero(toHex(day))
+				+ addZero(toHex(hour)) + addZero(toHex(minute)) + addZero(toHex(second)) + addZero("" + week);
+//		byte[] check = HexStringExchangeBytesUtil.hexStringToBytes(bleTime);
+//		String checkBleStr = HexStringExchangeBytesUtil.bytesToHexString(new byte[]{BLECheckBitUtil.getXor(check)});
+//		bleTime += addZero(checkBleStr);
 		return bleTime;
 	}
 

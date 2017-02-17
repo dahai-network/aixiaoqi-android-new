@@ -63,11 +63,13 @@ public class Constant {
 	public static String UP_TO_POWER_USED_TO_SDK = "888003100003";//上电指令,返回BB998877BB，用于SDK使用的上下电命令
 	public static final String OFF_TO_POWER = "8880021100";//断电指令
 	public static final String REAL_TIME_STEPS = "AA010401AE ";//实时步数
-	public static final String HISTORICAL_STEPS = "AA030401AC";//历史步数
-	public static final String FIND_DEVICE = "AA060401A9";//查找手环
-	public static final String FIND_VERSION = "8880020600";//版本号
-//		public static final String FIND_VERSION = "AA0A0401A5";//版本号（以后的版本）
-	public static final String RESTORATION = "AA112233AA";//复位命令
+	public static final String HISTORICAL_STEPS = "8880020E00";//历史步数
+	public static final String FIND_DEVICE = "8880020C00";//查找手环
+	public static final String BASIC_MESSAGE = "8880020600";//基本信息获取
+	public static final String SKY_UPGRADE_ORDER = "8880030A0001";//基本信息获取
+	//		public static final String FIND_VERSION = "AA0A0401A5";//版本号（以后的版本）
+	public static final String RESTORATION = "8880020100";//复位命令
+
 	public static final String BIND_SUCCESS = "AADD01DDAA";//绑定成功命令
 	//		public static final String ANDROID_TARGET = "AA010400AF";//绑定成功命令
 	//ICCID标记
@@ -155,31 +157,27 @@ public class Constant {
 	public static final int REPEAT_OPERATE = 2500;
 
 
-
 	//蓝牙发送类型
 
-	public static final String SYSTEM_RESET="0100";//系统复位
+	public static final String SYSTEM_RESET = "0100";//系统复位
 
-	public static final String SEND_PHONE_SYSTEM_TO_BLUETOOTH="0200";//发送手机类型
-	public static final String USER_NOTIFY="0300";//是否使用通知
-	public static final String MESSAGE_PUSH="0400";//检测到有消息，消息推送
-	public static final String UPDATE_TIME="0500";//更新时间
-	public static final String SYSTEM_BASICE_INFO="0600";//系统基本信息请求
-	public static final String BIND_DEVICE="0700";//请求绑定
-	public static final String BIND_STATUE="0800";//是否绑定成功
-	public static final String UNBIND_DEVICE="0900";//解除绑定
-	public static final String SKY_UPGRADE="0a00";//空中升级
-	public static final String REQUEST_POWER="0b00";//请求电量
-	public static final String SEARCH_DEVICE="0c00";//查找手环
-	public static final String THE_HAND_FUNCTION ="0d00";//是否使用抬手功能
-	public static final String HISTORY_STEP="0e00";//历史步数
-	public static final String SETTING_ALARM="0f00";//设置闹钟
-	public static final String SIM_UP_POWER="1000";//对卡上电
-	public static final String SIM_DOWN_POWER="1100";//对卡断电
-	public static final String SIM_DATA="1200";//卡数据
-
-
-
+	public static final String SEND_PHONE_SYSTEM_TO_BLUETOOTH = "0200";//发送手机类型
+	public static final String USER_NOTIFY = "0300";//是否使用通知
+	public static final String MESSAGE_PUSH = "0400";//检测到有消息，消息推送
+	public static final String UPDATE_TIME = "0500";//更新时间
+	public static final String SYSTEM_BASICE_INFO = "0600";//系统基本信息请求
+	public static final String BIND_DEVICE = "0700";//请求绑定
+	public static final String BIND_STATUE = "0800";//是否绑定成功
+	public static final String UNBIND_DEVICE = "0900";//解除绑定
+	public static final String SKY_UPGRADE = "0a0001";//空中升级
+	public static final String REQUEST_POWER = "0b00";//请求电量
+	public static final String SEARCH_DEVICE = "0c00";//查找手环
+	public static final String THE_HAND_FUNCTION = "0d00";//是否使用抬手功能
+	public static final String HISTORY_STEP = "0e00";//历史步数
+	public static final String SETTING_ALARM = "0f00";//设置闹钟
+	public static final String SIM_UP_POWER = "1000";//对卡上电
+	public static final String SIM_DOWN_POWER = "1100";//对卡断电
+	public static final String SIM_DATA = "1200";//卡数据
 
 
 }
