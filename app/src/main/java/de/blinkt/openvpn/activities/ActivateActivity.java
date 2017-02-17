@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
-import java.util.TimerTask;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
@@ -52,20 +51,6 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	private String orderId;
 	private UartService mService = ICSOpenVPNApplication.uartService;
 	private boolean isActivateSuccess = false;
-	private TimerTask task = new TimerTask() {
-		@Override
-		public void run() {
-			try {
-				Thread.sleep(20000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (isActivateSuccess) {
-				dismissProgress();
-				CommonTools.showShortToast(ActivateActivity.this, getString(R.string.activate_fail));
-			}
-		}
-	};
 
 	public static void launch(Context context) {
 		Intent intent = new Intent(context, ActivateActivity.class);

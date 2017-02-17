@@ -333,7 +333,7 @@
     <!--激活界面-->
     <string name="activate_packet">激活套餐</string>
     <string name="connect_success">连接成功</string>
-    <string name="connect_failure">连接失败</string>
+    <string name="connect_failure">连接失败,请重试</string>
     <string name="activate_unconnected">未连接</string>
     <string name="activate_begin">开始激活</string>
     <string name="effective_date">生效日期</string>
@@ -556,4 +556,5 @@
     <string name="regist_fail_tips">注册失败，请重试</string>
     <string name="check_net_work_reconnect">请检查网络是否正常，并重试</string>
     <string name="activate_fail">激活失败，请重试</string>
+    <string name="error_to_restart_ble">注册失败，请重新连接</string>
 </resources>

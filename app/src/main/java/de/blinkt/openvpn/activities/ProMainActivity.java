@@ -182,7 +182,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 
-	private void initServices() {
+	public void initServices() {
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
 			Log.i(TAG, "开启UartService");
 			Intent bindIntent = new Intent(this, UartService.class);
@@ -678,6 +678,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				switch (entity.getFailType()) {
 					case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 						CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
+						break;
 					case SocketConstant.REGISTER_FAIL:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail));
 						break;

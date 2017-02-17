@@ -327,7 +327,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 								case (byte) 0xDB:
 								case (byte) 0xDA:
 									if (IS_TEXT_SIM) {
-										SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+										if (SocketConnection.sdkAndBluetoothDataInchange != null) {
+											SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+										} else {
+											Log.i(TAG,context.getString(R.string.error_to_restart_ble));
+//											CommonTools.showShortToast(context, context.getString(R.string.error_to_restart_ble));
+											ICSOpenVPNApplication.uartService.disconnect();
+										}
 									} else {
 										messages.add(messageFromBlueTooth);
 										if (txValue[3] == txValue[4]) {
@@ -441,7 +447,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						}
 					}
 				} else {
-					if (mStrSimCmdPacket.startsWith("9000")) {
+					if (mStrSimCmdPacket.startsWith("9000") && !CommonTools.isFastDoubleClick(1000)) {
 						//新型写卡完成
 						handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
 						SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
@@ -453,7 +459,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				}
 				break;
 			default:
-				if (mStrSimCmdPacket.startsWith("9000")) {
+				if (mStrSimCmdPacket.startsWith("9000") && !CommonTools.isFastDoubleClick(1000)) {
 					//新型写卡完成
 					handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
 					SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电

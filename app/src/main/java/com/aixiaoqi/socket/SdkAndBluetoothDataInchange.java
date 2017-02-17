@@ -14,7 +14,6 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 import de.blinkt.openvpn.util.CommonTools;
 
@@ -56,45 +55,46 @@ public class SdkAndBluetoothDataInchange {
 	private long lastTime;
 	private int count = 0;
 
-	Timer timerMessage ;
-	TimerTask timerTaskMessage = new TimerTask() {
-		@Override
-		public void run() {
-
-			if (SocketConstant.REGISTER_STATUE_CODE != 3) {
-				if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
-					Log.e("timer", "接收不到蓝牙数据");
-					JNIUtil.startSDK(2);
-					notCanReceiveBluetoothDataCount++;
-				}else if(notCanReceiveBluetoothDataCount>=3){
-					Log.e("timer", "注册失败");
-					notifyRegisterFail();
-					if(timerMessage!=null){
-						timerMessage.cancel();
-						timerMessage=null;
-					}
-					notCanReceiveBluetoothDataCount=0;
-					countMessage=0;
-				}
-			}
-		}
-	};
+	Timer timerMessage;
+	TimerTask timerTaskMessage;
 
 	private void notifyRegisterFail() {
-		registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
+		registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
 	}
-	private boolean isWholeDataPackage=false;
+
+	private boolean isWholeDataPackage = false;
 	long getSendBlueToothTime;
 	private int countMessage = 0;
 	private int notCanReceiveBluetoothDataCount = 0;
+
 	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
 		isReceiveBluetoothData = true;
-		synchronized (this){
-			if (countMessage ==0) {
+		synchronized (this) {
+			if (countMessage == 0) {
 				Log.e("timer", "开启定时器");
 				countMessage++;
-				if(timerMessage==null){
-					timerMessage= new Timer();
+				if (timerMessage == null) {
+					timerMessage = new Timer();
+				}
+				if (timerTaskMessage == null) {
+					timerTaskMessage = new TimerTask() {
+						@Override
+						public void run() {
+
+							if (SocketConstant.REGISTER_STATUE_CODE != 3) {
+								if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData && notCanReceiveBluetoothDataCount < 3) {
+									Log.e("timer", "接收不到蓝牙数据");
+									JNIUtil.startSDK(2);
+									notCanReceiveBluetoothDataCount++;
+								} else if (notCanReceiveBluetoothDataCount >= 3) {
+									Log.e("timer", "注册失败");
+									notifyRegisterFail();
+									clearTimer();
+
+								}
+							}
+						}
+					};
 				}
 				timerMessage.schedule(timerTaskMessage, 5000, 5000);
 
@@ -109,22 +109,22 @@ public class SdkAndBluetoothDataInchange {
 			EventBus.getDefault().post(percentEntity);
 			lastTime = 0;
 			count = 0;
-			notCanReceiveBluetoothDataCount=0;
+			notCanReceiveBluetoothDataCount = 0;
 			if (messages == null) {
 				messages = new ArrayList<>();
 			}
 			messages.add(temp);
-			Log.e(TAG, "txValue[3]:" + txValue[3] + "\ntxValue[4]:" + txValue[4]+"\ntxValue[3] == txValue[4]"+(txValue[3] == txValue[4]));
-			if(messages.size()<txValue[3]){
-				if(txValue[3] == txValue[4]){
-					isWholeDataPackage=true;
+			Log.e(TAG, "txValue[3]:" + txValue[3] + "\ntxValue[4]:" + txValue[4] + "\ntxValue[3] == txValue[4]" + (txValue[3] == txValue[4]));
+			if (messages.size() < txValue[3]) {
+				if (txValue[3] == txValue[4]) {
+					isWholeDataPackage = true;
 				}
 				return;
 			}
-			if (isWholeDataPackage||txValue[3] == txValue[4]) {
-				isWholeDataPackage=false;
-				Log.e(TAG, "messages:" + messages.size() );
-				if(messages.size()<txValue[3]){
+			if (isWholeDataPackage || txValue[3] == txValue[4]) {
+				isWholeDataPackage = false;
+				Log.e(TAG, "messages:" + messages.size());
+				if (messages.size() < txValue[3]) {
 					sendToBluetoothAboutCardInfo(finalTemp);
 					return;
 				}
@@ -165,25 +165,39 @@ public class SdkAndBluetoothDataInchange {
 		}
 	}
 
+	private void clearTimer() {
+		if (timerMessage != null) {
+			Log.e("timer", "注册失败1111111");
+			timerMessage.cancel();
+			timerMessage = null;
+		}
+		if (timerTaskMessage != null) {
+			timerTaskMessage.cancel();
+			timerTaskMessage = null;
+		}
+		countMessage = 0;
+		notCanReceiveBluetoothDataCount = 0;
+	}
+
 	private void sortMessage() {
-		if(messages.size()>1){
-			ArrayList<String> messagesList=new ArrayList<>();
-			int z=0;
-			for(int i=0;i<messages.size();i++){
-				for(int j=0;j<messages.size();j++){
-					if(Integer.parseInt(messages.get(j).substring(8,10),16)==i+1){
-						z=j;
+		if (messages.size() > 1) {
+			ArrayList<String> messagesList = new ArrayList<>();
+			int z = 0;
+			for (int i = 0; i < messages.size(); i++) {
+				for (int j = 0; j < messages.size(); j++) {
+					if (Integer.parseInt(messages.get(j).substring(8, 10), 16) == i + 1) {
+						z = j;
 						break;
 					}
 				}
 				messagesList.add(messages.get(z));
 			}
 			messages.clear();
-			messages=messagesList;
-			for(int i=0;i<messages.size();i++){
-				Log.e("messages","messages="+messages.get(i));
+			messages = messagesList;
+			for (int i = 0; i < messages.size(); i++) {
+				Log.e("messages", "messages=" + messages.get(i));
 			}
-			Log.e("messages","===========================");
+			Log.e("messages", "===========================");
 		}
 	}
 
@@ -200,8 +214,8 @@ public class SdkAndBluetoothDataInchange {
 	private boolean isReceiveBluetoothData = true;
 
 	private void sendToBluetoothAboutCardInfo(String msg) {
-		if(TextUtils.isEmpty(msg)){
-			registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
+		if (TextUtils.isEmpty(msg)) {
+			registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.REGISTER_FAIL);
 			return;
 		}
 		Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + msg);
@@ -239,10 +253,8 @@ public class SdkAndBluetoothDataInchange {
 		}
 	}
 
-	public  void closeReceviceBlueData(){
-		if(timerMessage!=null){
-			timerMessage.cancel();
-			timerMessage=null;
-		}
+	public void closeReceviceBlueData() {
+		Log.e(TAG, "closeReceviceBlueData1111111111");
+		clearTimer();
 	}
 }
