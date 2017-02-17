@@ -133,9 +133,12 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	}
 
 	private void callPhone() {
+
 		if(contactRecodeEntity==null||TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())){
-			return;
+			CommonTools.showShortToast(this, "电话号码不能为空");
+				return;
 		}
+
 		if (contactRecodeEntity.getPhoneNumber().startsWith("sip:")) {
 			ICSOpenVPNApplication.the_sipengineReceive.MakeUrlCall(contactRecodeEntity.getPhoneNumber());
 		} else if(cellPhoneType==Constant.NETWORK_CELL_PHONE){

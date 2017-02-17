@@ -153,4 +153,33 @@ public class Constant {
 
 	//蓝牙操作时间限制（5秒内不可重复操作）
 	public static final int REPEAT_OPERATE = 2500;
+
+
+
+	//蓝牙发送类型
+
+	public static final String SYSTEM_RESET="0100";//系统复位
+
+	public static final String SEND_PHONE_SYSTEM_TO_BLUETOOTH="0200";//发送手机类型
+	public static final String USER_NOTIFY="0300";//是否使用通知
+	public static final String MESSAGE_PUSH="0400";//检测到有消息，消息推送
+	public static final String UPDATE_TIME="0500";//更新时间
+	public static final String SYSTEM_BASICE_INFO="0600";//系统基本信息请求
+	public static final String BIND_DEVICE="0700";//请求绑定
+	public static final String BIND_STATUE="0800";//是否绑定成功
+	public static final String UNBIND_DEVICE="0900";//解除绑定
+	public static final String SKY_UPGRADE="0a00";//空中升级
+	public static final String REQUEST_POWER="0b00";//请求电量
+	public static final String SEARCH_DEVICE="0c00";//查找手环
+	public static final String THE_HAND_FUNCTION ="0d00";//是否使用抬手功能
+	public static final String HISTORY_STEP="0e00";//历史步数
+	public static final String SETTING_ALARM="0f00";//设置闹钟
+	public static final String SIM_UP_POWER="1000";//对卡上电
+	public static final String SIM_DOWN_POWER="1100";//对卡断电
+	public static final String SIM_DATA="1200";//卡数据
+
+
+
+
+
 }

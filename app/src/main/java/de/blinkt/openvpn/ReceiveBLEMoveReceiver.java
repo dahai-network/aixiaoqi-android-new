@@ -82,6 +82,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	public static String nullCardId = null;
 	private int UPDATE_HISTORY_DATE = 1;
 	private int WRITE_CARD_COMPLETE = 2;
+	private String dataType ;//发出数据以后需要把dataType重置为-1；
 	private Handler handler = new Handler() {
 		@Override
 		public void dispatchMessage(Message msg) {
@@ -200,178 +201,211 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					//通过SDK收发Service发送信息到SDK
 					Log.e("Blue_Chanl", "接收从蓝牙发出的消息：" + HexStringExchangeBytesUtil.bytesToHexString(txValue));
 					//判断是否是分包（BB开头的包）
-					if (txValue[0] != (byte) 0xBB && txValue[0] != (byte) 0xAA) {
-						return;
+//					if (txValue[0] != (byte) 0xBB && txValue[0] != (byte) 0xAA) {
+//						return;
+//
+//					}
+					int dataID = Integer.parseInt(messageFromBlueTooth.substring(2,4) + "", 16) &127;
+					Log.e("Blue_Chanl", "txValue[1]"+Integer.parseInt(messageFromBlueTooth.substring(2,4) + "", 16) +"dataID：" + dataID);
+					if (dataID == 0) {
+						dataType = messageFromBlueTooth.substring(6,10);
 					}
+//					else if(dataType==-1&&dataID!=0){
+//						//第一个包发过来的顺序错了，需要重新发送数据到蓝牙
+//					}
+					Log.e("Blue_Chanl", "dataType：" + dataType);
 					switch (txValue[0]) {
-						case (byte) 0xBB:
-							switch (txValue[1]) {
+						case (byte) 0x55:
+							switch (dataType) {
 								//获取步数
-								case (byte) 0x01:
-									byte[] stepBytes = new byte[2];
-									stepBytes[0] = txValue[3];
-									stepBytes[1] = txValue[4];
-									long currentTimeLong = System.currentTimeMillis() / 1000;
-									int currentStepInt = Integer.parseInt(HexStringExchangeBytesUtil.bytesToHexString(stepBytes), 16);
-									Intent realTimeStepIntent = new Intent();
-									realTimeStepIntent.putExtra(Constant.REAL_TIME_STEPS, currentStepInt);
-									realTimeStepIntent.setAction(SportFragment.REALTIMESTEP);
-									ICSOpenVPNApplication.getInstance().sendBroadcast(realTimeStepIntent);
-//							saveRealTimeStep(currentTimeLong, currentStepInt);
-									break;
-								case (byte) 0x02:
-									break;
-								//获取历史步数
-								case (byte) 0x03:
-									messages.add(messageFromBlueTooth);
-									//如果历史步数到了第四行，则要输出
-									if (txValue[4] == (byte) 0x03) {
-										mStrStepHistory = PacketeUtil.CombinationForHistory(messages);
-										messages.clear();
-										//判断是哪天的步数
-										switch (txValue[3]) {
-											//今天的数据
-											case 0x00:
-												Log.i("test", "今天的步数" + mStrStepHistory + "length:" + mStrStepHistory.length());
-												ArrayList<Integer> todayList = StepStrToList(mStrStepHistory);
-												entity.setTodayList(todayList);
-												break;
-											//昨天的数据
-											case 0x01:
-												Log.i("test", "昨天的步数" + mStrStepHistory + "length:" + mStrStepHistory.length());
-												ArrayList<Integer> yesterdayList = StepStrToList(mStrStepHistory);
-												entity.setYesterdayList(yesterdayList);
-												break;
-											//前天的数据
-											case 0x02:
-												Log.i("test", "前天的步数" + mStrStepHistory + "length:" + mStrStepHistory.length());
-												ArrayList<Integer> beforeYesterdayList = StepStrToList(mStrStepHistory);
-												entity.setBeforeyesterdayList(beforeYesterdayList);
-												break;
-										}
-									}
-									//如果不是记录前三天数据，那么就要判断类型是不是0x03
-									else if (txValue[3] == 0x03) {
-										mStrStepHistory = PacketeUtil.CombinationForHistory(messages);
-										messages.clear();
-										ArrayList<Integer> sixDayList = StepStrToList(mStrStepHistory);
-										entity.setSixDayList(sixDayList);
-										//更新历史步数到UI线程
-										handler.sendEmptyMessage(UPDATE_HISTORY_DATE);
-									}
-
-									break;
-								//电量多少
-								case (byte) 0x04:
-									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(String.valueOf(txValue[3])));
-									break;
-								case (byte) 0x05:
-									//充电状态
-									Log.i("test", "充电状态");
-									resetOrderStr = null;
-									if (sendStepThread != null)
-										sendStepThread = null;
-									if (!isOpenStepService) {
-										Intent updateStepIntent = new Intent(context, UpdateStepService.class);
-										context.startService(updateStepIntent);
-										isOpenStepService = true;
-									}
-//							//结束BindDeviceActivity
-//							Intent bindCompeleteIntent = new Intent();
-//							bindCompeleteIntent.setAction(BindDeviceActivity.BIND_COMPELETE);
-//							LocalBroadcastManager.getInstance(context).sendBroadcast(bindCompeleteIntent);
-									break;
-								case (byte) 0x09:
-									Log.i("test", "上一次充电时间");
-									break;
-								case (byte) 0x11:
-									if (!IS_TEXT_SIM) {
-										Intent cardBreakIntent = new Intent();
-										cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
-										LocalBroadcastManager.getInstance(context).sendBroadcast(cardBreakIntent);
-									}
-									break;
-								case (byte) 0x33:
-									//添加计时器20秒后没有回复则写卡失败
-//							Timer overTimer = new Timer();
-//							overTimer.schedule(new TimerTask() {
-//								@Override
-//								public void run() {
-//									orderStatus = 4;
-//									Intent intent = new Intent();
-//									intent.setAction(MyOrderDetailActivity.FINISH_PROCESS);
-//									ICSOpenVPNApplication.getInstance().sendBroadcast(intent);
-//									repeatReceive33 = false;
-//								}
-//							}, 30000);
-									//当上电完成则需要发送写卡命令
-									Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
-									if (!IS_TEXT_SIM && isGetnullCardid) {
-										//空卡ID是否不为空，若不为空则
-										if (nullCardId != null) {
-											Log.i(TAG, "nullcardid上电返回");
-										} else {
-											Log.i(TAG, "发送A0A40000023F00");
-											sendMessageSeparate("A0A40000023F00");
-										}
-									}
-									break;
-								case (byte) 0x0A:
+//								case (byte) 0x01:
+//									byte[] stepBytes = new byte[2];
+//									stepBytes[0] = txValue[3];
+//									stepBytes[1] = txValue[4];
+//									long currentTimeLong = System.currentTimeMillis() / 1000;
+//									int currentStepInt = Integer.parseInt(HexStringExchangeBytesUtil.bytesToHexString(stepBytes), 16);
+//									Intent realTimeStepIntent = new Intent();
+//									realTimeStepIntent.putExtra(Constant.REAL_TIME_STEPS, currentStepInt);
+//									realTimeStepIntent.setAction(SportFragment.REALTIMESTEP);
+//									ICSOpenVPNApplication.getInstance().sendBroadcast(realTimeStepIntent);
+////							saveRealTimeStep(currentTimeLong, currentStepInt);
+//									break;
+//								case (byte) 0x02:
+//									break;
+//								//获取历史步数
+//								case (byte) 0x03:
+//									messages.add(messageFromBlueTooth);
+//									//如果历史步数到了第四行，则要输出
+//									if (txValue[4] == (byte) 0x03) {
+//										mStrStepHistory = PacketeUtil.CombinationForHistory(messages);
+//										messages.clear();
+//										//判断是哪天的步数
+//										switch (txValue[3]) {
+//											//今天的数据
+//											case 0x00:
+//												Log.i("test", "今天的步数" + mStrStepHistory + "length:" + mStrStepHistory.length());
+//												ArrayList<Integer> todayList = StepStrToList(mStrStepHistory);
+//												entity.setTodayList(todayList);
+//												break;
+//											//昨天的数据
+//											case 0x01:
+//												Log.i("test", "昨天的步数" + mStrStepHistory + "length:" + mStrStepHistory.length());
+//												ArrayList<Integer> yesterdayList = StepStrToList(mStrStepHistory);
+//												entity.setYesterdayList(yesterdayList);
+//												break;
+//											//前天的数据
+//											case 0x02:
+//												Log.i("test", "前天的步数" + mStrStepHistory + "length:" + mStrStepHistory.length());
+//												ArrayList<Integer> beforeYesterdayList = StepStrToList(mStrStepHistory);
+//												entity.setBeforeyesterdayList(beforeYesterdayList);
+//												break;
+//										}
+//									}
+//									//如果不是记录前三天数据，那么就要判断类型是不是0x03
+//									else if (txValue[3] == 0x03) {
+//										mStrStepHistory = PacketeUtil.CombinationForHistory(messages);
+//										messages.clear();
+//										ArrayList<Integer> sixDayList = StepStrToList(mStrStepHistory);
+//										entity.setSixDayList(sixDayList);
+//										//更新历史步数到UI线程
+//										handler.sendEmptyMessage(UPDATE_HISTORY_DATE);
+//									}
+//
+//									break;
+//								//电量多少
+//								case (byte) 0x04:
+//									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(String.valueOf(txValue[3])));
+//									break;
+//								case (byte) 0x05:
+//									//充电状态
+//									Log.i("test", "充电状态");
+//									resetOrderStr = null;
+//									if (sendStepThread != null)
+//										sendStepThread = null;
+//									if (!isOpenStepService) {
+//										Intent updateStepIntent = new Intent(context, UpdateStepService.class);
+//										context.startService(updateStepIntent);
+//										isOpenStepService = true;
+//									}
+////							//结束BindDeviceActivity
+////							Intent bindCompeleteIntent = new Intent();
+////							bindCompeleteIntent.setAction(BindDeviceActivity.BIND_COMPELETE);
+////							LocalBroadcastManager.getInstance(context).sendBroadcast(bindCompeleteIntent);
+//									break;
+//								case (byte) 0x09:
+//									Log.i("test", "上一次充电时间");
+//									break;
+//								case (byte) 0x11:
+//									if (!IS_TEXT_SIM) {
+//										Intent cardBreakIntent = new Intent();
+//										cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
+//										LocalBroadcastManager.getInstance(context).sendBroadcast(cardBreakIntent);
+//									}
+//									break;
+//								case (byte) 0x33:
+//									//添加计时器20秒后没有回复则写卡失败
+////							Timer overTimer = new Timer();
+////							overTimer.schedule(new TimerTask() {
+////								@Override
+////								public void run() {
+////									orderStatus = 4;
+////									Intent intent = new Intent();
+////									intent.setAction(MyOrderDetailActivity.FINISH_PROCESS);
+////									ICSOpenVPNApplication.getInstance().sendBroadcast(intent);
+////									repeatReceive33 = false;
+////								}
+////							}, 30000);
+//									//当上电完成则需要发送写卡命令
+//									Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
+//									if (!IS_TEXT_SIM && isGetnullCardid) {
+//										//空卡ID是否不为空，若不为空则
+//										if (nullCardId != null) {
+//											Log.i(TAG, "nullcardid上电返回");
+//										} else {
+//											Log.i(TAG, "发送A0A40000023F00");
+//											sendMessageSeparate("A0A40000023F00");
+//										}
+//									}
+//									break;
+								case 0100 + "":
 //									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
 //									}
-									Log.i(TAG, "固件版本号：" + txValue[2]);
-									utils.writeString(Constant.BRACELETVERSION, txValue[2] + "");
+									Log.i(TAG, "固件版本号：" + txValue[5]);
+									utils.writeString(Constant.BRACELETVERSION, txValue[5] + "");
 									break;
-								case (byte) 0xDB:
-								case (byte) 0xDA:
-									if (IS_TEXT_SIM) {
-										if (SocketConnection.sdkAndBluetoothDataInchange != null) {
-											SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
-										} else {
-											Log.i(TAG,context.getString(R.string.error_to_restart_ble));
-//											CommonTools.showShortToast(context, context.getString(R.string.error_to_restart_ble));
-											ICSOpenVPNApplication.uartService.disconnect();
-										}
-									} else {
-										messages.add(messageFromBlueTooth);
-										if (txValue[3] == txValue[4]) {
-											mStrSimCmdPacket = PacketeUtil.Combination(messages);
-											// 接收到一个完整的数据包,处理信息
-											ReceiveDBOperate(mStrSimCmdPacket);
-											messages.clear();
-										}
+
+								case 0700 + "":
+									if (txValue[5] == 1) {
+
+
+//								case (byte) 0xDB:
+//								case (byte) 0xDA:
+//									if (IS_TEXT_SIM) {
+//										if (SocketConnection.sdkAndBluetoothDataInchange != null) {
+//											SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+//										} else {
+//											Log.i(TAG,context.getString(R.string.error_to_restart_ble));
+////											CommonTools.showShortToast(context, context.getString(R.string.error_to_restart_ble));
+//											ICSOpenVPNApplication.uartService.disconnect();
+//										}
+//									} else {
+//										messages.add(messageFromBlueTooth);
+//										if (txValue[3] == txValue[4]) {
+//											mStrSimCmdPacket = PacketeUtil.Combination(messages);
+//											// 接收到一个完整的数据包,处理信息
+//											ReceiveDBOperate(mStrSimCmdPacket);
+//											messages.clear();
+//										}
+
 									}
+								case "0900":
+									Log.i(TAG, "发送给SDK");
+									SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
 									break;
-								case (byte) 0xEE:
-									//绑定流程成功命令
-									CommonTools.delayTime(500);
-									//android 标记，给蓝牙设备标记是否是android设备用的
-									SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
-									CommonTools.delayTime(500);
-									//更新时间操作
-//									Thread.sleep(500);
-									//android 标记，给蓝牙设备标记是否是android设备用的
-									SendCommandToBluetooth.sendMessageToBlueTooth(getBLETime());
-									isConnect = true;
-									if (sendStepThread != null)
-										sendStepThread = null;
+//								case (byte) 0xDB:
+//								case (byte) 0xDA:
+//									if (IS_TEXT_SIM) {
+//										SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+//									} else {
+//										messages.add(messageFromBlueTooth);
+//										if (txValue[3] == txValue[4]) {
+//											mStrSimCmdPacket = PacketeUtil.Combination(messages);
+//											// 接收到一个完整的数据包,处理信息
+//											ReceiveDBOperate(mStrSimCmdPacket);
+//											messages.clear();
+//										}
+//									}
+//									break;
+//								case (byte) 0xEE:
+//									//绑定流程成功命令
+//									CommonTools.delayTime(500);
+//									//android 标记，给蓝牙设备标记是否是android设备用的
+//									SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
+//									CommonTools.delayTime(500);
+//									//更新时间操作
+////									Thread.sleep(500);
+//									//android 标记，给蓝牙设备标记是否是android设备用的
+//									SendCommandToBluetooth.sendMessageToBlueTooth(getBLETime());
+//									isConnect = true;
+//									if (sendStepThread != null)
+//										sendStepThread = null;
+//									break;
+//							}
+//							break;
+//						case (byte) 0xAA:
+//							Log.i("toBlue", "已收到重置信息：" + messageFromBlueTooth);
+//							resetOrderStr = messageFromBlueTooth;
+//							break;
+
+								default:
+//							updateMessage(messageFromBlueTooth);
 									break;
 							}
-							break;
-						case (byte) 0xAA:
-							Log.i("toBlue", "已收到重置信息：" + messageFromBlueTooth);
-							resetOrderStr = messageFromBlueTooth;
-							break;
-
-						default:
-//							updateMessage(messageFromBlueTooth);
-							break;
 					}
 				}
 			}
-
 			).start();
 		}
 		if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)) {
