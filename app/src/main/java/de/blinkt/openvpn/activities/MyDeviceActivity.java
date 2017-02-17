@@ -44,6 +44,7 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
@@ -83,8 +84,8 @@ import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
-import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
+import static de.blinkt.openvpn.constant.Constant.SKY_UPGRADE_ORDER;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
@@ -389,6 +390,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private Thread connectThread;
 	private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
 
+		public String dataType;
+
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
@@ -467,43 +470,57 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 
 				final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
-				//判断是否是分包（BB开头的包）
-				if (txValue[0] != (byte) 0xBB) {
+				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
+
+				if (txValue[0] != (byte) 0x55) {
 					return;
 				}
-				switch (txValue[0]) {
-					case (byte) 0xBB:
-						//如果收到
-						if (txValue[1] == (byte) 0xEE) {
-							utils.writeString(Constant.IMEI, deviceAddresstemp);
-							setView();
-						} else if (txValue[1] == (byte) 0x05) {
-							setView();
-						} else if (txValue[1] == (byte) 0x0A) {
-							Log.i(TAG, "版本号:" + txValue[2]);
-
-							firmwareTextView.setText(txValue[2] + "");
-							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
-								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
-								entity.setBraceletversion(txValue[2] + "");
-								entity.setSuccess(true);
-								EventBus.getDefault().post(entity);
-								Log.i(TAG, "进入版本号:" + txValue[2]);
-							}
-						} else if (txValue[1] == (byte) 0x04) {
-							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
-						} else if (txValue[1] == (byte) 0x33) {
-							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
-								sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
-							}
-						} else if (txValue[1] == (byte) 0x11) {
-							//百分比TextView设置为0
-//							percentTextView.setText("");
-							showNoCardDialog();
-							SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
-							sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card));
-							stopAnim();
+				//判断是否是分包（0x80的包）
+				if (txValue[1] != (byte) 0x80) {
+					return;
+				}
+				dataType = messageFromBlueTooth.substring(6, 10);
+				switch (dataType) {
+//					case (byte) 0xBB:
+//						if (txValue[1] == (byte) 0x05) {
+//							setView();
+//						} else if (txValue[1] == (byte) 0x0A) {
+//							Log.i(TAG, "版本号:" + txValue[2]);
+//
+//							firmwareTextView.setText(txValue[2] + "");
+//							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+//								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
+//								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
+//								entity.setBraceletversion(txValue[2] + "");
+//								entity.setSuccess(true);
+//								EventBus.getDefault().post(entity);
+//								Log.i(TAG, "进入版本号:" + txValue[2]);
+//							}
+//						} else if (txValue[1] == (byte) 0x04) {
+//							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
+//						} else if (txValue[1] == (byte) 0x33) {
+//							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
+//								sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+//							}
+//						} else if (txValue[1] == (byte) 0x11) {
+//							//百分比TextView设置为0
+////							percentTextView.setText("");
+//							showNoCardDialog();
+//							SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
+//							sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card));
+//							stopAnim();
+//						}
+//						break;
+					case "0100":
+						Log.i(TAG, "版本号:" + txValue[5]);
+						firmwareTextView.setText(txValue[5] + "");
+						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
+							entity.setBlueType(BluetoothConstant.BLUE_VERSION);
+							entity.setBraceletversion(txValue[5] + "");
+							entity.setSuccess(true);
+							EventBus.getDefault().post(entity);
+							Log.i(TAG, "进入版本号:" + txValue[5]);
 						}
 						break;
 				}
@@ -626,7 +643,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (cmdType == HttpConfigUrl.COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE) {
 			DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = (DownloadSkyUpgradePackageHttp) object;
 			if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
-				SendCommandToBluetooth.sendMessageToBlueTooth("AA080401A7");
+				SendCommandToBluetooth.sendMessageToBlueTooth(SKY_UPGRADE_ORDER);
 				CommonTools.delayTime(1000);
 				uploadToBlueTooth();
 			} else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
