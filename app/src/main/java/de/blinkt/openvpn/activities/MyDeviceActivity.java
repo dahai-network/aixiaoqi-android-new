@@ -265,6 +265,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
+				statueTextView.setText(getString(R.string.conn_bluetooth));
+				statueTextView.setEnabled(true);
 				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
@@ -443,7 +445,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
 							CommonTools.delayTime(2000);
-							mService.connect(deviceAddresstemp);
+							if (mService != null) {
+								mService.connect(deviceAddresstemp);
+							}
 						}
 					});
 					connectThread.start();
@@ -594,6 +598,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (getBindDeviceHttp.getStatus() == 1) {
 				BlueToothDeviceEntity mBluetoothDevice = getBindDeviceHttp.getBlueToothDeviceEntityity();
 				firmwareTextView.setText(mBluetoothDevice.getVersion());
+				statueTextView.setText(getString(R.string.blue_connecting));
+				statueTextView.setEnabled(false);
 				utils.writeString(Constant.IMEI, mBluetoothDevice.getIMEI());
 				utils.writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
 				unBindButton.setVisibility(View.VISIBLE);
@@ -828,8 +834,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 										return;
 									}
 									Log.i("test", "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
-									if (macAddressStr != null) {
-										if (macAddressStr.equalsIgnoreCase(device.getAddress())) {
+									if (macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
+										if (mService != null) {
 											scanLeDevice(false);
 //										    checkIsBindDevie(device);
 											utils.writeString(Constant.IMEI, macAddressStr);
@@ -909,6 +915,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_no_signal))) {
 			percentTextView.setText("0%");
+			registerSimStatu.setVisibility(View.VISIBLE);
+			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_regist_fail))) {
 			percentTextView.setText("");
 		} else if (conStatus.equals(getString(R.string.index_registing))) {
@@ -918,12 +926,17 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_unbind))) {
 			percentTextView.setText("");
 		} else if (conStatus.equals(getString(R.string.index_no_packet))) {
+			stopAnim();
 			percentTextView.setText("");
 			registerSimStatu.setVisibility(GONE);
 		} else if (conStatus.equals(getString(R.string.index_un_insert_card))) {
 			percentTextView.setText("");
 		} else if (conStatus.equals(getString(R.string.index_high_signal))) {
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
+			percentTextView.setText("");
+		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
+			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
 		}
 	}
 

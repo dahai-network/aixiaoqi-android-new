@@ -1,7 +1,6 @@
 package cn.com.johnson.adapter;
 
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -114,10 +113,10 @@ public class PictureAdapter extends PagerAdapter {
 			/**
 			 * 只用这句话应该会出现问题
 			 * */
-//        position %= images.size();
-//        if (position < 0) {
-//            position = position + images.size();
-//        }
+			initPosition %= images.size();
+			if (position < 0) {
+				initPosition = position + images.size();
+			}
 			ImageView imageView = images.get(initPosition);
 			removeChildView(imageView);
 			container.addView(imageView);
@@ -128,8 +127,8 @@ public class PictureAdapter extends PagerAdapter {
 	private void removeChildView(ImageView imageView) {
 		ViewParent parent = imageView.getParent();
 		if (parent != null) {
-            ViewGroup viewGroup = (ViewGroup) parent;
-            viewGroup.removeView(imageView);
-        }
+			ViewGroup viewGroup = (ViewGroup) parent;
+			viewGroup.removeView(imageView);
+		}
 	}
 }

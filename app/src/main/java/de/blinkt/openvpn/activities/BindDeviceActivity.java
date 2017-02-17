@@ -38,6 +38,8 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
+import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
+import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
@@ -203,6 +205,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			if (http.getIsBindEntity().getBindStatus() == 0 && http.getStatus() == 1) {
 				if (mService != null) {
 					mService.connect(deviceAddress);
+				} else {
+					CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.connect_failure));
+					restartUartService();
+					finish();
 				}
 			} else {
 				CommonTools.showShortToast(this, "该设备已经绑定过了！");
@@ -214,11 +220,34 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				utils.writeString(Constant.IMEI, deviceAddress);
+				ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
+				if (!utils.readBoolean(Constant.ISHAVEORDER, true)) {
+					entity.setStatus(getString(R.string.index_no_packet));
+					entity.setStatusDrawableInt(R.drawable.index_no_packet);
+					EventBus.getDefault().post(entity);
+				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 			finish();
 		}
+	}
+
+	private void restartUartService() {
+		Log.i(TAG, "restart Uart服务");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				//关闭UartService服务
+				ServiceOperationEntity serviceOperationEntity = new ServiceOperationEntity();
+				serviceOperationEntity.setServiceName(UartService.class.getName());
+				serviceOperationEntity.setOperationType(ServiceOperationEntity.REMOVE_SERVICE);
+				EventBus.getDefault().post(serviceOperationEntity);
+				CommonTools.delayTime(200);
+				serviceOperationEntity.setOperationType(ServiceOperationEntity.CREATE_SERVICE);
+				EventBus.getDefault().post(serviceOperationEntity);
+			}
+		}).start();
 	}
 
 	@Override

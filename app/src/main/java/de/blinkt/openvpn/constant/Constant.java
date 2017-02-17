@@ -5,7 +5,7 @@ package de.blinkt.openvpn.constant;
  */
 public class Constant {
 
-	public static final boolean IS_DEBUG = true;
+	public static final boolean IS_DEBUG = false;
 	public static final String BLUETOOTH_NAME = "unitoys";
 //	public static final String BLUETOOTH_NAME = "ZiJian";
 
@@ -58,15 +58,15 @@ public class Constant {
 	public static final String CALL_OUTGOING = "拨出";
 	public static final String CALL_MISSED = "未接";
 	//蓝牙指令
-	public static String UP_TO_POWER = "888003100001";//上电指令，没有详细卡信息以及BB332211BB
-	public static String UP_TO_POWER_DETAIL = "888003100002";//上电指令,只有详细卡信息以及BB665544BB
-	public static String UP_TO_POWER_USED_TO_SDK = "888003100003";//上电指令,返回BB998877BB，用于SDK使用的上下电命令
-	public static final String OFF_TO_POWER = "8880021100";//断电指令
+	public static String UP_TO_POWER = "AADB040174";//上电指令，没有详细卡信息以及BB332211BB
+	public static String UP_TO_POWER_DETAIL = "AADB040277";//上电指令,只有详细卡信息以及BB665544BB
+	public static String UP_TO_POWER_USED_TO_SDK = "AADB040376";//上电指令,返回BB998877BB，用于SDK使用的上下电命令
+	public static final String OFF_TO_POWER = "AADC040173";//断点指令
 	public static final String REAL_TIME_STEPS = "AA010401AE ";//实时步数
 	public static final String HISTORICAL_STEPS = "AA030401AC";//历史步数
 	public static final String FIND_DEVICE = "AA060401A9";//查找手环
-		public static final String FIND_VERSION = "8880020600";//版本号
-//	public static final String FIND_VERSION = "AA0A0401A5";//版本号（以后的版本）
+	public static final String FIND_VERSION = "AA0A01A1";//版本号
+//		public static final String FIND_VERSION = "AA0A0401A5";//版本号（以后的版本）
 	public static final String RESTORATION = "AA112233AA";//复位命令
 	public static final String BIND_SUCCESS = "AADD01DDAA";//绑定成功命令
 	//		public static final String ANDROID_TARGET = "AA010400AF";//绑定成功命令

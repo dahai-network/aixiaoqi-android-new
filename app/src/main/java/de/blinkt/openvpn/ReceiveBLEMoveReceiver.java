@@ -335,8 +335,29 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									Log.i(TAG, "固件版本号：" + txValue[5]);
 									utils.writeString(Constant.BRACELETVERSION, txValue[5] + "");
 									break;
+
 								case 0700 + "":
 									if (txValue[5] == 1) {
+
+
+//								case (byte) 0xDB:
+//								case (byte) 0xDA:
+//									if (IS_TEXT_SIM) {
+//										if (SocketConnection.sdkAndBluetoothDataInchange != null) {
+//											SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+//										} else {
+//											Log.i(TAG,context.getString(R.string.error_to_restart_ble));
+////											CommonTools.showShortToast(context, context.getString(R.string.error_to_restart_ble));
+//											ICSOpenVPNApplication.uartService.disconnect();
+//										}
+//									} else {
+//										messages.add(messageFromBlueTooth);
+//										if (txValue[3] == txValue[4]) {
+//											mStrSimCmdPacket = PacketeUtil.Combination(messages);
+//											// 接收到一个完整的数据包,处理信息
+//											ReceiveDBOperate(mStrSimCmdPacket);
+//											messages.clear();
+//										}
 
 									}
 								case "0900":
@@ -460,11 +481,19 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						}
 					}
 				} else {
+					if (mStrSimCmdPacket.startsWith("9000") && !CommonTools.isFastDoubleClick(1000)) {
+						//新型写卡完成
+						handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
+						SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
+						isGetnullCardid = false;
+						nullCardId = null;
+						return;
+					}
 					registFlowPath();
 				}
 				break;
 			default:
-				if (mStrSimCmdPacket.startsWith("9000")) {
+				if (mStrSimCmdPacket.startsWith("9000") && !CommonTools.isFastDoubleClick(1000)) {
 					//新型写卡完成
 					handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
 					SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电

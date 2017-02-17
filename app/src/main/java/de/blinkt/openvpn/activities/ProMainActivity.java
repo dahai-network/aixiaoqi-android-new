@@ -182,7 +182,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 
-	private void initServices() {
+	public void initServices() {
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
 			Log.i(TAG, "开启UartService");
 			Intent bindIntent = new Intent(this, UartService.class);
@@ -597,7 +597,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
 					new Thread(http).start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
-
 				} else {
 					//TODO 没有通知到设备界面
 					//如果是没有套餐，则通知我的设备界面更新状态并且停止转动
@@ -679,6 +678,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				switch (entity.getFailType()) {
 					case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 						CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
+						break;
 					case SocketConstant.REGISTER_FAIL:
 						CommonTools.showShortToast(this, getString(R.string.regist_fail));
 						break;
@@ -787,6 +787,7 @@ private int count;
 				IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 				new Thread(http).start();
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+				Log.i(TAG,"被主动断掉连接！");
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 				final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
@@ -799,7 +800,7 @@ private int count;
 						if (txValue[3] == (byte) 0x03) {
 						}
 					} else if (txValue[1] == (byte) 0x33) {
-						if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(1000)) {
+						if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
 							//当有通话套餐的时候才允许注册操作
 							IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 							new Thread(http).start();
