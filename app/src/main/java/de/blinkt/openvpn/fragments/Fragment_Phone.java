@@ -248,13 +248,19 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 				if(CommonTools.isFastDoubleClick(500)){
 					return;
 				}
+				hideCellPhoneDialog();
 				requestTimeHttp();
 				break;
 			case R.id.cancel_phone:
 				hideCellPhoneDialog();
 				break;
 			case R.id.sim_register_phone_tv:
+				hideCellPhoneDialog();
+				if(CommonTools.isFastDoubleClick(500)){
+					return;
+				}
 				if(SocketConstant.REGISTER_STATUE_CODE==3){
+
 					simCellPhone();
 				}else{
 					CommonTools.showShortToast(getActivity(),getString(R.string.sim_register_phone_tip));
@@ -415,7 +421,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	}
 
 	private void simCellPhone(){
-		CommonTools.delayTime(1000);
+		CommonTools.delayTime(500);
 		Intent intent=new Intent(getActivity(),CallPhoneNewActivity.class);
 		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO,contactRecodeEntity);
 		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,SIM_CELL_PHONE);

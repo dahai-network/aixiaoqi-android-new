@@ -52,22 +52,17 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	Chronometer timer;
 	String maxinumPhoneCallTime;
 	ConnectedReceive connectedReceive;
+	private String TAG="CallPhoneNewActivity";
 	int cellPhoneType;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_callphone);
-		try {
-			cellPhoneType=getIntent().getIntExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,-1);
-		}catch (Exception e){
-
-		}
-
+		cellPhoneType=getIntent().getIntExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,-1);
 		initView();
 		initData();
 		addListener();
-
 		IntentFilter filter = getIntentFilter();
 		connectedReceive = new ConnectedReceive();
 		registerReceiver(connectedReceive, filter);
@@ -107,7 +102,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 
 	private void initData() {
-		 contactRecodeEntity = (ContactRecodeEntity) getIntent().getSerializableExtra(IntentPutKeyConstant.DATA_CALLINFO);
+		contactRecodeEntity = (ContactRecodeEntity) getIntent().getSerializableExtra(IntentPutKeyConstant.DATA_CALLINFO);
 		maxinumPhoneCallTime = getIntent().getStringExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME);
 		if (TextUtils.isEmpty(maxinumPhoneCallTime)) {
 			maxinumPhoneCallTime = "0";
@@ -136,7 +131,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 		if(contactRecodeEntity==null||TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())){
 			CommonTools.showShortToast(this, "电话号码不能为空");
-				return;
+			return;
 		}
 
 		if (contactRecodeEntity.getPhoneNumber().startsWith("sip:")) {
@@ -147,7 +142,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		}else if(cellPhoneType==Constant.SIM_CELL_PHONE){
 			try{
 				Log.e("CallPhoneNewActivity","ICSOpenVPNApplication.the_sipengineReceive"+(ICSOpenVPNApplication.the_sipengineReceive==null));
-			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",contactRecodeEntity.getPhoneNumber()) );
+				ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",contactRecodeEntity.getPhoneNumber()) );
 			}catch (Exception e){
 
 			}
@@ -192,18 +187,19 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				break;
 			case R.id.cancelcallbtn:
 				//友盟方法统计
+
 				MobclickAgent.onEvent(context, CLICKCALLHANGUP);
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						ICSOpenVPNApplication.the_sipengineReceive.Hangup();
+						if (ICSOpenVPNApplication.the_sipengineReceive != null) {
+							CommonTools.delayTime(500);
+							ICSOpenVPNApplication.the_sipengineReceive.Hangup();
+						}
 					}
 				}).start();
-
-				if(timer.isActivated()){
-					stopTimer();
-				}
-				finish();
+//				stopTimer();
+//				onBackPressed();
 				break;
 		}
 	}
@@ -225,9 +221,11 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 
 	private void stopTimer() {
-		timer.stop();
-		timer.setBase(SystemClock.elapsedRealtime());
-		timer=null;
+		if(timer.isActivated()){
+			timer.stop();
+			timer.setBase(SystemClock.elapsedRealtime());
+			timer=null;
+		}
 	}
 
 	private void startTimer() {
@@ -279,8 +277,10 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (CallPhoneService.endFlag.equals(action)) {
+				if(CallPhoneService.CALL_DIR==1){
 				stopTimer();
-				finish();
+				onBackPressed();
+				}
 			} else if (CallPhoneService.connectedFlag.equals(action)) {
 				displayStatus("");
 				startTimer();
@@ -292,8 +292,8 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 					displayStatus(R.string.calling);
 //					displayStatus(getString(R.string.wait_other_connecting));
 			} else if (CallPhoneService.reportFlag.equals(action)) {
-				int callDir = intent.getIntExtra("CallDir", -1);
-				if (callDir == 1) {
+
+				if (CallPhoneService.CALL_DIR == 1) {
 					insertCallRecode();
 				}
 			} else if (CallPhoneService.CALL_FAIL.equals(action)) {

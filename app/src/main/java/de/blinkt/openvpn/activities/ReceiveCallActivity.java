@@ -231,8 +231,8 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKRECIVEHANGUP);
 				sipEngineCore.Hangup();
-				stopTimer();
-				finish();
+//				stopTimer();
+//				finish();
 				TipHelper.stopShock();
 				TipHelper.stopSound();
 				break;
@@ -247,8 +247,11 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	}
 
 	private void stopTimer() {
+		if(timer.isActivated()){
 		timer.stop();
 		timer.setBase(SystemClock.elapsedRealtime());
+		timer=null;
+		}
 	}
 
 	private void controlWidget() {
@@ -267,11 +270,13 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 		public void onReceive(Context context, Intent intent) {
 			String action=intent.getAction();
 			if(CallPhoneService.endFlag.equals(action)){
+				if(CallPhoneService.CALL_DIR==0){
 				stopTimer();
-				finish();
+				onBackPressed();
+				}
 			}else if(CallPhoneService.reportFlag.equals(action)){
-				int callDir=intent.getIntExtra("CallDir",-1);
-				if(callDir==0){
+
+				if(CallPhoneService.CALL_DIR==0){
 					long nativePtr=intent.getLongExtra("nativePtr",-1);
 					if(nativePtr>0){
 						insertCallRecode(CallLog.Calls.MISSED_TYPE);

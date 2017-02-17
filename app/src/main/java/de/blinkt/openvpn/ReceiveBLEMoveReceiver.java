@@ -118,7 +118,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 						Thread.sleep(500);
 						//更新时间操作
-						SendCommandToBluetooth.sendMessageToBlueTooth(getBLETime());
+//						SendCommandToBluetooth.sendMessageToBlueTooth(getBLETime());
 						Thread.sleep(500);
 						//android 标记，给蓝牙设备标记是否是android设备用的
 //						sendMessageToBlueTooth(ANDROID_TARGET);
