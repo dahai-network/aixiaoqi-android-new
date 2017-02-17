@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.CallLog;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -57,11 +58,24 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_callphone);
-		cellPhoneType=getIntent().getIntExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,-1);
+		try {
+			cellPhoneType=getIntent().getIntExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,-1);
+		}catch (Exception e){
+
+		}
+
 		initView();
 		initData();
 		addListener();
 
+		IntentFilter filter = getIntentFilter();
+		connectedReceive = new ConnectedReceive();
+		registerReceiver(connectedReceive, filter);
+		callPhone();
+	}
+
+	@NonNull
+	private IntentFilter getIntentFilter() {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(CallPhoneService.endFlag);
 		filter.addAction(CallPhoneService.connectedFlag);
@@ -69,9 +83,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		filter.addAction(CallPhoneService.waitConnected);
 		filter.addAction(CallPhoneService.CALL_FAIL);
 		filter.addAction(CallPhoneService.callProcessing);
-		connectedReceive = new ConnectedReceive();
-		registerReceiver(connectedReceive, filter);
-		callPhone();
+		return filter;
 	}
 
 
@@ -91,12 +103,11 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		cancelcallbtn = (Button) findViewById(R.id.cancelcallbtn);
 		displayStatus(R.string.calling);
 	}
+	ContactRecodeEntity contactRecodeEntity;
 
-	String address;
 
 	private void initData() {
-		ContactRecodeEntity contactRecodeEntity = (ContactRecodeEntity) getIntent().getSerializableExtra(IntentPutKeyConstant.DATA_CALLINFO);
-		address = contactRecodeEntity.getAddress();
+		 contactRecodeEntity = (ContactRecodeEntity) getIntent().getSerializableExtra(IntentPutKeyConstant.DATA_CALLINFO);
 		maxinumPhoneCallTime = getIntent().getStringExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME);
 		if (TextUtils.isEmpty(maxinumPhoneCallTime)) {
 			maxinumPhoneCallTime = "0";
@@ -122,15 +133,18 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	}
 
 	private void callPhone() {
-		ContactRecodeEntity info = (ContactRecodeEntity) getIntent().getSerializableExtra(IntentPutKeyConstant.DATA_CALLINFO);
-		if (info.getPhoneNumber().startsWith("sip:")) {
-			ICSOpenVPNApplication.the_sipengineReceive.MakeUrlCall(info.getPhoneNumber());
+		if(contactRecodeEntity==null||TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())){
+			return;
+		}
+		if (contactRecodeEntity.getPhoneNumber().startsWith("sip:")) {
+			ICSOpenVPNApplication.the_sipengineReceive.MakeUrlCall(contactRecodeEntity.getPhoneNumber());
 		} else if(cellPhoneType==Constant.NETWORK_CELL_PHONE){
-			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("981" + deleteprefix("-",info.getPhoneNumber()) + "#" + maxinumPhoneCallTime);
+			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("981" + deleteprefix("-",contactRecodeEntity.getPhoneNumber()) + "#" + maxinumPhoneCallTime);
 
 		}else if(cellPhoneType==Constant.SIM_CELL_PHONE){
 			try{
-			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",info.getPhoneNumber()) );
+				Log.e("CallPhoneNewActivity","ICSOpenVPNApplication.the_sipengineReceive"+(ICSOpenVPNApplication.the_sipengineReceive==null));
+			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",contactRecodeEntity.getPhoneNumber()) );
 			}catch (Exception e){
 
 			}
@@ -147,7 +161,10 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 		}else if(s.replace(type,"").startsWith("86")){
 			phoneNumber= s.substring(2, s.length());
-		}else{
+		}else if(s.replace(type,"").startsWith("0086")){
+			phoneNumber= s.substring(2, s.length());
+		}
+		else{
 			phoneNumber= s;
 		}
 		Log.e("CallPhoneNewActivity","phoneNumber"+phoneNumber);
@@ -239,8 +256,8 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		long time = System.currentTimeMillis();
 		contactRecodeEntity.setCallTime(time);
 		contactRecodeEntity.setData(DateUtils.getTimeStampString(time + ""));
-		if (!TextUtils.isEmpty(address)) {
-			contactRecodeEntity.setAddress(address);
+		if (!TextUtils.isEmpty(contactRecodeEntity.getAddress())) {
+			contactRecodeEntity.setAddress(contactRecodeEntity.getAddress());
 		} else {
 			contactRecodeEntity.setAddress(getString(R.string.title_search_result_not_found));
 		}

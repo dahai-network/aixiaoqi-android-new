@@ -415,6 +415,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	}
 
 	private void simCellPhone(){
+		CommonTools.delayTime(1000);
 		Intent intent=new Intent(getActivity(),CallPhoneNewActivity.class);
 		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO,contactRecodeEntity);
 		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,SIM_CELL_PHONE);
