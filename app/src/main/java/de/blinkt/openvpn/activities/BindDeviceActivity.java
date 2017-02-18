@@ -278,7 +278,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
 		String type = entity.getBlueType();
-		if (type == BluetoothConstant.BLUE_VERSION && !CommonTools.isFastDoubleClick(300)) {
+		if (type == BluetoothConstant.BLUE_VERSION) {
 			Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + utils.readString(Constant.IMEI) + ",版本号：" + utils.readString(Constant.BRACELETVERSION));
 			BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, utils.readString(Constant.IMEI), entity.getBraceletversion());
 			new Thread(bindDevicehttp).start();

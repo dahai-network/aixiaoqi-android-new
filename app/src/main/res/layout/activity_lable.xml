@@ -15,6 +15,8 @@
         android:background="@color/white"
         android:lines="1"
         android:textSize="@dimen/little_14"
+        android:inputType="text"
+        android:labelFor="@+id/lableEditText"
         android:maxLength="20"
         android:paddingLeft="@dimen/padding_15dp"
         android:paddingRight="@dimen/padding_15dp"

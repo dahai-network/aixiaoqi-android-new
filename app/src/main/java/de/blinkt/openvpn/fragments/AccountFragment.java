@@ -217,7 +217,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKMYDEVICE);
 				intent = new Intent(getActivity(), MyDeviceActivity.class);
-				int status = 0;
+				int status = R.string.index_connecting;
 				if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBleStatus())) {
 					status = R.string.index_no_signal;
 				} else if (getActivity().getResources().getString(R.string.index_connecting).equals(getBleStatus())) {
@@ -227,9 +227,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				} else if (getActivity().getResources().getString(R.string.index_no_packet).equals(getBleStatus())) {
 					status = R.string.index_no_packet;
 				} else if (getString(R.string.index_un_insert_card).equals(getBleStatus())) {
-					status = R.string.index_no_signal;
+					status = R.string.index_un_insert_card;
 				} else if (getString(R.string.index_high_signal).equals(getBleStatus())) {
 					status = R.string.index_high_signal;
+				} else if (getString(R.string.index_registing).equals(getBleStatus())) {
+					status = R.string.index_registing;
+				} else if (getString(R.string.index_aixiaoqicard).equals(getBleStatus())) {
+					status = R.string.index_aixiaoqicard;
 				}
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
 				break;
@@ -325,7 +329,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	@OnClick(R.id.liftWristLinearLayout)
 	public void onClick() {
 	}
-
 
 
 	public String getBleStatus() {

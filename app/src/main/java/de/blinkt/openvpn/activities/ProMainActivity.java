@@ -804,6 +804,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				dataType = messageFromBlueTooth.substring(6, 10);
 				switch (dataType) {
 					case "0700":
+						Log.i(TAG,"进入0700 ProMainActivity");
 						if (txValue[5] == 0x01) {
 							if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
 								//当有通话套餐的时候才允许注册操作

@@ -154,6 +154,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_device);
 		ButterKnife.bind(this);
+		EventBus.getDefault().register(this);
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBtAdapter == null) {
 //			Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
@@ -228,7 +229,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
-		EventBus.getDefault().register(this);
 		//如果是在注册中才能打开动画
 		if ((SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 2)
 				&& conStatusTextView.getText().toString().equals(getResources().getString(R.string.index_registing))) {
@@ -323,8 +323,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			case R.id.statueTextView:
 				//当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
 				registerSimStatu.setVisibility(View.VISIBLE);
-				IsHavePacketHttp isHavePacketHttp = new IsHavePacketHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
-				new Thread(isHavePacketHttp).start();
+//				IsHavePacketHttp isHavePacketHttp = new IsHavePacketHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
+//				new Thread(isHavePacketHttp).start();
 				Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 				break;
@@ -401,11 +401,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				unBindButton.setVisibility(View.VISIBLE);
 				dismissProgress();
 				setView();
-				if (utils.readBoolean(Constant.ISHAVEORDER, true)) {
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
-				} else {
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_no_packet));
-				}
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
 				if (retryTime != 0) {
 //							//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
 //							new Thread(new Runnable() {
