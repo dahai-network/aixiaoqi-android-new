@@ -47,7 +47,6 @@ import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 public class BindDeviceActivity extends CommenActivity implements InterfaceCallback, DialogInterfaceTypeBase {
 
-	public static int FAILT = 4;
 	@BindView(R.id.stopImageView)
 	ImageView stopImageView;
 	@BindView(R.id.all_device_rv)
@@ -62,7 +61,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	private String deviceAddress = "";
 	SharedUtils utils = SharedUtils.getInstance();
 	private DialogBalance noDevicedialog;
-	private int REQUEST_ENABLE_BT = 2;
 	private String TAG = "BindDeviceActivity";
 	private UartService mService = ICSOpenVPNApplication.uartService;
 
@@ -163,7 +161,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 													Collections.sort(infos, new Comparator<Map.Entry<String, Integer>>() {
 														public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
 															return (o2.getValue() - o1.getValue());
-//																return (o1.getKey()).toString().compareTo(o2.getKey());
 														}
 													});
 													for (int i = 0; i < infos.size(); i++) {

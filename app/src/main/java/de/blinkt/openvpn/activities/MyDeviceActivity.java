@@ -8,7 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
@@ -123,8 +122,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_ENABLE_BT = 2;
-	private static final int UART_PROFILE_CONNECTED = 20;
-	private static final int UART_PROFILE_DISCONNECTED = 21;
 	public static final String BLUESTATUSFROMPROMAIN = "bluestatusfrompromain";
 	private TimerTask checkPowerTask = new TimerTask() {
 		@Override
@@ -135,7 +132,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 		}
 	};
-	private int mState = UART_PROFILE_DISCONNECTED;
 	private SharedUtils utils = SharedUtils.getInstance();
 	private UartService mService = ICSOpenVPNApplication.uartService;
 	private Timer checkPowerTimer = new Timer();
@@ -144,6 +140,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private DialogBalance noDevicedialog;
 	private DialogBalance cardRuleBreakDialog;
 	Animation RegisterStatueAnim;
+	//写卡进度
+	private static int percentInt;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +159,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		serviceInit();
 		initDialogUpgrade();
 	}
+
 
 	//停止动画
 	public void stopAnim() {
@@ -200,14 +199,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
 		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 		checkPowerTimer.schedule(checkPowerTask, 100, 60000);
-		if (mService != null)
-			mState = mService.mConnectionState;
+
 		macAddressStr = utils.readString(Constant.IMEI);
 		if (macAddressStr != null)
 			macAddressStr = macAddressStr.toUpperCase();
 		macTextView.setText(macAddressStr);
 		hasLeftViewTitle(R.string.device, 0);
-		if (mState == UartService.STATE_CONNECTED) {
+		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 			int electricityInt = utils.readInt(ELECTRICITY);
 			noConnectImageView.setVisibility(GONE);
 			unBindButton.setVisibility(View.VISIBLE);
@@ -232,6 +230,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if ((SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 2)
 				&& conStatusTextView.getText().toString().equals(getResources().getString(R.string.index_registing))) {
 			startAnim();
+		}
+		if (percentInt != 0) {
+			percentTextView.setText(percentInt + "%");
 		}
 	}
 
@@ -400,7 +401,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
-				mState = UART_PROFILE_CONNECTED;
+				//TODO 连接成功，操作问题
 				//测试代码
 				unBindButton.setVisibility(View.VISIBLE);
 				dismissProgress();
@@ -414,8 +415,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 
-				mState = UART_PROFILE_DISCONNECTED;
-				if (ICSOpenVPNApplication.isConnect) {
+				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 					retryTime++;
 					if (retryTime > 20) {
 						sinking.setVisibility(GONE);
@@ -953,24 +953,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 	}
 
-	private void setLeftDrawable(int resId) {
-		if (resId != -1) {
-			Drawable leftDrawable = getResources().getDrawable(resId);
-			if (leftDrawable != null) {
-				leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
-				conStatusTextView.setCompoundDrawables(null, null, leftDrawable, null);
-			}
-		} else {
-			conStatusTextView.setCompoundDrawables(null, null, null, null);
-		}
-	}
-
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(IsSuccessEntity entity) {
 		Log.e(TAG, "onIsSuccessEntity");
 		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
 			if (entity.isSuccess()) {
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
+				percentInt = 0;
 				stopAnim();
 			} else {
 				if (entity.getFailType() != SocketConstant.START_TCP_FAIL)
@@ -1028,7 +1017,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			percentTextView.setVisibility(View.VISIBLE);
 		}
 		double percent = entity.getPercent();
-		int percentInt = (int) (percent / 1.6);
+		percentInt = (int) (percent / 1.6);
 		Log.i(TAG, "写卡进度：" + percentInt + "%");
 		if (percentInt >= 100) {
 			percentInt = 98;

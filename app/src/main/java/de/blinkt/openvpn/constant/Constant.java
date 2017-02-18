@@ -68,7 +68,7 @@ public class Constant {
 	public static final String HISTORICAL_STEPS = "8880020E00";//历史步数
 	public static final String FIND_DEVICE = "8880020C00";//查找手环
 	public static final String BASIC_MESSAGE = "8880020600";//基本信息获取
-	public static final String SKY_UPGRADE_ORDER = "8880030A00B1";//升级
+	public static final String SKY_UPGRADE_ORDER = "8880030A00B1";//空中升级指令
 	//		public static final String FIND_VERSION = "AA0A0401A5";//版本号（以后的版本）
 	public static final String RESTORATION = "8880020100";//复位命令
 
