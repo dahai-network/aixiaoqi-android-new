@@ -124,8 +124,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_ENABLE_BT = 2;
-	private static final int UART_PROFILE_CONNECTED = 20;
-	private static final int UART_PROFILE_DISCONNECTED = 21;
 	public static final String BLUESTATUSFROMPROMAIN = "bluestatusfrompromain";
 	private TimerTask checkPowerTask = new TimerTask() {
 		@Override
@@ -136,7 +134,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 		}
 	};
-	private int mState = UART_PROFILE_DISCONNECTED;
 	private SharedUtils utils = SharedUtils.getInstance();
 	private UartService mService = ICSOpenVPNApplication.uartService;
 	private Timer checkPowerTimer = new Timer();
@@ -198,14 +195,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
 		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 		checkPowerTimer.schedule(checkPowerTask, 100, 60000);
-		if (mService != null)
-			mState = mService.mConnectionState;
+
 		macAddressStr = utils.readString(Constant.IMEI);
 		if (macAddressStr != null)
 			macAddressStr = macAddressStr.toUpperCase();
 		macTextView.setText(macAddressStr);
 		hasLeftViewTitle(R.string.device, 0);
-		if (mState == UartService.STATE_CONNECTED) {
+		if (mService!=null&&mService.mConnectionState == UartService.STATE_CONNECTED) {
 			int electricityInt = utils.readInt(ELECTRICITY);
 			noConnectImageView.setVisibility(GONE);
 			unBindButton.setVisibility(View.VISIBLE);
@@ -394,7 +390,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
-				mState = UART_PROFILE_CONNECTED;
+				//TODO 连接成功，操作问题
 				//测试代码
 				unBindButton.setVisibility(View.VISIBLE);
 				dismissProgress();
@@ -412,8 +408,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 
-				mState = UART_PROFILE_DISCONNECTED;
-				if (ICSOpenVPNApplication.isConnect) {
+				if (mService!=null&&mService.mConnectionState==UartService.STATE_CONNECTED) {
 					retryTime++;
 					if (retryTime > 20) {
 						sinking.setVisibility(GONE);
