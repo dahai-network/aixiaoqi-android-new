@@ -635,7 +635,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
 					} else {
 						CommonTools.showShortToast(this, getString(R.string.last_version));
-						stopAnim();
+//						stopAnim();
 					}
 				}
 			}

@@ -209,8 +209,8 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	public void onDestroy() {
 		super.onDestroy();
 		if (ICSOpenVPNApplication.the_sipengineReceive != null) {
-			ICSOpenVPNApplication.the_sipengineReceive.MuteMic(false);
-			ICSOpenVPNApplication.the_sipengineReceive.SetLoudspeakerStatus(false);
+			ICSOpenVPNApplication.the_sipengineReceive.MuteMic(true);
+			ICSOpenVPNApplication.the_sipengineReceive.SetLoudspeakerStatus(true);
 		}
 		if(connectedReceive!=null){
 			unregisterReceiver(connectedReceive);

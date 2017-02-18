@@ -292,8 +292,8 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	public void onDestroy() {
 		super.onDestroy();
 		if(sipEngineCore!=null){
-			sipEngineCore.MuteMic(false);
-			sipEngineCore.SetLoudspeakerStatus(false);
+			sipEngineCore.MuteMic(true);
+			sipEngineCore.SetLoudspeakerStatus(true);
 			sipEngineCore=null;
 		}
 		if(receiver!=null)
