@@ -4,8 +4,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import de.blinkt.openvpn.constant.Constant;
-
 /**
  * 用于分包组包（包信息去除不要，并把有效数据放在一个大包里面。）
  * Created by Administrator on 2016/9/7.
@@ -71,7 +69,7 @@ public class PacketeUtil {
 				else if(i==totalNum-1){
 					packets[i]= String.format("88%02X%02X",0x80+i ,(message.length()-(15*2+17*2*(i-1)))/2)+message.substring(15*2+17*2*(i-1),message.length());
 				}else{
-					packets[i]= String.format("88%02X%02X", i,17)+message.substring(15*2,15*2+17*2*i);
+					packets[i]= String.format("88%02X%02X", i,17)+message.substring(15*2+17*2*(i-1),15*2+17*2*i);
 				}
 				Log.e("PacketeUtil","packets["+i+"]="+packets[i]);
 			}

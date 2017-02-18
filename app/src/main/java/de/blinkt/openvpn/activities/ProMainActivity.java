@@ -47,6 +47,7 @@ import cn.com.johnson.adapter.FragmentAdapter;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -523,8 +524,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
 		bleMoveReceiver = null;
-		if(intentCallPhone!=null)
-		stopService(intentCallPhone);
+		if (intentCallPhone != null)
+			stopService(intentCallPhone);
 		//关闭服务并设置为null
 
 		if (isDfuServiceRunning()) {
@@ -558,7 +559,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			unbindService(socketTcpConnection);
 			if (SocketConnection.mReceiveSocketService != null) {
 				SocketConnection.mReceiveSocketService.stopSelf();
-				SocketConnection.mReceiveSocketService=null;
+				SocketConnection.mReceiveSocketService = null;
 			}
 		}
 	}
@@ -730,12 +731,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	private void startTcpSocket() {
 		bindTcpSucceed();
-		if(TestProvider.sendYiZhengService!=null)
+		if (TestProvider.sendYiZhengService != null)
 			TestProvider.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
 	}
 
-	private void bindTcpSucceed(){
-		if(SocketConnection.mReceiveSocketService==null){
+	private void bindTcpSucceed() {
+		if (SocketConnection.mReceiveSocketService == null) {
 			CommonTools.delayTime(1000);
 			if (bindtime > 15) {
 				return;
@@ -743,7 +744,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			bindtime++;
 			startTcpSocket();
 		}
-		bindtime=0;
+		bindtime = 0;
 	}
 
 	/**
@@ -777,38 +778,50 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				break;
 		}
 	}
-private int count;
+
+	private int count;
 	//用于改变indexFragment状态的Receiver
 	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {
+		public String dataType;
+
 		@Override
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
-				IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
-				new Thread(http).start();
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-				Log.i(TAG,"被主动断掉连接！");
+				Log.i(TAG, "被主动断掉连接！");
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 				final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
-				//判断是否是分包（BB开头的包）
-				if (txValue[0] != (byte) 0xBB && txValue[0] != (byte) 0xAA) {
+				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
+				if (txValue[0] != (byte) 0x55) {
 					return;
+				}
+				//判断是否是分包（0x80的包）
+				if (txValue[1] != (byte) 0x80) {
+					return;
+				}
+				dataType = messageFromBlueTooth.substring(6, 10);
+				switch (dataType) {
+					case "0700":
+						if (txValue[5] == 0x01) {
+							if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
+								//当有通话套餐的时候才允许注册操作
+								IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
+								new Thread(http).start();
+								checkRegisterStatuGoIp();
+							}
+						} else if (txValue[5] == 0x11) {
+							sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
+						}
+						break;
 				}
 				if (txValue[0] == (byte) 0xBB) {
 					if (txValue[1] == (byte) 0x01) {
 						if (txValue[3] == (byte) 0x03) {
 						}
-					} else if (txValue[1] == (byte) 0x33) {
-						if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
-							//当有通话套餐的时候才允许注册操作
-							IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
-							new Thread(http).start();
-							checkRegisterStatuGoIp();
-						}
-					} else if (txValue[1] == (byte) 0x11) {
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
-					} else if (txValue[1] == (byte) 0xEE) {
+					}
+					else if (txValue[1] == (byte) 0xEE) {
 						if (SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
 							checkRegisterStatuGoIp();
 						} else {

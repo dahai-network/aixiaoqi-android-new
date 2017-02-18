@@ -250,7 +250,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	}
 
 	private void sendMessageSeparate(final String message) {
-		String[] messages = PacketeUtil.Separate(message);
+		String[] messages = PacketeUtil.Separate(message,"1300");
 		int length = messages.length;
 		for (int i = 0; i < length; i++) {
 			if (!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])) {

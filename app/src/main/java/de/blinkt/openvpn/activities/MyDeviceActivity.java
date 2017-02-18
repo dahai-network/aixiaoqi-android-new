@@ -84,6 +84,7 @@ import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
+import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.Constant.SKY_UPGRADE_ORDER;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
@@ -484,31 +485,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //					case (byte) 0xBB:
 //						if (txValue[1] == (byte) 0x05) {
 //							setView();
-//						} else if (txValue[1] == (byte) 0x0A) {
-//							Log.i(TAG, "版本号:" + txValue[2]);
-//
-//							firmwareTextView.setText(txValue[2] + "");
-//							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-//								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
-//								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
-//								entity.setBraceletversion(txValue[2] + "");
-//								entity.setSuccess(true);
-//								EventBus.getDefault().post(entity);
-//								Log.i(TAG, "进入版本号:" + txValue[2]);
-//							}
 //						} else if (txValue[1] == (byte) 0x04) {
 //							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
-//						} else if (txValue[1] == (byte) 0x33) {
-//							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
-//								sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
-//							}
-//						} else if (txValue[1] == (byte) 0x11) {
-//							//百分比TextView设置为0
-////							percentTextView.setText("");
-//							showNoCardDialog();
-//							SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
-//							sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card));
-//							stopAnim();
 //						}
 //						break;
 					case "0100":
@@ -521,6 +499,20 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							entity.setSuccess(true);
 							EventBus.getDefault().post(entity);
 							Log.i(TAG, "进入版本号:" + txValue[5]);
+						}
+						break;
+					case "0700":
+						if (txValue[5] == 0x01) {
+							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
+								sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+							}
+						} else if (txValue[5] == 0x11) {
+							//百分比TextView设置为0
+//							percentTextView.setText("");
+							showNoCardDialog();
+							SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
+							sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card));
+							stopAnim();
 						}
 						break;
 				}
