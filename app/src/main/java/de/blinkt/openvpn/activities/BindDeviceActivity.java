@@ -38,7 +38,6 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
-import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -213,6 +212,8 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			} else {
 				CommonTools.showShortToast(this, "该设备已经绑定过了！");
 				scanLeDevice(false);
+				mService.disconnect();
+				utils.delete(Constant.IMEI);
 				finish();
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
@@ -220,12 +221,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				utils.writeString(Constant.IMEI, deviceAddress);
-				ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-				if (!utils.readBoolean(Constant.ISHAVEORDER, true)) {
-					entity.setStatus(getString(R.string.index_no_packet));
-					entity.setStatusDrawableInt(R.drawable.index_no_packet);
-					EventBus.getDefault().post(entity);
-				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}

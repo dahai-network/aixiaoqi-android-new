@@ -1,5 +1,7 @@
 package de.blinkt.openvpn.bluetooth.util;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by Administrator on 2016/9/7.
  */
@@ -10,8 +12,10 @@ public class HexStringExchangeBytesUtil {
 	 * @param src byte[] data
 	 * @return hex string
 	 */
+	@NonNull
 	public static String bytesToHexString(byte[] src, int length) {
-		if (src == null) {
+		if(src == null)
+		{
 			return "";
 		}
 		return bytesToHexString(src, 0, length);
