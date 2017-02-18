@@ -107,8 +107,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	LinearLayout flowPayLinearLayout;
 	@BindView(R.id.unBindButton)
 	Button unBindButton;
-	//	@BindView(R.id.resetDeviceTextView)
-//	TextView resetDeviceTextView;
 	@BindView(R.id.sinking)
 	MySinkingView sinking;
 	//重连次数记录
@@ -125,7 +123,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	Button registerSimStatu;
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
-	private static final int REQUEST_SELECT_DEVICE = 1;
 	private static final int REQUEST_ENABLE_BT = 2;
 	private static final int UART_PROFILE_CONNECTED = 20;
 	private static final int UART_PROFILE_DISCONNECTED = 21;
@@ -165,13 +162,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		initDialogUpgrade();
 	}
 
+	//停止动画
 	public void stopAnim() {
 		registerSimStatu.setEnabled(true);
 		RegisterStatueAnim.reset();
 		registerSimStatu.clearAnimation();
 		registerSimStatu.setBackgroundResource(R.drawable.registering);
 	}
-
+	//启动动画
 	public void startAnim() {
 		if (!registerSimStatu.isEnabled()) return;
 		registerSimStatu.setEnabled(false);
@@ -182,7 +180,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	DfuProgressListener mDfuProgressListener;
-
+//空中升级
 	private void skyUpgradeHttp() {
 		Log.e(TAG, "skyUpgradeHttp");
 		long beforeRequestTime = utils.readLong(Constant.UPGRADE_INTERVAL);
@@ -407,23 +405,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_no_packet));
 				}
 				if (retryTime != 0) {
-//							//测试：当刚连接的时候，因为测试阶段没有连接流程所以连通上就等于连接上。
-//							new Thread(new Runnable() {
-//								@Override
-//								public void run() {
-//									IsSuccessEntity entity = new IsSuccessEntity();
-//									entity.setType(Constant.BLUE_CONNECTED_INT);
-//									entity.setSuccess(true);
-//									EventBus.getDefault().post(entity);
-//									try {
-//										Thread.sleep(5000);
-//									} catch (InterruptedException e) {
-//										e.printStackTrace();
-//									}
-//									Log.e("phoneAddress", "main.start()");
-//									JNIUtil.getInstance().startSDK(SharedUtils.getInstance().readString(Constant.USER_NAME));
-//								}
-//							}).start();
+
 					retryTime = 0;
 				}
 			}
@@ -559,10 +541,19 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		stopAnim();
 		Log.d(TAG, "onDestroy()");
 		isUpgrade = false;
 		if (isDfuServiceRunning()) {
 			stopService(new Intent(this, DfuService.class));
+		}
+		if(checkPowerTimer!=null){
+			checkPowerTimer.cancel();
+			checkPowerTimer=null;
+		}
+		if(checkPowerTask!=null){
+			checkPowerTask.cancel();
+			checkPowerTask=null;
 		}
 
 		try {
@@ -627,7 +618,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
 					} else {
 						CommonTools.showShortToast(this, getString(R.string.last_version));
-//						stopAnim();
+						stopAnim();
 					}
 				}
 			}
@@ -683,12 +674,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		showSkyUpgrade();
 
 		final DfuServiceInitiator starter = new DfuServiceInitiator(utils.readString(Constant.IMEI));
+		starter.setKeepBond(true);
 		if (Environment.getExternalStorageState().equals(
 				Environment.MEDIA_MOUNTED)) {
 			File filePath = Environment.getExternalStorageDirectory();
 			String path = filePath.getPath();
 			String abo = path + Constant.UPLOAD_PATH;
-			starter.setZip(null, abo);
+			starter.setZip(abo);
 			starter.start(this, DfuService.class);
 		}
 
@@ -858,23 +850,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				}
 			};
 
-	private void checkIsBindDevie(BluetoothDevice device) {
-		try {
-			// 连接建立之前的先配对
-			if (device.getBondState() == BluetoothDevice.BOND_NONE) {
-				Method creMethod = BluetoothDevice.class
-						.getMethod("createBond");
-				Log.e("TAG", "开始配对");
-				creMethod.invoke(device);
-			} else {
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			//DisplayMessage("无法配对！");
-			e.printStackTrace();
-		}
-
-	}
 
 	private void showDialog() {
 		scanLeDevice(false);
