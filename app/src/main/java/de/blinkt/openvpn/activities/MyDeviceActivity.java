@@ -8,7 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
@@ -33,7 +32,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -142,12 +140,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private DialogBalance noDevicedialog;
 	private DialogBalance cardRuleBreakDialog;
 	Animation RegisterStatueAnim;
+	//写卡进度
+	private static int percentInt;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_device);
 		ButterKnife.bind(this);
+		EventBus.getDefault().register(this);
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBtAdapter == null) {
 //			Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
@@ -159,6 +160,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		initDialogUpgrade();
 	}
 
+
 	//停止动画
 	public void stopAnim() {
 		registerSimStatu.setEnabled(true);
@@ -166,6 +168,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		registerSimStatu.clearAnimation();
 		registerSimStatu.setBackgroundResource(R.drawable.registering);
 	}
+
 	//启动动画
 	public void startAnim() {
 		if (!registerSimStatu.isEnabled()) return;
@@ -177,7 +180,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	DfuProgressListener mDfuProgressListener;
-//空中升级
+
+	//空中升级
 	private void skyUpgradeHttp() {
 		Log.e(TAG, "skyUpgradeHttp");
 		long beforeRequestTime = utils.readLong(Constant.UPGRADE_INTERVAL);
@@ -201,7 +205,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			macAddressStr = macAddressStr.toUpperCase();
 		macTextView.setText(macAddressStr);
 		hasLeftViewTitle(R.string.device, 0);
-		if (mService!=null&&mService.mConnectionState == UartService.STATE_CONNECTED) {
+		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 			int electricityInt = utils.readInt(ELECTRICITY);
 			noConnectImageView.setVisibility(GONE);
 			unBindButton.setVisibility(View.VISIBLE);
@@ -222,11 +226,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 
 		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
-		EventBus.getDefault().register(this);
 		//如果是在注册中才能打开动画
 		if ((SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 2)
 				&& conStatusTextView.getText().toString().equals(getResources().getString(R.string.index_registing))) {
 			startAnim();
+		}
+		if (percentInt != 0) {
+			percentTextView.setText(percentInt + "%");
 		}
 	}
 
@@ -237,7 +243,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		switch (requestCode) {
 			case REQUEST_ENABLE_BT:
 				if (resultCode == Activity.RESULT_OK) {
-					clickFindBracelet();
+					String deviceAddress = utils.readString(Constant.IMEI);
+					if (deviceAddress != null) {
+						connDevice(deviceAddress);
+					} else {
+						clickFindBracelet();
+					}
 				} else {
 					Log.d(TAG, "BT not enabled");
 					Toast.makeText(this, "蓝牙未打开", Toast.LENGTH_SHORT).show();
@@ -317,8 +328,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			case R.id.statueTextView:
 				//当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
 				registerSimStatu.setVisibility(View.VISIBLE);
-				IsHavePacketHttp isHavePacketHttp = new IsHavePacketHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
-				new Thread(isHavePacketHttp).start();
+//				IsHavePacketHttp isHavePacketHttp = new IsHavePacketHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
+//				new Thread(isHavePacketHttp).start();
 				Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 				break;
@@ -395,11 +406,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				unBindButton.setVisibility(View.VISIBLE);
 				dismissProgress();
 				setView();
-				if (utils.readBoolean(Constant.ISHAVEORDER, true)) {
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
-				} else {
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_no_packet));
-				}
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
 				if (retryTime != 0) {
 
 					retryTime = 0;
@@ -408,7 +415,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 
-				if (mService!=null&&mService.mConnectionState==UartService.STATE_CONNECTED) {
+				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 					retryTime++;
 					if (retryTime > 20) {
 						sinking.setVisibility(GONE);
@@ -542,13 +549,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (isDfuServiceRunning()) {
 			stopService(new Intent(this, DfuService.class));
 		}
-		if(checkPowerTimer!=null){
+		if (checkPowerTimer != null) {
 			checkPowerTimer.cancel();
-			checkPowerTimer=null;
+			checkPowerTimer = null;
 		}
-		if(checkPowerTask!=null){
+		if (checkPowerTask != null) {
 			checkPowerTask.cancel();
-			checkPowerTask=null;
+			checkPowerTask = null;
 		}
 
 		try {
@@ -599,11 +606,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				utils.writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
 				unBindButton.setVisibility(View.VISIBLE);
 				//当接口调用完毕后，扫描设备，打开状态栏
-				scanLeDevice(true);
-			} else {
-				Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-				startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+//				scanLeDevice(true);
 			}
+			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 		} else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
 			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
 			if (skyUpgradeHttp.getStatus() == 1) {
@@ -745,7 +751,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				downloadSkyUpgradePackageHttp(url);
 			}
 		} else if (type == NOT_YET_REARCH) {
-			scanLeDevice(true);
+			connDevice(utils.readString(Constant.IMEI));
 		} else {
 			onBackPressed();
 		}
@@ -782,7 +788,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		thread.start();
 	}
 
-	//我的设备内如果有已储存设备的话，那么开始扫描已有设备进行连接，不用进入绑定流程啦！
+	//扫描新设备
 	private void scanLeDevice(final boolean enable) {
 		new Thread(new Runnable() {
 			@Override
@@ -812,6 +818,34 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				}
 			}
 		}).start();
+	}
+
+	//连接旧设备
+	private void connDevice(final String deviceAddress) {
+		if (deviceAddress == null) {
+			return;
+		}
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
+					return;
+				}
+				if (mBtAdapter != null) {
+					mService.connect(deviceAddress);
+					CommonTools.delayTime(SCAN_PERIOD);
+					if (mService.mConnectionState != UartService.STATE_CONNECTED) {
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								showDialog();
+							}
+						});
+					}
+				}
+			}
+		}).start();
+
 	}
 
 	private BluetoothAdapter.LeScanCallback mLeScanCallback =
@@ -919,24 +953,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 	}
 
-	private void setLeftDrawable(int resId) {
-		if (resId != -1) {
-			Drawable leftDrawable = getResources().getDrawable(resId);
-			if (leftDrawable != null) {
-				leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
-				conStatusTextView.setCompoundDrawables(null, null, leftDrawable, null);
-			}
-		} else {
-			conStatusTextView.setCompoundDrawables(null, null, null, null);
-		}
-	}
-
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(IsSuccessEntity entity) {
 		Log.e(TAG, "onIsSuccessEntity");
 		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
 			if (entity.isSuccess()) {
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
+				percentInt = 0;
 				stopAnim();
 			} else {
 				if (entity.getFailType() != SocketConstant.START_TCP_FAIL)
@@ -994,7 +1017,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			percentTextView.setVisibility(View.VISIBLE);
 		}
 		double percent = entity.getPercent();
-		int percentInt = (int) (percent / 1.6);
+		percentInt = (int) (percent / 1.6);
 		Log.i(TAG, "写卡进度：" + percentInt + "%");
 		if (percentInt >= 100) {
 			percentInt = 98;

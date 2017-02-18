@@ -485,10 +485,6 @@
         </activity>
         <activity android:name="de.blinkt.openvpn.activities.CommitCallTimeOrderActivity">
         </activity>
-        <activity android:name="de.blinkt.openvpn.activities.BluetoothNoConnectActivity">
-        </activity>
-        <activity android:name="de.blinkt.openvpn.activities.BluetoothConnectedActivity">
-        </activity>
     </application>
 
 </manifest>

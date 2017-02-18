@@ -159,6 +159,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	}
 
+
 	private void initBrocast() {
 		if (bleMoveReceiver == null) {
 			bleMoveReceiver = new ReceiveBLEMoveReceiver();
@@ -325,9 +326,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							return;
 						}
 						while (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED) {
-							scanDeviceFiveSecond();
+							connDeviceFiveSecond();
 							CommonTools.delayTime(RECONNECT_TIME);
-
 						}
 
 					}
@@ -342,9 +342,36 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	private Handler stopHandler = null;
 
-	//扫描五秒后断连
-	private void scanDeviceFiveSecond() {
-		scanLeDevice(true);
+//	//扫描五秒后断连
+//	private void scanDeviceFiveSecond() {
+//		scanLeDevice(true);
+//		runOnUiThread(new Runnable() {
+//			@Override
+//			public void run() {
+//				sendEventBusChangeBluetoothStatus(getResources().getString(R.string.index_connecting), R.drawable.index_connecting);
+//				if (stopHandler == null) {
+//					stopHandler = new Handler();
+//				}
+//				stopHandler.postDelayed(new Runnable() {
+//					@Override
+//					public void run() {
+//						scanLeDevice(false);
+//						runOnUiThread(new Runnable() {
+//							@Override
+//							public void run() {
+//								if (indexFragment.getBlutoothStatus().equals(getResources().getString(R.string.index_unconnect)))
+//									sendEventBusChangeBluetoothStatus(getResources().getString(R.string.index_unconnect), R.drawable.index_unconnect);
+//							}
+//						});
+//					}
+//				}, 5000);
+//			}
+//		});
+//	}
+
+	//扫描五秒后提示
+	private void connDeviceFiveSecond() {
+		mService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -804,6 +831,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				dataType = messageFromBlueTooth.substring(6, 10);
 				switch (dataType) {
 					case "0700":
+						Log.i(TAG, "进入0700 ProMainActivity");
 						if (txValue[5] == 0x01) {
 							if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
 								//当有通话套餐的时候才允许注册操作
@@ -820,8 +848,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					if (txValue[1] == (byte) 0x01) {
 						if (txValue[3] == (byte) 0x03) {
 						}
-					}
-					else if (txValue[1] == (byte) 0xEE) {
+					} else if (txValue[1] == (byte) 0xEE) {
 						if (SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
 							checkRegisterStatuGoIp();
 						} else {

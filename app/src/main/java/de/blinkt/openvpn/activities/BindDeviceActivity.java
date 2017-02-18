@@ -38,7 +38,6 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
-import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -210,6 +209,8 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			} else {
 				CommonTools.showShortToast(this, "该设备已经绑定过了！");
 				scanLeDevice(false);
+				mService.disconnect();
+				utils.delete(Constant.IMEI);
 				finish();
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
@@ -217,12 +218,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				utils.writeString(Constant.IMEI, deviceAddress);
-				ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-				if (!utils.readBoolean(Constant.ISHAVEORDER, true)) {
-					entity.setStatus(getString(R.string.index_no_packet));
-					entity.setStatusDrawableInt(R.drawable.index_no_packet);
-					EventBus.getDefault().post(entity);
-				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
@@ -275,7 +270,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
 		String type = entity.getBlueType();
-		if (type == BluetoothConstant.BLUE_VERSION && !CommonTools.isFastDoubleClick(300)) {
+		if (type == BluetoothConstant.BLUE_VERSION) {
 			Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + utils.readString(Constant.IMEI) + ",版本号：" + utils.readString(Constant.BRACELETVERSION));
 			BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, utils.readString(Constant.IMEI), entity.getBraceletversion());
 			new Thread(bindDevicehttp).start();

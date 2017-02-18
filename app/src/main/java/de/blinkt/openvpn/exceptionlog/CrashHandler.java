@@ -1,17 +1,13 @@
 package de.blinkt.openvpn.exceptionlog;
 
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
@@ -28,13 +24,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import de.blinkt.openvpn.activities.LaunchActivity;
-import de.blinkt.openvpn.activities.LoginMainActivity;
-import de.blinkt.openvpn.activities.ProMainActivity;
-import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.SharedUtils;
 
 /**
  * UncaughtException处理类,当程序发生Uncaught异常的时候,有该类来接管程序,并记录发送错误报告.
@@ -201,7 +192,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 			String time = formatter.format(new Date());
 			String fileName = time + ".text";
 			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-				String path = "/sdcard/aixiaoqi/";
+				String path = Environment.getExternalStorageDirectory().getPath()+"/aixiaoqi/";
 				File dir = new File(path);
 				if (!dir.exists()) {
 					dir.mkdirs();

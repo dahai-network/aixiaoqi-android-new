@@ -96,6 +96,7 @@ public class TipUserOptionActivity extends BaseActivity implements InterfaceCall
 	private boolean isLinkBluetooth;
 	private SharedUtils utils = SharedUtils.getInstance();
 	private int REQUEST_ENABLE_BT = 2;
+	private String TAG = getClass().getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -319,17 +320,20 @@ public class TipUserOptionActivity extends BaseActivity implements InterfaceCall
 
 	private void sendBlueEnable() {
 		if (!type.equals(Constant.LIFT_WRIST)) {
-			String enableQQ = "0" + utils.readInt(Constant.QQ_REMIND);
-			String enableWeixin = "0" + utils.readInt(Constant.WEIXIN_REMIND);
-			String enableComingTel = "0" + utils.readInt(Constant.COMING_TEL_REMIND);
-			String enableMessage = "0" + utils.readInt(Constant.MESSAGE_REMIND);
-			String blueStr = "AA0D07" + enableComingTel + enableMessage + enableWeixin + enableQQ;
+			String enableComingTel = "" + utils.readInt(Constant.COMING_TEL_REMIND);
+			String enableMessage = "" + utils.readInt(Constant.MESSAGE_REMIND);
+			String enableWeixin = "" + utils.readInt(Constant.WEIXIN_REMIND);
+			String enableQQ = "" + utils.readInt(Constant.QQ_REMIND);
+			String enableStr = "0000" + enableComingTel + enableMessage + enableWeixin + enableQQ;
+			Log.i(TAG, "EnableStr old: " + enableStr);
+			enableStr = HexStringExchangeBytesUtil.BToH(enableStr);
+			Log.i(TAG, "EnableStr new: " + enableStr);
+			String blueStr = "8880030300" + enableStr;
 			SendCommandToBluetooth.sendMessageToBlueTooth(blueStr +
 					HexStringExchangeBytesUtil.bytesToHexString(new byte[]{BLECheckBitUtil.getXor(HexStringExchangeBytesUtil.hexStringToBytes(blueStr))})
 			);
 		}
 	}
-
 
 
 	@Override
