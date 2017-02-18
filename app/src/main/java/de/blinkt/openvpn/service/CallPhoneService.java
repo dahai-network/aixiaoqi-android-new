@@ -46,10 +46,9 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
     public static String waitConnected = "waitConnected";
     public static String reportFlag = "reportFlag";
     public static String CALL_FAIL = "callfail";
-    private String TAG = "ProMainActivity";
+    private String TAG = "CallPhoneService";
     public  SipEngineCore the_sipengineReceive;
     private Timer mTimerReceive = new Timer("51DTY scheduler");
-    private int callDir=0;
     private SharedUtils sharedUtils;
     @Override
     public void onCreate() {
@@ -114,15 +113,17 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
         }else if(code==4){
         }
     }
+public static  int CALL_DIR=0;
 
     @Override
     public void OnNewCall(int CallDir, final String peer_caller, boolean is_video_call) {
         Log.e(TAG,"新来电");
         if (CallDir != 0){
-            callDir=0;
+            CALL_DIR=0;
             ReceiveCallActivity.launch(CallPhoneService.this, peer_caller);
         }else{
-            callDir=1;
+            CALL_DIR=1;
+
         }
 
 
@@ -224,7 +225,6 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
         TipHelper.stopSound();
         TipHelper.stopShock();
         Intent intent = new Intent();
-        intent.putExtra("CallDir",callDir);
         intent.putExtra("nativePtr",nativePtr);
         intent.setAction(reportFlag);
         sendBroadcast(intent);

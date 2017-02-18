@@ -90,6 +90,9 @@ public class CommonTools {
 		return false;
 	}
 
+	public static void clearLastClickTime(){
+		lastClickTime=0;
+	}
 	/**
 	 * 获取屏幕宽度
 	 *

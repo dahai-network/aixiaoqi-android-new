@@ -69,6 +69,7 @@ public class Constant {
 	public static final String SKY_UPGRADE_ORDER = "8880030A0001";//基本信息获取
 	//		public static final String FIND_VERSION = "AA0A0401A5";//版本号（以后的版本）
 	public static final String RESTORATION = "8880020100";//复位命令
+
 	public static final String BIND_SUCCESS = "AADD01DDAA";//绑定成功命令
 	//		public static final String ANDROID_TARGET = "AA010400AF";//绑定成功命令
 	//ICCID标记
