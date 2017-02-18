@@ -177,7 +177,9 @@ public class Constant {
 	public static final String SETTING_ALARM = "0f00";//设置闹钟
 	public static final String SIM_UP_POWER = "1000";//对卡上电
 	public static final String SIM_DOWN_POWER = "1100";//对卡断电
-	public static final String SIM_DATA = "1200";//卡数据
-
-
+	public static final String READED_SIM_DATA = "1200";//读卡数据
+	public static final String WRITE_SIM_DATA = "1300";//写卡数据
+	public static final String WRITE_SIM_STEP_ONE ="A0A40000023F00";//写卡第一步
+	public static final String WRITE_SIM_STEP_TWO ="A0A40000022F02";//写卡第一步
+	public static final String WRITE_SIM_STEP_THREE ="A0B000000A";//写卡第一步
 }

@@ -222,7 +222,7 @@ public class SdkAndBluetoothDataInchange {
 			sendMessage(temp);
 		} else {
 			Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + temp);
-			String[] messages = PacketeUtil.Separate(temp,Constant.SIM_DATA);
+			String[] messages = PacketeUtil.Separate(temp,Constant.READED_SIM_DATA);
 			for (int i = 0; i < messages.length; i++) {
 				Log.e(TAG, "&&& server  message: " + messages[i].toString());
 				sendMessage(messages[i]);

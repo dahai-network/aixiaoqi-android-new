@@ -224,19 +224,6 @@ public class UartService extends Service implements Serializable {
 			return false;
 		}
 
-
-//		// Previously connected device.  Try to reconnect.
-//		if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
-//				&& mBluetoothGatt != null) {
-//			Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
-//			if (mBluetoothGatt.connect()) {
-//				mConnectionState = STATE_CONNECTING;
-//				return true;
-//			} else {
-//				return false;
-//			}
-//		}
-
 		final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 		if (device == null) {
 			Log.w(TAG, "Device not found.  Unable to connect.");

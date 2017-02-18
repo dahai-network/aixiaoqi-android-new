@@ -58,9 +58,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 	private UartService mService = null;
 	private Context context;
-	private static final int UART_PROFILE_CONNECTED = 20;
-	private static final int UART_PROFILE_DISCONNECTED = 21;
-	private int mState = UART_PROFILE_DISCONNECTED;
 	private String TAG = "ReceiveBLEMoveReceiver";
 	private String mStrSimCmdPacket;
 	private String mStrStepHistory;
@@ -99,7 +96,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		mService = ICSOpenVPNApplication.uartService;
 		if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 			Log.d(TAG, "UART_CONNECT_MSG");
-			mState = UART_PROFILE_CONNECTED;
 			ICSOpenVPNApplication.isConnect = true;
 			IS_TEXT_SIM = false;
 			isGetnullCardid = true;
@@ -160,7 +156,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 		if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 			isConnect = false;
-			mState = UART_PROFILE_DISCONNECTED;
 			nullCardId = null;
 			if (sendStepThread != null && !sendStepThread.isInterrupted())
 				sendStepThread.interrupt();
@@ -197,20 +192,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 					//通过SDK收发Service发送信息到SDK
 					Log.e("Blue_Chanl", "接收从蓝牙发出的消息：" + HexStringExchangeBytesUtil.bytesToHexString(txValue));
-					//判断是否是分包（BB开头的包）
-//					if (txValue[0] != (byte) 0xBB && txValue[0] != (byte) 0xAA) {
-//						return;
-//
-//					}
 					//是否第一个包，判断类型
 					int dataID = Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) & 127;
 					Log.e("Blue_Chanl", "txValue[1]" + Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) + "dataID：" + dataID);
 					if (dataID == 0) {
 						dataType = messageFromBlueTooth.substring(6, 10);
 					}
-//					else if(dataType==-1&&dataID!=0){
-//						//第一个包发过来的顺序错了，需要重新发送数据到蓝牙
-//					}
 					Log.e("Blue_Chanl", "dataType：" + dataType);
 					switch (txValue[0]) {
 						case (byte) 0x55:
@@ -377,7 +364,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 												Log.i(TAG, "nullcardid上电返回");
 											} else {
 												Log.i(TAG, "发送A0A40000023F00");
-												sendMessageSeparate("A0A40000023F00", "1300");
+												sendMessageSeparate(Constant.WRITE_SIM_STEP_ONE, Constant.WRITE_SIM_DATA);
 											}
 										}
 
@@ -463,29 +450,29 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 		switch (lastSendMessageStr) {
 			case "":
-				sendMessageSeparate("A0A40000023F00", "1300");
+				sendMessageSeparate(Constant.WRITE_SIM_STEP_ONE, Constant.WRITE_SIM_DATA);
 				break;
 			//获取空卡序列号第一步
-			case "A0A40000023F00":
+			case Constant.WRITE_SIM_STEP_ONE:
 				if (mStrSimCmdPacket.contains(WRITE_CARD_STEP1)) {
 					if (isGetnullCardid) {
-						sendMessageSeparate("A0A40000022F02", "1300");
+						sendMessageSeparate(Constant.WRITE_SIM_STEP_TWO, Constant.WRITE_SIM_DATA);
 					} else {
 						registFlowPath();
 					}
 				}
 				break;
 			//获取空卡序列号第二步
-			case "A0A40000022F02":
+			case Constant.WRITE_SIM_STEP_TWO:
 				if (mStrSimCmdPacket.contains(GET_NULLCARDID)) {
 					if (isGetnullCardid)
-						sendMessageSeparate("A0B000000A", "1300");
+						sendMessageSeparate(Constant.WRITE_SIM_STEP_THREE, Constant.WRITE_SIM_DATA);
 				} else {
 					registFlowPath();
 				}
 				break;
 			//获取空卡序列号第三部
-			case "A0B000000A":
+			case Constant.WRITE_SIM_STEP_THREE:
 				if (mStrSimCmdPacket.contains(WRITE_CARD_STEP5)
 						&& mStrSimCmdPacket.contains(RECEIVE_NULL_CARD_CHAR)) {
 					if (isGetnullCardid) {
