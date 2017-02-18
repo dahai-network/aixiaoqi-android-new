@@ -388,6 +388,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											LocalBroadcastManager.getInstance(context).sendBroadcast(cardBreakIntent);
 										}
 									}
+									break;
 								case "0900":
 									Log.i(TAG, "发送给SDK");
 									if (IS_TEXT_SIM) {
