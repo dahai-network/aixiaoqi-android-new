@@ -202,6 +202,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //						return;
 //
 //					}
+					//是否第一个包，判断类型
 					int dataID = Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) & 127;
 					Log.e("Blue_Chanl", "txValue[1]" + Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) + "dataID：" + dataID);
 					if (dataID == 0) {
@@ -324,18 +325,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										}
 //									}
 //									break;
-								case "0100":
-//									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
-//										Log.i(TAG,"老版本设备，修改上电命令");
-//										Constant.UP_TO_POWER = "AADB040174";
-//									}
-									Log.i(TAG, "固件版本号：" + txValue[5]);
-									utils.writeString(Constant.BRACELETVERSION, txValue[5] + "");
-									break;
-
-								case 0700 + "":
-									if (txValue[5] == 1) {
-
 
 //								case (byte) 0xDB:
 //								case (byte) 0xDA:
@@ -355,11 +344,64 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //											ReceiveDBOperate(mStrSimCmdPacket);
 //											messages.clear();
 //										}
+//								case (byte) 0xEE:
+//									//绑定流程成功命令
+//									CommonTools.delayTime(500);
+//									//android 标记，给蓝牙设备标记是否是android设备用的
+//									SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
+//									CommonTools.delayTime(500);
+//									//更新时间操作
+////									Thread.sleep(500);
+//									//android 标记，给蓝牙设备标记是否是android设备用的
+//									SendCommandToBluetooth.sendMessageToBlueTooth(getBLETime());
+//									isConnect = true;
+//									if (sendStepThread != null)
+//										sendStepThread = null;
+//									break;
+								case "0100":
+//									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
+//										Log.i(TAG,"老版本设备，修改上电命令");
+//										Constant.UP_TO_POWER = "AADB040174";
+//									}
+									Log.i(TAG, "固件版本号：" + txValue[5]);
+									utils.writeString(Constant.BRACELETVERSION, txValue[5] + "");
+									break;
 
+								case "0700":
+									if (txValue[5] == 0x01) {
+										//当上电完成则需要发送写卡命令
+										Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
+										if (!IS_TEXT_SIM && isGetnullCardid) {
+											//空卡ID是否不为空，若不为空则
+											if (nullCardId != null) {
+												Log.i(TAG, "nullcardid上电返回");
+											} else {
+												Log.i(TAG, "发送A0A40000023F00");
+												sendMessageSeparate("A0A40000023F00", "1300");
+											}
+										}
+
+									} else if (txValue[5] == 0x11) {
+										if (!IS_TEXT_SIM) {
+											Intent cardBreakIntent = new Intent();
+											cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
+											LocalBroadcastManager.getInstance(context).sendBroadcast(cardBreakIntent);
+										}
 									}
 								case "0900":
 									Log.i(TAG, "发送给SDK");
-									SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+									if (IS_TEXT_SIM) {
+										SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+									}
+									break;
+								case "0a00":
+									messages.add(messageFromBlueTooth);
+									if ((txValue[1] & 0x80) == 0x80) {
+										mStrSimCmdPacket = PacketeUtil.Combination(messages);
+										// 接收到一个完整的数据包,处理信息
+										ReceiveDBOperate(mStrSimCmdPacket);
+										messages.clear();
+									}
 									break;
 //								case (byte) 0xDB:
 //								case (byte) 0xDA:
@@ -375,22 +417,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										}
 //									}
 //									break;
-//								case (byte) 0xEE:
-//									//绑定流程成功命令
-//									CommonTools.delayTime(500);
-//									//android 标记，给蓝牙设备标记是否是android设备用的
-//									SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
-//									CommonTools.delayTime(500);
-//									//更新时间操作
-////									Thread.sleep(500);
-//									//android 标记，给蓝牙设备标记是否是android设备用的
-//									SendCommandToBluetooth.sendMessageToBlueTooth(getBLETime());
-//									isConnect = true;
-//									if (sendStepThread != null)
-//										sendStepThread = null;
-//									break;
-//							}
-//							break;
 //						case (byte) 0xAA:
 //							Log.i("toBlue", "已收到重置信息：" + messageFromBlueTooth);
 //							resetOrderStr = messageFromBlueTooth;
@@ -414,9 +440,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 	}
 
-	private void sendMessageSeparate(final String message) {
+	private void sendMessageSeparate(final String message, String type) {
 		lastSendMessageStr = message;
-		String[] messages = PacketeUtil.Separate(message);
+		String[] messages = PacketeUtil.Separate(message, type);
 		int length = messages.length;
 		for (int i = 0; i < length; i++) {
 			SendCommandToBluetooth.sendMessageToBlueTooth(messages[i]);
@@ -436,13 +462,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 		switch (lastSendMessageStr) {
 			case "":
-				sendMessageSeparate("A0A40000023F00");
+				sendMessageSeparate("A0A40000023F00", "1300");
 				break;
 			//获取空卡序列号第一步
 			case "A0A40000023F00":
 				if (mStrSimCmdPacket.contains(WRITE_CARD_STEP1)) {
 					if (isGetnullCardid) {
-						sendMessageSeparate("A0A40000022F02");
+						sendMessageSeparate("A0A40000022F02", "1300");
 					} else {
 						registFlowPath();
 					}
@@ -452,7 +478,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			case "A0A40000022F02":
 				if (mStrSimCmdPacket.contains(GET_NULLCARDID)) {
 					if (isGetnullCardid)
-						sendMessageSeparate("A0B000000A");
+						sendMessageSeparate("A0B000000A", "1300");
 				} else {
 					registFlowPath();
 				}

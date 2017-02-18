@@ -254,7 +254,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 	}
 
 	private void sendMessageSeparate(final String message) {
-		String[] messages = PacketeUtil.Separate(message);
+		String[] messages = PacketeUtil.Separate(message, "1300");
 		int length = messages.length;
 		for (int i = 0; i < length; i++) {
 			if (!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])) {
