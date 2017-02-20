@@ -16,7 +16,7 @@ public class ContactBean implements Serializable, Indexable {
 	private Long photoId; // 图片id
 	private String lookUpKey;
 	private int selected = 0;
-	private String formattedNumber;
+	private String[] formattedNumber=new String[2];
 	private String sortLetters;
 
 	public String getSortLetters() {
@@ -109,11 +109,11 @@ public class ContactBean implements Serializable, Indexable {
 		this.selected = selected;
 	}
 
-	public String getFormattedNumber() {
+	public String[] getFormattedNumber() {
 		return formattedNumber;
 	}
 
-	public void setFormattedNumber(String formattedNumber) {
+	public void setFormattedNumber(String[] formattedNumber) {
 		this.formattedNumber = formattedNumber;
 	}
 

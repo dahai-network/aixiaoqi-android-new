@@ -13,14 +13,14 @@ public class ContactRecodeEntity implements Serializable{
     private String typeString;
     private int type;
     private int duration;
-    private String  formattedNumber;
+    private String[] formattedNumber=new String[2];
 
-    public String getFormattedNumber() {
+    public String[] getFormattedNumber() {
         return formattedNumber;
     }
 
-    public void setFormattedNumber(String formattedNumber) {
-        this.formattedNumber = formattedNumber;
+    public void setFormattedNumber(String[] formattedNumber) {
+        this.formattedNumber= formattedNumber;
     }
 
     public String getAddress() {

@@ -552,13 +552,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			checkPowerTask.cancel();
 			checkPowerTask = null;
 		}
-
 		try {
 			LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(UARTStatusChangeReceiver);
 			EventBus.getDefault().unregister(this);
 		} catch (Exception ignore) {
 			Log.e(TAG, ignore.toString());
 		}
+		utils=null;
 
 	}
 
