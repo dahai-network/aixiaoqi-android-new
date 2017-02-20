@@ -50,7 +50,7 @@ public class UartService extends Service implements Serializable {
 	private BluetoothManager mBluetoothManager;
 	private BluetoothAdapter mBluetoothAdapter;
 	private BluetoothGatt mBluetoothGatt;
-	public  int mConnectionState = STATE_DISCONNECTED;
+	public int mConnectionState = STATE_DISCONNECTED;
 
 	private static final int STATE_DISCONNECTED = 0;
 	private static final int STATE_CONNECTING = 1;
@@ -71,6 +71,7 @@ public class UartService extends Service implements Serializable {
 
 	public static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 	public static final UUID RX_SERVICE_UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
+	public static final UUID UPGRADE_SERVICE_UUID = UUID.fromString("00001530-1212-efde-1523-785feabcd123");
 	public static final UUID RX_CHAR_UUID = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E");
 	public static final UUID TX_CHAR_UUID1 = UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
 	//GATT通用特征值
@@ -329,6 +330,10 @@ public class UartService extends Service implements Serializable {
 		RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
 		Log.i("getService", "获取服务：" + RxService);
 		if (RxService == null) {
+			RxService = mBluetoothGatt.getService(UPGRADE_SERVICE_UUID);
+			Log.i("getService", "获取空中升级服务：" + RxService);
+		}
+		if (RxService == null) {
 			showMessage("Rx service not found!");
 			broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
 			return;
@@ -394,6 +399,9 @@ public class UartService extends Service implements Serializable {
 		BluetoothGattService RxService = null;
 		if (RxService == null) {
 			RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
+		}
+		if (RxService == null) {
+			RxService = mBluetoothGatt.getService(UPGRADE_SERVICE_UUID);
 		}
 		showMessage("mBluetoothGatt null" + mBluetoothGatt);
 		if (RxService == null) {
