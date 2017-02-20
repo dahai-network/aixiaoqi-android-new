@@ -427,7 +427,6 @@ public static int startDfuCount=0;
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
 							CommonTools.delayTime(1000);
-							Log.i(TAG, "空中升级重连");
 							if (isUpgrade) {
 								Log.i(TAG, "空中升级重连");
 								scanLeDevice(true);
@@ -793,18 +792,6 @@ public static int startDfuCount=0;
 					if (enable) {
 						// Stops scanning after a pre-defined scan period.
 						mBtAdapter.startLeScan(mLeScanCallback);
-						CommonTools.delayTime(SCAN_PERIOD);
-						if (mService.mConnectionState != UartService.STATE_CONNECTED) {
-							mBtAdapter.stopLeScan(mLeScanCallback);
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									showDialog();
-								}
-							});
-						} else {
-							mBtAdapter.stopLeScan(mLeScanCallback);
-						}
 					} else {
 						mBtAdapter.stopLeScan(mLeScanCallback);
 					}
