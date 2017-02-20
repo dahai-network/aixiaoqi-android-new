@@ -12,9 +12,13 @@ import android.widget.TextView;
 import butterknife.BindView;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
+import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DialogUtils;
+import de.blinkt.openvpn.util.SharedUtils;
 import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter;
 
@@ -79,7 +83,7 @@ public class DialogUpgrade extends DialogBase{
         public void onDfuCompleted( String deviceAddress) {
             mTextPercentage.setText(R.string.dfu_status_completed);
             noUpgrade();
-            dialog.dismiss();
+
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -138,5 +142,10 @@ public class DialogUpgrade extends DialogBase{
     private void noUpgrade() {
         MyDeviceActivity.isUpgrade=false;
         MyDeviceActivity.startDfuCount=0;
+        if(ICSOpenVPNApplication.uartService!=null){
+            CommonTools.delayTime(5000);
+        ICSOpenVPNApplication.uartService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
+        }
+        dialog.dismiss();
     }
 }
