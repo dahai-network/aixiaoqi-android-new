@@ -299,6 +299,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				//如果激活卡成功后，刷新按钮点击需要将标记激活
 				isGetnullCardid = true;
 				nullCardId = null;
+				percentInt = 0;
 				//TODO 处理异常
 				//如没有没插卡检测插卡并且提示用户重启手环。
 				//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
@@ -469,21 +470,21 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
 //						}
 //						break;
-					case "0100":
-						Log.i(TAG, "版本号:" + txValue[5]);
-						firmwareTextView.setText(txValue[5] + "");
+					case Constant.SYSTEM_BASICE_INFO:
+						Log.i(TAG, "版本号:" + txValue[6]);
+						firmwareTextView.setText(txValue[6] + "");
 						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, txValue[5] + "");
 						new Thread(http).start();
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 							entity.setBlueType(BluetoothConstant.BLUE_VERSION);
-							entity.setBraceletversion(txValue[5] + "");
+							entity.setBraceletversion(txValue[6] + "");
 							entity.setSuccess(true);
 							EventBus.getDefault().post(entity);
-							Log.i(TAG, "进入版本号:" + txValue[5]);
+							Log.i(TAG, "进入版本号:" + txValue[6]);
 						}
 						break;
-					case "0700":
+					case Constant.RETURN_POWER:
 						if (txValue[5] == 0x01) {
 							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
 								sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
@@ -839,34 +840,34 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
 
 
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									if (device.getName() == null) {
-										return;
-									}
-									Log.i(TAG, "isUpgrade:" + isUpgrade + "deviceName:" + device.getName() + "保存的IMEI地址:" + utils.readString(Constant.IMEI).replace(":", ""));
-									if (isUpgrade && device.getName().contains(utils.readString(Constant.IMEI).replace(":", ""))) {
-										Log.i(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
-										if (mService != null) {
-											scanLeDevice(false);
-											if(startDfuCount==0){
-												Log.i(TAG, "startDfuCount:" + startDfuCount);
-												startDfuCount++;
-												CommonTools.delayTime(1000);
-												uploadToBlueTooth(device.getName(),device.getAddress());
-											}
-										}
-									} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
-										Log.i(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
-										if (mService != null) {
-											scanLeDevice(false);
-											utils.writeString(Constant.IMEI, macAddressStr);
-											mService.connect(macAddressStr);
-										}
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							if (device.getName() == null) {
+								return;
+							}
+							Log.i(TAG, "isUpgrade:" + isUpgrade + "deviceName:" + device.getName() + "保存的IMEI地址:" + utils.readString(Constant.IMEI).replace(":", ""));
+							if (isUpgrade && device.getName().contains(utils.readString(Constant.IMEI).replace(":", ""))) {
+								Log.i(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
+								if (mService != null) {
+									scanLeDevice(false);
+									if (startDfuCount == 0) {
+										Log.i(TAG, "startDfuCount:" + startDfuCount);
+										startDfuCount++;
+										CommonTools.delayTime(1000);
+										uploadToBlueTooth(device.getName(), device.getAddress());
 									}
 								}
-							});
+							} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
+								Log.i(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
+								if (mService != null) {
+									scanLeDevice(false);
+									utils.writeString(Constant.IMEI, macAddressStr);
+									mService.connect(macAddressStr);
+								}
+							}
+						}
+					});
 
 				}
 			};

@@ -153,7 +153,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				}
 			});
 			//五秒内不可以再次启动
-			if (!CommonTools.isFastDoubleClick(1000)&&!isUpgrade) {
+			if (!CommonTools.isFastDoubleClick(1000) && !isUpgrade) {
 				sendStepThread.start();
 			}
 		}
@@ -360,8 +360,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
 //									}
-									Log.i(TAG, "固件版本号：" + txValue[5]);
-									utils.writeString(Constant.BRACELETVERSION, txValue[5] + "");
+									Log.i(TAG, "固件版本号：" + txValue[6]);
+									utils.writeString(Constant.BRACELETVERSION, txValue[6] + "");
 									break;
 
 								case Constant.RETURN_POWER:
