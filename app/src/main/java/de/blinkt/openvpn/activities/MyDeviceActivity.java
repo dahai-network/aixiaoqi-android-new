@@ -386,7 +386,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		return intentFilter;
 	}
 
-
+public static int startDfuCount=0;
 	private Thread connectThread;
 	private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
 
@@ -401,7 +401,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				dismissProgress();
 				setView();
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
-				if(isUpgrade){
+				if(isUpgrade&&startDfuCount==0){
+					startDfuCount++;
 					CommonTools.delayTime(5000);
 					uploadToBlueTooth();
 				}
@@ -409,7 +410,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				if (mService != null) {
-					Log.e(TAG, "isUpgradeSTATECONNECTED=" + isUpgrade);
+
 					if (retryTime >= 20 || !ICSOpenVPNApplication.isConnect) {
 						sinking.setVisibility(GONE);
 						noConnectImageView.setVisibility(View.VISIBLE);
@@ -665,7 +666,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		showSkyUpgrade();
 		Log.e(TAG, "isUpgrade=" + isUpgrade);
-		final DfuServiceInitiator starter = new DfuServiceInitiator(utils.readString(Constant.IMEI));
+		final DfuServiceInitiator starter = new DfuServiceInitiator(upgradeDeviceAddress)
+				.setDeviceName(upgradeDeviceName);
 		starter.setKeepBond(true);
 		if (Environment.getExternalStorageState().equals(
 				Environment.MEDIA_MOUNTED)) {
@@ -839,6 +841,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	}
 
+	private String upgradeDeviceName;
+	private String upgradeDeviceAddress;
 	private BluetoothAdapter.LeScanCallback mLeScanCallback =
 			new BluetoothAdapter.LeScanCallback() {
 
