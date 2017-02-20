@@ -386,7 +386,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		return intentFilter;
 	}
 
-public static int startDfuCount=0;
+	public static int startDfuCount=0;
 	private Thread connectThread;
 	private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
 
@@ -401,11 +401,11 @@ public static int startDfuCount=0;
 				dismissProgress();
 				setView();
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
-				if(isUpgrade&&startDfuCount==0){
-					startDfuCount++;
-					CommonTools.delayTime(5000);
-					uploadToBlueTooth();
-				}
+//				if(isUpgrade&&startDfuCount==0){
+//					startDfuCount++;
+//					CommonTools.delayTime(10000);
+
+//				}
 			}
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
@@ -657,7 +657,7 @@ public static int startDfuCount=0;
 		Upgrade.changeText(desc, getResources().getString(R.string.upgrade), 1);
 	}
 
-	private void uploadToBlueTooth() {
+	private void uploadToBlueTooth(String deviceName,String deviceAddress) {
 		Log.d(TAG, "uploadToBlueTooth");
 		if (isDfuServiceRunning()) {
 			return;
@@ -665,9 +665,10 @@ public static int startDfuCount=0;
 
 		showSkyUpgrade();
 		Log.e(TAG, "isUpgrade=" + isUpgrade);
-		final DfuServiceInitiator starter = new DfuServiceInitiator(upgradeDeviceAddress)
-				.setDeviceName(upgradeDeviceName);
-		starter.setKeepBond(true);
+		final DfuServiceInitiator starter = new DfuServiceInitiator(deviceAddress)
+				.setDeviceName(deviceName).setKeepBond(true);
+		Log.i(TAG, "deviceAddress:" + deviceAddress+"deviceName:"+deviceName);
+
 		if (Environment.getExternalStorageState().equals(
 				Environment.MEDIA_MOUNTED)) {
 			File filePath = Environment.getExternalStorageDirectory();
@@ -835,9 +836,7 @@ public static int startDfuCount=0;
 
 				@Override
 				public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
+
 
 							runOnUiThread(new Runnable() {
 								@Override
@@ -850,7 +849,13 @@ public static int startDfuCount=0;
 										Log.i(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
 										if (mService != null) {
 											scanLeDevice(false);
-											mService.connect(device.getAddress());
+											if(startDfuCount==0){
+												Log.i(TAG, "startDfuCount:" + startDfuCount);
+												startDfuCount++;
+												CommonTools.delayTime(5000);
+												uploadToBlueTooth(device.getName(),device.getAddress());
+											}
+//											mService.connect(device.getAddress());
 										}
 									} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
 										Log.i(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
@@ -862,8 +867,7 @@ public static int startDfuCount=0;
 									}
 								}
 							});
-						}
-					});
+
 				}
 			};
 
