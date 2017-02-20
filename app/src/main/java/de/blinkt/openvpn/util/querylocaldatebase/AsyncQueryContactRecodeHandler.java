@@ -92,9 +92,9 @@ public class AsyncQueryContactRecodeHandler extends AsyncQueryHandler {
         contactRecodeEntity.setData(date);
         if(!TextUtils.isEmpty(name))
             contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(name));
-        else{
-            contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(number));
-        }
+//        else{
+//            contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(number),PinYinConverNumber.getInstance().getNameNum(number));
+//        }
         contactRecodeEntity.setDuration(duration);
         contactRecodeEntity.setName(name);
         contactRecodeEntity.setPhoneNumber(number);

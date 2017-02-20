@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -350,7 +351,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 				}
 
 			}
-			if (!isExist&&contactBean.getFormattedNumber().indexOf(str)>=0 || contactBean.getPhoneNum().indexOf(str)>-1) {
+			if (!isExist&&contactBean.getFormattedNumber()[0].indexOf(str)>-1 ||contactBean.getFormattedNumber()[1].indexOf(str)>-1|| contactBean.getPhoneNum().indexOf(str)>-1) {
 				ContactRecodeEntity contactRecodeEntity=new ContactRecodeEntity();
 				String phoneNumber=	contactBean.getPhoneNum().split(",")[0];
 				contactRecodeEntity.setPhoneNumber(phoneNumber);
@@ -366,11 +367,13 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 			}
 		}
 	}
+	private String TAG="Fragment_Phone";
 	public Filter getFilter() {
 		Filter filter = new Filter() {
 			String str;
 			protected void publishResults(CharSequence constraint, FilterResults results) {
 				if(results.values!=null)
+					Log.e(TAG,"str="+str);
 					contactRecodeAdapter.setSearchChar(str);
 				contactRecodeAdapter.addAll((ArrayList<ContactRecodeEntity>)results.values);
 			}
@@ -391,7 +394,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	private void searchContactRecoder(String str, List<ContactRecodeEntity> searchResultList) {
 		try{
 			for (ContactRecodeEntity contactRecodeEntityntact : mAllList) {
-				if(contactRecodeEntityntact.getFormattedNumber().indexOf(str)>=0 || contactRecodeEntityntact.getPhoneNumber().indexOf(str)>-1){
+				if(contactRecodeEntityntact.getFormattedNumber()[0].indexOf(str)>-1 ||contactRecodeEntityntact.getFormattedNumber()[1].indexOf(str)>-1 || contactRecodeEntityntact.getPhoneNumber().indexOf(str)>-1){
 					if (!searchResultList.contains(contactRecodeEntityntact)) {
 						searchResultList.add(contactRecodeEntityntact);
 					}

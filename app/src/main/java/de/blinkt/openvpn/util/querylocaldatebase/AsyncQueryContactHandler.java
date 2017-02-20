@@ -72,9 +72,11 @@ public class AsyncQueryContactHandler extends AsyncQueryHandler{
                     contact.setSortKey(sortKey);
                     if(!TextUtils.isEmpty(name)){
                         contact.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(name));
-                    }else{
-                        contact.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(number));
                     }
+
+//                    else{
+//                        contact.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(number));
+//                    }
 
                     String pinyin = characterParser.getSelling(name);
                     String sortString = pinyin.substring(0, 1).toUpperCase();

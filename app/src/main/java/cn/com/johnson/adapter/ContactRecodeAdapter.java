@@ -76,7 +76,7 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 		}
 		if(!TextUtils.isEmpty(searchContent)) {
 			if(!TextUtils.isEmpty(name)){
-				if (contactRecodeEntity.getFormattedNumber().contains(searchContent)) {
+				if (contactRecodeEntity.getFormattedNumber()[0].contains(searchContent)||contactRecodeEntity.getFormattedNumber()[1].contains(searchContent)) {
 					holder.mNameTv.setTextColor(mContext.getResources().getColor(R.color.phone_top_color));
 				} else {
 					holder.mNameTv.setTextColor(Color.BLACK);
