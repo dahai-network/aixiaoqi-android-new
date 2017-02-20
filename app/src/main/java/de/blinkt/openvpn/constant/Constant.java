@@ -139,8 +139,8 @@ public class Constant {
 	//获取空卡流程
 	public static final String GET_NULLCARDID = "9f0f";
 
-//	public static final String DOWNLOAD_PATH = "/sdcard/aixiaoqi";
-	public static final String DOWNLOAD_PATH = Environment.getExternalStorageDirectory().getPath()+"/aixiaoqi/";
+	//	public static final String DOWNLOAD_PATH = "/sdcard/aixiaoqi";
+	public static final String DOWNLOAD_PATH = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi/";
 	public static String UPLOAD_PATH = "/aixiaoqi/upload.zip";
 	public static final String DOWNLOAD_SUCCEED = "succeed";
 	public static final String DOWNLOAD_FAIL = "fail";
@@ -182,7 +182,84 @@ public class Constant {
 	public static final String SIM_DOWN_POWER = "1100";//对卡断电
 	public static final String READED_SIM_DATA = "1200";//读卡数据
 	public static final String WRITE_SIM_DATA = "1300";//写卡数据
-	public static final String WRITE_SIM_STEP_ONE ="A0A40000023F00";//写卡第一步
-	public static final String WRITE_SIM_STEP_TWO ="A0A40000022F02";//写卡第一步
-	public static final String WRITE_SIM_STEP_THREE ="A0B000000A";//写卡第一步
+	public static final String WRITE_SIM_STEP_ONE = "A0A40000023F00";//写卡第一步
+	public static final String WRITE_SIM_STEP_TWO = "A0A40000022F02";//写卡第一步
+	public static final String WRITE_SIM_STEP_THREE = "A0B000000A";//写卡第一步
+
+	//网络访问返回状态码
+	/**
+	 * 一般通用接口返回值：
+	 * <p>
+	 * 失败 = 0,
+	 * 成功 = 1,
+	 * 找不到该用户 = 9900,
+	 * 手机号码格式不正确 = 9901,
+	 * 密码长度必须在6到20位之间 = 9902,
+	 * 验证码无效 = 9903,
+	 * 验证码错误 = 9904,
+	 * 此验证码已经过期_请重新发送验证码 = 9905,
+	 * 系统繁忙_请重试 = 9906,
+	 * 参数错误 = 9940,
+	 * 必填参数为空 = 9944,
+	 * 用户不能为空 = 9945,
+	 * 内部错误 = 9950,
+	 */
+	public static final int HTTP_SUCCESS = 1;
+	public static final int HTTP_FAIL = 0;
+	public static final int CANT_FIND_USER = 9900;
+	public static final int PHONE_NUMBER_ERROR = 9901;
+	public static final int PASSWORD_LENGTH_ERROR = 9902;
+	public static final int VERTIFICATION_CODE_VALID = 9903;
+	public static final int VERTIFICATION_CODE_ERROR = 9904;
+	public static final int VERTIFICATION_CODE_OVERDUE = 9905;
+	public static final int SYSTEM_BUSY = 9906;
+	public static final int PARAMETER_ERROR = 9940;
+	public static final int PARAMETER_NULL = 9944;
+	public static final int USER_NULL = 9945;
+	public static final int INSIDE_ERROR = 9945;
+
+	/**
+	 * 注册
+	 * 您输入的手机号码已注册 = 1001,
+	 * 注册失败_请重试 = 1002,
+	 */
+	public static final int ALLREADY_REGIST = 1001;
+	public static final int REGIST_FAIL = 1002;
+
+	/**
+	 * 登录
+	 * 帐号不存在_请先注册 = 1003,
+	 * 您的帐号已被锁定 = 1004,
+	 * 密码不正确 = 1005
+	 */
+	public static final int ACCOUNT_UNEXIST = 1003;
+	public static final int ACCOUNT_LOCK = 1004;
+	public static final int PSW_ERROR = 1005;
+
+	/**
+	 * 退出登录
+	 * 退出失败 = 1006
+	 */
+
+	public static final int EXIT_ERROR = 1006;
+
+	/**
+	 * 忘记密码
+	 * 手机号未注册 = 1008
+	 */
+
+	public static final int PHONE_UNREGIST = 1008;
+
+	/**
+	 *  发送验证短信
+	 验证类型错误 = 1009,
+	 您输入的手机号码已注册2 = 1010,
+	 您输入的手机号码未注册 = 1011,
+	 短信服务器异常_请联系客服人员 = 1012,
+	 您发送的太频繁了 = 1013,
+	 阿里云短信调用失败 = 1014,
+	 一分钟内不能再次发送_RemainingSeconds秒以后可以再次发送 = 1015,
+	 */
+
+	public static final int VERTIFICATION_ERROR = 1009;
 }
