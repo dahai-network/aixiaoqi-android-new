@@ -67,7 +67,6 @@ public class DialogUpgrade extends DialogBase{
         @Override
         public void onFirmwareValidating( String deviceAddress) {
             mProgressBar.setIndeterminate(true);
-            mTextPercentage.setText(R.string.dfu_status_validating);
         }
 
         @Override
@@ -79,8 +78,7 @@ public class DialogUpgrade extends DialogBase{
         @Override
         public void onDfuCompleted( String deviceAddress) {
             mTextPercentage.setText(R.string.dfu_status_completed);
-            MyDeviceActivity.isUpgrade=false;
-            MyDeviceActivity.startDfuCount=0;
+            noUpgrade();
             dialog.dismiss();
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             new Handler().postDelayed(new Runnable() {
@@ -95,8 +93,7 @@ public class DialogUpgrade extends DialogBase{
 
         @Override
         public void onDfuAborted( String deviceAddress) {
-            MyDeviceActivity.isUpgrade=false;
-            MyDeviceActivity.startDfuCount=0;
+            noUpgrade();
             mTextPercentage.setText(R.string.dfu_status_aborted);
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             new Handler().postDelayed(new Runnable() {
@@ -125,8 +122,7 @@ public class DialogUpgrade extends DialogBase{
         @Override
         public void onError(final String deviceAddress, final int error, final int errorType, final String message) {
             CommonTools.showShortToast(context, message);
-            MyDeviceActivity.isUpgrade=false;
-            MyDeviceActivity.startDfuCount=0;
+            noUpgrade();
             // We have to wait a bit before canceling notification. This is called before DfuService creates the last notification.
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -138,4 +134,9 @@ public class DialogUpgrade extends DialogBase{
             }, 200);
         }
     };
+
+    private void noUpgrade() {
+        MyDeviceActivity.isUpgrade=false;
+        MyDeviceActivity.startDfuCount=0;
+    }
 }

@@ -627,7 +627,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				isUpgrade = true;
 				SendCommandToBluetooth.sendMessageToBlueTooth(SKY_UPGRADE_ORDER);
-
+				showSkyUpgrade();
 
 			} else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				CommonTools.showShortToast(this, Constant.DOWNLOAD_FAIL);
@@ -663,7 +663,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			return;
 		}
 
-		showSkyUpgrade();
+
 		Log.e(TAG, "isUpgrade=" + isUpgrade);
 		final DfuServiceInitiator starter = new DfuServiceInitiator(deviceAddress)
 				.setDeviceName(deviceName).setKeepBond(true);
@@ -829,8 +829,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	}
 
-	private String upgradeDeviceName;
-	private String upgradeDeviceAddress;
 	private BluetoothAdapter.LeScanCallback mLeScanCallback =
 			new BluetoothAdapter.LeScanCallback() {
 
@@ -852,10 +850,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 											if(startDfuCount==0){
 												Log.i(TAG, "startDfuCount:" + startDfuCount);
 												startDfuCount++;
-												CommonTools.delayTime(5000);
+												CommonTools.delayTime(1000);
 												uploadToBlueTooth(device.getName(),device.getAddress());
 											}
-//											mService.connect(device.getAddress());
 										}
 									} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
 										Log.i(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
