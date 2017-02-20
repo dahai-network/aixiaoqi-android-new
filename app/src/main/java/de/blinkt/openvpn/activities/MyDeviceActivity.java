@@ -432,6 +432,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							}else{
 							CommonTools.delayTime(2000);
 							if (mService != null) {
+								Log.i(TAG,"重新连接："+retryTime+"次");
 								mService.connect(deviceAddresstemp);
 							}
 							}
@@ -449,7 +450,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					statueTextView.setVisibility(View.VISIBLE);
 					CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 				}
-
 			}
 			if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 
