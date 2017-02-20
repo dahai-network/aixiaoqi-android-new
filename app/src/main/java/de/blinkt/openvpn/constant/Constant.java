@@ -162,17 +162,17 @@ public class Constant {
 
 	//蓝牙发送类型
 
-	public static final String SYSTEM_RESET = "0100";//系统复位
+	public static final String SYSTEM_BASICE_INFO = "0100";//系统基本信息
 
 	public static final String SEND_PHONE_SYSTEM_TO_BLUETOOTH = "0200";//发送手机类型
 	public static final String USER_NOTIFY = "0300";//是否使用通知
 	public static final String MESSAGE_PUSH = "0400";//检测到有消息，消息推送
 	public static final String UPDATE_TIME = "0500";//更新时间
-	public static final String SYSTEM_BASICE_INFO = "0600";//系统基本信息请求
-	public static final String BIND_DEVICE = "0700";//请求绑定
+	public static final String REQUEST_SYSTEM_BASICE_INFO = "0600";//系统基本信息请求
+	public static final String RETURN_POWER = "0700";//回应上电
 	public static final String BIND_STATUE = "0800";//是否绑定成功
-	public static final String UNBIND_DEVICE = "0900";//解除绑定
-	public static final String SKY_UPGRADE = "0a0001";//空中升级
+	public static final String READ_SIM_DATA = "0900";//读卡返回数据
+	public static final String LAST_CHARGE_POWER_TIMER = "0a00";//上一次充电时间
 	public static final String REQUEST_POWER = "0b00";//请求电量
 	public static final String SEARCH_DEVICE = "0c00";//查找手环
 	public static final String THE_HAND_FUNCTION = "0d00";//是否使用抬手功能

@@ -328,8 +328,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			case R.id.statueTextView:
 				//当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
 				registerSimStatu.setVisibility(View.VISIBLE);
-//				IsHavePacketHttp isHavePacketHttp = new IsHavePacketHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
-//				new Thread(isHavePacketHttp).start();
 				Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 				break;
@@ -407,10 +405,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				dismissProgress();
 				setView();
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
-				if (retryTime != 0) {
-
 					retryTime = 0;
-				}
 			}
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
@@ -432,9 +427,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						public void run() {
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
+							if(isUpgrade){
+								scanLeDevice(true);
+							}else{
 							CommonTools.delayTime(2000);
 							if (mService != null) {
 								mService.connect(deviceAddresstemp);
+							}
 							}
 						}
 					});
@@ -640,18 +639,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			} else {
 				stopAnim();
 				CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
-			if (object.getStatus() == 1) {
-				IsHavePacketHttp isHavePacketHttp = (IsHavePacketHttp) object;
-				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
-				if (entity.getUsed() == 1) {
-					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-				} else {
-					//TODO 没有通知到设备界面
-					//如果是没有套餐，则通知我的设备界面更新状态并且停止转动
-					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
-				}
 			}
 		}
 	}
@@ -864,7 +851,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 										return;
 									}
 									Log.i("test", "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
-									if (macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
+									if(isUpgrade&&device.getName().contains(utils.readString(Constant.IMEI).replace(":",""))){
+										mService.connect(device.getAddress());
+									}
+								else	if (!isUpgrade&&macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
 										if (mService != null) {
 											scanLeDevice(false);
 //										    checkIsBindDevie(device);

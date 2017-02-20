@@ -345,7 +345,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //									if (sendStepThread != null)
 //										sendStepThread = null;
 //									break;
-								case "0100":
+								case Constant.SYSTEM_BASICE_INFO:
 //									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
@@ -354,7 +354,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									utils.writeString(Constant.BRACELETVERSION, txValue[5] + "");
 									break;
 
-								case "0700":
+								case Constant.RETURN_POWER:
 									if (txValue[5] == 0x01) {
 										//当上电完成则需要发送写卡命令
 										Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
@@ -363,7 +363,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											if (nullCardId != null) {
 												Log.i(TAG, "nullcardid上电返回");
 											} else {
-												Log.i(TAG, "发送A0A40000023F00");
+												Log.i(TAG, "发送"+Constant.WRITE_SIM_STEP_ONE);
 												sendMessageSeparate(Constant.WRITE_SIM_STEP_ONE, Constant.WRITE_SIM_DATA);
 											}
 										}
@@ -376,13 +376,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										}
 									}
 									break;
-								case "0900":
+								case Constant.READ_SIM_DATA:
 									Log.i(TAG, "发送给SDK");
 									if (IS_TEXT_SIM) {
 										SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
 									}
 									break;
-								case "0a00":
+								case Constant.LAST_CHARGE_POWER_TIMER:
 									messages.add(messageFromBlueTooth);
 									if ((txValue[1] & 0x80) == 0x80) {
 										mStrSimCmdPacket = PacketeUtil.Combination(messages);
