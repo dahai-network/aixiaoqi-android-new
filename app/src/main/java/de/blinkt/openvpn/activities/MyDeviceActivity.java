@@ -79,6 +79,7 @@ import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
+import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.retryTime;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
@@ -106,8 +107,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	Button unBindButton;
 	@BindView(R.id.sinking)
 	MySinkingView sinking;
-	//重连次数记录
-	int retryTime = 0;
 	@BindView(R.id.simStatusLinearLayout)
 	LinearLayout simStatusLinearLayout;
 	@BindView(R.id.findStatusLinearLayout)
@@ -271,8 +270,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
-				statueTextView.setText(getString(R.string.conn_bluetooth));
-				statueTextView.setEnabled(true);
 				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
 				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				new Thread(http).start();
@@ -404,14 +401,16 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				dismissProgress();
 				setView();
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
-				retryTime = 0;
+				if(isUpgrade){
+					CommonTools.delayTime(5000);
+					uploadToBlueTooth();
+				}
 			}
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-
-				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
-					retryTime++;
-					if (retryTime > 20) {
+				if (mService != null) {
+					Log.e(TAG, "isUpgradeSTATECONNECTED=" + isUpgrade);
+					if (retryTime >= 20 || !ICSOpenVPNApplication.isConnect) {
 						sinking.setVisibility(GONE);
 						noConnectImageView.setVisibility(View.VISIBLE);
 						statueTextView.setVisibility(View.VISIBLE);
@@ -426,14 +425,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						public void run() {
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
+							CommonTools.delayTime(1000);
+							Log.i(TAG, "空中升级重连");
 							if (isUpgrade) {
+								Log.i(TAG, "空中升级重连");
 								scanLeDevice(true);
-							} else {
-								CommonTools.delayTime(2000);
-								if (mService != null) {
-									Log.i(TAG, "重新连接：" + retryTime + "次");
-									mService.connect(deviceAddresstemp);
-								}
 							}
 						}
 					});
@@ -578,6 +574,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				noConnectImageView.setVisibility(View.VISIBLE);
 				statueTextView.setVisibility(View.VISIBLE);
 				registerSimStatu.setVisibility(GONE);
+				statueTextView.setText(getString(R.string.conn_bluetooth));
+				statueTextView.setEnabled(true);
 				//传出注册失败
 				utils.delete(ELECTRICITY);
 				firmwareTextView.setText("");
@@ -627,9 +625,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (cmdType == HttpConfigUrl.COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE) {
 			DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = (DownloadSkyUpgradePackageHttp) object;
 			if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
+				isUpgrade = true;
 				SendCommandToBluetooth.sendMessageToBlueTooth(SKY_UPGRADE_ORDER);
-				CommonTools.delayTime(1000);
-				uploadToBlueTooth();
+
+
 			} else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				CommonTools.showShortToast(this, Constant.DOWNLOAD_FAIL);
 			}
@@ -663,9 +662,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (isDfuServiceRunning()) {
 			return;
 		}
-		isUpgrade = true;
-		showSkyUpgrade();
 
+		showSkyUpgrade();
+		Log.e(TAG, "isUpgrade=" + isUpgrade);
 		final DfuServiceInitiator starter = new DfuServiceInitiator(utils.readString(Constant.IMEI));
 		starter.setKeepBond(true);
 		if (Environment.getExternalStorageState().equals(
@@ -855,13 +854,17 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 									if (device.getName() == null) {
 										return;
 									}
-									Log.i("test", "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
+									Log.i(TAG, "isUpgrade:" + isUpgrade + "deviceName:" + device.getName() + "保存的IMEI地址:" + utils.readString(Constant.IMEI).replace(":", ""));
 									if (isUpgrade && device.getName().contains(utils.readString(Constant.IMEI).replace(":", ""))) {
-										mService.connect(device.getAddress());
-									} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
+										Log.i(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
 										if (mService != null) {
 											scanLeDevice(false);
-//										    checkIsBindDevie(device);
+											mService.connect(device.getAddress());
+										}
+									} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
+										Log.i(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
+										if (mService != null) {
+											scanLeDevice(false);
 											utils.writeString(Constant.IMEI, macAddressStr);
 											mService.connect(macAddressStr);
 										}

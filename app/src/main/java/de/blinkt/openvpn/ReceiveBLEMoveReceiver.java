@@ -39,6 +39,7 @@ import de.blinkt.openvpn.model.SportStepEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
+import static de.blinkt.openvpn.activities.MyDeviceActivity.isUpgrade;
 import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
@@ -88,6 +89,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			}
 		}
 	};
+	//重连次数
+	public static int retryTime;
 
 
 	public void onReceive(final Context context, Intent intent) {
@@ -99,6 +102,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			ICSOpenVPNApplication.isConnect = true;
 			IS_TEXT_SIM = false;
 			isGetnullCardid = true;
+			retryTime = 0;
 
 			sendStepThread = new Thread(new Runnable() {
 				@Override
@@ -160,20 +164,26 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			if (sendStepThread != null && !sendStepThread.isInterrupted())
 				sendStepThread.interrupt();
 			//如果保存的IMEI没有的话，那么就是在MyDevice里面，在Mydevice里面会有连接操作
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					Log.d(TAG, "IMEI=" + TextUtils.isEmpty(utils.readString(Constant.IMEI)) + "\nisConnect=" + ICSOpenVPNApplication.isConnect);
-					if (!TextUtils.isEmpty(utils.readString(Constant.IMEI)) && ICSOpenVPNApplication.isConnect) {
-						//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
-						// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
-						CommonTools.delayTime(2000);
-						mService.connect(utils.readString(Constant.IMEI));
-					} else {
-						Log.d(TAG, "UART_DISCONNECT_MSG");
+			if (retryTime < 20) {
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						Log.d(TAG, "IMEI=" + TextUtils.isEmpty(utils.readString(Constant.IMEI)) + "\nisConnect=" + ICSOpenVPNApplication.isConnect);
+						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI)) && ICSOpenVPNApplication.isConnect) {
+							if (isUpgrade) {
+								return;
+							}
+							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
+							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
+							CommonTools.delayTime(2000);
+							mService.connect(utils.readString(Constant.IMEI));
+						} else {
+							Log.d(TAG, "UART_DISCONNECT_MSG");
+						}
 					}
-				}
-			}).start();
+				}).start();
+				retryTime++;
+			}
 		}
 		if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
 			mService.enableTXNotification();
@@ -363,7 +373,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											if (nullCardId != null) {
 												Log.i(TAG, "nullcardid上电返回");
 											} else {
-												Log.i(TAG, "发送"+Constant.WRITE_SIM_STEP_ONE);
+												Log.i(TAG, "发送" + Constant.WRITE_SIM_STEP_ONE);
 												sendMessageSeparate(Constant.WRITE_SIM_STEP_ONE, Constant.WRITE_SIM_DATA);
 											}
 										}
