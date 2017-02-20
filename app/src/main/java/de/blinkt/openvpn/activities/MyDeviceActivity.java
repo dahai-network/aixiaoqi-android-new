@@ -405,12 +405,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				dismissProgress();
 				setView();
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
-					retryTime = 0;
+				retryTime = 0;
 			}
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 
 				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
+					Log.e(TAG,"isUpgradeSTATECONNECTED="+isUpgrade);
 					retryTime++;
 					if (retryTime > 20) {
 						sinking.setVisibility(GONE);
@@ -427,14 +428,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						public void run() {
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
+
 							if(isUpgrade){
 								scanLeDevice(true);
 							}else{
-							CommonTools.delayTime(2000);
-							if (mService != null) {
-								Log.i(TAG,"重新连接："+retryTime+"次");
-								mService.connect(deviceAddresstemp);
-							}
+								CommonTools.delayTime(2000);
+								if (mService != null) {
+									Log.i(TAG,"重新连接："+retryTime+"次");
+									mService.connect(deviceAddresstemp);
+								}
 							}
 						}
 					});
@@ -660,7 +662,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 		isUpgrade = true;
 		showSkyUpgrade();
-
+		Log.e(TAG,"isUpgrade="+isUpgrade);
 		final DfuServiceInitiator starter = new DfuServiceInitiator(utils.readString(Constant.IMEI));
 		starter.setKeepBond(true);
 		if (Environment.getExternalStorageState().equals(
@@ -850,14 +852,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 									if (device.getName() == null) {
 										return;
 									}
-									Log.i("test", "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
+									Log.i(TAG, "isUpgrade:" + isUpgrade);
 									if(isUpgrade&&device.getName().contains(utils.readString(Constant.IMEI).replace(":",""))){
-										mService.connect(device.getAddress());
-									}
-								else	if (!isUpgrade&&macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
+										Log.i(TAG, "device:" + device.getName() + "mac:" + device.getAddress() );
 										if (mService != null) {
 											scanLeDevice(false);
-//										    checkIsBindDevie(device);
+											mService.connect(device.getAddress());
+										}
+									}
+									else	if (!isUpgrade&&macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
+										Log.i(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
+										if (mService != null) {
+											scanLeDevice(false);
 											utils.writeString(Constant.IMEI, macAddressStr);
 											mService.connect(macAddressStr);
 										}
