@@ -94,6 +94,7 @@ public class HttpConfigUrl {
 	public static final String GET_SECURITY_CONFIG ="/Config/GetSecurityConfig";
 	public static final String GET_DEVICE_SIM_REG_STATUES ="/DeviceBracelet/GetRegStatus";
 	public static final String PACKET_GET ="Package/Get";
+	public static final String UPDATE_VERSION ="/DeviceBracelet/UpdateVersion";
 	public static final int COMTYPE_LOGIN = 0x0001;
 	public static final int COMTYPE_SECURITY_CONFIG = 0x0002;
 	public static final int COMTYPE_SEND_SMS = 0x0003;
@@ -166,5 +167,6 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_PACKET_GET = 0x1046;
 	public static final int COMTYPE_CHECK_IS_HAVE_PACKET = 0x1047;
 	public static final int COMTYPE_GET_SECURITY_CONFIG = 0x1048;
+	public static final int COMTYPE_UPDATE_VERSION = 0x1049;
 
 }
