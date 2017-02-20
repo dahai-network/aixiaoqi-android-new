@@ -557,4 +557,31 @@
     <string name="check_net_work_reconnect">请检查网络是否正常，并重试</string>
     <string name="activate_fail">激活失败，请重试</string>
     <string name="error_to_restart_ble">注册失败，请重新连接</string>
+
+    <!--空中升级-->
+    <string name="dfu_action_abort">Abort</string>
+    <string name="dfu_status_aborted">Aborted</string>
+    <string name="dfu_status_aborted_msg">Application upload has been canceled.</string>
+    <string name="dfu_status_aborting">Aborting…</string>
+    <string name="dfu_status_completed">升级完成</string>
+    <string name="dfu_status_completed_msg">Application has been sent successfully.</string>
+    <string name="dfu_status_connecting">连接中…</string>
+    <string name="dfu_status_connecting_msg">Connecting to %s…</string>
+    <string name="dfu_status_disconnecting">正在断开连接…</string>
+    <string name="dfu_status_disconnecting_msg">Disconnecting from %s…</string>
+    <string name="dfu_status_error">Upload failed</string>
+    <string name="dfu_status_error_msg">DFU process failed.</string>
+    <string name="dfu_status_initializing">Initializing…</string>
+    <string name="dfu_status_starting">开始升级…</string>
+    <string name="dfu_status_starting_msg">Initializing DFU process…</string>
+    <string name="dfu_status_switching_to_dfu">开始升级…</string>
+    <string name="dfu_status_switching_to_dfu_msg">Waiting for bootloader…</string>
+    <string name="dfu_status_uploading">手环固件升级中…</string>
+    <string name="dfu_upgrade">手环固件有更新了！！！</string>
+    <string name="dfu_status_uploading_msg">Transmitting firmware to %s…</string>
+    <string formatted="false" name="dfu_status_uploading_part">升级 %d/%d…</string>
+    <string name="dfu_status_validating">Validating…</string>
+    <string name="dfu_status_validating_msg">Validating…</string>
+    <string name="dfu_unknown_name">unnamed device</string>
+
 </resources>

@@ -38,7 +38,7 @@ public class DialogBalance extends DialogBase implements View.OnClickListener {
 	}
 	public void changeText(String title, String sureText,int type) {
 		if(type==1){
-			titleTextView.setVisibility(View.GONE);
+			titleTextView.setText(context.getString(R.string.dfu_upgrade));
 			upgradeTextView.setVisibility(View.VISIBLE);
 			upgradeTextView.setText(title);
 			tvRechange.setText(sureText);

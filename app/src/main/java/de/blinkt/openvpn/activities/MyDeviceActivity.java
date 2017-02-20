@@ -630,7 +630,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				isUpgrade = true;
 				SendCommandToBluetooth.sendMessageToBlueTooth(SKY_UPGRADE_ORDER);
-
+				showSkyUpgrade();
 
 			} else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				CommonTools.showShortToast(this, Constant.DOWNLOAD_FAIL);
@@ -666,7 +666,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			return;
 		}
 
-		showSkyUpgrade();
+
 		Log.e(TAG, "isUpgrade=" + isUpgrade);
 		final DfuServiceInitiator starter = new DfuServiceInitiator(deviceAddress)
 				.setDeviceName(deviceName).setKeepBond(true);
@@ -832,8 +832,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	}
 
-	private String upgradeDeviceName;
-	private String upgradeDeviceAddress;
 	private BluetoothAdapter.LeScanCallback mLeScanCallback =
 			new BluetoothAdapter.LeScanCallback() {
 
@@ -841,35 +839,34 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
 
 
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							if (device.getName() == null) {
-								return;
-							}
-							Log.i(TAG, "isUpgrade:" + isUpgrade + "deviceName:" + device.getName() + "保存的IMEI地址:" + utils.readString(Constant.IMEI).replace(":", ""));
-							if (isUpgrade && device.getName().contains(utils.readString(Constant.IMEI).replace(":", ""))) {
-								Log.i(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
-								if (mService != null) {
-									scanLeDevice(false);
-									if (startDfuCount == 0) {
-										Log.i(TAG, "startDfuCount:" + startDfuCount);
-										startDfuCount++;
-										CommonTools.delayTime(5000);
-										uploadToBlueTooth(device.getName(), device.getAddress());
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									if (device.getName() == null) {
+										return;
 									}
-//											mService.connect(device.getAddress());
+									Log.i(TAG, "isUpgrade:" + isUpgrade + "deviceName:" + device.getName() + "保存的IMEI地址:" + utils.readString(Constant.IMEI).replace(":", ""));
+									if (isUpgrade && device.getName().contains(utils.readString(Constant.IMEI).replace(":", ""))) {
+										Log.i(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
+										if (mService != null) {
+											scanLeDevice(false);
+											if(startDfuCount==0){
+												Log.i(TAG, "startDfuCount:" + startDfuCount);
+												startDfuCount++;
+												CommonTools.delayTime(1000);
+												uploadToBlueTooth(device.getName(),device.getAddress());
+											}
+										}
+									} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
+										Log.i(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
+										if (mService != null) {
+											scanLeDevice(false);
+											utils.writeString(Constant.IMEI, macAddressStr);
+											mService.connect(macAddressStr);
+										}
+									}
 								}
-							} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
-								Log.i(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
-								if (mService != null) {
-									scanLeDevice(false);
-									utils.writeString(Constant.IMEI, macAddressStr);
-									mService.connect(macAddressStr);
-								}
-							}
-						}
-					});
+							});
 
 				}
 			};
