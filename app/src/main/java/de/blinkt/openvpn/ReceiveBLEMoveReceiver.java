@@ -153,7 +153,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				}
 			});
 			//五秒内不可以再次启动
-			if (!CommonTools.isFastDoubleClick(1000)) {
+			if (!CommonTools.isFastDoubleClick(1000)&&!isUpgrade) {
 				sendStepThread.start();
 			}
 		}

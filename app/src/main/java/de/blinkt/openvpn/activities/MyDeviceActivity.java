@@ -401,7 +401,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				dismissProgress();
 				setView();
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
-				if(isUpgrade){
+				if (isUpgrade) {
 					CommonTools.delayTime(5000);
 					uploadToBlueTooth();
 				}
@@ -558,7 +558,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} catch (Exception ignore) {
 			Log.e(TAG, ignore.toString());
 		}
-		utils=null;
+		utils = null;
 
 	}
 
@@ -790,18 +790,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					if (enable) {
 						// Stops scanning after a pre-defined scan period.
 						mBtAdapter.startLeScan(mLeScanCallback);
-						CommonTools.delayTime(SCAN_PERIOD);
-						if (mService.mConnectionState != UartService.STATE_CONNECTED) {
-							mBtAdapter.stopLeScan(mLeScanCallback);
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									showDialog();
-								}
-							});
-						} else {
-							mBtAdapter.stopLeScan(mLeScanCallback);
-						}
 					} else {
 						mBtAdapter.stopLeScan(mLeScanCallback);
 					}
