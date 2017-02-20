@@ -434,6 +434,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
 							CommonTools.delayTime(2000);
 							if (mService != null) {
+								Log.i(TAG,"重新连接："+retryTime+"次");
 								mService.connect(deviceAddresstemp);
 							}
 						}
@@ -450,7 +451,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					statueTextView.setVisibility(View.VISIBLE);
 					CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 				}
-
 			}
 			if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 

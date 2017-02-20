@@ -173,7 +173,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 													utils.writeString(Constant.IMEI, deviceAddress);
 													IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
 													new Thread(http).start();
-
 													isStartFindDeviceDelay = false;
 												}
 											}, 5000);
@@ -200,7 +199,8 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			IsBindHttp http = (IsBindHttp) object;
 			if (http.getIsBindEntity().getBindStatus() == 0 && http.getStatus() == 1) {
 				if (mService != null) {
-					mService.connect(deviceAddress);
+					BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, deviceAddress, "0");
+					new Thread(bindDevicehttp).start();
 				} else {
 					CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.connect_failure));
 					restartUartService();
@@ -218,6 +218,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				utils.writeString(Constant.IMEI, deviceAddress);
+				mService.connect(deviceAddress);
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
@@ -272,8 +273,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		String type = entity.getBlueType();
 		if (type == BluetoothConstant.BLUE_VERSION) {
 			Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + utils.readString(Constant.IMEI) + ",版本号：" + utils.readString(Constant.BRACELETVERSION));
-			BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE, utils.readString(Constant.IMEI), entity.getBraceletversion());
-			new Thread(bindDevicehttp).start();
 		}
 	}
 }
