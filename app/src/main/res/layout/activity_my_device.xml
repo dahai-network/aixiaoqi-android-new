@@ -205,8 +205,7 @@
         android:background="@drawable/circle_green_ret"
         android:text="@string/remove_bind"
         android:textColor="@android:color/white"
-        android:textSize="16dp"
-        android:visibility="gone"/>
+        android:textSize="16dp"/>
 
 </LinearLayout>
 

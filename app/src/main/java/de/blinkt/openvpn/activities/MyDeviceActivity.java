@@ -471,8 +471,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //						}
 //						break;
 					case Constant.SYSTEM_BASICE_INFO:
-						Log.i(TAG, "版本号:" + txValue[6]);
-						firmwareTextView.setText(txValue[6] + "");
+						Log.i(TAG, "版本号:" + txValue[5] + "." + txValue[6]);
+						firmwareTextView.setText(txValue[5] + "." + txValue[6]);
+						//不让无设备dialog弹出
+						noDevicedialog.getDialog().dismiss();
 						slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[7]))) / 100);
 						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, txValue[5] + "");
 						new Thread(http).start();
@@ -941,6 +943,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_high_signal))) {
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 			percentTextView.setText("");
+			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
 			percentTextView.setText("");
 			percentTextView.setVisibility(GONE);

@@ -361,8 +361,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
 //									}
-									Log.i(TAG, "固件版本号：" + txValue[6] + "，电量：" + txValue[7]);
-									utils.writeString(Constant.BRACELETVERSION, txValue[6] + "");
+									Log.i(TAG, "固件版本号：" + txValue[5] + "." + txValue[6] + "，电量：" + txValue[7]);
+									utils.writeString(Constant.BRACELETVERSION, txValue[5] + "." + txValue[6]);
 									utils.writeInt(Constant.ELECTRICITY, txValue[7]);
 									break;
 
