@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Handler;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -48,9 +50,7 @@ public class DialogUpgrade extends DialogBase{
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
     }
-    public void initTextPercentValue(String s){
-        mTextPercentage.setText(s);
-    }
+
 
 
     public  DfuProgressListener getDfuProgressListener(){
@@ -60,35 +60,44 @@ public class DialogUpgrade extends DialogBase{
         @Override
         public void onDeviceConnecting( String deviceAddress) {
             mProgressBar.setIndeterminate(true);
+            Log.e("DialogUpgrade","onDeviceConnecting");
             mTextPercentage.setText(R.string.dfu_status_connecting);
         }
 
         @Override
         public void onDfuProcessStarting( String deviceAddress) {
             mProgressBar.setIndeterminate(true);
+            Log.e("DialogUpgrade","onDfuProcessStarting");
             mTextPercentage.setText(R.string.dfu_status_starting);
         }
 
         @Override
         public void onEnablingDfuMode( String deviceAddress) {
             mProgressBar.setIndeterminate(true);
+            Log.e("DialogUpgrade","onEnablingDfuMode");
             mTextPercentage.setText(R.string.dfu_status_switching_to_dfu);
         }
 
         @Override
         public void onFirmwareValidating( String deviceAddress) {
+            Log.e("DialogUpgrade","onFirmwareValidating="+deviceAddress);
             mProgressBar.setIndeterminate(true);
+//            if(TextUtils.isEmpty(deviceAddress)){
+//                noUpgrade();
+//            }
         }
 
         @Override
         public void onDeviceDisconnecting( String deviceAddress) {
             mProgressBar.setIndeterminate(true);
+            Log.e("DialogUpgrade","onDeviceDisconnecting");
             mTextPercentage.setText(R.string.dfu_status_disconnecting);
         }
 
         @Override
         public void onDfuCompleted( String deviceAddress) {
             mTextPercentage.setText(R.string.dfu_status_completed);
+            Log.e("DialogUpgrade","onDfuCompleted");
             noUpgrade();
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             new Handler().postDelayed(new Runnable() {
@@ -105,6 +114,7 @@ public class DialogUpgrade extends DialogBase{
         @Override
         public void onDfuAborted( String deviceAddress) {
             noUpgrade();
+            Log.e("DialogUpgrade","onDfuAborted");
             mTextPercentage.setText(R.string.dfu_status_aborted);
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             new Handler().postDelayed(new Runnable() {
@@ -123,6 +133,7 @@ public class DialogUpgrade extends DialogBase{
         @Override
         public void onProgressChanged(final String deviceAddress, final int percent, final float speed, final float avgSpeed, final int currentPart, final int partsTotal) {
             mProgressBar.setIndeterminate(false);
+            Log.e("DialogUpgrade","onProgressChanged");
             mProgressBar.setProgress(percent);
             mTextPercentage.setText(percent + "%");
             if (partsTotal > 1)
@@ -134,6 +145,7 @@ public class DialogUpgrade extends DialogBase{
         @Override
         public void onError(final String deviceAddress, final int error, final int errorType, final String message) {
             CommonTools.showShortToast(context, message);
+            Log.e("DialogUpgrade","onError");
             noUpgrade();
             // We have to wait a bit before canceling notification. This is called before DfuService creates the last notification.
             new Handler().postDelayed(new Runnable() {
@@ -150,12 +162,14 @@ public class DialogUpgrade extends DialogBase{
     private void noUpgrade() {
         MyDeviceActivity.isUpgrade=false;
         MyDeviceActivity.startDfuCount=0;
+        mProgressBar.setProgress(0);
+        dialog.dismiss();
+        mTextPercentage.setText(0 + "%");
         if(ICSOpenVPNApplication.uartService!=null){
             CommonTools.delayTime(5000);
         ICSOpenVPNApplication.uartService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
 
         }
-        dialog.dismiss();
-        mTextPercentage.setText(R.string.dfu_status_starting);
+
     }
 }

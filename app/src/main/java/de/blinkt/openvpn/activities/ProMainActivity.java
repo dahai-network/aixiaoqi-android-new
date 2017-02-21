@@ -398,7 +398,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private boolean isClick = false;
-
+	private int clickCount=0;
+	private int scrollCount=0;
 	@Override
 	public void onClick(View v) {
 		removeAllStatus();
@@ -406,14 +407,17 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		switch (id) {
 			case R.id.phoneLinearLayout:
 				isClick = true;
+				clickCount++;
 				viewPagerCurrentPageIndex = 1;
 				if (isDeploy) {
 					//如果展开则收回
+					Log.e(TAG,"isDeploy"+isDeploy);
 					ViewUtil.showView(phoneFragment.t9dialpadview);
 					ivArray[viewPagerCurrentPageIndex].setBackgroundResource(R.drawable.phone_icon_check);
 					isDeploy = false;
 				} else if (!isDeploy) {
 					//如果展开则收回
+					Log.e(TAG,"isDeploy1"+isDeploy);
 					ViewUtil.hideView(phoneFragment.t9dialpadview);
 					ivArray[viewPagerCurrentPageIndex].setBackgroundResource(R.drawable.phone_icon_check_open);
 					isDeploy = true;
@@ -500,20 +504,26 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			public void onPageSelected(int position) {
 				if (position != 1) {
 					isClick = false;
+					Log.e(TAG,"isClick2"+isClick+",position="+position);
 					hidePhoneBottomBar();
 					llArray[position].performClick();
 				} else {
 					if (!isClick) {
 						removeAllStatus();
 						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
+							Log.e(TAG,"isClick"+isClick);
 							ivArray[1].setBackgroundResource(R.drawable.phone_icon_check);
 						} else {
+							Log.e(TAG,"isClick1"+isClick);
 							if (phoneFragment == null) {
 								phoneFragment = Fragment_Phone.newInstance();
 							}
 							ivArray[1].setBackgroundResource(R.drawable.phone_icon_check_open);
 						}
-
+						if(clickCount==0&&scrollCount==0){
+							scrollCount++;
+							ViewUtil.showView(phoneFragment.t9dialpadview);
+						}
 						tvArray[1].setTextColor(getResources().getColor(R.color.bottom_bar_text_enable));
 						mViewPager.setCurrentItem(1);
 					}
