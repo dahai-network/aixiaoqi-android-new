@@ -73,6 +73,7 @@ import de.blinkt.openvpn.util.ViewUtil;
 
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
+import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
 
@@ -621,10 +622,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-//					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
-					GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
-					new Thread(http).start();
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+					if (SocketConstant.REGISTER_STATUE_CODE != 3) {
+						GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
+						new Thread(http).start();
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+					}else
+					{
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal),R.drawable.index_high_signal);
+					}
 				} else {
 					//TODO 没有通知到设备界面
 					//如果是没有套餐，则通知我的设备界面更新状态并且停止转动
@@ -830,7 +835,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				}
 				dataType = messageFromBlueTooth.substring(6, 10);
 				switch (dataType) {
-					case "0700":
+					case RETURN_POWER:
 						Log.i(TAG, "进入0700 ProMainActivity");
 						if (txValue[5] == 0x01) {
 							if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
