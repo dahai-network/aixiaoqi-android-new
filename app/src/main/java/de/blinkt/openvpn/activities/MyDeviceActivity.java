@@ -275,7 +275,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 				break;
 			case R.id.callPayLinearLayout:
-				if(CommonTools.isFastDoubleClick(1000)){
+				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
 				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION)) && !isUpgrade) {
@@ -473,18 +473,22 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //						}
 //						break;
 					case Constant.SYSTEM_BASICE_INFO:
-						Log.i(TAG, "版本号:" + txValue[6]);
-						firmwareTextView.setText(txValue[6] + "");
+						Log.i(TAG, "版本号:" + txValue[5] + "." + txValue[6]);
+						firmwareTextView.setText(txValue[5] + "." + txValue[6]);
+						//不让无设备dialog弹出
+						if (noDevicedialog != null)
+							noDevicedialog.getDialog().dismiss();
+
 						slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[7]))) / 100);
 						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, txValue[5] + "");
 						new Thread(http).start();
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 							entity.setBlueType(BluetoothConstant.BLUE_VERSION);
-							entity.setBraceletversion(txValue[6] + "");
+							entity.setBraceletversion(txValue[5] + "." + txValue[6]);
 							entity.setSuccess(true);
 							EventBus.getDefault().post(entity);
-							Log.i(TAG, "进入版本号:" + txValue[6]);
+							Log.i(TAG, "进入版本号:" + txValue[5] + "." + txValue[6]);
 						}
 						break;
 					case Constant.RETURN_POWER:
@@ -519,11 +523,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 		statueTextView.setVisibility(GONE);
 		if (macTextView.getText().length() == 0) {
-			if (deviceAddresstemp != null && deviceAddresstemp.length() != 0) {
-				macTextView.setText(deviceAddresstemp);
-			} else {
-				macTextView.setText(utils.readString(Constant.IMEI));
-			}
+			macTextView.setText(utils.readString(Constant.IMEI));
 		}
 	}
 
@@ -620,7 +620,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			utils.writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
 			if (skyUpgradeHttp.getStatus() == 1) {
 				if (skyUpgradeHttp.getUpgradeEntity() != null) {
-					if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Integer.parseInt(utils.readString(Constant.BRACELETVERSION))) {
+					if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(utils.readString(Constant.BRACELETVERSION))) {
 						url = skyUpgradeHttp.getUpgradeEntity().getUrl();
 						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
 					} else {
@@ -947,6 +947,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_high_signal))) {
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 			percentTextView.setText("");
+			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
 			percentTextView.setText("");
 			percentTextView.setVisibility(GONE);
