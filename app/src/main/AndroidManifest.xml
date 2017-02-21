@@ -123,6 +123,7 @@
         <activity
             android:name="de.blinkt.openvpn.activities.CallPhoneNewActivity"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:permission="android.permission.RECORD_AUDIO"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>

@@ -45,7 +45,14 @@ public class DialogUpgrade extends DialogBase{
         mTextPercentage=(TextView)view.findViewById(R.id.textviewProgress);
         mProgressBar=(ProgressBar)view.findViewById(R.id.progressbar_file);
         mTextUploading=(TextView)view.findViewById(R.id.textviewUploading);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
     }
+    public void initTextPercentValue(String s){
+        mTextPercentage.setText(s);
+    }
+
+
     public  DfuProgressListener getDfuProgressListener(){
         return mDfuProgressListener;
     }
@@ -83,7 +90,6 @@ public class DialogUpgrade extends DialogBase{
         public void onDfuCompleted( String deviceAddress) {
             mTextPercentage.setText(R.string.dfu_status_completed);
             noUpgrade();
-
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -91,6 +97,7 @@ public class DialogUpgrade extends DialogBase{
                     // if this activity is still open and upload process was completed, cancel the notification
                     final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancel(DfuService.NOTIFICATION_ID);
+
                 }
             }, 200);
         }
@@ -108,6 +115,7 @@ public class DialogUpgrade extends DialogBase{
                     // if this activity is still open and upload process was completed, cancel the notification
                     final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancel(DfuService.NOTIFICATION_ID);
+
                 }
             }, 200);
         }
@@ -145,7 +153,9 @@ public class DialogUpgrade extends DialogBase{
         if(ICSOpenVPNApplication.uartService!=null){
             CommonTools.delayTime(5000);
         ICSOpenVPNApplication.uartService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
+
         }
         dialog.dismiss();
+        mTextPercentage.setText(R.string.dfu_status_starting);
     }
 }
