@@ -185,7 +185,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		long beforeRequestTime = utils.readLong(Constant.UPGRADE_INTERVAL);
 		if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
 		{
-			utils.writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
 			SkyUpgradeHttp skyUpgradeHttp = new SkyUpgradeHttp(this, HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, utils.readString(Constant.BRACELETVERSION));
 			new Thread(skyUpgradeHttp).start();
 		}
@@ -618,6 +617,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 		} else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
 			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
+			utils.writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
 			if (skyUpgradeHttp.getStatus() == 1) {
 				if (skyUpgradeHttp.getUpgradeEntity() != null) {
 					if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Integer.parseInt(utils.readString(Constant.BRACELETVERSION))) {
@@ -723,6 +723,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		CommonTools.showShortToast(this, errorMessage);
+		if(cmdType==HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA){
+			utils.writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
+		}
 	}
 
 	@Override

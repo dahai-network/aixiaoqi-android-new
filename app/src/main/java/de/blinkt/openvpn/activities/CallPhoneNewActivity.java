@@ -61,6 +61,8 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	String maxinumPhoneCallTime;
 	ConnectedReceive connectedReceive;
 	int cellPhoneType;
+	NotificationManager	mNotificationManager;
+	NotificationCompat.Builder mBuilder;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -148,10 +150,9 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		}else if(cellPhoneType==Constant.SIM_CELL_PHONE){
 			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",contactRecodeEntity.getPhoneNumber())+ "#"+100000 );
 		}
-		initNotify();
+
 	}
-	NotificationManager	mNotificationManager;
-	NotificationCompat.Builder mBuilder;
+
 	int notifyId=100;
 	private void initNotify(){
 		if(mNotificationManager==null){
@@ -257,6 +258,19 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 			timer.setBase(SystemClock.elapsedRealtime());
 			timer=null;
 		}
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.e("CallPhoneNewActivity","onPause()");
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		initNotify();
+		Log.e("CallPhoneNewActivity","onStop()");
 	}
 
 	private void startTimer() {

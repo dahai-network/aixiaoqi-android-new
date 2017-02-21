@@ -8,8 +8,10 @@ package de.blinkt.openvpn.core;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -376,6 +378,7 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 
 		}
 	}
+
 
 	/**
 	 * 退出应用程序

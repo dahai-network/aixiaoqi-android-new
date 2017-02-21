@@ -66,7 +66,7 @@ public class CellPhoneFragment extends Fragment  {
                 hidePhoneBottomBar();
             }
         }else{
-            ProMainActivity.isDeploy=!ProMainActivity.isDeploy;
+//            ProMainActivity.isDeploy=!ProMainActivity.isDeploy;
         }
 
     }
