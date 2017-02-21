@@ -390,7 +390,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			if (getBasicConfigHttp.getStatus() == 1) {
 				BasicConfigEntity basicConfigEntity = getBasicConfigHttp.getBasicConfigEntity();
 				sharedUtils.writeString(IntentPutKeyConstant.USER_AGREEMENT_URL, basicConfigEntity.getUserAgreementUrl());
-				sharedUtils.writeString(IntentPutKeyConstant.HOW_TO_USE, basicConfigEntity.getHowToUse());
 				sharedUtils.writeString(IntentPutKeyConstant.PAYMENT_OF_TERMS, basicConfigEntity.getPaymentOfTerms());
 			}
 		}

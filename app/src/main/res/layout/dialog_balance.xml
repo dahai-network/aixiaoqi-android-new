@@ -23,7 +23,6 @@
         android:id="@+id/upgradeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/padding_25dp"
         android:textSize="@dimen/little_16"
         android:visibility="gone"
         android:paddingBottom="@dimen/padding_25dp"

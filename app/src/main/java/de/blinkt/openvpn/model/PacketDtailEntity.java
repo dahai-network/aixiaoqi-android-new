@@ -48,10 +48,19 @@ public class PacketDtailEntity implements Serializable{
 		private String Flow;
 		private Object Desction;
 		private String Pic;
+		private String UseDescr;
 		private String LogoPic;
 		private int ExpireDays;
 		private String Features;
 		private String Details;
+
+		public String getUseDescr() {
+			return UseDescr;
+		}
+
+		public void setUseDescr(String useDescr) {
+			UseDescr = useDescr;
+		}
 
 		public String getLogoPic() {
 			return LogoPic;

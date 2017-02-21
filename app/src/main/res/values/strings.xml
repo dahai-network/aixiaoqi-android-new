@@ -578,7 +578,7 @@
     <string name="dfu_status_switching_to_dfu">开始升级…</string>
     <string name="dfu_status_switching_to_dfu_msg">Waiting for bootloader…</string>
     <string name="dfu_status_uploading">手环固件升级中…</string>
-    <string name="dfu_upgrade">手环固件有更新了！！！</string>
+    <string name="dfu_upgrade">手环固件有更新了</string>
     <string name="dfu_status_uploading_msg">Transmitting firmware to %s…</string>
     <string formatted="false" name="dfu_status_uploading_part">升级 %d/%d…</string>
     <string name="dfu_status_validating">Validating…</string>

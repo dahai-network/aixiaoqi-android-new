@@ -27,7 +27,6 @@ public class IntentPutKeyConstant {
     public   static final int EDIT_ID_CARD=2;
     public static final String USER_AGREEMENT_URL="userAgreementUrl";
     public static final String PAYMENT_OF_TERMS="paymentOfTerms";
-    public static final String HOW_TO_USE="howToUse";
     public static final String  DEVICE="device";
     //个人中心
     public static final String TIP_TYPE="tiptype";

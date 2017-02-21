@@ -104,11 +104,7 @@ public class PackageDetailActivity extends BaseActivity implements InterfaceCall
 
 	private void initViews() {
 		hasLeftViewTitle(R.string.package_detail,0);
-		String howToUse=SharedUtils.getInstance().readString(IntentPutKeyConstant.HOW_TO_USE);
 		String paymentOfTerms=SharedUtils.getInstance().readString(IntentPutKeyConstant.PAYMENT_OF_TERMS);
-
-		if(!TextUtils.isEmpty(howToUse))
-		howToUseTv.setText(SharedUtils.getInstance().readString(IntentPutKeyConstant.HOW_TO_USE));
 		if(!TextUtils.isEmpty(paymentOfTerms))
 		paymentTermText.setText(SharedUtils.getInstance().readString(IntentPutKeyConstant.PAYMENT_OF_TERMS));
 	}
@@ -123,6 +119,7 @@ public class PackageDetailActivity extends BaseActivity implements InterfaceCall
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 		PacketDtailHttp http = (PacketDtailHttp) object;
+		if(cmdType==HttpConfigUrl.COMTYPE_PACKET_DETAIL)
 		if (http.getStatus() == 1) {
 			NoNetRelativeLayout.setVisibility(View.GONE);
 			detailScrollView.setVisibility(View.VISIBLE);
@@ -131,6 +128,7 @@ public class PackageDetailActivity extends BaseActivity implements InterfaceCall
 			featuresTextView.setText(bean.getFeatures());
 			packageNameTextView.setText(bean.getPackageName());
 			flowTextView.setText(bean.getFlow());
+			howToUseTv.setText(bean.getUseDescr());
 			priceTextView.setText("￥" + bean.getPrice());
 			setSpan(priceTextView);
 			String	countryPic= getIntent().getStringExtra("countryPic");
@@ -169,7 +167,6 @@ public class PackageDetailActivity extends BaseActivity implements InterfaceCall
 
 	@Override
 	public void noNet() {
-
 		NoNetRelativeLayout.setVisibility(View.VISIBLE);
 		detailScrollView.setVisibility(View.GONE);
 	}

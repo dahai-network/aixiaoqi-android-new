@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class BasicConfigEntity  implements Serializable{
     private String userAgreementUrl;
     private String paymentOfTerms;
-    private String howToUse;
+
 
     public String getUserAgreementUrl() {
         return userAgreementUrl;
@@ -26,11 +26,4 @@ public class BasicConfigEntity  implements Serializable{
         this.paymentOfTerms = paymentOfTerms;
     }
 
-    public String getHowToUse() {
-        return howToUse;
-    }
-
-    public void setHowToUse(String howToUse) {
-        this.howToUse = howToUse;
-    }
 }
