@@ -473,6 +473,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					case Constant.SYSTEM_BASICE_INFO:
 						Log.i(TAG, "版本号:" + txValue[6]);
 						firmwareTextView.setText(txValue[6] + "");
+						slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[7]))) / 100);
 						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, txValue[5] + "");
 						new Thread(http).start();
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
