@@ -44,6 +44,7 @@ import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
+import static de.blinkt.openvpn.constant.Constant.RECEIVE_ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP1;
@@ -153,7 +154,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				}
 			});
 			//五秒内不可以再次启动
-			if (!CommonTools.isFastDoubleClick(1000)&&!isUpgrade) {
+			if (!CommonTools.isFastDoubleClick(1000) && !isUpgrade) {
 				sendStepThread.start();
 			}
 		}
@@ -267,10 +268,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //									}
 //
 //									break;
-//								//电量多少
-//								case (byte) 0x04:
-//									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(String.valueOf(txValue[3])));
-//									break;
+								//电量多少
+								case RECEIVE_ELECTRICITY:
+									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(String.valueOf(txValue[5])));
+									break;
 //								case (byte) 0x05:
 //									//充电状态
 //									Log.i("test", "充电状态");
@@ -360,8 +361,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
 //									}
-									Log.i(TAG, "固件版本号：" + txValue[5]);
-									utils.writeString(Constant.BRACELETVERSION, txValue[5] + "");
+									Log.i(TAG, "固件版本号：" + txValue[6] + "，电量：" + txValue[7]);
+									utils.writeString(Constant.BRACELETVERSION, txValue[6] + "");
+									utils.writeInt(Constant.ELECTRICITY, txValue[7]);
 									break;
 
 								case Constant.RETURN_POWER:

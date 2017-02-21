@@ -164,7 +164,7 @@ public class Constant {
 
 	public static final String SYSTEM_BASICE_INFO = "0100";//系统基本信息
 
-	public static final String SEND_PHONE_SYSTEM_TO_BLUETOOTH = "0200";//发送手机类型
+	public static final String RECEIVE_ELECTRICITY = "0200";//接收电量
 	public static final String USER_NOTIFY = "0300";//是否使用通知
 	public static final String MESSAGE_PUSH = "0400";//检测到有消息，消息推送
 	public static final String UPDATE_TIME = "0500";//更新时间
