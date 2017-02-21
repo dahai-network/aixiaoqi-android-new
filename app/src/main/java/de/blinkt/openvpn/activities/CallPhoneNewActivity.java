@@ -1,5 +1,8 @@
 package de.blinkt.openvpn.activities;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +12,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.CallLog;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,9 +23,12 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 
 import com.aixiaoqi.socket.SocketConstant;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.umeng.analytics.MobclickAgent;
 
 import cn.com.aixiaoqi.R;
+import cn.jpush.android.api.JPushInterface;
 import de.blinkt.openvpn.activities.Base.BaseSensorActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -34,6 +41,7 @@ import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
+import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLCONTROLVOIDE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLHANGUP;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONEQUIET;
@@ -52,7 +60,6 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	Chronometer timer;
 	String maxinumPhoneCallTime;
 	ConnectedReceive connectedReceive;
-	private String TAG="CallPhoneNewActivity";
 	int cellPhoneType;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -107,7 +114,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		if (TextUtils.isEmpty(maxinumPhoneCallTime)) {
 			maxinumPhoneCallTime = "0";
 		}
-		if (TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())) {
+		if (contactRecodeEntity==null&&TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())) {
 			CommonTools.showShortToast(this, "电话号码不能为空");
 			return;
 		}
@@ -138,12 +145,43 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 			ICSOpenVPNApplication.the_sipengineReceive.MakeUrlCall(contactRecodeEntity.getPhoneNumber());
 		} else if(cellPhoneType==Constant.NETWORK_CELL_PHONE){
 			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("981" + deleteprefix("-",contactRecodeEntity.getPhoneNumber()) + "#" + maxinumPhoneCallTime);
-
 		}else if(cellPhoneType==Constant.SIM_CELL_PHONE){
-				Log.e("CallPhoneNewActivity","ICSOpenVPNApplication.the_sipengineReceive"+(ICSOpenVPNApplication.the_sipengineReceive==null));
-				ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",contactRecodeEntity.getPhoneNumber())+ "#"+100000 );
+			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",contactRecodeEntity.getPhoneNumber())+ "#"+100000 );
 		}
+		initNotify();
 	}
+	NotificationManager	mNotificationManager;
+	NotificationCompat.Builder mBuilder;
+	int notifyId=100;
+	private void initNotify(){
+		if(mNotificationManager==null){
+			mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+		}
+		if(mBuilder==null){
+			mBuilder = new NotificationCompat.Builder(this);
+		}
+		mBuilder.setContentTitle(getString(R.string.unitoys_phone))
+				.setContentText(getString(R.string.call_phoning,phonenumtxt.getText().toString(),contactRecodeEntity.getPhoneNumber().toString()))
+				.setNumber(3)//显示数量
+//				.setTicker("有新短信来啦")//通知首次出现在通知栏，带上升动画效果的
+				.setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示
+				.setPriority(Notification.PRIORITY_DEFAULT)//设置该通知优先级
+				.setAutoCancel(true)//设置这个标志当用户单击面板就可以让通知将自动取消
+//				.setOngoing(true)//ture，设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)
+				.setDefaults(Notification.DEFAULT_VIBRATE)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合：
+				//Notification.DEFAULT_ALL  Notification.DEFAULT_SOUND 添加声音 // requires VIBRATE permission
+				.setSmallIcon(R.drawable.login_icon);
+		Intent intent = new Intent(this, CallPhoneNewActivity.class);
+		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO,contactRecodeEntity);
+		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,cellPhoneType);
+		intent.putExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME,maxinumPhoneCallTime);
+//		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+//				| Intent.FLAG_ACTIVITY_NEW_TASK);
+		PendingIntent contextIntent = PendingIntent.getActivity(this, 0,intent, 0);
+		mBuilder.setContentIntent(contextIntent);
+		mNotificationManager.notify(notifyId, mBuilder.build());
+	}
+
 	private String deleteprefix(String type,String s) {
 		if(TextUtils.isEmpty(s)){
 			return "";
@@ -161,7 +199,6 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		else{
 			phoneNumber= s;
 		}
-		Log.e("CallPhoneNewActivity","phoneNumber"+phoneNumber);
 		return phoneNumber;
 	}
 	@Override
@@ -194,8 +231,6 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 						}
 					}
 				}).start();
-//				stopTimer();
-//				onBackPressed();
 				break;
 		}
 	}
@@ -211,8 +246,8 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		if(connectedReceive!=null){
 			unregisterReceiver(connectedReceive);
 			connectedReceive=null;
-
 		}
+		mNotificationManager.cancel(notifyId);
 	}
 
 
@@ -274,8 +309,9 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 			String action = intent.getAction();
 			if (CallPhoneService.endFlag.equals(action)) {
 				if(CallPhoneService.CALL_DIR==1){
-				stopTimer();
-				onBackPressed();
+					mNotificationManager.cancel(notifyId);
+					stopTimer();
+					onBackPressed();
 				}
 			} else if (CallPhoneService.connectedFlag.equals(action)) {
 				displayStatus("");
@@ -294,6 +330,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				}
 			} else if (CallPhoneService.CALL_FAIL.equals(action)) {
 				displayStatus(R.string.call_fail);
+				mNotificationManager.cancel(notifyId);
 				cancelcallbtn.setEnabled(false);
 				new Handler().postDelayed(new Runnable() {
 					@Override

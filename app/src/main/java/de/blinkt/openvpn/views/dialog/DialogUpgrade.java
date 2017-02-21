@@ -45,6 +45,8 @@ public class DialogUpgrade extends DialogBase{
         mTextPercentage=(TextView)view.findViewById(R.id.textviewProgress);
         mProgressBar=(ProgressBar)view.findViewById(R.id.progressbar_file);
         mTextUploading=(TextView)view.findViewById(R.id.textviewUploading);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
     }
     public  DfuProgressListener getDfuProgressListener(){
         return mDfuProgressListener;
@@ -83,7 +85,6 @@ public class DialogUpgrade extends DialogBase{
         public void onDfuCompleted( String deviceAddress) {
             mTextPercentage.setText(R.string.dfu_status_completed);
             noUpgrade();
-
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             new Handler().postDelayed(new Runnable() {
                 @Override

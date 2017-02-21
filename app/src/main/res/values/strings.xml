@@ -254,12 +254,13 @@
     <string name="connecting">正在连接...</string>
     <string name="call_fail">呼叫失败...</string>
     <string name="update_fail">更新失败</string>
-
+    <string name="unitoys_phone">爱小器直拨</string>
     <string name="wait_other_connecting">等待对方接听...</string>
     <string name="engine_initialization">SIP 引擎初始化</string>
     <string name="engine_end">SIP 引擎初始化完成</string>
     <string name="engine_fail">SIP 引擎初始化失败</string>
     <string name="network_phone">网络电话</string>
+    <string formatted="false" name="call_phoning">正在与 %s[%s]通话中…</string>
     <string name="sim_register_phone">手环电话</string>
     <string name="sim_register_phone_tip">手环内SIM未注册成功，请前往设备里边去注册成功在使用</string>
     <!--提交订单-->
@@ -560,7 +561,7 @@
 
     <!--空中升级-->
     <string name="dfu_action_abort">Abort</string>
-    <string name="dfu_status_aborted">Aborted</string>
+    <string name="dfu_status_aborted">升级失败</string>
     <string name="dfu_status_aborted_msg">Application upload has been canceled.</string>
     <string name="dfu_status_aborting">Aborting…</string>
     <string name="dfu_status_completed">升级完成</string>
