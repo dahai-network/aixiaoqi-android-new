@@ -58,6 +58,8 @@ public class MyReceiver extends BroadcastReceiver {
 			Log.e(TAG, "[MyReceiver] 接收到推送下来的通知");
 			int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
 			processCustomNotify(context);
+
+			//TODO 注册成功后与一正服务器断开连接
 			Log.e(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
 
 		} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
