@@ -568,7 +568,7 @@
     <string name="dfu_status_completed_msg">Application has been sent successfully.</string>
     <string name="dfu_status_connecting">连接中…</string>
     <string name="dfu_status_connecting_msg">Connecting to %s…</string>
-    <string name="dfu_status_disconnecting">正在断开连接…</string>
+    <string name="dfu_status_disconnecting">正在重连…</string>
     <string name="dfu_status_disconnecting_msg">Disconnecting from %s…</string>
     <string name="dfu_status_error">Upload failed</string>
     <string name="dfu_status_error_msg">DFU process failed.</string>

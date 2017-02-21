@@ -276,6 +276,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 				break;
 			case R.id.callPayLinearLayout:
+				if(CommonTools.isFastDoubleClick(1000)){
+					return;
+				}
 				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION)) && !isUpgrade) {
 					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
 					skyUpgradeHttp();
