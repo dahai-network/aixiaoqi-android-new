@@ -164,9 +164,9 @@ public class DialogUpgrade extends DialogBase{
         MyDeviceActivity.startDfuCount=0;
         mProgressBar.setProgress(0);
         dialog.dismiss();
-        mTextPercentage.setText(0 + "%");
+        mTextPercentage.setText(R.string.dfu_status_starting);
         if(ICSOpenVPNApplication.uartService!=null){
-            CommonTools.delayTime(5000);
+            CommonTools.delayTime(7000);
         ICSOpenVPNApplication.uartService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
 
         }

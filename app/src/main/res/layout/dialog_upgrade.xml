@@ -28,6 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/padding_8dp"
         android:freezesText="true"
-        android:text="0%"
+        android:text="@string/dfu_status_starting"
        />
 </LinearLayout>

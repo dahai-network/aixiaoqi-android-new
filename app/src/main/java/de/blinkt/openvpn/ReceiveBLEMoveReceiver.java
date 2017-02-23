@@ -92,8 +92,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	};
 	//重连次数
 	public static int retryTime;
-
-
 	public void onReceive(final Context context, Intent intent) {
 		this.context = context;
 		final String action = intent.getAction();
@@ -209,6 +207,16 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					if (dataID == 0) {
 						dataType = messageFromBlueTooth.substring(6, 10);
 					}
+
+//					messages.add(messageFromBlueTooth);
+//					int lengthData=(txValue[1]&0x7f)+1;
+//					if(messages.size()<lengthData){
+//						return;
+//					}
+//			if (isWholeDataPackage||dataStatue==0x80) {
+//				isWholeDataPackage=false;
+//			}
+
 					Log.e("Blue_Chanl", "dataType：" + dataType);
 					switch (txValue[0]) {
 						case (byte) 0x55:

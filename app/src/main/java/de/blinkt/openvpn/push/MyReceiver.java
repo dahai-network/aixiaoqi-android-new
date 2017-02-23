@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import cn.com.aixiaoqi.R;
 import cn.jpush.android.api.JPushInterface;
 import de.blinkt.openvpn.activities.LoginMainActivity;
+import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.SMSAcivity;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.fragments.SmsFragment;
@@ -56,23 +57,28 @@ public class MyReceiver extends BroadcastReceiver {
 
 		} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
 			Log.e(TAG, "[MyReceiver] 接收到推送下来的通知");
-			int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-			processCustomNotify(context);
+//			int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
+//			processCustomNotify(context);
 
 			//TODO 注册成功后与一正服务器断开连接
-			Log.e(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+//			Log.e(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
 
 		} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 			Log.e(TAG, "[MyReceiver] 用户点击打开了通知");
 			String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
+			Log.e(TAG, "[MyReceiver] 用户点击打开了通知"+extra);
+			JsonObject jsonObject = new JsonParser().parse(extra).getAsJsonObject();
+			String   tipActivityType = jsonObject.get("alertType").getAsString();
+			String   tel = jsonObject.get("Tel").getAsString();
 			if(!TextUtils.isEmpty(extra)){
-				String[] arrayString = extra.split(":");
+
 				Intent i;
-				if (arrayString.length == 2) {
-					String phoneNumber = arrayString[1].substring(1, arrayString[1].length() - 2);
+				if ("SMSReceiveNew" .equals(tipActivityType)) {
 					//打开自定义的Activity
 					i = new Intent(context, SMSAcivity.class);
-					i.putExtra(IntentPutKeyConstant.RECEIVE_SMS, phoneNumber);
+					i.putExtra(IntentPutKeyConstant.RECEIVE_SMS, tel);
+				}else if("EjoDVCloseLontTime" .equals(tipActivityType)){
+					i = new Intent(context, MyDeviceActivity.class);
 				} else {
 					i = new Intent(context, LoginMainActivity.class);
 				}
@@ -100,7 +106,7 @@ public class MyReceiver extends BroadcastReceiver {
 
 
 	private void processCustomMessage(Context context, Bundle bundle) {
-
+		processCustomNotify(context);
 		if (SMSAcivity.isForeground) {
 			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
 			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
@@ -131,6 +137,7 @@ public class MyReceiver extends BroadcastReceiver {
 		if(mNotificationManager==null){
 			mNotificationManager = (NotificationManager)context.getSystemService(context.NOTIFICATION_SERVICE);
 		}
+		processCustomNotify(context);
 		initNotify(context,bundle);
 	}
 	NotificationCompat.Builder mBuilder;

@@ -308,8 +308,8 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 			String action=intent.getAction();
 			if(CallPhoneService.endFlag.equals(action)){
 				if(CallPhoneService.CALL_DIR==0){
-					mNotificationManager.cancel(notifyId);
-				stopTimer();
+					cancelNotify();
+					stopTimer();
 				onBackPressed();
 				}
 			}else if(CallPhoneService.reportFlag.equals(action)){
@@ -337,6 +337,11 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 		if(receiver!=null)
 			unregisterReceiver(receiver);
 		receiver=null;
+		cancelNotify();
+	}
+
+	private void cancelNotify() {
+		if(mNotificationManager!=null)
 		mNotificationManager.cancel(notifyId);
 	}
 }
