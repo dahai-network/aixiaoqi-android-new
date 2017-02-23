@@ -37,6 +37,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
 
@@ -158,6 +159,7 @@ public class UartService extends Service implements Serializable {
 			// Log.d(TAG, String.format("Received TX: %d",characteristic.getValue() ));
 			intent.putExtra(EXTRA_DATA, characteristic.getValue());
 		}
+		Log.e("UartService", HexStringExchangeBytesUtil.bytesToHexString(characteristic.getValue()));
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
 	}
 
@@ -364,9 +366,7 @@ public class UartService extends Service implements Serializable {
 			return false;
 
 		final BluetoothGattCharacteristic scCharacteristic = gaService.getCharacteristic(SERVICE_CHANGED_CHARACTERISTIC);
-		if (scCharacteristic == null)
-			return false;
-		return true;
+		return scCharacteristic != null;
 	}
 
 	//用于某个接收的UUID写入mBluetoothGatt的监听callback里面。在onCharacteristicChanged()会产生响应

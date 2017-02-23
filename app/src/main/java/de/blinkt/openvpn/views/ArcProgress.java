@@ -260,11 +260,7 @@ public class ArcProgress extends View {
 	@Override
 	public void setVisibility(int visibility) {
 		super.setVisibility(visibility);
-		if (visibility == View.GONE) {
-			isDraw = false;
-		} else {
-			isDraw = true;
-		}
+		isDraw = visibility != View.GONE;
 	}
 
 	@Override
@@ -355,7 +351,6 @@ public class ArcProgress extends View {
 			float textBaseline = (getHeight() - textHeight) / 2.7f;
 			canvas.drawText(text, (getWidth() - textPaint.measureText(text)) / 2.0f, textBaseline, textPaint);
 		}
-
 	}
 
 	@Override

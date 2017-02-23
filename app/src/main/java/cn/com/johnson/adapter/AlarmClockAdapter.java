@@ -118,7 +118,7 @@ public class AlarmClockAdapter extends RecyclerBaseAdapter<AlarmClockAdapter.Ala
             }
         });
         holder.alarmClockDays.setText(mList.get(position).getTag()+getStringBuilder(TextUtils.isEmpty(mList.get(position).getRepeat())?null:Arrays.asList(mList.get(position).getRepeat().split(","))));
-        holder.switchView.setOpened(mList.get(position).getStatus().equals("1")?true:false);
+        holder.switchView.setOpened(mList.get(position).getStatus().equals("1"));
         holder.alarmClockTimeTv.setText(mList.get(position).getTime());
     }
     private String getStringBuilder(List<String> repeatDayList) {

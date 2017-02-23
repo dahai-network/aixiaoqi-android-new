@@ -372,6 +372,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	//扫描五秒后提示
 	private void connDeviceFiveSecond() {
+		Log.i(TAG, "错误IMEI显示：" + SharedUtils.getInstance().readString(Constant.IMEI));
 		mService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
 		runOnUiThread(new Runnable() {
 			@Override
@@ -398,8 +399,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private boolean isClick = false;
-	private int clickCount=0;
-	private int scrollCount=0;
+	private int clickCount = 0;
+	private int scrollCount = 0;
+
 	@Override
 	public void onClick(View v) {
 		removeAllStatus();
@@ -411,13 +413,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				viewPagerCurrentPageIndex = 1;
 				if (isDeploy) {
 					//如果展开则收回
-					Log.e(TAG,"isDeploy"+isDeploy);
+					Log.e(TAG, "isDeploy" + isDeploy);
 					ViewUtil.showView(phoneFragment.t9dialpadview);
 					ivArray[viewPagerCurrentPageIndex].setBackgroundResource(R.drawable.phone_icon_check);
 					isDeploy = false;
 				} else if (!isDeploy) {
 					//如果展开则收回
-					Log.e(TAG,"isDeploy1"+isDeploy);
+					Log.e(TAG, "isDeploy1" + isDeploy);
 					ViewUtil.hideView(phoneFragment.t9dialpadview);
 					ivArray[viewPagerCurrentPageIndex].setBackgroundResource(R.drawable.phone_icon_check_open);
 					isDeploy = true;
@@ -504,23 +506,23 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			public void onPageSelected(int position) {
 				if (position != 1) {
 					isClick = false;
-					Log.e(TAG,"isClick2"+isClick+",position="+position);
+					Log.e(TAG, "isClick2" + isClick + ",position=" + position);
 					hidePhoneBottomBar();
 					llArray[position].performClick();
 				} else {
 					if (!isClick) {
 						removeAllStatus();
 						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-							Log.e(TAG,"isClick"+isClick);
+							Log.e(TAG, "isClick" + isClick);
 							ivArray[1].setBackgroundResource(R.drawable.phone_icon_check);
 						} else {
-							Log.e(TAG,"isClick1"+isClick);
+							Log.e(TAG, "isClick1" + isClick);
 							if (phoneFragment == null) {
 								phoneFragment = Fragment_Phone.newInstance();
 							}
 							ivArray[1].setBackgroundResource(R.drawable.phone_icon_check_open);
 						}
-						if(clickCount==0&&scrollCount==0){
+						if (clickCount == 0 && scrollCount == 0) {
 							scrollCount++;
 							ViewUtil.showView(phoneFragment.t9dialpadview);
 						}
@@ -618,7 +620,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					if (deviceAddress != null)
 						deviceAddress = deviceAddress.toUpperCase();
 					SharedUtils utils = SharedUtils.getInstance();
-					utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI());
+					utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
 					utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
 					Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 					startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -636,9 +638,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
 						new Thread(http).start();
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
-					}else
-					{
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal),R.drawable.index_high_signal);
+					} else {
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 					}
 				} else {
 					//TODO 没有通知到设备界面
@@ -893,9 +894,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private boolean isDfuServiceRunning() {
-		if (ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName())) {
-			return true;
-		}
-		return false;
+		return ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName());
 	}
 }

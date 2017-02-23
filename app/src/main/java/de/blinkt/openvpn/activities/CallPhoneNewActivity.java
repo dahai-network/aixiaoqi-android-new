@@ -23,12 +23,9 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 
 import com.aixiaoqi.socket.SocketConstant;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.umeng.analytics.MobclickAgent;
 
 import cn.com.aixiaoqi.R;
-import cn.jpush.android.api.JPushInterface;
 import de.blinkt.openvpn.activities.Base.BaseSensorActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -41,12 +38,9 @@ import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
-import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLCONTROLVOIDE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLHANGUP;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONEQUIET;
-
-;
 
 /**
  * Created by Administrator on 2016/9/19 0019.
@@ -148,7 +142,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		} else if(cellPhoneType==Constant.NETWORK_CELL_PHONE){
 			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("981" + deleteprefix("-",contactRecodeEntity.getPhoneNumber()) + "#" + maxinumPhoneCallTime);
 		}else if(cellPhoneType==Constant.SIM_CELL_PHONE){
-			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",contactRecodeEntity.getPhoneNumber())+ "#"+100000 );
+			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",contactRecodeEntity.getPhoneNumber()) );
 		}
 
 	}
@@ -248,7 +242,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 			unregisterReceiver(connectedReceive);
 			connectedReceive=null;
 		}
-		mNotificationManager.cancel(notifyId);
+		cancelNotify();
 	}
 
 
@@ -323,7 +317,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 			String action = intent.getAction();
 			if (CallPhoneService.endFlag.equals(action)) {
 				if(CallPhoneService.CALL_DIR==1){
-					mNotificationManager.cancel(notifyId);
+					cancelNotify();
 					stopTimer();
 					onBackPressed();
 				}
@@ -344,7 +338,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				}
 			} else if (CallPhoneService.CALL_FAIL.equals(action)) {
 				displayStatus(R.string.call_fail);
-				mNotificationManager.cancel(notifyId);
+				cancelNotify();
 				cancelcallbtn.setEnabled(false);
 				new Handler().postDelayed(new Runnable() {
 					@Override
@@ -355,6 +349,11 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 			}
 		}
+	}
+
+	private void cancelNotify() {
+		if(mNotificationManager!=null)
+			mNotificationManager.cancel(notifyId);
 	}
 
 }

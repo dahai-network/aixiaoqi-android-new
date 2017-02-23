@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.CallLog;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.PinYinConverNumber;
-import de.blinkt.openvpn.util.pinyin.CharacterParser;
 
 /**
  * Created by Administrator on 2016/9/24 0024.
@@ -104,7 +102,8 @@ public class AsyncQueryContactRecodeHandler extends AsyncQueryHandler {
     }
 
 
-    Handler mHandler=new Handler(){
+
+	Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

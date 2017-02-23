@@ -88,7 +88,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
-		isForeground = isVisibleToUser ? true : false;
+		isForeground = isVisibleToUser;
 	}
 
 	private void initView(View view) {

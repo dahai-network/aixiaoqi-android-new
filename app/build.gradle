@@ -53,7 +53,7 @@ android {
         exclude 'META-INF/LGPL2.1'
     }
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         applicationId "cn.com.aixiaoqi"

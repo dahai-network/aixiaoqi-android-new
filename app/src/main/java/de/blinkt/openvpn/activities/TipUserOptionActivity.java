@@ -167,7 +167,7 @@ public class TipUserOptionActivity extends BaseActivity implements InterfaceCall
 	private void initTitle() {
 		uartservice = ICSOpenVPNApplication.uartService;
 		type = getIntent().getStringExtra(IntentPutKeyConstant.TIP_TYPE);
-		switchView.setOpened(utils.readInt(type) == 1 ? true : false);
+		switchView.setOpened(utils.readInt(type) == 1);
 
 
 	}

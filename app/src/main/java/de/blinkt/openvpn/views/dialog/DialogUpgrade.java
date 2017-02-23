@@ -4,17 +4,14 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import butterknife.BindView;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
-import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.service.DfuService;
@@ -164,9 +161,9 @@ public class DialogUpgrade extends DialogBase{
         MyDeviceActivity.startDfuCount=0;
         mProgressBar.setProgress(0);
         dialog.dismiss();
-        mTextPercentage.setText(0 + "%");
+        mTextPercentage.setText(R.string.dfu_status_starting);
         if(ICSOpenVPNApplication.uartService!=null){
-            CommonTools.delayTime(5000);
+            CommonTools.delayTime(7000);
         ICSOpenVPNApplication.uartService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
 
         }

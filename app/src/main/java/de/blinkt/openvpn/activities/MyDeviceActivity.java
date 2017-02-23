@@ -478,7 +478,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							noDevicedialog.getDialog().dismiss();
 
 						slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[7]))) / 100);
-						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, txValue[5]+"."+txValue[6] + "");
+						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, txValue[5] + "." + txValue[6] + "");
 						new Thread(http).start();
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
@@ -640,11 +640,16 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			//检测是否在线
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES) {
-			if (object.getStatus() != 1) {
+			GetDeviceSimRegStatuesHttp http = (GetDeviceSimRegStatuesHttp) object;
+			if (http.getStatus() != 1) {
 				connectGoip();
 			} else {
-				stopAnim();
-				CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
+				if (http.getRegSuccessEntity().getRegStatus() == 1) {
+					stopAnim();
+					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
+				} else {
+					connectGoip();
+				}
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_VERSION) {
 			if (object.getStatus() != 1) {
@@ -721,7 +726,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		CommonTools.showShortToast(this, errorMessage);
-		if(cmdType==HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA){
+		if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
 			utils.writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
 		}
 	}
@@ -761,10 +766,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 
 	private boolean isDfuServiceRunning() {
-		if (ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName())) {
-			return true;
-		}
-		return false;
+		return ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName());
 	}
 
 	private void slowSetPercent(final float percent) {

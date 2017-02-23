@@ -497,7 +497,7 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 				//		editFirstUrl.toLowerCase(Locale.getDefault()));
 
 				isHome = url.equals(mFirstUrl) || url.toLowerCase(Locale.getDefault()).contains(
-						editFirstUrl.toLowerCase(Locale.getDefault())) || !url.contains("http://") ? true : false;
+						editFirstUrl.toLowerCase(Locale.getDefault())) || !url.contains("http://");
 
 				// if(isHome)
 				//((WebContainerActivity)mActivity).showContainer();
