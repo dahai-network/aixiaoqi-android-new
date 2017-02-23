@@ -499,8 +499,10 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 
 	//修改蓝牙状态
 	public void changeBluetoothStatus(String leftText, int leftIconId) {
-		if(title == null)
+		if (title == null) {
+			view = getView();
 			title = (TitleBar) view.findViewById(R.id.title);
+		}
 		if (leftText != null && leftIconId != 0 && title != null) {
 			Log.i("changeBluetoothStatus", "title=" + (title == null) + "\nleftText=" + leftText + "\nleftIconId=" + leftIconId);
 			title.setLeftIvIconAndText(leftIconId, leftText);

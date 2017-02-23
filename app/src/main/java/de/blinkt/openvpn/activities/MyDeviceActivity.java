@@ -478,7 +478,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							noDevicedialog.getDialog().dismiss();
 
 						slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[7]))) / 100);
-						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, txValue[5] + "");
+						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, txValue[5]+"."+txValue[6] + "");
 						new Thread(http).start();
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();

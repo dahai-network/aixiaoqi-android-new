@@ -18,6 +18,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.ActivateActivity;
@@ -92,6 +94,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	};
 	//重连次数
 	public static int retryTime;
+	//单线程线程池 用于接收大量数据时候使用
+	private ExecutorService pool = Executors.newSingleThreadExecutor();
 
 
 	public void onReceive(final Context context, Intent intent) {
@@ -196,24 +200,25 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		}
 		if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 			final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
+			pool.execute(
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
 
-					//通过SDK收发Service发送信息到SDK
-					Log.e("Blue_Chanl", "接收从蓝牙发出的消息：" + HexStringExchangeBytesUtil.bytesToHexString(txValue));
-					//是否第一个包，判断类型
-					int dataID = Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) & 127;
-					Log.e("Blue_Chanl", "txValue[1]" + Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) + "dataID：" + dataID);
-					if (dataID == 0) {
-						dataType = messageFromBlueTooth.substring(6, 10);
-					}
-					Log.e("Blue_Chanl", "dataType：" + dataType);
-					switch (txValue[0]) {
-						case (byte) 0x55:
-							switch (dataType) {
-								//获取步数
+							//通过SDK收发Service发送信息到SDK
+							Log.e("Blue_Chanl", "接收从蓝牙发出的消息：" + HexStringExchangeBytesUtil.bytesToHexString(txValue));
+							//是否第一个包，判断类型
+							int dataID = Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) & 127;
+							Log.e("Blue_Chanl", "txValue[1]" + Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) + "dataID：" + dataID);
+							if (dataID == 0) {
+								dataType = messageFromBlueTooth.substring(6, 10);
+							}
+							Log.e("Blue_Chanl", "dataType：" + dataType);
+							switch (txValue[0]) {
+								case (byte) 0x55:
+									switch (dataType) {
+										//获取步数
 //								case (byte) 0x01:
 //									byte[] stepBytes = new byte[2];
 //									stepBytes[0] = txValue[3];
@@ -268,10 +273,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //									}
 //
 //									break;
-								//电量多少
-								case RECEIVE_ELECTRICITY:
-									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(String.valueOf(txValue[5])));
-									break;
+										//电量多少
+										case RECEIVE_ELECTRICITY:
+											utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(String.valueOf(txValue[5])));
+											break;
 //								case (byte) 0x05:
 //									//充电状态
 //									Log.i("test", "充电状态");
@@ -356,53 +361,57 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //									if (sendStepThread != null)
 //										sendStepThread = null;
 //									break;
-								case Constant.SYSTEM_BASICE_INFO:
+										case Constant.SYSTEM_BASICE_INFO:
 //									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
 //									}
-									Log.i(TAG, "固件版本号：" + txValue[5] + "." + txValue[6] + "，电量：" + txValue[7]);
-									utils.writeString(Constant.BRACELETVERSION, txValue[5] + "." + txValue[6]);
-									utils.writeInt(Constant.ELECTRICITY, txValue[7]);
-									break;
-
-								case Constant.RETURN_POWER:
-									if (txValue[5] == 0x01) {
-										//当上电完成则需要发送写卡命令
-										Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
-										if (!IS_TEXT_SIM && isGetnullCardid) {
-											//空卡ID是否不为空，若不为空则
-											if (nullCardId != null) {
-												Log.i(TAG, "nullcardid上电返回");
-											} else {
-												Log.i(TAG, "发送" + Constant.WRITE_SIM_STEP_ONE);
-												sendMessageSeparate(Constant.WRITE_SIM_STEP_ONE, Constant.WRITE_SIM_DATA);
+											try {
+												Log.i(TAG, "固件版本号：" + txValue[5] + "." + txValue[6] + "，电量：" + txValue[7]);
+												utils.writeString(Constant.BRACELETVERSION, txValue[5] + "." + txValue[6]);
+												utils.writeInt(Constant.ELECTRICITY, txValue[7]);
+											} catch (ArrayIndexOutOfBoundsException e) {
+												e.printStackTrace();
 											}
-										}
+											break;
 
-									} else if (txValue[5] == 0x11) {
-										if (!IS_TEXT_SIM) {
-											Intent cardBreakIntent = new Intent();
-											cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
-											LocalBroadcastManager.getInstance(context).sendBroadcast(cardBreakIntent);
-										}
-									}
-									break;
-								case Constant.READ_SIM_DATA:
-									Log.i(TAG, "发送给SDK");
-									if (IS_TEXT_SIM) {
-										SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
-									}
-									break;
-								case Constant.LAST_CHARGE_POWER_TIMER:
-									messages.add(messageFromBlueTooth);
-									if ((txValue[1] & 0x80) == 0x80) {
-										mStrSimCmdPacket = PacketeUtil.Combination(messages);
-										// 接收到一个完整的数据包,处理信息
-										ReceiveDBOperate(mStrSimCmdPacket);
-										messages.clear();
-									}
-									break;
+										case Constant.RETURN_POWER:
+											if (txValue[5] == 0x01) {
+												//当上电完成则需要发送写卡命令
+												Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
+												if (!IS_TEXT_SIM && isGetnullCardid) {
+													//空卡ID是否不为空，若不为空则
+													if (nullCardId != null) {
+														Log.i(TAG, "nullcardid上电返回");
+													} else {
+														Log.i(TAG, "发送" + Constant.WRITE_SIM_STEP_ONE);
+														sendMessageSeparate(Constant.WRITE_SIM_STEP_ONE, Constant.WRITE_SIM_DATA);
+													}
+												}
+
+											} else if (txValue[5] == 0x11) {
+												if (!IS_TEXT_SIM) {
+													Intent cardBreakIntent = new Intent();
+													cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
+													LocalBroadcastManager.getInstance(context).sendBroadcast(cardBreakIntent);
+												}
+											}
+											break;
+										case Constant.READ_SIM_DATA:
+											Log.i(TAG, "发送给SDK");
+											if (IS_TEXT_SIM) {
+												SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+											}
+											break;
+										case Constant.LAST_CHARGE_POWER_TIMER:
+											messages.add(messageFromBlueTooth);
+											if ((txValue[1] & 0x80) == 0x80) {
+												mStrSimCmdPacket = PacketeUtil.Combination(messages);
+												// 接收到一个完整的数据包,处理信息
+												ReceiveDBOperate(mStrSimCmdPacket);
+												messages.clear();
+											}
+											break;
 //								case (byte) 0xDB:
 //								case (byte) 0xDA:
 //									if (IS_TEXT_SIM) {
@@ -422,14 +431,16 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //							resetOrderStr = messageFromBlueTooth;
 //							break;
 
-								default:
+										default:
 //							updateMessage(messageFromBlueTooth);
-									break;
+											break;
+									}
 							}
+						}
 					}
-				}
-			}
-			).start();
+					)
+// .start();
+			);
 		}
 		if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)) {
 			mService.disconnect();
@@ -688,6 +699,5 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			return "" + date;
 		}
 	}
-
 
 }

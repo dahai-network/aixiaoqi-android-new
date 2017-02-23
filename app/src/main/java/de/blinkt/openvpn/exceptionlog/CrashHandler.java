@@ -88,7 +88,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 //			Intent intent = new Intent(application.getApplicationContext(), LaunchActivity.class);
 
 
-
 //			PendingIntent restartIntent = PendingIntent.getActivity(
 //					application.getApplicationContext(), 0, intent,
 //					Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -192,7 +191,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 			String time = formatter.format(new Date());
 			String fileName = time + ".text";
 			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-				String path = Environment.getExternalStorageDirectory().getPath()+"/aixiaoqi/";
+				String path = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi/";
 				File dir = new File(path);
 				if (!dir.exists()) {
 					dir.mkdirs();

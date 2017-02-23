@@ -37,7 +37,6 @@ import java.util.zip.ZipInputStream;
  */
 public class AssetsDatabaseManager {
 	private static final String TAG = "AssetsDatabaseManager";
-//	private static String DB_PATH = "/data/data/%s/databases";// %s is packageName.
 	private static String DB_PATH = "/data/data/%s/databases";// %s is packageName.
 	private Map<String, SQLiteDatabase> databases = new HashMap<>();
 	private Context mContext = null;

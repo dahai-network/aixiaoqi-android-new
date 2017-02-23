@@ -1,8 +1,8 @@
 package de.blinkt.openvpn.http;
 
-import de.blinkt.openvpn.constant.HttpConfigUrl;
+import android.util.Log;
 
-import static de.blinkt.openvpn.activities.MyOrderDetailActivity.OrderID;
+import de.blinkt.openvpn.constant.HttpConfigUrl;
 
 /**
  * Created by Administrator on 2017/2/20.
@@ -10,10 +10,12 @@ import static de.blinkt.openvpn.activities.MyOrderDetailActivity.OrderID;
 
 public class UpdateVersionHttp extends BaseHttp {
 	private final String Version;
+	private final String TAG = "UpdateVersionHttp";
 
 	public UpdateVersionHttp(InterfaceCallback interfaceCallback, int cmdType_, String Version) {
 		super(interfaceCallback, cmdType_);
-		this.Version = OrderID;
+		Log.i(TAG, "接口进入设备号：" + Version);
+		this.Version = Version;
 	}
 
 	@Override
