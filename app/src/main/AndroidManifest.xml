@@ -356,7 +356,15 @@
                 <category android:name="${JPUSH_PKGNAME}"/>
             </intent-filter>
         </receiver>
-
+        <receiver
+            android:name="de.blinkt.openvpn.push.PhoneReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.phone.android.intent.CALL_PHONE"/> <!-- 打电话 -->
+                <action android:name="cn.phone.android.intent.RECIVE_PHONE"/> <!-- 接电话 -->
+            </intent-filter>
+        </receiver>
         <activity
             android:name="de.blinkt.openvpn.activities.BalanceParticularsActivity"
             android:screenOrientation="portrait">

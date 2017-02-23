@@ -78,7 +78,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	public static String nullCardId = null;
 	private int UPDATE_HISTORY_DATE = 1;
 	private int WRITE_CARD_COMPLETE = 2;
-	private String dataType;//发出数据以后需要把dataType重置为-1；
+//	private String dataType;//发出数据以后需要把dataType重置为-1；
 	private Handler handler = new Handler() {
 		@Override
 		public void dispatchMessage(Message msg) {
@@ -193,21 +193,33 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			}
 		}
 		if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
-			final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
+			final ArrayList<String>  messages= intent.getStringArrayListExtra(UartService.EXTRA_DATA);
+			if(messages.size()==0){
+				return;
+			}
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
+//					String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
 
 					//通过SDK收发Service发送信息到SDK
-					Log.e("Blue_Chanl", "接收从蓝牙发出的消息：" + HexStringExchangeBytesUtil.bytesToHexString(txValue));
-					//是否第一个包，判断类型
-					int dataID = Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) & 127;
-					Log.e("Blue_Chanl", "txValue[1]" + Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) + "dataID：" + dataID);
-					if (dataID == 0) {
-						dataType = messageFromBlueTooth.substring(6, 10);
-					}
+//					Log.e("Blue_Chanl", "接收从蓝牙发出的消息：" + HexStringExchangeBytesUtil.bytesToHexString(txValue));
+//					//是否第一个包，判断类型
+//					int dataID = Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) & 127;
+//					Log.e("Blue_Chanl", "txValue[1]" + Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) + "dataID：" + dataID);
+//					if (dataID == 0) {
+//						dataType = messageFromBlueTooth.substring(6, 10);
+//					}
+					String firstPackage=	messages.get(0).substring(0,2);
+			String		dataType=messages.get(0).substring(6,10);
 
+					if(messages.size()==1){
+						Log.e(TAG,messages.get(0));
+					}else {
+						for(int i=0;i<messages.size();i++){
+							Log.e(TAG,messages.get(i));
+						}
+					}
 //					messages.add(messageFromBlueTooth);
 //					int lengthData=(txValue[1]&0x7f)+1;
 //					if(messages.size()<lengthData){
@@ -218,8 +230,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //			}
 
 					Log.e("Blue_Chanl", "dataType：" + dataType);
-					switch (txValue[0]) {
-						case (byte) 0x55:
+					switch (firstPackage) {
+						case "55":
 							switch (dataType) {
 								//获取步数
 //								case (byte) 0x01:
@@ -278,7 +290,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //									break;
 								//电量多少
 								case RECEIVE_ELECTRICITY:
-									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(String.valueOf(txValue[5])));
+									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(String.valueOf(messages.get(0).substring(10,12))));
 									break;
 //								case (byte) 0x05:
 //									//充电状态
@@ -369,13 +381,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
 //									}
-									Log.i(TAG, "固件版本号：" + txValue[5] + "." + txValue[6] + "，电量：" + txValue[7]);
-									utils.writeString(Constant.BRACELETVERSION, txValue[5] + "." + txValue[6]);
-									utils.writeInt(Constant.ELECTRICITY, txValue[7]);
+									Log.i(TAG, "固件版本号：" + messages.get(0).substring(10,12) + "." + messages.get(0).substring(12,14) + "，电量：" + messages.get(0).substring(14,16));
+									utils.writeString(Constant.BRACELETVERSION, messages.get(0).substring(10,12) + "." + messages.get(0).substring(12,14));
+									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(14,16),16));
 									break;
 
 								case Constant.RETURN_POWER:
-									if (txValue[5] == 0x01) {
+									if (messages.get(0).substring(10,12).equals("01")) {
 										//当上电完成则需要发送写卡命令
 										Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
 										if (!IS_TEXT_SIM && isGetnullCardid) {
@@ -388,7 +400,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											}
 										}
 
-									} else if (txValue[5] == 0x11) {
+									} else if (messages.get(0).substring(10,12).equals("11")) {
 										if (!IS_TEXT_SIM) {
 											Intent cardBreakIntent = new Intent();
 											cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
@@ -399,12 +411,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 								case Constant.READ_SIM_DATA:
 									Log.i(TAG, "发送给SDK");
 									if (IS_TEXT_SIM) {
-										SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
+										SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
 									}
 									break;
 								case Constant.LAST_CHARGE_POWER_TIMER:
-									messages.add(messageFromBlueTooth);
-									if ((txValue[1] & 0x80) == 0x80) {
+
+									if ((Integer.parseInt(messages.get(0).substring(2,4),16) & 0x80) == 0x80) {
 										mStrSimCmdPacket = PacketeUtil.Combination(messages);
 										// 接收到一个完整的数据包,处理信息
 										ReceiveDBOperate(mStrSimCmdPacket);

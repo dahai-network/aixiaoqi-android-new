@@ -11,6 +11,8 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.aixiaoqi.socket.ReceiveSocketService;
+import com.aixiaoqi.socket.SocketConstant;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -22,9 +24,15 @@ import cn.jpush.android.api.JPushInterface;
 import de.blinkt.openvpn.activities.LoginMainActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.SMSAcivity;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.SmsFragment;
+import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
+
+import static com.aixiaoqi.socket.EventBusUtil.registerFail;
+import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 
 /**
  * 自定义接收器
@@ -35,7 +43,10 @@ import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
  */
 public class MyReceiver extends BroadcastReceiver {
 	private static final String TAG = "JPush";
-
+	private void connectGoip() {
+		if (sendYiZhengService != null)
+			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+	}
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Bundle bundle = intent.getExtras();
@@ -61,30 +72,51 @@ public class MyReceiver extends BroadcastReceiver {
 //			processCustomNotify(context);
 
 			//TODO 注册成功后与一正服务器断开连接
+			String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
+			Log.e(TAG, "[MyReceiver] 用户点击打开了通知"+extra);
+			if(!TextUtils.isEmpty(extra)) {
+				JsonObject jsonObject = new JsonParser().parse(extra).getAsJsonObject();
+				String tipActivityType = jsonObject.get("alertType").getAsString();
+				if("EjoDVCloseLontTime" .equals(tipActivityType)){
+					if (SocketConstant.REGISTER_STATUE_CODE == 3||SocketConstant.REGISTER_STATUE_CODE == 2) {
+						SocketConstant.REGISTER_STATUE_CODE = 2;
+						if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+							//从预读取数据那里重新注册
+							connectGoip();
+						} else {
+							registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+						}
+					}
+				}
+			}
 //			Log.e(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
 
 		} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 			Log.e(TAG, "[MyReceiver] 用户点击打开了通知");
 			String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
 			Log.e(TAG, "[MyReceiver] 用户点击打开了通知"+extra);
+			if(!TextUtils.isEmpty(extra)){
 			JsonObject jsonObject = new JsonParser().parse(extra).getAsJsonObject();
 			String   tipActivityType = jsonObject.get("alertType").getAsString();
 			String   tel = jsonObject.get("Tel").getAsString();
-			if(!TextUtils.isEmpty(extra)){
+
 
 				Intent i;
-				if ("SMSReceiveNew" .equals(tipActivityType)) {
+				if ("SMSReceiveNew" .equals(tipActivityType)&&!SMSAcivity.isForeground) {
 					//打开自定义的Activity
 					i = new Intent(context, SMSAcivity.class);
 					i.putExtra(IntentPutKeyConstant.RECEIVE_SMS, tel);
-				}else if("EjoDVCloseLontTime" .equals(tipActivityType)){
+					startActivity(context, i);
+				}else if("EjoDVCloseLontTime" .equals(tipActivityType)&&!MyDeviceActivity.isForeground){
 					i = new Intent(context, MyDeviceActivity.class);
-				} else {
+					startActivity(context, i);
+				}
+				else if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.TOKEN))){
 					i = new Intent(context, LoginMainActivity.class);
+					startActivity(context, i);
 				}
 				//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				context.startActivity(i);
+
 			}
 
 		} else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
@@ -93,8 +125,7 @@ public class MyReceiver extends BroadcastReceiver {
 			Intent i = new Intent(context, SMSAcivity.class);
 			i.putExtras(bundle);
 			//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			context.startActivity(i);
+			startActivity(context, i);
 		} else if (JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
 			boolean connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
 			Log.e(TAG, "[MyReceiver]" + intent.getAction() + " connected state change to " + connected);
@@ -103,6 +134,10 @@ public class MyReceiver extends BroadcastReceiver {
 		}
 	}
 
+	private void startActivity(Context context, Intent i) {
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		context.startActivity(i);
+	}
 
 
 	private void processCustomMessage(Context context, Bundle bundle) {
