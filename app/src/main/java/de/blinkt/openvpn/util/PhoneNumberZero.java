@@ -78,9 +78,9 @@ public class PhoneNumberZero {
 	public static String getAddress(DatabaseDAO dao, String phoneNumber) {
 		String address;
 		Map<String, String> map = getPhoneZero(dao, phoneNumber);
-		String province = map.get("province");
-		String city = map.get("city");
-		if (province == null || city == null || province.isEmpty() || city.isEmpty())
+		String province = map.get("provinceName");
+		String city = map.get("cityName");
+		if (province == null || province.isEmpty())
 			address = ICSOpenVPNApplication.getContext().getString(R.string.title_search_result_not_found);
 		else if (province.equals(city))
 			address = province;
