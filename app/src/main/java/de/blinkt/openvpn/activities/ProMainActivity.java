@@ -164,7 +164,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		if (bleMoveReceiver == null) {
 			bleMoveReceiver = new ReceiveBLEMoveReceiver();
 			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(bleMoveReceiver, makeGattUpdateIntentFilter());
-			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(updateIndexTitleReceiver, makeGattUpdateIntentFilter());
+			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(updateIndexTitleReceiver, makeGattUpdateHigherLevelIntentFilter());
 			//打开蓝牙服务后开始搜索
 			searchBLE();
 		}
@@ -256,6 +256,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		intentFilter.addAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
 		return intentFilter;
 	}
+
+	private static IntentFilter makeGattUpdateHigherLevelIntentFilter() {
+		final IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
+		intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
+		intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
+		intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
+		intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+		intentFilter.addAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
+		intentFilter.setPriority(1000);
+		return intentFilter;
+	}
+
 
 	private void addListener() {
 		LinearLayout[] localLlArray = llArray;
@@ -824,8 +837,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private int count;
 	//用于改变indexFragment状态的Receiver
 	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {
-
-
 		@Override
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
