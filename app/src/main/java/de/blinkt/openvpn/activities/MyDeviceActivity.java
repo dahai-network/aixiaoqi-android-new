@@ -482,7 +482,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						if (noDevicedialog != null)
 							noDevicedialog.getDialog().dismiss();
 
-						slowSetPercent(((float) Integer.parseInt(String.valueOf( messages.get(0).substring(14, 16)))) / 100);
+						slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16),16)) / 100);
 						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, messages.get(0).substring(10, 12) + "");
 						new Thread(http).start();
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
