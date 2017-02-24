@@ -20,7 +20,6 @@ import de.blinkt.openvpn.views.PickerScrollView;
  */
 public class DialogPicker extends DialogBase implements View.OnClickListener, PickerScrollView.onSelectListener {
 	private Button pickerYes;
-	private List<String> list;
 	private PickerScrollView pickerscrlllview;
 	private TextView dialogType;
 
@@ -75,7 +74,7 @@ public class DialogPicker extends DialogBase implements View.OnClickListener, Pi
 	}
 
 	private void initData() {
-		list = new ArrayList<>();
+		List<String> list = new ArrayList<>();
 		pickerscrlllview.setColor(Color.BLUE);
 		if (type == PersonalCenterActivity.HEIGHT) {
 			dialogType.setText(context.getString(R.string.stature));

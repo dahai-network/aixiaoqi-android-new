@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -42,7 +43,6 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
@@ -136,8 +136,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private String macAddressStr;
 	private int SCAN_PERIOD = 10000;//原本120000毫秒
 	private DialogBalance noDevicedialog;
-	private DialogBalance cardRuleBreakDialog;
 	Animation RegisterStatueAnim;
+	public static boolean isForeground = false;
 	//写卡进度
 	private static int percentInt;
 
@@ -388,10 +388,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	public static int startDfuCount = 0;
-	private Thread connectThread;
 	private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
 
-		public String dataType;
 
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
@@ -422,7 +420,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 						return;
 					}
-					connectThread = new Thread(new Runnable() {
+					Thread connectThread = new Thread(new Runnable() {
 						@Override
 						public void run() {
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
@@ -451,17 +449,20 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 
-				final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
-				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
+				final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
+				if (messages.size() == 0) {
+					return;
+				}
+//				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
 
-				if (txValue[0] != (byte) 0x55) {
+				if (!messages.get(0).substring(0, 2).equals("55")) {
 					return;
 				}
 				//判断是否是分包（0x80的包）
-				if (txValue[1] != (byte) 0x80) {
+				if (!messages.get(0).substring(2, 4).equals("80")) {
 					return;
 				}
-				dataType = messageFromBlueTooth.substring(6, 10);
+				String dataType = messages.get(0).substring(6, 10);
 				switch (dataType) {
 //					case (byte) 0xBB:
 //						if (txValue[1] == (byte) 0x05) {
@@ -471,30 +472,32 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //						}
 //						break;
 					case Constant.SYSTEM_BASICE_INFO:
-						Log.i(TAG, "版本号:" + txValue[5] + "." + txValue[6]);
-						firmwareTextView.setText(txValue[5] + "." + txValue[6]);
+						int versionFirst = Integer.parseInt(messages.get(0).substring(10, 12), 16);
+						int versionLast = Integer.parseInt(messages.get(0).substring(12, 14), 16);
+						Log.i(TAG, "版本号:" + versionFirst + "." + versionLast);
+						firmwareTextView.setText(versionFirst + "." + versionLast);
 						//不让无设备dialog弹出
 						if (noDevicedialog != null)
 							noDevicedialog.getDialog().dismiss();
 
-						slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[7]))) / 100);
-						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, txValue[5] + "." + txValue[6] + "");
+						slowSetPercent(((float) Integer.parseInt(String.valueOf(messages.get(0).substring(14, 16)))) / 100);
+						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, versionFirst + "." + versionLast);
 						new Thread(http).start();
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 							entity.setBlueType(BluetoothConstant.BLUE_VERSION);
-							entity.setBraceletversion(txValue[5] + "." + txValue[6]);
+							entity.setBraceletversion(messages.get(0).substring(10, 12) + "." + messages.get(0).substring(12, 14));
 							entity.setSuccess(true);
 							EventBus.getDefault().post(entity);
-							Log.i(TAG, "进入版本号:" + txValue[5] + "." + txValue[6]);
+							Log.i(TAG, "进入版本号:" + messages.get(0).substring(10, 12) + "." + messages.get(0).substring(12, 14));
 						}
 						break;
 					case Constant.RETURN_POWER:
-						if (txValue[5] == 0x01) {
+						if (messages.get(0).substring(10, 12).equals("01")) {
 							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
 								sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 							}
-						} else if (txValue[5] == 0x11) {
+						} else if (messages.get(0).substring(10, 12).equals("11")) {
 							//百分比TextView设置为0
 //							percentTextView.setText("");
 							showNoCardDialog();
@@ -530,6 +533,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public void onResume() {
 		super.onResume();
 		Log.d(TAG, "onResume");
+		isForeground = true;
 		DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
 	}
 
@@ -544,6 +548,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public void onDestroy() {
 		super.onDestroy();
 		stopAnim();
+		isForeground = false;
 		Log.d(TAG, "onDestroy()");
 		isUpgrade = false;
 		if (isDfuServiceRunning()) {
@@ -1028,7 +1033,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void showNoCardDialog() {
 		//不能按返回键，只能二选其一
-		cardRuleBreakDialog = new DialogBalance(MyDeviceActivity.this, MyDeviceActivity.this, R.layout.dialog_balance, 3);
+		DialogBalance cardRuleBreakDialog = new DialogBalance(MyDeviceActivity.this, MyDeviceActivity.this, R.layout.dialog_balance, 3);
 		cardRuleBreakDialog.setCanClickBack(false);
 		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));
 	}

@@ -27,7 +27,6 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
@@ -110,8 +109,6 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 	TextView statueTextView;
 	private OrderEntity.ListBean bean;
 	private boolean isCreateView = false;
-	private UartService mService = ICSOpenVPNApplication.uartService;
-	private DialogBalance cardRuleBreakDialog;
 	private boolean isActivateSuccess = false;
 
 	@Override
@@ -248,7 +245,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 
 	private void showDialog() {
 		//不能按返回键，只能二选其一
-		cardRuleBreakDialog = new DialogBalance(this, MyOrderDetailActivity.this, R.layout.dialog_balance, 2);
+		DialogBalance cardRuleBreakDialog = new DialogBalance(this, MyOrderDetailActivity.this, R.layout.dialog_balance, 2);
 		cardRuleBreakDialog.setCanClickBack(false);
 		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));
 	}

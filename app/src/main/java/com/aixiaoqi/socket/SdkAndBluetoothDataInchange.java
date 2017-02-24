@@ -14,7 +14,6 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 import de.blinkt.openvpn.util.CommonTools;
 
@@ -26,7 +25,7 @@ import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 public class SdkAndBluetoothDataInchange {
 	public static final String TAG = "Blue_Chanl";
 	UartService mService;
-	ArrayList<String> messages;
+	//	ArrayList<String> messages;
 	ReceiveDataframSocketService mReceiveDataframSocketService;
 
 	public void initReceiveDataframSocketService(ReceiveDataframSocketService receiveDataframSocketService, UartService mService) {
@@ -85,7 +84,7 @@ public class SdkAndBluetoothDataInchange {
 	private int notCanReceiveBluetoothDataCount = 0;
 	private String finalTemp;//保存上一次发给蓝牙的数据，以免出错，需要重发
 	private boolean isReceiveBluetoothData = true;//判断5s内是否接收完成，没有完成则重新发送
-	public void sendToSDKAboutBluetoothInfo(String temp, byte[] txValue) {
+	public void sendToSDKAboutBluetoothInfo(ArrayList<String> messages) {
 
 		synchronized (this){
 //			if (countMessage ==0) {
@@ -108,32 +107,32 @@ public class SdkAndBluetoothDataInchange {
 			lastTime = 0;
 			count = 0;
 			notCanReceiveBluetoothDataCount=0;
-			if (messages == null) {
-				messages = new ArrayList<>();
-			}
-			messages.add(temp);
-			int lengthData=(txValue[1]&0x7f)+1;
-			int dataStatue=txValue[1]&0x80;
-			if(messages.size()<lengthData){
-				if(dataStatue== 0x80){
-					isWholeDataPackage=true;
-				}
-				return;
-			}
+//			if (messages == null) {
+//				messages = new ArrayList<>();
+//			}
+//			messages.add(temp);
+//			int lengthData=(txValue[1]&0x7f)+1;
+//			int dataStatue=txValue[1]&0x80;
+//			if(messages.size()<lengthData){
+//				if(dataStatue== 0x80){
+//					isWholeDataPackage=true;
+//				}
+//				return;
+//			}
 
-			if (isWholeDataPackage||dataStatue==0x80) {
+//			if (isWholeDataPackage||dataStatue==0x80) {
 
-				isReceiveBluetoothData = true;
-				isWholeDataPackage=false;
-				Log.e(TAG, "messages:" + messages.size() );
-				if(messages.size()<lengthData){
-					sendToBluetoothAboutCardInfo(finalTemp);
-					return;
-				}
-				sortMessage();
-				mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
+//				isReceiveBluetoothData = true;
+//				isWholeDataPackage=false;
+//				Log.e(TAG, "messages:" + messages.size() );
+//				if(messages.size()<lengthData){
+//					sendToBluetoothAboutCardInfo(finalTemp);
+//					return;
+//				}
+//				sortMessage();
+			mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
 
-				// 接收到一个完整的数据包,发送到SDK
+			// 接收到一个完整的数据包,发送到SDK
 //				int length = (txValue[2] & 0xff);
 //				if (messages.size() >= 127 && length < 252) {
 //					length += 255;
@@ -156,40 +155,40 @@ public class SdkAndBluetoothDataInchange {
 //					sendToBluetoothAboutCardInfo(finalTemp);
 //					return;
 //				}
-				socketTag = mReceiveDataframSocketService.getSorcketTag();
+			socketTag = mReceiveDataframSocketService.getSorcketTag();
 //				sendToOneServerTemp = sendToOnService;
-				Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
-						+ mStrSimPowerOnPacket);
+			Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
+					+ mStrSimPowerOnPacket);
 
-				sendToSDKAboutBluetoothInfo(socketTag + mStrSimPowerOnPacket);
-
-			}
-		}
-	}
-
-	private void sortMessage() {
-		if(messages.size()>1){
-			ArrayList<String> messagesList=new ArrayList<>();
-			int z=0;
-			for(int i=0;i<messages.size();i++){
-				for(int j=0;j<messages.size();j++){
-					Log.e("messages","messages()"+(Integer.parseInt(messages.get(j).substring(2,4),16)&127)+"  i="+i);
-					if((Integer.parseInt(messages.get(j).substring(2,4),16)&127)==i){
-						z=j;
-						Log.e("messages","messagesz"+z);
-						break;
-					}
-				}
-				messagesList.add(messages.get(z));
-			}
+			sendToSDKAboutBluetoothInfo(socketTag + mStrSimPowerOnPacket);
 			messages.clear();
-			messages=messagesList;
-			for(int i=0;i<messages.size();i++){
-				Log.e("messages","messages="+messages.get(i));
-			}
-			Log.e("messages","===========================");
+//			}
 		}
 	}
+
+//	private void sortMessage() {
+//		if(messages.size()>1){
+//			ArrayList<String> messagesList=new ArrayList<>();
+//			int z=0;
+//			for(int i=0;i<messages.size();i++){
+//				for(int j=0;j<messages.size();j++){
+//					Log.e("messages","messages()"+(Integer.parseInt(messages.get(j).substring(2,4),16)&127)+"  i="+i);
+//					if((Integer.parseInt(messages.get(j).substring(2,4),16)&127)==i){
+//						z=j;
+//						Log.e("messages","messagesz"+z);
+//						break;
+//					}
+//				}
+//				messagesList.add(messages.get(z));
+//			}
+//			messages.clear();
+//			messages=messagesList;
+//			for(int i=0;i<messages.size();i++){
+//				Log.e("messages","messages="+messages.get(i));
+//			}
+//			Log.e("messages","===========================");
+//		}
+//	}
 
 	PercentEntity percentEntity;
 
@@ -197,7 +196,7 @@ public class SdkAndBluetoothDataInchange {
 		if (mReceiveDataframSocketService != null) {
 			mReceiveDataframSocketService.sendToSdkMessage(finalMessage);
 		}
-		messages.clear();
+//		messages.clear();
 	}
 
 

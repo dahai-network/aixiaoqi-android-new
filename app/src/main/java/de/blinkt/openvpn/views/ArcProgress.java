@@ -22,7 +22,6 @@ import de.blinkt.openvpn.util.CommonTools;
  * Created by bruce on 11/6/14.
  */
 public class ArcProgress extends View {
-	private Paint paint;
 	protected Paint textPaint;
 	Paint linePaint;
 	private RectF rectF = new RectF();
@@ -40,23 +39,19 @@ public class ArcProgress extends View {
 	private String suffixText = "%";
 	private float suffixTextPadding;
 
-	private float arcBottomHeight;
 
 	private final int default_finished_color = Color.rgb(255, 255, 255);
 
-	private final int default_unfinished_color = Color.WHITE;
 	private final int default_text_color = Color.rgb(1, 208, 192);
 	private final float default_suffix_text_size;
 	private final float default_suffix_padding;
 	private final float default_bottom_text_size;
 	private final float default_stroke_width;
 	private final String default_suffix_text;
-	private final int default_max = 100;
 
 	private final float default_arc_angle = 360 * 2 / 3f;
 	private float default_text_size;
 	private final int min_size;
-	private String default_text = "当日步数";
 	private static final String INSTANCE_STATE = "saved_instance";
 	private static final String INSTANCE_STROKE_WIDTH = "stroke_width";
 	private static final String INSTANCE_SUFFIX_TEXT_SIZE = "suffix_text_size";
@@ -103,6 +98,7 @@ public class ArcProgress extends View {
 	}
 
 	protected void initByAttributes(TypedArray attributes) {
+		int default_max = 100;
 		textColor = attributes.getColor(R.styleable.ArcProgress_arc_text_color, default_text_color);
 		textSize = attributes.getDimension(R.styleable.ArcProgress_arc_text_size, default_text_size);
 		arcAngle = attributes.getFloat(R.styleable.ArcProgress_arc_angle, default_arc_angle);
@@ -122,7 +118,8 @@ public class ArcProgress extends View {
 		textPaint.setTextSize(textSize);
 		textPaint.setAntiAlias(true);
 
-		paint = new Paint();
+		int default_unfinished_color = Color.WHITE;
+		Paint paint = new Paint();
 		paint.setColor(default_unfinished_color);
 		paint.setAntiAlias(true);
 		paint.setStrokeWidth(strokeWidth);
@@ -282,7 +279,7 @@ public class ArcProgress extends View {
 		float radius = width / 2f;
 		circleRadius = radius;
 		float angle = (360 - arcAngle) / 2f;
-		arcBottomHeight = radius * (float) (1 - Math.cos(angle / 180 * Math.PI));
+		float arcBottomHeight = radius * (float) (1 - Math.cos(angle / 180 * Math.PI));
 	}
 
 	private float circleRadius;
@@ -344,7 +341,7 @@ public class ArcProgress extends View {
 			textPaint.setTextSize(textSize / 2);
 			float tipHeight = textPaint.descent() + textPaint.ascent();
 			float textBaseline1 = (getHeight() - tipHeight) / 3.2f;
-			canvas.drawText(default_text, (getWidth() - textPaint.measureText(default_text)) / 2.0f, textBaseline1 + tipHeight, textPaint);
+			canvas.drawText(getContext().getString(R.string.total_day_step), (getWidth() - textPaint.measureText(getContext().getString(R.string.total_day_step))) / 2.0f, textBaseline1 + tipHeight, textPaint);
 			textPaint.setColor(textColor);
 			textPaint.setTextSize(textSize);
 			float textHeight = textPaint.descent() + textPaint.ascent();

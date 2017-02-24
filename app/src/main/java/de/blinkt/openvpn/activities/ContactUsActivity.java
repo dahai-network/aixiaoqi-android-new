@@ -22,10 +22,6 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTOURUSEWEIXINHA
  */
 public class ContactUsActivity extends BaseActivity implements View.OnClickListener {
 
-	private TextView emailLinearLayout;
-	private TextView phoneLinearLayout;
-	private TextView weixinLinearLayout;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,9 +31,9 @@ public class ContactUsActivity extends BaseActivity implements View.OnClickListe
 	private void initSet() {
 		setContentView(R.layout.activity_contact_us);
 		hasLeftViewTitle(R.string.connect_us, 0);
-		emailLinearLayout = (TextView) findViewById(R.id.emailLinearLayout);
-		phoneLinearLayout = (TextView) findViewById(R.id.phoneLinearLayout);
-		weixinLinearLayout = (TextView) findViewById(R.id.weixinLinearLayout);
+		TextView emailLinearLayout = (TextView) findViewById(R.id.emailLinearLayout);
+		TextView phoneLinearLayout = (TextView) findViewById(R.id.phoneLinearLayout);
+		TextView weixinLinearLayout = (TextView) findViewById(R.id.weixinLinearLayout);
 		emailLinearLayout.setOnClickListener(this);
 		phoneLinearLayout.setOnClickListener(this);
 		weixinLinearLayout.setOnClickListener(this);

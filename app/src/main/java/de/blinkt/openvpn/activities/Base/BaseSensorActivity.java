@@ -17,7 +17,6 @@ public class BaseSensorActivity extends CommenActivity implements SensorEventLis
 	//调用距离传感器，控制屏幕
 	private SensorManager mManager;//传感器管理对象
 	//屏幕开关
-	private PowerManager localPowerManager = null;//电源管理对象
 	private PowerManager.WakeLock localWakeLock = null;//电源锁
 
 	@Override
@@ -30,9 +29,9 @@ public class BaseSensorActivity extends CommenActivity implements SensorEventLis
 	private void addSensorSet() {
 		mManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		//获取系统服务POWER_SERVICE，返回一个PowerManager对象
-		localPowerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		PowerManager localPowerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		//获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
-		localWakeLock = this.localPowerManager.newWakeLock(32, "unitoy power");//第一个参数为电源锁级别，第二个是日志tag
+		localWakeLock = localPowerManager.newWakeLock(32, "unitoy power");//第一个参数为电源锁级别，第二个是日志tag
 	}
 
 	@Override

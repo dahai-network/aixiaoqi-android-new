@@ -97,7 +97,6 @@ public class CommitCallTimeOrderActivity extends BaseActivity implements Interfa
 	private int ALI_PAY_METHOD = 1;
 	private boolean isAliPayClick;
 	private static final int SDK_PAY_FLAG = 1;
-	private IWXAPI api;
 	private OrderAddEntity orderEntity;
 	private Handler mHandler = new Handler() {
 		@SuppressWarnings("unused")
@@ -252,7 +251,7 @@ public class CommitCallTimeOrderActivity extends BaseActivity implements Interfa
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID) {
 			try {
-				api = WXAPIFactory.createWXAPI(CommitCallTimeOrderActivity.this, WEIXIN_APPID);
+				IWXAPI api = WXAPIFactory.createWXAPI(CommitCallTimeOrderActivity.this, WEIXIN_APPID);
 				WeixinGetPayIdHttp http = (WeixinGetPayIdHttp) object;
 				WeiXinResultEntity entity = http.getWeixinResultEntity();
 				PayReq req = new PayReq();

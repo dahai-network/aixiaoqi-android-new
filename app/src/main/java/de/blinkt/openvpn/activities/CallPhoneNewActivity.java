@@ -31,6 +31,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
+import de.blinkt.openvpn.push.PhoneReceiver;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
@@ -57,6 +58,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	int cellPhoneType;
 	NotificationManager	mNotificationManager;
 	NotificationCompat.Builder mBuilder;
+	public static boolean isForeground = false;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -70,6 +72,12 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		connectedReceive = new ConnectedReceive();
 		registerReceiver(connectedReceive, filter);
 		callPhone();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		isForeground=true;
 	}
 
 	@NonNull
@@ -166,13 +174,15 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				.setDefaults(Notification.DEFAULT_VIBRATE)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合：
 				//Notification.DEFAULT_ALL  Notification.DEFAULT_SOUND 添加声音 // requires VIBRATE permission
 				.setSmallIcon(R.drawable.login_icon);
-		Intent intent = new Intent(this, CallPhoneNewActivity.class);
+		Intent intent = new Intent(this, PhoneReceiver.class);
+		intent.setAction(PhoneReceiver.CALL_PHONE);
 		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO,contactRecodeEntity);
 		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,cellPhoneType);
 		intent.putExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME,maxinumPhoneCallTime);
 //		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 //				| Intent.FLAG_ACTIVITY_NEW_TASK);
-		PendingIntent contextIntent = PendingIntent.getActivity(this, 0,intent, 0);
+
+		PendingIntent contextIntent = PendingIntent.getBroadcast(this, 0,intent, 0);
 		mBuilder.setContentIntent(contextIntent);
 		mNotificationManager.notify(notifyId, mBuilder.build());
 	}
@@ -263,6 +273,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	@Override
 	protected void onStop() {
 		super.onStop();
+		isForeground=false;
 		initNotify();
 		Log.e("CallPhoneNewActivity","onStop()");
 	}

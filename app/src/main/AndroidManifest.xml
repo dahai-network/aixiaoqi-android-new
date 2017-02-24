@@ -52,6 +52,9 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <user-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <uses-feature
         android:name="android.software.leanback"
         android:required="false"/>
@@ -354,6 +357,15 @@
                 <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK"/> <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
                 <action android:name="cn.jpush.android.intent.CONNECTION"/> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
                 <category android:name="${JPUSH_PKGNAME}"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="de.blinkt.openvpn.push.PhoneReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.phone.android.intent.CALL_PHONE"/> <!-- 打电话 -->
+                <action android:name="cn.phone.android.intent.RECIVE_PHONE"/> <!-- 接电话 -->
             </intent-filter>
         </receiver>
 

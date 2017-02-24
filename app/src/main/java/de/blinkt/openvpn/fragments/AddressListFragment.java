@@ -15,24 +15,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import cn.com.aixiaoqi.R;
-
 import cn.com.johnson.adapter.ContactAdapter;
 import de.blinkt.openvpn.activities.ContactDetailActivity;
-
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.util.pinyin.CharacterParser;
-
-import de.blinkt.openvpn.util.CommonTools;
-
-
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.contact.SideBar;
 import de.blinkt.openvpn.views.contact.TouchableRecyclerView;
@@ -41,8 +33,6 @@ import de.blinkt.openvpn.views.contact.expand.StickyRecyclerHeadersDecoration;
 public class AddressListFragment extends Fragment implements ContactAdapter.CallLisener, ContactDetailActivity.ContactChangeDataListener {
 
 	private SideBar mSideBar;
-	private TextView mUserDialog;
-	private TextView tvNoPermission;
 	private TouchableRecyclerView mRecyclerView;
 	private ContactAdapter mAdapter;
 
@@ -72,8 +62,8 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 		TitleBar title = (TitleBar) rootView.findViewById(R.id.title);
 		title.setTextTitle(getString(R.string.address_list));
 		mSideBar = (SideBar) rootView.findViewById(R.id.contact_sidebar);
-		mUserDialog = (TextView) rootView.findViewById(R.id.contact_dialog);
-		tvNoPermission = (TextView) rootView.findViewById(R.id.tv_no_permission);
+		TextView mUserDialog = (TextView) rootView.findViewById(R.id.contact_dialog);
+		TextView tvNoPermission = (TextView) rootView.findViewById(R.id.tv_no_permission);
 		searchEditText = (EditText) rootView.findViewById(R.id.searchEditText);
 		mRecyclerView = (TouchableRecyclerView) rootView.findViewById(R.id.contact_member);
 		mSideBar.setTextView(mUserDialog);

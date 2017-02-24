@@ -84,8 +84,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 
 	private TextView callPacketTextView;
 	private TextView DSDSTextView;
-	private FullyRecylerView hotPackageRecyclerView;
-	private RecyclerView boughtPackgeRecyclerView;
 	private TextView hotMessageMoreTextView;
 	private TextView boughtMessageMoreTextView;
 	private RelativeLayout scrollViewPagerLayout;
@@ -242,7 +240,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		hotMessageMoreTextView = (TextView) view.findViewById(R.id.hotMessageMoreTextView);
 		boughtMessageMoreTextView = (TextView) view.findViewById(R.id.boughtMessageMoreTextView);
 		sportTabLienarLayout = (LinearLayout) view.findViewById(R.id.sportTabLienarLayout);
-		boughtPackgeRecyclerView = (RecyclerView) view.findViewById(R.id.boughtPackgeRecyclerView);
+		RecyclerView boughtPackgeRecyclerView = (RecyclerView) view.findViewById(R.id.boughtPackgeRecyclerView);
 		hotPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.hotPacketLinearLayout);
 		totalStepTextView = (TextView) view.findViewById(R.id.totalStepTextView);
 		totalKmTextView = (TextView) view.findViewById(R.id.totalKmTextView);
@@ -412,7 +410,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			GetHotHttp http = (GetHotHttp) object;
 			List<HotPackageEntity> hotList = http.getHotPackageEntityList();
 			if (hotList.size() != 0) {
-				hotPackageRecyclerView = new FullyRecylerView(getActivity());
+				FullyRecylerView hotPackageRecyclerView = new FullyRecylerView(getActivity());
 //				hotPackageRecyclerView.setBackgroundResource(R.color.white);
 				hotPackageRecyclerView.setNestedScrollingEnabled(false);
 //				FullyGridLayoutManager GridManager = new FullyGridLayoutManager(getActivity(), 4);

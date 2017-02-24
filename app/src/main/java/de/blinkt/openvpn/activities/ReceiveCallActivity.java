@@ -30,6 +30,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
+import de.blinkt.openvpn.push.PhoneReceiver;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.AssetsDatabaseManager;
 import de.blinkt.openvpn.util.DatabaseDAO;
@@ -65,6 +66,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	private ReceiveCallReceiver receiver;
 	public SQLiteDatabase sqliteDB;
 	public DatabaseDAO dao;
+	public static boolean isForeground=false;
 	public static void launch(Context context,String phoneNum)
 	{
 		Intent intent = new Intent(context,ReceiveCallActivity.class);
@@ -85,6 +87,13 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 		initDB();
 		searchArea();
 	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		isForeground=true;
+	}
+
 	private void initDB() {
 		AssetsDatabaseManager.initManager(getApplicationContext());
 		AssetsDatabaseManager mg = AssetsDatabaseManager.getAssetsDatabaseManager();
@@ -214,12 +223,13 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 				.setDefaults(Notification.DEFAULT_VIBRATE)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合：
 				//Notification.DEFAULT_ALL  Notification.DEFAULT_SOUND 添加声音 // requires VIBRATE permission
 				.setSmallIcon(R.drawable.login_icon);
-		Intent intent = new Intent(this, ReceiveCallActivity.class);
+		Intent intent = new Intent(this, PhoneReceiver.class);
+		intent.setAction(PhoneReceiver.RECIVE_PHONE);
 		intent.putExtra("phoneNum",getIntent().getStringExtra("phoneNum"));
 
 //		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 //				| Intent.FLAG_ACTIVITY_NEW_TASK);
-		PendingIntent contextIntent = PendingIntent.getActivity(this, 0,intent, 0);
+		PendingIntent contextIntent = PendingIntent.getBroadcast(this, 0,intent, 0);
 		mBuilder.setContentIntent(contextIntent);
 		mNotificationManager.notify(notifyId, mBuilder.build());
 	}
@@ -279,9 +289,9 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 
 	private void stopTimer() {
 		if(timer.isActivated()){
-		timer.stop();
-		timer.setBase(SystemClock.elapsedRealtime());
-		timer=null;
+			timer.stop();
+			timer.setBase(SystemClock.elapsedRealtime());
+			timer=null;
 		}
 	}
 
@@ -296,6 +306,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	@Override
 	protected void onStop() {
 		super.onStop();
+		isForeground=false;
 		initNotify();
 	}
 
@@ -309,7 +320,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 				if(CallPhoneService.CALL_DIR==0){
 					cancelNotify();
 					stopTimer();
-				onBackPressed();
+					onBackPressed();
 				}
 			}else if(CallPhoneService.reportFlag.equals(action)){
 
@@ -341,6 +352,6 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 
 	private void cancelNotify() {
 		if(mNotificationManager!=null)
-		mNotificationManager.cancel(notifyId);
+			mNotificationManager.cancel(notifyId);
 	}
 }

@@ -43,7 +43,6 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
     EditText searchEditText;
     SelectContactAdapter selectContactAdapter ;
     StickyRecyclerHeadersDecoration headersDecor;
-    private TextView tvNoPermission;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +62,7 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
         mUserDialog = (TextView) findViewById(R.id.contact_dialog);
         searchEditText = (EditText)findViewById(R.id.searchEditText);
         mRecyclerView = (TouchableRecyclerView) findViewById(R.id.contact_member);
-        tvNoPermission = (TextView) findViewById(R.id.tv_no_permission);
+		TextView tvNoPermission = (TextView) findViewById(R.id.tv_no_permission);
         int orientation = LinearLayoutManager.VERTICAL;
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, orientation, false);
         mRecyclerView.setLayoutManager(layoutManager);

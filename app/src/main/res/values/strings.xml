@@ -86,6 +86,7 @@
 
     <string name="setting">设置</string>
     <string name="step_all">总共步行</string>
+    <string name="total_day_step">当日步数"</string>
     <string name="order_message">订单信息</string>
     <string name="order_detail">订单详情</string>
     <string name="activate_now">立即激活</string>

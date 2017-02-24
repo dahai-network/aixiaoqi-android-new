@@ -19,10 +19,26 @@ public class DateUtils {
 
 	private static SimpleDateFormat sf;
 
-	/*获取系统时间 格式为："yyyy/MM/dd "*/
+	/*获取系统时间 格式为："yyyy年MM月dd日 "*/
 	public static String getCurrentDate() {
 		Date d = new Date();
 		sf = new SimpleDateFormat("yyyy年MM月dd日",
+				Locale.getDefault());
+		return sf.format(d);
+	}
+
+	/*获取系统时间 格式为："yyyyMMdd "*/
+	public static String getCurrentDateForFile() {
+		Date d = new Date();
+		sf = new SimpleDateFormat("yyyyMMdd",
+				Locale.getDefault());
+		return sf.format(d);
+	}
+
+	/*获取系统时间 格式为："yyyyMMdd "*/
+	public static String getCurrentDateForFileDetail() {
+		Date d = new Date();
+		sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
 				Locale.getDefault());
 		return sf.format(d);
 	}
@@ -162,7 +178,7 @@ public class DateUtils {
 
 
 	public static String getTimeStampString(String time) {
-		String str ;
+		String str;
 		long timeStamp = Long.parseLong(time);
 		if (time.length() < 10) {
 			return "";
@@ -191,7 +207,7 @@ public class DateUtils {
 	}
 
 	public static String getTimeStampDetailString(String time) {
-		String str ;
+		String str;
 		long timeStamp = Long.parseLong(time);
 		if (time.length() < 10) {
 			return "";

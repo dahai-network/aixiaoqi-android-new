@@ -31,9 +31,11 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -86,6 +88,8 @@ public class UartService extends Service implements Serializable {
 	// Implements callback methods for GATT events that the app cares about.  For example,
 	// connection change and services discovered.
 	//蓝牙回调
+	ArrayList<String> messages;
+	private boolean isWholeDataPackage=false;//怕最后一个包搞混了
 	private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 		//监听蓝牙连接状态
 		@Override
@@ -143,26 +147,85 @@ public class UartService extends Service implements Serializable {
 		final Intent intent = new Intent(action);
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
 	}
-
+//	private String dataType="";
+//	private String messageFromBlueTooth;
 	//发送广播
 	private void broadcastUpdate(final String action,
 								 final BluetoothGattCharacteristic characteristic) {
 		final Intent intent = new Intent(action);
 
-		// This is special handling for the Heart Rate Measurement profile.  Data parsing is
-		// carried out as per profile specifications:
-		// http://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.heart_rate_measurement.xml
-		if (TX_CHAR_UUID1.equals(characteristic.getUuid())
-//				|| TX_CHAR_UUID2.equals(characteristic.getUuid())
-//				|| TX_CHAR_UUID3.equals(characteristic.getUuid())
-				) {
-			// Log.d(TAG, String.format("Received TX: %d",characteristic.getValue() ));
-			intent.putExtra(EXTRA_DATA, characteristic.getValue());
-		}
-		Log.e("UartService", HexStringExchangeBytesUtil.bytesToHexString(characteristic.getValue()));
-		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
-	}
+		if (TX_CHAR_UUID1.equals(characteristic.getUuid())) {
+			byte[] txValue=characteristic.getValue();
+			int lengthData=(txValue[1]&0x7f)+1;
+			int dataStatue=txValue[1]&0x80;
 
+
+			String	messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(characteristic.getValue());
+			Log.e("UartService", messageFromBlueTooth);
+			if(lengthData==1&&dataStatue==0x80){
+				//TODO 单包处理
+//				messages.add(messageFromBlueTooth);
+				ArrayList<String>	onePackagemessage=	new ArrayList<String>();
+				onePackagemessage.add(messageFromBlueTooth);
+				intent.putStringArrayListExtra(EXTRA_DATA,onePackagemessage);
+				LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
+				return;
+			}else {
+				//TODO 多包处理
+				if(TextUtils.isEmpty(messageFromBlueTooth)){
+					return;
+				}
+				if (messages == null) {
+					messages = new ArrayList<>();
+				}
+//				if (lengthData - 1 == 0) {
+//					dataType = messageFromBlueTooth.substring(6, 10);
+//				}
+				messages.add(messageFromBlueTooth);
+				if (messages.size() < lengthData) {
+					if (dataStatue == 0x80) {
+						isWholeDataPackage = true;
+					}
+					return;
+				}
+				if (isWholeDataPackage||dataStatue==0x80) {
+					sortMessage();
+					intent.putStringArrayListExtra(EXTRA_DATA,messages);
+					LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
+				}
+
+			}
+//			intent.putExtra(EXTRA_DATA, messageFromBlueTooth);
+//			if(messages.size()==0){
+//				return;
+//			}
+
+		}
+
+
+	}
+	private void sortMessage() {
+		if(messages.size()>1){
+			ArrayList<String> messagesList=new ArrayList<>();
+			int z=0;
+			for(int i=0;i<messages.size();i++){
+				for(int j=0;j<messages.size();j++){
+					if((Integer.parseInt(messages.get(j).substring(2,4),16)&127)==i){
+						z=j;
+						Log.e("messages","messagesz"+z);
+						break;
+					}
+				}
+				messagesList.add(messages.get(z));
+			}
+			messages.clear();
+			messages=messagesList;
+			for(int i=0;i<messages.size();i++){
+				Log.e("messages","messages="+messages.get(i));
+			}
+			Log.e("messages","===========================");
+		}
+	}
 
 	public class LocalBinder extends Binder {
 		public UartService getService() {

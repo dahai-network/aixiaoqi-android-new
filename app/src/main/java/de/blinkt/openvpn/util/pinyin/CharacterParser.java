@@ -81,7 +81,6 @@ public class CharacterParser {
 			"yin", "ying", "yo", "yong", "you", "yu", "yuan", "yue", "yun", "za", "zai", "zan", "zang", "zao", "ze", "zei", "zen", "zeng", "zha",
 			"zhai", "zhan", "zhang", "zhao", "zhe", "zhen", "zheng", "zhi", "zhong", "zhou", "zhu", "zhua", "zhuai", "zhuan", "zhuang", "zhui",
 			"zhun", "zhuo", "zi", "zong", "zou", "zu", "zuan", "zui", "zun", "zuo"};
-	private StringBuilder buffer;
 	private String resource;
 	private static CharacterParser characterParser = new CharacterParser();
 
@@ -148,7 +147,7 @@ public class CharacterParser {
 	 */
 	public String getSelling(String chs) {
 		String key, value;
-		buffer = new StringBuilder();
+		StringBuilder buffer = new StringBuilder();
 		int length = chs.length();
 		for (int i = 0; i < length; i++) {
 			key = chs.substring(i, i + 1);

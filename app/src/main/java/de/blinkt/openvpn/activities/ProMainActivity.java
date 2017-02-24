@@ -47,7 +47,6 @@ import cn.com.johnson.adapter.FragmentAdapter;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -825,7 +824,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private int count;
 	//用于改变indexFragment状态的Receiver
 	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {
-		public String dataType;
+
 
 		@Override
 		public void onReceive(final Context context, Intent intent) {
@@ -835,43 +834,50 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				Log.i(TAG, "被主动断掉连接！");
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
-				final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
-				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
-				if (txValue[0] != (byte) 0x55) {
+				ArrayList<String> message = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
+//				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
+
+				if (message.size() == 0) {
+					return;
+				}
+				Log.i(TAG, "消息：" + message.get(0));
+				if (!message.get(0).substring(0, 2).equals("55")) {
 					return;
 				}
 				//判断是否是分包（0x80的包）
-				if (txValue[1] != (byte) 0x80) {
+				if (!message.get(0).substring(2, 4).equals("80")) {
 					return;
 				}
-				dataType = messageFromBlueTooth.substring(6, 10);
+				String dataType = message.get(0).substring(6, 10);
+				Log.e(TAG, "dataType=" + dataType + "  " + (dataType.equals(RETURN_POWER)));
 				switch (dataType) {
 					case RETURN_POWER:
-						Log.i(TAG, "进入0700 ProMainActivity");
-						if (txValue[5] == 0x01) {
+						Log.e(TAG, "进入0700 ProMainActivity");
+						if (message.get(0).substring(10, 12).equals("01")) {
+
 							if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
 								//当有通话套餐的时候才允许注册操作
 								IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 								new Thread(http).start();
 								checkRegisterStatuGoIp();
 							}
-						} else if (txValue[5] == 0x11) {
+						} else if (message.get(0).substring(10, 12).equals("11")) {
 							sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 						}
 						break;
 				}
-				if (txValue[0] == (byte) 0xBB) {
-					if (txValue[1] == (byte) 0x01) {
-						if (txValue[3] == (byte) 0x03) {
-						}
-					} else if (txValue[1] == (byte) 0xEE) {
-						if (SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
-							checkRegisterStatuGoIp();
-						} else {
-							sendEventBusChangeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
-						}
-					}
-				}
+//				if (message.get(0).substring(0,2).equals("BB")) {
+//					if (message.get(0).substring(2,4).equals("01")) {
+//						if (message.get(0).substring(6,8).equals("03")) {
+//						}
+//					} else if (message.get(0).substring(2,4) .equals("EE")) {
+//						if (SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
+//							checkRegisterStatuGoIp();
+//						} else {
+//							sendEventBusChangeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
+//						}
+//					}
+//				}
 			}
 
 			if (action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)) {
