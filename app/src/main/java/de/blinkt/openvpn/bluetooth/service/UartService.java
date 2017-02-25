@@ -40,8 +40,6 @@ import java.util.List;
 import java.util.UUID;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
-import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
-import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
 
@@ -91,7 +89,7 @@ public class UartService extends Service implements Serializable {
 	// connection change and services discovered.
 	//蓝牙回调
 	ArrayList<String> messages;
-	private boolean isWholeDataPackage=false;//怕最后一个包搞混了
+	private boolean isWholeDataPackage = false;//怕最后一个包搞混了
 	private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 		//监听蓝牙连接状态
 		@Override
@@ -149,7 +147,8 @@ public class UartService extends Service implements Serializable {
 		final Intent intent = new Intent(action);
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
 	}
-//	private String dataType="";
+
+	//	private String dataType="";
 //	private String messageFromBlueTooth;
 	//发送广播
 	private void broadcastUpdate(final String action,
@@ -157,24 +156,24 @@ public class UartService extends Service implements Serializable {
 		final Intent intent = new Intent(action);
 
 		if (TX_CHAR_UUID1.equals(characteristic.getUuid())) {
-			byte[] txValue=characteristic.getValue();
-			int lengthData=(txValue[1]&0x7f)+1;
-			int dataStatue=txValue[1]&0x80;
+			byte[] txValue = characteristic.getValue();
+			int lengthData = (txValue[1] & 0x7f) + 1;
+			int dataStatue = txValue[1] & 0x80;
 
 
-			String	messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(characteristic.getValue());
+			String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(characteristic.getValue());
 			Log.e("UartService", messageFromBlueTooth);
-			if(lengthData==1&&dataStatue==0x80){
+			if (lengthData == 1 && dataStatue == 0x80) {
 				//TODO 单包处理
 //				messages.add(messageFromBlueTooth);
-				ArrayList<String>	onePackagemessage=	new ArrayList<String>();
+				ArrayList<String> onePackagemessage = new ArrayList<String>();
 				onePackagemessage.add(messageFromBlueTooth);
-				intent.putStringArrayListExtra(EXTRA_DATA,onePackagemessage);
+				intent.putStringArrayListExtra(EXTRA_DATA, onePackagemessage);
 				LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
 				return;
-			}else {
+			} else {
 				//TODO 多包处理
-				if(TextUtils.isEmpty(messageFromBlueTooth)){
+				if (TextUtils.isEmpty(messageFromBlueTooth)) {
 					return;
 				}
 				if (messages == null) {
@@ -190,9 +189,9 @@ public class UartService extends Service implements Serializable {
 					}
 					return;
 				}
-				if (isWholeDataPackage||dataStatue==0x80) {
+				if (isWholeDataPackage || dataStatue == 0x80) {
 					sortMessage();
-					intent.putStringArrayListExtra(EXTRA_DATA,messages);
+					intent.putStringArrayListExtra(EXTRA_DATA, messages);
 					LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
 				}
 
@@ -206,26 +205,27 @@ public class UartService extends Service implements Serializable {
 
 
 	}
+
 	private void sortMessage() {
-		if(messages.size()>1){
-			ArrayList<String> messagesList=new ArrayList<>();
-			int z=0;
-			for(int i=0;i<messages.size();i++){
-				for(int j=0;j<messages.size();j++){
-					if((Integer.parseInt(messages.get(j).substring(2,4),16)&127)==i){
-						z=j;
-						Log.e("messages","messagesz"+z);
+		if (messages.size() > 1) {
+			ArrayList<String> messagesList = new ArrayList<>();
+			int z = 0;
+			for (int i = 0; i < messages.size(); i++) {
+				for (int j = 0; j < messages.size(); j++) {
+					if ((Integer.parseInt(messages.get(j).substring(2, 4), 16) & 127) == i) {
+						z = j;
+						Log.e("messages", "messagesz" + z);
 						break;
 					}
 				}
 				messagesList.add(messages.get(z));
 			}
 			messages.clear();
-			messages=messagesList;
-			for(int i=0;i<messages.size();i++){
-				Log.e("messages","messages="+messages.get(i));
+			messages = messagesList;
+			for (int i = 0; i < messages.size(); i++) {
+				Log.e("messages", "messages=" + messages.get(i));
 			}
-			Log.e("messages","===========================");
+			Log.e("messages", "===========================");
 		}
 	}
 
@@ -287,7 +287,8 @@ public class UartService extends Service implements Serializable {
 	 * callback.
 	 */
 	//通过mac地址连接设备
-	public boolean connect(final String address) {
+	public boolean connect(String address) {
+		address = address.toUpperCase();
 		if (mBluetoothAdapter == null || address == null) {
 			Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
 			return false;

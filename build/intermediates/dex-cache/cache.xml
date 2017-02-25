@@ -3,15 +3,6 @@
 
     <item
         is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\alipaySdk-20161129.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="9356473ed942faa70a18f34883af52681e1c7223">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\alipaySdk-20161129_c80810fa12d9ffc4c62e43c60265ef2a6d5a1902.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.4.0\jars\classes.jar"
         jumboMode="false"
         optimize="true"
@@ -39,15 +30,6 @@
     </item>
     <item
         is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="30a4938ea5235ccf532b3e9f04200e68547e36ad">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.android.support-cardview-v7-25.2.0_9cd992347e8db5be9525862b212d0c5d5f3a7f16.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\cn.jiguang\jpush\2.1.8\jars\classes.jar"
         jumboMode="false"
         optimize="true"
@@ -63,6 +45,123 @@
         revision="23.0.3"
         sha1="20e6d443b368a3cbcfd9121e6f424708e772967e">
         <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.android.support-support-v13-25.2.0_1860217703763f20088b3352a0b3e00f3e9d0c16.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.5\686c608d1805b6d4d425ec4459e88164ffc85870\gson-2.5.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="686c608d1805b6d4d425ec4459e88164ffc85870">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\gson-2.5_d1775ad48bbb63d88951f4da76a944051360b30e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\cn.jiguang\jpush\2.1.8\jars\libs\jpush-android-2.1.8.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="86f15a6e7555400affa351041374d5129e99660e">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\jpush-android-2.1.8_1b4171dd9dc4dbdc30470f7c933eb6cc72a3fa10.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\AppData\Local\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\25.2.0\support-annotations-25.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="4a5a82a027706397fff621b22fd6fa796e91d7c5">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\support-annotations-25.2.0_320eedaa2510ba9d414e459c0d4d5f15ae00ae31.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\in.srain.cube\cube-sdk\1.0.44\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="ab3e30bc50e6b7f859b4971bfc897cd107a7b6c5">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\in.srain.cube-cube-sdk-1.0.44_878e02c3a8f93e145327a338ecc763732054b40e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\libs\libammsdk.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="d7c2f29c05b35e8c8713be2b81c41cf18f98b64a">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\libammsdk_191f2bf46c7d90fe6828f748bf753aa8cb765a4a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\libs\bugly_crash_upgrade_v1.1.5.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="e5394982bca4f57dfd3912646098cbee7d8197a6">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\bugly_crash_upgrade_v1.1.5_e2ab73007b6a1287097e9fcf16b74cbe7f809c23.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="fa0446a14ed5dd3725047d6399ffea771a564b30">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.android.support-support-core-ui-25.2.0_c604dd6264cff6581f8ade944259c3db0337301a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="8fe8a8f77d651982ce5e18f6187dc4daf914ac57">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.android.support-support-fragment-25.2.0_837ddc7de913dcaddf0b1b7de7993dd19e6e7864.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.jakewharton\butterknife\8.3.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="9fc69c9eb208228b7feef1d3108ef28a16cc3abf">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.jakewharton-butterknife-8.3.0_560a030595b36787c1df1d818a65e8b4b8aa5f62.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.github.lzyzsd\circleprogress\1.1.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="e6f9fb0d2ea982d656d6dca785a9097659395874">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.github.lzyzsd-circleprogress-1.1.0_520288e59cd0ade72640a1d7b0b14e471113ee40.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\org.androidannotations\androidannotations-api\4.0.0\8ef59050fdc527130b8f1f5689164a1ec0ebc13c\androidannotations-api-4.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="8ef59050fdc527130b8f1f5689164a1ec0ebc13c">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\androidannotations-api-4.0.0_5a4721e76ca83d458113f36175a12d79093d9017.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\libs\alipaySdk-20161129.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="9356473ed942faa70a18f34883af52681e1c7223">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\alipaySdk-20161129_c80810fa12d9ffc4c62e43c60265ef2a6d5a1902.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="30a4938ea5235ccf532b3e9f04200e68547e36ad">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.android.support-cardview-v7-25.2.0_9cd992347e8db5be9525862b212d0c5d5f3a7f16.jar" />
     </item>
     <item
         is-multidex="false"
@@ -93,30 +192,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.5\686c608d1805b6d4d425ec4459e88164ffc85870\gson-2.5.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="686c608d1805b6d4d425ec4459e88164ffc85870">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\gson-2.5_d1775ad48bbb63d88951f4da76a944051360b30e.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.umeng.analytics\analytics\6.0.9\5259c1d58a8f2373c2bbb7cb0ff33aee0eef4503\analytics-6.0.9.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.3"
         sha1="5259c1d58a8f2373c2bbb7cb0ff33aee0eef4503">
         <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\analytics-6.0.9_4468fc866b83c3997851493e17b72ff7d7e51ac7.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\cn.jiguang\jpush\2.1.8\jars\libs\jpush-android-2.1.8.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="86f15a6e7555400affa351041374d5129e99660e">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\jpush-android-2.1.8_1b4171dd9dc4dbdc30470f7c933eb6cc72a3fa10.jar" />
     </item>
     <item
         is-multidex="false"
@@ -135,24 +216,6 @@
         revision="23.0.3"
         sha1="ecf534dba3a8446ce84cbb797d314763be212a68">
         <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\glide-3.5.2_ea43fa33689a18fd8d7307d472bff1ec5c77700e.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Administrator\AppData\Local\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\25.2.0\support-annotations-25.2.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="4a5a82a027706397fff621b22fd6fa796e91d7c5">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\support-annotations-25.2.0_320eedaa2510ba9d414e459c0d4d5f15ae00ae31.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\in.srain.cube\cube-sdk\1.0.44\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="ab3e30bc50e6b7f859b4971bfc897cd107a7b6c5">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\in.srain.cube-cube-sdk-1.0.44_878e02c3a8f93e145327a338ecc763732054b40e.jar" />
     </item>
     <item
         is-multidex="false"
@@ -210,39 +273,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\libammsdk.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="d7c2f29c05b35e8c8713be2b81c41cf18f98b64a">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\libammsdk_191f2bf46c7d90fe6828f748bf753aa8cb765a4a.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\bugly_crash_upgrade_v1.1.5.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="e5394982bca4f57dfd3912646098cbee7d8197a6">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\bugly_crash_upgrade_v1.1.5_e2ab73007b6a1287097e9fcf16b74cbe7f809c23.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.android.support\design\23.4.0\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.3"
         sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
         <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.android.support-design-23.4.0_311e016785303a9d5dd63475b05184abaaa121db.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="fa0446a14ed5dd3725047d6399ffea771a564b30">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.android.support-support-core-ui-25.2.0_c604dd6264cff6581f8ade944259c3db0337301a.jar" />
     </item>
     <item
         is-multidex="false"
@@ -255,48 +291,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="8fe8a8f77d651982ce5e18f6187dc4daf914ac57">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.android.support-support-fragment-25.2.0_837ddc7de913dcaddf0b1b7de7993dd19e6e7864.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.4.0\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="23.0.3"
         sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
         <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.android.support-support-vector-drawable-23.4.0_7891ce581e19f85d04e26c909f9916e534826b73.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.jakewharton\butterknife\8.3.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="9fc69c9eb208228b7feef1d3108ef28a16cc3abf">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.jakewharton-butterknife-8.3.0_560a030595b36787c1df1d818a65e8b4b8aa5f62.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\exploded-aar\com.github.lzyzsd\circleprogress\1.1.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="e6f9fb0d2ea982d656d6dca785a9097659395874">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\com.github.lzyzsd-circleprogress-1.1.0_520288e59cd0ade72640a1d7b0b14e471113ee40.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\org.androidannotations\androidannotations-api\4.0.0\8ef59050fdc527130b8f1f5689164a1ec0ebc13c\androidannotations-api-4.0.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.3"
-        sha1="8ef59050fdc527130b8f1f5689164a1ec0ebc13c">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\androidannotations-api-4.0.0_5a4721e76ca83d458113f36175a12d79093d9017.jar" />
     </item>
 
 </items>
