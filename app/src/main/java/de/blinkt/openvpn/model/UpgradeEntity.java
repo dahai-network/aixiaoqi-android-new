@@ -6,12 +6,12 @@ import java.io.Serializable;
  * Created by Administrator on 2016/10/20 0020.
  */
 public class UpgradeEntity implements Serializable{
-    private int Version;
+    private double Version;
     private String VersionName;
     private String Descr;
     private String Url;
 
-    public int getVersion() {
+    public double getVersion() {
         return Version;
     }
 

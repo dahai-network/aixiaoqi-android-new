@@ -27,6 +27,24 @@ public class DateUtils {
 		return sf.format(d);
 	}
 
+	/*获取系统时间 格式为："yyyyMMdd "*/
+	public static String getCurrentDateForFile() {
+		Date d = new Date();
+		sf = new SimpleDateFormat("yyyyMMdd",
+				Locale.getDefault());
+		return sf.format(d);
+	}
+
+	/*获取系统时间 格式为："yyyyMMdd "*/
+	public static String getCurrentDateForFileDetail() {
+		Date d = new Date();
+		sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+				Locale.getDefault());
+		return sf.format(d);
+	}
+
+
+
 	/*
 	  提交订单处添加半年后（180天）的时间
 	 */

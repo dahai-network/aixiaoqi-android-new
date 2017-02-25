@@ -5,16 +5,23 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.DateUtils;
 
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
@@ -70,6 +77,8 @@ public class ReceiveSocketService extends Service {
 			TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s, length));
 			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
+			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "read :" + HexStringExchangeBytesUtil.bytesToHexString(s, length));
+
 		}
 
 		@Override
@@ -113,6 +122,37 @@ public class ReceiveSocketService extends Service {
 			reConnect();
 		}
 	}
+
+	/**
+	 * 打开日志文件并写入日志
+	 *
+	 * @return
+	 **/
+	public  void recordStringLog(String text) {// 新建或打开日志文件
+		String path = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi/";
+		String fileName = "TCP" + DateUtils.getCurrentDateForFile() + ".text";
+		File file = new File(path + fileName);
+		if (!file.exists()) {
+			file.getParentFile().mkdirs();
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			FileWriter filerWriter = new FileWriter(file, true);//后面这个参数代表是不是要接上文件中原来的数据，不进行覆盖
+			BufferedWriter bufWriter = new BufferedWriter(filerWriter);
+			bufWriter.write(text);
+			bufWriter.newLine();
+			bufWriter.close();
+			filerWriter.close();
+			Log.d("行为日志写入成功", text);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	private void createHeartBeatPackage() {
 		Log.e(TAG,"count="+count+"\nSocketConstant.SESSION_ID_TEMP"+SocketConstant.SESSION_ID_TEMP+"\nSocketConstant.SESSION_ID="+SocketConstant.SESSION_ID+(SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
 		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0) {
@@ -140,6 +180,7 @@ public class ReceiveSocketService extends Service {
 
 		if (tcpClient != null && tcpClient.getTransceiver() != null) {
 			tcpClient.getTransceiver().send(s);
+			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "write :\n" +s);
 		}
 	}
 

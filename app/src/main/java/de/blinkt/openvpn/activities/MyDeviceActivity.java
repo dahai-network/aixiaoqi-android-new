@@ -43,7 +43,6 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
@@ -476,22 +475,23 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //						}
 //						break;
 					case Constant.SYSTEM_BASICE_INFO:
-						Log.i(TAG, "版本号:" + messages.get(0).substring(10, 12) + "." + messages.get(0).substring(12, 14));
-						firmwareTextView.setText(messages.get(0).substring(10, 12)+ "." +  messages.get(0).substring(12, 14));
+						String deviceVesion=Integer.parseInt(messages.get(0).substring(10, 12),16)+ "." +  Integer.parseInt(messages.get(0).substring(12, 14),16);
+						Log.i(TAG, "版本号:" + deviceVesion);
+						firmwareTextView.setText(deviceVesion);
 						//不让无设备dialog弹出
 						if (noDevicedialog != null)
 							noDevicedialog.getDialog().dismiss();
 
 						slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16),16)) / 100);
-						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, messages.get(0).substring(10, 12) + "");
+						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, deviceVesion);
 						new Thread(http).start();
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 							entity.setBlueType(BluetoothConstant.BLUE_VERSION);
-							entity.setBraceletversion(messages.get(0).substring(10, 12) + "." + messages.get(0).substring(12, 14));
+							entity.setBraceletversion(deviceVesion);
 							entity.setSuccess(true);
 							EventBus.getDefault().post(entity);
-							Log.i(TAG, "进入版本号:" + messages.get(0).substring(10, 12) + "." + messages.get(0).substring(12, 14));
+							Log.i(TAG, "进入版本号:" + deviceVesion);
 						}
 						break;
 					case Constant.RETURN_POWER:
@@ -647,12 +647,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			//检测是否在线
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES) {
-			if (object.getStatus() != 1) {
+			GetDeviceSimRegStatuesHttp http = (GetDeviceSimRegStatuesHttp) object;
+			if (http.getStatus() != 1) {
 				connectGoip();
 			} else {
-				stopAnim();
-				CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
+				if (http.getRegSuccessEntity().getRegStatus() == 1) {
+					stopAnim();
+					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
+				} else {
+					connectGoip();
+				}
 			}
+
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_VERSION) {
 			if (object.getStatus() != 1) {
 				CommonTools.showShortToast(this, object.getMsg());
@@ -825,7 +831,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
+				if (mService == null || mService.mConnectionState == UartService.STATE_CONNECTED) {
 					return;
 				}
 				if (mBtAdapter != null) {
@@ -952,6 +958,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_high_signal))) {
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 			percentTextView.setText("");
+			percentInt = 0;
 			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
 			percentTextView.setText("");

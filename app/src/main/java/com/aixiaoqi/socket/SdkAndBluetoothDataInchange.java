@@ -50,12 +50,7 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 	private String socketTag = "0";
-	private String sendToOneServerTemp;
 	private String mStrSimPowerOnPacket = "";
-	//	byte num = 0;
-	private long lastTime;
-	private int count = 0;
-
 	Timer timerMessage ;
 	TimerTask timerTaskMessage = new TimerTask() {
 		@Override
@@ -64,7 +59,8 @@ public class SdkAndBluetoothDataInchange {
 			if (SocketConstant.REGISTER_STATUE_CODE != 3) {
 				if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
 					Log.e("timer", "接收不到蓝牙数据");
-					JNIUtil.startSDK(2);
+//					JNIUtil.startSDK(2);
+					sendToBluetoothAboutCardInfo(finalTemp);
 					notCanReceiveBluetoothDataCount++;
 				}else if(notCanReceiveBluetoothDataCount>=3){
 					Log.e("timer", "注册失败");
@@ -79,7 +75,7 @@ public class SdkAndBluetoothDataInchange {
 	private void notifyRegisterFail() {
 		registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
 	}
-	private boolean isWholeDataPackage=false;//怕最后一个包搞混了
+
 	long getSendBlueToothTime;
 	private int countMessage = 0;
 	private int notCanReceiveBluetoothDataCount = 0;
@@ -88,15 +84,15 @@ public class SdkAndBluetoothDataInchange {
 	public void sendToSDKAboutBluetoothInfo(ArrayList<String> messages) {
 
 		synchronized (this){
-//			if (countMessage ==0) {
-//				Log.e("timer", "开启定时器");
-//				countMessage++;
-//				if(timerMessage==null){
-//					timerMessage= new Timer();
-//				}
-//				timerMessage.schedule(timerTaskMessage, 5000, 5000);
-//
-//			}
+			if (countMessage ==0) {
+				Log.e("timer", "开启定时器");
+				countMessage++;
+				if(timerMessage==null){
+					timerMessage= new Timer();
+				}
+				timerMessage.schedule(timerTaskMessage, 5000, 5000);
+
+			}
 
 
 			if (percentEntity == null) {
@@ -105,91 +101,18 @@ public class SdkAndBluetoothDataInchange {
 			int percent = Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag()) ? "-1" : mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length() - 4, mReceiveDataframSocketService.getSorcketTag().length() - 1));
 			percentEntity.setPercent(percent);
 			EventBus.getDefault().post(percentEntity);
-			lastTime = 0;
-			count = 0;
+			isReceiveBluetoothData = true;
 			notCanReceiveBluetoothDataCount=0;
-//			if (messages == null) {
-//				messages = new ArrayList<>();
-//			}
-//			messages.add(temp);
-//			int lengthData=(txValue[1]&0x7f)+1;
-//			int dataStatue=txValue[1]&0x80;
-//			if(messages.size()<lengthData){
-//				if(dataStatue== 0x80){
-//					isWholeDataPackage=true;
-//				}
-//				return;
-//			}
-
-//			if (isWholeDataPackage||dataStatue==0x80) {
-
-//				isReceiveBluetoothData = true;
-//				isWholeDataPackage=false;
-//				Log.e(TAG, "messages:" + messages.size() );
-//				if(messages.size()<lengthData){
-//					sendToBluetoothAboutCardInfo(finalTemp);
-//					return;
-//				}
-//				sortMessage();
 			mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
-
-			// 接收到一个完整的数据包,发送到SDK
-//				int length = (txValue[2] & 0xff);
-//				if (messages.size() >= 127 && length < 252) {
-//					length += 255;
-//				}
-//				String sendToOnService = null;
-//				Log.e(TAG, "从蓝牙发出的完整数据 mStrSimPowerOnPacket:" + mStrSimPowerOnPacket.length() + "; \n"
-//						+ mStrSimPowerOnPacket + "\nlength=" + length);
-//				if (mStrSimPowerOnPacket.length() >= length) {
-//					try {
-//						sendToOnService = mStrSimPowerOnPacket.substring(0, length * 2);
-//					} catch (StringIndexOutOfBoundsException e) {
-//						Log.e(TAG, "catch socketTag:" + socketTag + "; \n"
-//								+ sendToOneServerTemp);
-//						sendToBluetoothAboutCardInfo(finalTemp);
-//						return;
-//					}
-//				} else {
-//					Log.e(TAG, "catch else:" + socketTag + "; \n"
-//							+ sendToOneServerTemp);
-//					sendToBluetoothAboutCardInfo(finalTemp);
-//					return;
-//				}
 			socketTag = mReceiveDataframSocketService.getSorcketTag();
-//				sendToOneServerTemp = sendToOnService;
 			Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
 					+ mStrSimPowerOnPacket);
-
 			sendToSDKAboutBluetoothInfo(socketTag + mStrSimPowerOnPacket);
 			messages.clear();
-//			}
+
 		}
 	}
 
-//	private void sortMessage() {
-//		if(messages.size()>1){
-//			ArrayList<String> messagesList=new ArrayList<>();
-//			int z=0;
-//			for(int i=0;i<messages.size();i++){
-//				for(int j=0;j<messages.size();j++){
-//					Log.e("messages","messages()"+(Integer.parseInt(messages.get(j).substring(2,4),16)&127)+"  i="+i);
-//					if((Integer.parseInt(messages.get(j).substring(2,4),16)&127)==i){
-//						z=j;
-//						Log.e("messages","messagesz"+z);
-//						break;
-//					}
-//				}
-//				messagesList.add(messages.get(z));
-//			}
-//			messages.clear();
-//			messages=messagesList;
-//			for(int i=0;i<messages.size();i++){
-//				Log.e("messages","messages="+messages.get(i));
-//			}
-//			Log.e("messages","===========================");
-//		}
-//	}
 
 	PercentEntity percentEntity;
 
@@ -197,7 +120,6 @@ public class SdkAndBluetoothDataInchange {
 		if (mReceiveDataframSocketService != null) {
 			mReceiveDataframSocketService.sendToSdkMessage(finalMessage);
 		}
-//		messages.clear();
 	}
 
 
