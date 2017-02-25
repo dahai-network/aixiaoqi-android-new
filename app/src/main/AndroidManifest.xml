@@ -433,7 +433,11 @@
                 <action android:name="android.intent.action.SMS_STATUS_RECEIVED"/>
             </intent-filter>
         </receiver>
-
+        <receiver android:name="de.blinkt.openvpn.push.NetReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name="de.blinkt.openvpn.activities.SetAlarmActivity"
             android:screenOrientation="portrait">

@@ -106,6 +106,10 @@ public class ReceiveSocketService extends Service {
 
 		}
 	}
+public void disconnect(){
+	tcpClient.disconnect();
+}
+
 
 	private boolean isDisconnect=false;
 	//断开连接，如果注册成功，需要重新注册，并且改变注册状态
@@ -168,7 +172,7 @@ public class ReceiveSocketService extends Service {
 
 
 	private void reConnect() {
-		tcpClient.disconnect();
+
 		initSocket();
 
 	}

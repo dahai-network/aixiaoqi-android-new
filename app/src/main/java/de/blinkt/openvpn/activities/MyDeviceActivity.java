@@ -647,16 +647,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			//检测是否在线
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES) {
-			GetDeviceSimRegStatuesHttp http = (GetDeviceSimRegStatuesHttp) object;
-			if (http.getStatus() != 1) {
-				connectGoip();
-			} else {
-				if (http.getRegSuccessEntity().getRegStatus() == 1) {
+			GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp=(GetDeviceSimRegStatuesHttp)object;
+			if(!getDeviceSimRegStatuesHttp.getSimRegStatue().equals("1")){
+					connectGoip();
+				} else {
 					stopAnim();
 					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
-				} else {
-					connectGoip();
-				}
+
 			}
 
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_VERSION) {
