@@ -1,7 +1,6 @@
 package cn.com.johnson.adapter;
 
 import android.content.Context;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -53,7 +52,7 @@ public class AlarmClockAdapter extends RecyclerBaseAdapter<AlarmClockAdapter.Ala
             holder.matchScreen.setVisibility(View.GONE);
         }
         if(isEditAlarmClock){
-            holder.swipeContent.setBackground(ResourcesCompat.getDrawable(mContext.getResources(),R.drawable.call_phone_selector,null));
+            holder.swipeContent.setBackground(mContext.getResources().getDrawable(R.drawable.call_phone_selector));
             ((SwipeMenuView) holder.itemView).setIos(false).setSwipeEnable(false);
             holder.alarmClockDeleteIv.setVisibility(View.VISIBLE);
             holder.canClickIv.setVisibility(View.VISIBLE);
@@ -87,7 +86,7 @@ public class AlarmClockAdapter extends RecyclerBaseAdapter<AlarmClockAdapter.Ala
         }else{
             holder.llSmothClose.setEnabled(false);
             ((SwipeMenuView) holder.itemView).noScroll(false);
-            holder.swipeContent.setBackground(ResourcesCompat.getDrawable(mContext.getResources(),R.color.white,null));
+            holder.swipeContent.setBackground(mContext.getResources().getDrawable(R.color.white));
             ((SwipeMenuView) holder.itemView).setIos(false).setSwipeEnable(true);
             ((SwipeMenuView) holder.itemView).setIos(false).setLeftSwipe(true);
             holder.alarmClockDeleteIv.setVisibility(View.GONE);
@@ -119,7 +118,7 @@ public class AlarmClockAdapter extends RecyclerBaseAdapter<AlarmClockAdapter.Ala
             }
         });
         holder.alarmClockDays.setText(mList.get(position).getTag()+getStringBuilder(TextUtils.isEmpty(mList.get(position).getRepeat())?null:Arrays.asList(mList.get(position).getRepeat().split(","))));
-        holder.switchView.setOpened(mList.get(position).getStatus().equals("1"));
+        holder.switchView.setOpened(mList.get(position).getStatus().equals("1")?true:false);
         holder.alarmClockTimeTv.setText(mList.get(position).getTime());
     }
     private String getStringBuilder(List<String> repeatDayList) {

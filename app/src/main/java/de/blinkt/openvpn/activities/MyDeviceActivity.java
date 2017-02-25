@@ -43,6 +43,7 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
@@ -136,6 +137,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private String macAddressStr;
 	private int SCAN_PERIOD = 10000;//原本120000毫秒
 	private DialogBalance noDevicedialog;
+	private DialogBalance cardRuleBreakDialog;
 	Animation RegisterStatueAnim;
 	public static boolean isForeground = false;
 	//写卡进度
@@ -388,7 +390,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	public static int startDfuCount = 0;
+	private Thread connectThread;
 	private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
+
 
 
 		public void onReceive(Context context, Intent intent) {
@@ -420,7 +424,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 						return;
 					}
-					Thread connectThread = new Thread(new Runnable() {
+					connectThread = new Thread(new Runnable() {
 						@Override
 						public void run() {
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
@@ -449,20 +453,20 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 
-				final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
-				if (messages.size() == 0) {
+				final ArrayList<String> messages= intent.getStringArrayListExtra(UartService.EXTRA_DATA);
+				if(messages.size()==0){
 					return;
 				}
 //				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
 
-				if (!messages.get(0).substring(0, 2).equals("55")) {
+				if (!messages.get(0).substring(0,2).equals("55")) {
 					return;
 				}
 				//判断是否是分包（0x80的包）
-				if (!messages.get(0).substring(2, 4).equals("80")) {
+				if (!messages.get(0).substring(2,4).equals("80")) {
 					return;
 				}
-				String dataType = messages.get(0).substring(6, 10);
+				String	dataType = messages.get(0).substring(6, 10);
 				switch (dataType) {
 //					case (byte) 0xBB:
 //						if (txValue[1] == (byte) 0x05) {
@@ -472,24 +476,23 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //						}
 //						break;
 					case Constant.SYSTEM_BASICE_INFO:
-						int versionFirst = Integer.parseInt(messages.get(0).substring(10, 12), 16);
-						int versionLast = Integer.parseInt(messages.get(0).substring(12, 14), 16);
-						Log.i(TAG, "版本号:" + versionFirst + "." + versionLast);
-						firmwareTextView.setText(versionFirst + "." + versionLast);
+						String deviceVesion=Integer.parseInt(messages.get(0).substring(10, 12),16)+ "." +  Integer.parseInt(messages.get(0).substring(12, 14),16);
+						Log.i(TAG, "版本号:" + deviceVesion);
+						firmwareTextView.setText(deviceVesion);
 						//不让无设备dialog弹出
 						if (noDevicedialog != null)
 							noDevicedialog.getDialog().dismiss();
 
-						slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
-						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, versionFirst + "." + versionLast);
+						slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16),16)) / 100);
+						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, deviceVesion);
 						new Thread(http).start();
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 							entity.setBlueType(BluetoothConstant.BLUE_VERSION);
-							entity.setBraceletversion(messages.get(0).substring(10, 12) + "." + messages.get(0).substring(12, 14));
+							entity.setBraceletversion(deviceVesion);
 							entity.setSuccess(true);
 							EventBus.getDefault().post(entity);
-							Log.i(TAG, "进入版本号:" + messages.get(0).substring(10, 12) + "." + messages.get(0).substring(12, 14));
+							Log.i(TAG, "进入版本号:" + deviceVesion);
 						}
 						break;
 					case Constant.RETURN_POWER:
@@ -533,7 +536,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public void onResume() {
 		super.onResume();
 		Log.d(TAG, "onResume");
-		isForeground = true;
+		isForeground=true;
 		DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
 	}
 
@@ -548,7 +551,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public void onDestroy() {
 		super.onDestroy();
 		stopAnim();
-		isForeground = false;
+		isForeground=false;
 		Log.d(TAG, "onDestroy()");
 		isUpgrade = false;
 		if (isDfuServiceRunning()) {
@@ -645,17 +648,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			//检测是否在线
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES) {
-			GetDeviceSimRegStatuesHttp http = (GetDeviceSimRegStatuesHttp) object;
-			if (http.getStatus() != 1) {
-				connectGoip();
-			} else {
-				if (http.getRegSuccessEntity().getRegStatus() == 1) {
+			GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp=(GetDeviceSimRegStatuesHttp)object;
+			if(!getDeviceSimRegStatuesHttp.getSimRegStatue().equals("1")){
+					connectGoip();
+				} else {
 					stopAnim();
 					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
-				} else {
-					connectGoip();
-				}
+
 			}
+
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_VERSION) {
 			if (object.getStatus() != 1) {
 				CommonTools.showShortToast(this, object.getMsg());
@@ -731,7 +732,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		CommonTools.showShortToast(this, errorMessage);
-		if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
+		if(cmdType==HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA){
 			utils.writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
 		}
 	}
@@ -771,7 +772,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 
 	private boolean isDfuServiceRunning() {
-		return ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName());
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName())) {
+			return true;
+		}
+		return false;
 	}
 
 	private void slowSetPercent(final float percent) {
@@ -1033,7 +1037,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void showNoCardDialog() {
 		//不能按返回键，只能二选其一
-		DialogBalance cardRuleBreakDialog = new DialogBalance(MyDeviceActivity.this, MyDeviceActivity.this, R.layout.dialog_balance, 3);
+		cardRuleBreakDialog = new DialogBalance(MyDeviceActivity.this, MyDeviceActivity.this, R.layout.dialog_balance, 3);
 		cardRuleBreakDialog.setCanClickBack(false);
 		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));
 	}

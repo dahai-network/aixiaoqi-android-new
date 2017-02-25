@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.UUID;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
 
@@ -429,7 +431,9 @@ public class UartService extends Service implements Serializable {
 			return false;
 
 		final BluetoothGattCharacteristic scCharacteristic = gaService.getCharacteristic(SERVICE_CHANGED_CHARACTERISTIC);
-		return scCharacteristic != null;
+		if (scCharacteristic == null)
+			return false;
+		return true;
 	}
 
 	//用于某个接收的UUID写入mBluetoothGatt的监听callback里面。在onCharacteristicChanged()会产生响应

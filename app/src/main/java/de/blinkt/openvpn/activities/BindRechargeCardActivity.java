@@ -20,6 +20,7 @@ import de.blinkt.openvpn.util.CommonTools;
 
 
 public class BindRechargeCardActivity extends BaseNetActivity {
+	private String TYPE = "type";
 	public static int RECHARGE = 1;
 	public static int GIFT = 2;
 
@@ -40,7 +41,6 @@ public class BindRechargeCardActivity extends BaseNetActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_bind_recharge_card);
 		ButterKnife.bind(this);
-		String TYPE = "type";
 		bindType = getIntent().getIntExtra(TYPE, RECHARGE);
 		if (bindType == RECHARGE) {
 			hasLeftViewTitle(R.string.bind_recharge_card, 0);

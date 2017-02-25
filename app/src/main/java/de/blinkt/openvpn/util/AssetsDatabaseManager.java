@@ -37,6 +37,8 @@ import java.util.zip.ZipInputStream;
  */
 public class AssetsDatabaseManager {
 	private static final String TAG = "AssetsDatabaseManager";
+//	private static String DB_PATH = "/data/data/%s/databases";// %s is packageName.
+	private static String DB_PATH = "/data/data/%s/databases";// %s is packageName.
 	private Map<String, SQLiteDatabase> databases = new HashMap<>();
 	private Context mContext = null;
 	private static AssetsDatabaseManager mInstance = null;//singleton pattern.
@@ -112,7 +114,6 @@ public class AssetsDatabaseManager {
 	}
 
 	private String getDatabaseFilePath() {
-		String DB_PATH = "/data/data/%s/databases";
 		return String.format(DB_PATH,
 				mContext.getApplicationInfo().packageName);
 	}

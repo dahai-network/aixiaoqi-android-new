@@ -10,14 +10,16 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 
@@ -35,8 +37,7 @@ public class ReceiveSocketService extends Service {
 	private int contactFailCount = 1;
 	PendingIntent sender;
 	AlarmManager am;
-	private static String TAG = "ReceiveSocketService";
-
+	private static String TAG="ReceiveSocketService";
 	@Override
 	public IBinder onBind(Intent intent) {
 		return mBinder;
@@ -54,12 +55,11 @@ public class ReceiveSocketService extends Service {
 		tcpClient.connect();
 	}
 
-	private FileOutputStream fileOutputStream;
 	TcpClient tcpClient = new TcpClient() {
 		@Override
 		public void onConnect(SocketTransceiver transceiver) {
 			Log.i("Blue_Chanl", "正在注册GOIP");
-			SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
+			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
 			createSocketLisener.create();
 		}
 
@@ -69,18 +69,16 @@ public class ReceiveSocketService extends Service {
 		}
 
 
+
+
 		@Override
-		public void onReceive(SocketTransceiver transceiver,final  byte[] s,final  int length) {
+		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
 			Log.e("Blue_Chanl", "接收数据 - onReceive");
 			TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s, length));
 			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					recordStringLog(DateUtils.getCurrentDateForFileDetail() + " :" + HexStringExchangeBytesUtil.bytesToHexString(s, length));
-				}
-			}).start();
+			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "read :" + HexStringExchangeBytesUtil.bytesToHexString(s, length));
+
 		}
 
 		@Override
@@ -91,13 +89,50 @@ public class ReceiveSocketService extends Service {
 
 
 	};
+	//首次创建连接失败，重试三次还不成功，则断开连接，并且提示注册失败。
+	private void connectFailReconnect() {
+
+		if(!isDisconnect){
+			CommonTools.delayTime(5000);
+			if(tcpClient!=null&&!tcpClient.isConnected()){
+				if (contactFailCount <= 3) {
+					reConnect();
+					contactFailCount++;
+				}else{
+					contactFailCount=0;
+					registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.START_TCP_FAIL);
+				}
+			}
+
+		}
+	}
+public void disconnect(){
+	tcpClient.disconnect();
+}
+
+
+	private boolean isDisconnect=false;
+	//断开连接，如果注册成功，需要重新注册，并且改变注册状态
+	private void disConnectReconnect() {
+		isDisconnect=true;
+//		cancelTimer();
+		CommonTools.delayTime(5000);
+		if(tcpClient!=null&&!tcpClient.isConnected()) {
+			if(REGISTER_STATUE_CODE==3){
+				REGISTER_STATUE_CODE = 2;
+				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.TCP_DISCONNECT);
+			}
+			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
+			reConnect();
+		}
+	}
 
 	/**
 	 * 打开日志文件并写入日志
 	 *
 	 * @return
 	 **/
-	public static void recordStringLog(String text) {// 新建或打开日志文件
+	public  void recordStringLog(String text) {// 新建或打开日志文件
 		String path = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi/";
 		String fileName = "TCP" + DateUtils.getCurrentDateForFile() + ".text";
 		File file = new File(path + fileName);
@@ -122,43 +157,8 @@ public class ReceiveSocketService extends Service {
 			e.printStackTrace();
 		}
 	}
-
-	//首次创建连接失败，重试三次还不成功，则断开连接，并且提示注册失败。
-	private void connectFailReconnect() {
-		if (!isDisconnect) {
-			CommonTools.delayTime(5000);
-			if (tcpClient != null && !tcpClient.isConnected()) {
-				if (contactFailCount <= 3) {
-					reConnect();
-					contactFailCount++;
-				} else {
-					contactFailCount = 0;
-					registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.START_TCP_FAIL);
-				}
-			}
-
-		}
-	}
-
-	private boolean isDisconnect = false;
-
-	//断开连接，如果注册成功，需要重新注册，并且改变注册状态
-	private void disConnectReconnect() {
-		isDisconnect = true;
-//		cancelTimer();
-		CommonTools.delayTime(5000);
-		if (tcpClient != null && !tcpClient.isConnected()) {
-			if (REGISTER_STATUE_CODE == 3) {
-				REGISTER_STATUE_CODE = 2;
-				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.TCP_DISCONNECT);
-			}
-			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
-			reConnect();
-		}
-	}
-
 	private void createHeartBeatPackage() {
-		Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
+		Log.e(TAG,"count="+count+"\nSocketConstant.SESSION_ID_TEMP"+SocketConstant.SESSION_ID_TEMP+"\nSocketConstant.SESSION_ID="+SocketConstant.SESSION_ID+(SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
 		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0) {
 			count = count + 1;
 			Log.e("onReceive", "开启定时器");
@@ -172,7 +172,7 @@ public class ReceiveSocketService extends Service {
 
 
 	private void reConnect() {
-		tcpClient.disconnect();
+
 		initSocket();
 
 	}
@@ -184,22 +184,23 @@ public class ReceiveSocketService extends Service {
 
 		if (tcpClient != null && tcpClient.getTransceiver() != null) {
 			tcpClient.getTransceiver().send(s);
+			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "write :\n" +s);
 		}
 	}
 
 	@Override
 	public void onDestroy() {
-		Log.e(TAG, "onDestroy()");
-		if (SocketConnection.sdkAndBluetoothDataInchange != null)
+		Log.e(TAG,"onDestroy()");
+		if(SocketConnection.sdkAndBluetoothDataInchange!=null)
 			SocketConnection.sdkAndBluetoothDataInchange.closeReceviceBlueData();
-		if (tcpClient != null) {
+		if(tcpClient!=null){
 			tcpClient.closeTimer();
 			tcpClient.disconnect();
 //			tcpClient=null;
 		}
-		Log.e(TAG, "tcpClient=null" + (tcpClient == null));
-		count = 0;
-		SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
+		Log.e(TAG,"tcpClient=null"+(tcpClient==null));
+		count=0;
+		SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
 		cancelTimer();
 		TlvAnalyticalUtils.clearData();
 		TestProvider.clearData();
@@ -211,9 +212,9 @@ public class ReceiveSocketService extends Service {
 	}
 
 	private void cancelTimer() {
-		if (am != null) {
+		if (am != null){
 			am.cancel(sender);
-			am = null;
+			am=null;
 		}
 	}
 

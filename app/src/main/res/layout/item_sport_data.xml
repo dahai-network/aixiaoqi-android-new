@@ -43,8 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/activeTimeTextView"
-        android:layout_toRightOf="@id/image"
-        android:baselineAligned="false">
+        android:layout_toRightOf="@id/image">
 
         <LinearLayout
             android:layout_width="0dp"

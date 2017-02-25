@@ -23,9 +23,12 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 
 import com.aixiaoqi.socket.SocketConstant;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.umeng.analytics.MobclickAgent;
 
 import cn.com.aixiaoqi.R;
+import cn.jpush.android.api.JPushInterface;
 import de.blinkt.openvpn.activities.Base.BaseSensorActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -39,9 +42,12 @@ import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
+import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLCONTROLVOIDE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLHANGUP;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONEQUIET;
+
+;
 
 /**
  * Created by Administrator on 2016/9/19 0019.

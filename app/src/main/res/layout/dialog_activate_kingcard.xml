@@ -31,12 +31,11 @@
         android:layout_height="@dimen/padding_40dp"
         android:layout_marginBottom="@dimen/padding_10dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/kingcard_activate_edit"
-        android:hint="@string/input_kingcard_phonenumber"
-        android:inputType="phone"
         android:paddingLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:hint="@string/input_kingcard_phonenumber"
+        android:background="@drawable/kingcard_activate_edit"
+        android:layout_marginTop="10dp"
         />
 
     <View

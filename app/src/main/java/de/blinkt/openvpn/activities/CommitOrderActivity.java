@@ -111,6 +111,8 @@ public class CommitOrderActivity extends BaseNetActivity {
 	private static final int SDK_AUTH_FLAG = 2;
 	private OrderAddEntity orderEntity;
 	private boolean isAliPayClick = false;
+	//微信支付类
+	private IWXAPI api;
 	private Handler mHandler = new Handler() {
 		@SuppressWarnings("unused")
 		public void handleMessage(Message msg) {
@@ -186,7 +188,8 @@ public class CommitOrderActivity extends BaseNetActivity {
 		dismissProgress();
 	}
 
-	public void resetCount() {
+	public void resetCount()
+	{
 		buyDaysTextView.setText("1");
 		packetCount = 1;
 		String unitPriceStr = unitePriceTextView.getText().toString();
@@ -194,7 +197,6 @@ public class CommitOrderActivity extends BaseNetActivity {
 		addUpTextView.setText(unitPriceStr);
 		setSpan(addUpTextView);
 	}
-
 	@OnClick({R.id.addImageView, R.id.reduceImageView, R.id.weixinPayLienarLayout, R.id.aliPayLienarLayout, R.id.sureTextView, R.id.balancePayLienarLayout})
 	public void onClick(View view) {
 		switch (view.getId()) {
@@ -316,7 +318,7 @@ public class CommitOrderActivity extends BaseNetActivity {
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID) {
 			try {
-				IWXAPI api = WXAPIFactory.createWXAPI(CommitOrderActivity.this, WEIXIN_APPID);
+				api = WXAPIFactory.createWXAPI(CommitOrderActivity.this, WEIXIN_APPID);
 				WeixinGetPayIdHttp http = (WeixinGetPayIdHttp) object;
 				WeiXinResultEntity entity = http.getWeixinResultEntity();
 				PayReq req = new PayReq();
@@ -338,7 +340,7 @@ public class CommitOrderActivity extends BaseNetActivity {
 		} else if (cmdType == HttpConfigUrl.COMTYPE_BALANCE_GETPAYID) {
 			sureTextView.setEnabled(true);
 			if (object.getStatus() == 1) {
-				resetCount();
+                resetCount();
 				PaySuccessActivity.launch(CommitOrderActivity.this, PaySuccessActivity.BUY, PaySuccessActivity.BALANCE,
 						orderEntity.getOrder().getTotalPrice() + "", orderEntity.getOrder().getOrderID());
 				finish();

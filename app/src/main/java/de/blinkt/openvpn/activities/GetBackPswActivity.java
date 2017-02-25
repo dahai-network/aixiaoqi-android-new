@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
@@ -9,6 +10,7 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -40,6 +42,8 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
 	private EditText passwordEdit;
 	private Button sendBtn;
 	private Button sure_btn;
+	private CheckBox hindPswCheckBox;
+	private LinearLayout getPswLinearLayout;
 
 	private boolean isOpenHind = true;
 	private CountDownTimer timer = new CountDownTimer(111000, 1000) {
@@ -54,6 +58,7 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
 			sendBtn.setText("发送验证码");
 		}
 	};
+	private InputMethodManager manager;
 
 
 	@Override
@@ -66,6 +71,7 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
 
 	private void init() {
 		initView();
+		manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 	}
 
 
@@ -78,13 +84,13 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
 		setPhoneNumberEditChangeLisener();
 		passwordEdit = (EditText)
 				findViewById(R.id.passwordEdit);
-		CheckBox hindPswCheckBox = (CheckBox) findViewById(R.id.hindPswCheckBox);
+		hindPswCheckBox = (CheckBox) findViewById(R.id.hindPswCheckBox);
 		hindPswCheckBox.setOnClickListener(this);
 		sendBtn = (Button) findViewById(R.id.sendBtn);
 		sendBtn.setOnClickListener(this);
 		sure_btn = (Button) findViewById(R.id.sure_btn);
 		sure_btn.setOnClickListener(this);
-		LinearLayout getPswLinearLayout = (LinearLayout) findViewById(R.id.getPswLinearLayout);
+		getPswLinearLayout = (LinearLayout) findViewById(R.id.getPswLinearLayout);
 		getPswLinearLayout.setOnClickListener(this);
 
 	}

@@ -3,6 +3,7 @@ package com.aixiaoqi.socket;
 import android.util.Log;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -65,7 +66,10 @@ public abstract class TcpClient implements Runnable {
 				connectSocket();
 
 			}
-		} catch (Exception e) {
+		}catch (ConnectException e){
+			this.onConnectFailed();
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			this.onConnectFailed();
 		}
@@ -80,6 +84,7 @@ public abstract class TcpClient implements Runnable {
 
 			@Override
 			public void onReceive(InetAddress addr, byte[] s, int length) {
+
 				TcpClient.this.onReceive(this,s,length);
 			}
 

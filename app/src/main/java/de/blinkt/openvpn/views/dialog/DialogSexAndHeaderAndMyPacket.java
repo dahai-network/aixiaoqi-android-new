@@ -32,7 +32,7 @@ public class DialogSexAndHeaderAndMyPacket extends DialogBase implements View.On
 		tvTopLayer = (TextView) view.findViewById(R.id.tv_top_layer);
 		tvCenterLayer = (TextView) view.findViewById(R.id.tv_center_layer);
 		tvBottomLayer = (TextView) view.findViewById(R.id.tv_bottom_layer);
-		bottom_line_view = view.findViewById(R.id.bottom_line_view);
+		bottom_line_view = (View) view.findViewById(R.id.bottom_line_view);
 		if (type == PersonalCenterActivity.PHEADER_PIC) {
 			tvTopLayer.setText(R.string.album);
 			tvCenterLayer.setText(R.string.take_a_picture);

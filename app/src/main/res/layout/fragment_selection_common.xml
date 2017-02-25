@@ -22,7 +22,7 @@
         android:background="@drawable/search_et"
         android:drawableLeft="@drawable/connecter_search"
         android:drawablePadding="@dimen/padding"
-        android:maxLines="1"
+        android:singleLine="true"
         android:textSize="@dimen/little_12"
         android:hint="@string/search"
         android:gravity="center_vertical"

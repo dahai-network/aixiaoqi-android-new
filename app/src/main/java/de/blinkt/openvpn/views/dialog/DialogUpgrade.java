@@ -4,14 +4,17 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.service.DfuService;

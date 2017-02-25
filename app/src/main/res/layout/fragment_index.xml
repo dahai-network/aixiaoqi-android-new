@@ -145,7 +145,6 @@
                     android:gravity="bottom"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/padding_5dp"
-                    android:baselineAligned="false"
                     >
 
                     <LinearLayout

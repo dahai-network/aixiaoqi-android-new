@@ -68,7 +68,7 @@ public abstract class UdpClient implements Runnable {
 	}
 
 	public void setSorketTag(String tag) {
-		UdpClient.tag = tag;
+		this.tag = tag;
 	}
 
 	public abstract void sendToBluetoothMsg(String msg);

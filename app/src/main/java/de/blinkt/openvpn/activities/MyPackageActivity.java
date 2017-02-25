@@ -48,6 +48,7 @@ public class MyPackageActivity extends BaseActivity implements XRecyclerView.Loa
 	private OrderAdapter orderAdapter;
 	private String TAG = "MyPackageActivity";
 	private int pageNumber = 1;
+	private LinearLayoutManager manager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class MyPackageActivity extends BaseActivity implements XRecyclerView.Loa
 	private void init() {
 		hasAllViewTitle(R.string.order_list, R.drawable.order_list_add, 0, true);
         //hasLeftViewTitle(R.string.order_list, 0);
-		LinearLayoutManager manager = new LinearLayoutManager(this);
+		manager = new LinearLayoutManager(this);
 		orderListRecylerView.setLayoutManager(manager);
 		orderListRecylerView.setArrowImageView(R.drawable.iconfont_downgrey);
 		orderListRecylerView.setLoadingListener(this);

@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -25,6 +26,8 @@ public class CalendarView extends View {
 	private Paint mCirclePaint;
 	private Paint mTextPaint;
 	private Paint mLinePaint;
+	private int mViewWidth;
+	private int mViewHight;
 	private int mCellSpace;
 	private Row rows[] = new Row[TOTAL_ROW];
 	public static CustomDate mShowDate;//
@@ -143,8 +146,8 @@ public class CalendarView extends View {
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
-		int mViewWidth = w;
-		int mViewHight = h;
+		mViewWidth = w;
+		mViewHight = h;
 		mCellSpace = Math.min(mViewHight / TOTAL_ROW, mViewWidth / TOTAL_COL);
 		if (!callBackCellSpace) {
 			mCallBack.onMesureCellHeight(mCellSpace / 2);

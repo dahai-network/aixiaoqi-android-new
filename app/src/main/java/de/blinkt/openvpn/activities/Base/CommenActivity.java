@@ -32,7 +32,7 @@ public class CommenActivity  extends FragmentActivity {
         Resources res = super.getResources();
         Configuration config=new Configuration();
         config.setToDefaults();
-//        res.updateConfiguration(config,res.getDisplayMetrics());
+        res.updateConfiguration(config,res.getDisplayMetrics() );
         return res;
     }
     @Override

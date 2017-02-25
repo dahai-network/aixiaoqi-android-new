@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.util.CommonTools;
 
 /**
  * UncaughtException处理类,当程序发生Uncaught异常的时候,有该类来接管程序,并记录发送错误报告.
@@ -83,20 +84,23 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 			//如果用户没有处理则让系统默认的异常处理器来处理
 			mDefaultHandler.uncaughtException(thread, ex);
 		} else {
-//			CommonTools.delayTime(100);
+			CommonTools.delayTime(100);
 //			Intent intent = new Intent(application.getApplicationContext(), LaunchActivity.class);
-//
-//
+
+
+
 //			PendingIntent restartIntent = PendingIntent.getActivity(
 //					application.getApplicationContext(), 0, intent,
 //					Intent.FLAG_ACTIVITY_NEW_TASK);
-////			//退出程序
+//			//退出程序
 //			AlarmManager mgr = (AlarmManager)application.getSystemService(Context.ALARM_SERVICE);
 //			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
 //					restartIntent); // 1秒钟后重启应用
-			application.AppExit();
+//			application.AppExit();
 			//退出程序
-			System.exit(1);
+
+
+//            System.exit(1);
 		}
 	}
 
@@ -188,7 +192,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 			String time = formatter.format(new Date());
 			String fileName = time + ".text";
 			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-				String path = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi/";
+				String path = Environment.getExternalStorageDirectory().getPath()+"/aixiaoqi/";
 				File dir = new File(path);
 				if (!dir.exists()) {
 					dir.mkdirs();

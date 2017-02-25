@@ -19,7 +19,7 @@ public class DateUtils {
 
 	private static SimpleDateFormat sf;
 
-	/*获取系统时间 格式为："yyyy年MM月dd日 "*/
+	/*获取系统时间 格式为："yyyy/MM/dd "*/
 	public static String getCurrentDate() {
 		Date d = new Date();
 		sf = new SimpleDateFormat("yyyy年MM月dd日",
@@ -42,6 +42,8 @@ public class DateUtils {
 				Locale.getDefault());
 		return sf.format(d);
 	}
+
+
 
 	/*
 	  提交订单处添加半年后（180天）的时间
@@ -178,7 +180,7 @@ public class DateUtils {
 
 
 	public static String getTimeStampString(String time) {
-		String str;
+		String str ;
 		long timeStamp = Long.parseLong(time);
 		if (time.length() < 10) {
 			return "";
@@ -207,7 +209,7 @@ public class DateUtils {
 	}
 
 	public static String getTimeStampDetailString(String time) {
-		String str;
+		String str ;
 		long timeStamp = Long.parseLong(time);
 		if (time.length() < 10) {
 			return "";

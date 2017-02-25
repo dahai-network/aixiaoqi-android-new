@@ -23,7 +23,6 @@
                 android:layout_height="50dp"
                 android:background="@color/bottom_bar"
                 android:orientation="horizontal"
-                android:baselineAligned="false"
                 >
 
                 <LinearLayout

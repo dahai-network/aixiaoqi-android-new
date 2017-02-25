@@ -18,13 +18,12 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.ActivateActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
@@ -66,7 +65,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	private String mStrStepHistory;
 	private SportStepEntity entity = new SportStepEntity();
 	//分包存储ArrayList
-	private ArrayList<String> messages = new ArrayList<>();
+//	private ArrayList<String> messages = new ArrayList<>();
 	//写卡状态（订单状态 ，0是没有写卡，1是写卡成功，4是写卡失败）
 	public static int orderStatus = 0;
 	private Thread sendStepThread;
@@ -93,10 +92,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	};
 	//重连次数
 	public static int retryTime;
-	//单线程线程池 用于接收大量数据时候使用
-	private ExecutorService pool = Executors.newSingleThreadExecutor();
-
-
 	public void onReceive(final Context context, Intent intent) {
 		this.context = context;
 		final String action = intent.getAction();
@@ -202,7 +197,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			if(messages.size()==0){
 				return;
 			}
-			pool.execute(
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -382,15 +376,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //									if (sendStepThread != null)
 //										sendStepThread = null;
 //									break;
-										case Constant.SYSTEM_BASICE_INFO:
+								case Constant.SYSTEM_BASICE_INFO:
 //									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
 //									}
-									int versionFirst = Integer.parseInt(messages.get(0).substring(10,12),16);
-									int versionLast = Integer.parseInt(messages.get(0).substring(12,14),16);
-									Log.i(TAG, "固件版本号：" + versionFirst + "." + versionLast + "，电量：" + messages.get(0).substring(14,16));
-									utils.writeString(Constant.BRACELETVERSION, versionFirst + "." + versionLast);
+									String deviceVesion=Integer.parseInt(messages.get(0).substring(10, 12),16)+ "." +  Integer.parseInt(messages.get(0).substring(12, 14),16);
+									Log.i(TAG, "固件版本号：" +deviceVesion + "，电量：" + messages.get(0).substring(14,16));
+									utils.writeString(Constant.BRACELETVERSION,deviceVesion);
 									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(14,16),16));
 									break;
 
@@ -457,7 +450,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					}
 				}
 			}
-			));
+			).start();
 		}
 		if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)) {
 			mService.disconnect();
@@ -716,5 +709,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			return "" + date;
 		}
 	}
+
 
 }

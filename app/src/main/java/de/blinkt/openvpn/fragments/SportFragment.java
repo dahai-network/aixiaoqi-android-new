@@ -399,62 +399,59 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 		if (cmdType == HttpConfigUrl.COMTYPE_SPORT_GET_TIME_PERIOD_DATE) {
 			final SportPeriodHttp sportPeriodHttp = (SportPeriodHttp) object;
 			if (sportPeriodHttp.getStatus() == 1) {
-				sportNoDataLinearLayout.setVisibility(View.GONE);
-				sportDataRecylerView.setVisibility(View.VISIBLE);
-				i = 0;
-				arcProgress.invalidate();
-				mhandler.removeCallbacksAndMessages(null);
-				if (timer != null) {
-					timer.cancel();
-					timer = null;
-				}
-				timer = new Timer();
-				DecimalFormat df = new DecimalFormat("0.0");
-
-				if (TextUtils.isEmpty(sportPeriodHttp.getSportPeriodEntity().getTotalStepNum())) {
-					totalStep = 0;
-				} else {
-					totalStep = Integer.parseInt(sportPeriodHttp.getSportPeriodEntity().getTotalStepNum());
-				}
-
-				Calendar calender = Calendar.getInstance();
-				calender.setTime(new Date());
-				final int allStep;
-				if (defaultCustomDate.year == calender.get(Calendar.YEAR) &&
-						defaultCustomDate.month == calender.get(Calendar.MONTH) + 1 &&
-						defaultCustomDate.day == calender.get(Calendar.DAY_OF_MONTH)) {
-					allStep = totalStep + currentStep;
-				} else {
-					allStep = totalStep;
-				}
-
-				kmResult = df.format(((allStep) * 0.683 / 1000));
-				kmTextView.setText(kmResult);
-				timer.schedule(new TimerTask() {
-					@Override
-					public void run() {
-						Message msg = new Message();
-						msg.what = 1;
-						msg.arg1 = allStep;
-						mhandler.sendMessage(msg);
+				if (!TextUtils.isEmpty(sportPeriodHttp.getSportPeriodEntity().getTotalStepNum())) {
+					sportNoDataLinearLayout.setVisibility(View.GONE);
+					sportDataRecylerView.setVisibility(View.VISIBLE);
+					i = 0;
+					arcProgress.invalidate();
+					mhandler.removeCallbacksAndMessages(null);
+					if (timer != null) {
+						timer.cancel();
+						timer = null;
 					}
-				}, 30, 30);
-				String weigth = SharedUtils.getInstance().readString(Constant.WEIGHT);
-				int weightInt;
-				if (TextUtils.isEmpty(weigth)) {
-					weightInt = 30;
-				} else {
-					if (Integer.parseInt(weigth) < 30) {
+					timer = new Timer();
+					DecimalFormat df = new DecimalFormat("0.0");
+
+					totalStep = Integer.parseInt(sportPeriodHttp.getSportPeriodEntity().getTotalStepNum());
+
+					Calendar calender = Calendar.getInstance();
+					calender.setTime(new Date());
+					final int allStep;
+					if (defaultCustomDate.year == calender.get(Calendar.YEAR) &&
+							defaultCustomDate.month == calender.get(Calendar.MONTH) + 1 &&
+							defaultCustomDate.day == calender.get(Calendar.DAY_OF_MONTH)) {
+						allStep = totalStep + currentStep;
+					} else {
+						allStep = totalStep;
+					}
+
+					kmResult = df.format(((allStep) * 0.683 / 1000));
+					kmTextView.setText(kmResult);
+					timer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							Message msg = new Message();
+							msg.what = 1;
+							msg.arg1 = allStep;
+							mhandler.sendMessage(msg);
+						}
+					}, 30, 30);
+					String weigth = SharedUtils.getInstance().readString(Constant.WEIGHT);
+					int weightInt;
+					if (TextUtils.isEmpty(weigth)) {
 						weightInt = 30;
 					} else {
-						weightInt = Integer.parseInt(weigth);
+						if (Integer.parseInt(weigth) < 30) {
+							weightInt = 30;
+						} else {
+							weightInt = Integer.parseInt(weigth);
+						}
 					}
+					double weightDouble = weightInt * ((allStep) * 0.683 / 1000) * 1.036;
+					kcResult = df.format(weightDouble);
+					kcalTextView.setText(kcResult);
+					sportDataAdapter.addAll(sportPeriodHttp.getSportPeriodEntity().getTimePeriods());
 				}
-				double weightDouble = weightInt * ((allStep) * 0.683 / 1000) * 1.036;
-				kcResult = df.format(weightDouble);
-				kcalTextView.setText(kcResult);
-				sportDataAdapter.addAll(sportPeriodHttp.getSportPeriodEntity().getTimePeriods());
-
 			} else {
 				kmTextView.setText("0.0");
 				kcalTextView.setText("0.0");

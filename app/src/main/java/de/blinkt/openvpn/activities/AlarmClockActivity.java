@@ -222,7 +222,7 @@ private boolean	isDoubleClick=false;
 
 	private void initData() {
 		alarmClockAdapter = new AlarmClockAdapter(this, alarmClockEntityList);
-		alarmClockAdapter.isVisibility(openBluetoothLl.getVisibility() == View.VISIBLE);
+		alarmClockAdapter.isVisibility(openBluetoothLl.getVisibility() == View.VISIBLE ? true : false);
 		alarmClockAdapter.setOnDelListener(this);
 		alarmClockRv.setAdapter(alarmClockAdapter);
 	}

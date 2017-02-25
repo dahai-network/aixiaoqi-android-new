@@ -22,6 +22,7 @@ import de.blinkt.openvpn.model.ReWebChomeClient;
 
 public class ActivateLinkCardActivity extends BaseActivity implements ReWebChomeClient.OpenFileChooserCallBack {
 
+	private final String ACTIVATE_CARD_URL = "http://m.10010.com/html/tencent/tx-active-query.html?u=aoq3zQGx5a71aCkIhkjFM+O1lBy4/CBeWxzohSoEX/w=&withuStatus=true";
 	@BindView(R.id.activateWebView)
 	CustomWebViewLayout activateWebView;
 	private ValueCallback<Uri> mUploadMsg;
@@ -32,7 +33,6 @@ public class ActivateLinkCardActivity extends BaseActivity implements ReWebChome
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		String ACTIVATE_CARD_URL = "http://m.10010.com/html/tencent/tx-active-query.html?u=aoq3zQGx5a71aCkIhkjFM+O1lBy4/CBeWxzohSoEX/w=&withuStatus=true";
 		setContentView(R.layout.activity_activate_link_card);
 		ButterKnife.bind(this);
 		hasLeftViewTitle(R.string.card_activate, -1);

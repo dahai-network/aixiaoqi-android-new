@@ -33,6 +33,7 @@ public class CallPackageLlistActivity extends BaseActivity implements XRecyclerV
 	TextView noDataTextView;
 	@BindView(R.id.NodataRelativeLayout)
 	RelativeLayout NodataRelativeLayout;
+	private int CATOGORY = 1;
 	private int pageNumber = 1;
 
 	@Override
@@ -58,7 +59,6 @@ public class CallPackageLlistActivity extends BaseActivity implements XRecyclerV
 
 	//加入数据
 	private void addData() {
-		int CATOGORY = 1;
 		GetPakcetHttp http = new GetPakcetHttp(this, HttpConfigUrl.COMTYPE_PACKET_GET, pageNumber, 20, CATOGORY);
 		new Thread(http).start();
 	}

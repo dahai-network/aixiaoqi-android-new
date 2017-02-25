@@ -16,12 +16,14 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 
 /**
  * 自定义进度框
- *
+ * 
  * @author wangxiaojie
  */
 public class MyProgressDialog extends AlertDialog {
 
 	private boolean state = false;
+
+	private ProgressBar mProgress;
 
 	private TextView mMessageView;
 
@@ -55,7 +57,7 @@ public class MyProgressDialog extends AlertDialog {
 	}
 
 	public MyProgressDialog(Context context, boolean cancelable,
-							OnCancelListener cancelListener) {
+			OnCancelListener cancelListener) {
 		super(context, cancelable, cancelListener);
 		this.mContext = context;
 	}
@@ -66,12 +68,12 @@ public class MyProgressDialog extends AlertDialog {
 	}
 
 	public static MyProgressDialog show(Context context, CharSequence title,
-										CharSequence message) {
+			CharSequence message) {
 		return show(context, title, message, null);
 	}
 
 	public static MyProgressDialog show(Context context, CharSequence title,
-										CharSequence message, OnCancelListener cancleListener) {
+			CharSequence message, OnCancelListener cancleListener) {
 		MyProgressDialog dialog = new MyProgressDialog(context);
 		dialog.setMessage(message);
 		dialog.setCancelable(true);
@@ -92,7 +94,7 @@ public class MyProgressDialog extends AlertDialog {
 		super.onCreate(savedInstanceState);
 		LayoutInflater mInflater = LayoutInflater.from(mContext);
 		View view = mInflater.inflate(R.layout.progress_dialog, null);
-		ProgressBar mProgress = (ProgressBar) view.findViewById(android.R.id.progress);
+		mProgress = (ProgressBar) view.findViewById(android.R.id.progress);
 		mMessageView = (TextView) view.findViewById(android.R.id.message);
 		setContentView(view);
 		if (mMessage != null) {

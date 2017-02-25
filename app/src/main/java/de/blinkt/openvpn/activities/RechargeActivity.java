@@ -354,14 +354,14 @@ public class RechargeActivity extends BaseActivity implements InterfaceCallback,
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 		RadioButton moneyButton = (RadioButton) RechargeActivity.this.findViewById(checkedId);
 		if (checkedId != R.id.recharge1000Button) {
-			RechargeActivity.this.findViewById(R.id.recharge1000Button).setVisibility(View.VISIBLE);
+			((RadioButton) RechargeActivity.this.findViewById(R.id.recharge1000Button)).setVisibility(View.VISIBLE);
 			amountEditText.setText("");
 			amountEditText.setVisibility(View.GONE);
 			moneyAmount = Float.valueOf(moneyButton.getText().toString());
 			ViewUtil.hideSoftKeyboard(this);
 		} else {
 			moneyAmount = 0;
-			RechargeActivity.this.findViewById(R.id.recharge1000Button).setVisibility(View.INVISIBLE);
+			((RadioButton) RechargeActivity.this.findViewById(R.id.recharge1000Button)).setVisibility(View.INVISIBLE);
 			amountEditText.setVisibility(View.VISIBLE);
 			amountEditText.setFocusable(true);
 			amountEditText.setFocusableInTouchMode(true);

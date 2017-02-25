@@ -27,7 +27,7 @@
     <TextView
         android:id="@+id/readly_select_number"
         android:layout_below="@id/order_number"
-        android:maxLines="1"
+        android:singleLine="true"
         android:ellipsize="end"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/arrow"

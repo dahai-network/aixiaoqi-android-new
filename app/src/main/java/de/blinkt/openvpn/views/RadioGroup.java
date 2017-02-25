@@ -124,7 +124,7 @@ public class RadioGroup extends LinearLayout {
     public void addView(final View child, int index, ViewGroup.LayoutParams params) {
         if (child instanceof RadioButton) {
         	
-        	child.setOnTouchListener(new OnTouchListener() {
+        	((RadioButton) child).setOnTouchListener(new OnTouchListener() {
 				
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
@@ -145,12 +145,12 @@ public class RadioGroup extends LinearLayout {
                     final RadioButton button = (RadioButton) view;
 
 
-                	button.setOnTouchListener(new OnTouchListener() {
+                	((RadioButton) button).setOnTouchListener(new OnTouchListener() {
         				
         				@Override
         				public boolean onTouch(View v, MotionEvent event) {
-        					button.setChecked(true);
-        					checkRadioButton(button);
+        					((RadioButton) button).setChecked(true);
+        					checkRadioButton((RadioButton) button);
         					if(mOnCheckedChangeListener != null){
         						mOnCheckedChangeListener.onCheckedChanged(RadioGroup.this, button.getId());
         					}
@@ -185,7 +185,7 @@ public class RadioGroup extends LinearLayout {
     	    			if(button == radioButton){
     	    				// do nothing
     	    			} else {
-    	    				button.setChecked(false);
+    	    				((RadioButton) button).setChecked(false);
     	    			}
     				}
     			}
@@ -387,7 +387,7 @@ public class RadioGroup extends LinearLayout {
          * @param group the group in which the checked radio button has changed
          * @param checkedId the unique identifier of the newly checked radio button
          */
-		void onCheckedChanged(RadioGroup group, int checkedId);
+        public void onCheckedChanged(RadioGroup group, int checkedId);
     }
 
     private class CheckedStateTracker implements CompoundButton.OnCheckedChangeListener {
