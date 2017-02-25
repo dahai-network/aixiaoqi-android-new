@@ -8,9 +8,14 @@ import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 
+import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+
+import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 
 /**
@@ -18,13 +23,27 @@ import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
  */
 
 public class NetReceiver extends BroadcastReceiver {
-    private String TAG="NetReceiver";
+
     private void connectGoip() {
         if (sendYiZhengService != null){
             SocketConnection.mReceiveSocketService.disconnect();
+            registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REG_STATUE_CHANGE);
             sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
         }
     }
+private void restartConnect(){
+    if (SocketConstant.REGISTER_STATUE_CODE == 3||SocketConstant.REGISTER_STATUE_CODE == 2) {
+        SocketConstant.REGISTER_STATUE_CODE = 2;
+        if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+            //从预读取数据那里重新注册
+            connectGoip();
+        } else {
+            registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+        }
+
+    }
+}
+
     @Override
     public void onReceive(Context context, Intent intent) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -41,8 +60,7 @@ public class NetReceiver extends BroadcastReceiver {
                         case TelephonyManager.NETWORK_TYPE_EDGE: //移动2g
                         case TelephonyManager.NETWORK_TYPE_1xRTT:
                         case TelephonyManager. NETWORK_TYPE_IDEN:
-                            connectGoip();
-                            Log.e(TAG,"2G");
+                            restartConnect();
                             break;
                         case TelephonyManager.NETWORK_TYPE_EVDO_A: //电信3g
                         case TelephonyManager.NETWORK_TYPE_UMTS:
@@ -53,12 +71,10 @@ public class NetReceiver extends BroadcastReceiver {
                         case TelephonyManager.NETWORK_TYPE_EVDO_B:
                         case TelephonyManager.NETWORK_TYPE_EHRPD:
                         case TelephonyManager.NETWORK_TYPE_HSPAP:
-                            Log.e(TAG,"3G");
-                            connectGoip();
+                            restartConnect();
                             break;
                         case TelephonyManager.NETWORK_TYPE_LTE:
-                            Log.e(TAG,"4G");
-                            connectGoip();
+                            restartConnect();
                             break;
                         default:
 

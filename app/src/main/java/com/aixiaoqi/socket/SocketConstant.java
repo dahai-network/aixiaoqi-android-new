@@ -76,8 +76,8 @@ public class SocketConstant {
 	public static final int NOT_NETWORK = 7;//注册到GOIP时没有网络
 	public static final int START_TCP_FAIL = 8;//开启TCP失败
 	public static final int TCP_DISCONNECT = 9;//TCP断开
-
-	public static final int RESTART_TCP = 10;//TCP断开
+	public static final int REG_STATUE_CHANGE = 11;//注册状态改变
+	public static final int RESTART_TCP = 10;//重连TCP
 	public static int REGISTER_STATUE_CODE = 0;//0，表示还没有开始注册。1，表示获取预读取数据没有完成（已经写卡但未完成）。2，表示注册中，3表示注册成功
 	public static final String TRAN_DATA_TO_SDK = "88888888";
 
