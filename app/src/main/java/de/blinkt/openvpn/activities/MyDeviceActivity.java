@@ -455,11 +455,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
 //				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
 
-				if (messages.size() == 0||!messages.get(0).substring(0, 2).equals("55")) {
+				if (messages.size() == 0 || !messages.get(0).substring(0, 2).equals("55")) {
 					return;
 				}
 				//判断是否是分包（0x80的包）
-				if (messages.size() == 0||!messages.get(0).substring(2, 4).equals("80")) {
+				if (messages.size() == 0 || !messages.get(0).substring(2, 4).equals("80")) {
 					return;
 				}
 				String dataType = messages.get(0).substring(6, 10);
