@@ -649,13 +649,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			//检测是否在线
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES) {
 			GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp=(GetDeviceSimRegStatuesHttp)object;
-			if(!getDeviceSimRegStatuesHttp.getSimRegStatue().equals("1")){
+			if(getDeviceSimRegStatuesHttp.getStatus()==1)
+			if(!getDeviceSimRegStatuesHttp.getSimRegStatue().getRegStatus().equals("1")){
+
 					connectGoip();
 				} else {
 					stopAnim();
 					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
-
 			}
+//			else{
+//				CommonTools.showShortToast(this, getDeviceSimRegStatuesHttp.getMsg());
+//			}
+
 
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_VERSION) {
 			if (object.getStatus() != 1) {
@@ -1000,7 +1005,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 						break;
 					case SocketConstant.RESTART_TCP:
-
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+						break;
+					case SocketConstant.REG_STATUE_CHANGE:
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 						break;
 					default:
 						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {

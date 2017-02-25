@@ -749,11 +749,15 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 						break;
 					case SocketConstant.RESTART_TCP:
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 						startSocketService();
 						if (TestProvider.sendYiZhengService == null) {
 							TestProvider.sendYiZhengService = new SendYiZhengService();
 						}
 						startTcpSocket();
+						break;
+					case SocketConstant.REG_STATUE_CHANGE:
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 						break;
 					default:
 						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
