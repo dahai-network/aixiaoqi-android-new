@@ -39,7 +39,6 @@ import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -47,7 +46,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
 
 
 /**
@@ -67,6 +65,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 	private int status;
 	private String msg;
 	private static Call call;
+	private String TAG = "CommonHttp";
 
 	public Object getData() {
 		return data;
@@ -156,7 +155,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			BaseEntry baseEntry = gson.fromJson(responseBody, BaseEntry.class);
 			status = baseEntry.getStatus();
 			msg = baseEntry.getMsg();
-			data=baseEntry.getData();
+			data = baseEntry.getData();
 			if (status == 1) {
 				right(gson.toJson(baseEntry.getData()));
 			} else if (status == -999) {
@@ -185,14 +184,14 @@ public abstract class CommonHttp implements Callback, Runnable {
 	private void Download(Response response) {
 		File fileDir = new File(Constant.DOWNLOAD_PATH);
 		//此处可以增加判断文件是否存在的逻辑
-		if(!fileDir.exists()){
+		if (!fileDir.exists()) {
 			fileDir.mkdirs();
 		}
-		File file = new File(fileDir,"/upload.zip");
-		if(!file.exists()){
+		File file = new File(fileDir, "/upload.zip");
+		if (!file.exists()) {
 			try {
 				file.createNewFile();
-			}catch (Exception e){
+			} catch (Exception e) {
 
 			}
 		}
@@ -216,11 +215,11 @@ public abstract class CommonHttp implements Callback, Runnable {
 //                }
 			}
 			fos.flush();
-			if(downloadLen<contentLen&&file.isFile()&&file.exists()){
+			if (downloadLen < contentLen && file.isFile() && file.exists()) {
 				file.delete();
 				right(Constant.DOWNLOAD_FAIL);
-			}else{
-			right(Constant.DOWNLOAD_SUCCEED);
+			} else {
+				right(Constant.DOWNLOAD_SUCCEED);
 			}
 		} catch (Exception e) {
 			right(Constant.DOWNLOAD_FAIL);
@@ -368,7 +367,11 @@ public abstract class CommonHttp implements Callback, Runnable {
 					Map.Entry entry = (Map.Entry) iter.next();
 					String key = (String) entry.getKey();
 					String value = (String) entry.getValue();
-					formEncodingBuilder.add(key, value);
+					if (key != null || value != null) {
+						formEncodingBuilder.add(key, value);
+					} else {
+						Log.i(TAG, "请求网络键值对出现null: key:" + key + "," + " value:" + value);
+					}
 				}
 			}
 			if (params == null) {
@@ -438,7 +441,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 
 	}
 
-	public static  void setCertificates(InputStream... certificates) {
+	public static void setCertificates(InputStream... certificates) {
 		try {
 			CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
 			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());

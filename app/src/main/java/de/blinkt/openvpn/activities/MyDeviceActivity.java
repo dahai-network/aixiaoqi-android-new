@@ -43,7 +43,6 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
@@ -340,7 +339,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void connectGoip() {
 		if (sendYiZhengService != null)
-			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+		sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 	}
 
 	private void registFail() {
@@ -453,20 +453,20 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 
-				final ArrayList<String> messages= intent.getStringArrayListExtra(UartService.EXTRA_DATA);
-				if(messages.size()==0){
+				final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
+				if (messages.size() == 0) {
 					return;
 				}
 //				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
 
-				if (!messages.get(0).substring(0,2).equals("55")) {
+				if (!messages.get(0).substring(0, 2).equals("55")) {
 					return;
 				}
 				//判断是否是分包（0x80的包）
-				if (!messages.get(0).substring(2,4).equals("80")) {
+				if (!messages.get(0).substring(2, 4).equals("80")) {
 					return;
 				}
-				String	dataType = messages.get(0).substring(6, 10);
+				String dataType = messages.get(0).substring(6, 10);
 				switch (dataType) {
 //					case (byte) 0xBB:
 //						if (txValue[1] == (byte) 0x05) {
@@ -476,14 +476,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //						}
 //						break;
 					case Constant.SYSTEM_BASICE_INFO:
-						String deviceVesion=Integer.parseInt(messages.get(0).substring(10, 12),16)+ "." +  Integer.parseInt(messages.get(0).substring(12, 14),16);
+						String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
 						Log.i(TAG, "版本号:" + deviceVesion);
 						firmwareTextView.setText(deviceVesion);
 						//不让无设备dialog弹出
 						if (noDevicedialog != null)
 							noDevicedialog.getDialog().dismiss();
 
-						slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16),16)) / 100);
+						slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
 						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, deviceVesion);
 						new Thread(http).start();
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
@@ -536,7 +536,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public void onResume() {
 		super.onResume();
 		Log.d(TAG, "onResume");
-		isForeground=true;
+		isForeground = true;
 		DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
 	}
 
@@ -551,7 +551,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public void onDestroy() {
 		super.onDestroy();
 		stopAnim();
-		isForeground=false;
+		isForeground = false;
 		Log.d(TAG, "onDestroy()");
 		isUpgrade = false;
 		if (isDfuServiceRunning()) {
@@ -657,10 +657,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					stopAnim();
 					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
 			}
-//			else{
-//				CommonTools.showShortToast(this, getDeviceSimRegStatuesHttp.getMsg());
-//			}
-
 
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_VERSION) {
 			if (object.getStatus() != 1) {
@@ -737,7 +733,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		CommonTools.showShortToast(this, errorMessage);
-		if(cmdType==HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA){
+		if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
 			utils.writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
 		}
 	}
@@ -834,7 +830,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
+				if (mService == null || mService.mConnectionState == UartService.STATE_CONNECTED) {
 					return;
 				}
 				if (mBtAdapter != null) {
@@ -961,6 +957,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_high_signal))) {
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 			percentTextView.setText("");
+			percentInt = 0;
 			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
 			percentTextView.setText("");

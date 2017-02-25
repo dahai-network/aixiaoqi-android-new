@@ -542,7 +542,7 @@
     <string name="index_unconnect">未连接</string>
     <string name="index_no_packet">无套餐</string>
     <string name="index_no_signal">注册中</string>
-    <string name="index_aixiaoqicard">识别为爱小器卡</string>
+    <string name="index_aixiaoqicard">爱小器卡</string>
     <string name="index_high_signal">信号强</string>
     <string name="index_regist_fail">注册失败</string>
     <string name="index_registing">注册中</string>
