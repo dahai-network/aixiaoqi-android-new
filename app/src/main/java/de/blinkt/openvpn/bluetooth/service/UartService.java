@@ -288,11 +288,11 @@ public class UartService extends Service implements Serializable {
 	 */
 	//通过mac地址连接设备
 	public boolean connect(String address) {
-		address = address.toUpperCase();
 		if (mBluetoothAdapter == null || address == null) {
 			Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
 			return false;
 		}
+		address = address.toUpperCase();
 
 		final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 		if (device == null) {

@@ -54,7 +54,7 @@ import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.http.UnBindDeviceHttp;
-import de.blinkt.openvpn.http.UpdateVersionHttp;
+import de.blinkt.openvpn.http.UpdateConnectInfoHttp;
 import de.blinkt.openvpn.model.BlueToothDeviceEntity;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
@@ -453,16 +453,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 
 				final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
-				if (messages.size() == 0) {
-					return;
-				}
 //				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
 
-				if (!messages.get(0).substring(0, 2).equals("55")) {
+				if (messages.size() == 0||!messages.get(0).substring(0, 2).equals("55")) {
 					return;
 				}
 				//判断是否是分包（0x80的包）
-				if (!messages.get(0).substring(2, 4).equals("80")) {
+				if (messages.size() == 0||!messages.get(0).substring(2, 4).equals("80")) {
 					return;
 				}
 				String dataType = messages.get(0).substring(6, 10);
@@ -483,7 +480,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							noDevicedialog.getDialog().dismiss();
 
 						slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
-						UpdateVersionHttp http = new UpdateVersionHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_VERSION, deviceVesion);
+						UpdateConnectInfoHttp http = new UpdateConnectInfoHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, deviceVesion, Integer.parseInt(messages.get(0).substring(14, 16), 16), 0);
 						new Thread(http).start();
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
@@ -609,14 +606,16 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			//网络获取看有没有存储IMEI设备号,如果没有绑定过则去绑定流程
 			if (getBindDeviceHttp.getStatus() == 1) {
 				BlueToothDeviceEntity mBluetoothDevice = getBindDeviceHttp.getBlueToothDeviceEntityity();
-				firmwareTextView.setText(mBluetoothDevice.getVersion());
-				statueTextView.setText(getString(R.string.blue_connecting));
-				statueTextView.setEnabled(false);
-				utils.writeString(Constant.IMEI, mBluetoothDevice.getIMEI());
-				utils.writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
-				unBindButton.setVisibility(View.VISIBLE);
-				//当接口调用完毕后，扫描设备，打开状态栏
+				if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
+					firmwareTextView.setText(mBluetoothDevice.getVersion());
+					statueTextView.setText(getString(R.string.blue_connecting));
+					statueTextView.setEnabled(false);
+					utils.writeString(Constant.IMEI, mBluetoothDevice.getIMEI());
+					utils.writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
+					unBindButton.setVisibility(View.VISIBLE);
+					//当接口调用完毕后，扫描设备，打开状态栏
 //				scanLeDevice(true);
+				}
 			}
 			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -648,7 +647,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			//检测是否在线
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES) {
 			GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp = (GetDeviceSimRegStatuesHttp) object;
-			if (!getDeviceSimRegStatuesHttp.getSimRegStatue().equals("1")) {
+			if (!getDeviceSimRegStatuesHttp.getSimRegStatue().getRegStatus().equals("1")) {
 				connectGoip();
 			} else {
 				stopAnim();
@@ -656,7 +655,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 			}
 
-		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_VERSION) {
+		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO) {
 			if (object.getStatus() != 1) {
 				CommonTools.showShortToast(this, object.getMsg());
 			}

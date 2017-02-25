@@ -397,8 +397,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private boolean isClick = false;
-	private int clickCount=0;
-	private int scrollCount=0;
+	private int clickCount = 0;
+	private int scrollCount = 0;
+
 	@Override
 	public void onClick(View v) {
 		removeAllStatus();
@@ -410,13 +411,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				viewPagerCurrentPageIndex = 1;
 				if (isDeploy) {
 					//如果展开则收回
-					Log.e(TAG,"isDeploy"+isDeploy);
+					Log.e(TAG, "isDeploy" + isDeploy);
 					ViewUtil.showView(phoneFragment.t9dialpadview);
 					ivArray[viewPagerCurrentPageIndex].setBackgroundResource(R.drawable.phone_icon_check);
 					isDeploy = false;
 				} else if (!isDeploy) {
 					//如果展开则收回
-					Log.e(TAG,"isDeploy1"+isDeploy);
+					Log.e(TAG, "isDeploy1" + isDeploy);
 					ViewUtil.hideView(phoneFragment.t9dialpadview);
 					ivArray[viewPagerCurrentPageIndex].setBackgroundResource(R.drawable.phone_icon_check_open);
 					isDeploy = true;
@@ -503,23 +504,23 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			public void onPageSelected(int position) {
 				if (position != 1) {
 					isClick = false;
-					Log.e(TAG,"isClick2"+isClick+",position="+position);
+					Log.e(TAG, "isClick2" + isClick + ",position=" + position);
 					hidePhoneBottomBar();
 					llArray[position].performClick();
 				} else {
 					if (!isClick) {
 						removeAllStatus();
 						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-							Log.e(TAG,"isClick"+isClick);
+							Log.e(TAG, "isClick" + isClick);
 							ivArray[1].setBackgroundResource(R.drawable.phone_icon_check);
 						} else {
-							Log.e(TAG,"isClick1"+isClick);
+							Log.e(TAG, "isClick1" + isClick);
 							if (phoneFragment == null) {
 								phoneFragment = Fragment_Phone.newInstance();
 							}
 							ivArray[1].setBackgroundResource(R.drawable.phone_icon_check_open);
 						}
-						if(clickCount==0&&scrollCount==0){
+						if (clickCount == 0 && scrollCount == 0) {
 							scrollCount++;
 							ViewUtil.showView(phoneFragment.t9dialpadview);
 						}
@@ -612,18 +613,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
 			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
 			if (object.getStatus() == 1) {
-				if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
-					deviceAddress = getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI();
-					if (deviceAddress != null)
-						deviceAddress = deviceAddress.toUpperCase();
-					SharedUtils utils = SharedUtils.getInstance();
-					utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
-					utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
-					Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-					startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+				if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
+					if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
+						deviceAddress = getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI();
+						if (deviceAddress != null)
+							deviceAddress = deviceAddress.toUpperCase();
+						SharedUtils utils = SharedUtils.getInstance();
+						utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
+						utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
+						Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+					} else {
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
+					}
+				} else {
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
 				}
-			} else {
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
 			if (object.getStatus() == 1) {
@@ -635,9 +640,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
 						new Thread(http).start();
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
-					}else
-					{
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal),R.drawable.index_high_signal);
+					} else {
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 					}
 				} else {
 					//TODO 没有通知到设备界面
@@ -835,18 +839,18 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 				ArrayList<String> message = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
 //				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
-				if(message.size()==0){
+				if (message.size() == 0) {
 					return;
 				}
-				if (!message.get(0).substring(0,2).equals("55")) {
+				if (!message.get(0).substring(0, 2).equals("55")) {
 					return;
 				}
 				//判断是否是分包（0x80的包）
-				if (!message.get(0).substring(2,4).equals("80")) {
+				if (!message.get(0).substring(2, 4).equals("80")) {
 					return;
 				}
-			String	dataType = message.get(0).substring(6, 10);
-				Log.e(TAG, "dataType="+dataType+"  "+(dataType.equals(RETURN_POWER)));
+				String dataType = message.get(0).substring(6, 10);
+				Log.e(TAG, "dataType=" + dataType + "  " + (dataType.equals(RETURN_POWER)));
 				switch (dataType) {
 					case RETURN_POWER:
 						Log.e(TAG, "进入0700 ProMainActivity");
