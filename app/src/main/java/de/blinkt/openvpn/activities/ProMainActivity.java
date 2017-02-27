@@ -159,7 +159,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	}
 
-
 	private void initBrocast() {
 		if (bleMoveReceiver == null) {
 			bleMoveReceiver = new ReceiveBLEMoveReceiver();

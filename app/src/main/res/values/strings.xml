@@ -6,8 +6,8 @@
 
     <string name="app">爱小器</string>
 
-    <string name="loading_msg">加载中...</string>
-    <string name="login_loading">登陆中...</string>
+    <string name="loading_msg">加载中…</string>
+    <string name="login_loading">登陆中…</string>
     <string name="loading_msg_fails">加载失败</string>
     <string name="login_loading_fails">登录失败</string>
     <string name="cancel">取消</string>
@@ -55,7 +55,7 @@
     <string name="sure">确认</string>
     <string name="forget_psw">忘记密码?</string>
     <string name="input_phone">请输入手机号码</string>
-    <string name="input_psw">请输入6-12位密码</string>
+    <string name="input_psw">请输入6–12位密码</string>
     <string name="inland_set">国内节费</string>
     <string name="foreign_set">国外节费</string>
     <string name="device">设备</string>
@@ -78,7 +78,7 @@
     <string name="order_list">订单列表</string>
     <string name="my_pakages">我的套餐</string>
     <string name="my_device">我的设备</string>
-    <string name="blue_connecting">蓝牙连接中...</string>
+    <string name="blue_connecting">蓝牙连接中…</string>
     <string name="my_message">我的消息</string>
     <string name="international_flow_packet">国际流量套餐</string>
     <string name="bind_packet_giftcard">绑定套餐礼包卡</string>
@@ -182,7 +182,7 @@
 
     <!--拨号-->
     <string name="quiet">静音</string>
-    <string name="dital_phone">正在拨号...</string>
+    <string name="dital_phone">正在拨号…</string>
     <string name="end_phone">已结束</string>
     <string name="load_more">加载更多</string>
 
@@ -190,7 +190,7 @@
     <string name="connect_us">联系我们</string>
     <string name="customer_service_time">售后客服时间 7x24小时</string>
     <string name="web_of_service">service@unitoys.com</string>
-    <string name="service_phone">0755-32979727</string>
+    <string name="service_phone">0755–32979727</string>
     <string name="weixin">微信公众号:爱小器</string>
     <!-- 用户反馈 -->
     <string name="user_feedback">用户反馈</string>
@@ -205,8 +205,8 @@
     <!--上下拉刷新-->
     <string name="recycler_view_header_hint_normal">下拉刷新</string>
     <string name="recycler_view_header_hint_release">释放立即刷新</string>
-    <string name="recycler_view_loading">正在加载...</string>
-    <string name="refreshing">正在刷新...</string>
+    <string name="recycler_view_loading">正在加载…</string>
+    <string name="refreshing">正在刷新…</string>
     <string name="refresh_done">刷新完成</string>
     <string name="recycler_view_header_last_time">上次更新时间：</string>
     <!--短信详情-->
@@ -221,7 +221,7 @@
     <!--版本升级-->
     <string name="strToastYourAreTheLatestVersion">你已经是最新版了</string>
     <string name="strToastCheckUpgradeError">检查新版本失败，请稍后重试</string>
-    <string name="strToastCheckingUpgrade">正在检查，请稍候...</string>
+    <string name="strToastCheckingUpgrade">正在检查，请稍候…</string>
     <string name="strNotificationDownloading">正在下载</string>
     <string name="strNotificationClickToView">点击查看</string>
     <string name="strNotificationClickToInstall">点击安装</string>
@@ -250,12 +250,12 @@
 
     <!--拨打电话-->
 
-    <string name="calling">正在拨号...</string>
-    <string name="connecting">正在连接...</string>
-    <string name="call_fail">呼叫失败...</string>
+    <string name="calling">正在拨号…</string>
+    <string name="connecting">正在连接…</string>
+    <string name="call_fail">呼叫失败…</string>
     <string name="update_fail">更新失败</string>
     <string name="unitoys_phone">爱小器直拨</string>
-    <string name="wait_other_connecting">等待对方接听...</string>
+    <string name="wait_other_connecting">等待对方接听…</string>
     <string name="engine_initialization">SIP 引擎初始化</string>
     <string name="engine_end">SIP 引擎初始化完成</string>
     <string name="engine_fail">SIP 引擎初始化失败</string>
@@ -421,7 +421,7 @@
     <string name="qq">QQ</string>
     <string name="weixin_remider">微信</string>
     <string name="coming_tel">来电</string>
-    <string name="linking">连接中...</string>
+    <string name="linking">连接中…</string>
     <string name="add">添加</string>
     <string name="has_alarm_clock_tip">振动过程中敲击手环即可停止闹钟</string>
 

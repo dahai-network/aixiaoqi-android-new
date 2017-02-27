@@ -412,7 +412,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				if (mService != null) {
-
 					if (retryTime >= 20 || !ICSOpenVPNApplication.isConnect) {
 						sinking.setVisibility(GONE);
 						noConnectImageView.setVisibility(View.VISIBLE);
