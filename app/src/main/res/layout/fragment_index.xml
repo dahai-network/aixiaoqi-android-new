@@ -39,18 +39,6 @@
                 android:background="@color/white">
 
                 <TextView
-                    android:id="@+id/inlandTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/index_inland_save"
-                    android:gravity="center_horizontal"
-                    android:text="@string/inland_set"
-                    android:textSize="14sp"/>
-
-                <TextView
                     android:id="@+id/foreignTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -61,6 +49,20 @@
                     android:gravity="center_horizontal"
                     android:text="@string/foreign_set"
                     android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/inlandTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/index_inland_save"
+                    android:gravity="center_horizontal"
+                    android:text="@string/dual_sim"
+                    android:textSize="14sp"/>
+
+
 
                 <TextView
                     android:id="@+id/DSDSTextView"

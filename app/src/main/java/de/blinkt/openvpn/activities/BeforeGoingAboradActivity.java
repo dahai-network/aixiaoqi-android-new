@@ -72,7 +72,7 @@ public class BeforeGoingAboradActivity extends BaseNetActivity implements XRecyc
 
 	//初始化
 	private void init() {
-		hasAllViewTitle(R.string.before_going_abroad,R.string.purchase_packet,-1,false);
+		hasAllViewTitle(R.string.ordered_outside_purchase,R.string.purchase_packet,-1,false);
 		manager = new LinearLayoutManager(this);
 		orderListRecylerView.setLayoutManager(manager);
 		orderListRecylerView.setArrowImageView(R.drawable.iconfont_downgrey);
