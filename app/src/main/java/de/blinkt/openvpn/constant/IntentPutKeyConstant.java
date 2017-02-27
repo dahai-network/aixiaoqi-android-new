@@ -44,5 +44,5 @@ public class IntentPutKeyConstant {
     public static final String ADD_PHONE_NUMBER="add_phone_number";
     public static final String E_BUIZ_ORDER="order";
     public static final String E_BUIZ_ORDER_ID="order_id";
-
+    public static final String ORDERED_OUTSIDE="ordered_outside";
 }

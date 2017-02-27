@@ -52,11 +52,11 @@ public class FastSetActivity extends BaseActivity implements View.OnClickListene
 	public void onClick(View v) {
 		switch (v.getId()){
 
-			case R.id.before_going_abroad_tv:
-				//友盟方法统计
-				MobclickAgent.onEvent(context, CLICKFASTSETBEFOREABROAD);
-			toActivity(new Intent(this, BeforeGoingAboradActivity.class));
-				break;
+//			case R.id.before_going_abroad_tv:
+//				//友盟方法统计
+//				MobclickAgent.onEvent(context, CLICKFASTSETBEFOREABROAD);
+//			toActivity(new Intent(this, OrderedOutsidePurchaseActivity.class));
+//				break;
 			case R.id.link_bracelet_tv:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKFASTSETDEVICE);

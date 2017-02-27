@@ -38,6 +38,8 @@ public class BoughtPacketHttp extends BaseHttp {
 		sendMethod_ = GET_MODE;
 		params.put("PageNumber", URLEncoder.encode(PageNumber + "", "utf-8"));
 		params.put("PageSize", URLEncoder.encode(PageSize + "", "utf-8"));
+		params.put("PackageCategory", URLEncoder.encode(0 + "", "utf-8"));
+
 	}
 
 	@Override

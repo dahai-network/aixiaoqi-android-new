@@ -18,8 +18,12 @@ import cn.com.johnson.adapter.OrderAdapter;
 import cn.com.johnson.model.BoughtPackageEntity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
+import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.http.BoughtPacketHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.util.SharedUtils;
+import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+import de.blinkt.openvpn.views.dialog.DialogOrderedOutside;
 import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBEFOREABROADPURCHASEPACKAGE;
@@ -27,7 +31,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKBEFOREABROADPURCHASEP
 /**
  * 订单列表，用于显示购买过的套餐
  */
-public class BeforeGoingAboradActivity extends BaseNetActivity implements XRecyclerView.LoadingListener {
+public class OrderedOutsidePurchaseActivity extends BaseNetActivity implements XRecyclerView.LoadingListener,DialogInterfaceTypeBase {
 	@BindView(R.id.orderListRecylerView)
 	XRecyclerView orderListRecylerView;
 	@BindView(R.id.rootLinearLayout)
@@ -43,17 +47,21 @@ public class BeforeGoingAboradActivity extends BaseNetActivity implements XRecyc
 	RelativeLayout NodataRelativeLayout;
 
 	private OrderAdapter orderAdapter;
-
-	private String TAG = "MyPackageActivity";
 	private int pageNumber = 1;
 	private LinearLayoutManager manager;
-
+private static final int DIALOG_ORDERED_OUTSIDE_TYPE=0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_before_going_aborad);
+		setContentView(R.layout.activity_ordered_outside_purchase);
 		ButterKnife.bind(this);
+		if(SharedUtils.getInstance().readInt(IntentPutKeyConstant.ORDERED_OUTSIDE)!=1){
+		setDialog();
+		}
 		init();
+	}
+	private  void setDialog(){
+	new DialogOrderedOutside(this,this,R.layout.dialog_ordered_outside,DIALOG_ORDERED_OUTSIDE_TYPE);
 	}
 
 	@Override
@@ -77,14 +85,14 @@ public class BeforeGoingAboradActivity extends BaseNetActivity implements XRecyc
 		orderListRecylerView.setLayoutManager(manager);
 		orderListRecylerView.setArrowImageView(R.drawable.iconfont_downgrey);
 		orderListRecylerView.setLoadingListener(this);
-		orderAdapter = new OrderAdapter(BeforeGoingAboradActivity.this, R.layout.item_before_going_aborad);
+		orderAdapter = new OrderAdapter(this, R.layout.item_before_going_aborad);
 		orderListRecylerView.setAdapter(orderAdapter);
 	}
 
 	@Override
 	protected void onClickRightView() {
 		//友盟方法统计
-		MobclickAgent.onEvent(BeforeGoingAboradActivity.this, CLICKBEFOREABROADPURCHASEPACKAGE);
+		MobclickAgent.onEvent(this, CLICKBEFOREABROADPURCHASEPACKAGE);
 		toActivity(PackageMarketActivity.class);
 	}
 
@@ -161,5 +169,12 @@ public class BeforeGoingAboradActivity extends BaseNetActivity implements XRecyc
 	@OnClick(R.id.retryTextView)
 	public void onClick() {
 		addData();
+	}
+
+	@Override
+	public void dialogText(int type, String text) {
+		if(type==DIALOG_ORDERED_OUTSIDE_TYPE){
+			SharedUtils.getInstance().writeInt(IntentPutKeyConstant.ORDERED_OUTSIDE,1);
+		}
 	}
 }
