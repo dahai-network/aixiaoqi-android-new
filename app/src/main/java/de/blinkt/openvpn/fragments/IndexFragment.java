@@ -41,6 +41,7 @@ import de.blinkt.openvpn.activities.FastSetActivity;
 import de.blinkt.openvpn.activities.InlandSaveActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.MyPackageActivity;
+import de.blinkt.openvpn.activities.OrderedOutsidePurchaseActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.WebViewActivity;
@@ -316,7 +317,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			case R.id.foreignTextView:
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKABROADFEE);
-				Intent fastSetIntent = new Intent(getActivity(), FastSetActivity.class);
+				Intent fastSetIntent = new Intent(getActivity(), OrderedOutsidePurchaseActivity.class);
 				startActivity(fastSetIntent);
 				break;
 			case R.id.callPacketTextView:

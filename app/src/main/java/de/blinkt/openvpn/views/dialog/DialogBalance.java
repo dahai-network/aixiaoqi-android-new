@@ -54,6 +54,7 @@ public class DialogBalance extends DialogBase implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+
 		switch (v.getId()) {
 			case R.id.tv_cancel:
 				dialog.dismiss();
