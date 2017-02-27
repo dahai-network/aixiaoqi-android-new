@@ -57,6 +57,8 @@
     <string name="input_phone">请输入手机号码</string>
     <string name="input_psw">请输入6-12位密码</string>
     <string name="inland_set">国内节费</string>
+    <string name="dual_sim">双卡双待</string>
+
     <string name="foreign_set">国外节费</string>
     <string name="device">设备</string>
     <string name="DSDS">双卡双待</string>
@@ -350,6 +352,7 @@
     <string name="quick_setting">快捷设置</string>
     <string name="link_bracelet">连接手环</string>
     <string name="before_going_abroad">出国前</string>
+    <string name="ordered_outside_purchase">已购境外套餐</string>
     <string name="outside">在境外</string>
     <string name="readly_purchase">已购套餐</string>
     <string name="after_going_abroad">回国后</string>
