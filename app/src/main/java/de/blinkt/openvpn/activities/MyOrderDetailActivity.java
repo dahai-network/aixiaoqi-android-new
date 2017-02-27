@@ -110,7 +110,6 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 	TextView statueTextView;
 	private OrderEntity.ListBean bean;
 	private boolean isCreateView = false;
-	private UartService mService = ICSOpenVPNApplication.uartService;
 	private DialogBalance cardRuleBreakDialog;
 	private boolean isActivateSuccess = false;
 
@@ -120,14 +119,28 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 		addData();
 	}
 
-	public static void launch(Context context, String id) {
+	public static void launch(Context context, String id,int PackageCategory) {
+		Intent intent = new Intent(context, MyOrderDetailActivity.class);
+		intent.putExtra("id", id);
+		intent.putExtra("PackageCategory", PackageCategory);
+		context.startActivity(intent);
+	}
+	public static void launch(Context context, String id ) {
 		Intent intent = new Intent(context, MyOrderDetailActivity.class);
 		intent.putExtra("id", id);
 		context.startActivity(intent);
 	}
 
 	private void initSet() {
-		hasLeftViewTitle(R.string.order_detail, 0);
+		if(getIntent().getIntExtra("PackageCategory",-1)==0){
+			hasAllViewTitle(R.string.order_detail,R.string.standby_tutorial,0,false);
+		}else{
+		hasLeftViewTitle(R.string.order_detail, 0);}
+	}
+
+	@Override
+	protected void onClickRightView() {
+		toActivity(new Intent(this,FastSetActivity.class).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,bean.isPackageIsSupport4G()));
 	}
 
 	//获取数据
@@ -151,6 +164,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 			Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getLogoPic()).into(countryImageView);
 			packageNameTextView.setText(bean.getPackageName());
 			//如果订单状态是正在使用，那么就计算时间
+			Log.e("initData","isSupport4G1111111="+bean.isPackageIsSupport4G());
 			if (bean.getOrderStatus() == 0) {
 				expiryDateTextView.setText(bean.getExpireDays());
 				expirytitleTextView.setText(getResources().getString(R.string.expireday));

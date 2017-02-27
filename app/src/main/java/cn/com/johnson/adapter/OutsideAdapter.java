@@ -19,7 +19,7 @@ public class OutsideAdapter extends PagerAdapter {
 
 	@Override
 	public int getCount() {
-		return Integer.MAX_VALUE;
+		return list.size();
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class OutsideAdapter extends PagerAdapter {
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
-		container.addView(list.get(position % list.size()), 0);
+			container.addView(list.get(position % list.size()), 0);
 		return list.get(position % list.size());
 	}
 

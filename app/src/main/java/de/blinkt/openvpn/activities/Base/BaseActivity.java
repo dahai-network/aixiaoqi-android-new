@@ -57,6 +57,13 @@ public class BaseActivity extends CommenActivity {
 		});
 	}
 
+	/**
+	 *
+	 * @param titleId   标题id
+	 * @param rightTextId 右边文字或者图片的id
+	 * @param leftTextId  如果leftTextId>0,则显示文字，否则显示默认的图片
+	 * @param isRegihtImage  右边是否是图片
+     */
 	protected  void hasAllViewTitle(int titleId,int rightTextId,int leftTextId ,boolean isRegihtImage){
 		titleBar.setTextTitle(getString(titleId));
 		if(leftTextId<=0){

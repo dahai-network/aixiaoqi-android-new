@@ -285,10 +285,10 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 			MobclickAgent.onEvent(context, CLICKINDEXORDER);
 			if (isHaveHeader) {
 				clickPosition = getPosition() - 1;
-				MyOrderDetailActivity.launch(context, data.get(getPosition() - 1).getOrderID());
+				MyOrderDetailActivity.launch(context, data.get(getPosition() - 1).getOrderID(),data.get(getPosition()-1).getPackageCategory());
 			} else {
 				clickPosition = getPosition();
-				MyOrderDetailActivity.launch(context, data.get(getPosition()).getOrderID());
+				MyOrderDetailActivity.launch(context, data.get(getPosition()).getOrderID(),data.get(getPosition()).getPackageCategory());
 			}
 		}
 	}

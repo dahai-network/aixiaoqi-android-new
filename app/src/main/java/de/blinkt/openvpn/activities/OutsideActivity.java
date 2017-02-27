@@ -1,10 +1,12 @@
 package de.blinkt.openvpn.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.OutsideAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -37,15 +40,30 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKOPENAPNSET;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKOPENSYSTEMSET;
 
 
-public class OutsideActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener, InterfaceCallback {
+public class OutsideActivity extends BaseNetActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 	private ViewPager viewPager;
 	private ArrayList<View> list;
 	private ImageView imageView;
 	private ImageView[] imageViews;
-
+	Button outsideStepFiveBt;
+	Button outsideStepThirdBt;
+	Button outsideStepFourBt;
+	Button outsideStepSecondBt;
+	TextView outside_step_five_content_tv;
+	TextView outsideStepSecondContentTv;
+	TextView outside_step_third_tv;
+	TextView outside_step_third_content_tv;
+	TextView outside_step_four_tv;
+	TextView outside_step_four_content_tv;
+	TextView outside_step_five_tv;
+	TextView outsideStepSecondTv;
 	LinearLayout group;
 	String statuString;
-	private UartService mService = ICSOpenVPNApplication.uartService;
+	View view1;
+	View view2;
+	View view3;
+	View view4;
+	View view5;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,29 +84,35 @@ public class OutsideActivity extends BaseActivity implements ViewPager.OnPageCha
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
 	}
 
-	View view1;
-	View view2;
-	View view3;
-	View view4;
-	View view5;
+
 
 	private void initData() {
 		LayoutInflater inflater = getLayoutInflater();
 		list = new ArrayList<>();
 		statuString = getIntent().getStringExtra(IntentPutKeyConstant.OUTSIDE);
+		boolean isSupport4G=getIntent().getBooleanExtra(IntentPutKeyConstant.IS_SUPPORT_4G,false);
 		view1 = inflater.inflate(R.layout.activity_outside_item01, null);
 		view2 = inflater.inflate(R.layout.activity_outside_item02, null);
 		view3 = inflater.inflate(R.layout.activity_outside_item03, null);
 		view4 = inflater.inflate(R.layout.activity_outside_item04, null);
 		view5 = inflater.inflate(R.layout.activity_outside_item05, null);
+		TextView step=(TextView)view4.findViewById(R.id.step);
+		TextView step5=(TextView)view5.findViewById(R.id.step5);
 
 		list.add(view1);
 		list.add(view2);
+		if(!isSupport4G){
 		list.add(view3);
+		}else{
+			step.setText("3");
+			step5.setText("4");
+		}
 		list.add(view4);
+		if (IntentPutKeyConstant.OUTSIDE.equals(statuString)) {
 		list.add(view5);
-		imageViews = new ImageView[list.size()];
+		}
 		int length = list.size();
+		imageViews = new ImageView[length];
 		for (int i = 0; i < length; i++) {
 			imageView = new ImageView(this);
 			imageView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -110,18 +134,7 @@ public class OutsideActivity extends BaseActivity implements ViewPager.OnPageCha
 		viewPager.setCurrentItem(0);
 	}
 
-	Button outsideStepFiveBt;
-	Button outsideStepThirdBt;
-	Button outsideStepFourBt;
-	Button outsideStepSecondBt;
-	TextView outside_step_five_content_tv;
-	TextView outsideStepSecondContentTv;
-	TextView outside_step_third_tv;
-	TextView outside_step_third_content_tv;
-	TextView outside_step_four_tv;
-	TextView outside_step_four_content_tv;
-	TextView outside_step_five_tv;
-	TextView outsideStepSecondTv;
+
 
 	private void initSubView() {
 		outsideStepSecondBt = (Button) view2.findViewById(R.id.outside_step_second_bt);
@@ -165,64 +178,33 @@ public class OutsideActivity extends BaseActivity implements ViewPager.OnPageCha
 			case R.id.outside_step_second_bt:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKOPENAPNSET);
+						try{
 				startActivity(new Intent(Settings.ACTION_APN_SETTINGS));
+						}catch (ActivityNotFoundException e){
+							CommonTools.showShortToast(this,getString(R.string.not_suppert_open_way));
+						}
 				break;
 			case R.id.outside_step_third_bt:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKOPENSYSTEMSET);
+				try{
 				startActivity(new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS));
-				break;
-			case R.id.outside_step_four_bt:
-				startActivity(new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS));
-				break;
-			case R.id.outside_step_five_bt:
-				if (outsideStepFiveBt.getText().toString().equals(getString(R.string.outside_step_five_click_1))) {
-					//友盟方法统计
-					MobclickAgent.onEvent(context, CLICKCLOSE);
-					cancelCallTransferHttp();
+				}catch (ActivityNotFoundException e){
+					CommonTools.showShortToast(this,getString(R.string.not_suppert_open_way));
 				}
 				break;
+			case R.id.outside_step_four_bt:
+				try{
+				startActivity(new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS));
+		}catch (ActivityNotFoundException e){
+			CommonTools.showShortToast(this,getString(R.string.not_suppert_open_way));
+		}
+				break;
+
+
 		}
 	}
 
-//	private IntentFilter setFilter() {
-//		IntentFilter filter = new IntentFilter();
-//		filter.addAction(MyOrderDetailActivity.FINISH_PROCESS);
-//		return filter;
-//	}
-//
-//	//写卡成功关闭process
-//	private BroadcastReceiver isWriteReceiver = new BroadcastReceiver() {
-//		@Override
-//		public void onReceive(Context context, Intent intent) {
-//			if (ReceiveBLEMoveReceiver.orderStatus == 4) {
-//				HashMap<String, String> map = new HashMap<>();
-//				map.put("statue", 0 + "");
-//				//友盟方法统计
-//				MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
-//				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活失败，请重试!");
-//			}
-//			dismissProgress();
-//			openCallTransferHttp();
-//		}
-//	};
-//
-
-
-	private void openCallTransferHttp() {
-		String iccId = SharedUtils.getInstance().readString(Constant.ICCID);
-		if (TextUtils.isEmpty(iccId)) {
-			CommonTools.showShortToast(this, "获取ICCID失败，请重新连接设备重试");
-			return;
-		}
-		OpenCallTransferHttp openCallTransferHttp = new OpenCallTransferHttp(this, HttpConfigUrl.COMTYPE_OPEN_CALL_TRANSFER, iccId);
-		new Thread(openCallTransferHttp).start();
-	}
-
-	private void cancelCallTransferHttp() {
-		CancelCallTransferHttp cancelCallTransferHttp = new CancelCallTransferHttp(this, HttpConfigUrl.COMTYPE_CANCEL_CALL_TRANSFER);
-		new Thread(cancelCallTransferHttp).start();
-	}
 
 	private void initTitle() {
 		if (IntentPutKeyConstant.OUTSIDE.equals(statuString))
@@ -267,13 +249,5 @@ public class OutsideActivity extends BaseActivity implements ViewPager.OnPageCha
 			CommonTools.showShortToast(this, object.getMsg());
 	}
 
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
 
-	}
-
-	@Override
-	public void noNet() {
-
-	}
 }

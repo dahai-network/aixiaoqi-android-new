@@ -20,6 +20,12 @@ public class BoughtPacketHttp extends BaseHttp {
 	private final int PageSize;
 	private BoughtPackageEntity boughtPackageEntity;
 
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	private int type=-1;
 	public BoughtPackageEntity getBoughtPackageEntity() {
 		return boughtPackageEntity;
 	}
@@ -38,7 +44,8 @@ public class BoughtPacketHttp extends BaseHttp {
 		sendMethod_ = GET_MODE;
 		params.put("PageNumber", URLEncoder.encode(PageNumber + "", "utf-8"));
 		params.put("PageSize", URLEncoder.encode(PageSize + "", "utf-8"));
-		params.put("PackageCategory", URLEncoder.encode(0 + "", "utf-8"));
+		if(type!=-1)
+		params.put("PackageCategory", URLEncoder.encode(type + "", "utf-8"));
 
 	}
 

@@ -17,11 +17,13 @@ public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
+		dismissProgress();
 		CommonTools.showShortToast(mContext, errorMessage);
 	}
 
 	@Override
 	public void noNet() {
+		dismissProgress();
 		CommonTools.showShortToast(mContext, getString(R.string.no_wifi));
 	}
 }
