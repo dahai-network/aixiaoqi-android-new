@@ -8,7 +8,6 @@ import android.view.View;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.widget.CustomWebViewLayout;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.views.TitleBar;
 
 public class WebViewActivity extends BaseActivity {
 
@@ -38,11 +37,19 @@ public class WebViewActivity extends BaseActivity {
 				onBackPressed();
 			}
 		});
-		final String url = getIntent().getStringExtra(TAG_URL);
+		String url = getIntent().getStringExtra(TAG_URL);
+		if (url == null) return;
 		layout.setUrl(this, url, url);
 
 
 	}
 
-
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		layout.setVisibility(View.GONE);
+		layout.mWebView.clearCache(false);
+		layout.removeAllViews();
+		layout = null;
+	}
 }

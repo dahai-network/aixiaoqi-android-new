@@ -58,6 +58,7 @@
     <string name="input_psw">请输入6–12位密码</string>
     <string name="inland_set">国内节费</string>
     <string name="dual_sim">双卡双待</string>
+    <string name="dual_sim_standby_tutorial">双卡双待使用教程</string>
 
     <string name="foreign_set">国外节费</string>
     <string name="device">设备</string>

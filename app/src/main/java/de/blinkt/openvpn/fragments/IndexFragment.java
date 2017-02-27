@@ -38,13 +38,13 @@ import cn.com.johnson.model.HotPackageEntity;
 import cn.com.johnson.model.IndexBannerEntity;
 import de.blinkt.openvpn.activities.CallPackageLlistActivity;
 import de.blinkt.openvpn.activities.FastSetActivity;
-import de.blinkt.openvpn.activities.InlandSaveActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.MyPackageActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.WebViewActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
+import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.BannerHttp;
 import de.blinkt.openvpn.http.BoughtPacketHttp;
@@ -54,6 +54,7 @@ import de.blinkt.openvpn.http.GetSportTotalHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.model.SportTotalEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.DividerGridItemDecoration;
 import de.blinkt.openvpn.views.FullyRecylerView;
 import de.blinkt.openvpn.views.ScrollViewPager;
@@ -75,7 +76,7 @@ import static de.blinkt.openvpn.fragments.SportFragment.REFRESHSTEP;
 public class IndexFragment extends Fragment implements View.OnClickListener, ScrollViewPager.OnImageItemClickListener, InterfaceCallback {
 
 	private String TAG = "IndexFragment";
-	private TextView inlandTextView;
+	private TextView dualSimTextView;
 
 	private TextView foreignTextView;
 	private ScrollViewPager viewPager;
@@ -211,7 +212,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		hotMessageMoreTextView.setOnClickListener(this);
 		boughtMessageMoreTextView.setOnClickListener(this);
 		sportTabLienarLayout.setOnClickListener(this);
-		inlandTextView.setOnClickListener(this);
+		dualSimTextView.setOnClickListener(this);
 		DSDSTextView.setOnClickListener(this);
 		manager = Glide.with(ICSOpenVPNApplication.getContext());
 		ICSOpenVPNApplication.getInstance().registerReceiver(realStepReceiver, getFilter());
@@ -236,7 +237,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		foreignTextView = (TextView) view.findViewById(R.id.foreignTextView);
 		callPacketTextView = (TextView) view.findViewById(R.id.callPacketTextView);
 		DSDSTextView = (TextView) view.findViewById(R.id.DSDSTextView);
-		inlandTextView = (TextView) view.findViewById(R.id.inlandTextView);
+		dualSimTextView = (TextView) view.findViewById(R.id.dualSimTextView);
 		boughtPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.boughtPacketLinearLayout);
 		scrollViewPagerLayout = (RelativeLayout) view.findViewById(R.id.scrollViewPagerLayout);
 		hotMessageMoreTextView = (TextView) view.findViewById(R.id.hotMessageMoreTextView);
@@ -342,11 +343,10 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 				MobclickAgent.onEvent(getActivity(), CLICKSPORTTOTALDATA);
 				((ProMainActivity) getActivity()).getLlArrayToSport().performClick();
 				break;
-			case R.id.inlandTextView:
+			case R.id.dualSimTextView:
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKINLANDFEE);
-				Intent inlandIntent = new Intent(getActivity(), InlandSaveActivity.class);
-				startActivity(inlandIntent);
+				WebViewActivity.launch(getActivity(), SharedUtils.getInstance().readString(IntentPutKeyConstant.DUALSIM_STANDBYTUTORIAL_URL), getString(R.string.dual_sim_standby_tutorial));
 				break;
 			case R.id.DSDSTextView:
 				//友盟方法统计
@@ -427,7 +427,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			GetSportTotalHttp http = (GetSportTotalHttp) object;
 			SportTotalEntity sportTotalEntity = http.getSportTotalEntity();
 			//如果获取总步数为空，那么其他数据也是空。
-			if (sportTotalEntity!=null&&!TextUtils.isEmpty(sportTotalEntity.getStepNum())) {
+			if (sportTotalEntity != null && !TextUtils.isEmpty(sportTotalEntity.getStepNum())) {
 				totalStepTextView.setText(sportTotalEntity.getStepNum());
 				totalKmTextView.setText(sportTotalEntity.getKM());
 				totalDayTextView.setText(sportTotalEntity.getDate());
@@ -499,7 +499,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 
 	//修改蓝牙状态
 	public void changeBluetoothStatus(String leftText, int leftIconId) {
-		if(title == null)
+		if (title == null)
 			title = (TitleBar) view.findViewById(R.id.title);
 		if (leftText != null && leftIconId != 0 && title != null) {
 			Log.i("changeBluetoothStatus", "title=" + (title == null) + "\nleftText=" + leftText + "\nleftIconId=" + leftIconId);

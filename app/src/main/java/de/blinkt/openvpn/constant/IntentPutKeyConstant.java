@@ -26,6 +26,8 @@ public class IntentPutKeyConstant {
     public   static final int EDIT_USER_NAME=1;
     public   static final int EDIT_ID_CARD=2;
     public static final String USER_AGREEMENT_URL="userAgreementUrl";
+    public static final String DUALSIM_STANDBYTUTORIAL_URL="dualSimStandbyTutorialUrl";
+    public static final String BEFORE_GOING_ABROAD_TUTORIAL_URL="beforeGoingAbroadTutorialUrl";
     public static final String PAYMENT_OF_TERMS="paymentOfTerms";
     public static final String  DEVICE="device";
     //个人中心

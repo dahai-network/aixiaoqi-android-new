@@ -7,6 +7,8 @@ import java.io.Serializable;
  */
 public class BasicConfigEntity  implements Serializable{
     private String userAgreementUrl;
+    private String dualSimStandbyTutorialUrl;
+    private String beforeGoingAbroadTutorialUrl;
     private String paymentOfTerms;
 
 
@@ -14,7 +16,23 @@ public class BasicConfigEntity  implements Serializable{
         return userAgreementUrl;
     }
 
-    public void setUserAgreementUrl(String userAgreementUrl) {
+	public String getDualSimStandbyTutorialUrl() {
+		return dualSimStandbyTutorialUrl;
+	}
+
+	public void setDualSimStandbyTutorialUrl(String dualSimStandbyTutorialUrl) {
+		this.dualSimStandbyTutorialUrl = dualSimStandbyTutorialUrl;
+	}
+
+	public String getBeforeGoingAbroadTutorialUrl() {
+		return beforeGoingAbroadTutorialUrl;
+	}
+
+	public void setBeforeGoingAbroadTutorialUrl(String beforeGoingAbroadTutorialUrl) {
+		this.beforeGoingAbroadTutorialUrl = beforeGoingAbroadTutorialUrl;
+	}
+
+	public void setUserAgreementUrl(String userAgreementUrl) {
         this.userAgreementUrl = userAgreementUrl;
     }
 
