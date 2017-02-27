@@ -648,7 +648,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp=(GetDeviceSimRegStatuesHttp)object;
 			if(getDeviceSimRegStatuesHttp.getStatus()==1)
 			if(!getDeviceSimRegStatuesHttp.getSimRegStatue().getRegStatus().equals("1")){
-
 					connectGoip();
 				} else {
 					stopAnim();
