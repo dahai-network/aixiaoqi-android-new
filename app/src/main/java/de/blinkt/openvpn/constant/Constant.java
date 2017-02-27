@@ -7,7 +7,7 @@ import android.os.Environment;
  */
 public class Constant {
 
-	public static final boolean IS_DEBUG = false;
+	public static final boolean IS_DEBUG = true;
 	public static final String BLUETOOTH_NAME = "unitoys";
 //	public static final String BLUETOOTH_NAME = "ZiJian";
 

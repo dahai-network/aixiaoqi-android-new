@@ -934,6 +934,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_aixiaoqicard))) {
 			percentTextView.setText("");
 			stopAnim();
+			//重新上电清空
+			SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
 		} else if (conStatus.equals(getString(R.string.index_no_signal))) {
 			percentTextView.setText("0%");
 			registerSimStatu.setVisibility(View.VISIBLE);

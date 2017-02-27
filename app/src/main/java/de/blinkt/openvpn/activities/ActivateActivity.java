@@ -129,7 +129,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 					//友盟方法统计
 					MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
 					CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活失败，请重试!");
-				}else{
+				} else {
 					isActivateSuccess = true;
 				}
 				dismissProgress();
@@ -250,7 +250,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	}
 
 	private void sendMessageSeparate(final String message) {
-		String[] messages = PacketeUtil.Separate(message,"1300");
+		String[] messages = PacketeUtil.Separate(message, "1300");
 		int length = messages.length;
 		for (int i = 0; i < length; i++) {
 			if (!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])) {
