@@ -54,6 +54,7 @@ private static final int DIALOG_ORDERED_OUTSIDE_TYPE=0;
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ordered_outside_purchase);
+		showDefaultProgress();
 		ButterKnife.bind(this);
 		if(SharedUtils.getInstance().readInt(IntentPutKeyConstant.ORDERED_OUTSIDE)!=1){
 		setDialog();
@@ -99,6 +100,7 @@ private static final int DIALOG_ORDERED_OUTSIDE_TYPE=0;
 	//加入数据
 	private void addData() {
 		BoughtPacketHttp http = new BoughtPacketHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, pageNumber, 20);
+		http.setType(0);
 		new Thread(http).start();
 	}
 
@@ -118,6 +120,7 @@ private static final int DIALOG_ORDERED_OUTSIDE_TYPE=0;
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
+		dismissProgress();
 		if (cmdType == HttpConfigUrl.COMTYPE_GET_ORDER) {
 			orderListRecylerView.loadMoreComplete();
 			orderListRecylerView.refreshComplete();

@@ -12,28 +12,6 @@
         style="@style/horizontal_line_view"
         />
 
-    <TextView
-        android:id="@+id/link_bracelet_tv"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/padding_40dp"
-        android:background="@drawable/call_phone_selector"
-        android:drawableLeft="@drawable/link_bracelet"
-        android:drawablePadding="@dimen/padding"
-        android:drawableRight="@drawable/arrow"
-        android:gravity="center_vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:text="@string/link_bracelet"
-        android:textSize="14sp"/>
-
-    <View
-        style="@style/horizontal_line_view"
-        />
-
-    <View
-        android:layout_marginTop="@dimen/padding_10"
-        style="@style/horizontal_line_view"
-        />
 
     <TextView
 

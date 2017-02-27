@@ -412,6 +412,12 @@
             android:name="de.blinkt.openvpn.activities.OutsideActivity"
             android:label="@string/title_activity_outside"
             android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name="de.blinkt.openvpn.activities.BeforeGoingAbroadActivity"
+            android:screenOrientation="portrait">
+
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.OrderedOutsidePurchaseActivity"

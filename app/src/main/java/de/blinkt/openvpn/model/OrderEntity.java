@@ -76,6 +76,25 @@ public class OrderEntity implements Serializable {
 		private String PackageDetails;
 		private String Pic;
 
+		private boolean PackageIsSupport4G;
+		private boolean PackageIsApn;
+
+		public boolean isPackageIsSupport4G() {
+			return PackageIsSupport4G;
+		}
+
+		public void setPackageIsSupport4G(boolean packageIsSupport4G) {
+			PackageIsSupport4G = packageIsSupport4G;
+		}
+
+		public boolean isPackageIsApn() {
+			return PackageIsApn;
+		}
+
+		public void setPackageIsApn(boolean packageIsApn) {
+			PackageIsApn = packageIsApn;
+		}
+
 		public int getExpireDaysInt() {
 			return ExpireDaysInt;
 		}

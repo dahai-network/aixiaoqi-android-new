@@ -19,6 +19,7 @@
             android:background="@drawable/step_tip"
             android:gravity="center"
             android:text="5"
+            android:id="@+id/step5"
             android:textColor="@color/white"
             android:layout_height="wrap_content"/>
 

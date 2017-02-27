@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
@@ -31,7 +32,7 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 
 
-public class CallTimeOrderDetailActitivy extends BaseActivity implements InterfaceCallback {
+public class CallTimeOrderDetailActitivy extends BaseNetActivity   {
 
 	@BindView(R.id.retryTextView)
 	TextView retryTextView;
@@ -79,8 +80,10 @@ public class CallTimeOrderDetailActitivy extends BaseActivity implements Interfa
 	public static void launch(Context context, String id) {
 		Intent intent = new Intent(context, CallTimeOrderDetailActitivy.class);
 		intent.putExtra("id", id);
+
 		context.startActivity(intent);
 	}
+
 
 	//获取数据
 	private void addData() {
@@ -188,17 +191,11 @@ public class CallTimeOrderDetailActitivy extends BaseActivity implements Interfa
 	}
 
 	private void initSet() {
-		hasLeftViewTitle(R.string.order_detail, 0);
-	}
-
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
+			hasLeftViewTitle(R.string.order_detail,0);
 
 	}
 
-	@Override
-	public void noNet() {
 
-	}
+
 
 }
