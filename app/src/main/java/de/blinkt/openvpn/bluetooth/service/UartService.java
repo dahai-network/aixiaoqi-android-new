@@ -59,6 +59,7 @@ public class UartService extends Service implements Serializable {
 	private static final int STATE_CONNECTING = 1;
 	public static final int STATE_CONNECTED = 2;
 
+
 	public final static String ACTION_GATT_CONNECTED =
 			"com.nordicsemi.nrfUART.ACTION_GATT_CONNECTED";//蓝牙连接
 	public final static String ACTION_GATT_DISCONNECTED =

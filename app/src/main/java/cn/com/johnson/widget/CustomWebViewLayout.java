@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -540,6 +542,13 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 
 			}
 
+			public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+				//handler.cancel(); 默认的处理方式，WebView变成空白页
+//                        //接受证书
+				handler.proceed();
+				//handleMessage(Message msg); 其他处理
+			}
+
 		};
 		mWebView.setWebViewClient(mWebViewClient);
 	}
@@ -554,5 +563,4 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 		webSettings.setNeedInitialFocus(false);
 		webSettings.setLoadsImagesAutomatically(true);
 	}
-
 }

@@ -488,7 +488,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			intentCallPhone = new Intent(this, CallPhoneService.class);
 			startService(intentCallPhone);
 		}
-
+		if (mService != null && !mService.isOpenBlueTooth()) {
+			sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
+		}
 	}
 
 	public void hidePhoneBottomBar() {

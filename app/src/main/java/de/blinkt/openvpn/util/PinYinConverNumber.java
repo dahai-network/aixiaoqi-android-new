@@ -1,7 +1,5 @@
 package de.blinkt.openvpn.util;
 
-import android.util.Log;
-
 import de.blinkt.openvpn.util.pinyin.CharacterParser;
 
 /**
@@ -46,7 +44,6 @@ public class PinYinConverNumber {
 					stringheaderBuilder.append(getOneNumFromAlpha(characterParser.getSelling(tmp).toLowerCase().charAt(0)));
 				}
 				str[1] = stringheaderBuilder.toString();
-				Log.e(TAG, "name=" + stringBuilder.toString());
 				return str;
 			}
 		} catch (Exception e) {

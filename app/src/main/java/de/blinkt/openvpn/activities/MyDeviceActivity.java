@@ -645,14 +645,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			//检测是否在线
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES) {
-			GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp=(GetDeviceSimRegStatuesHttp)object;
-			if(getDeviceSimRegStatuesHttp.getStatus()==1)
-			if(!getDeviceSimRegStatuesHttp.getSimRegStatue().getRegStatus().equals("1")){
+			GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp = (GetDeviceSimRegStatuesHttp) object;
+			if (getDeviceSimRegStatuesHttp.getStatus() == 1)
+				if (!getDeviceSimRegStatuesHttp.getSimRegStatue().getRegStatus().equals("1")) {
 					connectGoip();
 				} else {
 					stopAnim();
 					CommonTools.showShortToast(this, getString(R.string.tip_high_signal));
-			}
+				}
 
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO) {
 			if (object.getStatus() != 1) {
@@ -916,6 +916,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			statusDrawable = R.drawable.index_no_signal;
 		} else if (status.equals(getString(R.string.index_high_signal))) {
 			statusDrawable = R.drawable.index_high_signal;
+		} else if (status.equals(getString(R.string.index_blue_un_opne))) {
+			statusDrawable = R.drawable.index_blue_unpen;
 		}
 		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
 		entity.setStatus(status);

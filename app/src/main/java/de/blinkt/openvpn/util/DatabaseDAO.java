@@ -2,10 +2,8 @@ package de.blinkt.openvpn.util;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.HashMap;
-
 import java.util.Map;
 
 public class DatabaseDAO {
@@ -80,7 +78,7 @@ public class DatabaseDAO {
 				for (int i = 0; i < col_len; i++) {
 					String columnName = cursor.getColumnName(i);
 					String columnValue = cursor.getString(cursor.getColumnIndex(columnName));
-					Log.e("DatabaseDAO",columnName+"\n"+columnValue);
+//					Log.e("DatabaseDAO",columnName+"\n"+columnValue);
 					if (columnValue == null)
 						columnValue = "";
 					map.put(columnName, columnValue);
