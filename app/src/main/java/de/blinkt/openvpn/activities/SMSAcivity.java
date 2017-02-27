@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -241,6 +242,7 @@ public class SMSAcivity extends BaseActivity implements View.OnClickListener, In
 		lp.weight = 1;
 		editText = new EditText(this);
 		editText.setBackground(null);
+		editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(11)});
 		editText.setInputType(InputType.TYPE_CLASS_PHONE);
 		editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, CommonTools.sp2px(getResources(), 14));
 		editText.setLayoutParams(lp);
@@ -701,7 +703,13 @@ public class SMSAcivity extends BaseActivity implements View.OnClickListener, In
 	public void errorComplete(int cmdType, String errorMessage) {
 		dismissProgress();
 		swipeRefreshLayout.setRefreshing(false);
-		sendFail();
+		if (pageNumber == 1 && !isClick) {
+			NoNetRelativeLayout.setVisibility(View.VISIBLE);
+		} else if (isClick) {
+			sendFail();
+		} else {
+			CommonTools.showShortToast(this, errorMessage);
+		}
 	}
 
 	@Override
@@ -718,17 +726,21 @@ public class SMSAcivity extends BaseActivity implements View.OnClickListener, In
 	}
 
 	private void sendFail() {
-		if (position == -1) {
+		if (position == -1&&smsContentEt!=null) {
 			smsContentEt.setText("");
 			SmsDetailEntity smsDetailEntity = smsDetailAdapter.getItem(smsDetailAdapter.getItemCount() - 1);
-			smsDetailEntity.setStatus(SEND_FAIL);
-			smsDetailAdapter.remove(smsDetailAdapter.getItemCount() - 1);
-			smsDetailAdapter.add(smsDetailEntity);
+			if(smsDetailEntity!=null){
+				smsDetailEntity.setStatus(SEND_FAIL);
+				smsDetailAdapter.remove(smsDetailAdapter.getItemCount() - 1);
+				smsDetailAdapter.add(smsDetailEntity);
+			}
 		} else {
 			SmsDetailEntity smsDetailEntity = smsDetailAdapter.getItem(position);
-			smsDetailEntity.setStatus(SEND_FAIL);
-			smsDetailAdapter.remove(position);
-			smsDetailAdapter.add(position, smsDetailEntity);
+			if(smsDetailEntity!=null){
+				smsDetailEntity.setStatus(SEND_FAIL);
+				smsDetailAdapter.remove(position);
+				smsDetailAdapter.add(position, smsDetailEntity);
+			}
 		}
 	}
 }

@@ -94,6 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4.5dp"
+                android:visibility="gone"
                 android:background="@drawable/index_sport_back"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">

@@ -427,7 +427,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			GetSportTotalHttp http = (GetSportTotalHttp) object;
 			SportTotalEntity sportTotalEntity = http.getSportTotalEntity();
 			//如果获取总步数为空，那么其他数据也是空。
-			if (!TextUtils.isEmpty(sportTotalEntity.getStepNum())) {
+			if (sportTotalEntity!=null&&!TextUtils.isEmpty(sportTotalEntity.getStepNum())) {
 				totalStepTextView.setText(sportTotalEntity.getStepNum());
 				totalKmTextView.setText(sportTotalEntity.getKM());
 				totalDayTextView.setText(sportTotalEntity.getDate());

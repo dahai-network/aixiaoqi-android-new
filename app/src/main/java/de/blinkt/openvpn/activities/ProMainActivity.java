@@ -79,8 +79,8 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
 public class ProMainActivity extends BaseNetActivity implements View.OnClickListener {
 
 	private ViewPager mViewPager;
-	private TextView[] tvArray = new TextView[5];
-	private ImageView[] ivArray = new ImageView[5];
+	private TextView[] tvArray = new TextView[4];
+	private ImageView[] ivArray = new ImageView[4];
 	int viewPagerCurrentPageIndex = 0;
 	public static LinearLayout bottom_bar_linearLayout;
 	public static LinearLayout phone_linearLayout;
@@ -89,7 +89,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public static TextView networkPhoneTv;
 	public static TextView cancelPhone;
 	public static TextView simRegisterPhoneTv;
-	public static LinearLayout[] llArray = new LinearLayout[5];
+	public static LinearLayout[] llArray = new LinearLayout[4];
 	private ImageView phoneNumberImageView;
 	private ImageView callImageView;
 	private ImageView deleteImageView;
@@ -224,19 +224,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		deleteImageView = (ImageView) findViewById(R.id.deleteImageView);
 		llArray[1] = (LinearLayout) findViewById(R.id.phoneLinearLayout);
 		llArray[0] = (LinearLayout) findViewById(R.id.indexLinearLayout);
-		llArray[4] = (LinearLayout) findViewById(R.id.accountLinearLayout);
+		llArray[3] = (LinearLayout) findViewById(R.id.accountLinearLayout);
 		llArray[2] = (LinearLayout) findViewById(R.id.addressListLienarLayout);
-		llArray[3] = (LinearLayout) findViewById(R.id.sportLinearLayout);
+//		llArray[3] = (LinearLayout) findViewById(R.id.sportLinearLayout);
 		tvArray[1] = (TextView) findViewById(R.id.phoneTextView);
 		tvArray[0] = (TextView) findViewById(R.id.indexTextView);
-		tvArray[3] = (TextView) findViewById(R.id.sportTextView);
-		tvArray[4] = (TextView) findViewById(R.id.accountTextView);
+//		tvArray[3] = (TextView) findViewById(R.id.sportTextView);
+		tvArray[3] = (TextView) findViewById(R.id.accountTextView);
 		tvArray[2] = (TextView) findViewById(R.id.addressListTextView);
 		ivArray[1] = (ImageView) findViewById(R.id.phoneImageView);
 		ivArray[0] = (ImageView) findViewById(R.id.indexImageView);
-		ivArray[4] = (ImageView) findViewById(R.id.accountImageView);
+		ivArray[3] = (ImageView) findViewById(R.id.accountImageView);
 		ivArray[2] = (ImageView) findViewById(R.id.addressListImageView);
-		ivArray[3] = (ImageView) findViewById(R.id.sportImageView);
+//		ivArray[3] = (ImageView) findViewById(R.id.sportImageView);
 		showCellPhoneDialogBackground = (LinearLayout) findViewById(R.id.show_cell_phone_dialog_background);
 		cellPhoneLinearlayout = (LinearLayout) findViewById(R.id.cell_phone_linearlayout);
 		networkPhoneTv = (TextView) findViewById(R.id.network_phone_tv);
@@ -286,10 +286,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			addressListFragment = new AddressListFragment();
 
 		}
-		if (sportFragment == null) {
-			sportFragment = new SportFragment();
-
-		}
+//		if (sportFragment == null) {
+//			sportFragment = new SportFragment();
+//
+//		}
 		if (accountFragment == null) {
 			accountFragment = new AccountFragment();
 		}
@@ -298,12 +298,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			list.add(indexFragment);
 			list.add(cellPhoneFragment);
 			list.add(addressListFragment);
-			list.add(sportFragment);
+//			list.add(sportFragment);
 			list.add(accountFragment);
 			FragmentAdapter adapter = new FragmentAdapter(
 					getSupportFragmentManager(), list);
 			mViewPager.setAdapter(adapter);
-			mViewPager.setOffscreenPageLimit(5);
+			mViewPager.setOffscreenPageLimit(4);
 		}
 
 	}
@@ -433,12 +433,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			case R.id.accountLinearLayout:
 				//友盟方法统计
 				MobclickAgent.onEvent(this, CLICKHOMECONTACT);
-				viewPagerCurrentPageIndex = 4;
+				viewPagerCurrentPageIndex = 3;
 				accountFragment.setBleStatus(indexFragment.getBlutoothStatus());
 				break;
-			case R.id.sportLinearLayout:
-				viewPagerCurrentPageIndex = 3;
-				break;
+//			case R.id.sportLinearLayout:
+//				viewPagerCurrentPageIndex = 3;
+//				break;
 			case R.id.phoneNumberImageView:
 				if (isDeploy) {
 					phoneNumberImageView.setImageResource(R.drawable.phone_icon_check);

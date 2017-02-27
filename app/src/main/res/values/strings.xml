@@ -215,7 +215,7 @@
     <string name="new_sms">新信息</string>
     <string name="send_content_is_null">短信内容不能为空</string>
     <string name="has_no_contact">还没有填写收件人</string>
-    <string name="phone_already_has">号码重复选择</string>
+    <string name="phone_already_has">该号码已经被选择了</string>
     <string name="send_sms">发送</string>
 
     <!--版本升级-->

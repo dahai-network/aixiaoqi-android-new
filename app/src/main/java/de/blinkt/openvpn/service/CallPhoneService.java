@@ -65,8 +65,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
         int wifiSleepValue= Settings.System.getInt(getContentResolver(),Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
         Log.e("wifiSleepValue","wifiSleepValue="+wifiSleepValue);
         Settings.System.putInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_NEVER);
-        int wifiSleepValue1= Settings.System.getInt(getContentResolver(),Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-        Log.e("wifiSleepValue1","wifiSleepValue1="+wifiSleepValue1);
+
     }
     private void registSipForReceive() {
         SharedUtils sharedUtils = SharedUtils.getInstance();

@@ -52,25 +52,7 @@ public class SdkAndBluetoothDataInchange {
 	private String socketTag = "0";
 	private String mStrSimPowerOnPacket = "";
 	Timer timerMessage ;
-	TimerTask timerTaskMessage = new TimerTask() {
-		@Override
-		public void run() {
-
-			if (SocketConstant.REGISTER_STATUE_CODE != 3) {
-				if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
-					Log.e("timer", "接收不到蓝牙数据");
-//					JNIUtil.startSDK(2);
-					sendToBluetoothAboutCardInfo(finalTemp);
-					notCanReceiveBluetoothDataCount++;
-				}else if(notCanReceiveBluetoothDataCount>=3){
-					Log.e("timer", "注册失败");
-					notifyRegisterFail();
-					clearTimer();
-					notCanReceiveBluetoothDataCount=0;
-				}
-			}
-		}
-	};
+	TimerTask timerTaskMessage ;
 
 	private void notifyRegisterFail() {
 		registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
@@ -89,6 +71,26 @@ public class SdkAndBluetoothDataInchange {
 				countMessage++;
 				if(timerMessage==null){
 					timerMessage= new Timer();
+				}
+				if(timerTaskMessage==null){
+					timerTaskMessage= new TimerTask() {
+						@Override
+						public void run() {
+
+							if (SocketConstant.REGISTER_STATUE_CODE != 3) {
+								if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
+									Log.e("timer", "接收不到蓝牙数据");
+									sendToBluetoothAboutCardInfo(finalTemp);
+									notCanReceiveBluetoothDataCount++;
+								}else if(notCanReceiveBluetoothDataCount>=3){
+									Log.e("timer", "注册失败");
+									notifyRegisterFail();
+									clearTimer();
+									notCanReceiveBluetoothDataCount=0;
+								}
+							}
+						}
+					};
 				}
 				timerMessage.schedule(timerTaskMessage, 5000, 5000);
 
