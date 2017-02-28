@@ -95,7 +95,7 @@ public class RechargeActivity extends BaseActivity implements InterfaceCallback,
 					/**
 					 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
 					 */
-					String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+//					String resultInfo = payResult.getResult();// 同步返回需要验证的信息
 					String resultStatus = payResult.getResultStatus();
 					// 判断resultStatus 为9000则代表支付成功
 					if (TextUtils.equals(resultStatus, "9000")) {
@@ -354,14 +354,14 @@ public class RechargeActivity extends BaseActivity implements InterfaceCallback,
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 		RadioButton moneyButton = (RadioButton) RechargeActivity.this.findViewById(checkedId);
 		if (checkedId != R.id.recharge1000Button) {
-			((RadioButton) RechargeActivity.this.findViewById(R.id.recharge1000Button)).setVisibility(View.VISIBLE);
+			(RechargeActivity.this.findViewById(R.id.recharge1000Button)).setVisibility(View.VISIBLE);
 			amountEditText.setText("");
 			amountEditText.setVisibility(View.GONE);
 			moneyAmount = Float.valueOf(moneyButton.getText().toString());
 			ViewUtil.hideSoftKeyboard(this);
 		} else {
 			moneyAmount = 0;
-			((RadioButton) RechargeActivity.this.findViewById(R.id.recharge1000Button)).setVisibility(View.INVISIBLE);
+			(RechargeActivity.this.findViewById(R.id.recharge1000Button)).setVisibility(View.INVISIBLE);
 			amountEditText.setVisibility(View.VISIBLE);
 			amountEditText.setFocusable(true);
 			amountEditText.setFocusableInTouchMode(true);

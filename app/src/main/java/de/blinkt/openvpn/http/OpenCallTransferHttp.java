@@ -1,7 +1,6 @@
 package de.blinkt.openvpn.http;
 
 
-import java.util.HashMap;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 
 /**

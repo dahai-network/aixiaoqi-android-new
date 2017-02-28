@@ -3,7 +3,7 @@ package de.blinkt.openvpn.http;
 
 
 import java.net.URLEncoder;
-import java.util.HashMap;
+
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 
 

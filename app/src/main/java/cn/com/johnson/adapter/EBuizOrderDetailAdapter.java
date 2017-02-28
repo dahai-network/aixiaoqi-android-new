@@ -11,7 +11,6 @@ import java.util.List;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.model.EBizOrderDetailEntity;
-import de.blinkt.openvpn.model.EBizOrderListEntity;
 
 /**
  * Created by Administrator on 2016/11/29 0029.

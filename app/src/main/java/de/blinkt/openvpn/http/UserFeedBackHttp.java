@@ -1,6 +1,6 @@
 package de.blinkt.openvpn.http;
 import java.net.URLEncoder;
-import java.util.HashMap;
+
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 /**
  * Created by Administrator on 2016/9/10.

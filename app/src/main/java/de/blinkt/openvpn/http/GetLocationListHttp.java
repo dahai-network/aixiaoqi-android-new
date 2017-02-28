@@ -8,7 +8,6 @@ import java.util.List;
 
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.model.LocationEntity;
-import de.blinkt.openvpn.model.SmsEntity;
 
 /**
  * Created by Administrator on 2016/11/30 0030.

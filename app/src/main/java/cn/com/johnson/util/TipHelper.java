@@ -3,9 +3,6 @@ package cn.com.johnson.util;
 import java.io.IOException;
 import java.util.Random;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.Service;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;

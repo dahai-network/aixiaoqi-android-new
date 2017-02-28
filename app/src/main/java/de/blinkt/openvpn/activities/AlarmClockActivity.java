@@ -75,6 +75,7 @@ public class AlarmClockActivity extends BaseNetActivity implements AlarmClockAda
 	LinearLayout llLoadPush;
 	@BindView(R.id.edit_ll)
 	LinearLayout llEdit;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -122,18 +123,19 @@ public class AlarmClockActivity extends BaseNetActivity implements AlarmClockAda
 		titleBar.getRightText().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(isDoubleClick){
+				if (isDoubleClick) {
 					llEdit.setVisibility(View.GONE);
-				}else{
-				llEdit.setVisibility(View.VISIBLE);
+				} else {
+					llEdit.setVisibility(View.VISIBLE);
 
 				}
-				isDoubleClick=!isDoubleClick;
+				isDoubleClick = !isDoubleClick;
 			}
 		});
 	}
 
-private boolean	isDoubleClick=false;
+	private boolean isDoubleClick = false;
+
 	private void noCanEdit() {
 		alarmClockAdapter.isEditAlarmClock(false);
 		titleBar.setLeftBtnIcon(R.drawable.btn_top_back);
@@ -148,10 +150,12 @@ private boolean	isDoubleClick=false;
 //            bluetoothTv.setText(getString(R.string.no_bind_bluetooth_device));
 //            openBluetoothTv.setText(getString(R.string.go_bind));
 //        }  else
-		if (uartservice != null && uartservice.mConnectionState == UartService.STATE_CONNECTED) {
-			isLinkedDevice = true;
-		} else if (uartservice.isConnecttingBlueTooth()) {
-			bluetoothIsOpen();
+		if (uartservice != null) {
+			if (uartservice.mConnectionState == UartService.STATE_CONNECTED) {
+				isLinkedDevice = true;
+			} else if (uartservice.isConnecttingBlueTooth()) {
+				bluetoothIsOpen();
+			}
 		}
 		//如果连接上，图片要相应不同
 		if (isLinkedDevice) {
@@ -204,7 +208,6 @@ private boolean	isDoubleClick=false;
 				alarmClockAdapter.add(alarmClockEntity.getPosition(), alarmClockEntity);
 				break;
 			case REQUEST_ENABLE_BT:
-
 				if (resultCode == Activity.RESULT_OK) {
 					Toast.makeText(this, "蓝牙已启动", Toast.LENGTH_SHORT).show();
 					bluetoothIsOpen();
@@ -240,7 +243,7 @@ private boolean	isDoubleClick=false;
 	public static final int ADD_CLICK = 101;
 	public static final int UPDATE_CLICK = 102;
 
-	@OnClick({R.id.edit_alarm_tv, R.id.add_alarm_tv,R.id.edit_ll})
+	@OnClick({R.id.edit_alarm_tv, R.id.add_alarm_tv, R.id.edit_ll})
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.edit_alarm_tv:

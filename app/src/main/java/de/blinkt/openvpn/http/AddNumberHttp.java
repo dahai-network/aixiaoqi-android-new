@@ -1,6 +1,5 @@
 package de.blinkt.openvpn.http;
 
-import java.util.List;
 
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 

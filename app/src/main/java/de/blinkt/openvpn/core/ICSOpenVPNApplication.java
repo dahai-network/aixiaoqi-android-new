@@ -8,10 +8,8 @@ package de.blinkt.openvpn.core;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
-import android.content.ComponentName;
 import android.content.Context;
 import android.os.Environment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -26,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import cn.com.aixiaoqi.BuildConfig;
 import cn.com.aixiaoqi.R;
 import cn.qfishphone.sipengine.SipEngineCore;
 import de.blinkt.openvpn.activities.ProMainActivity;
@@ -79,9 +76,9 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 	public void onCreate() {
 		super.onCreate();
 
-		if (BuildConfig.DEBUG) {
-			//ACRA.init(this);
-		}
+//		if (BuildConfig.DEBUG) {
+//			//ACRA.init(this);
+//		}
 		instance = this;
 
 		CommonHttp.setContext(getApplicationContext());
@@ -128,7 +125,7 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 		/**
 		 * 设置升级周期为60s（默认检查周期为0s），60s内SDK不重复向后天请求策略
 		 */
-		Beta.initDelay = 1 * 1000;
+		Beta.initDelay = 1000;
 
 		/**
 		 * 设置通知栏大图标，largeIconId为项目中的图片资源；

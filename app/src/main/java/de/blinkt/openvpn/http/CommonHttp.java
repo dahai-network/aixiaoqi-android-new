@@ -204,7 +204,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			long contentLen = response.body().contentLength();
 			long downloadLen = 0;
 			fos = new FileOutputStream(file);
-			long currentPercent = 0;
+//			long currentPercent = 0;
 			while ((len = is.read(buf)) != -1) {
 				fos.write(buf, 0, len);
 				downloadLen += len;
@@ -280,7 +280,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 	public CommonHttp() {
 		if (null == client) {
 			synchronized (this) {
-				File file = context_.getCacheDir();
+//				File file = context_.getCacheDir();
 				File cacheFile = new File(context_.getCacheDir(), CACHE_FILE);
 				Cache cache = new Cache(cacheFile, 1024 * 1024 * 5); //5Mb
 				client = new OkHttpClient().newBuilder().connectTimeout(15, TimeUnit.SECONDS)
@@ -367,7 +367,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 					Map.Entry entry = (Map.Entry) iter.next();
 					String key = (String) entry.getKey();
 					String value = (String) entry.getValue();
-					if (key != null || value != null) {
+					if (key != null && value != null) {
 						formEncodingBuilder.add(key, value);
 					} else {
 						Log.i(TAG, "请求网络键值对出现null: key:" + key + "," + " value:" + value);

@@ -658,7 +658,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	}
 
 	public String getBLETime() {
-		String bleTime = "";
+		String bleTime;
 		Calendar calendar = Calendar.getInstance();
 		//年
 		int year = calendar.get(Calendar.YEAR);

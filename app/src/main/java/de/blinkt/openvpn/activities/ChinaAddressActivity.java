@@ -77,7 +77,7 @@ public class ChinaAddressActivity extends BaseNetActivity implements DialogInter
     @Override
     protected void onClickRightView() {
         Intent intent =new Intent();
-        intent.putExtra(IntentPutKeyConstant.PROVINCE,proviceTv.getText().toString().toString());
+        intent.putExtra(IntentPutKeyConstant.PROVINCE,proviceTv.getText().toString());
         intent.putExtra(IntentPutKeyConstant.CITY,cityTv.getText().toString());
         setResult(Constant.SAVE_ADDRESS,intent);
         finish();

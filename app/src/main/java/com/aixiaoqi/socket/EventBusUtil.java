@@ -2,7 +2,6 @@ package com.aixiaoqi.socket;
 
 import org.greenrobot.eventbus.EventBus;
 
-import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 
 /**

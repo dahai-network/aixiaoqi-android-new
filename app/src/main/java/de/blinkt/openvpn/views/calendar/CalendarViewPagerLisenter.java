@@ -1,11 +1,6 @@
 package de.blinkt.openvpn.views.calendar;
 
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
-
-import java.util.Calendar;
-
-import static de.blinkt.openvpn.views.calendar.CalendarView.mShowDate;
 
 public class CalendarViewPagerLisenter implements OnPageChangeListener {
 

@@ -1,10 +1,8 @@
 package de.blinkt.openvpn.http;
 
-import android.text.TextUtils;
 import com.google.gson.Gson;
 import cn.com.johnson.model.OnlyCallModel;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 
 /**
  * Created by Administrator on 2016/9/10 0010.

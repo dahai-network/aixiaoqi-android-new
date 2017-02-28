@@ -1,13 +1,10 @@
 package de.blinkt.openvpn.http;
 
-import android.text.TextUtils;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import cn.com.johnson.model.HotPackageEntity;

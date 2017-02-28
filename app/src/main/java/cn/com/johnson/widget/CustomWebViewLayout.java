@@ -26,6 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.util.NetworkUtils;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -558,7 +559,11 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 		WebSettings webSettings = mWebView.getSettings();
 		mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 		webSettings.setJavaScriptEnabled(true);
-		webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+		if (NetworkUtils.isNetworkAvailable(mContext)) {
+			webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+		} else {
+			webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+		}
 		webSettings.setAllowFileAccess(false);
 		webSettings.setNeedInitialFocus(false);
 		webSettings.setLoadsImagesAutomatically(true);

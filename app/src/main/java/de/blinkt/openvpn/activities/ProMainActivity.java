@@ -816,13 +816,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public void onServiceOperation(ServiceOperationEntity entity) {
 		switch (entity.getOperationType()) {
 			case ServiceOperationEntity.REMOVE_SERVICE:
-				if (entity.getServiceName() == UartService.class.getName()) {
+				if (UartService.class.getName().equals(entity.getServiceName())) {
 					Log.i(TAG, "关闭UartService");
 					unbindService(mServiceConnection);
 				}
 				break;
 			case ServiceOperationEntity.CREATE_SERVICE:
-				if (entity.getServiceName() == UartService.class.getName()) {
+				if (UartService.class.getName().equals(entity.getServiceName())) {
 					initServices();
 				}
 				break;
@@ -837,10 +837,16 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		@Override
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
-			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
-			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+//			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+//			} else
+			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				Log.i(TAG, "被主动断掉连接！");
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
+				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
+				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
+				} else {
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
+				}
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 				ArrayList<String> message = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
 //				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
