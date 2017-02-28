@@ -164,7 +164,6 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 			Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getLogoPic()).into(countryImageView);
 			packageNameTextView.setText(bean.getPackageName());
 			//如果订单状态是正在使用，那么就计算时间
-			Log.e("initData","isSupport4G1111111="+bean.isPackageIsSupport4G());
 			if (bean.getOrderStatus() == 0) {
 				expiryDateTextView.setText(bean.getExpireDays());
 				expirytitleTextView.setText(getResources().getString(R.string.expireday));

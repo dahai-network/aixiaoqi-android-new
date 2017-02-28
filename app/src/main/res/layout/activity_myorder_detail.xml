@@ -324,7 +324,5 @@
         android:background="@drawable/circle_light_gray_ret"
         android:text="@string/cancel_order"
         android:textSize="16dp"/>
-
-
 </LinearLayout>
 </de.blinkt.openvpn.util.UserDefineScrollView>
