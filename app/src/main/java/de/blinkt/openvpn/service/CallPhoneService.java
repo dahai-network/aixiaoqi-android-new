@@ -1,14 +1,12 @@
 package de.blinkt.openvpn.service;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.provider.Settings;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,7 +15,6 @@ import cn.com.johnson.model.SecurityConfig;
 import cn.qfishphone.sipengine.SipEngineCore;
 import cn.qfishphone.sipengine.SipEngineEventListener;
 import cn.qfishphone.sipengine.SipEngineFactory;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.ReceiveCallActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -62,9 +59,13 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
         new Thread(http).start();
     }
     public void setWifiDormancy( ){
-        int wifiSleepValue= Settings.System.getInt(getContentResolver(),Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-        Log.e("wifiSleepValue","wifiSleepValue="+wifiSleepValue);
-        Settings.System.putInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_NEVER);
+//        int wifiSleepValue= Settings.System.getInt(getContentResolver(),Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+//        Log.e("wifiSleepValue","wifiSleepValue="+wifiSleepValue);
+//        Settings.System.putInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_NEVER);
+//
+		PowerManager t_power=(PowerManager)getSystemService(POWER_SERVICE);
+		PowerManager.WakeLock t_wake=t_power.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"tag");
+		t_wake.acquire();
 
     }
     private void registSipForReceive() {
@@ -105,12 +106,12 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
     @Override
     public void OnRegistrationState(int code, int error_code) {
         Log.e(TAG,"code="+code+"  , errorcode="+error_code);
-        if (code == 1) {
-
-        } else if (code == 2) {
-
-        }else if(code==4){
-        }
+//        if (code == 1) {
+//
+//        } else if (code == 2) {
+//
+//        }else if(code==4){
+//        }
     }
 public static  int CALL_DIR=0;
 

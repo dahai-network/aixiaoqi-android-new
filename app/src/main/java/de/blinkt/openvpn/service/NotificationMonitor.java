@@ -18,7 +18,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -111,7 +110,7 @@ public class NotificationMonitor extends NotificationListenerService {
 				String phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
 				Log.i(TAG, "call OUT:" + phoneNumber);
 
-			} else if (SMS_RECEIVED == intent.getAction() && utils.readInt(Constant.MESSAGE_REMIND) == 1) {
+			} else if (SMS_RECEIVED.equals(intent.getAction()) && utils.readInt(Constant.MESSAGE_REMIND) == 1) {
 				if (isComeMessage) {
 					Log.i(TAG, "收到短信");
 					Toast.makeText(context, "收到短信", Toast.LENGTH_LONG).show();

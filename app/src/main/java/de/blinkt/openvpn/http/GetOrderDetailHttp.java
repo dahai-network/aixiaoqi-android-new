@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.model.EBizOrderDetailEntity;
-import de.blinkt.openvpn.model.EBizOrderListEntity;
 
 /**
  * Created by Administrator on 2016/11/30 0030.

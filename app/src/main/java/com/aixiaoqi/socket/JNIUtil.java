@@ -9,7 +9,6 @@ import de.blinkt.openvpn.util.SharedUtils;
 import static com.aixiaoqi.socket.SocketConstant.EN_APPEVT_CMD_SETRST;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
-import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 
 /**
  * Created by Administrator on 2016/12/27 0027.
@@ -110,7 +109,7 @@ public class JNIUtil {
 		String cu = "^((13[0-2])|(145)|(15[5-6])|(176)|(18[5-6]))\\d{8}$";//中国联通
 		String ct = "^((133)|(153)|(1700)|(18[0-1,9]))\\d{8}$";//中国电信
 
-		int flag = 0;
+		int flag;
 		if (phone_number.matches(cm)) {
 			flag = 1;
 		} else if (phone_number.matches(cu)) {

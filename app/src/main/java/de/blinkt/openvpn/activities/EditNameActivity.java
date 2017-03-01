@@ -1,21 +1,16 @@
 package de.blinkt.openvpn.activities;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.EditText;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.ModifyPersonInfoHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;

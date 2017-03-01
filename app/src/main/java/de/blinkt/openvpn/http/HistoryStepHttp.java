@@ -4,8 +4,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import java.util.HashMap;
-
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.model.SportStepEntity;
 

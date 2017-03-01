@@ -9,21 +9,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.umeng.analytics.MobclickAgent;
-
-import java.util.HashMap;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
-import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
-import de.blinkt.openvpn.http.OrderAddHttp;
-
-import static de.blinkt.openvpn.constant.UmengContant.CLICKSUREPAGMENT;
 
 /**
  * Created by Administrator on 2016/11/28 0028.
@@ -88,8 +79,8 @@ public class PaymentSelectNumberFeeActivity extends BaseNetActivity {
                 aliPayCheckBox.setChecked(true);
                 break;
             case R.id.sureTextView:
-                HashMap<String, String> map = new HashMap<>();
-                OrderAddHttp http;
+//                HashMap<String, String> map = new HashMap<>();
+//                OrderAddHttp http;
                 sureTextView.setEnabled(false);
                 Toast.makeText(this, "获取订单中...", Toast.LENGTH_SHORT).show();
 //                if (weixinPayCheckBox.isChecked()) {

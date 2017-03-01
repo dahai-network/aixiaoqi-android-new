@@ -81,8 +81,8 @@ public class TouchableRecyclerView extends RecyclerView {
 
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                dx = (int) e.getX();
-                dy = (int) e.getY();
+//                dx = (int) e.getX();
+//                dy = (int) e.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
                 int tempX = (int) e.getX();

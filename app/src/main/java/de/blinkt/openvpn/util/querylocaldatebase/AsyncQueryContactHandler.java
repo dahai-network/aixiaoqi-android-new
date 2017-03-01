@@ -4,7 +4,6 @@ import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.text.TextUtils;
-import android.util.Log;
 
 
 import java.util.ArrayList;

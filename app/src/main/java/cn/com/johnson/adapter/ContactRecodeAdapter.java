@@ -4,12 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
 import de.blinkt.openvpn.util.DatabaseDAO;
 import de.blinkt.openvpn.util.PhoneNumberZero;
-import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 
 
 /**
@@ -46,7 +43,7 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 		ContactRecodeEntity contactRecodeEntity = mList.get(position);
 		final 	String phoneNumber = contactRecodeEntity.getPhoneNumber();
 		final 	String name = contactRecodeEntity.getName();
-		String address=PhoneNumberZero.getAddress(dao,deleteprefix(" ",phoneNumber));
+		String address= PhoneNumberZero.getAddress(dao,deleteprefix(" ",phoneNumber));
 		if (!TextUtils.isEmpty(name)) {
 			holder.mNameTv.setVisibility(View.VISIBLE);
 			holder.mNameTv.setText(contactRecodeEntity.getName());

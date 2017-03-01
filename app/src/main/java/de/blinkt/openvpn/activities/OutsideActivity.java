@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -20,22 +19,12 @@ import java.util.ArrayList;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.OutsideAdapter;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
-import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.http.CancelCallTransferHttp;
 import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.InterfaceCallback;
-import de.blinkt.openvpn.http.OpenCallTransferHttp;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKCLOSE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKOPENAPNSET;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKOPENSYSTEMSET;
 

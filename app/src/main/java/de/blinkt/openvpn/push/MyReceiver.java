@@ -188,7 +188,7 @@ public class MyReceiver extends BroadcastReceiver {
 		JsonObject jsonObject = new JsonParser().parse(extras).getAsJsonObject();
 		String   SMSContent = jsonObject.get("SMSContent").getAsString();
 		String   tel = jsonObject.get("Tel").getAsString();
-		String smsID=jsonObject.get("SMSID").getAsString();
+//		String smsID=jsonObject.get("SMSID").getAsString();
 		String name;
 		String telName=SearchConnectterHelper.getContactNameByPhoneNumber(context,tel);
 		if(TextUtils.isEmpty(telName)){

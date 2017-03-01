@@ -1,13 +1,9 @@
 package de.blinkt.openvpn.http;
 
-import android.text.TextUtils;
-
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.net.URLEncoder;
-import java.util.HashMap;
 
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 

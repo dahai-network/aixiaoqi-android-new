@@ -37,7 +37,6 @@ import cn.com.johnson.model.BoughtPackageEntity;
 import cn.com.johnson.model.HotPackageEntity;
 import cn.com.johnson.model.IndexBannerEntity;
 import de.blinkt.openvpn.activities.CallPackageLlistActivity;
-import de.blinkt.openvpn.activities.FastSetActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.MyPackageActivity;
 import de.blinkt.openvpn.activities.OrderedOutsidePurchaseActivity;

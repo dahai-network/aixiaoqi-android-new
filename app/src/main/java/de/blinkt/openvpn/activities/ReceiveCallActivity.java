@@ -13,7 +13,6 @@ import android.os.SystemClock;
 import android.provider.CallLog;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -146,9 +145,9 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 		return phoneNumStr;
 	}
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-		}
+//		if (keyCode == KeyEvent.KEYCODE_BACK) {
+//
+//		}
 		return true;
 	}
 	private void insertCallRecode(int type) {

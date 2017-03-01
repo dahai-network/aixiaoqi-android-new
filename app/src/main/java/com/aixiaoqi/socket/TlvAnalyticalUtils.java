@@ -7,11 +7,9 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.util.CommonTools;
 
@@ -86,7 +84,7 @@ public class TlvAnalyticalUtils {
 
 			int vl = lPositon.getvL();
 			position = lPositon.getposition();
-			String value = "";
+			String value;
 			if (position + vl * 2 <= hexString.length()) {
 				value = hexString.substring(position, position + vl * 2);
 			} else {
@@ -137,7 +135,7 @@ public class TlvAnalyticalUtils {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
 				}
 			} else if (tag == 15) {
-				if (System.currentTimeMillis() - lastClickTime > 365 * 24 * 60 * 60 * 1000l || isFast(5 * 60 * 1000)) {
+				if (System.currentTimeMillis() - lastClickTime > 365 * 24 * 60 * 60 * 1000L || isFast(5 * 60 * 1000)) {
 					if (!isFast(5 * 60 * 1000)) {
 						isFast(5 * 60 * 1000);
 					}
@@ -230,7 +228,7 @@ public class TlvAnalyticalUtils {
 	private static LPositon getLengthAndPosition(String hexString, int position) {
 		String firstByteString = hexString.substring(position, position + 2);
 		int i = Integer.parseInt(firstByteString, 16);
-		String hexLength = "";
+		String hexLength;
 		if (((i >>> 7) & 1) == 0) {
 			hexLength = hexString.substring(position, position + 2);
 			position = position + 2;

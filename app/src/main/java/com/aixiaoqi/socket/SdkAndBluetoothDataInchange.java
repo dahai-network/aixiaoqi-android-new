@@ -14,7 +14,6 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 import de.blinkt.openvpn.util.CommonTools;
 
@@ -134,7 +133,7 @@ public class SdkAndBluetoothDataInchange {
 		Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + msg);
 		isReceiveBluetoothData = false;
 		getSendBlueToothTime = System.currentTimeMillis();
-		String temp = "";
+		String temp;
 		if (msg.length() > 7) {
 			temp = msg.substring(7);
 		} else {
@@ -148,7 +147,7 @@ public class SdkAndBluetoothDataInchange {
 			Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + temp);
 			String[] messages = PacketeUtil.Separate(temp,Constant.READED_SIM_DATA);
 			for (int i = 0; i < messages.length; i++) {
-				Log.e(TAG, "&&& server  message: " + messages[i].toString());
+				Log.e(TAG, "&&& server  message: " + messages[i]);
 				sendMessage(messages[i]);
 			}
 		}

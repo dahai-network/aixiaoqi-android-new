@@ -338,9 +338,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	private void connectGoip() {
-		if (sendYiZhengService != null)
+		if (sendYiZhengService != null) {
 			sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
-		sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+		}
 	}
 
 	private void registFail() {

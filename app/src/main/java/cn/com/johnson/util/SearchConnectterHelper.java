@@ -24,9 +24,13 @@ public class SearchConnectterHelper {
 				ContactsContract.PhoneLookup.DISPLAY_NAME,
 				ContactsContract.PhoneLookup.TYPE, ContactsContract.PhoneLookup.LABEL}, null, null, null);
 
-		if (c.getCount() == 0) {
-			//没找到电话号码
-		} else if (c.getCount() > 0) {
+		if (c == null) {
+			return null;
+		}
+//		if (c.getCount() == 0) {
+//			//没找到电话号码
+//		} else
+		if (c.getCount() > 0) {
 
 			c.moveToFirst();
 			return c.getString(2); //获取姓名
@@ -49,6 +53,9 @@ public class SearchConnectterHelper {
 		Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null,
 				null, null, null);
 
+		if (cursor == null) {
+			return null;
+		}
 		if (cursor.moveToFirst()) {
 			do {
 				String contactId = cursor.getString(cursor
@@ -67,6 +74,9 @@ public class SearchConnectterHelper {
 						ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
 						null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID
 								+ " = " + contactId, null, null);
+				if (phones != null) {
+					return null;
+				}
 				while (phones.moveToNext()) {
 					String phoneNumber = phones
 							.getString(phones

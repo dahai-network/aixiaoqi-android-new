@@ -23,12 +23,9 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 
 import com.aixiaoqi.socket.SocketConstant;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.umeng.analytics.MobclickAgent;
 
 import cn.com.aixiaoqi.R;
-import cn.jpush.android.api.JPushInterface;
 import de.blinkt.openvpn.activities.Base.BaseSensorActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -41,8 +38,6 @@ import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 
-import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
-import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLCONTROLVOIDE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLHANGUP;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONEQUIET;
@@ -100,9 +95,9 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-		}
+//		if (keyCode == KeyEvent.KEYCODE_BACK) {
+//
+//		}
 		return true;
 	}
 
@@ -124,7 +119,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		if (TextUtils.isEmpty(maxinumPhoneCallTime)) {
 			maxinumPhoneCallTime = "0";
 		}
-		if (contactRecodeEntity==null&&TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())) {
+		if (contactRecodeEntity==null||TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())) {
 			CommonTools.showShortToast(this, "电话号码不能为空");
 			return;
 		}
@@ -170,7 +165,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 			mBuilder = new NotificationCompat.Builder(this);
 		}
 		mBuilder.setContentTitle(getString(R.string.unitoys_phone))
-				.setContentText(getString(R.string.call_phoning,phonenumtxt.getText().toString(),contactRecodeEntity.getPhoneNumber().toString()))
+				.setContentText(getString(R.string.call_phoning,phonenumtxt.getText().toString(),contactRecodeEntity.getPhoneNumber()))
 				.setNumber(3)//显示数量
 //				.setTicker("有新短信来啦")//通知首次出现在通知栏，带上升动画效果的
 				.setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示
@@ -217,22 +212,21 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		switch (v.getId()) {
 			case R.id.mtview:
 				//友盟方法统计
-				MobclickAgent.onEvent(context, CLICKCALLCONTROLVOIDE);
+				MobclickAgent.onEvent(this, CLICKCALLCONTROLVOIDE);
 				Boolean isselected = mtview.isSelected();
 				ICSOpenVPNApplication.the_sipengineReceive.SetLoudspeakerStatus(!isselected);
 				mtview.setSelected(!isselected);
 				break;
 			case R.id.calmTextView:
 				//友盟方法统计
-				MobclickAgent.onEvent(context, CLICKCALLPHONEQUIET);
+				MobclickAgent.onEvent(this, CLICKCALLPHONEQUIET);
 				Boolean iscalmSelected = calmTextView.isSelected();
 				ICSOpenVPNApplication.the_sipengineReceive.MuteMic(!iscalmSelected);
 				calmTextView.setSelected(!iscalmSelected);
 				break;
 			case R.id.cancelcallbtn:
 				//友盟方法统计
-
-				MobclickAgent.onEvent(context, CLICKCALLHANGUP);
+				MobclickAgent.onEvent(this, CLICKCALLHANGUP);
 				new Thread(new Runnable() {
 					@Override
 					public void run() {

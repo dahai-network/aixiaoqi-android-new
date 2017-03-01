@@ -1,8 +1,5 @@
 package com.aixiaoqi.socket;
 
-import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.util.SharedUtils;
-
 /**
  * Created by Administrator on 2016/12/17 0017.
  */

@@ -30,7 +30,7 @@ public abstract class RecyclerBaseAdapter<VH extends RecyclerView.ViewHolder, T>
 	public RecyclerBaseAdapter(Context mContext, List<T> mList) {
 		this.mContext = mContext;
 		if (mList == null) {
-			this.mList = new ArrayList<T>();
+			this.mList = new ArrayList<>();
 		} else {
 			this.mList = mList;
 		}

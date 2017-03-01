@@ -3,15 +3,9 @@ package de.blinkt.openvpn.http;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.model.SelectNumberEntity;
-import de.blinkt.openvpn.model.SmsEntity;
 
 /**
  * Created by Administrator on 2016/11/30 0030.

@@ -30,8 +30,6 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.util.pinyin.CharacterParser;
 
-import de.blinkt.openvpn.util.CommonTools;
-
 
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.contact.SideBar;

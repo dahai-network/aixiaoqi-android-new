@@ -10,8 +10,6 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -19,7 +17,6 @@ import java.io.IOException;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 

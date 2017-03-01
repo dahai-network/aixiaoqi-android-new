@@ -1,7 +1,5 @@
 package de.blinkt.openvpn.http;
 
-import android.text.TextUtils;
-
 import com.google.gson.Gson;
 
 import de.blinkt.openvpn.constant.HttpConfigUrl;

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 
@@ -92,12 +93,21 @@ public class ActivateLinkCardActivity extends BaseActivity implements ReWebChome
 
 		Cursor cursor = getContentResolver().query(selectedImage,
 				filePathColumn, null, null, null);
-		cursor.moveToFirst();
+		try {
+			cursor.moveToFirst();
 
-		int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-		String picturePath = cursor.getString(columnIndex);
-		cursor.close();
-		return picturePath;
+			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+			String picturePath = cursor.getString(columnIndex);
+			cursor.close();
+
+			return picturePath;
+		} catch (NullPointerException e) {
+			Log.i("error", "ActivateLinkCardActivity cursor 空指针异常！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 
@@ -106,6 +116,7 @@ public class ActivateLinkCardActivity extends BaseActivity implements ReWebChome
 				Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		startActivityForResult(i, REQUEST_CODE_PICK_IMAGE);
 	}
+
 	class UploadVideoJavascriptInterface {
 
 		public UploadVideoJavascriptInterface() {

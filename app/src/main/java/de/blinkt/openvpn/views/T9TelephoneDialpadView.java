@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -149,9 +148,11 @@ public class T9TelephoneDialpadView extends LinearLayout implements
 		MobclickAgent.onEvent(mContext, CLICKKEYCALLPHONE);
         if (v.getId() == R.id.dial_delete_btn) {
             deleteSingleDialCharacter();
-        } else if (v.getId() == R.id.dial_input_edit_text) {
-
-        } else {
+        }
+//		else if (v.getId() == R.id.dial_input_edit_text) {
+//
+//        }
+		else {
             addSingleDialCharacter(v.getTag().toString());
         }
 

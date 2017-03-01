@@ -24,19 +24,22 @@ public class DialogUtils {
 	public static void dialogSet(Dialog dialog, Context mContext, int dialogPosition, double widthMultiple, double heightMultiple, boolean setWidthflag, boolean setHeightFlag, boolean addAnimationFlag) {
 		WindowManager m = ((Activity) mContext).getWindowManager();
 		Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
-		WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-		if (setWidthflag) {
-			params.width = (int) (d.getWidth() * widthMultiple);
-		}// 宽度设置为屏幕的0.8
-		if (setHeightFlag) {
-			params.height = (int) (d.getHeight() * heightMultiple);
-		}// 宽度设置为屏幕的0.8
-		Window window = dialog.getWindow();
-		window.setGravity(dialogPosition);
-		if (addAnimationFlag) {// 此处可以设置dialog显示的位置
-			window.setWindowAnimations(R.style.dialogstyle); // 添加动画
+		try {
+			WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+			if (setWidthflag) {
+				params.width = (int) (d.getWidth() * widthMultiple);
+			}// 宽度设置为屏幕的0.8
+			if (setHeightFlag) {
+				params.height = (int) (d.getHeight() * heightMultiple);
+			}// 宽度设置为屏幕的0.8
+			Window window = dialog.getWindow();
+			window.setGravity(dialogPosition);
+			if (addAnimationFlag) {// 此处可以设置dialog显示的位置
+				window.setWindowAnimations(R.style.dialogstyle); // 添加动画
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
 	}
 
 }

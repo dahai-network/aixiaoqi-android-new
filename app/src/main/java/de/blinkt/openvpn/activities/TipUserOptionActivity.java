@@ -144,7 +144,7 @@ public class TipUserOptionActivity extends BaseActivity implements InterfaceCall
 		} else if (uartservice != null && uartservice.mConnectionState == UartService.STATE_CONNECTED) {
 			isLinkBluetooth = true;
 			//判断是否重连/连接蓝牙中
-		} else if (uartservice.isConnecttingBlueTooth()) {
+		} else if (uartservice != null && uartservice.isConnecttingBlueTooth()) {
 			bluetoothIsOpen();
 		}
 		//如果连接上，图片要相应不同
@@ -294,7 +294,7 @@ public class TipUserOptionActivity extends BaseActivity implements InterfaceCall
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG) {
 			if (object.getStatus() == 1) {
-				HashMap<String, String> map = new HashMap<String, String>();
+				HashMap<String, String> map = new HashMap<>();
 				if (switchView.isOpened()) {
 					//友盟方法统计
 					map.put("type", type);

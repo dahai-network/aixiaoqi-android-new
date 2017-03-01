@@ -3,12 +3,9 @@ package de.blinkt.openvpn.http;
 import android.text.TextUtils;
 
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import de.blinkt.openvpn.constant.HttpConfigUrl;
-import de.blinkt.openvpn.model.AlarmClockEntity;
 
 /**
  * Created by Administrator on 2016/10/27.

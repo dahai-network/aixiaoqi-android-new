@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
 /**
  * Created by Administrator on 2016/12/31 0031.

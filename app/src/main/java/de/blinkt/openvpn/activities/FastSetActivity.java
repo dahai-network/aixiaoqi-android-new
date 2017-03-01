@@ -16,7 +16,6 @@ import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKAFTERINLAND;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKFASTSETBEFOREABROAD;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKFASTSETDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKFASTSETOUTSIDE;
 

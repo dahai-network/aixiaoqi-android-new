@@ -167,7 +167,7 @@ public class UartService extends Service implements Serializable {
 			if (lengthData == 1 && dataStatue == 0x80) {
 				//TODO 单包处理
 //				messages.add(messageFromBlueTooth);
-				ArrayList<String> onePackagemessage = new ArrayList<String>();
+				ArrayList<String> onePackagemessage = new ArrayList<>();
 				onePackagemessage.add(messageFromBlueTooth);
 				intent.putStringArrayListExtra(EXTRA_DATA, onePackagemessage);
 				LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
@@ -391,13 +391,13 @@ public class UartService extends Service implements Serializable {
 	 * @return
 	 */
 	public void enableTXNotification() {
-		boolean isUpgrade = false;
+//		boolean isUpgrade = false;
 		if (mBluetoothGatt == null) {
 			showMessage("mBluetoothGatt null" + mBluetoothGatt);
 			broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
 			return;
 		}
-		BluetoothGattService RxService = null;
+		BluetoothGattService RxService;
 		RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
 		Log.i("getService", "获取服务：" + RxService);
 

@@ -44,7 +44,7 @@ public class PublicEncoderTools {
 		final byte[] byteArray = new byte[hexString.length() / 2];
 		int k = 0;
 		int length = byteArray.length;
-		for (int i = 0; i < length ; i++) {
+		for (int i = 0; i < length; i++) {
 			// 因为是16进制，最多只会占用4位，转换成字节需要两个16进制的字符，高位在先
 			// 将hex 转换成byte "&" 操作为了防止负数的自动扩展
 			// hex转换成byte 其实只占用了4位，然后把高位进行右移四位
@@ -144,7 +144,7 @@ public class PublicEncoderTools {
 		String resultString = null;
 
 		try {
-			resultString = new String(origin);
+			resultString = origin;
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			//md.update(resultString.getBytes());
 			// resultString=bytesToHexString(md.digest());
@@ -167,7 +167,7 @@ public class PublicEncoderTools {
 		String resultString = null;
 
 		try {
-			resultString = new String(origin);
+			resultString = origin;
 
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
 			//md.update(resultString.getBytes());

@@ -206,7 +206,7 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 			switch (msg.what) {
 				case 1:
 					int step = msg.arg1;
-					int stepTemp = 0;
+					int stepTemp;
 					int targetStep = getTargetStep();
 					int progress = step * 100 / targetStep;
 					if (progress > 100) {
@@ -302,9 +302,9 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 		kmTextView = (TextView) header.findViewById(R.id.kmTextView);
 		if (view instanceof RecyclerView)
 			sportDataAdapter.setHeaderView(header);
-		else if (view instanceof LinearLayout) {
-
-		}
+//		else if (view instanceof LinearLayout) {
+//
+//		}
 	}
 
 

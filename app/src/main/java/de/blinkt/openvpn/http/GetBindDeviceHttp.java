@@ -1,10 +1,6 @@
 package de.blinkt.openvpn.http;
 
-import android.text.TextUtils;
-
 import com.google.gson.Gson;
-
-import java.io.Serializable;
 
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.model.BlueToothDeviceEntity;

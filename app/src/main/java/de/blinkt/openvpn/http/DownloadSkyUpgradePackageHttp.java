@@ -1,7 +1,5 @@
 package de.blinkt.openvpn.http;
 
-import java.util.HashMap;
-
 /**
  * Created by Administrator on 2016/10/20 0020.
  */

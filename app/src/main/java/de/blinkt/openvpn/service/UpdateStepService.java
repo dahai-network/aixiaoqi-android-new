@@ -6,7 +6,6 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;

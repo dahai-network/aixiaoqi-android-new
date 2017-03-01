@@ -80,7 +80,6 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 	@OnClick({R.id.contactUsTextView, R.id.userFeedbackTextView, R.id.agreementUsTextView, R.id.exitBtn, R.id.ll_upgrade})
 	public void onClick(View v) {
 		switch (v.getId()) {
-
 			case R.id.contactUsTextView:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKCONTACTOUR);
