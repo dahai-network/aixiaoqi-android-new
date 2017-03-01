@@ -34,7 +34,6 @@
             android:layout_height="wrap_content"
             android:textColor="@color/gray_text"
             android:drawableRight="@drawable/arrow"
-
             android:layout_marginLeft="@dimen/padding"
             android:textSize="14sp"
             />

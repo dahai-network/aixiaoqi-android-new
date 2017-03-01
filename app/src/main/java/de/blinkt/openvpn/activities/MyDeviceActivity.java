@@ -278,7 +278,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					return;
 				}
 				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION)) && !isUpgrade) {
-					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
+//					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
 					skyUpgradeHttp();
 				} else if (isUpgrade) {
 					showSkyUpgrade();

@@ -368,7 +368,8 @@
     <string name="after_going_abroad">回国后恢复设置</string>
     <string name="before_going_abroad_tip">在APP的套餐超市,选择您需要前往的国家,购买流量套餐,然后激活。</string>
     <string name="purchase_packet">购买套餐</string>
-    <string name="outside_step_one">手环和手机内置的SIM卡交换位置。</string>
+    <string name="outside_step_one">插电话卡。</string>
+    <string name="outside_step_one_content">将爱小器国际卡插入手机中，然后将您的国内电话卡插入到手环中。</string>
     <string name="outside_step_second">设置APN</string>
     <string name="outside_step_second_content">打开系统的APN设置器,点击新建APN,然后在"名称"和"APN"行输入263,点击保存,最后启用该APN。</string>
     <string name="outside_step_second_click">打开手机APN设置</string>

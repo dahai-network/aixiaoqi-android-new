@@ -38,21 +38,8 @@ public abstract class TcpClient implements Runnable {
 		new Thread(this).start();
 	}
 
-	private Timer timerSocket=new Timer();
-	private TimerTask taskSocket=new TimerTask() {
-		@Override
-		public void run() {
-			Log.e("Blue_Chanl","执行了定时器任务，connect="+connect);
-			if(!connect){
-				try {
-					connectSocket();
-				} catch (Exception e) {
-					e.printStackTrace();
-					TcpClient.this.onConnectFailed();
-				}
-			}
-		}
-	};
+	private Timer timerSocket;
+	private TimerTask taskSocket;
 	private int socketStartCount=0;
 	@Override
 	public void run() {
@@ -60,6 +47,12 @@ public abstract class TcpClient implements Runnable {
 			Log.e("initSocket","socket start");
 			if(!connect){
 				if(socketStartCount==0){
+					if(timerSocket==null){
+						timerSocket=new Timer();
+					}
+					if(taskSocket==null){
+						timerTask();
+					}
 					timerSocket.schedule(taskSocket,5*60*1000,5*60*1000);
 				}
 				socketStartCount++;
@@ -73,6 +66,23 @@ public abstract class TcpClient implements Runnable {
 			e.printStackTrace();
 			this.onConnectFailed();
 		}
+	}
+
+	private void timerTask() {
+		taskSocket=new TimerTask() {
+            @Override
+            public void run() {
+                Log.e("Blue_Chanl","执行了定时器任务，connect="+connect);
+                if(!connect){
+                    try {
+                        connectSocket();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        TcpClient.this.onConnectFailed();
+                    }
+                }
+            }
+        };
 	}
 
 	private void connectSocket() throws IOException {
@@ -120,6 +130,10 @@ public abstract class TcpClient implements Runnable {
 		if(timerSocket!=null){
 			timerSocket.cancel();
 			timerSocket=null;
+		}
+		if(taskSocket!=null){
+			taskSocket.cancel();
+			taskSocket=null;
 		}
 
 	}

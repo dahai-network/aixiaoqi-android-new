@@ -1,63 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:paddingTop="@dimen/padding_20dp"
-        android:paddingBottom="@dimen/padding_10"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:background="@drawable/step_tip"
-            android:gravity="center"
-            android:text="5"
-            android:id="@+id/step5"
-            android:textColor="@color/white"
-            android:layout_height="wrap_content"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/padding"
-            android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:background="@drawable/step_tip"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/padding_15dp"
+        android:layout_marginTop="18dp"
+        android:text="5"
+        android:id="@+id/step5"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/outside_step_five_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
 
-                android:text="@string/outside_step_five"
-                />
-
-            <TextView
-                android:id="@+id/outside_step_five_content_tv"
-                android:layout_width="wrap_content"
-                android:paddingTop="@dimen/padding"
-                android:layout_height="wrap_content"
-                android:text="@string/outside_step_five_content"
-                />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/outside_step_five_bt"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/outside_step_five_tv"
+        android:layout_toRightOf="@id/step5"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/login_btn"
-        android:text="@string/outside_step_five_click"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="@dimen/padding_20dp"
-        android:textSize="16dp"/>
+        android:paddingLeft="@dimen/padding"
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:text="@string/outside_step_five"
+        />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/outside_step_five_content_tv"
+        android:layout_width="wrap_content"
+        android:paddingLeft="@dimen/padding"
+        android:layout_below="@id/outside_step_five_tv"
+        android:layout_toRightOf="@id/step5"
+        android:paddingTop="@dimen/padding"
+        android:layout_marginRight="@dimen/padding_15dp"
+        android:layout_height="wrap_content"
+        android:text="@string/outside_step_five_content"
+        />
+
+
+
+
+
+</RelativeLayout>

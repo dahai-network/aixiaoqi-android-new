@@ -45,7 +45,6 @@ public class OutsideActivity extends BaseNetActivity implements ViewPager.OnPage
 	private ArrayList<View> list;
 	private ImageView imageView;
 	private ImageView[] imageViews;
-	Button outsideStepFiveBt;
 	Button outsideStepThirdBt;
 	Button outsideStepFourBt;
 	Button outsideStepSecondBt;
@@ -140,7 +139,6 @@ public class OutsideActivity extends BaseNetActivity implements ViewPager.OnPage
 		outsideStepSecondBt = (Button) view2.findViewById(R.id.outside_step_second_bt);
 		outsideStepThirdBt = (Button) view3.findViewById(R.id.outside_step_third_bt);
 		outsideStepFourBt = (Button) view4.findViewById(R.id.outside_step_four_bt);
-		outsideStepFiveBt = (Button) view5.findViewById(R.id.outside_step_five_bt);
 		outsideStepSecondTv = (TextView) view2.findViewById(R.id.outside_step_second_tv);
 		outsideStepSecondContentTv = (TextView) view2.findViewById(R.id.outside_step_second_content_tv);
 		outside_step_third_tv = (TextView) view3.findViewById(R.id.outside_step_third_tv);
@@ -161,7 +159,7 @@ public class OutsideActivity extends BaseNetActivity implements ViewPager.OnPage
 			outside_step_four_content_tv.setText(getString(R.string.outside_step_four_content_1));
 			outside_step_five_tv.setText(getString(R.string.outside_step_five_1));
 			outside_step_five_content_tv.setText(getString(R.string.outside_step_five_content_1));
-			outsideStepFiveBt.setText(getString(R.string.outside_step_five_click_1));
+
 		}
 	}
 
@@ -169,7 +167,6 @@ public class OutsideActivity extends BaseNetActivity implements ViewPager.OnPage
 		outsideStepSecondBt.setOnClickListener(this);
 		outsideStepThirdBt.setOnClickListener(this);
 		outsideStepFourBt.setOnClickListener(this);
-		outsideStepFiveBt.setOnClickListener(this);
 	}
 
 	@Override

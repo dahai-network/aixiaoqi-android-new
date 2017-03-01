@@ -1,56 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:paddingTop="@dimen/padding_20dp"
-        android:paddingBottom="@dimen/padding_10"
-        android:paddingLeft="15dp"
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/number_2"
+        android:layout_marginLeft="@dimen/padding_15dp"
+        android:background="@drawable/step_tip"
+        android:layout_marginTop="18dp"
+        android:gravity="center"
+        android:text="2"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"/>
+
+
+
+    <TextView
+        android:id="@+id/outside_step_second_tv"
+        android:layout_toRightOf="@id/number_2"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:paddingLeft="@dimen/padding"
+        android:layout_height="wrap_content"
+        android:text="@string/outside_step_second"
+        />
+
+    <TextView
+        android:id="@+id/outside_step_second_content_tv"
+        android:layout_below="@id/outside_step_second_tv"
         android:paddingRight="15dp"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_toRightOf="@id/number_2"
+        android:layout_width="wrap_content"
+        android:paddingTop="@dimen/padding"
+        android:paddingLeft="@dimen/padding"
+        android:layout_height="wrap_content"
+        android:text="@string/outside_step_second_content"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:background="@drawable/step_tip"
-            android:gravity="center"
-            android:text="2"
-            android:textColor="@color/white"
-            android:layout_height="wrap_content"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/padding"
-            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/outside_step_second_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/outside_step_second"
-                />
-
-            <TextView
-                android:id="@+id/outside_step_second_content_tv"
-                android:layout_width="wrap_content"
-                android:paddingTop="@dimen/padding"
-
-                android:layout_height="wrap_content"
-                android:text="@string/outside_step_second_content"
-                />
-        </LinearLayout>
-
-    </LinearLayout>
 
     <Button
         android:id="@+id/outside_step_second_bt"
+        android:layout_below="@id/outside_step_second_content_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:background="@drawable/login_btn"
@@ -61,11 +59,12 @@
 
     <ImageView
         android:id="@+id/imageView1"
+        android:layout_below="@id/outside_step_second_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-
+        android:layout_centerHorizontal="true"
         android:scaleType="fitXY"
         android:src="@drawable/item02"/>
 
-</LinearLayout>
+</RelativeLayout>
