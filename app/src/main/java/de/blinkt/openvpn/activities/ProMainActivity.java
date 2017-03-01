@@ -13,6 +13,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -164,6 +165,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			bleMoveReceiver = new ReceiveBLEMoveReceiver();
 			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(bleMoveReceiver, makeGattUpdateIntentFilter());
 			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(updateIndexTitleReceiver, makeGattUpdateIntentFilter());
+//			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(screenoffReceive, screenoffIntentFilter());
 			//打开蓝牙服务后开始搜索
 			searchBLE();
 		}
@@ -253,6 +255,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
 		intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
 		intentFilter.addAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
+		return intentFilter;
+	}
+
+	private static IntentFilter screenoffIntentFilter() {
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
 		return intentFilter;
 	}
 
@@ -562,7 +570,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	protected void onDestroy() {
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
+//		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(screenoffReceive);
 		bleMoveReceiver = null;
+		screenoffReceive = null;
 		if (intentCallPhone != null)
 			stopService(intentCallPhone);
 		//关闭服务并设置为null
@@ -850,33 +860,36 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 				ArrayList<String> message = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
 //				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
-				if (message.size() == 0) {
-					return;
-				}
-				if (!message.get(0).substring(0, 2).equals("55")) {
+
+				if (message.size() == 0 || !message.get(0).substring(0, 2).equals("55")) {
 					return;
 				}
 				//判断是否是分包（0x80的包）
-				if (!message.get(0).substring(2, 4).equals("80")) {
+				if (message.size() == 0 || !message.get(0).substring(2, 4).equals("80")) {
 					return;
 				}
-				String dataType = message.get(0).substring(6, 10);
-				Log.e(TAG, "dataType=" + dataType + "  " + (dataType.equals(RETURN_POWER)));
-				switch (dataType) {
-					case RETURN_POWER:
-						Log.e(TAG, "进入0700 ProMainActivity");
-						if (message.get(0).substring(10, 12).equals("01")) {
+				try {
+					String dataType = message.get(0).substring(6, 10);
+					Log.e(TAG, "dataType=" + dataType + "  " + (dataType.equals(RETURN_POWER)));
+					switch (dataType) {
+						case RETURN_POWER:
+							Log.e(TAG, "进入0700 ProMainActivity");
+							if (message.get(0).substring(10, 12).equals("01")) {
 
-							if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
-								//当有通话套餐的时候才允许注册操作
-								IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
-								new Thread(http).start();
-								checkRegisterStatuGoIp();
+								if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
+									//当有通话套餐的时候才允许注册操作
+									IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
+									new Thread(http).start();
+									checkRegisterStatuGoIp();
+								}
+							} else if (message.get(0).substring(10, 12).equals("11")) {
+								sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 							}
-						} else if (message.get(0).substring(10, 12).equals("11")) {
-							sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
-						}
-						break;
+							break;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					return;
 				}
 //				if (message.get(0).substring(0,2).equals("BB")) {
 //					if (message.get(0).substring(2,4).equals("01")) {
@@ -891,11 +904,27 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 //					}
 //				}
 			}
-
 			if (action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)) {
 				stopService(intentCallPhone);
 				unbindTcpService();
 				destorySocketService();
+			}
+		}
+	};
+
+	private BroadcastReceiver screenoffReceive = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+				Log.i("screenoff", "The screen has turned off");
+				// Turn the screen back on again, from the main thread
+				new Handler().post(new Runnable() {
+					public void run() {
+						PowerManager t_power = (PowerManager) getSystemService(POWER_SERVICE);
+						PowerManager.WakeLock t_wakelock = t_power.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP, "SleepMonitor");
+						t_wakelock.acquire();
+					}
+				});
 			}
 		}
 	};

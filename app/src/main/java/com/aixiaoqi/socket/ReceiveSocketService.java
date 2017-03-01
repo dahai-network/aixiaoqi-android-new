@@ -163,7 +163,7 @@ public void disconnect(){
 			intent.setAction(HEARTBEAT_PACKET_TIMER);
 			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
 			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 60 * 1000, sender);
+			am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 40 * 1000, sender);
 		}
 	}
 
