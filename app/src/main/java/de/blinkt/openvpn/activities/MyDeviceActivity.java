@@ -462,8 +462,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (messages.size() == 0 || !messages.get(0).substring(2, 4).equals("80")) {
 					return;
 				}
-				String dataType = messages.get(0).substring(6, 10);
-				switch (dataType) {
+				try {
+					String dataType = messages.get(0).substring(6, 10);
+
+					switch (dataType) {
 //					case (byte) 0xBB:
 //						if (txValue[1] == (byte) 0x05) {
 //							setView();
@@ -471,42 +473,47 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
 //						}
 //						break;
-					case Constant.SYSTEM_BASICE_INFO:
-						String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
-						Log.i(TAG, "版本号:" + deviceVesion);
-						firmwareTextView.setText(deviceVesion);
-						//不让无设备dialog弹出
-						if (noDevicedialog != null)
-							noDevicedialog.getDialog().dismiss();
+						case Constant.SYSTEM_BASICE_INFO:
+							String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
+							Log.i(TAG, "版本号:" + deviceVesion);
+							firmwareTextView.setText(deviceVesion);
+							//不让无设备dialog弹出
+							if (noDevicedialog != null)
+								noDevicedialog.getDialog().dismiss();
 
-						slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
-						UpdateConnectInfoHttp http = new UpdateConnectInfoHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, deviceVesion, Integer.parseInt(messages.get(0).substring(14, 16), 16), 0);
-						new Thread(http).start();
-						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
-							entity.setBlueType(BluetoothConstant.BLUE_VERSION);
-							entity.setBraceletversion(deviceVesion);
-							entity.setSuccess(true);
-							EventBus.getDefault().post(entity);
-							Log.i(TAG, "进入版本号:" + deviceVesion);
-						}
-						break;
-					case Constant.RETURN_POWER:
-						if (messages.get(0).substring(10, 12).equals("01")) {
-							if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
-								sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+							slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
+							UpdateConnectInfoHttp http = new UpdateConnectInfoHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, deviceVesion, Integer.parseInt(messages.get(0).substring(14, 16), 16), 0);
+							new Thread(http).start();
+							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
+								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
+								entity.setBraceletversion(deviceVesion);
+								entity.setSuccess(true);
+								EventBus.getDefault().post(entity);
+								Log.i(TAG, "进入版本号:" + deviceVesion);
 							}
-						} else if (messages.get(0).substring(10, 12).equals("11")) {
-							//百分比TextView设置为0
+							break;
+						case Constant.RETURN_POWER:
+							if (messages.get(0).substring(10, 12).equals("01")) {
+								if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
+									sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+								}
+							} else if (messages.get(0).substring(10, 12).equals("11")) {
+								//百分比TextView设置为0
 //							percentTextView.setText("");
-							showNoCardDialog();
-							SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
-							sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card));
-							stopAnim();
-						}
-						break;
+								showNoCardDialog();
+								SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
+								sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card));
+								stopAnim();
+							}
+							break;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					return;
 				}
 			}
+
 		}
 	};
 

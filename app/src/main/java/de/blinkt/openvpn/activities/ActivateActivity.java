@@ -152,9 +152,11 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 			case R.id.expireDaysTextView:
 				break;
 			case R.id.sureTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(context, CLICKACTIVEPACKAGE);
-				orderActivationHttp();
+				if (!CommonTools.isFastDoubleClick(3000)) {
+					//友盟方法统计
+					MobclickAgent.onEvent(context, CLICKACTIVEPACKAGE);
+					orderActivationHttp();
+				}
 				break;
 			case R.id.payWayTextView:
 				new DialogYearMonthDayPicker(this, this, R.layout.picker_year_month_day_layout, 0);

@@ -3,7 +3,7 @@ package de.blinkt.openvpn.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -59,16 +59,12 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
         new Thread(http).start();
     }
     public void setWifiDormancy( ){
-//        int wifiSleepValue= Settings.System.getInt(getContentResolver(),Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-//        Log.e("wifiSleepValue","wifiSleepValue="+wifiSleepValue);
-//        Settings.System.putInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_NEVER);
-//
-		PowerManager t_power=(PowerManager)getSystemService(POWER_SERVICE);
-		PowerManager.WakeLock t_wake=t_power.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"tag");
-		t_wake.acquire();
-
+        int wifiSleepValue= Settings.System.getInt(getContentResolver(),Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+        Log.e("wifiSleepValue","wifiSleepValue="+wifiSleepValue);
+        Settings.System.putInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_NEVER);
     }
-    private void registSipForReceive() {
+
+	private void registSipForReceive() {
         SharedUtils sharedUtils = SharedUtils.getInstance();
         String	 username = sharedUtils.readString(Constant.USER_NAME);
         String password = PublicEncoderTools.MD5Encode(PublicEncoderTools.MD5Encode(sharedUtils.readString(Constant.PUBLIC_PASSWORD) + "voipcc2015"));

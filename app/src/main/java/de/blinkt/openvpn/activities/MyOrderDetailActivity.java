@@ -118,28 +118,30 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 		addData();
 	}
 
-	public static void launch(Context context, String id,int PackageCategory) {
+	public static void launch(Context context, String id, int PackageCategory) {
 		Intent intent = new Intent(context, MyOrderDetailActivity.class);
 		intent.putExtra("id", id);
 		intent.putExtra("PackageCategory", PackageCategory);
 		context.startActivity(intent);
 	}
-	public static void launch(Context context, String id ) {
+
+	public static void launch(Context context, String id) {
 		Intent intent = new Intent(context, MyOrderDetailActivity.class);
 		intent.putExtra("id", id);
 		context.startActivity(intent);
 	}
 
 	private void initSet() {
-		if(getIntent().getIntExtra("PackageCategory",-1)==0){
-			hasAllViewTitle(R.string.order_detail,R.string.standby_tutorial,0,false);
-		}else{
-		hasLeftViewTitle(R.string.order_detail, 0);}
+		if (getIntent().getIntExtra("PackageCategory", -1) == 0) {
+			hasAllViewTitle(R.string.order_detail, R.string.standby_tutorial, 0, false);
+		} else {
+			hasLeftViewTitle(R.string.order_detail, 0);
+		}
 	}
 
 	@Override
 	protected void onClickRightView() {
-		toActivity(new Intent(this,FastSetActivity.class).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,bean.isPackageIsSupport4G()));
+		toActivity(new Intent(this, FastSetActivity.class).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G()));
 	}
 
 	//获取数据
@@ -344,38 +346,40 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 				}
 				break;
 			case R.id.activateTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(context, CLICKACTIVECARD);
-				OrderID = bean.getOrderID();
-				//如果订单未激活跳转到激活界面
-				if (bean.getOrderStatus() == 0)
-					toActivity(new Intent(this, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt()));
-				else {
-					//是否测试卡位置：否，这是写卡！
-					IS_TEXT_SIM = false;
-					orderStatus = 4;
-					showProgress("正在激活");
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								Thread.sleep(20000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
+				if (!CommonTools.isFastDoubleClick(3000)) {
+					//友盟方法统计
+					MobclickAgent.onEvent(context, CLICKACTIVECARD);
+					OrderID = bean.getOrderID();
+					//如果订单未激活跳转到激活界面
+					if (bean.getOrderStatus() == 0)
+						toActivity(new Intent(this, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt()));
+					else {
+						//是否测试卡位置：否，这是写卡！
+						IS_TEXT_SIM = false;
+						orderStatus = 4;
+						showProgress("正在激活");
+						new Thread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									Thread.sleep(20000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+								if (!isActivateSuccess) {
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											dismissProgress();
+											CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
+										}
+									});
+								}
 							}
-							if (!isActivateSuccess) {
-								runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										dismissProgress();
-										CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
-									}
-								});
-							}
-						}
-					}).start();
-					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
-					orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
+						}).start();
+						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+						orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
+					}
 				}
 				break;
 			case R.id.retryTextView:

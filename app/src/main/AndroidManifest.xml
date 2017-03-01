@@ -52,6 +52,8 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
     <uses-feature
         android:name="android.software.leanback"
         android:required="false"/>
@@ -365,6 +367,7 @@
                 <action android:name="cn.phone.android.intent.RECIVE_PHONE"/> <!-- 接电话 -->
             </intent-filter>
         </receiver>
+
         <activity
             android:name="de.blinkt.openvpn.activities.BalanceParticularsActivity"
             android:screenOrientation="portrait">
@@ -397,7 +400,9 @@
 
         <service
             android:name="de.blinkt.openvpn.service.CallPhoneService"
-            android:enabled="true"/>
+            android:enabled="true">
+            <intent-filter android:priority="1000"></intent-filter>
+        </service>
         <service
             android:name="de.blinkt.openvpn.service.UpdateStepService"
             android:enabled="true"/>
@@ -423,6 +428,7 @@
             android:name="de.blinkt.openvpn.activities.OrderedOutsidePurchaseActivity"
             android:screenOrientation="portrait">
         </activity>
+
         <service
             android:name="de.blinkt.openvpn.service.NotificationMonitor"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
@@ -442,11 +448,17 @@
                 <action android:name="android.intent.action.SMS_STATUS_RECEIVED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="de.blinkt.openvpn.push.NetReceiver" >
+        <receiver android:name="de.blinkt.openvpn.push.NetReceiver">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
+        <!--<receiver android:name="de.blinkt.openvpn.activities.ProMainActivity$ScreenoffReceive">
+            <intent-filter>
+                <action android:name="android.intent.action.SCREEN_OFF"/>
+            </intent-filter>
+        </receiver>-->
+
         <activity
             android:name="de.blinkt.openvpn.activities.SetAlarmActivity"
             android:screenOrientation="portrait">
