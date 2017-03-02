@@ -398,7 +398,6 @@
         <service
             android:name="de.blinkt.openvpn.service.CallPhoneService"
             android:enabled="true">
-            <intent-filter android:priority="1000"></intent-filter>
         </service>
         <service
             android:name="de.blinkt.openvpn.service.UpdateStepService"
