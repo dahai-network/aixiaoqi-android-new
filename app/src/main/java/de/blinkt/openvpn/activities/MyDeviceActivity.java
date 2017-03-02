@@ -278,7 +278,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					return;
 				}
 				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION)) && !isUpgrade) {
-//					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
+					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
 					skyUpgradeHttp();
 				} else if (isUpgrade) {
 					showSkyUpgrade();
@@ -553,6 +553,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+
 		stopAnim();
 		isForeground = false;
 		Log.d(TAG, "onDestroy()");
@@ -628,7 +629,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 		} else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
 			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
-			utils.writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
+			SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
 			if (skyUpgradeHttp.getStatus() == 1) {
 				if (skyUpgradeHttp.getUpgradeEntity() != null) {
 					if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(utils.readString(Constant.BRACELETVERSION))) {
@@ -671,11 +672,16 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 
 	String url;
-
+	DialogBalance Upgrade;
 	private void showDialogGOUpgrade(String desc) {
 		Log.d(TAG, "showDialogGOUpgrade");
 		//不能按返回键，只能二选其一
-		DialogBalance Upgrade = new DialogBalance(this, MyDeviceActivity.this, R.layout.dialog_balance, DOWNLOAD_SKY_UPGRADE);
+	if(Upgrade==null){
+		 Upgrade = new DialogBalance(this, MyDeviceActivity.this, R.layout.dialog_balance, DOWNLOAD_SKY_UPGRADE);
+	}
+		if(!Upgrade.getDialog().isShowing()){
+			Upgrade.getDialog().show();
+		}
 		Upgrade.changeText(desc, getResources().getString(R.string.upgrade), 1);
 	}
 
