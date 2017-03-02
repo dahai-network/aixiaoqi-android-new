@@ -71,6 +71,10 @@ public class ReceiveSocketService extends Service {
 		@Override
 		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
 			Log.e("Blue_Chanl", "接收数据 - onReceive");
+//			if(AutoReceiver.t_wakelock!=null){
+//				AutoReceiver.t_wakelock.release();
+//				AutoReceiver.t_wakelock=null;
+//			}
 			TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s, length));
 			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
@@ -103,9 +107,9 @@ public class ReceiveSocketService extends Service {
 
 		}
 	}
-public void disconnect(){
-	tcpClient.disconnect();
-}
+	public void disconnect(){
+		tcpClient.disconnect();
+	}
 
 
 	private boolean isDisconnect=false;
@@ -163,7 +167,7 @@ public void disconnect(){
 			intent.setAction(HEARTBEAT_PACKET_TIMER);
 			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
 			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 40 * 1000, sender);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 30 * 1000, sender);
 		}
 	}
 
