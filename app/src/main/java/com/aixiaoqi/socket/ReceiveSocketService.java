@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
-import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 
 import java.io.BufferedWriter;
@@ -34,7 +34,8 @@ public class ReceiveSocketService extends Service {
 	private int contactFailCount = 1;
 	PendingIntent sender;
 	AlarmManager am;
-	private static String TAG="ReceiveSocketService";
+	private static String TAG = "ReceiveSocketService";
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return mBinder;
@@ -56,7 +57,7 @@ public class ReceiveSocketService extends Service {
 		@Override
 		public void onConnect(SocketTransceiver transceiver) {
 			Log.i("Blue_Chanl", "正在注册GOIP");
-			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
+			SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
 			createSocketLisener.create();
 		}
 
@@ -64,8 +65,6 @@ public class ReceiveSocketService extends Service {
 		public void onConnectFailed() {
 			connectFailReconnect();
 		}
-
-
 
 
 		@Override
@@ -86,38 +85,41 @@ public class ReceiveSocketService extends Service {
 
 
 	};
+
 	//首次创建连接失败，重试三次还不成功，则断开连接，并且提示注册失败。
 	private void connectFailReconnect() {
 
-		if(!isDisconnect){
+		if (!isDisconnect) {
 			CommonTools.delayTime(5000);
-			if(tcpClient!=null&&!tcpClient.isConnected()){
+			if (tcpClient != null && !tcpClient.isConnected()) {
 				if (contactFailCount <= 3) {
 					reConnect();
 					contactFailCount++;
-				}else{
-					contactFailCount=0;
-					registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.START_TCP_FAIL);
+				} else {
+					contactFailCount = 0;
+					registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.START_TCP_FAIL);
 				}
 			}
 
 		}
 	}
-public void disconnect(){
-	tcpClient.disconnect();
-}
+
+	public void disconnect() {
+		tcpClient.disconnect();
+	}
 
 
-	private boolean isDisconnect=false;
+	private boolean isDisconnect = false;
+
 	//断开连接，如果注册成功，需要重新注册，并且改变注册状态
 	private void disConnectReconnect() {
-		isDisconnect=true;
+		isDisconnect = true;
 //		cancelTimer();
 		CommonTools.delayTime(5000);
-		if(tcpClient!=null&&!tcpClient.isConnected()) {
-			if(REGISTER_STATUE_CODE==3){
+		if (tcpClient != null && !tcpClient.isConnected()) {
+			if (REGISTER_STATUE_CODE == 3) {
 				REGISTER_STATUE_CODE = 2;
-				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.TCP_DISCONNECT);
+				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.TCP_DISCONNECT);
 			}
 			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 			reConnect();
@@ -129,7 +131,7 @@ public void disconnect(){
 	 *
 	 * @return
 	 **/
-	public  void recordStringLog(String text) {// 新建或打开日志文件
+	public void recordStringLog(String text) {// 新建或打开日志文件
 		String path = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi/";
 		String fileName = "TCP" + DateUtils.getCurrentDateForFile() + ".text";
 		File file = new File(path + fileName);
@@ -154,19 +156,30 @@ public void disconnect(){
 			e.printStackTrace();
 		}
 	}
+
 	private void createHeartBeatPackage() {
-		Log.e(TAG,"count="+count+"\nSocketConstant.SESSION_ID_TEMP"+SocketConstant.SESSION_ID_TEMP+"\nSocketConstant.SESSION_ID="+SocketConstant.SESSION_ID+(SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
+		Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
 		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0) {
 			count = count + 1;
 			Log.e("onReceive", "开启定时器");
+			setWifiDormancy();
 			Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
 			intent.setAction(HEARTBEAT_PACKET_TIMER);
 			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
 			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(), 40 * 1000, sender);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 40 * 1000, sender);
 		}
 	}
 
+	public void setWifiDormancy() {
+		int wifiSleepValue = Settings.System.getInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+		if (wifiSleepValue == 0) {
+			Log.e("wifiSleepValue", "wifiSleepValue=" + wifiSleepValue);
+			Settings.System.putInt(getContentResolver(), android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
+			wifiSleepValue = Settings.System.getInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+			Log.e("wifiSleepValue", "wifiSleepValue=" + wifiSleepValue);
+		}
+	}
 
 	private void reConnect() {
 
@@ -181,23 +194,23 @@ public void disconnect(){
 
 		if (tcpClient != null && tcpClient.getTransceiver() != null) {
 			tcpClient.getTransceiver().send(s);
-			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "write :\n" +s);
+			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "write :\n" + s);
 		}
 	}
 
 	@Override
 	public void onDestroy() {
-		Log.e(TAG,"onDestroy()");
-		if(SocketConnection.sdkAndBluetoothDataInchange!=null)
+		Log.e(TAG, "onDestroy()");
+		if (SocketConnection.sdkAndBluetoothDataInchange != null)
 			SocketConnection.sdkAndBluetoothDataInchange.closeReceviceBlueData();
-		if(tcpClient!=null){
+		if (tcpClient != null) {
 			tcpClient.closeTimer();
 			tcpClient.disconnect();
 //			tcpClient=null;
 		}
-		Log.e(TAG,"tcpClient=null"+(tcpClient==null));
-		count=0;
-		SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
+		Log.e(TAG, "tcpClient=null" + (tcpClient == null));
+		count = 0;
+		SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
 		cancelTimer();
 		TlvAnalyticalUtils.clearData();
 		TestProvider.clearData();
@@ -209,9 +222,9 @@ public void disconnect(){
 	}
 
 	private void cancelTimer() {
-		if (am != null){
+		if (am != null) {
 			am.cancel(sender);
-			am=null;
+			am = null;
 		}
 	}
 

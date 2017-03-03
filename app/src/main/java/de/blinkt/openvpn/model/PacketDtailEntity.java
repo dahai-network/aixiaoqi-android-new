@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/9/18.
  */
-public class PacketDtailEntity implements Serializable{
+public class PacketDtailEntity implements Serializable {
 
 	/**
 	 * PackageName : 1分钱测试套餐
@@ -53,6 +53,15 @@ public class PacketDtailEntity implements Serializable{
 		private int ExpireDays;
 		private String Features;
 		private String Details;
+		private String ApnName;
+
+		public String getApnName() {
+			return ApnName;
+		}
+
+		public void setApnName(String apnName) {
+			ApnName = apnName;
+		}
 
 		public String getUseDescr() {
 			return UseDescr;

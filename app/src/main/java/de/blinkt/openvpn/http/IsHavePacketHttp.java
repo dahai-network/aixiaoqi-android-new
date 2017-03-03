@@ -18,8 +18,22 @@ public class IsHavePacketHttp extends BaseHttp {
 		return isHavePacketEntity;
 	}
 
+	/**
+	 * PackageIsCategoryFlow（是否流量类型）
+	 * <p>
+	 * PackageIsCategoryCall（是否通话类型）
+	 * <p>
+	 * PackageIsCategoryDualSimStandby（是否双卡双待类型）
+	 * <p>
+	 * PackageIsCategoryKingCard（是否双卡双待类型）
+	 */
+	private String PackageIsCategoryFlow;
+	private String PackageIsCategoryCall;
+	private String PackageIsCategoryDualSimStandby;
+	private String PackageIsCategoryKingCard;
+
 	public IsHavePacketHttp(InterfaceCallback call, int cmdType_, String PackageCategory) {
-		super(call,cmdType_);
+		super(call, cmdType_);
 		this.PackageCategory = PackageCategory;
 
 	}
@@ -29,9 +43,19 @@ public class IsHavePacketHttp extends BaseHttp {
 		super.BuildParams();
 		slaverDomain_ = HttpConfigUrl.CHECK_IS_HAVE_PACKET;
 		params.put("PackageCategory", PackageCategory);
+		params.put("PackageIsCategoryFlow", PackageIsCategoryFlow);
+		params.put("PackageIsCategoryCall", PackageIsCategoryCall);
+		params.put("PackageIsCategoryDualSimStandby", PackageIsCategoryDualSimStandby);
+		params.put("PackageIsCategoryKingCard", PackageIsCategoryKingCard);
 	}
 
-
+	//设置筛选条件
+	public void setScreenType(String PackageIsCategoryFlow, String PackageIsCategoryCall, String PackageIsCategoryDualSimStandby, String PackageIsCategoryKingCard) {
+		this.PackageIsCategoryFlow = PackageIsCategoryFlow;
+		this.PackageIsCategoryCall = PackageIsCategoryCall;
+		this.PackageIsCategoryDualSimStandby = PackageIsCategoryDualSimStandby;
+		this.PackageIsCategoryKingCard = PackageIsCategoryKingCard;
+	}
 
 	@Override
 	protected void parseObject(String response) {

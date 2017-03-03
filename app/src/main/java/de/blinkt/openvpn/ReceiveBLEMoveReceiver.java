@@ -289,7 +289,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //									break;
 								//电量多少
 								case RECEIVE_ELECTRICITY:
-									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(String.valueOf(messages.get(0).substring(10,12))));
+									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(10,12),16));
 									break;
 //								case (byte) 0x05:
 //									//充电状态

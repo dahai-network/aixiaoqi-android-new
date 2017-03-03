@@ -156,51 +156,56 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID) {
 			dismissProgress();
-			if (!isCreateView) {
-				createViews();
+			if (object.getStatus() == 1) {
+				if (!isCreateView) {
+					createViews();
+				}
+				NoNetRelativeLayout.setVisibility(GONE);
+				GetOrderByIdHttp http = (GetOrderByIdHttp) object;
+				bean = http.getOrderEntity().getList();
+				if (bean != null) {
+					if (bean.getLogoPic() != null)
+						Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getLogoPic()).into(countryImageView);
+					packageNameTextView.setText(bean.getPackageName());
+					//如果订单状态是正在使用，那么就计算时间
+					if (bean.getOrderStatus() == 0) {
+						expiryDateTextView.setText(bean.getExpireDays());
+						expirytitleTextView.setText(getResources().getString(R.string.expireday));
+						packageStateTextView.setText("未激活");
+					} else if (bean.getOrderStatus() == 2) {
+						packageStateTextView.setText("订单已过期");
+						expiryDateTextView.setVisibility(GONE);
+						activateTextView.setVisibility(GONE);
+						cancelOrderButton.setVisibility(GONE);
+						expirytitleTextView.setVisibility(GONE);
+						expirytitleTextView.setVisibility(GONE);
+						expiryDateTextView.setVisibility(GONE);
+					} else if (bean.getOrderStatus() == 3) {
+						packageStateTextView.setText("订单已经被取消");
+						expiryDateTextView.setVisibility(GONE);
+						activateTextView.setVisibility(GONE);
+						cancelOrderButton.setVisibility(GONE);
+					} else if (bean.getOrderStatus() == 4) {
+						packageStateTextView.setText("激活失败");
+						cancelOrderButton.setVisibility(GONE);
+						expiryDateTextView.setText(bean.getExpireDays());
+						activateTextView.setText("再次激活");
+					} else if (bean.getOrderStatus() == 1) {
+						packageStateTextView.setText("已激活");
+						cancelOrderButton.setVisibility(GONE);
+						expiryDateTextView.setText(bean.getExpireDays());
+						activateTextView.setText("再次激活");
+					}
+					priceTextView.setText("￥" + bean.getUnitPrice());
+					setSpan(priceTextView);
+					packetCountTextView.setText("x" + bean.getQuantity());
+					orderNumberTextView.setText(bean.getOrderNum());
+					orderTimeTextView.setText(DateUtils.getDateToString(bean.getOrderDate() * 1000));
+					allPriceTextView.setText("￥" + bean.getTotalPrice());
+					payWayTextView.setText(getPaymentMethod(bean.getPaymentMethod()));
+					dateTextView.setText(DateUtils.getDateToString(bean.getLastCanActivationDate() * 1000));
+				}
 			}
-			NoNetRelativeLayout.setVisibility(GONE);
-			GetOrderByIdHttp http = (GetOrderByIdHttp) object;
-			bean = http.getOrderEntity().getList();
-			Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getLogoPic()).into(countryImageView);
-			packageNameTextView.setText(bean.getPackageName());
-			//如果订单状态是正在使用，那么就计算时间
-			if (bean.getOrderStatus() == 0) {
-				expiryDateTextView.setText(bean.getExpireDays());
-				expirytitleTextView.setText(getResources().getString(R.string.expireday));
-				packageStateTextView.setText("未激活");
-			} else if (bean.getOrderStatus() == 2) {
-				packageStateTextView.setText("订单已过期");
-				expiryDateTextView.setVisibility(GONE);
-				activateTextView.setVisibility(GONE);
-				cancelOrderButton.setVisibility(GONE);
-				expirytitleTextView.setVisibility(GONE);
-				expirytitleTextView.setVisibility(GONE);
-				expiryDateTextView.setVisibility(GONE);
-			} else if (bean.getOrderStatus() == 3) {
-				packageStateTextView.setText("订单已经被取消");
-				expiryDateTextView.setVisibility(GONE);
-				activateTextView.setVisibility(GONE);
-				cancelOrderButton.setVisibility(GONE);
-			} else if (bean.getOrderStatus() == 4) {
-				packageStateTextView.setText("激活失败");
-				cancelOrderButton.setVisibility(GONE);
-				expiryDateTextView.setText(bean.getExpireDays());
-				activateTextView.setText("再次激活");
-			} else if (bean.getOrderStatus() == 1) {
-				packageStateTextView.setText("已激活");
-				cancelOrderButton.setVisibility(GONE);
-				expiryDateTextView.setText(bean.getExpireDays());
-				activateTextView.setText("再次激活");
-			}
-			priceTextView.setText("￥" + bean.getUnitPrice());
-			setSpan(priceTextView);
-			packetCountTextView.setText("x" + bean.getQuantity());
-			orderNumberTextView.setText(bean.getOrderNum());
-			orderTimeTextView.setText(DateUtils.getDateToString(bean.getOrderDate() * 1000));
-			allPriceTextView.setText("￥" + bean.getTotalPrice());
-			payWayTextView.setText(getPaymentMethod(bean.getPaymentMethod()));
-			dateTextView.setText(DateUtils.getDateToString(bean.getLastCanActivationDate() * 1000));
 		} else if (cmdType == HttpConfigUrl.COMTYPE_CANCEL_ORDER) {
 			CancelOrderHttp http = (CancelOrderHttp) object;
 			if (http.getStatus() == 1) {

@@ -443,11 +443,14 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 
 	private void addPageViews(int size) {
 		for (int i = 0; i < size; i++) {
-			ImageView imageView = new ImageView(getActivity());
-			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-			manager.load(bannerData.get(i).getImage()).into(imageView);
-			Log.i(TAG, "首页图片：" + bannerData.get(i).getImage());
-			pageViews.add(imageView);
+			Context context = getActivity();
+			if (context != null) {
+				ImageView imageView = new ImageView(context);
+				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+				manager.load(bannerData.get(i).getImage()).into(imageView);
+				Log.i(TAG, "首页图片：" + bannerData.get(i).getImage());
+				pageViews.add(imageView);
+			}
 		}
 	}
 

@@ -1,8 +1,6 @@
 package de.blinkt.openvpn.activities;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -73,7 +71,7 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 
 	private void init() {
 		hasLeftViewTitle(R.string.setting, 0);
-		appVersionTextView.setText(getVersion());
+		appVersionTextView.setText(CommonTools.getVersion(this));
 
 	}
 
@@ -115,22 +113,6 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 		cardRuleBreakDialog.changeText(getResources().getString(R.string.are_you_sure_exit_login), getResources().getString(R.string.sure));
 	}
 
-	/**
-	 * 获取版本号
-	 *
-	 * @return 当前应用的版本号
-	 */
-	public String getVersion() {
-		try {
-			PackageManager manager = this.getPackageManager();
-			PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
-			String version = info.versionName;
-			return version;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "1.0";
-		}
-	}
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {

@@ -9,7 +9,6 @@ public class Constant {
 
 	public static final boolean IS_DEBUG = true;
 	public static final String BLUETOOTH_NAME = "unitoys";
-//	public static final String BLUETOOTH_NAME = "ZiJian";
 
 	//购买套餐数量限制
 	public static final int LIMIT_COUNT = 30;
@@ -36,6 +35,8 @@ public class Constant {
 	public static final String IMEI = "BraceletIMEI";
 	public static final String BRACELETVERSION = "BraceletVersion";
 	public static final String NULLCARD_SERIALNUMBER = "NULLCARD_SERIALNUMBER";
+	public static final String VERSION_HEADER = "Version";
+	public static final String TERMINAL_HEADER = "Terminal";
 	//旧版本蓝牙设备
 	public static final String ELECTRICITY = "electricity";
 	public static final String PHONE_NUMBER_LIST = "phone_number_list";

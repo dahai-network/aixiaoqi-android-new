@@ -31,6 +31,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.PublicEncoderTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -349,10 +350,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			}
 			Request request;
 
-			if (TextUtils.isEmpty(sharedUtils.readString(Constant.TOKEN)))
-				request = new Request.Builder().url(hostUrl_).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.SIGN, md5).build();
-			else
-				request = new Request.Builder().url(hostUrl_).addHeader(Constant.TOKEN, sharedUtils.readString(Constant.TOKEN)).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.SIGN, md5).build();
+			request = getRequest(expires, md5, sharedUtils);
 			call = client.newCall(request);
 			try {
 				call.enqueue(this);
@@ -380,10 +378,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			RequestBody formBody = formEncodingBuilder.build();
 			try {
 				Request request;
-				if (TextUtils.isEmpty(sharedUtils.readString(Constant.TOKEN)))
-					request = new Request.Builder().url(hostUrl_).post(formBody).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.SIGN, md5).build();
-				else
-					request = new Request.Builder().url(hostUrl_).post(formBody).addHeader(Constant.TOKEN, sharedUtils.readString(Constant.TOKEN)).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.SIGN, md5).build();
+				request = getRequest(expires, md5, sharedUtils, formBody);
 				call = client.newCall(request);
 				try {
 					call.enqueue(this);
@@ -400,10 +395,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			RequestBody formBody = RequestBody.create(JSON, (String) entry.getValue());
 			try {
 				Request request;
-				if (TextUtils.isEmpty(sharedUtils.readString(Constant.TOKEN)))
-					request = new Request.Builder().url(hostUrl_).post(formBody).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.SIGN, md5).build();
-				else
-					request = new Request.Builder().url(hostUrl_).post(formBody).addHeader(Constant.TOKEN, sharedUtils.readString(Constant.TOKEN)).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.SIGN, md5).build();
+				request = getRequest(expires, md5, sharedUtils, formBody);
 				call = client.newCall(request);
 				try {
 					call.enqueue(this);
@@ -425,10 +417,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 
 			RequestBody requestBody = builder.build();
 			Request request;
-			if (TextUtils.isEmpty(sharedUtils.readString(Constant.TOKEN)))
-				request = new Request.Builder().url(hostUrl_).post(requestBody).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.SIGN, md5).build();
-			else
-				request = new Request.Builder().url(hostUrl_).post(requestBody).addHeader(Constant.TOKEN, sharedUtils.readString(Constant.TOKEN)).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.SIGN, md5).build();
+			request = getRequest(expires, md5, sharedUtils, requestBody);
 			//构建请求
 			call = client.newCall(request);
 			try {
@@ -439,6 +428,24 @@ public abstract class CommonHttp implements Callback, Runnable {
 
 		}
 
+	}
+
+	private Request getRequest(String expires, String md5, SharedUtils sharedUtils) {
+		Request request;
+		if (TextUtils.isEmpty(sharedUtils.readString(Constant.TOKEN)))
+			request = new Request.Builder().url(hostUrl_).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.TERMINAL_HEADER, "Android").addHeader(Constant.VERSION_HEADER, CommonTools.getVersion(ICSOpenVPNApplication.getContext())).addHeader(Constant.SIGN, md5).build();
+		else
+			request = new Request.Builder().url(hostUrl_).addHeader(Constant.TOKEN, sharedUtils.readString(Constant.TOKEN)).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.TERMINAL_HEADER, "Android").addHeader(Constant.VERSION_HEADER, CommonTools.getVersion(ICSOpenVPNApplication.getContext())).addHeader(Constant.SIGN, md5).build();
+		return request;
+	}
+
+	private Request getRequest(String expires, String md5, SharedUtils sharedUtils, RequestBody requestBody) {
+		Request request;
+		if (TextUtils.isEmpty(sharedUtils.readString(Constant.TOKEN)))
+			request = new Request.Builder().url(hostUrl_).post(requestBody).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.TERMINAL_HEADER, "Android").addHeader(Constant.VERSION_HEADER, CommonTools.getVersion(ICSOpenVPNApplication.getContext())).addHeader(Constant.SIGN, md5).build();
+		else
+			request = new Request.Builder().url(hostUrl_).post(requestBody).addHeader(Constant.TOKEN, sharedUtils.readString(Constant.TOKEN)).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.TERMINAL_HEADER, "Android").addHeader(Constant.VERSION_HEADER, CommonTools.getVersion(ICSOpenVPNApplication.getContext())).addHeader(Constant.SIGN, md5).build();
+		return request;
 	}
 
 	public static void setCertificates(InputStream... certificates) {

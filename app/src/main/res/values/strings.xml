@@ -31,7 +31,7 @@
     <string name="login">登录</string>
     <string name="phone">拨打</string>
     <string name="index">首页</string>
-    <string name="reset">重置</string>
+    <string name="reset">重启</string>
     <string name="videotutorial">视频教程</string>
     <string name="quit_app">再按一次退出爱小器应用</string>
     <string name="address_list">通讯录</string>
@@ -64,7 +64,7 @@
     <string name="device">设备</string>
     <string name="DSDS">双卡双待</string>
     <string name="purchased_package">已购套餐</string>
-    <string name="hot_package">热门流量套餐</string>
+    <string name="hot_package">热门境外流量套餐</string>
     <string name="residue">剩余</string>
     <string name="more">更多></string>
     <string name="distace">距离</string>
@@ -160,7 +160,7 @@
     <string name="package_detail">套餐详情</string>
     <string name="payment_term">支付条款</string>
     <string name="unset_name">未设置名字</string>
-    <string name="how_to_use">如何使用</string>
+    <string name="how_to_use">使用简介</string>
     <string name="country_no_data">我们正在努力为您准备更优质的\n资源服务中，敬请期待。</string>
     <string name="searching_wrist_strap">正在搜索周围手环</string>
     <string name="please_close_to_the_phone">当手环震动时，请点击确认绑定</string>
@@ -333,6 +333,7 @@
     <string name="PAY_FOR_WEIXIN">微信支付</string>
     <string name="weixin_paying">正在微信支付</string>
     <string name="PAY_FOR_ALI">支付宝支付</string>
+    <string name="ali_paying">正在支付宝支付</string>
     <string name="complete">完成</string>
     <!--激活界面-->
     <string name="activate_packet">激活套餐</string>
@@ -410,7 +411,7 @@
     <string name="call_recently">最近记录</string>
     <string name="call_phone">拨打</string>
     <string name="contacts">联系人</string>
-    <string name="no_card_or_rule_break">卡未插入或激活中途拔卡违规操作，请插入卡后点击确定重置设备或者取消当前操作</string>
+    <string name="no_card_or_rule_break">未能检测到手环内有电话卡，您需要重启手环重新检测吗</string>
     <string name="sport_no_data">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;暂无运动数据\n绑定手环后可以分析运动情况</string>
 
     <!--提醒功能-->

@@ -31,255 +31,268 @@ import de.blinkt.openvpn.util.querylocaldatebase.TipHelper;
 /**
  * Created by Administrator on 2016/11/21 0021.
  */
-public class CallPhoneService extends Service implements SipEngineEventListener,InterfaceCallback {
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-    public static String endFlag = "endCall";
-    public static String connectedFlag = "startCall";
-    public static String callProcessing = "callProcessing";
-    public static String waitConnected = "waitConnected";
-    public static String reportFlag = "reportFlag";
-    public static String CALL_FAIL = "callfail";
-    private String TAG = "CallPhoneService";
-    public  SipEngineCore the_sipengineReceive;
-    private Timer mTimerReceive = new Timer("51DTY scheduler");
-    private SharedUtils sharedUtils;
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        httpToken();
-        setWifiDormancy();
-    }
-    private void httpToken(){
-        sharedUtils = SharedUtils.getInstance();
-        CheckTokenHttp http = new CheckTokenHttp(this, HttpConfigUrl.COMTYPE_CHECKTOKEN);
-        new Thread(http).start();
-    }
-    public void setWifiDormancy( ){
-        int wifiSleepValue= Settings.System.getInt(getContentResolver(),Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-        Log.e("wifiSleepValue","wifiSleepValue="+wifiSleepValue);
-        Settings.System.putInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY,Settings.System.WIFI_SLEEP_POLICY_NEVER);
-    }
+public class CallPhoneService extends Service implements SipEngineEventListener, InterfaceCallback {
+	@Nullable
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
+	}
+
+	public static String endFlag = "endCall";
+	public static String connectedFlag = "startCall";
+	public static String callProcessing = "callProcessing";
+	public static String waitConnected = "waitConnected";
+	public static String reportFlag = "reportFlag";
+	public static String CALL_FAIL = "callfail";
+	private String TAG = "CallPhoneService";
+	public SipEngineCore the_sipengineReceive;
+	private Timer mTimerReceive = new Timer("51DTY scheduler");
+	private SharedUtils sharedUtils;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		httpToken();
+//		setWifiDormancy();
+	}
+
+	private void httpToken() {
+		sharedUtils = SharedUtils.getInstance();
+		CheckTokenHttp http = new CheckTokenHttp(this, HttpConfigUrl.COMTYPE_CHECKTOKEN);
+		new Thread(http).start();
+	}
+
+	public void setWifiDormancy() {
+		int wifiSleepValue = Settings.System.getInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+		if (wifiSleepValue == 0) {
+			Log.e("wifiSleepValue", "wifiSleepValue=" + wifiSleepValue);
+			Settings.System.putInt(getContentResolver(), android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
+			wifiSleepValue = Settings.System.getInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+			Log.e("wifiSleepValue", "wifiSleepValue=" + wifiSleepValue);
+		}
+	}
 
 	private void registSipForReceive() {
-        SharedUtils sharedUtils = SharedUtils.getInstance();
-        String	 username = sharedUtils.readString(Constant.USER_NAME);
-        String password = PublicEncoderTools.MD5Encode(PublicEncoderTools.MD5Encode(sharedUtils.readString(Constant.PUBLIC_PASSWORD) + "voipcc2015"));
+		SharedUtils sharedUtils = SharedUtils.getInstance();
+		String username = sharedUtils.readString(Constant.USER_NAME);
+		String password = PublicEncoderTools.MD5Encode(PublicEncoderTools.MD5Encode(sharedUtils.readString(Constant.PUBLIC_PASSWORD) + "voipcc2015"));
 
-        String	 server = sharedUtils.readString(Constant.ASTERISK_IP_OUT);
-        Log.e(TAG,"username="+username+",password="+password);
-        System.out.println("pwd:" + sharedUtils.readString(Constant.PUBLIC_PASSWORD) + "|username:" + username + "|server:" + server + "|port:" + sharedUtils.readString(Constant.ASTERISK_IP_OUT));
+		String server = sharedUtils.readString(Constant.ASTERISK_IP_OUT);
+		Log.e(TAG, "username=" + username + ",password=" + password);
+		System.out.println("pwd:" + sharedUtils.readString(Constant.PUBLIC_PASSWORD) + "|username:" + username + "|server:" + server + "|port:" + sharedUtils.readString(Constant.ASTERISK_IP_OUT));
 		/*
 		 * 设置rc4加密 并使用 65061 登陆
 		 * 取消加密  并使用65060 登陆
 		 * */
-        int	 port = Integer.parseInt(sharedUtils.readString(Constant.ASTERISK_PORT_OUT));
-        int expire = 60;
-        the_sipengineReceive = SipEngineFactory.instance().createPhoneCore(this, this);
-        the_sipengineReceive.CoreInit();
-        the_sipengineReceive.SetRC4Crypt(false);
-        the_sipengineReceive.DeRegisterSipAccount();
-        the_sipengineReceive.EnableDebug(true);
-        the_sipengineReceive.RegisterSipAccount(username, password, server, port, expire);
-        TimerTask lTask = new TimerTask() {
-            @Override
-            public void run() {
-                the_sipengineReceive.CoreEventProgress();
-            }
-        };
-        mTimerReceive.scheduleAtFixedRate(lTask, 0, 100);
-        ICSOpenVPNApplication.the_sipengineReceive = the_sipengineReceive;
-    }
+		int port = Integer.parseInt(sharedUtils.readString(Constant.ASTERISK_PORT_OUT));
+		int expire = 60;
+		the_sipengineReceive = SipEngineFactory.instance().createPhoneCore(this, this);
+		the_sipengineReceive.CoreInit();
+		the_sipengineReceive.SetRC4Crypt(false);
+		the_sipengineReceive.DeRegisterSipAccount();
+		the_sipengineReceive.EnableDebug(true);
+		the_sipengineReceive.RegisterSipAccount(username, password, server, port, expire);
+		TimerTask lTask = new TimerTask() {
+			@Override
+			public void run() {
+				the_sipengineReceive.CoreEventProgress();
+			}
+		};
+		mTimerReceive.scheduleAtFixedRate(lTask, 0, 100);
+		ICSOpenVPNApplication.the_sipengineReceive = the_sipengineReceive;
+	}
 
-    @Override
-    public void OnSipEngineState(int code) {
-        Log.e(TAG,"OnSipEngineState"+code);
-    }
+	@Override
+	public void OnSipEngineState(int code) {
+		Log.e(TAG, "OnSipEngineState" + code);
+	}
 
-    @Override
-    public void OnRegistrationState(int code, int error_code) {
-        Log.e(TAG,"code="+code+"  , errorcode="+error_code);
+	@Override
+	public void OnRegistrationState(int code, int error_code) {
+		Log.e(TAG, "code=" + code + "  , errorcode=" + error_code);
 //        if (code == 1) {
 //
 //        } else if (code == 2) {
 //
 //        }else if(code==4){
 //        }
-    }
-public static  int CALL_DIR=0;
+	}
 
-    @Override
-    public void OnNewCall(int CallDir, final String peer_caller, boolean is_video_call) {
-        Log.e(TAG,"新来电");
-        if (CallDir != 0){
-            CALL_DIR=0;
-            ReceiveCallActivity.launch(CallPhoneService.this, peer_caller);
-        }else{
-            CALL_DIR=1;
+	public static int CALL_DIR = 0;
 
-        }
+	@Override
+	public void OnNewCall(int CallDir, final String peer_caller, boolean is_video_call) {
+		Log.e(TAG, "新来电");
+		if (CallDir != 0) {
+			CALL_DIR = 0;
+			ReceiveCallActivity.launch(CallPhoneService.this, peer_caller);
+		} else {
+			CALL_DIR = 1;
+
+		}
 
 
-    }
+	}
 
-    @Override
-    public void OnCallProcessing() {
-        Intent intent = new Intent();
-        intent.setAction(callProcessing);
-        sendBroadcast(intent);
-        Log.e(TAG,"正在呼叫");
-    }
+	@Override
+	public void OnCallProcessing() {
+		Intent intent = new Intent();
+		intent.setAction(callProcessing);
+		sendBroadcast(intent);
+		Log.e(TAG, "正在呼叫");
+	}
 
-    @Override
-    public void OnCallRinging() {
-        Log.e(TAG,"正在响铃");
-    }
+	@Override
+	public void OnCallRinging() {
+		Log.e(TAG, "正在响铃");
+	}
 
-    @Override
-    public void OnCallConnected() {
-        Log.e(TAG,"呼叫接通");
-        TipHelper.stopSound();
-        TipHelper.stopShock();
-        Intent intent = new Intent();
-        intent.setAction(connectedFlag);
-        sendBroadcast(intent);
-    }
+	@Override
+	public void OnCallConnected() {
+		Log.e(TAG, "呼叫接通");
+		TipHelper.stopSound();
+		TipHelper.stopShock();
+		Intent intent = new Intent();
+		intent.setAction(connectedFlag);
+		sendBroadcast(intent);
+	}
 
-    @Override
-    public void OnCallStreamsRunning(boolean is_video_call) {
-        Log.e(TAG,"媒体接通");
-    }
+	@Override
+	public void OnCallStreamsRunning(boolean is_video_call) {
+		Log.e(TAG, "媒体接通");
+	}
 
-    @Override
-    public void OnCallMediaStreamConnected(int mode) {
-        if(mode==0)
-            Log.e(TAG,"媒体连接成功 模式 RTP");
-        else
-            Log.e(TAG,"媒体连接成功 模式 P2P");
+	@Override
+	public void OnCallMediaStreamConnected(int mode) {
+		if (mode == 0)
+			Log.e(TAG, "媒体连接成功 模式 RTP");
+		else
+			Log.e(TAG, "媒体连接成功 模式 P2P");
 
-        CommonTools.delayTime(1000);
-        Intent intent = new Intent();
-        intent.setAction(waitConnected);
-        sendBroadcast(intent);
-    }
+		CommonTools.delayTime(1000);
+		Intent intent = new Intent();
+		intent.setAction(waitConnected);
+		sendBroadcast(intent);
+	}
 
-    @Override
-    public void OnCallPaused() {
-        Log.e(TAG,"呼叫保持");
-    }
+	@Override
+	public void OnCallPaused() {
+		Log.e(TAG, "呼叫保持");
+	}
 
-    @Override
-    public void OnCallResuming() {
-        Log.e(TAG,"通话恢复");
-    }
+	@Override
+	public void OnCallResuming() {
+		Log.e(TAG, "通话恢复");
+	}
 
-    @Override
-    public void OnCallPausedByRemote() {
-        Log.e(TAG,"远端呼叫保持");
-    }
+	@Override
+	public void OnCallPausedByRemote() {
+		Log.e(TAG, "远端呼叫保持");
+	}
 
-    @Override
-    public void OnCallResumingByRemote() {
-        Log.e(TAG,"远端通话恢复");
-    }
+	@Override
+	public void OnCallResumingByRemote() {
+		Log.e(TAG, "远端通话恢复");
+	}
 
-    @Override
-    public void OnCallEnded() {
-        Log.e(TAG,"呼叫结束");
+	@Override
+	public void OnCallEnded() {
+		Log.e(TAG, "呼叫结束");
 
-        TipHelper.stopSound();
-        TipHelper.stopShock();
-        Intent intent = new Intent();
-        intent.setAction(endFlag);
-        sendBroadcast(intent);
-    }
+		TipHelper.stopSound();
+		TipHelper.stopShock();
+		Intent intent = new Intent();
+		intent.setAction(endFlag);
+		sendBroadcast(intent);
+	}
 
-    @Override
-    public void OnCallFailed(int status) {
-        Log.e(TAG,"呼叫失败,错误代码 "+status);
-        Intent intent = new Intent();
-        intent.setAction(CALL_FAIL);
-        sendBroadcast(intent);
-    }
+	@Override
+	public void OnCallFailed(int status) {
+		Log.e(TAG, "呼叫失败,错误代码 " + status);
+		Intent intent = new Intent();
+		intent.setAction(CALL_FAIL);
+		sendBroadcast(intent);
+	}
 
-    @Override
-    public void OnNetworkQuality(int ms, String vos_balance) {
-        Log.e(TAG,"网络延迟 "+ ms + ", 余额 " + vos_balance);
-    }
+	@Override
+	public void OnNetworkQuality(int ms, String vos_balance) {
+		Log.e(TAG, "网络延迟 " + ms + ", 余额 " + vos_balance);
+	}
 
-    @Override
-    public void OnRemoteDtmfClicked(int dtmf) {
-        Log.e(TAG,"远程点击"+dtmf);
-    }
+	@Override
+	public void OnRemoteDtmfClicked(int dtmf) {
+		Log.e(TAG, "远程点击" + dtmf);
+	}
 
-    @Override
-    public void OnCallReport(long nativePtr) {
-        Log.e(TAG,"通话记录"+nativePtr);
-        TipHelper.stopSound();
-        TipHelper.stopShock();
-        Intent intent = new Intent();
-        intent.putExtra("nativePtr",nativePtr);
-        intent.setAction(reportFlag);
-        sendBroadcast(intent);
-    }
+	@Override
+	public void OnCallReport(long nativePtr) {
+		Log.e(TAG, "通话记录" + nativePtr);
+		TipHelper.stopSound();
+		TipHelper.stopShock();
+		Intent intent = new Intent();
+		intent.putExtra("nativePtr", nativePtr);
+		intent.setAction(reportFlag);
+		sendBroadcast(intent);
+	}
 
-    @Override
-    public void onDestroy() {
-        if (ICSOpenVPNApplication.the_sipengineReceive != null)
-            ICSOpenVPNApplication.the_sipengineReceive.DeRegisterSipAccount();
-        ICSOpenVPNApplication.the_sipengineReceive = null;
-        super.onDestroy();
-    }
+	@Override
+	public void onDestroy() {
+		if (ICSOpenVPNApplication.the_sipengineReceive != null)
+			ICSOpenVPNApplication.the_sipengineReceive.DeRegisterSipAccount();
+		ICSOpenVPNApplication.the_sipengineReceive = null;
+		super.onDestroy();
+	}
 
-    @Override
-    public void rightComplete(int cmdType, CommonHttp object) {
-        if(cmdType==HttpConfigUrl.COMTYPE_CHECKTOKEN) {
-            CheckTokenHttp http = (CheckTokenHttp) object;
-            if (http.getStatus() == 1) {
-                //写入登陆天数，如果十五天没有登陆过则重新登录
-                long time = Long.parseLong(http.getUpdateConfigTime())*1000;
-                if (time != sharedUtils.readLong(Constant.CONFIG_TIME)) {
-                    if (time > sharedUtils.readLong(Constant.CONFIG_TIME)) {
-                        SecurityConfigHttp securityConfigHttp = new SecurityConfigHttp(this, HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
-                        new Thread(securityConfigHttp).start();
-                    } else {
-                        registSipForReceive();
-                    }
-                    sharedUtils.writeLong(Constant.CONFIG_TIME, time);
-                } else {
-                    registSipForReceive();
-                }
-            }
-        } else if(cmdType==HttpConfigUrl.COMTYPE_SECURITY_CONFIG){
-            SecurityConfigHttp securityConfigHttp=(SecurityConfigHttp)object;
-            if(securityConfigHttp.getStatus()==1){
-                saveSecurityConfig(securityConfigHttp);
-            }
-        }
-    }
-    private void saveSecurityConfig(SecurityConfigHttp securityConfigHttp) {
-        SecurityConfig.InBean in=	securityConfigHttp.getSecurityConfig().getIn();
-        SecurityConfig.OutBean out=securityConfigHttp.getSecurityConfig().getOut();
-        sharedUtils.writeString(Constant.ASTERISK_IP_IN,in.getAsteriskIp());
-        sharedUtils.writeString(Constant.ASTERISK_PORT_IN,in.getAsteriskPort());
-        sharedUtils.writeString(Constant.ASTERISK_IP_OUT,out.getAsteriskIp());
-        sharedUtils.writeString(Constant.ASTERISK_PORT_OUT,out.getAsteriskPort());
-        sharedUtils.writeString(Constant.PUBLIC_PASSWORD,out.getPublicPassword());
-        registSipForReceive();
-    }
-    @Override
-    public void errorComplete(int cmdType, String errorMessage) {
+	@Override
+	public void rightComplete(int cmdType, CommonHttp object) {
+		if (cmdType == HttpConfigUrl.COMTYPE_CHECKTOKEN) {
+			CheckTokenHttp http = (CheckTokenHttp) object;
+			if (http.getStatus() == 1) {
+				//写入登陆天数，如果十五天没有登陆过则重新登录
+				long time = Long.parseLong(http.getUpdateConfigTime()) * 1000;
+				if (time != sharedUtils.readLong(Constant.CONFIG_TIME)) {
+					if (time > sharedUtils.readLong(Constant.CONFIG_TIME)) {
+						SecurityConfigHttp securityConfigHttp = new SecurityConfigHttp(this, HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
+						new Thread(securityConfigHttp).start();
+					} else {
+						registSipForReceive();
+					}
+					sharedUtils.writeLong(Constant.CONFIG_TIME, time);
+				} else {
+					registSipForReceive();
+				}
+			}
+		} else if (cmdType == HttpConfigUrl.COMTYPE_SECURITY_CONFIG) {
+			SecurityConfigHttp securityConfigHttp = (SecurityConfigHttp) object;
+			if (securityConfigHttp.getStatus() == 1) {
+				saveSecurityConfig(securityConfigHttp);
+			}
+		}
+	}
 
-    }
-    private int count=0;
-    @Override
-    public void noNet() {
-        if(count==0)
-            CommonTools.showShortToast(getApplicationContext(),getString(R.string.no_wifi));
-        count++;
-        httpToken();
-    }
+	private void saveSecurityConfig(SecurityConfigHttp securityConfigHttp) {
+		SecurityConfig.InBean in = securityConfigHttp.getSecurityConfig().getIn();
+		SecurityConfig.OutBean out = securityConfigHttp.getSecurityConfig().getOut();
+		sharedUtils.writeString(Constant.ASTERISK_IP_IN, in.getAsteriskIp());
+		sharedUtils.writeString(Constant.ASTERISK_PORT_IN, in.getAsteriskPort());
+		sharedUtils.writeString(Constant.ASTERISK_IP_OUT, out.getAsteriskIp());
+		sharedUtils.writeString(Constant.ASTERISK_PORT_OUT, out.getAsteriskPort());
+		sharedUtils.writeString(Constant.PUBLIC_PASSWORD, out.getPublicPassword());
+		registSipForReceive();
+	}
+
+	@Override
+	public void errorComplete(int cmdType, String errorMessage) {
+
+	}
+
+	private int count = 0;
+
+	@Override
+	public void noNet() {
+		if (count == 0)
+			CommonTools.showShortToast(getApplicationContext(), getString(R.string.no_wifi));
+		count++;
+		httpToken();
+	}
 }

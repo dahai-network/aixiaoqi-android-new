@@ -27,7 +27,7 @@ public class OrderAddHttp extends BaseHttp {
 	}
 
 	public OrderAddHttp(InterfaceCallback call, int cmdType_, String PackageID, int Quantity, int PaymentMethod, boolean IsPayUserAmount) {
-		super(call,cmdType_);
+		super(call, cmdType_);
 		this.PackageID = PackageID;
 		this.Quantity = Quantity;
 		this.PaymentMethod = PaymentMethod;
