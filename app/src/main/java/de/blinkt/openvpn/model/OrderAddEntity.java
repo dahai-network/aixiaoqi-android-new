@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Administrator on 2016/9/21.
  */
 
-public class OrderAddEntity implements Serializable{
+public class OrderAddEntity implements Serializable {
 
 	/**
 	 * OrderID : b2a2397e-51d2-4dc6-a753-7c967220a379
@@ -50,6 +50,16 @@ public class OrderAddEntity implements Serializable{
 		private double PayUserAmount;
 		private String IsPayUserAmount;
 		private String PaymentMethod;
+
+		public boolean isPackageIsCategoryFlow() {
+			return PackageIsCategoryFlow;
+		}
+
+		public void setPackageIsCategoryFlow(boolean packageIsCategoryFlow) {
+			PackageIsCategoryFlow = packageIsCategoryFlow;
+		}
+
+		private boolean PackageIsCategoryFlow;
 
 		public String getOrderID() {
 			return OrderID;

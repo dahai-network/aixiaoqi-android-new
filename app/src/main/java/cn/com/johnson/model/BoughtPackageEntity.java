@@ -83,6 +83,44 @@ public class BoughtPackageEntity implements Serializable {
 		private int PackageCategory;
 		private int IsPayUserAmount;
 		private String PackageId;
+		private boolean PackageIsCategoryFlow;
+		private boolean PackageIsCategoryCall;
+		private boolean PackageIsCategoryDualSimStandby;
+
+		public boolean isPackageIsCategoryKingCard() {
+			return PackageIsCategoryKingCard;
+		}
+
+		public void setPackageIsCategoryKingCard(boolean packageIsCategoryKingCard) {
+			PackageIsCategoryKingCard = packageIsCategoryKingCard;
+		}
+
+		public boolean isPackageIsCategoryDualSimStandby() {
+			return PackageIsCategoryDualSimStandby;
+		}
+
+		public void setPackageIsCategoryDualSimStandby(boolean packageIsCategoryDualSimStandby) {
+			PackageIsCategoryDualSimStandby = packageIsCategoryDualSimStandby;
+		}
+
+		public boolean isPackageIsCategoryCall() {
+			return PackageIsCategoryCall;
+		}
+
+		public void setPackageIsCategoryCall(boolean packageIsCategoryCall) {
+			PackageIsCategoryCall = packageIsCategoryCall;
+		}
+
+		public boolean isPackageIsCategoryFlow() {
+			return PackageIsCategoryFlow;
+		}
+
+		public void setPackageIsCategoryFlow(boolean packageIsCategoryFlow) {
+			PackageIsCategoryFlow = packageIsCategoryFlow;
+		}
+
+		private boolean PackageIsCategoryKingCard;
+
 
 		public String getLogoPic() {
 			return LogoPic;

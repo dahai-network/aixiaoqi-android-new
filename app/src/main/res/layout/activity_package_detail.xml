@@ -143,13 +143,39 @@
                 android:textColor="@color/color_2d2d2d"
                 android:textSize="12sp"
                 />
+            <!--android:layout_below="@id/how_to_use_tv"-->
+            <TextView
+                android:id="@+id/detailTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/featuresTextView"
+                android:layout_marginLeft="@dimen/padding_15dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/package_detail"
+                android:textSize="15sp"
+                />
 
+
+            <TextView
+                android:id="@+id/detailTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailTitleTextView"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/padding_10dp"
+                android:paddingLeft="@dimen/padding_15dp"
+                android:paddingRight="@dimen/padding_15dp"
+                android:paddingTop="@dimen/padding_10dp"
+                android:textColor="@color/color_2d2d2d"
+                android:textSize="12sp"
+                />
 
             <TextView
                 android:id="@+id/paymenTermTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/featuresTextView"
+                android:layout_below="@id/detailTextView"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="@dimen/padding_15dp"
                 android:layout_marginTop="10dp"
@@ -199,32 +225,7 @@
                 />
 
 
-            <TextView
-                android:id="@+id/detailTitleTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/how_to_use_tv"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="@dimen/padding_15dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/package_detail"
-                android:textSize="15sp"
-                />
 
-
-            <TextView
-                android:id="@+id/detailTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/detailTitleTextView"
-                android:background="@color/white"
-                android:paddingBottom="@dimen/padding_10dp"
-                android:paddingLeft="@dimen/padding_15dp"
-                android:paddingRight="@dimen/padding_15dp"
-                android:paddingTop="@dimen/padding_10dp"
-                android:textColor="@color/color_2d2d2d"
-                android:textSize="12sp"
-                />
 
 
             <View
@@ -270,7 +271,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:layout_below="@id/detailTextView"/>
+                android:layout_below="@id/how_to_use_tv"/>
 
 
         </RelativeLayout>

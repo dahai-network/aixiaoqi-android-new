@@ -185,13 +185,14 @@
                 style="@style/horizontal_line_view"
                 />
 
-            <View
+            <!--<View
                 style="@style/horizontal_line_view"
                 android:layout_marginTop="15dp"
-                />
+                />-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:background="@color/white"
             android:orientation="vertical">
             <LinearLayout
@@ -257,7 +258,6 @@
                     android:textSize="14sp"/>
             </LinearLayout>
             <View
-
                 style="@style/horizontal_line_view_margin_15dp"
                 />
             <LinearLayout
@@ -393,9 +393,9 @@
                     android:textSize="14sp"/>
             </LinearLayout>
         </LinearLayout>
-            <View
+           <!-- <View
                 style="@style/horizontal_line_view"
-                />
+                />-->
             <View
                 android:layout_marginTop="15dp"
                 style="@style/horizontal_line_view"
@@ -418,10 +418,10 @@
             <View
                 style="@style/horizontal_line_view"
                 />
-            <View
+            <!--<View
                 android:layout_marginTop="15dp"
                 style="@style/horizontal_line_view"
-                />
+                />-->
         </LinearLayout>
     </ScrollView>
 

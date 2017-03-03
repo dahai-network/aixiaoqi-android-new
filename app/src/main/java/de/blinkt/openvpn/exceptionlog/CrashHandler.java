@@ -98,7 +98,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 //					restartIntent); // 1秒钟后重启应用
 			application.AppExit();
 			//退出程序
-            System.exit(1);
+            System.exit(0);
 		}
 	}
 

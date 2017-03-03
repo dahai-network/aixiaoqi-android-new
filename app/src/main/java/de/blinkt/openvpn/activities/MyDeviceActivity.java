@@ -285,16 +285,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				}
 				break;
 			case R.id.findStatusLinearLayout:
-
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						if (!CommonTools.isFastDoubleClick(3000)) {
+				if (!CommonTools.isFastDoubleClick(3000)) {
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
 							SendCommandToBluetooth.sendMessageToBlueTooth(FIND_DEVICE);
 						}
-					}
-				}).start();
-
+					}).start();
+				}
 				break;
 			case register_sim_statue:
 				//如果激活卡成功后，刷新按钮点击需要将标记激活
@@ -673,13 +671,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	String url;
 	DialogBalance Upgrade;
+
 	private void showDialogGOUpgrade(String desc) {
 		Log.d(TAG, "showDialogGOUpgrade");
 		//不能按返回键，只能二选其一
-	if(Upgrade==null){
-		 Upgrade = new DialogBalance(this, MyDeviceActivity.this, R.layout.dialog_balance, DOWNLOAD_SKY_UPGRADE);
-	}
-		if(!Upgrade.getDialog().isShowing()){
+		if (Upgrade == null) {
+			Upgrade = new DialogBalance(this, MyDeviceActivity.this, R.layout.dialog_balance, DOWNLOAD_SKY_UPGRADE);
+		}
+		if (!Upgrade.getDialog().isShowing()) {
 			Upgrade.getDialog().show();
 		}
 		Upgrade.changeText(desc, getResources().getString(R.string.upgrade), 1);

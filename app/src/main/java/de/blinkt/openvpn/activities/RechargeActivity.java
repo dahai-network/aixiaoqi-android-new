@@ -208,7 +208,7 @@ public class RechargeActivity extends BaseActivity implements InterfaceCallback,
 			case R.id.nextBtn:
 				//友盟方法统计
 				HashMap<String, String> map = new HashMap<>();
-				if (!CommonTools.isFastDoubleClick(1000)) {
+				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
 				nextBtn.setEnabled(false);
@@ -216,12 +216,14 @@ public class RechargeActivity extends BaseActivity implements InterfaceCallback,
 					map.put("type", ALI_PAY + "");
 					MobclickAgent.onEvent(this, CHARGE, map);
 					pay_way = ALI_PAY;
+					showProgress(getString(R.string.ali_paying));
 					pay(ALI_PAY);
 				} else {
 					if (isWXAppInstalledAndSupported()) {
 						map.put("type", WEIXIN_PAY + "");
 						MobclickAgent.onEvent(this, CHARGE, map);
 						pay_way = WEIXIN_PAY;
+						showProgress(getString(R.string.weixin_paying));
 						pay(WEIXIN_PAY);
 					} else {
 						nextBtn.setEnabled(true);

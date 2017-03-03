@@ -16,17 +16,38 @@ public class GetPakcetHttp extends BaseHttp {
 	private final int PageSize;
 	private final int category;
 	private PacketEntity packetEntity;
+	/**
+	 * IsCategoryFlow（是否流量类型）
+	 * <p>
+	 * IsCategoryCall（是否通话类型）
+	 * <p>
+	 * IsCategoryDualSimStandby（是否双卡双待类型）
+	 * <p>
+	 * IsCategoryKingCard（是否双卡双待类型）
+	 */
+	private String IsCategoryFlow;
+	private String IsCategoryCall;
+	private String IsCategoryDualSimStandby;
+	private String IsCategoryKingCard;
 
 
 	public PacketEntity getPacketEntity() {
 		return packetEntity;
 	}
 
-	public GetPakcetHttp(InterfaceCallback call, int cmdType_, int PageNumber, int PageSize , int category) {
-		super(call,cmdType_);
+	public GetPakcetHttp(InterfaceCallback call, int cmdType_, int PageNumber, int PageSize, int category) {
+		super(call, cmdType_);
 		this.PageNumber = PageNumber;
 		this.PageSize = PageSize;
 		this.category = category;
+	}
+
+	//设置筛选条件
+	public void setScreenType(String IsCategoryFlow, String IsCategoryCall, String IsCategoryDualSimStandby, String IsCategoryKingCard) {
+		this.IsCategoryFlow = IsCategoryFlow;
+		this.IsCategoryCall = IsCategoryCall;
+		this.IsCategoryDualSimStandby = IsCategoryDualSimStandby;
+		this.IsCategoryKingCard = IsCategoryKingCard;
 	}
 
 	@Override
@@ -37,6 +58,10 @@ public class GetPakcetHttp extends BaseHttp {
 		params.put("pageNumber", URLEncoder.encode(PageNumber + "", "utf-8"));
 		params.put("pageSize", URLEncoder.encode(PageSize + "", "utf-8"));
 		params.put("category", URLEncoder.encode(category + "", "utf-8"));
+		params.put("IsCategoryFlow", URLEncoder.encode(IsCategoryFlow + "", "utf-8"));
+		params.put("IsCategoryCall", URLEncoder.encode(IsCategoryCall + "", "utf-8"));
+		params.put("IsCategoryDualSimStandby", URLEncoder.encode(IsCategoryDualSimStandby + "", "utf-8"));
+		params.put("IsCategoryKingCard", URLEncoder.encode(IsCategoryKingCard + "", "utf-8"));
 	}
 
 	@Override
