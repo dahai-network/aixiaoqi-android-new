@@ -600,10 +600,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
 				ReceiveBLEMoveReceiver.isConnect = false;
-				mService.disconnect();
 				registFail();
 				CommonTools.showShortToast(this, "已解绑设备");
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
+				mService.disconnect();
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
