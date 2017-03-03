@@ -124,6 +124,7 @@ public class ReceiveSocketService extends Service {
 				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.TCP_DISCONNECT);
 			}
 			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
+			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "restart connect :\n" );
 			reConnect();
 		}
 	}
@@ -133,7 +134,7 @@ public class ReceiveSocketService extends Service {
 	 *
 	 * @return
 	 **/
-	public  void recordStringLog(String text) {// 新建或打开日志文件
+	public static void recordStringLog(String text) {// 新建或打开日志文件
 		String path = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi/";
 		String fileName = "TCP" + DateUtils.getCurrentDateForFile() + ".text";
 		File file = new File(path + fileName);
