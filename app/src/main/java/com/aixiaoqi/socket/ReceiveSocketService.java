@@ -70,6 +70,10 @@ public class ReceiveSocketService extends Service {
 		@Override
 		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
 			Log.e("Blue_Chanl", "接收数据 - onReceive");
+			if(AutoReceiver.t_wakelock!=null){
+				AutoReceiver.t_wakelock.release();
+				AutoReceiver.t_wakelock=null;
+			}
 			TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s, length));
 			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
@@ -88,8 +92,8 @@ public class ReceiveSocketService extends Service {
 
 	//首次创建连接失败，重试三次还不成功，则断开连接，并且提示注册失败。
 	private void connectFailReconnect() {
-
-		if (!isDisconnect) {
+		ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "connect fail:\n" );
+		if(!isDisconnect){
 			CommonTools.delayTime(5000);
 			if (tcpClient != null && !tcpClient.isConnected()) {
 				if (contactFailCount <= 3) {
@@ -122,6 +126,7 @@ public class ReceiveSocketService extends Service {
 				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.TCP_DISCONNECT);
 			}
 			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
+			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "restart connect :\n" );
 			reConnect();
 		}
 	}
@@ -131,7 +136,7 @@ public class ReceiveSocketService extends Service {
 	 *
 	 * @return
 	 **/
-	public void recordStringLog(String text) {// 新建或打开日志文件
+	public static void recordStringLog(String text) {// 新建或打开日志文件
 		String path = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi/";
 		String fileName = "TCP" + DateUtils.getCurrentDateForFile() + ".text";
 		File file = new File(path + fileName);
@@ -167,7 +172,7 @@ public class ReceiveSocketService extends Service {
 			intent.setAction(HEARTBEAT_PACKET_TIMER);
 			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
 			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 40 * 1000, sender);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60 * 1000, sender);
 		}
 	}
 

@@ -13,6 +13,7 @@ import com.aixiaoqi.socket.SocketConstant;
 
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.util.DateUtils;
 
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
@@ -27,6 +28,7 @@ public class NetReceiver extends BroadcastReceiver {
         if (sendYiZhengService != null){
             SocketConnection.mReceiveSocketService.disconnect();
             registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REG_STATUE_CHANGE);
+            ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "network change :\n" );
             sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
         }
     }
@@ -50,7 +52,7 @@ private void restartConnect(){
         if (ni != null && ni.isConnectedOrConnecting()) {
             switch (ni.getType()) {
                 case ConnectivityManager.TYPE_WIFI:
-
+                    restartConnect();
                     break;
                 case ConnectivityManager.TYPE_MOBILE:
                     switch (ni.getSubtype()) {

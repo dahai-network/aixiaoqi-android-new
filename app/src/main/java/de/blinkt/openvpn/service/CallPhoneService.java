@@ -31,46 +31,56 @@ import de.blinkt.openvpn.util.querylocaldatebase.TipHelper;
 /**
  * Created by Administrator on 2016/11/21 0021.
  */
-public class CallPhoneService extends Service implements SipEngineEventListener, InterfaceCallback {
-	@Nullable
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
-	}
-
-	public static String endFlag = "endCall";
-	public static String connectedFlag = "startCall";
-	public static String callProcessing = "callProcessing";
-	public static String waitConnected = "waitConnected";
-	public static String reportFlag = "reportFlag";
-	public static String CALL_FAIL = "callfail";
-	private String TAG = "CallPhoneService";
-	public SipEngineCore the_sipengineReceive;
-	private Timer mTimerReceive = new Timer("51DTY scheduler");
-	private SharedUtils sharedUtils;
-
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		httpToken();
-//		setWifiDormancy();
-	}
-
-	private void httpToken() {
-		sharedUtils = SharedUtils.getInstance();
-		CheckTokenHttp http = new CheckTokenHttp(this, HttpConfigUrl.COMTYPE_CHECKTOKEN);
-		new Thread(http).start();
-	}
-
-	public void setWifiDormancy() {
-		int wifiSleepValue = Settings.System.getInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-		if (wifiSleepValue == 0) {
-			Log.e("wifiSleepValue", "wifiSleepValue=" + wifiSleepValue);
-			Settings.System.putInt(getContentResolver(), android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
-			wifiSleepValue = Settings.System.getInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-			Log.e("wifiSleepValue", "wifiSleepValue=" + wifiSleepValue);
-		}
-	}
+public class CallPhoneService extends Service implements SipEngineEventListener,InterfaceCallback {
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+    public static String endFlag = "endCall";
+    public static String connectedFlag = "startCall";
+    public static String callProcessing = "callProcessing";
+    public static String waitConnected = "waitConnected";
+    public static String reportFlag = "reportFlag";
+    public static String CALL_FAIL = "callfail";
+    private String TAG = "CallPhoneService";
+    public  SipEngineCore the_sipengineReceive;
+    private Timer mTimerReceive = new Timer("51DTY scheduler");
+    private SharedUtils sharedUtils;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        httpToken();
+        setWifiDormancy();
+    }
+    private void httpToken(){
+        sharedUtils = SharedUtils.getInstance();
+        CheckTokenHttp http = new CheckTokenHttp(this, HttpConfigUrl.COMTYPE_CHECKTOKEN);
+        new Thread(http).start();
+    }
+    public void setWifiDormancy( ){
+//        int wifiSleepValue= Settings.Global.getInt(getContentResolver(),Settings.Global.WIFI_SLEEP_POLICY,Settings.Global.WIFI_SLEEP_POLICY_DEFAULT);
+//        Log.e("wifiSleepValue11111","wifiSleepValue="+wifiSleepValue);
+//        Settings.Global.putInt(getContentResolver(), Settings.Global.WIFI_SLEEP_POLICY,Settings.Global.WIFI_SLEEP_POLICY_NEVER);
+//        wifiSleepValue= Settings.Global.getInt(getContentResolver(),Settings.Global.WIFI_SLEEP_POLICY,Settings.Global.WIFI_SLEEP_POLICY_DEFAULT);
+//        Log.e("wifiSleepValue22222","wifiSleepValue="+wifiSleepValue);
+//        int wifiSleepPolicy=0;
+//        wifiSleepPolicy=Settings.System.getInt(getContentResolver(),
+//                android.provider.Settings.System.WIFI_SLEEP_POLICY,
+//                Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+//        Log.e("wifiSleepValue11111","---> 修改前的Wifi休眠策略值 WIFI_SLEEP_POLICY="+wifiSleepPolicy);
+//
+//
+//        Settings.System.putInt(getContentResolver(),
+//                android.provider.Settings.System.WIFI_SLEEP_POLICY,
+//                Settings.System.WIFI_SLEEP_POLICY_NEVER);
+//
+//
+//        wifiSleepPolicy=Settings.System.getInt(getContentResolver(),
+//                android.provider.Settings.System.WIFI_SLEEP_POLICY,
+//                Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+//        Log.e("wifiSleepValue22222","---> 修改后的Wifi休眠策略值 WIFI_SLEEP_POLICY="+wifiSleepPolicy);
+    }
 
 	private void registSipForReceive() {
 		SharedUtils sharedUtils = SharedUtils.getInstance();

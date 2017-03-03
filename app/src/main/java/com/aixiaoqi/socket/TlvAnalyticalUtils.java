@@ -12,6 +12,7 @@ import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.DateUtils;
 
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
@@ -185,6 +186,7 @@ public class TlvAnalyticalUtils {
 		if (TestProvider.sendYiZhengService != null){
 			CommonTools.delayTime(2000);
 			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
+			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "service disconncet :\n");
 			TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
