@@ -270,6 +270,12 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	}
 
 	@Override
+	protected void onStop() {
+		dismissProgress();
+		super.onStop();
+	}
+
+	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		sureTextView.setEnabled(true);
 	}
@@ -281,6 +287,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 
 	@Override
 	protected void onDestroy() {
+
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(isWriteReceiver);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(finishActivityReceiver);
 		super.onDestroy();

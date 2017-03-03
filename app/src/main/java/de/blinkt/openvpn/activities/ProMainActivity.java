@@ -861,11 +861,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				ArrayList<String> message = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
 //				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
 
-				if (message.size() == 0 || !message.get(0).substring(0, 2).equals("55")) {
+				if (message!=null&&message.size() == 0 || !message.get(0).substring(0, 2).equals("55")) {
 					return;
 				}
 				//判断是否是分包（0x80的包）
-				if (message.size() == 0 || !message.get(0).substring(2, 4).equals("80")) {
+				if (message!=null&&message.size() == 0 || !message.get(0).substring(2, 4).equals("80")) {
 					return;
 				}
 				try {

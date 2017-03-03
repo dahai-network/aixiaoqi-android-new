@@ -70,11 +70,11 @@ public class ReceiveSocketService extends Service {
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
-			Log.e("Blue_Chanl", "接收数据 - onReceive");
-			if(AutoReceiver.t_wakelock!=null){
-				AutoReceiver.t_wakelock.release();
-				AutoReceiver.t_wakelock=null;
-			}
+//			Log.e("Blue_Chanl", "接收数据 - onReceive");
+//			if(AutoReceiver.t_wakelock!=null){
+//				AutoReceiver.t_wakelock.release();
+//				AutoReceiver.t_wakelock=null;
+//			}
 			TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s, length));
 			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
@@ -168,7 +168,7 @@ public class ReceiveSocketService extends Service {
 			intent.setAction(HEARTBEAT_PACKET_TIMER);
 			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
 			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60 * 1000, sender);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3*60 * 1000, sender);
 		}
 	}
 
