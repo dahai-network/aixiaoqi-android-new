@@ -11,6 +11,8 @@ import java.net.SocketAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.blinkt.openvpn.util.DateUtils;
+
 
 /**
  * TCP Socket客户端
@@ -60,6 +62,7 @@ public abstract class TcpClient implements Runnable {
 
 			}
 		}catch (ConnectException e){
+
 			this.onConnectFailed();
 		}
 		catch (Exception e) {

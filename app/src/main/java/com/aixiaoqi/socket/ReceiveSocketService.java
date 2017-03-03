@@ -71,10 +71,10 @@ public class ReceiveSocketService extends Service {
 		@Override
 		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
 			Log.e("Blue_Chanl", "接收数据 - onReceive");
-//			if(AutoReceiver.t_wakelock!=null){
-//				AutoReceiver.t_wakelock.release();
-//				AutoReceiver.t_wakelock=null;
-//			}
+			if(AutoReceiver.t_wakelock!=null){
+				AutoReceiver.t_wakelock.release();
+				AutoReceiver.t_wakelock=null;
+			}
 			TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s, length));
 			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
@@ -92,7 +92,7 @@ public class ReceiveSocketService extends Service {
 	};
 	//首次创建连接失败，重试三次还不成功，则断开连接，并且提示注册失败。
 	private void connectFailReconnect() {
-
+		ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "connect fail:\n" );
 		if(!isDisconnect){
 			CommonTools.delayTime(5000);
 			if(tcpClient!=null&&!tcpClient.isConnected()){
@@ -168,7 +168,7 @@ public class ReceiveSocketService extends Service {
 			intent.setAction(HEARTBEAT_PACKET_TIMER);
 			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
 			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 30 * 1000, sender);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60 * 1000, sender);
 		}
 	}
 
