@@ -67,6 +67,18 @@ public class MyReceiver extends BroadcastReceiver {
 			processNotification(context, bundle);
 			}else if("SMSSendResult".equals(type)){
 				processCustomMessage(context, bundle);
+			}	if("EjoDVCloseLontTime" .equals(type)){
+				if (SocketConstant.REGISTER_STATUE_CODE == 3||SocketConstant.REGISTER_STATUE_CODE == 2) {
+					SocketConstant.REGISTER_STATUE_CODE = 2;
+					if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+						//从预读取数据那里重新注册
+						registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REG_STATUE_CHANGE);
+						connectGoip();
+					} else {
+						registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+					}
+
+				}
 			}
 
 		} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
@@ -77,23 +89,7 @@ public class MyReceiver extends BroadcastReceiver {
 			//TODO 注册成功后与一正服务器断开连接
 			String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
 			Log.e(TAG, "[MyReceiver] 用户点击打开了通知"+extra);
-			if(!TextUtils.isEmpty(extra)) {
-				JsonObject jsonObject = new JsonParser().parse(extra).getAsJsonObject();
-				String tipActivityType = jsonObject.get("alertType").getAsString();
-				if("EjoDVCloseLontTime" .equals(tipActivityType)){
-					if (SocketConstant.REGISTER_STATUE_CODE == 3||SocketConstant.REGISTER_STATUE_CODE == 2) {
-						SocketConstant.REGISTER_STATUE_CODE = 2;
-						if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
-							//从预读取数据那里重新注册
-							registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REG_STATUE_CHANGE);
-							connectGoip();
-						} else {
-							registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
-						}
 
-					}
-				}
-			}
 //			Log.e(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
 
 		} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {

@@ -23,7 +23,7 @@ public class SocketConstant {
 			, Integer.toHexString(198)//预读数据压缩前的长度
 			, Integer.toHexString(199)};//预读数据内容
 	public static String[] CONNENCT_VALUE = {"01",//01，请求GoIp模块的值
-			"b4"//101,链接存活时间
+			"021c"//101,链接存活时间
 			, "01"//107,是否请求预读数据
 			, ""//120,服务寻址sessionID
 			, "01"//121,数据链接协议
@@ -80,5 +80,5 @@ public class SocketConstant {
 
 	public static String REGISTER_REMOTE_ADDRESS;
 	public static String REGISTER_ROMOTE_PORT;
-	public static final  String  HEARTBEAT_PACKET_TIMER="heartbeat_packet_timer";
+	public static final String HEARTBEAT_PACKET_TIMER = "heartbeat_packet_timer";
 }

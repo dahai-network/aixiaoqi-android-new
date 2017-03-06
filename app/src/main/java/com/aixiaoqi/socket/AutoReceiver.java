@@ -21,7 +21,6 @@ public class AutoReceiver extends BroadcastReceiver {
 	private String TAG = "AutoReceiver";
 
 	public static PowerManager.WakeLock t_wakelock;
-
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 
@@ -30,14 +29,14 @@ public class AutoReceiver extends BroadcastReceiver {
 				@Override
 				public void run() {
 					if (TestProvider.sendYiZhengService != null) {
-						Log.e("AutoReceiver", "AutoReceiver111" + System.currentTimeMillis());
+//						Log.e("AutoReceiver","AutoReceiver111"+System.currentTimeMillis());
 //						if (t_wakelock == null) {
-//							PowerManager t_power = (PowerManager) context
+//							PowerManager	t_power = (PowerManager) context
 //									.getSystemService(POWER_SERVICE);
-//							Log.e("AutoReceiver", "AutoReceiver222" + System.currentTimeMillis());
-//							t_wakelock = t_power.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SleepMonitor");
+//							Log.e("AutoReceiver","AutoReceiver222"+System.currentTimeMillis());
+//						 t_wakelock = t_power.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "SleepMonitor");
 //							t_wakelock.acquire();
-//							Log.e("AutoReceiver", "AutoReceiver333" + System.currentTimeMillis());
+//							Log.e("AutoReceiver","AutoReceiver333"+System.currentTimeMillis());
 //						}
 						Log.i(TAG, DateUtils.getCurrentDateForFileDetail() + " 发送心跳包，是否联网：" + NetworkUtils.isNetworkAvailable(context));
 						Log.e("AutoReceiver", "AutoReceiver444" + System.currentTimeMillis());
