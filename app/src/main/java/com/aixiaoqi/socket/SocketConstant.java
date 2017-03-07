@@ -80,5 +80,5 @@ public class SocketConstant {
 
 	public static String REGISTER_REMOTE_ADDRESS;
 	public static String REGISTER_ROMOTE_PORT;
-	public static final  String  HEARTBEAT_PACKET_TIMER="heartbeat_packet_timer";
+	public static final String HEARTBEAT_PACKET_TIMER = "heartbeat_packet_timer";
 }

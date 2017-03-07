@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aixiaoqi.socket.AutoReceiver;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
@@ -172,7 +171,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			bleMoveReceiver = new ReceiveBLEMoveReceiver();
 			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(bleMoveReceiver, makeGattUpdateIntentFilter());
 			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(updateIndexTitleReceiver, makeGattUpdateIntentFilter());
-			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(screenoffReceive, screenoffIntentFilter());
+			registerReceiver(screenoffReceive, screenoffIntentFilter());
 			//打开蓝牙服务后开始搜索
 			searchBLE();
 		}
@@ -269,6 +268,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
 		intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
+		intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 		return intentFilter;
 	}
 
@@ -504,9 +504,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			intentCallPhone = new Intent(this, CallPhoneService.class);
 			startService(intentCallPhone);
 		}
-		if (mService != null && !mService.isOpenBlueTooth()) {
-			sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
-		}
 	}
 
 	public void hidePhoneBottomBar() {
@@ -578,7 +575,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	protected void onDestroy() {
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
-//		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(screenoffReceive);
+		unregisterReceiver(screenoffReceive);
 		bleMoveReceiver = null;
 		screenoffReceive = null;
 		if (intentCallPhone != null)
@@ -699,7 +696,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 
 	}
-
 
 	private void scanLeDevice(final boolean enable) {
 		Log.e(TAG, "scanLeDevice");
@@ -870,11 +866,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				ArrayList<String> message = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
 //				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
 
-				if (message!=null&&message.size() == 0 || !message.get(0).substring(0, 2).equals("55")) {
+				if (message != null && message.size() == 0 || !message.get(0).substring(0, 2).equals("55")) {
 					return;
 				}
 				//判断是否是分包（0x80的包）
-				if (message!=null&&message.size() == 0 || !message.get(0).substring(2, 4).equals("80")) {
+				if (message != null && message.size() == 0 || !message.get(0).substring(2, 4).equals("80")) {
 					return;
 				}
 				try {
@@ -920,7 +916,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		}
 	};
-private boolean isBatteryCharging=false;
+	private  boolean isBatteryCharging=false;
 	private BroadcastReceiver screenoffReceive = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -939,10 +935,34 @@ private boolean isBatteryCharging=false;
 				}
 				Log.e(TAG,"isBatteryCharging="+isBatteryCharging);
 			}
-		else	if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())||!isBatteryCharging) {
+			else	if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())||!isBatteryCharging) {
 				Log.i("screenoff", "The screen has turned off");
 				// Turn the screen back on again, from the main thread
-						timerStartCpu();
+				timerStartCpu();
+			}
+			else 	if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+				int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+						BluetoothAdapter.ERROR);
+				switch (state) {
+					case BluetoothAdapter.STATE_OFF:
+						Log.d("aaa", "STATE_OFF 手机蓝牙关闭");
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
+						break;
+					case BluetoothAdapter.STATE_TURNING_OFF:
+						Log.d("aaa", "STATE_TURNING_OFF 手机蓝牙正在关闭");
+						break;
+					case BluetoothAdapter.STATE_ON:
+						Log.d("aaa", "STATE_ON 手机蓝牙开启");
+						if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
+							sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
+						} else {
+							sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
+						}
+						break;
+					case BluetoothAdapter.STATE_TURNING_ON:
+						Log.d("aaa", "STATE_TURNING_ON 手机蓝牙正在开启");
+						break;
+				}
 			}
 		}
 	};
@@ -950,11 +970,11 @@ private boolean isBatteryCharging=false;
 	PendingIntent sender;
 	private void timerStartCpu() {
 		if(am==null){
-		Intent intent = new Intent(this, StartCPUService.class);
-		intent.setAction(HEARTBEAT_PACKET_TIMER);
-		sender = PendingIntent.getService(this, 0, intent, 0);
-		am = (AlarmManager) getSystemService(ALARM_SERVICE);
-		am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3*60 * 1000, sender);
+			Intent intent = new Intent(this, StartCPUService.class);
+			intent.setAction(HEARTBEAT_PACKET_TIMER);
+			sender = PendingIntent.getService(this, 0, intent, 0);
+			am = (AlarmManager) getSystemService(ALARM_SERVICE);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3*60 * 1000, sender);
 		}
 	}
 	private void cancelTimer() {
@@ -975,9 +995,6 @@ private boolean isBatteryCharging=false;
 	}
 
 	private boolean isDfuServiceRunning() {
-		if (ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName())) {
-			return true;
-		}
-		return false;
+		return ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName());
 	}
 }

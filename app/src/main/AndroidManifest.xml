@@ -411,6 +411,7 @@
             android:enabled="true"/>
         <service
             android:name="com.aixiaoqi.socket.ReceiveSocketService"
+            android:persistent="true"
             android:enabled="true"/>
 
         <activity

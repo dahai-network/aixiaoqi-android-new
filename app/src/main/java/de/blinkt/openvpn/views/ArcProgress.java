@@ -260,11 +260,7 @@ public class ArcProgress extends View {
 	@Override
 	public void setVisibility(int visibility) {
 		super.setVisibility(visibility);
-		if (visibility == View.GONE) {
-			isDraw = false;
-		} else {
-			isDraw = true;
-		}
+		isDraw = visibility != View.GONE;
 	}
 
 	@Override

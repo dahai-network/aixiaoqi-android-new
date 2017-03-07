@@ -200,7 +200,7 @@
     <string name="write_your_advice">请写下您的建议(不少于10字，不多于500字)</string>
     <string name="write_success">发送成功！</string>
 
-    <string name="no_wifi">请检查网络是否已连接</string>
+    <string name="no_wifi">网络不良或者请检查网络是否已连接</string>
     <string name="no_net">网络连接失败，点击</string>
     <string name="retry">重试</string>
     <string name="last_version">固件已经是最新的版本</string>

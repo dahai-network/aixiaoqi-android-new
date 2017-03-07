@@ -77,7 +77,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	public static String nullCardId = null;
 	private int UPDATE_HISTORY_DATE = 1;
 	private int WRITE_CARD_COMPLETE = 2;
-//	private String dataType;//发出数据以后需要把dataType重置为-1；
+	//	private String dataType;//发出数据以后需要把dataType重置为-1；
 	private Handler handler = new Handler() {
 		@Override
 		public void dispatchMessage(Message msg) {
@@ -91,6 +91,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	};
 	//重连次数
 	public static int retryTime;
+
 	public void onReceive(final Context context, Intent intent) {
 		this.context = context;
 		final String action = intent.getAction();
@@ -192,8 +193,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			}
 		}
 		if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
-			final ArrayList<String>  messages= intent.getStringArrayListExtra(UartService.EXTRA_DATA);
-			if(messages.size()==0){
+			final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
+			if (messages.size() == 0) {
 				return;
 			}
 			new Thread(new Runnable() {
@@ -209,14 +210,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //					if (dataID == 0) {
 //						dataType = messageFromBlueTooth.substring(6, 10);
 //					}
-					String firstPackage=	messages.get(0).substring(0,2);
-			String		dataType=messages.get(0).substring(6,10);
+					String firstPackage = messages.get(0).substring(0, 2);
+					String dataType = messages.get(0).substring(6, 10);
 
-					if(messages.size()==1){
-						Log.e(TAG,messages.get(0));
-					}else {
-						for(int i=0;i<messages.size();i++){
-							Log.e(TAG,messages.get(i));
+					if (messages.size() == 1) {
+						Log.e(TAG, messages.get(0));
+					} else {
+						for (int i = 0; i < messages.size(); i++) {
+							Log.e(TAG, messages.get(i));
 						}
 					}
 //					messages.add(messageFromBlueTooth);
@@ -289,7 +290,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //									break;
 								//电量多少
 								case RECEIVE_ELECTRICITY:
-									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(10,12),16));
+									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(10, 12), 16));
 									break;
 //								case (byte) 0x05:
 //									//充电状态
@@ -380,14 +381,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
 //									}
-									String deviceVesion=Integer.parseInt(messages.get(0).substring(10, 12),16)+ "." +  Integer.parseInt(messages.get(0).substring(12, 14),16);
-									Log.i(TAG, "固件版本号：" +deviceVesion + "，电量：" + messages.get(0).substring(14,16));
-									utils.writeString(Constant.BRACELETVERSION,deviceVesion);
-									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(14,16),16));
+									String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
+									Log.i(TAG, "固件版本号：" + deviceVesion + "，电量：" + messages.get(0).substring(14, 16));
+									utils.writeString(Constant.BRACELETVERSION, deviceVesion);
+									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(14, 16), 16));
 									break;
 
 								case Constant.RETURN_POWER:
-									if (messages.get(0).substring(10,12).equals("01")) {
+									if (messages.get(0).substring(10, 12).equals("01")) {
 										//当上电完成则需要发送写卡命令
 										Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
 										if (!IS_TEXT_SIM && isGetnullCardid) {
@@ -400,7 +401,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											}
 										}
 
-									} else if (messages.get(0).substring(10,12).equals("11")) {
+									} else if (messages.get(0).substring(10, 12).equals("11")) {
 										if (!IS_TEXT_SIM) {
 											Intent cardBreakIntent = new Intent();
 											cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
@@ -416,7 +417,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									break;
 								case Constant.LAST_CHARGE_POWER_TIMER:
 
-									if ((Integer.parseInt(messages.get(0).substring(2,4),16) & 0x80) == 0x80) {
+									if ((Integer.parseInt(messages.get(0).substring(2, 4), 16) & 0x80) == 0x80) {
 										mStrSimCmdPacket = PacketeUtil.Combination(messages);
 										// 接收到一个完整的数据包,处理信息
 										ReceiveDBOperate(mStrSimCmdPacket);
@@ -486,6 +487,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				break;
 			//获取空卡序列号第一步
 			case Constant.WRITE_SIM_STEP_ONE:
+				Log.i("Bluetooth", "进入获取空卡序列号第一步:" + mStrSimCmdPacket);
 				if (mStrSimCmdPacket.contains(WRITE_CARD_STEP1)) {
 					if (isGetnullCardid) {
 						sendMessageSeparate(Constant.WRITE_SIM_STEP_TWO, Constant.WRITE_SIM_DATA);
@@ -496,6 +498,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				break;
 			//获取空卡序列号第二步
 			case Constant.WRITE_SIM_STEP_TWO:
+				Log.i("Bluetooth", "进入获取空卡序列号第二步:" + mStrSimCmdPacket);
 				if (mStrSimCmdPacket.contains(GET_NULLCARDID)) {
 					if (isGetnullCardid)
 						sendMessageSeparate(Constant.WRITE_SIM_STEP_THREE, Constant.WRITE_SIM_DATA);
@@ -505,6 +508,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				break;
 			//获取空卡序列号第三部
 			case Constant.WRITE_SIM_STEP_THREE:
+				Log.i("Bluetooth", "进入获取空卡序列号第三步:" + mStrSimCmdPacket);
 				if (mStrSimCmdPacket.contains(WRITE_CARD_STEP5)
 						&& mStrSimCmdPacket.contains(RECEIVE_NULL_CARD_CHAR)) {
 					if (isGetnullCardid) {
@@ -524,7 +528,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						}
 					}
 				} else {
-					if (mStrSimCmdPacket.startsWith("9000") && !CommonTools.isFastDoubleClick(1000)) {
+					if (mStrSimCmdPacket.startsWith("9000")) {
 						//新型写卡完成
 						handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
 						SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
