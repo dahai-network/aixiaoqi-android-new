@@ -171,7 +171,7 @@ public class MyReceiver extends BroadcastReceiver {
 	NotificationManager	mNotificationManager;
 	private void processNotification(Context context,Bundle bundle){
 		if(mNotificationManager==null){
-			mNotificationManager = (NotificationManager)context.getSystemService(context.NOTIFICATION_SERVICE);
+			mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 		}
 		processCustomNotify(context);
 		initNotify(context,bundle);

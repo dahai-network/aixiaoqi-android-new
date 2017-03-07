@@ -10,7 +10,7 @@ import android.widget.ScrollView;
 
 /**
  * 有弹性的ScrollView 实现下拉弹回和上拉弹回
- * 
+ *
  * @author shaozuhceng
  */
 public class UserDefineScrollView extends ScrollView {
@@ -53,6 +53,7 @@ public class UserDefineScrollView extends ScrollView {
 
 	@Override
 	protected void onFinishInflate() {
+		super.onFinishInflate();
 		if (getChildCount() > 0) {
 			contentView = getChildAt(0);
 		}
@@ -91,55 +92,55 @@ public class UserDefineScrollView extends ScrollView {
 		int action = ev.getAction();
 
 		switch (action) {
-		case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_DOWN:
 
-			// 判断是否可以上拉和下拉
-			canPullDown = isCanPullDown();
-			canPullUp = isCanPullUp();
-
-			// 记录按下时的Y值
-			startY = ev.getY();
-
-			break;
-
-		case MotionEvent.ACTION_UP:
-
-			boundBack();
-
-			break;
-		case MotionEvent.ACTION_MOVE:
-
-			// 在移动的过程中， 既没有滚动到可以上拉的程度， 也没有滚动到可以下拉的程度
-			if (!canPullDown && !canPullUp) {
-				startY = ev.getY();
+				// 判断是否可以上拉和下拉
 				canPullDown = isCanPullDown();
 				canPullUp = isCanPullUp();
 
+				// 记录按下时的Y值
+				startY = ev.getY();
+
 				break;
-			}
 
-			// 计算手指移动的距离
-			float nowY = ev.getY();
-			int deltaY = (int) (nowY - startY);
+			case MotionEvent.ACTION_UP:
 
-			// 是否应该移动布局
-			boolean shouldMove = (canPullDown && deltaY > 0) // 可以下拉， 并且手指向下移动
-					|| (canPullUp && deltaY < 0) // 可以上拉， 并且手指向上移动
-					|| (canPullUp && canPullDown); // 既可以上拉也可以下拉（这种情况出现在ScrollView包裹的控件比ScrollView还小）
+				boundBack();
 
-			if (shouldMove) {
-				// 计算偏移量
-				int offset = (int) (deltaY * MOVE_FACTOR);
+				break;
+			case MotionEvent.ACTION_MOVE:
 
-				// 随着手指的移动而移动布局
-				contentView.layout(originalRect.left, originalRect.top + offset, originalRect.right, originalRect.bottom + offset);
+				// 在移动的过程中， 既没有滚动到可以上拉的程度， 也没有滚动到可以下拉的程度
+				if (!canPullDown && !canPullUp) {
+					startY = ev.getY();
+					canPullDown = isCanPullDown();
+					canPullUp = isCanPullUp();
 
-				isMoved = true; // 记录移动了布局
-			}
+					break;
+				}
 
-			break;
-		default:
-			break;
+				// 计算手指移动的距离
+				float nowY = ev.getY();
+				int deltaY = (int) (nowY - startY);
+
+				// 是否应该移动布局
+				boolean shouldMove = (canPullDown && deltaY > 0) // 可以下拉， 并且手指向下移动
+						|| (canPullUp && deltaY < 0) // 可以上拉， 并且手指向上移动
+						|| (canPullUp && canPullDown); // 既可以上拉也可以下拉（这种情况出现在ScrollView包裹的控件比ScrollView还小）
+
+				if (shouldMove) {
+					// 计算偏移量
+					int offset = (int) (deltaY * MOVE_FACTOR);
+
+					// 随着手指的移动而移动布局
+					contentView.layout(originalRect.left, originalRect.top + offset, originalRect.right, originalRect.bottom + offset);
+
+					isMoved = true; // 记录移动了布局
+				}
+
+				break;
+			default:
+				break;
 		}
 
 		return super.dispatchTouchEvent(ev);

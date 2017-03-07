@@ -148,7 +148,8 @@ public class CellPhoneFragment extends Fragment  {
 
 
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void onAttach(Activity activity) {
         // TODO Auto-generated method stub
         this.activity = activity;

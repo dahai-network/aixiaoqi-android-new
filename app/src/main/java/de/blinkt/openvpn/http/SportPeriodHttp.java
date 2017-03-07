@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.model.SportPeriodEntity;
-;
 
 /**
  * Created by Administrator on 2016/9/10 0010.

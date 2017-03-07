@@ -433,9 +433,7 @@ public class UartService extends Service implements Serializable {
 			return false;
 
 		final BluetoothGattCharacteristic scCharacteristic = gaService.getCharacteristic(SERVICE_CHANGED_CHARACTERISTIC);
-		if (scCharacteristic == null)
-			return false;
-		return true;
+		return scCharacteristic != null;
 	}
 
 	//用于某个接收的UUID写入mBluetoothGatt的监听callback里面。在onCharacteristicChanged()会产生响应

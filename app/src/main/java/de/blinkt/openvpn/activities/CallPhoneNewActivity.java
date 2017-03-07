@@ -42,8 +42,6 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLCONTROLVOIDE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLHANGUP;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONEQUIET;
 
-;
-
 /**
  * Created by Administrator on 2016/9/19 0019.
  */

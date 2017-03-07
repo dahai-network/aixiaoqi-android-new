@@ -229,7 +229,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				&& conStatusTextView.getText().toString().equals(getResources().getString(R.string.index_registing))) {
 			startAnim();
 		}
-		if (percentInt != 0) {
+		if (percentInt != 0 && ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.mConnectionState == UartService.STATE_CONNECTED) {
 			percentTextView.setText(percentInt + "%");
 		}
 	}
@@ -295,29 +295,31 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				}
 				break;
 			case register_sim_statue:
-				//如果激活卡成功后，刷新按钮点击需要将标记激活
-				isGetnullCardid = true;
-				nullCardId = null;
-				percentInt = 0;
-				//TODO 处理异常
-				//如没有没插卡检测插卡并且提示用户重启手环。
-				//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
-				//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
+				if (!CommonTools.isFastDoubleClick(3000)) {
+					//如果激活卡成功后，刷新按钮点击需要将标记激活
+					isGetnullCardid = true;
+					nullCardId = null;
+					percentInt = 0;
+					//TODO 处理异常
+					//如没有没插卡检测插卡并且提示用户重启手环。
+					//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
+					//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
-				startAnim();
-				if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
-					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
-				} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
-					if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
-						//从预读取数据那里重新注册
-						connectGoip();
-					} else {
-						registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+					startAnim();
+					if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
+						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+					} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
+						if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+							//从预读取数据那里重新注册
+							connectGoip();
+						} else {
+							registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+						}
+
+					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+						//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
+						getDeviceSimRegStatues();
 					}
-
-				} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-					//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
-					getDeviceSimRegStatues();
 				}
 				break;
 
@@ -455,11 +457,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 
 				try {
-					if (messages==null||messages.size() == 0 || !messages.get(0).substring(0, 2).equals("55")) {
+					if (messages == null || messages.size() == 0 || !messages.get(0).substring(0, 2).equals("55")) {
 						return;
 					}
 					//判断是否是分包（0x80的包）
-					if (messages==null||messages.size() == 0 || !messages.get(0).substring(2, 4).equals("80")) {
+					if (messages == null || messages.size() == 0 || !messages.get(0).substring(2, 4).equals("80")) {
 						return;
 					}
 					String dataType = messages.get(0).substring(6, 10);
@@ -749,10 +751,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	@Override
 	public void noNet() {
-		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
-		macTextView.setText(utils.readString(Constant.IMEI));
-		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-		startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+//		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
+//		macTextView.setText(utils.readString(Constant.IMEI));
+//		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//		startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+		CommonTools.showShortToast(this, getString(R.string.no_wifi));
 	}
 
 	public static final int DOWNLOAD_SKY_UPGRADE = 5;
@@ -782,10 +785,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 
 	private boolean isDfuServiceRunning() {
-		if (ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName())) {
-			return true;
-		}
-		return false;
+		return ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName());
 	}
 
 	private void slowSetPercent(final float percent) {

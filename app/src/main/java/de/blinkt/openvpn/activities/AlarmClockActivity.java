@@ -225,7 +225,7 @@ public class AlarmClockActivity extends BaseNetActivity implements AlarmClockAda
 
 	private void initData() {
 		alarmClockAdapter = new AlarmClockAdapter(this, alarmClockEntityList);
-		alarmClockAdapter.isVisibility(openBluetoothLl.getVisibility() == View.VISIBLE ? true : false);
+		alarmClockAdapter.isVisibility(openBluetoothLl.getVisibility() == View.VISIBLE);
 		alarmClockAdapter.setOnDelListener(this);
 		alarmClockRv.setAdapter(alarmClockAdapter);
 	}
