@@ -1,6 +1,8 @@
 package de.blinkt.openvpn.activities;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -10,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -28,12 +31,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.AutoReceiver;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
+import com.aixiaoqi.socket.StartCPUService;
 import com.aixiaoqi.socket.TestProvider;
 import com.umeng.analytics.MobclickAgent;
 
@@ -71,6 +76,7 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
 
+import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
@@ -166,7 +172,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			bleMoveReceiver = new ReceiveBLEMoveReceiver();
 			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(bleMoveReceiver, makeGattUpdateIntentFilter());
 			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(updateIndexTitleReceiver, makeGattUpdateIntentFilter());
-//			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(screenoffReceive, screenoffIntentFilter());
+			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(screenoffReceive, screenoffIntentFilter());
 			//打开蓝牙服务后开始搜索
 			searchBLE();
 		}
@@ -262,6 +268,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private static IntentFilter screenoffIntentFilter() {
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+		intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
 		return intentFilter;
 	}
 
@@ -693,6 +700,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	}
 
+
 	private void scanLeDevice(final boolean enable) {
 		Log.e(TAG, "scanLeDevice");
 		if (enable) {
@@ -912,24 +920,49 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		}
 	};
-
+private boolean isBatteryCharging=false;
 	private BroadcastReceiver screenoffReceive = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+			String action =intent.getAction();
+			if(Intent.ACTION_BATTERY_CHANGED.equals(action))
+			{
+				int status=intent.getIntExtra("status",BatteryManager.BATTERY_STATUS_UNKNOWN);
+				if(status== BatteryManager.BATTERY_STATUS_CHARGING)
+				{
+					isBatteryCharging=true;
+					cancelTimer();
+				}
+				else
+				{
+					isBatteryCharging=false;
+				}
+				Log.e(TAG,"isBatteryCharging="+isBatteryCharging);
+			}
+		else	if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())||!isBatteryCharging) {
 				Log.i("screenoff", "The screen has turned off");
 				// Turn the screen back on again, from the main thread
-				new Handler().post(new Runnable() {
-					public void run() {
-						PowerManager t_power = (PowerManager) getSystemService(POWER_SERVICE);
-						PowerManager.WakeLock t_wakelock = t_power.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP, "SleepMonitor");
-						t_wakelock.acquire();
-					}
-				});
+						timerStartCpu();
 			}
 		}
 	};
-
+	AlarmManager am;
+	PendingIntent sender;
+	private void timerStartCpu() {
+		if(am==null){
+		Intent intent = new Intent(this, StartCPUService.class);
+		intent.setAction(HEARTBEAT_PACKET_TIMER);
+		sender = PendingIntent.getService(this, 0, intent, 0);
+		am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3*60 * 1000, sender);
+		}
+	}
+	private void cancelTimer() {
+		if (am != null) {
+			am.cancel(sender);
+			am = null;
+		}
+	}
 	//是否注册成功，如果是则信号强，反之则信号弱
 	private void checkRegisterStatuGoIp() {
 		if (REGISTER_STATUE_CODE == 1) {

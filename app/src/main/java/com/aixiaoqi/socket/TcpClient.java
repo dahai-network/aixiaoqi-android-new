@@ -90,6 +90,7 @@ public abstract class TcpClient implements Runnable {
 
 	private void connectSocket() throws IOException {
 		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
+//		SocketAddress address = new InetSocketAddress("192.168.1.133", 5089);
 		Socket socket = new Socket();
 		socket.connect(address,30000);
 		socket.setTcpNoDelay(true);

@@ -26,9 +26,7 @@ public class NetReceiver extends BroadcastReceiver {
 
     private void connectGoip() {
         if (sendYiZhengService != null){
-            SocketConnection.mReceiveSocketService.disconnect();
             registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REG_STATUE_CHANGE);
-            ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "network change :\n" );
             sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
         }
     }

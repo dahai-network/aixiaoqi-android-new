@@ -118,6 +118,7 @@ public class ReceiveSocketService extends Service {
 	//断开连接，如果注册成功，需要重新注册，并且改变注册状态
 	private void disConnectReconnect() {
 		isDisconnect = true;
+
 //		cancelTimer();
 		CommonTools.delayTime(5000);
 		if (tcpClient != null && !tcpClient.isConnected()) {
@@ -164,27 +165,18 @@ public class ReceiveSocketService extends Service {
 
 	private void createHeartBeatPackage() {
 		Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
-		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0) {
+		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0&&am==null) {
 			count = count + 1;
 			Log.e("onReceive", "开启定时器");
-			setWifiDormancy();
 			Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
 			intent.setAction(HEARTBEAT_PACKET_TIMER);
 			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
 			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3*60 * 1000, sender);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60 * 1000, sender);
 		}
 	}
 
-	public void setWifiDormancy() {
-		int wifiSleepValue = Settings.System.getInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-		if (wifiSleepValue == 0) {
-			Log.e("wifiSleepValue", "wifiSleepValue=" + wifiSleepValue);
-			Settings.System.putInt(getContentResolver(), android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
-			wifiSleepValue = Settings.System.getInt(getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-			Log.e("wifiSleepValue", "wifiSleepValue=" + wifiSleepValue);
-		}
-	}
+
 
 	private void reConnect() {
 

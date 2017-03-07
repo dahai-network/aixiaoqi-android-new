@@ -428,7 +428,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
 							CommonTools.delayTime(1000);
 							if (isUpgrade) {
-								Log.i(TAG, "空中升级重连");
+								Log.e(TAG, "空中升级重连");
 								scanLeDevice(true);
 							}
 						}
@@ -685,7 +685,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	private void uploadToBlueTooth(String deviceName, String deviceAddress) {
-		Log.d(TAG, "uploadToBlueTooth");
+		Log.e(TAG, "uploadToBlueTooth");
 		if (isDfuServiceRunning()) {
 			return;
 		}
@@ -694,7 +694,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		Log.e(TAG, "isUpgrade=" + isUpgrade);
 		final DfuServiceInitiator starter = new DfuServiceInitiator(deviceAddress)
 				.setDeviceName(deviceName).setKeepBond(true);
-		Log.i(TAG, "deviceAddress:" + deviceAddress + "deviceName:" + deviceName);
+		Log.e(TAG, "deviceAddress:" + deviceAddress + "deviceName:" + deviceName);
 
 		if (Environment.getExternalStorageState().equals(
 				Environment.MEDIA_MOUNTED)) {
@@ -816,11 +816,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
+				if (mService == null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 					return;
 				}
+
 				if (mBtAdapter != null) {
 					if (enable) {
+
 						// Stops scanning after a pre-defined scan period.
 						mBtAdapter.startLeScan(mLeScanCallback);
 					} else {
@@ -872,9 +874,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							if (device.getName() == null) {
 								return;
 							}
-							Log.i(TAG, "isUpgrade:" + isUpgrade + "deviceName:" + device.getName() + "保存的IMEI地址:" + utils.readString(Constant.IMEI).replace(":", ""));
+							Log.e(TAG, "isUpgrade:" + isUpgrade + "deviceName:" + device.getName() + "保存的IMEI地址:" + utils.readString(Constant.IMEI).replace(":", ""));
 							if (isUpgrade && device.getName().contains(utils.readString(Constant.IMEI).replace(":", ""))) {
-								Log.i(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
+								Log.e(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
 								if (mService != null) {
 									scanLeDevice(false);
 									if (startDfuCount == 0) {
@@ -885,7 +887,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 									}
 								}
 							} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
-								Log.i(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
+								Log.e(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
 								if (mService != null) {
 									scanLeDevice(false);
 									utils.writeString(Constant.IMEI, macAddressStr);
@@ -987,10 +989,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				percentInt = 0;
 				stopAnim();
 			} else {
-				if (entity.getFailType() != SocketConstant.START_TCP_FAIL)
+//				if (entity.getFailType() != SocketConstant.START_TCP_FAIL)
 					stopAnim();
 				percentTextView.setVisibility(GONE);
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
+//				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 				switch (entity.getFailType()) {
 					case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 						CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
