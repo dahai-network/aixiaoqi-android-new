@@ -37,8 +37,10 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
         }
         Log.e("C_TAG","number="+number);
         List<TlvEntity> yiZhengTlvList=new ArrayList<>();
-        if(SocketConstant.CONNECTION.equals(header))
+        if(SocketConstant.CONNECTION.equals(header)){
+            SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
             connection(yiZhengTlvList);
+        }
         else if(SocketConstant.PRE_DATA.equals(header)){
             sdkReturn(yiZhengTlvList);
         }else if(SocketConstant.UPDATE_CONNECTION.equals(header)){
