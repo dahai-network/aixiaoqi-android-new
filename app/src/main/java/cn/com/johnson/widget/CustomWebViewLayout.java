@@ -408,20 +408,20 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 //				}
 
 
-				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-					//兼容android2.0的webview.reload的处理;
-					//android2.0的reload事件会触发该函数（3.0以上则不会），某些带单首页的url每次刷新地址后缀有的会不断改变。
-					//此处理是为了避免程序误认为不断变化的首页为子链接而做的处理
-					int index = url.indexOf("?");
-
-					if (index != -1) {
-						if (url.substring(0, index).trim().equals(mainPage.trim())) {
-							loadUrl(view, url);
-							return true;
-						}
-
-					}
-				}
+//				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+//					//兼容android2.0的webview.reload的处理;
+//					//android2.0的reload事件会触发该函数（3.0以上则不会），某些带单首页的url每次刷新地址后缀有的会不断改变。
+//					//此处理是为了避免程序误认为不断变化的首页为子链接而做的处理
+//					int index = url.indexOf("?");
+//
+//					if (index != -1) {
+//						if (url.substring(0, index).trim().equals(mainPage.trim())) {
+//							loadUrl(view, url);
+//							return true;
+//						}
+//
+//					}
+//				}
 
 
 				loadUrl(view, url);

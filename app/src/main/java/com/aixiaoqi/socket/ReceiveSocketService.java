@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.util.Log;
 
 import java.io.BufferedWriter;
@@ -175,7 +174,6 @@ public class ReceiveSocketService extends Service {
 			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60 * 1000, sender);
 		}
 	}
-
 
 
 	private void reConnect() {

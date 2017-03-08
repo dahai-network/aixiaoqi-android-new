@@ -215,7 +215,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				//是否测试卡位置：否，这是写卡！
 				IS_TEXT_SIM = false;
 				ReceiveBLEMoveReceiver.orderStatus = 4;
-				showProgress("正在激活");
+				showProgress("正在激活",false);
 				new Thread(new Runnable() {
 					@Override
 					public void run() {

@@ -406,7 +406,7 @@ public class CommitOrderActivity extends BaseNetActivity {
 	 * 微信支付
 	 */
 	private void payForWeixin() {
-		showProgress(getResources().getString(R.string.weixin_paying));
+		showProgress(getResources().getString(R.string.weixin_paying),false);
 		WeixinGetPayIdHttp http = new WeixinGetPayIdHttp(this, HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID, orderEntity.getOrder().getOrderNum());
 		SharedPreferences preferences = getSharedPreferences("order", MODE_PRIVATE);
 		SharedPreferences.Editor editor = preferences.edit();

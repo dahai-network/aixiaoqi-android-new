@@ -11,8 +11,6 @@ import java.net.SocketAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import de.blinkt.openvpn.util.DateUtils;
-
 
 /**
  * TCP Socket客户端
@@ -92,6 +90,8 @@ public abstract class TcpClient implements Runnable {
 		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
 //		SocketAddress address = new InetSocketAddress("192.168.1.133", 5089);
 		Socket socket = new Socket();
+		//TCP保活
+		socket.setKeepAlive(true);
 		socket.connect(address,30000);
 		socket.setTcpNoDelay(true);
 		transceiver = new SocketTransceiver(socket) {

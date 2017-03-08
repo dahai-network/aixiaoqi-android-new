@@ -16,7 +16,6 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -37,7 +36,6 @@ import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
-import com.aixiaoqi.socket.StartCPUService;
 import com.aixiaoqi.socket.TestProvider;
 import com.umeng.analytics.MobclickAgent;
 
@@ -75,7 +73,6 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
 
-import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
@@ -916,31 +913,25 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		}
 	};
-	private  boolean isBatteryCharging=false;
+	private boolean isBatteryCharging = false;
 	private BroadcastReceiver screenoffReceive = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			String action =intent.getAction();
-			if(Intent.ACTION_BATTERY_CHANGED.equals(action))
-			{
-				int status=intent.getIntExtra("status",BatteryManager.BATTERY_STATUS_UNKNOWN);
-				if(status== BatteryManager.BATTERY_STATUS_CHARGING)
-				{
-					isBatteryCharging=true;
-					cancelTimer();
+			String action = intent.getAction();
+			if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
+				int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
+				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
+					isBatteryCharging = true;
+//					cancelTimer();
+				} else {
+					isBatteryCharging = false;
 				}
-				else
-				{
-					isBatteryCharging=false;
-				}
-				Log.e(TAG,"isBatteryCharging="+isBatteryCharging);
-			}
-			else	if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())||!isBatteryCharging) {
+				Log.e(TAG, "isBatteryCharging=" + isBatteryCharging);
+			} else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction()) || !isBatteryCharging) {
 				Log.i("screenoff", "The screen has turned off");
 				// Turn the screen back on again, from the main thread
-				timerStartCpu();
-			}
-			else 	if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+//				timerStartCpu();
+			} else if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
 				int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
 						BluetoothAdapter.ERROR);
 				switch (state) {
@@ -968,21 +959,24 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	};
 	AlarmManager am;
 	PendingIntent sender;
-	private void timerStartCpu() {
-		if(am==null){
-			Intent intent = new Intent(this, StartCPUService.class);
-			intent.setAction(HEARTBEAT_PACKET_TIMER);
-			sender = PendingIntent.getService(this, 0, intent, 0);
-			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3*60 * 1000, sender);
-		}
-	}
-	private void cancelTimer() {
-		if (am != null) {
-			am.cancel(sender);
-			am = null;
-		}
-	}
+
+//	private void timerStartCpu() {
+//		if (am == null) {
+//			Intent intent = new Intent(this, StartCPUService.class);
+//			intent.setAction(HEARTBEAT_PACKET_TIMER);
+//			sender = PendingIntent.getService(this, 0, intent, 0);
+//			am = (AlarmManager) getSystemService(ALARM_SERVICE);
+//			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1 * 60 * 1000, sender);
+//		}
+//	}
+//
+//	private void cancelTimer() {
+//		if (am != null) {
+//			am.cancel(sender);
+//			am = null;
+//		}
+//	}
+
 	//是否注册成功，如果是则信号强，反之则信号弱
 	private void checkRegisterStatuGoIp() {
 		if (REGISTER_STATUE_CODE == 1) {

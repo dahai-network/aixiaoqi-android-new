@@ -59,7 +59,6 @@ android:layout_marginTop="@dimen/padding_20dp"
         android:textSize="16dp"/>
 
     <ImageView
-        android:id="@+id/imageView1"
         android:layout_below="@id/outside_step_four_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

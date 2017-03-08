@@ -70,9 +70,9 @@
         android:allowBackup="true"
         android:banner="@drawable/login_icon"
         android:icon="@drawable/login_icon"
-        android:persistent="true"
         android:label="@string/app"
         android:largeHeap="true"
+        android:persistent="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute"
@@ -273,12 +273,11 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.aixiaoqi.socket.AutoReceiver"
-            android:label="@string/app_name">
-            <intent-filter>
+            android:name="com.aixiaoqi.socket.AutoReceiver">
+            <!--<intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+            </intent-filter>-->
         </receiver>
 
         <activity
@@ -317,10 +316,10 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
-        <service
+        <!--<service
             android:name="com.aixiaoqi.socket.StartCPUService"
             android:exported="true">
-        </service>
+        </service>-->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true"
@@ -411,8 +410,8 @@
             android:enabled="true"/>
         <service
             android:name="com.aixiaoqi.socket.ReceiveSocketService"
-            android:persistent="true"
-            android:enabled="true"/>
+            android:enabled="true"
+            android:persistent="true"/>
 
         <activity
             android:name="de.blinkt.openvpn.activities.OutsideActivity"

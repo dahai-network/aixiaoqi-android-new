@@ -216,14 +216,14 @@ public class RechargeActivity extends BaseActivity implements InterfaceCallback,
 					map.put("type", ALI_PAY + "");
 					MobclickAgent.onEvent(this, CHARGE, map);
 					pay_way = ALI_PAY;
-					showProgress(getString(R.string.ali_paying));
+					showProgress(getString(R.string.ali_paying),true);
 					pay(ALI_PAY);
 				} else {
 					if (isWXAppInstalledAndSupported()) {
 						map.put("type", WEIXIN_PAY + "");
 						MobclickAgent.onEvent(this, CHARGE, map);
 						pay_way = WEIXIN_PAY;
-						showProgress(getString(R.string.weixin_paying));
+						showProgress(getString(R.string.weixin_paying),true);
 						pay(WEIXIN_PAY);
 					} else {
 						nextBtn.setEnabled(true);
@@ -329,7 +329,7 @@ public class RechargeActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void payForWeixin(RechargeEntity rechargeEntity) {
-		showProgress(getResources().getString(R.string.weixin_paying));
+		showProgress(getResources().getString(R.string.weixin_paying),false);
 		WeixinGetPayIdHttp http = new WeixinGetPayIdHttp(this, HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID, rechargeEntity.getPayment().getPaymentNum());
 		new Thread(http).start();
 		nextBtn.setEnabled(true);
