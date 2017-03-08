@@ -131,7 +131,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			initImageRounds();
 			viewPager.setImages(pageViews);
 			viewPager.setAdapter(new PictureAdapter(pageViews));
-			viewPager.setCurrentItem(Integer.MAX_VALUE / 2);
+//			viewPager.setCurrentItem();
 			images_layout.addView(viewPager);
 			viewPager.setOnImageItemClickListener(this);
 		}

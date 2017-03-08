@@ -23,7 +23,7 @@ public class StartCPUService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         PowerManager t_power = (PowerManager) getSystemService(POWER_SERVICE);
-        PowerManager.WakeLock t_wakelock = t_power.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP, "SleepMonitor");
+        PowerManager.WakeLock t_wakelock = t_power.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SleepMonitor");
         t_wakelock.acquire();
         CommonTools.delayTime(3000);
         t_wakelock.release();

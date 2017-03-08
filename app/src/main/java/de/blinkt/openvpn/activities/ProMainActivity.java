@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -45,6 +46,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import cn.com.aixiaoqi.R;
@@ -145,7 +147,109 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			mService = null;
 		}
 	};
-
+//	public  boolean yunos()
+//	{
+//		try
+//		{
+//			Object localObject = Class.forName("android.os.SystemProperties").getMethod("get", new Class[] { String.class }).invoke(null, new Object[] { "ro.yunos.version" });
+//			Log.e(TAG, "localObject="+localObject);
+//			if ((localObject != null) && ((localObject instanceof String)))
+//			{
+//				boolean bool = TextUtils.isEmpty((String)localObject);
+//				return !bool;
+//			}
+//		}
+//		catch (Exception localException)
+//		{
+//		}
+//		return false;
+//	}
+//	 String  str2;
+//	 String  str1;
+//	 String  str;
+//	public  String productV() {
+//		try {
+//			Object localObject = Class.forName("android.os.SystemProperties").getMethod("get", new Class[]{String.class}).invoke(null, new Object[]{"ro.vivo.product.version"});
+//			if ((localObject != null) && ((localObject instanceof String))) {
+//				str2 = (String) localObject;
+//				str1 = str2;
+//				Log.e(TAG, "str1="+str1);
+//				if (str1 == null)
+//					return "";
+//				return str1.trim();
+//			}
+//		} catch (InvocationTargetException localInvocationTargetException) {
+//			while (true)
+//				str1 = null;
+//		} catch (IllegalAccessException localIllegalAccessException) {
+//			while (true)
+//				str1 = null;
+//		} catch (NoSuchMethodException localNoSuchMethodException) {
+//			while (true)
+//				str1 = null;
+//		} catch (ClassNotFoundException localClassNotFoundException) {
+////            while (true) {
+////                String str1 = null;
+////                continue;
+////                String str2 = null;
+////            }
+//		}
+//		return "";
+//	}
+//
+//	private  String version()
+//	{
+//		while (true)
+//		{
+//			try
+//			{
+//				Object localObject = Class.forName("android.os.SystemProperties").getMethod("get", new Class[] { String.class }).invoke(null, new Object[] { "ro.miui.ui.version.name" });
+////                if ((localObject == null) || (!(localObject instanceof String)))
+//				str = (String)localObject;
+//				Log.e(TAG, "str="+str);
+//				if (str == null)
+//					return null;
+//			}
+//			catch (ClassNotFoundException localClassNotFoundException)
+//			{
+//				str = null;
+//				continue;
+//			}
+//			catch (NoSuchMethodException localNoSuchMethodException)
+//			{
+//				str = null;
+//				continue;
+//			}
+//			catch (IllegalAccessException localIllegalAccessException)
+//			{
+//				str = null;
+//				continue;
+//			}
+//			catch (InvocationTargetException localInvocationTargetException)
+//			{
+//				str = null;
+//				continue;
+//			}
+//			return str.trim();
+////            label113: String str = null;
+//		}
+//	}
+//	public  boolean className()
+//	{
+//		try
+//		{
+//			Class localClass = Class.forName("miui.os.Build");
+//			Log.e(TAG, "localClass="+localClass);
+//			boolean bool = false;
+//			if (localClass != null)
+//				bool = true;
+//			return bool;
+//		}
+//		catch (ClassNotFoundException localClassNotFoundException)
+//		{
+//		}
+//		return false;
+//	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -162,7 +266,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
-
+		Log.e(TAG, "Build.MANUFACTURER="+Build.MANUFACTURER);
+		Log.e(TAG, "android.os.Build.MODEL="+Build.MODEL);
+		Log.e(TAG, "VERSION.RELEASE="+Build.VERSION.RELEASE);
+		Log.e(TAG, "Build.VERSION.INCREMENTAL="+Build.VERSION.INCREMENTAL);
+//		yunos();
+//		className();
+//		version();
+//		productV();
 	}
 
 
@@ -921,26 +1032,27 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action =intent.getAction();
-			if(Intent.ACTION_BATTERY_CHANGED.equals(action))
-			{
-				int status=intent.getIntExtra("status",BatteryManager.BATTERY_STATUS_UNKNOWN);
-				if(status== BatteryManager.BATTERY_STATUS_CHARGING)
-				{
-					isBatteryCharging=true;
-					cancelTimer();
-				}
-				else
-				{
-					isBatteryCharging=false;
-				}
-				Log.e(TAG,"isBatteryCharging="+isBatteryCharging);
-			}
-			else	if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())||!isBatteryCharging) {
-				Log.i("screenoff", "The screen has turned off");
-				// Turn the screen back on again, from the main thread
-				timerStartCpu();
-			}
-			else 	if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+//			if(Intent.ACTION_BATTERY_CHANGED.equals(action))
+//			{
+//				int status=intent.getIntExtra("status",BatteryManager.BATTERY_STATUS_UNKNOWN);
+//				if(status== BatteryManager.BATTERY_STATUS_CHARGING)
+//				{
+//					isBatteryCharging=true;
+//					cancelTimer();
+//				}
+//				else
+//				{
+//					isBatteryCharging=false;
+//				}
+//				Log.e(TAG,"isBatteryCharging="+isBatteryCharging);
+//			}
+//			else	if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())||!isBatteryCharging) {
+//				Log.i("screenoff", "The screen has turned off");
+//				// Turn the screen back on again, from the main thread
+//				timerStartCpu();
+//			}
+//			else
+			if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
 				int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
 						BluetoothAdapter.ERROR);
 				switch (state) {
@@ -968,21 +1080,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	};
 	AlarmManager am;
 	PendingIntent sender;
-	private void timerStartCpu() {
-		if(am==null){
-			Intent intent = new Intent(this, StartCPUService.class);
-			intent.setAction(HEARTBEAT_PACKET_TIMER);
-			sender = PendingIntent.getService(this, 0, intent, 0);
-			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3*60 * 1000, sender);
-		}
-	}
-	private void cancelTimer() {
-		if (am != null) {
-			am.cancel(sender);
-			am = null;
-		}
-	}
+//	private void timerStartCpu() {
+//		if(am==null){
+//			Intent intent = new Intent(this, StartCPUService.class);
+//			intent.setAction(HEARTBEAT_PACKET_TIMER);
+//			sender = PendingIntent.getService(this, 0, intent, 0);
+//			am = (AlarmManager) getSystemService(ALARM_SERVICE);
+//			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3*60 * 1000, sender);
+//		}
+//	}
+//	private void cancelTimer() {
+//		if (am != null) {
+//			am.cancel(sender);
+//			am = null;
+//		}
+//	}
 	//是否注册成功，如果是则信号强，反之则信号弱
 	private void checkRegisterStatuGoIp() {
 		if (REGISTER_STATUE_CODE == 1) {

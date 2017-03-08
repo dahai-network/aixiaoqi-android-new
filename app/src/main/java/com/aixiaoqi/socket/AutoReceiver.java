@@ -28,9 +28,7 @@ public class AutoReceiver extends BroadcastReceiver {
 				public void run() {
 					if (TestProvider.sendYiZhengService != null) {
 						Log.i(TAG, DateUtils.getCurrentDateForFileDetail() + " 发送心跳包，是否联网：" + NetworkUtils.isNetworkAvailable(context));
-						Log.e("AutoReceiver", "AutoReceiver444" + System.currentTimeMillis());
 						TestProvider.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
-						Log.e("AutoReceiver", "AutoReceiver555" + System.currentTimeMillis());
 					} else {
 						Log.e(TAG, "AutoReceiver 异常！");
 					}

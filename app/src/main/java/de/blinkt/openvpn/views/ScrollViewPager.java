@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -89,6 +90,11 @@ public class ScrollViewPager extends ViewPager {
 	private OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
 		@Override
 		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//			if(position==images.size()-1){
+//				setCurrentItem(0);
+//			}else if(position==0){
+//				setCurrentItem(images.size());
+//			}
 
 		}
 
@@ -106,6 +112,7 @@ public class ScrollViewPager extends ViewPager {
 			 * lastPointIndex 上一个点在集合中的位置
 			 * currentPointIndex 当前的点在集合中的位置
 			 * */
+
 			int imagesSize = getImages().size();
 			if (dots.size() < images.size()) {
 				position %= 2;
@@ -220,6 +227,8 @@ public class ScrollViewPager extends ViewPager {
 		return super.onTouchEvent(event);
 	}
 
+	public  boolean isNext=false;
+	public  boolean isLast=false;
 	public boolean isScollStop = true;
 
 	/**
@@ -240,7 +249,12 @@ public class ScrollViewPager extends ViewPager {
 						if (!stopLoopTag) {
 							Message message = Message.obtain();
 							message.what = 10;
+							if(getCurrentItem()!=images.size()-1)
 							message.arg1 = getCurrentItem() + 1;
+							else{
+								message.arg1 =0;
+							}
+							Log.e("count","count"+message.arg1+"\ngetCurrentItem()="+getCurrentItem());
 							mHandler.sendMessage(message);
 						}
 					} catch (InterruptedException e) {
