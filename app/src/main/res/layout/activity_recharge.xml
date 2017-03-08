@@ -46,7 +46,6 @@
                 >
 
                 <RadioButton
-                    android:id="@+id/recharge20Button"
                     android:layout_width="0dp"
                     android:button="@null"
                     android:gravity="center"
@@ -58,7 +57,6 @@
                     />
 
                 <RadioButton
-                    android:id="@+id/recharge50Button"
                     android:layout_width="0dp"
                     android:button="@null"
                     android:gravity="center"
@@ -70,7 +68,6 @@
                     />
 
                 <RadioButton
-                    android:id="@+id/recharge100Button"
                     android:layout_width="0dp"
                     android:layout_height="33dp"
                     android:layout_marginRight="@dimen/padding_10dp"
@@ -90,7 +87,6 @@
                 android:padding="@dimen/padding_15dp">
 
                 <RadioButton
-                    android:id="@+id/recharge300Button"
                     android:layout_width="0dp"
                     android:button="@null"
                     android:gravity="center"
@@ -102,7 +98,6 @@
                     />
 
                 <RadioButton
-                    android:id="@+id/recharge500Button"
                     android:layout_width="0dp"
                     android:layout_height="33dp"
                     android:button="@null"

@@ -3,6 +3,15 @@
 
     <item
         is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\libs\alipaySdk-20161129.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="9356473ed942faa70a18f34883af52681e1c7223">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\alipaySdk-20161129_c80810fa12d9ffc4c62e43c60265ef2a6d5a1902.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="D:\android project\aixiaoqi-android-new\app\libs\bugly_crash_upgrade_v1.1.5.jar"
         jumboMode="false"
         optimize="true"
@@ -18,15 +27,6 @@
         revision="25.0.0"
         sha1="d7c2f29c05b35e8c8713be2b81c41cf18f98b64a">
         <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\libammsdk_191f2bf46c7d90fe6828f748bf753aa8cb765a4a.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\alipaySdk-20161129.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="9356473ed942faa70a18f34883af52681e1c7223">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\alipaySdk-20161129_c80810fa12d9ffc4c62e43c60265ef2a6d5a1902.jar" />
     </item>
 
 </items>

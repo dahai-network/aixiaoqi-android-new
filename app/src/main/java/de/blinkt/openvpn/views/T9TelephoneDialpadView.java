@@ -93,7 +93,6 @@ public class T9TelephoneDialpadView extends LinearLayout implements
          */
         for (int i = 0; i < 12; i++) {
             View v = mDialpadView.findViewById(R.id.dialNum1 + i);
-
             v.setOnClickListener(this);
         }
 

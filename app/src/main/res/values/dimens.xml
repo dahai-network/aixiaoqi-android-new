@@ -4,25 +4,9 @@
   -->
 
 <resources>
-    <dimen name="paddingItemsSidebarLog">20dp</dimen>
-    <dimen name="stdpadding">8dp</dimen>
-    <bool name="logSildersAlwaysVisible">false</bool>
-    <dimen name="searchbox_marginlr">15dp</dimen>
-    <dimen name="diameter">48dp</dimen>
-    <dimen name="elevation_low">1dp</dimen>
-    <dimen name="elevation_high">4dp</dimen>
-    <dimen name="add_button_margin">16dp</dimen>
-    <dimen name="add_button_margin_topfab">96dp</dimen>
-    <dimen name="round_button_diameter">56dp</dimen>
-    <dimen name="switchbar_pad">16dp</dimen>
-    <dimen name="vpn_setting_padding">16dp</dimen>
-    <dimen name="versionmarginRL">20dp</dimen>
     <dimen name="padding_10">10dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-
-    <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="padding_8dp">8dp</dimen>
     <dimen name="padding_2dp">2dp</dimen>
@@ -33,12 +17,10 @@
     <dimen name="padding_55dp">55dp</dimen>
     <dimen name="padding_25dp">25dp</dimen>
     <dimen name="padding_30dp">30dp</dimen>
-    <dimen name="padding_32dp">32dp</dimen>
     <dimen name="padding_35dp">35dp</dimen>
     <dimen name="padding_72dp">72dp</dimen>
     <dimen name="padding_100dp">100dp</dimen>
     <dimen name="padding_175dp">175dp</dimen>
-    <dimen name="padding_200dp">200dp</dimen>
     <dimen name="padding_250dp">250dp</dimen>
     <dimen name="padding_300dp">300dp</dimen>
     <dimen name="padding_10dp">10dp</dimen>
@@ -49,12 +31,9 @@
     <dimen name="little_16">16sp</dimen>
     <dimen name="little_14">14sp</dimen>
     <dimen name="little_18">18sp</dimen>
-    <dimen name="little_20">20sp</dimen>
     <dimen name="little_22">22sp</dimen>
     <dimen name="little_28">28sp</dimen>
     <dimen name="little_38">38sp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="dialpad_row_height">54dp</dimen>
     <!--
     <dimen name="dialpad_row_height">54dp</dimen>

@@ -362,7 +362,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 						//是否测试卡位置：否，这是写卡！
 						IS_TEXT_SIM = false;
 						orderStatus = 4;
-						showProgress("正在激活");
+						showProgress("正在激活",false);
 						new Thread(new Runnable() {
 							@Override
 							public void run() {

@@ -438,7 +438,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					connectThread.start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
 					if (!isUpgrade) {
-						showProgress("正在重新连接");
+						showProgress("正在重新连接",false);
 					}
 				} else {
 					unBindButton.setVisibility(GONE);

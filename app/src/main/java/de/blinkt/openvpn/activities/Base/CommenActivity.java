@@ -69,8 +69,9 @@ public class CommenActivity  extends FragmentActivity {
      * 显示进度条
      * @param message
      */
-    public void showProgress(String message) {
+    public void showProgress(String message,boolean isCanTouchOutside) {
         myProgressDialog.setMyMessage(message);
+		myProgressDialog.setCanceledOnTouchOutside(isCanTouchOutside);
         myProgressDialog.myShow();
     }
     public void showProgress(int id) {

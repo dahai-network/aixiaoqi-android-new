@@ -14,19 +14,19 @@ import de.blinkt.openvpn.util.CommonTools;
 
 public class StartCPUService extends Service {
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+	@Nullable
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
+	}
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        PowerManager t_power = (PowerManager) getSystemService(POWER_SERVICE);
-        PowerManager.WakeLock t_wakelock = t_power.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SleepMonitor");
-        t_wakelock.acquire();
-        CommonTools.delayTime(3000);
-        t_wakelock.release();
-        return super.onStartCommand(intent, flags, startId);
-    }
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		PowerManager t_power = (PowerManager) getSystemService(POWER_SERVICE);
+		PowerManager.WakeLock t_wakelock = t_power.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SleepMonitor");
+		t_wakelock.acquire();
+		CommonTools.delayTime(1000);
+		t_wakelock.release();
+		return super.onStartCommand(intent, flags, startId);
+	}
 }

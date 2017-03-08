@@ -55,15 +55,16 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	String maxinumPhoneCallTime;
 	ConnectedReceive connectedReceive;
 	int cellPhoneType;
-	NotificationManager	mNotificationManager;
+	NotificationManager mNotificationManager;
 	NotificationCompat.Builder mBuilder;
 	public static boolean isForeground = false;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_callphone);
-		cellPhoneType=getIntent().getIntExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,-1);
+		cellPhoneType = getIntent().getIntExtra(IntentPutKeyConstant.CELL_PHONE_TYPE, -1);
 		initView();
 		initData();
 		addListener();
@@ -76,7 +77,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	@Override
 	protected void onResume() {
 		super.onResume();
-		isForeground=true;
+		isForeground = true;
 	}
 
 	@NonNull
@@ -108,6 +109,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		cancelcallbtn = (Button) findViewById(R.id.cancelcallbtn);
 		displayStatus(R.string.calling);
 	}
+
 	ContactRecodeEntity contactRecodeEntity;
 
 
@@ -117,7 +119,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		if (TextUtils.isEmpty(maxinumPhoneCallTime)) {
 			maxinumPhoneCallTime = "0";
 		}
-		if (contactRecodeEntity==null||TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())) {
+		if (contactRecodeEntity == null || TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())) {
 			CommonTools.showShortToast(this, "电话号码不能为空");
 			return;
 		}
@@ -139,31 +141,32 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 	private void callPhone() {
 
-		if(contactRecodeEntity==null||TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())){
+		if (contactRecodeEntity == null || TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())) {
 			CommonTools.showShortToast(this, "电话号码不能为空");
 			return;
 		}
 
 		if (contactRecodeEntity.getPhoneNumber().startsWith("sip:")) {
 			ICSOpenVPNApplication.the_sipengineReceive.MakeUrlCall(contactRecodeEntity.getPhoneNumber());
-		} else if(cellPhoneType==Constant.NETWORK_CELL_PHONE){
-			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("981" + deleteprefix("-",contactRecodeEntity.getPhoneNumber()) + "#" + maxinumPhoneCallTime);
-		}else if(cellPhoneType==Constant.SIM_CELL_PHONE){
-			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986"+ SocketConstant.REGISTER_REMOTE_ADDRESS+SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-",contactRecodeEntity.getPhoneNumber()) );
+		} else if (cellPhoneType == Constant.NETWORK_CELL_PHONE) {
+			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("981" + deleteprefix("-", contactRecodeEntity.getPhoneNumber()) + "#" + maxinumPhoneCallTime);
+		} else if (cellPhoneType == Constant.SIM_CELL_PHONE) {
+			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986" + SocketConstant.REGISTER_REMOTE_ADDRESS + SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-", contactRecodeEntity.getPhoneNumber()));
 		}
 
 	}
 
-	int notifyId=100;
-	private void initNotify(){
-		if(mNotificationManager==null){
-			mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+	int notifyId = 100;
+
+	private void initNotify() {
+		if (mNotificationManager == null) {
+			mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		}
-		if(mBuilder==null){
+		if (mBuilder == null) {
 			mBuilder = new NotificationCompat.Builder(this);
 		}
 		mBuilder.setContentTitle(getString(R.string.unitoys_phone))
-				.setContentText(getString(R.string.call_phoning,phonenumtxt.getText().toString(),contactRecodeEntity.getPhoneNumber()))
+				.setContentText(getString(R.string.call_phoning, phonenumtxt.getText().toString(), contactRecodeEntity.getPhoneNumber()))
 				.setNumber(3)//显示数量
 //				.setTicker("有新短信来啦")//通知首次出现在通知栏，带上升动画效果的
 				.setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示
@@ -175,36 +178,36 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				.setSmallIcon(R.drawable.login_icon);
 		Intent intent = new Intent(this, PhoneReceiver.class);
 		intent.setAction(PhoneReceiver.CALL_PHONE);
-		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO,contactRecodeEntity);
-		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,cellPhoneType);
-		intent.putExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME,maxinumPhoneCallTime);
+		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO, contactRecodeEntity);
+		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE, cellPhoneType);
+		intent.putExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME, maxinumPhoneCallTime);
 //		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 //				| Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		PendingIntent contextIntent = PendingIntent.getBroadcast(this, 0,intent, 0);
+		PendingIntent contextIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 		mBuilder.setContentIntent(contextIntent);
 		mNotificationManager.notify(notifyId, mBuilder.build());
 	}
 
-	private String deleteprefix(String type,String s) {
-		if(TextUtils.isEmpty(s)){
+	private String deleteprefix(String type, String s) {
+		if (TextUtils.isEmpty(s)) {
 			return "";
 		}
 		String phoneNumber;
-		if(s.replace(type,"").startsWith("+86")){
+		if (s.replace(type, "").startsWith("+86")) {
 
-			phoneNumber= s.substring(3, s.length());
+			phoneNumber = s.substring(3, s.length());
 
-		}else if(s.replace(type,"").startsWith("86")){
-			phoneNumber= s.substring(2, s.length());
-		}else if(s.replace(type,"").startsWith("0086")){
-			phoneNumber= s.substring(2, s.length());
-		}
-		else{
-			phoneNumber= s;
+		} else if (s.replace(type, "").startsWith("86")) {
+			phoneNumber = s.substring(2, s.length());
+		} else if (s.replace(type, "").startsWith("0086")) {
+			phoneNumber = s.substring(2, s.length());
+		} else {
+			phoneNumber = s;
 		}
 		return phoneNumber;
 	}
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -246,34 +249,34 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 			ICSOpenVPNApplication.the_sipengineReceive.MuteMic(true);
 			ICSOpenVPNApplication.the_sipengineReceive.SetLoudspeakerStatus(true);
 		}
-		if(connectedReceive!=null){
+		if (connectedReceive != null) {
 			unregisterReceiver(connectedReceive);
-			connectedReceive=null;
+			connectedReceive = null;
 		}
 		cancelNotify();
 	}
 
 
 	private void stopTimer() {
-		if(timer.isActivated()){
+		if (timer.isActivated()) {
 			timer.stop();
 			timer.setBase(SystemClock.elapsedRealtime());
-			timer=null;
+			timer = null;
 		}
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.e("CallPhoneNewActivity","onPause()");
+		Log.e("CallPhoneNewActivity", "onPause()");
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		isForeground=false;
+		isForeground = false;
 		initNotify();
-		Log.e("CallPhoneNewActivity","onStop()");
+		Log.e("CallPhoneNewActivity", "onStop()");
 	}
 
 	private void startTimer() {
@@ -325,7 +328,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (CallPhoneService.endFlag.equals(action)) {
-				if(CallPhoneService.CALL_DIR==1){
+				if (CallPhoneService.CALL_DIR == 1) {
 					cancelNotify();
 					stopTimer();
 					onBackPressed();
@@ -361,7 +364,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	}
 
 	private void cancelNotify() {
-		if(mNotificationManager!=null)
+		if (mNotificationManager != null)
 			mNotificationManager.cancel(notifyId);
 	}
 

@@ -43,7 +43,6 @@
 
 
     <ImageView
-        android:id="@+id/imageView1"
         android:layout_below="@id/outside_step_second_content_tv"
         android:layout_marginTop="@dimen/padding_10dp"
         android:layout_width="wrap_content"
