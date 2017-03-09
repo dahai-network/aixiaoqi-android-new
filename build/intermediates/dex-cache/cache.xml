@@ -2,6 +2,24 @@
 <items version="2" >
 
     <item
+        is-multidex="true"
+        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\incremental-classes\baidu\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="0e21a94ceebde7c2cf099e450c565482a0eec796">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10000\instant-run-bootstrap_6fca5fec070da32c300e79d44da498bd3689894d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\android project\aixiaoqi-android-new\app\libs\alipaySdk-20161129.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="9356473ed942faa70a18f34883af52681e1c7223">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\2\alipaySdk-20161129_c80810fa12d9ffc4c62e43c60265ef2a6d5a1902\classes.dex" />
+    </item>
+    <item
         is-multidex="false"
         jar="D:\android project\aixiaoqi-android-new\app\libs\alipaySdk-20161129.jar"
         jumboMode="false"
@@ -9,6 +27,33 @@
         revision="25.0.0"
         sha1="9356473ed942faa70a18f34883af52681e1c7223">
         <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\alipaySdk-20161129_c80810fa12d9ffc4c62e43c60265ef2a6d5a1902.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android project\aixiaoqi-android-new\app\libs\libammsdk.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d7c2f29c05b35e8c8713be2b81c41cf18f98b64a">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\libammsdk_191f2bf46c7d90fe6828f748bf753aa8cb765a4a.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\android project\aixiaoqi-android-new\app\libs\libammsdk.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d7c2f29c05b35e8c8713be2b81c41cf18f98b64a">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\2\libammsdk_191f2bf46c7d90fe6828f748bf753aa8cb765a4a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\android project\aixiaoqi-android-new\app\libs\bugly_crash_upgrade_v1.1.5.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e5394982bca4f57dfd3912646098cbee7d8197a6">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\2\bugly_crash_upgrade_v1.1.5_e2ab73007b6a1287097e9fcf16b74cbe7f809c23\classes.dex" />
     </item>
     <item
         is-multidex="false"
@@ -20,13 +65,13 @@
         <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\bugly_crash_upgrade_v1.1.5_e2ab73007b6a1287097e9fcf16b74cbe7f809c23.jar" />
     </item>
     <item
-        is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\libammsdk.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\incremental-runtime-classes\baidu\debug\instant-run.jar"
+        jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="d7c2f29c05b35e8c8713be2b81c41cf18f98b64a">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\libammsdk_191f2bf46c7d90fe6828f748bf753aa8cb765a4a.jar" />
+        sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10000\instant-run_c76e5554c5d0ec672358abd5717d7c4db758768f\classes.dex" />
     </item>
 
 </items>
