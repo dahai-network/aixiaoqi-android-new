@@ -695,7 +695,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		Log.e(TAG, "isUpgrade=" + isUpgrade);
 		final DfuServiceInitiator starter = new DfuServiceInitiator(deviceAddress)
-				.setDeviceName(deviceName).setKeepBond(true);
+				.setDeviceName(deviceName).setKeepBond(true).setDisableNotification(true);
 		Log.e(TAG, "deviceAddress:" + deviceAddress + "deviceName:" + deviceName);
 
 		if (Environment.getExternalStorageState().equals(
