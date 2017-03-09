@@ -124,6 +124,10 @@ android {
         }
         debug {
             debuggable true
+            //Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources true
             signingConfig signingConfigs.release
         }
     }
