@@ -873,9 +873,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
 
 
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
+
 							if (device.getName() == null) {
 								return;
 							}
@@ -899,9 +897,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 									mService.connect(macAddressStr);
 								}
 							}
-						}
-					});
-
 				}
 			};
 

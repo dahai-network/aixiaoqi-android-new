@@ -218,3 +218,6 @@
 #爱小器内部特殊类和so库避免混淆
  -dontwarn  com.aixiaoqi.**
      -keep class com.aixiaoqi.** { *;}
+
+    -dontwarn  no.nordicsemi.**
+        -keep class no.nordicsemi.** { *;}
