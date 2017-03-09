@@ -374,8 +374,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	private static IntentFilter screenoffIntentFilter() {
 		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-		intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
+//		intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+//		intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
 		intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 		return intentFilter;
 	}
@@ -1029,20 +1029,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
-				int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
-				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-					isBatteryCharging = true;
-//					cancelTimer();
-				} else {
-					isBatteryCharging = false;
-				}
-				Log.e(TAG, "isBatteryCharging=" + isBatteryCharging);
-			} else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction()) || !isBatteryCharging) {
-				Log.i("screenoff", "The screen has turned off");
-				// Turn the screen back on again, from the main thread
-//				timerStartCpu();
-			} else if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+//			if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
+//				int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
+//				if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
+//					isBatteryCharging = true;
+////					cancelTimer();
+//				} else {
+//					isBatteryCharging = false;
+//				}
+//				Log.e(TAG, "isBatteryCharging=" + isBatteryCharging);
+//			} else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction()) || !isBatteryCharging) {
+//				Log.i("screenoff", "The screen has turned off");
+//				// Turn the screen back on again, from the main thread
+////				timerStartCpu();
+//			} else
+			if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
 				int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
 						BluetoothAdapter.ERROR);
 				switch (state) {
