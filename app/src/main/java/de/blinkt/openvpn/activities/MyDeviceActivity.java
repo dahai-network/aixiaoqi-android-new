@@ -33,8 +33,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -121,18 +119,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_ENABLE_BT = 2;
 	public static final String BLUESTATUSFROMPROMAIN = "bluestatusfrompromain";
-	private TimerTask checkPowerTask = new TimerTask() {
-		@Override
-		public void run() {
-			int powerInt = utils.readInt(ELECTRICITY);
-			if (sinking != null) {
-				sinking.setPercent(((float) powerInt) / 100);
-			}
-		}
-	};
+
 	private SharedUtils utils = SharedUtils.getInstance();
 	private UartService mService = ICSOpenVPNApplication.uartService;
-	private Timer checkPowerTimer = new Timer();
 	private String macAddressStr;
 	private int SCAN_PERIOD = 10000;//原本120000毫秒
 	private DialogBalance noDevicedialog;
@@ -196,7 +185,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
 		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
-		checkPowerTimer.schedule(checkPowerTask, 100, 60000);
 
 		macAddressStr = utils.readString(Constant.IMEI);
 		if (macAddressStr != null)
@@ -438,7 +426,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					connectThread.start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
 					if (!isUpgrade) {
-						showProgress("正在重新连接",true);
+						showProgress("正在重新连接", true);
 					}
 				} else {
 					unBindButton.setVisibility(GONE);
@@ -540,13 +528,16 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		super.onResume();
 		Log.d(TAG, "onResume");
 		isForeground = true;
+		int electricityInt = utils.readInt(Constant.ELECTRICITY);
+		sinking.setPercent(((float) electricityInt) / 100);
 		DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
 	}
 
 	@Override
 	protected void onPause() {
-		Log.d(TAG, "onResume");
+		Log.d(TAG, "onPause");
 		super.onPause();
+		sinking.setStatus(MySinkingView.Status.NONE);
 		DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
 	}
 
@@ -561,14 +552,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (isDfuServiceRunning()) {
 			stopService(new Intent(this, DfuService.class));
 		}
-		if (checkPowerTimer != null) {
-			checkPowerTimer.cancel();
-			checkPowerTimer = null;
-		}
-		if (checkPowerTask != null) {
-			checkPowerTask.cancel();
-			checkPowerTask = null;
-		}
+
 		try {
 			LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(UARTStatusChangeReceiver);
 			EventBus.getDefault().unregister(this);
@@ -868,30 +852,29 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
 
 
-
-							if (device.getName() == null) {
-								return;
+					if (device.getName() == null) {
+						return;
+					}
+					Log.e(TAG, "isUpgrade:" + isUpgrade + "deviceName:" + device.getName() + "保存的IMEI地址:" + utils.readString(Constant.IMEI).replace(":", ""));
+					if (isUpgrade && device.getName().contains(utils.readString(Constant.IMEI).replace(":", ""))) {
+						Log.e(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
+						if (mService != null) {
+							scanLeDevice(false);
+							if (startDfuCount == 0) {
+								Log.i(TAG, "startDfuCount:" + startDfuCount);
+								startDfuCount++;
+								CommonTools.delayTime(1000);
+								uploadToBlueTooth(device.getName(), device.getAddress());
 							}
-							Log.e(TAG, "isUpgrade:" + isUpgrade + "deviceName:" + device.getName() + "保存的IMEI地址:" + utils.readString(Constant.IMEI).replace(":", ""));
-							if (isUpgrade && device.getName().contains(utils.readString(Constant.IMEI).replace(":", ""))) {
-								Log.e(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
-								if (mService != null) {
-									scanLeDevice(false);
-									if (startDfuCount == 0) {
-										Log.i(TAG, "startDfuCount:" + startDfuCount);
-										startDfuCount++;
-										CommonTools.delayTime(1000);
-										uploadToBlueTooth(device.getName(), device.getAddress());
-									}
-								}
-							} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
-								Log.e(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
-								if (mService != null) {
-									scanLeDevice(false);
-									utils.writeString(Constant.IMEI, macAddressStr);
-									mService.connect(macAddressStr);
-								}
-							}
+						}
+					} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
+						Log.e(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
+						if (mService != null) {
+							scanLeDevice(false);
+							utils.writeString(Constant.IMEI, macAddressStr);
+							mService.connect(macAddressStr);
+						}
+					}
 				}
 			};
 
@@ -985,9 +968,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				stopAnim();
 			} else {
 //				if (entity.getFailType() != SocketConstant.START_TCP_FAIL)
-					stopAnim();
+				stopAnim();
 				percentTextView.setVisibility(GONE);
-//				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 				switch (entity.getFailType()) {
 					case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 						CommonTools.showShortToast(this, getString(R.string.index_regist_fail));

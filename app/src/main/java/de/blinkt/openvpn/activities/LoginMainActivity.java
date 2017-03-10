@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -100,7 +101,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		createViewInit();
 		setLoginData();
 		String otherDeviceLogin = getIntent().getStringExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN);
-		if (!TextUtils.isEmpty(otherDeviceLogin)&&!sharedUtils.readBoolean(Constant.ISFIRSTIN,true)) {
+		if (!TextUtils.isEmpty(otherDeviceLogin) && !sharedUtils.readBoolean(Constant.ISFIRSTIN, true)) {
 			CommonTools.showShortToast(this, otherDeviceLogin);
 		}
 	}
@@ -164,8 +165,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 						login_btn.setEnabled(true);
 						login_btn.setBackgroundResource(R.drawable.circle_green_ret);
 						login_btn.setTextColor(getResources().getColor(R.color.white));
-					}
-					else {
+					} else {
 						login_btn.setEnabled(false);
 						login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
 						login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
@@ -195,8 +195,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 						login_btn.setEnabled(true);
 						login_btn.setBackgroundResource(R.drawable.circle_green_ret);
 						login_btn.setTextColor(getResources().getColor(R.color.white));
-					}
-					else {
+					} else {
 						login_btn.setEnabled(false);
 						login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
 						login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
@@ -215,12 +214,15 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		});
 	}
 
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		finish();
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);// 注意
+			intent.addCategory(Intent.CATEGORY_HOME);
+			startActivity(intent);
+		}
+		return true;
 	}
-
 
 	@Override
 	public void onClick(View v) {
@@ -232,7 +234,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				startActivity(toRegistIntent);
 				break;
 			case R.id.login_btn:
-				if(pwdEdit!=null) {
+				if (pwdEdit != null) {
 					if (CheckUtil.isPassWordNo(pwdEdit.getText().toString(), LoginMainActivity.this)) {
 						showProgress(R.string.login_loading);
 						LoginHttp loginHttp = new LoginHttp(this, HttpConfigUrl.COMTYPE_LOGIN, usernameEdit.getText().toString(), pwdEdit.getText().toString());
@@ -333,7 +335,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			if (loginHttp.getStatus() == 1) {
 				LoginEntity entity = loginHttp.getLoginModel();
 
-				if(entity!=null) {
+				if (entity != null) {
 					sharedUtils.writeString(Constant.USER_NAME, entity.getTel());
 					sharedUtils.writeString(Constant.PASSWORD, pwdEdit.getText().toString());
 					sharedUtils.writeString(Constant.TOKEN, entity.getToken());
@@ -350,7 +352,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 					sharedUtils.writeInt(Constant.QQ_REMIND, entity.getNotificaQQ());
 					sharedUtils.writeInt(Constant.LIFT_WRIST, entity.getNotificaQQ());
 					sharedUtils.writeBoolean(Constant.ISFIRSTIN, false);
-					Log.e("token","token="+entity.getToken());
+					Log.e("token", "token=" + entity.getToken());
 					if (!TextUtils.isEmpty(entity.getBirthday())) {
 						sharedUtils.writeString(Constant.BRITHDAY, DateUtils.getDateToString(Long.parseLong(entity.getBirthday()) * 1000).substring(0, 7).replace("-", "年"));
 					}

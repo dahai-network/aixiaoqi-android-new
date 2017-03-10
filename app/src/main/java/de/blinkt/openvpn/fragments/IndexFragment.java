@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -32,7 +34,6 @@ import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.HotPackageAdapter;
 import cn.com.johnson.adapter.OrderAdapter;
-import cn.com.johnson.adapter.PictureAdapter;
 import cn.com.johnson.model.BoughtPackageEntity;
 import cn.com.johnson.model.HotPackageEntity;
 import cn.com.johnson.model.IndexBannerEntity;
@@ -53,12 +54,11 @@ import de.blinkt.openvpn.http.GetHotHttp;
 import de.blinkt.openvpn.http.GetSportTotalHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.model.SportTotalEntity;
-import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.DividerGridItemDecoration;
 import de.blinkt.openvpn.views.FullyRecylerView;
-import de.blinkt.openvpn.views.ScrollViewPager;
 import de.blinkt.openvpn.views.TitleBar;
+import de.blinkt.openvpn.views.bannerview.CycleViewPager;
 import de.blinkt.openvpn.views.xrecycler.DividerItemDecoration;
 
 import static de.blinkt.openvpn.constant.HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL;
@@ -67,29 +67,27 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKBANNER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOTPACKAGEMORE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKINLANDFEE;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKNOTES;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKSPORTTOTALDATA;
 import static de.blinkt.openvpn.constant.UmengContant.CLICORDERMORE;
 import static de.blinkt.openvpn.fragments.SportFragment.REFRESHSTEP;
 
 
-public class IndexFragment extends Fragment implements View.OnClickListener, ScrollViewPager.OnImageItemClickListener, InterfaceCallback {
+public class IndexFragment extends Fragment implements View.OnClickListener, InterfaceCallback {
 
 	private String TAG = "IndexFragment";
 	private TextView dualSimTextView;
 
 	private TextView foreignTextView;
-	private ScrollViewPager viewPager;
 
 	private List<ImageView> pageViews;
 
 	private TextView callPacketTextView;
-	private TextView DSDSTextView;
+
 	private FullyRecylerView hotPackageRecyclerView;
 	private RecyclerView boughtPackgeRecyclerView;
 	private TextView hotMessageMoreTextView;
 	private TextView boughtMessageMoreTextView;
-	private RelativeLayout scrollViewPagerLayout;
+	private CycleViewPager scrollViewPagerLayout;
 	private List<IndexBannerEntity> bannerData;
 	//图片加载类
 	private RequestManager manager;
@@ -108,76 +106,10 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	private TitleBar title;
 
 
-	private void addHeader() {
-		View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.viewpager_round_layout, null);
-		LinearLayout images_layout = (LinearLayout) headerView.findViewById(R.id.carousel_image_layout);
-		dots_layout = (LinearLayout) headerView.findViewById(R.id.image_round_layout);
-		int width = CommonTools.getScreenWidth(getActivity());
-		ViewGroup.LayoutParams params = images_layout.getLayoutParams();
-		params.width = width;
-		params.height = scrollViewPagerLayout.getHeight();
-		images_layout.setLayoutParams(params);
-		if (pageViews.size() == 1) {
-			pageViews.get(0).setLayoutParams(params);
-			images_layout.addView(pageViews.get(0));
-			images_layout.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					WebViewActivity.launch(getActivity(), bannerData.get(0).getUrl(), bannerData.get(0).getTitle());
-				}
-			});
-		} else {
-			viewPager = new ScrollViewPager(getActivity());
-			initImageRounds();
-			viewPager.setImages(pageViews);
-			viewPager.setAdapter(new PictureAdapter(pageViews));
-			viewPager.setCurrentItem(Integer.MAX_VALUE / 2);
-			images_layout.addView(viewPager);
-			viewPager.setOnImageItemClickListener(this);
-		}
-		scrollViewPagerLayout.addView(headerView);
-	}
-
 	public OrderAdapter getOrderAdapter() {
 		return orderAdapter;
 	}
 
-	private void initImageRounds() {
-		List<ImageView> dots = new ArrayList<>();
-		dots_layout.removeAllViews();
-
-		/**
-		 *当轮播图大于1张时小圆点显示
-		 * */
-		if (pageViews.size() > 1) {
-			dots_layout.setVisibility(View.VISIBLE);
-		} else {
-			dots_layout.setVisibility(View.INVISIBLE);
-		}
-		int size = pageViews.size();
-		//如果出现两张图，会出现异常，所以先复制成4张图，再将点改成两个
-		if (bannerData.size() == 2) {
-			size /= 2;
-		}
-		for (int i = 0; i < size; i++) {
-			ImageView round = new ImageView(getActivity());
-			/**
-			 * 默认让第一张图片显示深颜色的圆点
-			 * */
-			if (i == 0) {
-				round.setImageResource(R.drawable.face_float_icon);
-			} else {
-				round.setImageResource(R.drawable.face_float_icon_on);
-			}
-			dots.add(round);
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, -2);
-			params.leftMargin = 20;
-			params.width = CommonTools.dip2px(getActivity(), 5);
-			params.height = CommonTools.dip2px(getActivity(), 5);
-			dots_layout.addView(round, params);
-		}
-		viewPager.setDots(dots);
-	}
 
 	public IndexFragment() {
 		// Required empty public constructor
@@ -213,7 +145,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		boughtMessageMoreTextView.setOnClickListener(this);
 		sportTabLienarLayout.setOnClickListener(this);
 		dualSimTextView.setOnClickListener(this);
-		DSDSTextView.setOnClickListener(this);
 		manager = Glide.with(ICSOpenVPNApplication.getContext());
 		ICSOpenVPNApplication.getInstance().registerReceiver(realStepReceiver, getFilter());
 		changeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
@@ -224,22 +155,12 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		scrollLinearlayout = (LinearLayout) view.findViewById(R.id.scrollLinearlayout);
 		title = (TitleBar) view.findViewById(R.id.title);
 		title.setTextTitle(getString(R.string.index));
-		/*title.setRightBtnText(R.string.videotutorial);
-		title.getRightText().setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKVOIDECOURSE);
-				Intent marketIntent = new Intent(getActivity(), PackageMarketActivity.class);
-				startActivity(marketIntent);
-			}
-		});*/
 		foreignTextView = (TextView) view.findViewById(R.id.foreignTextView);
 		callPacketTextView = (TextView) view.findViewById(R.id.callPacketTextView);
-		DSDSTextView = (TextView) view.findViewById(R.id.DSDSTextView);
+
 		dualSimTextView = (TextView) view.findViewById(R.id.dualSimTextView);
 		boughtPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.boughtPacketLinearLayout);
-		scrollViewPagerLayout = (RelativeLayout) view.findViewById(R.id.scrollViewPagerLayout);
+		scrollViewPagerLayout = (CycleViewPager) view.findViewById(R.id.scrollViewPagerLayout);
 		hotMessageMoreTextView = (TextView) view.findViewById(R.id.hotMessageMoreTextView);
 		boughtMessageMoreTextView = (TextView) view.findViewById(R.id.boughtMessageMoreTextView);
 		sportTabLienarLayout = (LinearLayout) view.findViewById(R.id.sportTabLienarLayout);
@@ -348,10 +269,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 				MobclickAgent.onEvent(getActivity(), CLICKINLANDFEE);
 				WebViewActivity.launch(getActivity(), SharedUtils.getInstance().readString(IntentPutKeyConstant.DUALSIM_STANDBYTUTORIAL_URL), getString(R.string.dual_sim_standby_tutorial));
 				break;
-			case R.id.DSDSTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKNOTES);
-				break;
 		}
 
 	}
@@ -364,35 +281,61 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	}
 
 
-	@Override
-	public void onItemClick(int itemPosition) {
-		//如果出现itemPosition大于当前数据就意味着有2张图片*2，所以要减去2
-		if (itemPosition >= bannerData.size()) {
-			itemPosition %= 2;
+	@SuppressLint("NewApi")
+	private void initialize(List<IndexBannerEntity> infos) {
+		// 将最后一个ImageView添加进来
+		pageViews.add(getImageView(getActivity(), infos.get(infos.size() - 1).getImage()));
+		for (int i = 0; i < infos.size(); i++) {
+			pageViews.add(getImageView(getActivity(), infos.get(i).getImage()));
 		}
-		String urlStr = bannerData.get(itemPosition).getUrl();
-		if (!TextUtils.isEmpty(urlStr)) {
-			//友盟方法统计
-			MobclickAgent.onEvent(getActivity(), CLICKBANNER);
-			WebViewActivity.launch(getActivity(), urlStr, bannerData.get(itemPosition).getTitle());
-		}
+		// 将第一个ImageView添加进来
+		pageViews.add(getImageView(getActivity(), infos.get(0).getImage()));
+
+		// 设置循环，在调用setData方法前调用
+		scrollViewPagerLayout.setCycle(true);
+
+		// 在加载数据前设置是否循环
+		scrollViewPagerLayout.setData(pageViews, infos, mAdCycleViewListener);
+		//设置轮播
+		scrollViewPagerLayout.setWheel(true);
+
+		// 设置轮播时间，默认5000ms
+		scrollViewPagerLayout.setTime(2000);
+		//设置圆点指示图标组居中显示，默认靠右
+		scrollViewPagerLayout.setIndicatorCenter();
 	}
+
+	public static ImageView getImageView(Context context, String url) {
+		ImageView imageView = (ImageView) LayoutInflater.from(context).inflate(
+				R.layout.view_banner, null);
+		Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+		return imageView;
+	}
+
+	private CycleViewPager.ImageCycleViewListener mAdCycleViewListener = new CycleViewPager.ImageCycleViewListener() {
+
+		@Override
+		public void onImageClick(IndexBannerEntity info, int position, View imageView) {
+			if (scrollViewPagerLayout.isCycle()) {
+				if (!TextUtils.isEmpty(info.getUrl())) {
+					//友盟方法统计
+					MobclickAgent.onEvent(getActivity(), CLICKBANNER);
+					WebViewActivity.launch(getActivity(), info.getUrl(), info.getTitle());
+				}
+			}
+
+		}
+
+	};
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_INDEX_BANNER) {
 			BannerHttp http = (BannerHttp) object;
 			bannerData = http.getBannerList();
-			int size = bannerData.size();
-			if (bannerData.size() == 2) {
-				for (int j = 0; j < 2; j++) {
-					addPageViews(size);
-				}
-			} else {
-				addPageViews(size);
+			if (bannerData != null && bannerData.size() != 0) {
+				initialize(bannerData);
 			}
-
-			addHeader();
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_ORDER) {
 			BoughtPacketHttp http = (BoughtPacketHttp) object;
 			BoughtPackageEntity boughtPackageEntity = http.getBoughtPackageEntity();
@@ -442,19 +385,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		}
 	}
 
-	private void addPageViews(int size) {
-		for (int i = 0; i < size; i++) {
-			Context context = getActivity();
-			if (context != null) {
-				ImageView imageView = new ImageView(context);
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				manager.load(bannerData.get(i).getImage()).into(imageView);
-				Log.i(TAG, "首页图片：" + bannerData.get(i).getImage());
-				pageViews.add(imageView);
-			}
-		}
-	}
-
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 
@@ -491,22 +421,25 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
 		//当页面跳出的时候停止轮播
-		if (viewPager != null) {
+		if (scrollViewPagerLayout != null) {
 			if (isVisibleToUser) {
-				if (pageViews.size() > 1)
-					viewPager.openLoop();
+				if (pageViews.size() >= 1) {
+					controlWheel(true);
+				}
 			} else {
-				viewPager.stopLoop();
+				controlWheel(false);
 			}
 		}
 	}
 
-	@Override
-	public void onHiddenChanged(boolean hidden) {
-		if (!hidden) {
-			viewPager.stopLoop();
+
+	private void controlWheel(boolean isWheel) {
+		scrollViewPagerLayout.setCycle(isWheel);
+		scrollViewPagerLayout.setWheel(isWheel);
+		if (isWheel) {
+			scrollViewPagerLayout.setVisibility(View.VISIBLE);
 		} else {
-			viewPager.openLoop();
+			scrollViewPagerLayout.setVisibility(View.GONE);
 		}
 	}
 
