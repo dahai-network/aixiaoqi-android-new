@@ -12,6 +12,7 @@ import android.graphics.Path.Direction;
 import android.graphics.Region.Op;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import cn.com.aixiaoqi.R;
@@ -78,37 +79,26 @@ public class MySinkingView extends FrameLayout {
 		mFlag = status;
 	}
 
-//	public void clear() {
-//		mFlag = Status.NONE;
-//		if (mScaledBitmap != null) {
-//			mScaledBitmap.recycle();
-//			mScaledBitmap = null;
-//		}
-//
-//		if (mBitmap != null) {
-//			mBitmap.recycle();
-//			mBitmap = null;
-//		}
-//	}
-
 	@Override
 	protected void dispatchDraw(Canvas canvas) {
+		Log.e("MySinkingView","dispatchDraw");
 		super.dispatchDraw(canvas);
 		int width = getWidth();
 		int height = getHeight();
-
+		int halfWidth=width/2;
+		int halfHeight=height/2;
 		//裁剪成圆区域
 		Path path = new Path();
 		canvas.save();
 		path.reset();
 		canvas.clipPath(path);
-		path.addCircle(width / 2, height / 2, width / 2, Direction.CCW);
+		path.addCircle(halfWidth, halfHeight, halfWidth, Direction.CCW);
 		canvas.clipPath(path, Op.REPLACE);
 
 		if (mFlag == Status.RUNNING) {
 			if (mScaledBitmap == null) {
 				mBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.wave2);
-				mScaledBitmap = Bitmap.createScaledBitmap(mBitmap, width, getHeight(), false);
+				mScaledBitmap = Bitmap.createScaledBitmap(mBitmap, width, height, false);
 				mBitmap.recycle();
 				mBitmap = null;
 				mRepeatCount = (int) Math.ceil(width / mScaledBitmap.getWidth() + 0.5) + 1;
@@ -121,23 +111,23 @@ public class MySinkingView extends FrameLayout {
 			textPaint.setColor(mTextColor);
 			textPaint.setTextSize(mTextSize);
 			textPaint.setStyle(Style.FILL);
-			canvas.drawText(str, (getWidth() - textPaint.measureText(str)) / 2, getHeight() / 2, textPaint);
+			canvas.drawText(str, (width - textPaint.measureText(str)) / 2, halfHeight, textPaint);
 			String stronly = "剩余电量";
 			TextPaint onlyPaint = new TextPaint();
 			onlyPaint.setColor(mTextColor);
 			onlyPaint.setTextSize(mTextSize);
 			onlyPaint.setStyle(Style.FILL);
-			canvas.drawText(stronly, (getWidth() - onlyPaint.measureText(stronly)) / 2, (getHeight() + textPaint.measureText(str)+20) / 2, onlyPaint);
+			canvas.drawText(stronly, (width - onlyPaint.measureText(stronly)) / 2, (height+ textPaint.measureText(str)+20) / 2, onlyPaint);
 
 			mLeft += mSpeed;
 			if (mLeft >= mScaledBitmap.getWidth())
 				mLeft = 0;
 			// 绘制外圆环
 			mPaint.setStyle(Paint.Style.STROKE);
-			mPaint.setStrokeWidth(CommonTools.dip2px(ICSOpenVPNApplication.getContext(),15));
+			mPaint.setStrokeWidth(25);
 			mPaint.setAntiAlias(true);
 			mPaint.setColor(Color.rgb(94, 94, 94));
-			canvas.drawCircle(width / 2, height / 2, width / 2 - 2, mPaint);
+			canvas.drawCircle(halfWidth, halfHeight, halfWidth - 2, mPaint);
 			postInvalidateDelayed(20);
 		}
 		canvas.restore();

@@ -74,18 +74,21 @@ public class CycleViewPager extends LinearLayout implements OnPageChangeListener
 					}
 
 					releaseTime = System.currentTimeMillis();
-					handler.removeCallbacks(runnable);
-					handler.postDelayed(runnable, time);
+					delayWheel();
 					return;
 				}
 				if (msg.what == WHEEL_WAIT && imageViews.size() != 0) {
-					handler.removeCallbacks(runnable);
-					handler.postDelayed(runnable, time);
+					delayWheel();
 				}
 			}
 		};
 
 		return view;
+	}
+
+	private void delayWheel() {
+		handler.removeCallbacks(runnable);
+		handler.postDelayed(runnable, time);
 	}
 
 	private  Context context;
