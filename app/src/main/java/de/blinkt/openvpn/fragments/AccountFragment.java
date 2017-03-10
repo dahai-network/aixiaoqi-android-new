@@ -146,7 +146,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 		super.onResume();
 		//获取数据，每次都重新获取一次以保持正确性。
 		getData();
-		getAlarmClock();
+//		getAlarmClock();
 	}
 
 	private void getAlarmClock() {

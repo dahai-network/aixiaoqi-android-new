@@ -329,7 +329,7 @@ public class RechargeActivity extends BaseActivity implements InterfaceCallback,
 	}
 
 	private void payForWeixin(RechargeEntity rechargeEntity) {
-		showProgress(getResources().getString(R.string.weixin_paying),false);
+		showProgress(getResources().getString(R.string.weixin_paying),true);
 		WeixinGetPayIdHttp http = new WeixinGetPayIdHttp(this, HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID, rechargeEntity.getPayment().getPaymentNum());
 		new Thread(http).start();
 		nextBtn.setEnabled(true);

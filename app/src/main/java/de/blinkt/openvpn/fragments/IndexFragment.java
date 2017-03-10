@@ -131,7 +131,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			initImageRounds();
 			viewPager.setImages(pageViews);
 			viewPager.setAdapter(new PictureAdapter(pageViews));
-			viewPager.setCurrentItem(Integer.MAX_VALUE/2);
+			viewPager.setCurrentItem(Integer.MAX_VALUE / 2);
 			images_layout.addView(viewPager);
 			viewPager.setOnImageItemClickListener(this);
 		}
@@ -360,8 +360,9 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 	public void onResume() {
 		super.onResume();
 		getBoughtPackage();
-		getSportTotal();
+//		getSportTotal();
 	}
+
 
 	@Override
 	public void onItemClick(int itemPosition) {
@@ -468,7 +469,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (REFRESHSTEP.equals(intent.getAction())) {
-				getSportTotal();
+//				getSportTotal();
 			}
 		}
 	};
@@ -497,6 +498,15 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Scr
 			} else {
 				viewPager.stopLoop();
 			}
+		}
+	}
+
+	@Override
+	public void onHiddenChanged(boolean hidden) {
+		if (!hidden) {
+			viewPager.stopLoop();
+		} else {
+			viewPager.openLoop();
 		}
 	}
 

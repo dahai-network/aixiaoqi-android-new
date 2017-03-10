@@ -14,5 +14,6 @@
 
     <include
 
-        layout="@layout/view_no_net"/>
+        layout="@layout/view_no_net"
+        />
 </RelativeLayout>

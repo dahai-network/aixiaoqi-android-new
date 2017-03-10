@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -227,8 +226,8 @@ public class ScrollViewPager extends ViewPager {
 		return super.onTouchEvent(event);
 	}
 
-	public  boolean isNext=false;
-	public  boolean isLast=false;
+	public boolean isNext = false;
+	public boolean isLast = false;
 	public boolean isScollStop = true;
 
 	/**
@@ -249,12 +248,11 @@ public class ScrollViewPager extends ViewPager {
 						if (!stopLoopTag) {
 							Message message = Message.obtain();
 							message.what = 10;
-							if(getCurrentItem()!=images.size()-1)
-							message.arg1 = getCurrentItem() + 1;
-							else{
-								message.arg1 =0;
+							if (getCurrentItem() != images.size() - 1)
+								message.arg1 = getCurrentItem() + 1;
+							else {
+								message.arg1 = 0;
 							}
-							Log.e("count","count"+message.arg1+"\ngetCurrentItem()="+getCurrentItem());
 							mHandler.sendMessage(message);
 						}
 					} catch (InterruptedException e) {

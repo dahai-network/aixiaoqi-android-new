@@ -431,19 +431,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							CommonTools.delayTime(1000);
 							if (isUpgrade) {
 								Log.e(TAG, "空中升级重连");
-								String macStr = utils.readString(Constant.IMEI);
-								if (macStr != null) {
-									mService.connect(macStr);
-								} else {
-									scanLeDevice(true);
-								}
+								scanLeDevice(true);
 							}
 						}
 					});
 					connectThread.start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
 					if (!isUpgrade) {
-						showProgress("正在重新连接", false);
+						showProgress("正在重新连接",true);
 					}
 				} else {
 					unBindButton.setVisibility(GONE);
@@ -990,7 +985,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				stopAnim();
 			} else {
 //				if (entity.getFailType() != SocketConstant.START_TCP_FAIL)
-				stopAnim();
+					stopAnim();
 				percentTextView.setVisibility(GONE);
 //				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 				switch (entity.getFailType()) {

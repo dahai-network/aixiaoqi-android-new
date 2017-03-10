@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -74,6 +73,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	private IntentFilter setFilter() {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(MyOrderDetailActivity.FINISH_PROCESS);
+		filter.addAction(MyOrderDetailActivity.FINISH_PROCESS_ONLY);
 		filter.addAction(MyOrderDetailActivity.CARD_RULE_BREAK);
 		return filter;
 	}
@@ -123,7 +123,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 			if (TextUtils.equals(intent.getAction(), MyOrderDetailActivity.CARD_RULE_BREAK)) {
 				dismissProgress();
 				showDialog();
-			} else {
+			} else if (TextUtils.equals(intent.getAction(), MyOrderDetailActivity.FINISH_PROCESS)) {
 				if (ReceiveBLEMoveReceiver.orderStatus == 4) {
 					HashMap<String, String> map = new HashMap<>();
 					map.put("statue", 0 + "");
@@ -135,6 +135,8 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				}
 				dismissProgress();
 				finish();
+			} else if (TextUtils.equals(intent.getAction(), MyOrderDetailActivity.FINISH_PROCESS_ONLY)) {
+				dismissProgress();
 			}
 		}
 	};
@@ -175,8 +177,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 			CommonTools.showShortToast(this, getString(R.string.effective_date_is_null));
 			return;
 		}
-//		sureTextView.setEnabled(false);
-
+		showProgress("正在激活", false);
 		OrderActivationHttp orderActivationHttp = new OrderActivationHttp(this, HttpConfigUrl.COMTYPE_ORDER_ACTIVATION, orderId, effectTime);
 		new Thread(orderActivationHttp).start();
 	}
@@ -216,11 +217,11 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				//是否测试卡位置：否，这是写卡！
 				IS_TEXT_SIM = false;
 				ReceiveBLEMoveReceiver.orderStatus = 4;
-				showProgress("正在激活",false);
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
 						try {
+							SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
 							Thread.sleep(20000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
@@ -236,7 +237,6 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 						}
 					}
 				}).start();
-				SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
 				orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
 			} else {
 				CommonTools.showShortToast(this, orderActivationHttp.getMsg());
@@ -285,6 +285,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	@Override
 	public void noNet() {
 		sureTextView.setEnabled(true);
+		dismissProgress();
 	}
 
 	@Override
