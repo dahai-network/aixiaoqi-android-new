@@ -160,7 +160,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			if (status == 1) {
 				right(gson.toJson(baseEntry.getData()));
 			} else if (status == -999) {
-				ICSOpenVPNApplication.getInstance().finishAllActivity();
+//				ICSOpenVPNApplication.getInstance().finishAllActivity();
 				//token过期
 				Intent intent = new Intent(context_, LoginMainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

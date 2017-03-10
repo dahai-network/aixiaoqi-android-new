@@ -987,7 +987,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //				if (entity.getFailType() != SocketConstant.START_TCP_FAIL)
 					stopAnim();
 				percentTextView.setVisibility(GONE);
-//				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 				switch (entity.getFailType()) {
 					case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 						CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
