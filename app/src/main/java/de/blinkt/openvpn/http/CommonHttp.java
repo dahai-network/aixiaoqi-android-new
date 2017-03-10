@@ -162,10 +162,12 @@ public abstract class CommonHttp implements Callback, Runnable {
 			} else if (status == -999) {
 //				ICSOpenVPNApplication.getInstance().finishAllActivity();
 				//token过期
+				if(!CommonTools.isFastDoubleClick(1000)){
 				Intent intent = new Intent(context_, LoginMainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				intent.putExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN, context_.getResources().getString(R.string.token_interrupt));
 				context_.startActivity(intent);
+				}
 			} else {
 				right("");
 			}

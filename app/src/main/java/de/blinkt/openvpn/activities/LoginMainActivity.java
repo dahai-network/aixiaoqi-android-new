@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -68,8 +69,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 	private LinearLayout loginLinearLayout;
 
 	private static final int MSG_SET_ALIAS = 1001;
-	private InputMethodManager manager = null;
-
 
 	@Override
 	public void onPanelClosed(int featureId, Menu menu) {
@@ -96,7 +95,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 	private void init() {
 		sharedUtils = SharedUtils.getInstance();
-		manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		createViewInit();
 		setLoginData();
 		String otherDeviceLogin = getIntent().getStringExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN);
@@ -221,6 +219,13 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		finish();
 	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			ICSOpenVPNApplication.getInstance().AppExit();
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
 	@Override
 	public void onClick(View v) {

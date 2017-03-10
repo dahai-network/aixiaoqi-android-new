@@ -138,7 +138,6 @@ public class MySinkingView extends FrameLayout {
 			mPaint.setAntiAlias(true);
 			mPaint.setColor(Color.rgb(94, 94, 94));
 			canvas.drawCircle(width / 2, height / 2, width / 2 - 2, mPaint);
-
 			postInvalidateDelayed(20);
 		}
 		canvas.restore();

@@ -26,7 +26,7 @@ import cn.com.johnson.model.IndexBannerEntity;
  */
 @SuppressLint("NewApi")
 public class CycleViewPager extends LinearLayout implements OnPageChangeListener {
-	
+
 	private List<ImageView> imageViews = new ArrayList<ImageView>();
 	private ImageView[] indicators;
 	private FrameLayout viewPagerFragmentLayout;
@@ -88,12 +88,11 @@ public class CycleViewPager extends LinearLayout implements OnPageChangeListener
 		return view;
 	}
 
-private  Context context;
+	private  Context context;
 
 	public CycleViewPager(Context context) {
 		super(context);
 		this.context=context;
-
 		this.addView(onCreateView(context));
 	}
 
@@ -121,7 +120,7 @@ private  Context context;
 
 	/**
 	 * 初始化viewpager
-	 * 
+	 *
 	 * @param views
 	 *            要显示的views
 	 * @param showPosition
@@ -151,17 +150,17 @@ private  Context context;
 		for (int i = 0; i < indicators.length; i++) {
 			indicators[i] = new ImageView(context);
 			LayoutParams layoutParams=new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-			layoutParams.setMargins(0,0,5,0);
+			layoutParams.setMargins(0,0,10,0);
 			indicators[i].setLayoutParams(layoutParams);
 			indicatorLayout.addView(indicators[i]);
 		}
-
-		adapter = new ViewPagerAdapter();
-
+		if(adapter==null) {
+			adapter = new ViewPagerAdapter();
+		}
 		// 默认指向第一项，下方viewPager.setCurrentItem将触发重新计算指示器指向
 		setIndicator(0);
 
-		viewPager.setOffscreenPageLimit(3);
+//		viewPager.setOffscreenPageLimit(3);
 		viewPager.setOnPageChangeListener(this);
 		viewPager.setAdapter(adapter);
 		if (showPosition < 0 || showPosition >= views.size())
@@ -187,7 +186,7 @@ private  Context context;
 
 	/**
 	 * 是否循环，默认不开启，开启前，请将views的最前面与最后面各加入一个视图，用于循环
-	 * 
+	 *
 	 * @param isCycle
 	 *            是否循环
 	 */
@@ -197,7 +196,7 @@ private  Context context;
 
 	/**
 	 * 是否处于循环状态
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isCycle() {
@@ -206,7 +205,7 @@ private  Context context;
 
 	/**
 	 * 设置是否轮播，默认不轮播,轮播一定是循环的
-	 * 
+	 *
 	 * @param isWheel
 	 */
 	public void setWheel(boolean isWheel) {
@@ -219,7 +218,7 @@ private  Context context;
 
 	/**
 	 * 是否处于轮播状态
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isWheel() {
@@ -253,7 +252,7 @@ private  Context context;
 
 	/**
 	 * 设置轮播暂停时间，即没多少秒切换到下一张视图.默认5000ms
-	 * 
+	 *
 	 * @param time
 	 *            毫秒为单位
 	 */
@@ -278,7 +277,7 @@ private  Context context;
 
 	/**
 	 * 返回内置的viewpager
-	 * 
+	 *
 	 * @return viewPager
 	 */
 	public BaseViewPager getViewPager() {
@@ -287,9 +286,9 @@ private  Context context;
 
 	/**
 	 * 页面适配器 返回对应的view
-	 * 
+	 *
 	 * @author Yuedong Li
-	 * 
+	 *
 	 */
 	private class ViewPagerAdapter extends PagerAdapter {
 
@@ -313,7 +312,7 @@ private  Context context;
 			ImageView v = imageViews.get(position);
 			if (mImageCycleViewListener != null) {
 				v.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
 						mImageCycleViewListener.onImageClick(infos.get(currentPosition - 1), currentPosition, v);
@@ -342,7 +341,7 @@ private  Context context;
 			releaseTime = System.currentTimeMillis();
 
 			viewPager.setCurrentItem(currentPosition, false);
-			
+
 		}
 		isScrolling = false;
 	}
@@ -369,7 +368,7 @@ private  Context context;
 
 	/**
 	 * 设置viewpager是否可以滚动
-	 * 
+	 *
 	 * @param enable
 	 */
 	public void setScrollable(boolean enable) {
@@ -378,7 +377,7 @@ private  Context context;
 
 	/**
 	 * 返回当前位置,循环时需要注意返回的position包含之前在views最前方与最后方加入的视图，即当前页面试图在views集合的位置
-	 * 
+	 *
 	 * @return
 	 */
 	public int getCurrentPostion() {
@@ -387,7 +386,7 @@ private  Context context;
 
 	/**
 	 * 设置指示器
-	 * 
+	 *
 	 * @param selectedPosition
 	 *            默认指示器位置
 	 */
@@ -410,10 +409,10 @@ private  Context context;
 			parentViewPager.setScrollable(false);
 	}
 
-	
+
 	/**
 	 * 轮播控件的监听事件
-	 * 
+	 *
 	 * @author minking
 	 */
 	public  interface ImageCycleViewListener {
@@ -423,6 +422,6 @@ private  Context context;
 		 *
 		 * @param imageView
 		 */
-		 void onImageClick(IndexBannerEntity info, int postion, View imageView);
+		void onImageClick(IndexBannerEntity info, int postion, View imageView);
 	}
 }

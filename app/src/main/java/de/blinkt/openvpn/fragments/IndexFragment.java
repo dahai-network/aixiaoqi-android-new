@@ -302,9 +302,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		scrollViewPagerLayout.setData(pageViews, infos, mAdCycleViewListener);
 		//设置轮播
 		scrollViewPagerLayout.setWheel(true);
-
-		// 设置轮播时间，默认5000ms
-		scrollViewPagerLayout.setTime(2000);
 		//设置圆点指示图标组居中显示，默认靠右
 		scrollViewPagerLayout.setIndicatorCenter();
 	}
