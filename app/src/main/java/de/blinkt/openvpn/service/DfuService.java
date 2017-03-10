@@ -25,6 +25,7 @@ package de.blinkt.openvpn.service;
 import android.app.Activity;
 
 import de.blinkt.openvpn.activities.NotificationActivity;
+import de.blinkt.openvpn.constant.Constant;
 import no.nordicsemi.android.dfu.DfuBaseService;
 
 
@@ -51,6 +52,6 @@ public class DfuService extends DfuBaseService {
 	@Override
 	protected boolean isDebug() {
 		// return BuildConfig.DEBUG;
-		return true;
+		return Constant.IS_DEBUG;
 	}
 }
