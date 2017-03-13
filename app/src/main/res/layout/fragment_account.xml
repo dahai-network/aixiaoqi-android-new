@@ -179,6 +179,24 @@
                 android:paddingRight="@dimen/padding_15dp"
                 android:text="@string/my_device"
                 android:textSize="14sp"/>
+
+            <View
+                style="@style/horizontal_line_view_margin_15dp"
+                />
+
+            <TextView
+                android:id="@+id/permission_set"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_40dp"
+                android:background="@drawable/call_phone_selector"
+                android:drawableLeft="@drawable/my_device"
+                android:drawablePadding="@dimen/padding"
+                android:drawableRight="@drawable/arrow"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/padding_15dp"
+                android:paddingRight="@dimen/padding_15dp"
+                android:text="@string/permission_set"
+                android:textSize="14sp"/>
             </LinearLayout>
             <View
                 style="@style/horizontal_line_view"

@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -62,6 +63,7 @@ import de.blinkt.openvpn.fragments.Fragment_Phone;
 import de.blinkt.openvpn.fragments.IndexFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
@@ -78,6 +80,7 @@ import de.blinkt.openvpn.util.ViewUtil;
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
+import static de.blinkt.openvpn.constant.Constant.LOGIN_DATA;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
@@ -159,13 +162,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		initServices();
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
-
+		TelephonyManager telephonyManager=((TelephonyManager) getSystemService(TELEPHONY_SERVICE));
+		String android_imsi = telephonyManager.getSubscriberId();
+		Log.e(TAG,"android_imsi="+android_imsi);
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
-		Log.e(TAG, "Build.MANUFACTURER="+Build.MANUFACTURER);
-		Log.e(TAG, "android.os.Build.MODEL="+Build.MODEL);
-		Log.e(TAG, "VERSION.RELEASE="+Build.VERSION.RELEASE);
-		Log.e(TAG, "Build.VERSION.INCREMENTAL="+Build.VERSION.INCREMENTAL);
+
 	}
 
 
@@ -675,8 +677,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private void getConfigInfo() {
-		GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
-		new Thread(http).start();
+		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
 	}
 
 	private int requestCount=0;
@@ -904,8 +905,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	};
 
 	private void requestPacket() {
-		IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
-		new Thread(http).start();
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET);
 		checkRegisterStatuGoIp();
 	}
 

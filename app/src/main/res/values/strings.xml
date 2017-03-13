@@ -60,6 +60,7 @@
     <string name="order_list">订单列表</string>
     <string name="my_pakages">我的套餐</string>
     <string name="my_device">我的设备</string>
+    <string name="permission_set">权限设置</string>
     <string name="blue_connecting">蓝牙连接中…</string>
     <string name="international_flow_packet">国际流量套餐</string>
     <string name="bind_packet_giftcard">绑定套餐礼包卡</string>
@@ -479,4 +480,7 @@
     <string name="dfu_status_validating_msg">Validating…</string>
     <string name="dfu_unknown_name">unnamed device</string>
 
+    <string name="auto_start">自启动</string>
+    <string name="background_start">受保护应用</string>
+    <string name="trust_app">信任应用</string>
 </resources>

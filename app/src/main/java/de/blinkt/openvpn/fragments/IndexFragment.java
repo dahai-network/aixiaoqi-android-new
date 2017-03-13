@@ -51,6 +51,7 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.BannerHttp;
 import de.blinkt.openvpn.http.BoughtPacketHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetHotHttp;
 import de.blinkt.openvpn.http.GetSportTotalHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
@@ -215,24 +216,20 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	}
 
 	private void getHotPackage() {
-		GetHotHttp http = new GetHotHttp(this, HttpConfigUrl.COMTYPE_GET_HOT, 12);
-		new Thread(http).start();
+		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_HOT);
 	}
 
 	private void getBoughtPackage() {
-		BoughtPacketHttp http = new BoughtPacketHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, 1, 3);
-		new Thread(http).start();
+		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_ORDER);
 	}
 
 	private void getSportTotal() {
-		GetSportTotalHttp http = new GetSportTotalHttp(this, COMTYPE_GET_SPORT_TOTAL);
-		new Thread(http).start();
+		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL);
 	}
 
 	//获取banner图
 	private void getIndexBanner() {
-		BannerHttp http = new BannerHttp(this, HttpConfigUrl.COMTYPE_INDEX_BANNER);
-		new Thread(http).start();
+		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_INDEX_BANNER);
 	}
 
 	@Override
