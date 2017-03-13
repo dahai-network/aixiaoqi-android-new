@@ -137,34 +137,36 @@ public class ReceiveSocketService extends Service {
 	 * @return
 	 **/
 	public static void recordStringLog(String text) {// 新建或打开日志文件
-		String path = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi/";
-		String fileName = "TCP" + DateUtils.getCurrentDateForFile() + ".text";
-		File file = new File(path + fileName);
-		if (!file.exists()) {
-			file.getParentFile().mkdirs();
+		if (Constant.IS_DEBUG) {
+			String path = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi/";
+			String fileName = "TCP" + DateUtils.getCurrentDateForFile() + ".text";
+			File file = new File(path + fileName);
+			if (!file.exists()) {
+				file.getParentFile().mkdirs();
+				try {
+					file.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			try {
-				file.createNewFile();
+				FileWriter filerWriter = new FileWriter(file, true);//后面这个参数代表是不是要接上文件中原来的数据，不进行覆盖
+				BufferedWriter bufWriter = new BufferedWriter(filerWriter);
+				bufWriter.write(text);
+				bufWriter.newLine();
+				bufWriter.close();
+				filerWriter.close();
+				Log.d("行为日志写入成功", text);
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		try {
-			FileWriter filerWriter = new FileWriter(file, true);//后面这个参数代表是不是要接上文件中原来的数据，不进行覆盖
-			BufferedWriter bufWriter = new BufferedWriter(filerWriter);
-			bufWriter.write(text);
-			bufWriter.newLine();
-			bufWriter.close();
-			filerWriter.close();
-			Log.d("行为日志写入成功", text);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
 	private void createHeartBeatPackage() {
 		Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
-		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0&&am==null) {
+		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && am == null) {
 			count = count + 1;
 			Log.e("onReceive", "开启定时器");
 			Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);

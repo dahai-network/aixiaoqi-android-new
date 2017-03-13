@@ -22,6 +22,7 @@ public class CommenActivity extends FragmentActivity {
 	protected Context mContext;
 	protected MyProgressDialog myProgressDialog;
 	protected ICSOpenVPNApplication application;
+	private Configuration config;
 
 	protected boolean isAndroidTV() {
 		final UiModeManager uiModeManager = (UiModeManager) getSystemService(FragmentActivity.UI_MODE_SERVICE);
@@ -31,7 +32,7 @@ public class CommenActivity extends FragmentActivity {
 	@Override
 	public Resources getResources() {
 		Resources res = super.getResources();
-		Configuration config = new Configuration();
+		config = new Configuration();
 		config.setToDefaults();
 		res.updateConfiguration(config, res.getDisplayMetrics());
 		return res;
@@ -117,6 +118,8 @@ public class CommenActivity extends FragmentActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		//释放config
+		config = null;
 		dismissProgress();
 	}
 }

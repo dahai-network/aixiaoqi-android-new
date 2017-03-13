@@ -277,6 +277,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	public void onResume() {
 		super.onResume();
 		getBoughtPackage();
+		controlWheel(true);
 //		getSportTotal();
 	}
 
@@ -432,15 +433,16 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		}
 	}
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		controlWheel(false);
+	}
 
 	private void controlWheel(boolean isWheel) {
+		Log.e("controlWheel", "isWheel:" + isWheel);
 		scrollViewPagerLayout.setCycle(isWheel);
 		scrollViewPagerLayout.setWheel(isWheel);
-		if (isWheel) {
-			scrollViewPagerLayout.setVisibility(View.VISIBLE);
-		} else {
-			scrollViewPagerLayout.setVisibility(View.GONE);
-		}
 	}
 
 	//修改蓝牙状态

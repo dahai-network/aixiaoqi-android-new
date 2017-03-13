@@ -66,6 +66,7 @@ import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
+import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
@@ -157,10 +158,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
-		Log.e(TAG, "Build.MANUFACTURER="+Build.MANUFACTURER);
-		Log.e(TAG, "android.os.Build.MODEL="+Build.MODEL);
-		Log.e(TAG, "VERSION.RELEASE="+Build.VERSION.RELEASE);
-		Log.e(TAG, "Build.VERSION.INCREMENTAL="+Build.VERSION.INCREMENTAL);
+		Log.e(TAG, "Build.MANUFACTURER=" + Build.MANUFACTURER);
+		Log.e(TAG, "android.os.Build.MODEL=" + Build.MODEL);
+		Log.e(TAG, "VERSION.RELEASE=" + Build.VERSION.RELEASE);
+		Log.e(TAG, "Build.VERSION.INCREMENTAL=" + Build.VERSION.INCREMENTAL);
 	}
 
 
@@ -194,6 +195,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			Log.i(TAG, "开启UartService");
 			Intent bindIntent = new Intent(this, UartService.class);
 			bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+		}
+		//启动常驻服务
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(GrayService.class.getName())) {
+			startService(new Intent(this, GrayService.class));
 		}
 	}
 
@@ -265,6 +270,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private static IntentFilter screenoffIntentFilter() {
 		IntentFilter intentFilter = new IntentFilter();
 //		intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+//		intentFilter.addAction(Intent.ACTION_USER_PRESENT);
 //		intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
 		intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 		return intentFilter;
@@ -619,7 +625,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
 			if (object.getStatus() == 1) {
-				requestCount=0;
+				requestCount = 0;
 				IsHavePacketHttp isHavePacketHttp = (IsHavePacketHttp) object;
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
@@ -640,7 +646,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
 			GetHostAndPortHttp http = (GetHostAndPortHttp) object;
 			if (http.getStatus() == 1) {
-				requestCount=0;
+				requestCount = 0;
 				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
@@ -674,23 +680,24 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		new Thread(http).start();
 	}
 
-	private int requestCount=0;
+	private int requestCount = 0;
+
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		super.errorComplete(cmdType, errorMessage);
-		if(cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET){
-			if(requestCount<3){
+		if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
+			if (requestCount < 3) {
 				requestCount++;
 				requestPacket();
-			}else{
-				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
+			} else {
+				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.NOT_NETWORK);
 			}
-		}else if(cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG){
-			if(requestCount<3){
+		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
+			if (requestCount < 3) {
 				requestCount++;
 				getConfigInfo();
-			}else{
-				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
+			} else {
+				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.NOT_NETWORK);
 			}
 		}
 	}
@@ -851,7 +858,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		@Override
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
-			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+				MyDeviceActivity.isConnectOnce = true;
+			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				Log.i(TAG, "被主动断掉连接！");
 				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
 				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
@@ -875,7 +884,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						case RETURN_POWER:
 							Log.e(TAG, "进入0700 ProMainActivity");
 							if (message.get(0).substring(10, 12).equals("01")) {
-
 								if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
 									//当有通话套餐的时候才允许注册操作
 									requestPacket();

@@ -130,6 +130,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public static boolean isForeground = false;
 	//写卡进度
 	private static int percentInt;
+	//是否一次都没连上，如果是则不显示重新连接
+	public static boolean isConnectOnce = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -408,6 +410,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						unBindButton.setVisibility(GONE);
 						utils.delete(Constant.IMEI);
 						macTextView.setText("");
+						firmwareTextView.setText("");
+						statueTextView.setText(getString(R.string.conn_bluetooth));
 						CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 						return;
 					}
@@ -425,13 +429,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					});
 					connectThread.start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
-					if (!isUpgrade) {
-						showProgress("正在重新连接", true);
+					if (!isUpgrade && isConnectOnce) {
+						showProgress(getString(R.string.reconnecting), true);
 					}
 				} else {
 					unBindButton.setVisibility(GONE);
 					utils.delete(Constant.IMEI);
 					macTextView.setText("");
+					firmwareTextView.setText("");
+					statueTextView.setText(getString(R.string.conn_bluetooth));
 					sinking.setVisibility(GONE);
 					noConnectImageView.setVisibility(View.VISIBLE);
 					statueTextView.setVisibility(View.VISIBLE);
@@ -598,16 +604,26 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			//网络获取看有没有存储IMEI设备号,如果没有绑定过则去绑定流程
 			if (getBindDeviceHttp.getStatus() == 1) {
 				BlueToothDeviceEntity mBluetoothDevice = getBindDeviceHttp.getBlueToothDeviceEntityity();
-				if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
-					firmwareTextView.setText(mBluetoothDevice.getVersion());
+				if (mBluetoothDevice != null) {
+					if (!TextUtils.isEmpty(mBluetoothDevice.getVersion())) {
+						firmwareTextView.setText(mBluetoothDevice.getVersion());
+						utils.writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
+					} else {
+						Log.i(TAG, "mBluetoothDevice.getVersion()为空");
+					}
+					if (!TextUtils.isEmpty(mBluetoothDevice.getIMEI())) {
+						utils.writeString(Constant.IMEI, mBluetoothDevice.getIMEI());
+					} else {
+						Log.i(TAG, "mBluetoothDevice.getIMEI()为空");
+					}
 					statueTextView.setText(getString(R.string.blue_connecting));
 					statueTextView.setEnabled(false);
-					utils.writeString(Constant.IMEI, mBluetoothDevice.getIMEI());
-					utils.writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
 					unBindButton.setVisibility(View.VISIBLE);
 					//当接口调用完毕后，扫描设备，打开状态栏
 //				scanLeDevice(true);
 				}
+				//如果有设备，则开启重连机制，重连需要该参数为true。
+				ICSOpenVPNApplication.isConnect = true;
 			}
 			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -881,6 +897,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void showDialog() {
 		scanLeDevice(false);
+		dismissProgress();
 		//不能按返回键，只能二选其一
 		noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, NOT_YET_REARCH);
 		noDevicedialog.setCanClickBack(false);

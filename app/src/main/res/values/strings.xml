@@ -172,7 +172,7 @@
     <string name="update_fail">更新失败</string>
     <string name="unitoys_phone">爱小器直拨</string>
     <string name="network_phone">网络电话</string>
-    <string formatted="false" name="call_phoning">正在与 %s[%s]通话中…</string>
+    <string name="call_phoning" formatted="false">正在与 %s[%s]通话中…</string>
     <string name="sim_register_phone">手环电话</string>
     <string name="sim_register_phone_tip">手环内SIM未注册成功，请前往设备里边去注册成功在使用</string>
     <!--提交订单-->
@@ -265,7 +265,7 @@
 2）出国后将爱小器国际卡插入手机，实现上网，然后将国内电话卡插入爱小器智能设备，通过APP接打电话，收发短信。
 </string>
 
-<string name="know_not_tip"> 知道了，以后不再提醒</string>
+    <string name="know_not_tip"> 知道了，以后不再提醒</string>
 
 
     <string name="after_going_abroad">回国后恢复设置</string>
@@ -474,9 +474,10 @@
     <string name="dfu_status_uploading">手环固件升级中…</string>
     <string name="dfu_upgrade">手环固件有更新了</string>
     <string name="dfu_status_uploading_msg">Transmitting firmware to %s…</string>
-    <string formatted="false" name="dfu_status_uploading_part">升级 %d/%d…</string>
+    <string name="dfu_status_uploading_part" formatted="false">升级 %d/%d…</string>
     <string name="dfu_status_validating">Validating…</string>
     <string name="dfu_status_validating_msg">Validating…</string>
     <string name="dfu_unknown_name">unnamed device</string>
+    <string name="reconnecting">正在重新连接</string>
 
 </resources>
