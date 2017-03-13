@@ -173,7 +173,7 @@
     <string name="update_fail">更新失败</string>
     <string name="unitoys_phone">爱小器直拨</string>
     <string name="network_phone">网络电话</string>
-    <string formatted="false" name="call_phoning">正在与 %s[%s]通话中…</string>
+    <string name="call_phoning" formatted="false">正在与 %s[%s]通话中…</string>
     <string name="sim_register_phone">手环电话</string>
     <string name="sim_register_phone_tip">手环内SIM未注册成功，请前往设备里边去注册成功在使用</string>
     <!--提交订单-->
@@ -266,7 +266,7 @@
 2）出国后将爱小器国际卡插入手机，实现上网，然后将国内电话卡插入爱小器智能设备，通过APP接打电话，收发短信。
 </string>
 
-<string name="know_not_tip"> 知道了，以后不再提醒</string>
+    <string name="know_not_tip"> 知道了，以后不再提醒</string>
 
 
     <string name="after_going_abroad">回国后恢复设置</string>
@@ -445,7 +445,7 @@
     <string name="index_registing">注册中</string>
     <string name="tip_high_signal">您的卡已经注册成功</string>
     <string name="bluetooth_ble_not_support">十分抱歉，您的手机不支持低功耗蓝牙</string>
-    <string name="no_nullcard_id">没有空卡序列号，请重新连接</string>
+    <string name="no_nullcard_id">您的卡不是爱小器卡，请更换</string>
     <!--GOIP注册失败原因-->
     <string name="regist_fail">注册卡失败</string>
     <string name="regist_fail_card_invalid">注册卡失败，无效卡</string>
@@ -475,10 +475,11 @@
     <string name="dfu_status_uploading">手环固件升级中…</string>
     <string name="dfu_upgrade">手环固件有更新了</string>
     <string name="dfu_status_uploading_msg">Transmitting firmware to %s…</string>
-    <string formatted="false" name="dfu_status_uploading_part">升级 %d/%d…</string>
+    <string name="dfu_status_uploading_part" formatted="false">升级 %d/%d…</string>
     <string name="dfu_status_validating">Validating…</string>
     <string name="dfu_status_validating_msg">Validating…</string>
     <string name="dfu_unknown_name">unnamed device</string>
+    <string name="reconnecting">正在重新连接</string>
 
     <string name="auto_start">自启动</string>
     <string name="background_start">受保护应用</string>

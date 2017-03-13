@@ -24,7 +24,6 @@ public class OrderDataHttp extends BaseHttp {
 		super(call,cmdType_);
 		this.OrderID = OrderID;
 		this.EmptyCardSerialNumber = EmptyCardSerialNumber;
-
 	}
 
 	@Override

@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -69,7 +68,6 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKBANNER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOTPACKAGEMORE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKINLANDFEE;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKNOTES;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKSPORTTOTALDATA;
 import static de.blinkt.openvpn.constant.UmengContant.CLICORDERMORE;
 import static de.blinkt.openvpn.fragments.SportFragment.REFRESHSTEP;
@@ -107,7 +105,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	private TextView totalKalTextView;
 	private View view;
 	private TitleBar title;
-
 
 
 	public OrderAdapter getOrderAdapter() {
@@ -277,9 +274,9 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	public void onResume() {
 		super.onResume();
 		getBoughtPackage();
-		getSportTotal();
+		controlWheel(true);
+//		getSportTotal();
 	}
-
 
 
 	@SuppressLint("NewApi")
@@ -304,11 +301,12 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	}
 
 	public static ImageView getImageView(Context context, String url) {
-		ImageView imageView = (ImageView)LayoutInflater.from(context).inflate(
+		ImageView imageView = (ImageView) LayoutInflater.from(context).inflate(
 				R.layout.view_banner, null);
 		Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
 		return imageView;
 	}
+
 	private CycleViewPager.ImageCycleViewListener mAdCycleViewListener = new CycleViewPager.ImageCycleViewListener() {
 
 		@Override
@@ -317,19 +315,20 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 				if (!TextUtils.isEmpty(info.getUrl())) {
 					//友盟方法统计
 					MobclickAgent.onEvent(getActivity(), CLICKBANNER);
-					WebViewActivity.launch(getActivity(), info.getUrl(),info.getTitle());
+					WebViewActivity.launch(getActivity(), info.getUrl(), info.getTitle());
 				}
 			}
 
 		}
 
 	};
+
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_INDEX_BANNER) {
 			BannerHttp http = (BannerHttp) object;
 			bannerData = http.getBannerList();
-			if(bannerData!=null&&bannerData.size()!=0){
+			if (bannerData != null && bannerData.size() != 0) {
 				initialize(bannerData);
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_ORDER) {
@@ -395,7 +394,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (REFRESHSTEP.equals(intent.getAction())) {
-				getSportTotal();
+//				getSportTotal();
 			}
 		}
 	};
@@ -419,17 +418,26 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		//当页面跳出的时候停止轮播
 		if (scrollViewPagerLayout != null) {
 			if (isVisibleToUser) {
-				if (pageViews.size() >=1)
-				controlWheel(true);
+				if (pageViews.size() >= 1) {
+					controlWheel(true);
+				}
 			} else {
 				controlWheel(false);
 			}
 		}
 	}
-private void controlWheel(boolean isWheel){
-	scrollViewPagerLayout.setCycle(isWheel);
-	scrollViewPagerLayout.setWheel(isWheel);
-}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		controlWheel(false);
+	}
+
+	private void controlWheel(boolean isWheel) {
+		Log.e("controlWheel", "isWheel:" + isWheel);
+		scrollViewPagerLayout.setCycle(isWheel);
+		scrollViewPagerLayout.setWheel(isWheel);
+	}
 
 	//修改蓝牙状态
 	public void changeBluetoothStatus(String leftText, int leftIconId) {

@@ -126,14 +126,29 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="LiveActivityStyle" parent="AlertDialog.AppCompat">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowNoDisplay">false</item>
+    </style>
+
     <style name="horizontal_line_view">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
         <item name="android:background">@color/light_gray</item>
     </style>
+
     <style name="horizontal_line_view_margin_15dp" parent="horizontal_line_view">
         <item name="android:layout_marginLeft">@dimen/padding_15dp</item>
     </style>
+
     <style name="vertical_line_view">
         <item name="android:layout_width">1dp</item>
         <item name="android:layout_height">wrap_content</item>

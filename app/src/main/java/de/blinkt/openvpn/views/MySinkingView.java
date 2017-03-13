@@ -67,7 +67,6 @@ public class MySinkingView extends FrameLayout {
 		mFlag = Status.RUNNING;
 		mPercent = percent;
 		postInvalidate();
-
 	}
 
 	public float getmPercent()

@@ -73,6 +73,7 @@ import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.DfuService;
+import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
@@ -80,7 +81,6 @@ import de.blinkt.openvpn.util.ViewUtil;
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
-import static de.blinkt.openvpn.constant.Constant.LOGIN_DATA;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
@@ -201,6 +201,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			Log.i(TAG, "开启UartService");
 			Intent bindIntent = new Intent(this, UartService.class);
 			bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+		}
+		//启动常驻服务
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(GrayService.class.getName())) {
+			startService(new Intent(this, GrayService.class));
 		}
 	}
 
@@ -677,7 +681,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private void getConfigInfo() {
-		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
+		GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
+		new Thread(http).start();
 	}
 
 	private int requestCount=0;
@@ -857,7 +862,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		@Override
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
-			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+				MyDeviceActivity.isConnectOnce = true;
+			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				Log.i(TAG, "被主动断掉连接！");
 				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
 				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {

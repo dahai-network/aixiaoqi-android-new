@@ -461,13 +461,18 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 	}
 
-	private void sendMessageSeparate(final String message, String type) {
-		lastSendMessageStr = message;
-		String[] messages = PacketeUtil.Separate(message, type);
-		int length = messages.length;
-		for (int i = 0; i < length; i++) {
-			SendCommandToBluetooth.sendMessageToBlueTooth(messages[i]);
-		}
+	private void sendMessageSeparate(final String message, final String type) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				lastSendMessageStr = message;
+				String[] messages = PacketeUtil.Separate(message, type);
+				int length = messages.length;
+				for (int i = 0; i < length; i++) {
+					SendCommandToBluetooth.sendMessageToBlueTooth(messages[i]);
+				}
+			}
+		}).start();
 	}
 
 
@@ -656,6 +661,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	public void noNet() {
 		try {
 			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), context.getResources().getString(R.string.no_wifi));
+			Intent intent = new Intent();
+			intent.setAction(MyOrderDetailActivity.FINISH_PROCESS_ONLY);
+			LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

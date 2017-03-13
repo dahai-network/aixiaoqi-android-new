@@ -87,7 +87,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 	private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/*");
 	private final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {
 		@Override
-		public Response intercept(Chain chain) throws IOException {
+		public synchronized Response intercept(Chain chain) throws IOException {
 			Request request = chain.request();
 			if (!NetworkUtils.isNetworkAvailable(context_)) {
 				request = request.newBuilder()
@@ -106,6 +106,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 						//这里设置的为0就是说不进行缓存，我们也可以设置缓存时间
 						.removeHeader("Cache-Control")
 						.header("Cache-Control", "public, max-age=" + 0)
+						.message(context_.getString(R.string.no_wifi))
 						.removeHeader("Pragma")
 						.build();
 			} else {
@@ -116,11 +117,11 @@ public abstract class CommonHttp implements Callback, Runnable {
 				return response.newBuilder()
 						.removeHeader("Cache-Control")
 						.header("Cache-Control", cacheControl)
+						.message(context_.getString(R.string.no_wifi))
 						.removeHeader("Pragma")
 						.build();
 			}
 		}
-
 	};
 
 	@Override
@@ -292,7 +293,8 @@ public abstract class CommonHttp implements Callback, Runnable {
 						.retryOnConnectionFailure(true)
 						.addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)
 						.addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)
-						.cache(cache).build();
+						.cache(cache)
+						.build();
 			}
 			try {
 				setCertificates(context_.getAssets().open("api.unitoys.com.crt"));
@@ -313,8 +315,6 @@ public abstract class CommonHttp implements Callback, Runnable {
 
 
 	//set request params
-
-
 	void excute() {
 		try {
 			BuildParams();
@@ -492,4 +492,5 @@ public abstract class CommonHttp implements Callback, Runnable {
 		if (call != null && !call.isCanceled())
 			call.cancel();
 	}
+
 }

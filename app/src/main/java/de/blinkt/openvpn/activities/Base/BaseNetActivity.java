@@ -18,7 +18,7 @@ public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		dismissProgress();
-		CommonTools.showShortToast(mContext, errorMessage);
+//		CommonTools.showShortToast(mContext, errorMessage);
 	}
 
 	@Override

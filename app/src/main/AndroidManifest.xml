@@ -13,7 +13,6 @@
         android:name="${JPUSH_PKGNAME}.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature"/>
 
-
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true"/>
@@ -54,14 +53,12 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
-
     <uses-feature
         android:name="android.software.leanback"
         android:required="false"/>
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false"/>
-
 
     <!-- <uses-permission android:name="com.android.vending.BILLING" />   android:theme="@style/blinkt" -->
     <!-- " -->
@@ -80,7 +77,6 @@
         <meta-data
             android:name="com.tencent.rdm.uuid"
             android:value="6a4c151b-706a-41c0-b96e-40738e64c1ad"/>
-
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="58393022bbea837e4b0005e9"/>
@@ -277,12 +273,14 @@
                 <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP"/>
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="com.aixiaoqi.socket.AutoReceiver">
-            <!--<intent-filter>
+        <receiver android:name="com.aixiaoqi.socket.AutoReceiver">
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </receiver>
 
         <activity
@@ -302,6 +300,10 @@
             android:enabled="true"
             android:exported="false">
         </service>
+        <service android:name="de.blinkt.openvpn.service.GrayService">
+        </service>
+        <service android:name="de.blinkt.openvpn.service.GrayService$GrayInnerService">
+        </service>
         <service
             android:name="cn.jpush.android.service.PushService"
             android:enabled="true"
@@ -318,13 +320,16 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="no.nordicsemi.android.action.DFU_UPLOAD"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
-        <!--<service
+        <!--
+        <service
             android:name="com.aixiaoqi.socket.StartCPUService"
             android:exported="true">
-        </service>-->
+        </service>
+        -->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true"
@@ -400,9 +405,7 @@
 
         <service
             android:name="de.blinkt.openvpn.bluetooth.service.UartService"
-            android:enabled="true"
-            />
-
+            android:enabled="true"/>
         <service
             android:name="de.blinkt.openvpn.service.CallPhoneService"
             android:enabled="true">
@@ -422,12 +425,10 @@
             android:name="de.blinkt.openvpn.activities.OutsideActivity"
             android:label="@string/title_activity_outside"
             android:screenOrientation="portrait">
-
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.BeforeGoingAbroadActivity"
             android:screenOrientation="portrait">
-
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.OrderedOutsidePurchaseActivity"
@@ -523,6 +524,14 @@
         <activity android:name="de.blinkt.openvpn.activities.CallTimePacketDetailActivity">
         </activity>
         <activity android:name="de.blinkt.openvpn.activities.CommitCallTimeOrderActivity">
+        </activity>
+        <activity
+            android:name="de.blinkt.openvpn.activities.KeepAliveActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:finishOnTaskLaunch="false"
+            android:theme="@style/LiveActivityStyle"
+            >
         </activity>
     </application>
 

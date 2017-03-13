@@ -49,13 +49,13 @@ import static android.view.View.GONE;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.orderStatus;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
-import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCANCELORDER;
 
 public class MyOrderDetailActivity extends BaseActivity implements InterfaceCallback, DialogInterfaceTypeBase {
 
 	public static String FINISH_PROCESS = "finish";
+	public static String FINISH_PROCESS_ONLY = "finish_process_only";
 	public static String CARD_RULE_BREAK = "card_rule_break";
 	@BindView(R.id.countryImageView)
 	ImageView countryImageView;
@@ -261,6 +261,8 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 				}
 				GetOrderByIdHttp http = new GetOrderByIdHttp(MyOrderDetailActivity.this, HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID, getIntent().getStringExtra("id"));
 				new Thread(http).start();
+			} else if (TextUtils.equals(intent.getAction(), FINISH_PROCESS_ONLY)) {
+				dismissProgress();
 			}
 		}
 	};
@@ -294,6 +296,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 	private IntentFilter setFilter() {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(MyOrderDetailActivity.FINISH_PROCESS);
+		filter.addAction(MyOrderDetailActivity.FINISH_PROCESS_ONLY);
 		filter.addAction(MyOrderDetailActivity.CARD_RULE_BREAK);
 		return filter;
 	}
@@ -362,13 +365,15 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 						//是否测试卡位置：否，这是写卡！
 						IS_TEXT_SIM = false;
 						orderStatus = 4;
-						showProgress("正在激活",false);
+						showProgress("正在激活", false);
 						new Thread(new Runnable() {
 							@Override
 							public void run() {
 								try {
+									SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
 									Thread.sleep(20000);
 								} catch (InterruptedException e) {
+									dismissProgress();
 									e.printStackTrace();
 								}
 								if (!isActivateSuccess) {
@@ -382,7 +387,6 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 								}
 							}
 						}).start();
-						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 						orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
 					}
 				}

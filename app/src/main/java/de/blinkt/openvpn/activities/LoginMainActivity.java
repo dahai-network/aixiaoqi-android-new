@@ -70,6 +70,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 	private static final int MSG_SET_ALIAS = 1001;
 
+
 	@Override
 	public void onPanelClosed(int featureId, Menu menu) {
 		super.onPanelClosed(featureId, menu);
@@ -213,19 +214,16 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		});
 	}
 
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		finish();
-	}
-
-	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			ICSOpenVPNApplication.getInstance().AppExit();
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);// 注意
+			intent.addCategory(Intent.CATEGORY_HOME);
+			startActivity(intent);
 		}
-		return super.onKeyDown(keyCode, event);
+		return true;
 	}
+
 
 	@Override
 	public void onClick(View v) {
