@@ -19,9 +19,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +37,7 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
+import de.blinkt.openvpn.model.BluetoothModel;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -55,7 +55,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	RelativeLayout connectedRelativeLayout;
 	private Handler mHandler;
 	private Handler findDeviceHandler;
-	private Map deviceMap = new HashMap();
+	private HashSet<BluetoothModel> deviceSet = new HashSet<>();
 	private BluetoothAdapter mBluetoothAdapter;
 	private static final long SCAN_PERIOD = 120000; //120 seconds
 	private String deviceAddress = "";
@@ -129,6 +129,8 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		deviceSet.clear();
+		deviceSet = null;
 		EventBus.getDefault().unregister(this);
 	}
 
@@ -151,16 +153,21 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
 									if (device.getName().contains(Constant.BLUETOOTH_NAME)) {
-										deviceMap.put(device.getAddress(), rssi);
+										BluetoothModel model = new BluetoothModel();
+										model.setAddress(device.getAddress());
+										model.setDiviceName(device.getName());
+										model.setRssi(rssi);
+										deviceSet.add(model);
 										if (!isStartFindDeviceDelay) {
 											findDeviceHandler.postDelayed(new Runnable() {
 												@Override
 												public void run() {
-													List<Map.Entry<String, Integer>> infos =
-															new ArrayList<>(deviceMap.entrySet());
-													Collections.sort(infos, new Comparator<Map.Entry<String, Integer>>() {
-														public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-															return (o2.getValue() - o1.getValue());
+													List<BluetoothModel> infos =
+															new ArrayList<>(deviceSet);
+													Collections.sort(infos, new Comparator<BluetoothModel>() {
+														@Override
+														public int compare(BluetoothModel lhs, BluetoothModel rhs) {
+															return rhs.getRssi() - lhs.getRssi();
 														}
 													});
 													for (int i = 0; i < infos.size(); i++) {
@@ -169,11 +176,13 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 													}
 													//排序后连接操作
 													scanLeDevice(false);
-													deviceAddress = infos.get(0).getKey();
+													deviceAddress = infos.get(0).getAddress();
 													utils.writeString(Constant.IMEI, deviceAddress);
+													utils.writeString(Constant.BRACELETNAME, infos.get(0).getDiviceName());
 													IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
 													new Thread(http).start();
 													isStartFindDeviceDelay = false;
+													deviceSet.clear();
 												}
 											}, 5000);
 											isStartFindDeviceDelay = true;

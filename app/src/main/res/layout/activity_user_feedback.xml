@@ -7,26 +7,27 @@
     >
 
     <EditText
-        android:layout_marginTop="15dp"
-        android:padding="15dp"
         android:id="@+id/infoEditText"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"
         android:gravity="top"
-        android:textSize="15dp"
         android:hint="@string/write_your_advice"
-        android:background="@color/white"/>
+        android:padding="15dp"
+        android:textSize="15dp"/>
 
     <Button
         android:id="@+id/sendBtn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/login_btn"
-        android:text="发送"
-        android:layout_margin="15dp"
-        android:textSize="15sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginLeft="@dimen/padding_20dp"
+        android:layout_marginRight="@dimen/padding_20dp"
+        android:layout_marginTop="@dimen/padding_15dp"
+        android:background="@drawable/green_btn_click"
+        android:text="@string/send"
+        android:textColor="@android:color/white"
+        android:textSize="16dp"
         />
 
 </LinearLayout>

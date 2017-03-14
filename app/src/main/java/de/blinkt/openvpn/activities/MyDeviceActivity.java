@@ -72,6 +72,7 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 import static android.view.View.GONE;
 import static cn.com.aixiaoqi.R.id.register_sim_statue;
+import static cn.com.aixiaoqi.R.id.start;
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
@@ -233,7 +234,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					if (!TextUtils.isEmpty(deviceAddress)) {
 						connDevice(deviceAddress);
 					} else {
-						clickFindBracelet();
+//						clickFindBracelet();
+						Intent intent = new Intent(this, ChoiceDeviceTypeActivity.class);
+						startActivity(intent);
 					}
 				} else {
 					Log.d(TAG, "BT not enabled");

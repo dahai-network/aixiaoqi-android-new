@@ -7,7 +7,7 @@ import android.os.Environment;
  */
 public class Constant {
 
-	public static final boolean IS_DEBUG = true;
+	public static final boolean IS_DEBUG = false;
 	public static final String BLUETOOTH_NAME = "unitoys";
 
 	//购买套餐数量限制
@@ -34,6 +34,7 @@ public class Constant {
 	public static final String PUBLIC_PASSWORD = "publicpassword";
 	public static final String IMEI = "BraceletIMEI";
 	public static final String BRACELETVERSION = "BraceletVersion";
+	public static final String BRACELETNAME = "braceletname";
 	public static final String NULLCARD_SERIALNUMBER = "NULLCARD_SERIALNUMBER";
 	public static final String VERSION_HEADER = "Version";
 	public static final String TERMINAL_HEADER = "Terminal";

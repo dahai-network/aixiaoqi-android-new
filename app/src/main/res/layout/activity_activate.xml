@@ -115,7 +115,7 @@
         android:layout_marginLeft="@dimen/padding_20dp"
         android:layout_marginTop="@dimen/padding_15dp"
         android:layout_marginRight="@dimen/padding_20dp"
-        android:background="@drawable/circle_green_ret"
+        android:background="@drawable/green_btn_click"
         android:gravity="center"
         android:text="@string/activate_packet"
         android:textColor="@color/white"

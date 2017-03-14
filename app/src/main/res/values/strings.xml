@@ -479,5 +479,7 @@
     <string name="dfu_status_validating_msg">Validating…</string>
     <string name="dfu_unknown_name">unnamed device</string>
     <string name="reconnecting">正在重新连接</string>
+    <string name="send">发送</string>
+    <string name="aixiaoqi_bracelet">爱小器手环一代</string>
 
 </resources>
