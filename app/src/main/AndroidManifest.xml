@@ -157,12 +157,6 @@
         <activity
             android:name="de.blinkt.openvpn.activities.RegistActivity"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name="de.blinkt.openvpn.activities.permission.HuaWeiPermissionActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name="de.blinkt.openvpn.activities.permission.MeiZuPermissionActivity"
-            android:screenOrientation="portrait"/>
         <!--
         <receiver android:name="core.GetRestrictionReceiver">
             <intent-filter>
