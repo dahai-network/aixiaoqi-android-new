@@ -44,6 +44,7 @@ import de.blinkt.openvpn.http.BalanceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.IntentWrapper;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
 
@@ -245,17 +246,18 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
 				break;
 			case R.id.permission_set:
-				Log.e(TAG, "Build.MANUFACTURER="+ Build.MANUFACTURER);
-				Log.e(TAG, "android.os.Build.MODEL="+Build.MODEL);
-				Log.e(TAG, "VERSION.RELEASE="+Build.VERSION.RELEASE);
-				Log.e(TAG, "Build.VERSION.INCREMENTAL="+Build.VERSION.INCREMENTAL);
-				if("samsung".equalsIgnoreCase(Build.MANUFACTURER)){
-
-				}else if("huawei".equalsIgnoreCase(Build.MANUFACTURER)){
-					intent=new Intent(getActivity(),HuaWeiPermissionActivity.class);
-				}else if("meizu".equalsIgnoreCase(Build.MANUFACTURER)){
-					intent=new Intent(getActivity(),MeiZuPermissionActivity.class);
-				}
+//				Log.e(TAG, "Build.MANUFACTURER="+ Build.MANUFACTURER);
+//				Log.e(TAG, "android.os.Build.MODEL="+Build.MODEL);
+//				Log.e(TAG, "VERSION.RELEASE="+Build.VERSION.RELEASE);
+//				Log.e(TAG, "Build.VERSION.INCREMENTAL="+Build.VERSION.INCREMENTAL);
+//				if("samsung".equalsIgnoreCase(Build.MANUFACTURER)){
+//
+//				}else if("huawei".equalsIgnoreCase(Build.MANUFACTURER)){
+//					intent=new Intent(getActivity(),HuaWeiPermissionActivity.class);
+//				}else if("meizu".equalsIgnoreCase(Build.MANUFACTURER)){
+//					intent=new Intent(getActivity(),MeiZuPermissionActivity.class);
+//				}
+				IntentWrapper.whiteListMatters(getActivity(), "服务的持续运行");
 				break;
 
 			case R.id.tv_setting:
@@ -316,7 +318,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				break;
 
 		}
+		if(v.getId()!=R.id.permission_set){
 		getActivity().startActivity(intent);
+		}
 	}
 
 	@Override
