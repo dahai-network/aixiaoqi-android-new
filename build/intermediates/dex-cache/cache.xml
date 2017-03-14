@@ -30,12 +30,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\libammsdk.jar"
+        jar="D:\android project\aixiaoqi-android-new\app\libs\bugly_crash_upgrade_v1.1.5.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
-        sha1="d7c2f29c05b35e8c8713be2b81c41cf18f98b64a">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\libammsdk_191f2bf46c7d90fe6828f748bf753aa8cb765a4a.jar" />
+        sha1="e5394982bca4f57dfd3912646098cbee7d8197a6">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\bugly_crash_upgrade_v1.1.5_e2ab73007b6a1287097e9fcf16b74cbe7f809c23.jar" />
     </item>
     <item
         is-multidex="true"
@@ -57,12 +57,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\bugly_crash_upgrade_v1.1.5.jar"
+        jar="D:\android project\aixiaoqi-android-new\app\libs\libammsdk.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
-        sha1="e5394982bca4f57dfd3912646098cbee7d8197a6">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\bugly_crash_upgrade_v1.1.5_e2ab73007b6a1287097e9fcf16b74cbe7f809c23.jar" />
+        sha1="d7c2f29c05b35e8c8713be2b81c41cf18f98b64a">
+        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\libammsdk_191f2bf46c7d90fe6828f748bf753aa8cb765a4a.jar" />
     </item>
     <item
         is-multidex="true"

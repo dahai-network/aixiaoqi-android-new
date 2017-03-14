@@ -70,7 +70,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 	private LinearLayout loginLinearLayout;
 
 	private static final int MSG_SET_ALIAS = 1001;
-	private InputMethodManager manager = null;
 
 
 	@Override
@@ -98,11 +97,10 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 	private void init() {
 		sharedUtils = SharedUtils.getInstance();
-		manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		createViewInit();
 		setLoginData();
 		String otherDeviceLogin = getIntent().getStringExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN);
-		if (!TextUtils.isEmpty(otherDeviceLogin) && !sharedUtils.readBoolean(Constant.ISFIRSTIN, true)) {
+		if (!TextUtils.isEmpty(otherDeviceLogin)&&!sharedUtils.readBoolean(Constant.ISFIRSTIN,true)) {
 			CommonTools.showShortToast(this, otherDeviceLogin);
 		}
 	}
@@ -168,7 +166,8 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 						login_btn.setEnabled(true);
 						login_btn.setBackgroundResource(R.drawable.green_btn_click);
 						login_btn.setTextColor(getResources().getColor(R.color.white));
-					} else {
+					}
+					else {
 						login_btn.setEnabled(false);
 						login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
 						login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
@@ -215,7 +214,8 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 						login_btn.setEnabled(true);
 						login_btn.setBackgroundResource(R.drawable.green_btn_click);
 						login_btn.setTextColor(getResources().getColor(R.color.white));
-					} else {
+					}
+					else {
 						login_btn.setEnabled(false);
 						login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
 						login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
@@ -244,6 +244,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		return true;
 	}
 
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -254,7 +255,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				startActivity(toRegistIntent);
 				break;
 			case R.id.login_btn:
-				if (pwdEdit != null) {
+				if(pwdEdit!=null) {
 					if (CheckUtil.isPassWordNo(pwdEdit.getText().toString(), LoginMainActivity.this)) {
 						showProgress(R.string.login_loading);
 						LoginHttp loginHttp = new LoginHttp(this, HttpConfigUrl.COMTYPE_LOGIN, usernameEdit.getText().toString(), pwdEdit.getText().toString());
@@ -355,7 +356,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			if (loginHttp.getStatus() == 1) {
 				LoginEntity entity = loginHttp.getLoginModel();
 
-				if (entity != null) {
+				if(entity!=null) {
 					sharedUtils.writeString(Constant.USER_NAME, entity.getTel());
 					sharedUtils.writeString(Constant.PASSWORD, pwdEdit.getText().toString());
 					sharedUtils.writeString(Constant.TOKEN, entity.getToken());
@@ -372,7 +373,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 					sharedUtils.writeInt(Constant.QQ_REMIND, entity.getNotificaQQ());
 					sharedUtils.writeInt(Constant.LIFT_WRIST, entity.getNotificaQQ());
 					sharedUtils.writeBoolean(Constant.ISFIRSTIN, false);
-					Log.e("token", "token=" + entity.getToken());
+					Log.e("token","token="+entity.getToken());
 					if (!TextUtils.isEmpty(entity.getBirthday())) {
 						sharedUtils.writeString(Constant.BRITHDAY, DateUtils.getDateToString(Long.parseLong(entity.getBirthday()) * 1000).substring(0, 7).replace("-", "年"));
 					}

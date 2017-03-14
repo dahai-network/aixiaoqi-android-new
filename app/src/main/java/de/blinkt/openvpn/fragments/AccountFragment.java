@@ -2,10 +2,12 @@ package de.blinkt.openvpn.fragments;
 
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,8 @@ import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
 import de.blinkt.openvpn.activities.SettingActivity;
 import de.blinkt.openvpn.activities.TipUserOptionActivity;
+import de.blinkt.openvpn.activities.permission.HuaWeiPermissionActivity;
+import de.blinkt.openvpn.activities.permission.MeiZuPermissionActivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -40,6 +44,7 @@ import de.blinkt.openvpn.http.BalanceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.IntentWrapper;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
 
@@ -81,6 +86,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	TextView tvMyPakages;
 	@BindView(R.id.tv_my_device)
 	TextView tvMyDevice;
+	@BindView(R.id.permission_set)
+	TextView tvPermissionSet;
 	@BindView(R.id.tv_setting)
 	TextView tvSetting;
 	@BindView(R.id.balanceLinearLayout)
@@ -112,7 +119,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	SharedUtils utils = SharedUtils.getInstance();
 	//bluetooth status蓝牙状态
 	private String bleStatus;
-
+	private String TAG="AccountFragment";
 
 	public AccountFragment() {
 		// Required empty public constructor
@@ -202,6 +209,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 			R.id.ll_qq_tip,
 			R.id.ll_weixin_tip,
 			R.id.ll_sms_tip,
+			R.id.permission_set,
 			R.id.ll_alarm_clock_tip,
 			R.id.ll_coming_tel_tip,
 			R.id.liftWristLinearLayout})
@@ -237,6 +245,21 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				}
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
 				break;
+			case R.id.permission_set:
+//				Log.e(TAG, "Build.MANUFACTURER="+ Build.MANUFACTURER);
+//				Log.e(TAG, "android.os.Build.MODEL="+Build.MODEL);
+//				Log.e(TAG, "VERSION.RELEASE="+Build.VERSION.RELEASE);
+//				Log.e(TAG, "Build.VERSION.INCREMENTAL="+Build.VERSION.INCREMENTAL);
+//				if("samsung".equalsIgnoreCase(Build.MANUFACTURER)){
+//
+//				}else if("huawei".equalsIgnoreCase(Build.MANUFACTURER)){
+//					intent=new Intent(getActivity(),HuaWeiPermissionActivity.class);
+//				}else if("meizu".equalsIgnoreCase(Build.MANUFACTURER)){
+//					intent=new Intent(getActivity(),MeiZuPermissionActivity.class);
+//				}
+				IntentWrapper.whiteListMatters(getActivity(), "服务的持续运行");
+				break;
+
 			case R.id.tv_setting:
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKSET);
@@ -295,7 +318,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				break;
 
 		}
+		if(v.getId()!=R.id.permission_set){
 		getActivity().startActivity(intent);
+		}
 	}
 
 	@Override

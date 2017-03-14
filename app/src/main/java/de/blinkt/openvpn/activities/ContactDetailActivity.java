@@ -43,6 +43,7 @@ import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
+import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
 import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTDETAILCALL;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTDETAILEDIT;
@@ -370,6 +371,7 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 					Intent intent = new Intent(ContactDetailActivity.this, CallPhoneNewActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO, contactRecodeEntity);
+					intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,NETWORK_CELL_PHONE);
 					intent.putExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME, onlyCallModel.getMaximumPhoneCallTime());
 					startActivity(intent);
 				} else {

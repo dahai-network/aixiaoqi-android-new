@@ -1,6 +1,8 @@
 package de.blinkt.openvpn.activities;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -10,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -41,6 +45,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import cn.com.aixiaoqi.R;
@@ -58,6 +63,7 @@ import de.blinkt.openvpn.fragments.Fragment_Phone;
 import de.blinkt.openvpn.fragments.IndexFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
@@ -66,6 +72,7 @@ import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
+import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -155,13 +162,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		initServices();
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
-
+		TelephonyManager telephonyManager=((TelephonyManager) getSystemService(TELEPHONY_SERVICE));
+		String android_imsi = telephonyManager.getSubscriberId();
+		Log.e(TAG,"android_imsi="+android_imsi);
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
-		Log.e(TAG, "Build.MANUFACTURER=" + Build.MANUFACTURER);
-		Log.e(TAG, "android.os.Build.MODEL=" + Build.MODEL);
-		Log.e(TAG, "VERSION.RELEASE=" + Build.VERSION.RELEASE);
-		Log.e(TAG, "Build.VERSION.INCREMENTAL=" + Build.VERSION.INCREMENTAL);
+
 	}
 
 
@@ -270,7 +276,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private static IntentFilter screenoffIntentFilter() {
 		IntentFilter intentFilter = new IntentFilter();
 //		intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-//		intentFilter.addAction(Intent.ACTION_USER_PRESENT);
 //		intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
 		intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 		return intentFilter;
@@ -625,7 +630,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
 			if (object.getStatus() == 1) {
-				requestCount = 0;
+				requestCount=0;
 				IsHavePacketHttp isHavePacketHttp = (IsHavePacketHttp) object;
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
@@ -646,7 +651,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
 			GetHostAndPortHttp http = (GetHostAndPortHttp) object;
 			if (http.getStatus() == 1) {
-				requestCount = 0;
+				requestCount=0;
 				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
@@ -680,24 +685,23 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		new Thread(http).start();
 	}
 
-	private int requestCount = 0;
-
+	private int requestCount=0;
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		super.errorComplete(cmdType, errorMessage);
-		if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
-			if (requestCount < 3) {
+		if(cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET){
+			if(requestCount<3){
 				requestCount++;
 				requestPacket();
-			} else {
-				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.NOT_NETWORK);
+			}else{
+				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
 			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
-			if (requestCount < 3) {
+		}else if(cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG){
+			if(requestCount<3){
 				requestCount++;
 				getConfigInfo();
-			} else {
-				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.NOT_NETWORK);
+			}else{
+				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
 			}
 		}
 	}
@@ -884,6 +888,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						case RETURN_POWER:
 							Log.e(TAG, "进入0700 ProMainActivity");
 							if (message.get(0).substring(10, 12).equals("01")) {
+
 								if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
 									//当有通话套餐的时候才允许注册操作
 									requestPacket();
@@ -907,8 +912,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	};
 
 	private void requestPacket() {
-		IsHavePacketHttp http = new IsHavePacketHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
-		new Thread(http).start();
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET);
 		checkRegisterStatuGoIp();
 	}
 

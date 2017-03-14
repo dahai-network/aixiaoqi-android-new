@@ -157,7 +157,6 @@
         <activity
             android:name="de.blinkt.openvpn.activities.RegistActivity"
             android:screenOrientation="portrait"/>
-
         <!--
         <receiver android:name="core.GetRestrictionReceiver">
             <intent-filter>
