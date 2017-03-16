@@ -5,5 +5,7 @@ package de.blinkt.openvpn.constant;
  */
 
 public class BluetoothConstant {
-	public static String BLUE_VERSION = "blue_version";
+	public static String BLUE_BIND_SUCCESS = "blue_bind_success";
+	public static String BLUE_BIND = "blue_bind";
+	public static boolean IS_BIND = false;
 }

@@ -7,8 +7,9 @@ import android.os.Environment;
  */
 public class Constant {
 
-	public static final boolean IS_DEBUG = false;
-	public static final String BLUETOOTH_NAME = "unitoys";
+	public static final boolean IS_DEBUG = true;
+	public static final String UNITOYS = "unitoys";
+	public static final String UNIBOX = "unibox";
 
 	//购买套餐数量限制
 	public static final int LIMIT_COUNT = 30;
@@ -74,8 +75,10 @@ public class Constant {
 	//		public static final String FIND_VERSION = "AA0A0401A5";//版本号（以后的版本）
 	public static final String RESTORATION = "8880020100";//复位命令
 
-	public static final String BIND_SUCCESS = "AADD01DDAA";//绑定成功命令
-	//		public static final String ANDROID_TARGET = "AA010400AF";//绑定成功命令
+	public static final String APP_CONNECT = "8880021400";//绑定命令
+	public static final String BIND_DEVICE = "8880020700";//绑定命令
+	public static final String BIND_SUCCESS = "888003080001";//绑定成功命令
+	public static final String BIND_FAIL = "888003080000";//绑定失败命令
 	//ICCID标记
 	public static final String ICCID = "ICCID";
 	//来电，短信，微信，QQ通知开关标记
@@ -168,7 +171,7 @@ public class Constant {
 
 	public static final String RECEIVE_ELECTRICITY = "0200";//接收电量
 	public static final String USER_NOTIFY = "0300";//是否使用通知
-	public static final String MESSAGE_PUSH = "0400";//检测到有消息，消息推送
+	public static final String AGREE_BIND = "0400";//同意绑定
 	public static final String UPDATE_TIME = "0500";//更新时间
 	public static final String REQUEST_SYSTEM_BASICE_INFO = "0600";//系统基本信息请求
 	public static final String RETURN_POWER = "0700";//回应上电

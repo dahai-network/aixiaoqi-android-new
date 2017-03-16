@@ -116,7 +116,7 @@
     <string name="how_to_use">使用简介</string>
     <string name="country_no_data">我们正在努力为您准备更优质的\n资源服务中，敬请期待。</string>
     <string name="searching_wrist_strap">正在搜索周围手环</string>
-    <string name="please_close_to_the_phone">当手环震动时，请点击确认绑定</string>
+    <string name="please_close_to_the_phone">当设备震动时，请点击确认绑定</string>
     <string name="package_market">套餐超市</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -163,7 +163,8 @@
 
     <!--版本升级-->
     <string name="strUpgradeDialogFeatureLabel">更新说明</string>
-    <string name="no_find_device">未能搜索到爱小器手环</string>
+    <string name="no_find_unitoys">未能搜索到爱小器手环</string>
+    <string name="no_find_unibox">未能搜索到爱小器钥匙扣</string>
     <string name="sure_once_send">确定重发</string>
 
     <!--拨打电话-->
@@ -486,4 +487,10 @@
     <string name="auto_start">自启动</string>
     <string name="background_start">受保护应用</string>
     <string name="trust_app">信任应用</string>
+    <!--选择绑定设备-->
+    <string name="unibox">爱小器钥匙扣</string>
+    <string name="choice_bind_device">选择绑定设备</string>
+    <string name="finded_bracelet">已搜索到设备，请点击设备确认绑定</string>
+    <string name="click_bracelet_sure_bind">敲击设备确认绑定</string>
+    <string name="no_device_around">未能搜索到设备请重新搜索</string>
 </resources>

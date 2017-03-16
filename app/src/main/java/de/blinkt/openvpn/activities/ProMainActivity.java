@@ -1,8 +1,6 @@
 package de.blinkt.openvpn.activities;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -12,8 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.os.BatteryManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -45,7 +41,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import cn.com.aixiaoqi.R;
@@ -53,6 +48,7 @@ import cn.com.johnson.adapter.FragmentAdapter;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
+import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -72,7 +68,6 @@ import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
-import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -87,6 +82,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
 
 public class ProMainActivity extends BaseNetActivity implements View.OnClickListener {
 
+	public static ProMainActivity instance = null;
 	private ViewPager mViewPager;
 	private TextView[] tvArray = new TextView[4];
 	private ImageView[] ivArray = new ImageView[4];
@@ -151,6 +147,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		instance = this;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pro_main);
@@ -162,9 +159,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		initServices();
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
-		TelephonyManager telephonyManager=((TelephonyManager) getSystemService(TELEPHONY_SERVICE));
+		TelephonyManager telephonyManager = ((TelephonyManager) getSystemService(TELEPHONY_SERVICE));
 		String android_imsi = telephonyManager.getSubscriberId();
-		Log.e(TAG,"android_imsi="+android_imsi);
+		Log.e(TAG, "android_imsi=" + android_imsi);
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
 
@@ -617,8 +614,20 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (deviceAddress != null)
 							deviceAddress = deviceAddress.toUpperCase();
 						SharedUtils utils = SharedUtils.getInstance();
+						//证明app绑定过设备
+						BluetoothConstant.IS_BIND = true;
 						utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
 						utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
+						//防止返回“”或者null
+						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
+						if (!TextUtils.isEmpty(deviceTypeStr)) {
+							int deviceType = Integer.parseInt(deviceTypeStr);
+							if (deviceType == 0) {
+								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
+							} else {
+								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
+							}
+						}
 						Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 					} else {
@@ -630,7 +639,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
 			if (object.getStatus() == 1) {
-				requestCount=0;
+				requestCount = 0;
 				IsHavePacketHttp isHavePacketHttp = (IsHavePacketHttp) object;
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
@@ -651,7 +660,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
 			GetHostAndPortHttp http = (GetHostAndPortHttp) object;
 			if (http.getStatus() == 1) {
-				requestCount=0;
+				requestCount = 0;
 				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
@@ -685,23 +694,24 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		new Thread(http).start();
 	}
 
-	private int requestCount=0;
+	private int requestCount = 0;
+
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		super.errorComplete(cmdType, errorMessage);
-		if(cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET){
-			if(requestCount<3){
+		if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
+			if (requestCount < 3) {
 				requestCount++;
 				requestPacket();
-			}else{
-				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
+			} else {
+				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.NOT_NETWORK);
 			}
-		}else if(cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG){
-			if(requestCount<3){
+		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
+			if (requestCount < 3) {
 				requestCount++;
 				getConfigInfo();
-			}else{
-				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
+			} else {
+				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.NOT_NETWORK);
 			}
 		}
 	}

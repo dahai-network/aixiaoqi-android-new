@@ -8,6 +8,7 @@
         android:id="@+id/aixiaoqi1RelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/call_phone_selector"
         android:paddingBottom="@dimen/padding_10"
         android:paddingLeft="@dimen/padding_15dp"
         android:paddingRight="@dimen/padding_15dp"
@@ -38,6 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/aixiaoqi1Line"
+        android:background="@drawable/call_phone_selector"
         android:paddingBottom="@dimen/padding_10"
         android:paddingLeft="@dimen/padding_15dp"
         android:paddingRight="@dimen/padding_15dp"
@@ -47,7 +49,7 @@
             android:id="@+id/uniboxTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/aixiaoqi_bracelet"
+            android:text="@string/unibox"
             />
 
         <ImageView

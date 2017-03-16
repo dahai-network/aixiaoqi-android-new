@@ -12,7 +12,6 @@ import android.graphics.Path.Direction;
 import android.graphics.Region.Op;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.FrameLayout;
 
 import cn.com.aixiaoqi.R;
@@ -80,7 +79,6 @@ public class MySinkingView extends FrameLayout {
 
 	@Override
 	protected void dispatchDraw(Canvas canvas) {
-		Log.e("MySinkingView","dispatchDraw");
 		super.dispatchDraw(canvas);
 		int width = getWidth();
 		int height = getHeight();

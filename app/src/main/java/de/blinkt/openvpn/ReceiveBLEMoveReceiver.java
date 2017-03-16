@@ -16,15 +16,14 @@ import com.umeng.analytics.MobclickAgent;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.ActivateActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
+import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -33,13 +32,21 @@ import de.blinkt.openvpn.http.ActivationLocalCompletedHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.HistoryStepHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
+import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.SportStepEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
+import static de.blinkt.openvpn.activities.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.isUpgrade;
+import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
+import static de.blinkt.openvpn.constant.Constant.AGREE_BIND;
+import static de.blinkt.openvpn.constant.Constant.APP_CONNECT;
 import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
+import static de.blinkt.openvpn.constant.Constant.BIND_DEVICE;
+import static de.blinkt.openvpn.constant.Constant.BIND_FAIL;
+import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
@@ -50,6 +57,7 @@ import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP1;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP5;
 import static de.blinkt.openvpn.constant.HttpConfigUrl.COMTYPE_ORDER_ACTIVATION_LOCAL_COMPLETED;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
+import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 /**
  * Created by Administrator on 2016/10/5.
@@ -102,26 +110,30 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			IS_TEXT_SIM = false;
 			isGetnullCardid = true;
 			retryTime = 0;
-
+			BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
+			entity.setBlueType(BluetoothConstant.BLUE_BIND);
+			EventBus.getDefault().post(entity);
 			sendStepThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					try {
 						Thread.sleep(3000);
-						Log.i("toBLue", "连接成功");
+						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
+						if (!BluetoothConstant.IS_BIND) {
+							Thread.sleep(1000);
+							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
+						} else {
+							Log.i("toBLue", "连接成功");
 
-//						//测试代码
-						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
-						Thread.sleep(500);
-						//更新时间操作
-						SendCommandToBluetooth.sendMessageToBlueTooth(getBLETime());
-						Thread.sleep(500);
-						//android 标记，给蓝牙设备标记是否是android设备用的
+							sendMessageToBlueTooth(UP_TO_POWER);
+							CommonTools.delayTime(500);
+							//更新时间操作
+							sendMessageToBlueTooth(getBLETime());
+							CommonTools.delayTime(500);
+							//android 标记，给蓝牙设备标记是否是android设备用的
 //						sendMessageToBlueTooth(ANDROID_TARGET);
-						SendCommandToBluetooth.sendMessageToBlueTooth(BASIC_MESSAGE);
-
-//						sendMessageToBlueTooth("AABBCCDDEEFF");//绑定命令
-//						Thread.sleep(1000);
+							sendMessageToBlueTooth(BASIC_MESSAGE);
+						}
 //						if (!isConnect) {
 //							if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 //								sendMessageToBlueTooth("AAEEEEAA");//绑定命令
@@ -138,14 +150,20 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //						if (!TextUtils.isEmpty(resetOrderStr)) {
 //							sendMessageToBlueTooth(resetOrderStr);
 //						}
-//						Thread.sleep(20000);
-//						if (!isConnect && action.equals(UartService.ACTION_GATT_CONNECTED)
-//								&& TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-//							sendMessageToBlueTooth("AADD00DDAA");
-//							//连接|标记请出
-//							isConnect = false;
-//							mService.disconnect();
-//						}
+						Thread.sleep(20000);
+						if (!isConnect && action.equals(UartService.ACTION_GATT_CONNECTED)
+								&& TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+							sendMessageToBlueTooth(BIND_FAIL);
+							//连接|标记请出
+							isConnect = false;
+							ICSOpenVPNApplication.isConnect = false;
+							mService.disconnect();
+							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
+							entity.setBlueType(BluetoothConstant.BLUE_BIND_SUCCESS);
+							entity.setSuccess(false);
+							EventBus.getDefault().post(entity);
+
+						}
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -362,20 +380,19 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //											ReceiveDBOperate(mStrSimCmdPacket);
 //											messages.clear();
 //										}
-//								case (byte) 0xEE:
-//									//绑定流程成功命令
-//									CommonTools.delayTime(500);
-//									//android 标记，给蓝牙设备标记是否是android设备用的
-//									SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
-//									CommonTools.delayTime(500);
-//									//更新时间操作
-////									Thread.sleep(500);
-//									//android 标记，给蓝牙设备标记是否是android设备用的
-//									SendCommandToBluetooth.sendMessageToBlueTooth(getBLETime());
-//									isConnect = true;
-//									if (sendStepThread != null)
-//										sendStepThread = null;
-//									break;
+								case AGREE_BIND:
+									//绑定流程成功命令
+									CommonTools.delayTime(500);
+									//android 标记，给蓝牙设备标记是否是android设备用的
+									SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
+									isConnect = true;
+									if (sendStepThread != null)
+										sendStepThread = null;
+									BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
+									entity.setBlueType(BluetoothConstant.BLUE_BIND_SUCCESS);
+									entity.setSuccess(true);
+									EventBus.getDefault().post(entity);
+									break;
 								case Constant.SYSTEM_BASICE_INFO:
 //									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
 //										Log.i(TAG,"老版本设备，修改上电命令");
@@ -469,7 +486,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				String[] messages = PacketeUtil.Separate(message, type);
 				int length = messages.length;
 				for (int i = 0; i < length; i++) {
-					SendCommandToBluetooth.sendMessageToBlueTooth(messages[i]);
+					sendMessageToBlueTooth(messages[i]);
 				}
 			}
 		}).start();
@@ -522,10 +539,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							Log.i("Bluetooth", "空卡序列号:" + mStrSimCmdPacket);
 							nullCardId = mStrSimCmdPacket;
 							//重新上电清空
-							SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+							sendMessageToBlueTooth(UP_TO_POWER);
 							utils.writeString(Constant.NULLCARD_SERIALNUMBER, nullCardId);
 							//获取完空卡序列号后获取步数
-							SendCommandToBluetooth.sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
+							sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
 							ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
 							entity.setStatus(context.getString(R.string.index_aixiaoqicard));
 							entity.setStatusDrawableInt(R.drawable.index_no_signal);
@@ -536,7 +553,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					if (mStrSimCmdPacket.startsWith("9000")) {
 						//新型写卡完成
 						handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
-						SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
+						sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 						isGetnullCardid = false;
 						nullCardId = null;
 						return;
@@ -548,7 +565,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				if (mStrSimCmdPacket.startsWith("9000") && !CommonTools.isFastDoubleClick(1000)) {
 					//新型写卡完成
 					handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
-					SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
+					sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 					isGetnullCardid = false;
 					nullCardId = null;
 					return;
@@ -570,7 +587,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		EventBus.getDefault().post(entity);
 		IS_TEXT_SIM = true;
 		isGetnullCardid = false;
-		SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+		sendMessageToBlueTooth(UP_TO_POWER);
 	}
 
 	public String reverse(String str) {
@@ -636,10 +653,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活成功！");
 				orderStatus = 1;
 				Intent intent = new Intent();
-				intent.setAction(ActivateActivity.FINISH_ACTIVITY);
+				intent.setAction(FINISH_ACTIVITY);
 				intent.setAction(MyOrderDetailActivity.FINISH_PROCESS);
 				LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-				SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
+				sendMessageToBlueTooth(OFF_TO_POWER);
 			} else {
 				CommonTools.showShortToast(ICSOpenVPNApplication.getContext()
 						, object.getMsg());
@@ -666,58 +683,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
-	public String getBLETime() {
-		String bleTime;
-		Calendar calendar = Calendar.getInstance();
-		//年
-		int year = calendar.get(Calendar.YEAR);
-		year = year - 2000;
-		//月
-		int mouth = calendar.get(Calendar.MONTH);
-		mouth++;
-		//日
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		//周
-		int week = calendar.get(Calendar.DAY_OF_WEEK);
-		if (week == 1) {
-			week = 7;
-		} else {
-			week--;
-		}
-		//时
-		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		//分
-		int minute = calendar.get(Calendar.MINUTE);
-		//秒
-		int second = calendar.get(Calendar.SECOND);
-
-
-		bleTime = "8880090500" + addZero(toHex(year)) + addZero(toHex(mouth)) + addZero(toHex(day))
-				+ addZero(toHex(hour)) + addZero(toHex(minute)) + addZero(toHex(second)) + addZero("" + week);
-//		byte[] check = HexStringExchangeBytesUtil.hexStringToBytes(bleTime);
-//		String checkBleStr = HexStringExchangeBytesUtil.bytesToHexString(new byte[]{BLECheckBitUtil.getXor(check)});
-//		bleTime += addZero(checkBleStr);
-		return bleTime;
-	}
-
-	private String toHex(int num) {
-		return Integer.toHexString(num);
-	}
-
-	//为发送的数据添加0，如果小于15
-	private String addZero(String date) {
-		date = date.toUpperCase();
-		if (date.equals("A") || date.equals("B") || date.equals("C")
-				|| date.equals("D") || date.equals("E") || date.equals("F")
-				|| date.equals("0") || date.equals("1") || date.equals("2")
-				|| date.equals("3") || date.equals("4") || date.equals("5") ||
-				date.equals("6") || date.equals("7") || date.equals("8") || date.equals("9")) {
-			return "0" + date;
-		} else {
-			return "" + date;
 		}
 	}
 

@@ -222,6 +222,8 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 		sharedUtils.writeBoolean(Constant.ISFIRSTIN, true);
 		sharedUtils.delete(Constant.JPUSH_ALIAS);
 		sharedUtils.delete(Constant.TEL);
+		sharedUtils.delete(Constant.IMEI);
+		sharedUtils.delete(Constant.BRACELETNAME);
 		sharedUtils.delete(Constant.NULLCARD_SERIALNUMBER);
 		//友盟账号统计
 		MobclickAgent.onProfileSignOff();
@@ -231,6 +233,9 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 		ICSOpenVPNApplication.uartService.disconnect();
 		ICSOpenVPNApplication.getInstance().sendBroadcast(intent);
 		finish();
+		ProMainActivity activity = ProMainActivity.instance;
+		if (activity != null)
+			activity.finish();
 		toActivity(LoginMainActivity.class);
 	}
 

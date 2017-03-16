@@ -178,6 +178,7 @@
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.MyDeviceActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
         <activity

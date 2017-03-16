@@ -2,12 +2,10 @@ package de.blinkt.openvpn.fragments;
 
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,14 +24,13 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.activities.AlarmClockActivity;
 import de.blinkt.openvpn.activities.BalanceParticularsActivity;
+import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.MyPackageActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
 import de.blinkt.openvpn.activities.SettingActivity;
 import de.blinkt.openvpn.activities.TipUserOptionActivity;
-import de.blinkt.openvpn.activities.permission.HuaWeiPermissionActivity;
-import de.blinkt.openvpn.activities.permission.MeiZuPermissionActivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -224,7 +221,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 			case R.id.tv_my_device:
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKMYDEVICE);
-				intent = new Intent(getActivity(), MyDeviceActivity.class);
+				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
+					intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
+				} else {
+					intent = new Intent(getActivity(), MyDeviceActivity.class);
+				}
 				int status = R.string.index_connecting;
 				if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBleStatus())) {
 					status = R.string.index_no_signal;

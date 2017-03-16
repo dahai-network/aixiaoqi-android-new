@@ -105,6 +105,38 @@
         />
 
     <LinearLayout
+        android:id="@+id/alarmClockLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/call_phone_selector"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:text="@string/alarm_clock_tip"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/arrow"
+            />
+    </LinearLayout>
+
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+
+    <LinearLayout
         android:id="@+id/findStatusLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
