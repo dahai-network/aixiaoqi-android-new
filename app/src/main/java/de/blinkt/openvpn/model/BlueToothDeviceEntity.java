@@ -15,7 +15,14 @@ public class BlueToothDeviceEntity implements Serializable{
 	 */
 	private String IMEI;
 	private String Version;
+	private String DeviceType;
+
 	private String CreateDate;
+
+
+	public String getDeviceType() {
+		return DeviceType;
+	}
 
 	public String getIMEI() {
 		return IMEI;

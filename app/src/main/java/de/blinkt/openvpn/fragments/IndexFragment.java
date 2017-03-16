@@ -38,12 +38,14 @@ import cn.com.johnson.model.BoughtPackageEntity;
 import cn.com.johnson.model.HotPackageEntity;
 import cn.com.johnson.model.IndexBannerEntity;
 import de.blinkt.openvpn.activities.CallPackageLlistActivity;
+import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.MyPackageActivity;
 import de.blinkt.openvpn.activities.OrderedOutsidePurchaseActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.WebViewActivity;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -62,6 +64,7 @@ import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.bannerview.CycleViewPager;
 import de.blinkt.openvpn.views.xrecycler.DividerItemDecoration;
 
+import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
 import static de.blinkt.openvpn.constant.HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKABROADFEE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBANNER;
@@ -178,9 +181,16 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		boughtPackgeRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
 		boughtPackgeRecyclerView.setAdapter(orderAdapter);
 		title.getLeftText().setOnClickListener(new View.OnClickListener() {
+			public Intent intent;
+
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
+				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
+					 intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
+				} else {
+					 intent = new Intent(getActivity(), MyDeviceActivity.class);
+					 intent.putExtra(MyDeviceActivity.BRACELETTYPE,SharedUtils.getInstance().readString(BRACELETNAME,""));
+				}
 				int status = R.string.index_connecting;
 				if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBlutoothStatus())) {
 					status = R.string.index_no_signal;

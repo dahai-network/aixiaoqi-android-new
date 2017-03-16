@@ -178,6 +178,7 @@
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.MyDeviceActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -524,8 +525,9 @@
             android:excludeFromRecents="true"
             android:exported="false"
             android:finishOnTaskLaunch="false"
-            android:theme="@style/LiveActivityStyle"
-            >
+            android:theme="@style/LiveActivityStyle">
+        </activity>
+        <activity android:name="de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity">
         </activity>
     </application>
 

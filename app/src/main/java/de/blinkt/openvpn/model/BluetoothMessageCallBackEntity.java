@@ -7,6 +7,8 @@ import java.io.Serializable;
  */
 
 public class BluetoothMessageCallBackEntity implements Serializable{
+	public static String BIND_TYPE = "bind_type";
+	public static String REGIST_TYPE = "regist_type";
 	private String blueType;
 	private String braceletversion;
 	private boolean isSuccess;

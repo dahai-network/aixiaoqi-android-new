@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class CommonTools {
 
@@ -144,6 +145,58 @@ public class CommonTools {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "1.0";
+		}
+	}
+
+	public static String getBLETime() {
+		String bleTime;
+		Calendar calendar = Calendar.getInstance();
+		//年
+		int year = calendar.get(Calendar.YEAR);
+		year = year - 2000;
+		//月
+		int mouth = calendar.get(Calendar.MONTH);
+		mouth++;
+		//日
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		//周
+		int week = calendar.get(Calendar.DAY_OF_WEEK);
+		if (week == 1) {
+			week = 7;
+		} else {
+			week--;
+		}
+		//时
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		//分
+		int minute = calendar.get(Calendar.MINUTE);
+		//秒
+		int second = calendar.get(Calendar.SECOND);
+
+
+		bleTime = "8880090500" + addZero(toHex(year)) + addZero(toHex(mouth)) + addZero(toHex(day))
+				+ addZero(toHex(hour)) + addZero(toHex(minute)) + addZero(toHex(second)) + addZero("" + week);
+//		byte[] check = HexStringExchangeBytesUtil.hexStringToBytes(bleTime);
+//		String checkBleStr = HexStringExchangeBytesUtil.bytesToHexString(new byte[]{BLECheckBitUtil.getXor(check)});
+//		bleTime += addZero(checkBleStr);
+		return bleTime;
+	}
+
+	private static  String toHex(int num) {
+		return Integer.toHexString(num);
+	}
+
+	//为发送的数据添加0，如果小于15
+	private static String addZero(String date) {
+		date = date.toUpperCase();
+		if (date.equals("A") || date.equals("B") || date.equals("C")
+				|| date.equals("D") || date.equals("E") || date.equals("F")
+				|| date.equals("0") || date.equals("1") || date.equals("2")
+				|| date.equals("3") || date.equals("4") || date.equals("5") ||
+				date.equals("6") || date.equals("7") || date.equals("8") || date.equals("9")) {
+			return "0" + date;
+		} else {
+			return "" + date;
 		}
 	}
 }

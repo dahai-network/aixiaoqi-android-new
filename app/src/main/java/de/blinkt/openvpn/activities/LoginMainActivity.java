@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -149,6 +150,8 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 	}
 
+	private String pswString;
+
 	private void setTextChangeLisener() {
 		usernameEdit.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -161,7 +164,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				if (s.length() != 0) {
 					if (pwdEdit.getText().toString().length() != 0) {
 						login_btn.setEnabled(true);
-						login_btn.setBackgroundResource(R.drawable.circle_green_ret);
+						login_btn.setBackgroundResource(R.drawable.green_btn_click);
 						login_btn.setTextColor(getResources().getColor(R.color.white));
 					}
 					else {
@@ -181,7 +184,23 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 			}
 		});
+
+		pwdEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
+					//处理事件
+					if (pswString.length() != 0)
+						login_btn.performClick();
+				}
+				return false;
+			}
+		});
+
 		pwdEdit.addTextChangedListener(new TextWatcher() {
+
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -189,10 +208,11 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				pswString = s.toString();
 				if (s.length() != 0) {
 					if (usernameEdit.getText().toString().length() != 0) {
 						login_btn.setEnabled(true);
-						login_btn.setBackgroundResource(R.drawable.circle_green_ret);
+						login_btn.setBackgroundResource(R.drawable.green_btn_click);
 						login_btn.setTextColor(getResources().getColor(R.color.white));
 					}
 					else {
@@ -383,6 +403,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				sharedUtils.writeString(Constant.ASTERISK_IP_OUT, out.getAsteriskIp());
 				sharedUtils.writeString(Constant.ASTERISK_PORT_OUT, out.getAsteriskPort());
 				sharedUtils.writeString(Constant.PUBLIC_PASSWORD, out.getPublicPassword());
+
 				startActivity(new Intent(this, ProMainActivity.class));
 				//友盟帐号统计
 				MobclickAgent.onProfileSignIn(usernameEdit.getText().toString());

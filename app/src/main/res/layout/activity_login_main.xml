@@ -66,6 +66,7 @@
                 android:hint="@string/input_psw"
                 android:inputType="textPassword"
                 android:maxLines="1"
+                android:imeOptions="actionDone"
                 android:textColor="@color/white"
                 android:textColorHint="@color/login_hint_gray"
                 android:textSize="15dp"/>
@@ -92,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_marginTop="30dp"
-            android:background="@drawable/circle_green_ret"
+            android:background="@drawable/green_btn_click"
             android:text="@string/login"
             android:textColor="@android:color/white"
             android:textSize="18dp"/>

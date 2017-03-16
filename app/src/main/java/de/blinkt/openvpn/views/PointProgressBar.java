@@ -25,7 +25,7 @@ public class PointProgressBar extends LinearLayout {
 	private ImageView seekImageView4;
 	private ImageView seekImageView5;
 	private int[] images = {R.drawable.seeking1, R.drawable.seeking2, R.drawable.seeking3, R.drawable.seeking4, R.drawable.seeking5};
-	private int i = Integer.MAX_VALUE-5;
+	private int i = Integer.MAX_VALUE - 5;
 	private Handler handler = new Handler() {
 		@Override
 		public void dispatchMessage(Message msg) {
@@ -37,15 +37,23 @@ public class PointProgressBar extends LinearLayout {
 			seekImageView5.setBackgroundResource(images[((i + 4) % 5)]);
 			i--;
 			if (i == 0) {
-				i = Integer.MAX_VALUE-5;
+				i = Integer.MAX_VALUE - 5;
 			}
 			invalidate();
 		}
 	};
+	private boolean isStart = true;
+
+	public void start() {
+		isStart = true;
+	}
+
+	public void stop() {
+		isStart = false;
+	}
 
 	public PointProgressBar(Context context) {
 		super(context);
-
 	}
 
 	public PointProgressBar(Context context, AttributeSet attrs) {
@@ -70,11 +78,11 @@ public class PointProgressBar extends LinearLayout {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				CommonTools.delayTime(100);
-				handler.sendEmptyMessage(0);
+				if (isStart) {
+					CommonTools.delayTime(100);
+					handler.sendEmptyMessage(0);
+				}
 			}
 		}).start();
-
-
 	}
 }

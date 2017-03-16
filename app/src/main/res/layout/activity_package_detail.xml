@@ -285,7 +285,7 @@
         android:layout_marginBottom="@dimen/padding_15dp"
         android:layout_marginLeft="@dimen/padding_20dp"
         android:layout_marginRight="@dimen/padding_20dp"
-        android:background="@drawable/circle_green_ret"
+        android:background="@drawable/green_btn_click"
         android:text="@string/click_buy"
         android:textColor="@android:color/white"
         android:textSize="16dp"/>

@@ -105,10 +105,42 @@
         />
 
     <LinearLayout
+        android:id="@+id/alarmClockLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/call_phone_selector"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:text="@string/alarm_clock_tip"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/arrow"
+            />
+    </LinearLayout>
+
+
+    <View
+        style="@style/horizontal_line_view"
+        />
+
+
+    <LinearLayout
         android:id="@+id/findStatusLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@android:color/white"
+        android:background="@drawable/call_phone_selector"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingLeft="20dp"
@@ -139,7 +171,7 @@
         android:id="@+id/callPayLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@android:color/white"
+        android:background="@drawable/call_phone_selector"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingLeft="20dp"
@@ -202,7 +234,7 @@
         android:layout_marginLeft="@dimen/padding_20dp"
         android:layout_marginRight="@dimen/padding_20dp"
         android:layout_marginTop="@dimen/padding_15dp"
-        android:background="@drawable/circle_green_ret"
+        android:background="@drawable/green_btn_click"
         android:text="@string/remove_bind"
         android:textColor="@android:color/white"
         android:textSize="16dp"/>

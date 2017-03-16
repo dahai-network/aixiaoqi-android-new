@@ -8,32 +8,35 @@ import de.blinkt.openvpn.model.UpgradeEntity;
 /**
  * Created by Administrator on 2016/10/20 0020.
  */
-public class SkyUpgradeHttp extends BaseHttp{
+public class SkyUpgradeHttp extends BaseHttp {
 
-    UpgradeEntity upgradeEntity;
-    private String Version;
-    public UpgradeEntity getUpgradeEntity() {
-        return upgradeEntity;
-    }
+	UpgradeEntity upgradeEntity;
+	private String Version;
+	private String DeviceType;
 
-    public SkyUpgradeHttp(InterfaceCallback interfaceCallback, int cmdType_,  String Version){
-       super(interfaceCallback,cmdType_);
-        this.Version=Version;
-    }
+	public UpgradeEntity getUpgradeEntity() {
+		return upgradeEntity;
+	}
 
-    @Override
-    protected void BuildParams() throws Exception {
-        super.BuildParams();
-        slaverDomain_= HttpConfigUrl.DEVICE_BRACELET_OTA;
-        sendMethod_=GET_MODE;
-        params.put("Version",Version);
-    }
+	public SkyUpgradeHttp(InterfaceCallback interfaceCallback, int cmdType_, String Version, int deviceType) {
+		super(interfaceCallback, cmdType_);
+		this.Version = Version;
+		this.DeviceType = deviceType + "";
+	}
 
-    @Override
-    protected void parseObject(String response) {
-        upgradeEntity=new Gson().fromJson(response,UpgradeEntity.class);
-    }
+	@Override
+	protected void BuildParams() throws Exception {
+		super.BuildParams();
+		slaverDomain_ = HttpConfigUrl.DEVICE_BRACELET_OTA;
+		sendMethod_ = GET_MODE;
+		params.put("Version", Version);
+		params.put("DeviceType", DeviceType);
+	}
 
+	@Override
+	protected void parseObject(String response) {
+		upgradeEntity = new Gson().fromJson(response, UpgradeEntity.class);
+	}
 
 
 }
