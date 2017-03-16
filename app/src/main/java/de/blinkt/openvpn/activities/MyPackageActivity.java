@@ -19,6 +19,7 @@ import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.BoughtPacketHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
@@ -73,8 +74,7 @@ public class MyPackageActivity extends BaseActivity implements XRecyclerView.Loa
 
 	//加入数据
 	private void addData() {
-		BoughtPacketHttp http = new BoughtPacketHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, pageNumber, 20);
-		new Thread(http).start();
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, pageNumber+"", 20+"","-1");
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import de.blinkt.openvpn.util.User;
 /**
  * Created by Administrator on 2016/9/10 0010.
  */
-public class SmsListAdapter extends RecyclerBaseAdapter<SmsListAdapter.ViewHolder, SmsEntity> implements View.OnClickListener {
+public class SmsListAdapter extends RecyclerBaseAdapter<SmsListAdapter.ViewHolder, SmsEntity> implements View.OnClickListener,View.OnLongClickListener {
 
 
 	public SmsListAdapter(Context context, List<SmsEntity> list) {
@@ -55,6 +55,7 @@ public class SmsListAdapter extends RecyclerBaseAdapter<SmsListAdapter.ViewHolde
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		ViewHolder holder = new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_sms_list, parent, false));
 		holder.itemView.setOnClickListener(this);
+		holder.itemView.setOnLongClickListener(this);
 		return holder;
 	}
 
@@ -64,6 +65,20 @@ public class SmsListAdapter extends RecyclerBaseAdapter<SmsListAdapter.ViewHolde
 			//注意这里使用getTag方法获取数据
 			onItemClickListener.onItemClick(v, v.getTag());
 		}
+	}
+	public interface OnItemLongClickListener{
+		void onItemLongClick(View view, Object data);
+	}
+public OnItemLongClickListener onItemLongClickListener;
+
+	public void setOnItemLongClickListener(OnItemLongClickListener onItemClickListener) {
+		onItemLongClickListener=onItemClickListener;
+	}
+
+	@Override
+	public boolean onLongClick(View v) {
+		onItemLongClickListener.onItemLongClick(v, v.getTag());
+		return false;
 	}
 
 	public class ViewHolder extends RecyclerView.ViewHolder {

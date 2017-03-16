@@ -42,7 +42,9 @@ public class AsyncQueryContactHandler extends AsyncQueryHandler{
     @Override
     protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
         if (cursor != null && cursor.getCount() > 0) {
+            if(contactIdMap==null)
             contactIdMap = new HashMap<>();
+            if(mAllLists==null)
             mAllLists = new ArrayList<>();
             cursor.moveToFirst(); // 游标移动到第一项
             int count = cursor.getCount();

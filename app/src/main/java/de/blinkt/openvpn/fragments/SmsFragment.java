@@ -1,8 +1,10 @@
 package de.blinkt.openvpn.fragments;
 
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -10,9 +12,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,6 +35,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.SMSListHttp;
 import de.blinkt.openvpn.model.ContactBean;
@@ -45,7 +51,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKSMSITEM;
  * 会话列表fragment
  */
 
-public class SmsFragment extends Fragment implements XRecyclerView.LoadingListener, InterfaceCallback, RecyclerBaseAdapter.OnItemClickListener, View.OnClickListener {
+public class SmsFragment extends Fragment implements XRecyclerView.LoadingListener, InterfaceCallback, RecyclerBaseAdapter.OnItemClickListener,SmsListAdapter.OnItemLongClickListener, View.OnClickListener {
 
 
 	List<SmsEntity> list = new ArrayList<>();
@@ -57,6 +63,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	TextView noDataTextView;
 	public static boolean isForeground = false;
 	public static final String NOTIFY_RECEIVED_ACTION = "NOTIFY_RECEIVED_ACTION";
+	public static final String DELTE_MESSAGE = "DELTE_MESSAGE";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,6 +87,11 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 			if (NOTIFY_RECEIVED_ACTION.equals(intent.getAction())) {
 				if (!isForeground)
 					onRefresh();
+			}else if(DELTE_MESSAGE.equals(intent.getAction())){
+				if(mAllTempLists!=null&&clickPosition!=-1&&smsListAdapter!=null){
+					mAllTempLists.remove(clickPosition);
+					smsListAdapter.addAll(mAllTempLists);
+				}
 			}
 		}
 	}
@@ -89,6 +101,8 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
 		isForeground = isVisibleToUser;
+
+
 	}
 
 	private void initView(View view) {
@@ -100,12 +114,16 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	}
 
 	NotifyReceiver mNotifyReceiver;
+	private int position;
+
+
 
 	public void registerMessageReceiver() {
 		mNotifyReceiver = new NotifyReceiver();
 		IntentFilter filter = new IntentFilter();
 		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 		filter.addAction(NOTIFY_RECEIVED_ACTION);
+		filter.addAction(DELTE_MESSAGE);
 		getActivity().registerReceiver(mNotifyReceiver, filter);
 	}
 
@@ -123,6 +141,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		mRecyclerView.setLoadingListener(this);
 		smsListAdapter = new SmsListAdapter(getActivity(), list);
 		smsListAdapter.setOnItemClickListener(this);
+		smsListAdapter.setOnItemLongClickListener(this);
 		mRecyclerView.setAdapter(smsListAdapter);
 		mAllLists = ICSOpenVPNApplication.getInstance().getContactList();
 		smsListHttp();
@@ -148,6 +167,19 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	}
 
 	@Override
+	public void onItemLongClick(View view, final Object data) {
+		position=mAllTempLists.indexOf(data);
+		Log.e("position","position="+position);
+		new AlertDialog.Builder(getActivity()).setPositiveButton("删除", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				CreateHttpFactory.instanceHttp(SmsFragment.this,HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TEL,((SmsEntity)data).getFm());
+			}
+		}).show();
+
+	}
+
+	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.NoNetRelativeLayout:
@@ -163,6 +195,8 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	}
 
 
+
+	private int clickPosition=-1;
 	@Override
 	public void onItemClick(View view, Object object) {
 		//友盟方法统计
@@ -170,6 +204,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		Intent intent = new Intent(getActivity(), SMSAcivity.class);
 		SmsEntity smsEntity = (SmsEntity) object;
 		intent.putExtra(IntentPutKeyConstant.SMS_LIST_KEY, smsEntity);
+		clickPosition=mAllTempLists.indexOf(object);
 		if ("0".equals(smsEntity.getIsRead())) {
 			smsEntity.setIsRead("1");
 			int size = mAllTempLists.size();
@@ -184,6 +219,8 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		}
 		getActivity().startActivity(intent);
 	}
+
+
 
 	private void setSmsListRealName(List<SmsEntity> smsEntityList) {
 
@@ -214,10 +251,11 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
-		mRecyclerView.loadMoreComplete();
-		mRecyclerView.refreshComplete();
-		NoNetRelativeLayout.setVisibility(View.GONE);
+
 		if (cmdType == HttpConfigUrl.COMTYPE_GET_SMS_LIST) {
+			mRecyclerView.loadMoreComplete();
+			mRecyclerView.refreshComplete();
+			NoNetRelativeLayout.setVisibility(View.GONE);
 			SMSListHttp smsListHttp = (SMSListHttp) object;
 			if (smsListHttp.getStatus() == 1) {
 				List<SmsEntity> smsEntityList = smsListHttp.getSmsEntityList();
@@ -245,6 +283,12 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 					}
 					mRecyclerView.noMoreLoading();
 				}
+			}
+		}else if(cmdType==HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TEL){
+
+			if(object.getStatus()==1){
+				mAllTempLists.remove(position);
+				smsListAdapter.addAll(mAllTempLists);
 			}
 		}
 	}

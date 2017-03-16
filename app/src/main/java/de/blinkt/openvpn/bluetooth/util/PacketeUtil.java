@@ -18,7 +18,7 @@ public class PacketeUtil {
 		String[] packets;
 		if(message.length()/2<=15){
 			packets=new String[1];
-			packets[0]= "88800"+Integer.parseInt((message.length()/2+2)+"",16)+type+message;
+			packets[0]= "88800"+Integer.toHexString(message.length()/2+2)+type+message;
 
 		}else{
 			int totalNum=((message.length()-startLength)%(onrPackageLength)!=0?((message.length()-startLength)/(onrPackageLength)+1):(message.length()-startLength)/(onrPackageLength))+1;

@@ -106,7 +106,6 @@ public abstract class CommonHttp implements Callback, Runnable {
 						//这里设置的为0就是说不进行缓存，我们也可以设置缓存时间
 						.removeHeader("Cache-Control")
 						.header("Cache-Control", "public, max-age=" + 0)
-						.message(context_.getString(R.string.no_wifi))
 						.removeHeader("Pragma")
 						.build();
 			} else {
@@ -117,7 +116,6 @@ public abstract class CommonHttp implements Callback, Runnable {
 				return response.newBuilder()
 						.removeHeader("Cache-Control")
 						.header("Cache-Control", cacheControl)
-						.message(context_.getString(R.string.no_wifi))
 						.removeHeader("Pragma")
 						.build();
 			}

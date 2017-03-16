@@ -43,6 +43,7 @@ public class CellPhoneFragment extends Fragment  {
     private ArrayList<Fragment> fragments = new ArrayList<>();
     Activity activity;
     ViewPager mViewPager;
+    public static boolean isForeground = false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class CellPhoneFragment extends Fragment  {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        isForeground=isVisibleToUser;
         if(isVisibleToUser) {
             operation_rg.check(cell_phone_rb.getId());
             ClickPhone();
@@ -66,9 +68,6 @@ public class CellPhoneFragment extends Fragment  {
                 hidePhoneBottomBar();
             }
         }
-//		else{
-//            ProMainActivity.isDeploy=!ProMainActivity.isDeploy;
-//        }
 
     }
 

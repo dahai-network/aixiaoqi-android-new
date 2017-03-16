@@ -162,9 +162,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		initServices();
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
-		TelephonyManager telephonyManager=((TelephonyManager) getSystemService(TELEPHONY_SERVICE));
-		String android_imsi = telephonyManager.getSubscriberId();
-		Log.e(TAG,"android_imsi="+android_imsi);
+
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
 
@@ -912,7 +910,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	};
 
 	private void requestPacket() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET);
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET,"3");
 		checkRegisterStatuGoIp();
 	}
 
