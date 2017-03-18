@@ -28,6 +28,7 @@ import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.fragments.CellPhoneFragment;
 import de.blinkt.openvpn.fragments.SmsFragment;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -166,7 +167,7 @@ public class MyReceiver extends BroadcastReceiver {
 	}
 
 	private void processCustomNotify(Context context) {
-		if (!SmsFragment.isForeground) {
+		if (SmsFragment.isForeground&& CellPhoneFragment.isForeground) {
 			Intent msgIntent = new Intent(SmsFragment.NOTIFY_RECEIVED_ACTION);
 			context.sendBroadcast(msgIntent);
 		}

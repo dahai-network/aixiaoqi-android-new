@@ -32,9 +32,9 @@ public class IsHavePacketHttp extends BaseHttp {
 	private String PackageIsCategoryDualSimStandby;
 	private String PackageIsCategoryKingCard;
 
-	public IsHavePacketHttp(InterfaceCallback call, int cmdType_, String PackageCategory) {
+	public IsHavePacketHttp(InterfaceCallback call, int cmdType_,String...params) {
 		super(call, cmdType_);
-		this.PackageCategory = PackageCategory;
+		this.PackageCategory = params[0];
 
 	}
 

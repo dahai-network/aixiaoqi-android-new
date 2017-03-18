@@ -9,9 +9,12 @@ import android.provider.CallLog;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.PinYinConverNumber;
@@ -22,7 +25,7 @@ import de.blinkt.openvpn.util.PinYinConverNumber;
 public class AsyncQueryContactRecodeHandler extends AsyncQueryHandler {
     private QueryCompleteListener queryCompleteListener;
 
-
+    private Map<String, ContactRecodeEntity> contactRecodeMap = null;
 
     /**
      * @author Administrator
@@ -32,7 +35,8 @@ public class AsyncQueryContactRecodeHandler extends AsyncQueryHandler {
     public AsyncQueryContactRecodeHandler(  QueryCompleteListener queryCompleteListener , ContentResolver cr ,List<ContactRecodeEntity> list) {
         super(cr);
         this.queryCompleteListener=queryCompleteListener;
-        mAllLists=new ArrayList<>();
+        if(mAllLists==null)
+            mAllLists=new ArrayList<>();
     }
 
     @Override
@@ -66,38 +70,43 @@ public class AsyncQueryContactRecodeHandler extends AsyncQueryHandler {
         if(TextUtils.isEmpty(number)){
             return true;
         }
-        int type = cursor.getInt(cursor.getColumnIndex(CallLog.Calls.TYPE));
-
-        String typeString;
-        if (type==CallLog.Calls.INCOMING_TYPE) {
-
-            typeString = Constant.CALL_INCOMING;
-        }else if(type==CallLog.Calls.OUTGOING_TYPE)
-        {
-            typeString = Constant.CALL_OUTGOING;
+        if(contactRecodeMap==null){
+            contactRecodeMap=new HashMap<>();
         }
-        else if(type==CallLog.Calls.MISSED_TYPE) {
-            typeString = Constant.CALL_MISSED;
-        }else{
-            return true;
-        }
-        String name = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
-        long dateLong = cursor.getLong(cursor.getColumnIndex(CallLog.Calls.DATE));
-        String date = DateUtils.getTimeStampString(dateLong+"");
-        int duration = cursor.getInt(cursor.getColumnIndex(CallLog.Calls.DURATION));
+        if(!contactRecodeMap.containsKey(number)){
 
-        ContactRecodeEntity contactRecodeEntity=new ContactRecodeEntity();
-        contactRecodeEntity.setData(date);
-        if(!TextUtils.isEmpty(name))
-            contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(name));
-//        else{
-//            contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(number),PinYinConverNumber.getInstance().getNameNum(number));
-//        }
-        contactRecodeEntity.setDuration(duration);
-        contactRecodeEntity.setName(name);
-        contactRecodeEntity.setPhoneNumber(number);
-        contactRecodeEntity.setTypeString(typeString);
-        mAllLists.add(contactRecodeEntity);
+            int type = cursor.getInt(cursor.getColumnIndex(CallLog.Calls.TYPE));
+
+            String typeString;
+            if (type==CallLog.Calls.INCOMING_TYPE) {
+
+                typeString = Constant.CALL_INCOMING;
+            }else if(type==CallLog.Calls.OUTGOING_TYPE)
+            {
+                typeString = Constant.CALL_OUTGOING;
+            }
+            else if(type==CallLog.Calls.MISSED_TYPE) {
+                typeString = Constant.CALL_MISSED;
+            }else{
+                return true;
+            }
+            String name = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
+            long dateLong = cursor.getLong(cursor.getColumnIndex(CallLog.Calls.DATE));
+            String date = DateUtils.getTimeStampString(dateLong+"");
+            int duration = cursor.getInt(cursor.getColumnIndex(CallLog.Calls.DURATION));
+
+            ContactRecodeEntity contactRecodeEntity=new ContactRecodeEntity();
+            contactRecodeEntity.setData(date);
+            if(!TextUtils.isEmpty(name))
+                contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(name));
+
+            contactRecodeEntity.setDuration(duration);
+            contactRecodeEntity.setName(name);
+            contactRecodeEntity.setPhoneNumber(number);
+            contactRecodeEntity.setTypeString(typeString);
+            contactRecodeMap.put(number,contactRecodeEntity);
+            mAllLists.add(contactRecodeEntity);
+        }
         return false;
     }
 

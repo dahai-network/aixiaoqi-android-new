@@ -1,7 +1,9 @@
 package de.blinkt.openvpn.activities;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -38,12 +40,15 @@ import java.util.Map;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.RecyclerBaseAdapter;
 import cn.com.johnson.adapter.SmsDetailAdapter;
+import cn.com.johnson.adapter.SmsListAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.fragments.SmsFragment;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.SendRetryForErrorHttp;
 import de.blinkt.openvpn.http.SendSmsHttp;
@@ -66,7 +71,7 @@ import static de.blinkt.openvpn.constant.UmengContant.INPUTPHONENUMBER;
 /**
  * Created by Administrator on 2016/9/1 0001.
  */
-public class SMSAcivity extends BaseActivity implements View.OnClickListener, InterfaceCallback, SwipeRefreshLayout.OnRefreshListener, RecyclerBaseAdapter.OnItemClickListener, DialogInterfaceTypeBase {
+public class SMSAcivity extends BaseActivity implements View.OnClickListener, InterfaceCallback, SwipeRefreshLayout.OnRefreshListener, RecyclerBaseAdapter.OnItemClickListener, DialogInterfaceTypeBase,SmsDetailAdapter.OnItemLongClickListener {
 	SmsEntity smsEntity;
 	SwipeRefreshLayout swipeRefreshLayout;
 	RecyclerView recyclerView;
@@ -221,6 +226,7 @@ public class SMSAcivity extends BaseActivity implements View.OnClickListener, In
 		recyclerView.setLayoutManager(layoutManager);
 		smsDetailAdapter = new SmsDetailAdapter(this, list);
 		smsDetailAdapter.setOnItemClickListener(this);
+		smsDetailAdapter.setOnItemLongClickListener(this);
 		recyclerView.setAdapter(smsDetailAdapter);
 		smsContentEt = (EditText) findViewById(R.id.sms_content_et);
 		consigneeLl = (RelativeLayout) findViewById(R.id.consignee_ll);
@@ -624,6 +630,17 @@ public class SMSAcivity extends BaseActivity implements View.OnClickListener, In
 
 	}
 
+	@Override
+	public void onItemLongClick(View view, final Object data) {
+		position = (Integer) data;
+		new AlertDialog.Builder(this).setPositiveButton("删除", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				CreateHttpFactory.instanceHttp(SMSAcivity.this,HttpConfigUrl.COMTYPE_SMS_DELETE,smsDetailAdapter.getItem(position).getSMSID());
+			}
+		}).show();
+	}
+
 	private void showDialog() {
 		DialogBalance dialog = new DialogBalance(this, SMSAcivity.this, R.layout.dialog_balance, 3);
 		dialog.changeText(getResources().getString(R.string.sure_once_send), getResources().getString(R.string.sure));
@@ -695,6 +712,18 @@ public class SMSAcivity extends BaseActivity implements View.OnClickListener, In
 			}
 			smsDetailAdapter.remove(position);
 			smsDetailAdapter.add(position, smsDetailEntity);
+		}
+		else if(cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE){
+			if(object.getStatus()==1){
+				if(smsDetailAdapter.getItemCount()!=1){
+				smsDetailAdapter.remove(position);
+				smsDetailAdapter.notifyDataSetChanged();
+				}else{
+					Intent msgIntent = new Intent(SmsFragment.DELTE_MESSAGE);
+					sendBroadcast(msgIntent);
+					finish();
+				}
+			}
 		}
 
 	}

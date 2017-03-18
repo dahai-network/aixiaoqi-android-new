@@ -18,7 +18,7 @@ import de.blinkt.openvpn.util.User;
 /**
  * Created by Administrator on 2016/9/12 0012.
  */
-public class SmsDetailAdapter extends RecyclerBaseAdapter<RecyclerView.ViewHolder, SmsDetailEntity> implements View.OnClickListener {
+public class SmsDetailAdapter extends RecyclerBaseAdapter<RecyclerView.ViewHolder, SmsDetailEntity> implements View.OnClickListener,View.OnLongClickListener {
 	private static final int RIGTH_ME = 0;
 	private static final int LEFT_OTHER = 1;
 
@@ -50,7 +50,7 @@ public class SmsDetailAdapter extends RecyclerBaseAdapter<RecyclerView.ViewHolde
 			((LeftViewHolder) holder).showTimeTv.setText(DateUtils.getTimeStampDetailString(smsDetailEntity.getSMSTime()));
 			((LeftViewHolder) holder).leftSmsTv.setText(smsDetailEntity.getSMSContent());
 		}
-
+		holder.itemView.setTag(position);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class SmsDetailAdapter extends RecyclerBaseAdapter<RecyclerView.ViewHolde
 		} else {
 			holder = new LeftViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_left_sms, parent, false));
 		}
-
+		holder.itemView.setOnLongClickListener(this);
 		return holder;
 	}
 
@@ -69,12 +69,25 @@ public class SmsDetailAdapter extends RecyclerBaseAdapter<RecyclerView.ViewHolde
 	public int getItemViewType(int position) {
 		return User.isCurrentUser(mList.get(position).getFm()) ? RIGTH_ME : LEFT_OTHER;
 	}
+	public interface OnItemLongClickListener{
+		void onItemLongClick(View view, Object data);
+	}
+	public OnItemLongClickListener onItemLongClickListener;
 
+	public void setOnItemLongClickListener(OnItemLongClickListener onItemClickListener) {
+		onItemLongClickListener=onItemClickListener;
+	}
 	@Override
 	public void onClick(View v) {
 		if (onItemClickListener != null) {
 			onItemClickListener.onItemClick(v, v.getTag());
 		}
+	}
+
+	@Override
+	public boolean onLongClick(View v) {
+		onItemLongClickListener.onItemLongClick(v, v.getTag());
+		return false;
 	}
 
 	public class LeftViewHolder extends RecyclerView.ViewHolder {

@@ -15,7 +15,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
  */
 
 public class GetHotHttp extends BaseHttp {
-	private int pageSize;
+	private String pageSize;
 	private List<HotPackageEntity> hotPackageEntityList;
 
 	public List<HotPackageEntity> getHotPackageEntityList() {
@@ -25,9 +25,9 @@ public class GetHotHttp extends BaseHttp {
 		return hotPackageEntityList;
 	}
 
-	public GetHotHttp(InterfaceCallback call, int cmdType_, int pageSize) {
+	public GetHotHttp(InterfaceCallback call, int cmdType_, String...params) {
 	super(call,cmdType_);
-		this.pageSize = pageSize;
+		this.pageSize = params[0];
 
 	}
 

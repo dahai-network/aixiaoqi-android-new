@@ -22,9 +22,6 @@ public class UpdateAlarmHttp extends BaseHttp {
 	private final String Tag;
 	//状态（0禁用1启用）
 	private final String ID;
-	private InterfaceCallback call;
-	private int cmdType_;
-
 	private String  Status;
 
 	public UpdateAlarmHttp(InterfaceCallback call, int cmdType_, String Time, List<String> Repeat, String Tag, String ID, String Status) {

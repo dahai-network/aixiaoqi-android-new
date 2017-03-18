@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -42,6 +44,7 @@ import de.blinkt.openvpn.model.OrderEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.SharedUtils;
+import de.blinkt.openvpn.util.SmsHelper;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
@@ -363,32 +366,55 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 						toActivity(new Intent(this, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt()));
 					else {
 						//是否测试卡位置：否，这是写卡！
-						IS_TEXT_SIM = false;
-						orderStatus = 4;
-						showProgress("正在激活", false);
-						new Thread(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
-									Thread.sleep(20000);
-								} catch (InterruptedException e) {
-									dismissProgress();
-									e.printStackTrace();
+//						TelephonyManager telephonyManager=((TelephonyManager) getSystemService(TELEPHONY_SERVICE));
+//						String android_imsi = telephonyManager.getSubscriberId();
+//
+//						if(android_imsi.startsWith("4540")){
+//							String	str1=	SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER);
+//							if (!str1.isEmpty())
+//							{
+//								String str2 = SmsHelper.bytesToHex(Base64.decode(str1, 2));
+//								if (SmsHelper.getInstance().writeCMDSmall(str2))
+//								{
+//									CommonTools.showShortToast(this,"写卡成功");
+//
+//									return;
+//								}
+//								CommonTools.showShortToast(this,"写卡失败");
+//
+//								return;
+//							}
+//							CommonTools.showShortToast(this,"密钥为空");
+//						}else{
+
+
+							IS_TEXT_SIM = false;
+							orderStatus = 4;
+							showProgress("正在激活", false);
+							new Thread(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
+										Thread.sleep(20000);
+									} catch (InterruptedException e) {
+										dismissProgress();
+										e.printStackTrace();
+									}
+									if (!isActivateSuccess) {
+										runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												dismissProgress();
+												CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
+											}
+										});
+									}
 								}
-								if (!isActivateSuccess) {
-									runOnUiThread(new Runnable() {
-										@Override
-										public void run() {
-											dismissProgress();
-											CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
-										}
-									});
-								}
-							}
-						}).start();
-						orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
-					}
+							}).start();
+							orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
+						}
+//					}
 				}
 				break;
 			case R.id.retryTextView:

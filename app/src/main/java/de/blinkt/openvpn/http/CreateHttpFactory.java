@@ -9,13 +9,13 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
  */
 
 public class CreateHttpFactory {
-    public static void instanceHttp(InterfaceCallback interfaceCallback,int cmdType){
+    public static void instanceHttp(InterfaceCallback interfaceCallback,int cmdType,String ...params){
         switch (cmdType){
             case HttpConfigUrl.COMTYPE_GET_HOT://获取热门套餐
-                startHttp(new GetHotHttp(interfaceCallback, cmdType, 12));
+                startHttp(new GetHotHttp(interfaceCallback, cmdType, params));
                 break ;
             case HttpConfigUrl.COMTYPE_GET_ORDER://获取订单
-                startHttp(new BoughtPacketHttp(interfaceCallback, cmdType, 1, 3));
+                startHttp(new BoughtPacketHttp(interfaceCallback, cmdType, params));
                 break;
             case HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL://获取运动总数据
                 startHttp(new GetSportTotalHttp(interfaceCallback, cmdType));
@@ -27,12 +27,18 @@ public class CreateHttpFactory {
                 startHttp(new GetHostAndPortHttp(interfaceCallback, cmdType));
                 break;
             case HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET://获取端口号和IP地址
-                startHttp(new IsHavePacketHttp(interfaceCallback, cmdType,"3"));
+                startHttp(new IsHavePacketHttp(interfaceCallback, cmdType,params));
+                break;
+            case HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TEL://获取端口号和IP地址
+                startHttp(new SmsDeleteByTelHttp(interfaceCallback, cmdType,params));
+                break;
+            case HttpConfigUrl.COMTYPE_SMS_DELETE://获取端口号和IP地址
+                startHttp(new SmsDeleteHttp(interfaceCallback, cmdType,params));
                 break;
         }
     }
 
-    public  static  void startHttp(BaseHttp baseHttp){
+    private  static  void startHttp(BaseHttp baseHttp){
         new Thread(baseHttp).start();
     }
 

@@ -158,9 +158,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		initServices();
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
-		TelephonyManager telephonyManager = ((TelephonyManager) getSystemService(TELEPHONY_SERVICE));
-		String android_imsi = telephonyManager.getSubscriberId();
-		Log.e(TAG, "android_imsi=" + android_imsi);
+
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
 
@@ -658,7 +656,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
 			GetHostAndPortHttp http = (GetHostAndPortHttp) object;
 			if (http.getStatus() == 1) {
-				requestCount = 0;
+				requestCount=0;
 				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
 					Log.i(TAG, "SocketConstant.hostIP:" + SocketConstant.hostIP + ",SocketConstant.port:" + SocketConstant.port);
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
@@ -693,24 +691,23 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		new Thread(http).start();
 	}
 
-	private int requestCount = 0;
-
+	private int requestCount=0;
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		super.errorComplete(cmdType, errorMessage);
-		if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
-			if (requestCount < 3) {
+		if(cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET){
+			if(requestCount<3){
 				requestCount++;
 				requestPacket();
-			} else {
-				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.NOT_NETWORK);
+			}else{
+				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
 			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
-			if (requestCount < 3) {
+		}else if(cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG){
+			if(requestCount<3){
 				requestCount++;
 				getConfigInfo();
-			} else {
-				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.NOT_NETWORK);
+			}else{
+				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
 			}
 		}
 	}
@@ -921,7 +918,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	};
 
 	private void requestPacket() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET);
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET,"3");
 		checkRegisterStatuGoIp();
 	}
 

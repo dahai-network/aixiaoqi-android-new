@@ -223,20 +223,20 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	}
 
 	private void getHotPackage() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_HOT);
+		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_HOT,12+"");
 	}
 
 	private void getBoughtPackage() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER);
+		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_ORDER,"1","3","-1");
 	}
 
 	private void getSportTotal() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL);
+		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL);
 	}
 
 	//获取banner图
 	private void getIndexBanner() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_INDEX_BANNER);
+		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_INDEX_BANNER);
 	}
 
 	@Override
