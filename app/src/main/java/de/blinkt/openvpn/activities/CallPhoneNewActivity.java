@@ -71,7 +71,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		IntentFilter filter = getIntentFilter();
 		connectedReceive = new ConnectedReceive();
 		registerReceiver(connectedReceive, filter);
-		callPhone();
+			callPhone();
 	}
 
 	@Override
@@ -143,6 +143,12 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 		if (contactRecodeEntity == null || TextUtils.isEmpty(contactRecodeEntity.getPhoneNumber())) {
 			CommonTools.showShortToast(this, "电话号码不能为空");
+			return;
+		}
+
+		if(ICSOpenVPNApplication.the_sipengineReceive==null)
+		{
+			CommonTools.showShortToast(this, "电话异常请稍后重试");
 			return;
 		}
 

@@ -25,6 +25,7 @@ import de.blinkt.openvpn.util.pinyin.CharacterParser;
 
 public class PackageMarketActivity extends BaseActivity implements InterfaceCallback {
 
+	public static PackageMarketActivity activity ;
 	@BindView(R.id.marketRecyclerView)
 	RecyclerView marketRecyclerView;
 	@BindView(R.id.retryTextView)
@@ -46,6 +47,7 @@ public class PackageMarketActivity extends BaseActivity implements InterfaceCall
 	}
 
 	private void initSet() {
+		activity = this;
 		hasLeftViewTitle(R.string.package_market,0);
 		marketRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 		initData();

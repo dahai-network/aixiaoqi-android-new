@@ -3,7 +3,6 @@ package de.blinkt.openvpn.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -16,6 +15,7 @@ import cn.qfishphone.sipengine.SipEngineCore;
 import cn.qfishphone.sipengine.SipEngineEventListener;
 import cn.qfishphone.sipengine.SipEngineFactory;
 import de.blinkt.openvpn.activities.ReceiveCallActivity;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -136,6 +136,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 		if (CallDir != 0) {
 			CALL_DIR = 0;
 			ReceiveCallActivity.launch(CallPhoneService.this, peer_caller);
+			SendCommandToBluetooth.sendMessageToBlueTooth(Constant.COMING_TEL_PUSH);//发送给手环电话设备通知
 		} else {
 			CALL_DIR = 1;
 

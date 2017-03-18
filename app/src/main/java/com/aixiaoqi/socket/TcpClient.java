@@ -34,72 +34,72 @@ public abstract class TcpClient implements Runnable {
 	 * 连接建立失败，回调{@code onConnectFailed()}
 	 */
 	public void connect() {
-		Log.e("connectSocket","connect");
+		Log.e("connectSocket", "connect");
 		new Thread(this).start();
 	}
 
 	private Timer timerSocket;
 	private TimerTask taskSocket;
-	private int socketStartCount=0;
+	private int socketStartCount = 0;
+
 	@Override
 	public void run() {
 		try {
-			Log.e("initSocket","socket start");
-			if(!connect){
-				if(socketStartCount==0){
-					if(timerSocket==null){
-						timerSocket=new Timer();
+			Log.e("initSocket", "socket start");
+			if (!connect) {
+				if (socketStartCount == 0) {
+					if (timerSocket == null) {
+						timerSocket = new Timer();
 					}
-					if(taskSocket==null){
+					if (taskSocket == null) {
 						timerTask();
 					}
-					timerSocket.schedule(taskSocket,5*60*1000,5*60*1000);
+					timerSocket.schedule(taskSocket, 5 * 60 * 1000, 5 * 60 * 1000);
 				}
 				socketStartCount++;
 				connectSocket();
 
 			}
-		}catch (ConnectException e){
+		} catch (ConnectException e) {
 
 			this.onConnectFailed();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			this.onConnectFailed();
 		}
 	}
 
 	private void timerTask() {
-		taskSocket=new TimerTask() {
-            @Override
-            public void run() {
-                Log.e("Blue_Chanl","执行了定时器任务，connect="+connect);
-                if(!connect){
-                    try {
-                        connectSocket();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        TcpClient.this.onConnectFailed();
-                    }
-                }
-            }
-        };
+		taskSocket = new TimerTask() {
+			@Override
+			public void run() {
+				Log.e("Blue_Chanl", "执行了定时器任务，connect=" + connect);
+				if (!connect) {
+					try {
+						connectSocket();
+					} catch (Exception e) {
+						e.printStackTrace();
+						TcpClient.this.onConnectFailed();
+					}
+				}
+			}
+		};
 	}
 
 	private void connectSocket() throws IOException {
 		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
-//		SocketAddress address = new InetSocketAddress("192.168.1.133", 5089);
+//		SocketAddress address = new InetSocketAddress("192.168.1.133", 5090);
 		Socket socket = new Socket();
 		//TCP保活
 		socket.setKeepAlive(true);
-		socket.connect(address,30000);
+		socket.connect(address, 30000);
 		socket.setTcpNoDelay(true);
 		transceiver = new SocketTransceiver(socket) {
 
 			@Override
 			public void onReceive(InetAddress addr, byte[] s, int length) {
 
-				TcpClient.this.onReceive(this,s,length);
+				TcpClient.this.onReceive(this, s, length);
 			}
 
 			@Override
@@ -110,8 +110,8 @@ public abstract class TcpClient implements Runnable {
 		};
 		transceiver.start();
 		connect = true;
-		if(SocketConstant.REGISTER_STATUE_CODE!=3||System.currentTimeMillis()-TlvAnalyticalUtils.registerOrTime>60*1000){
-			TlvAnalyticalUtils.registerOrTime=System.currentTimeMillis();
+		if (SocketConstant.REGISTER_STATUE_CODE != 3 || System.currentTimeMillis() - TlvAnalyticalUtils.registerOrTime > 60 * 1000) {
+			TlvAnalyticalUtils.registerOrTime = System.currentTimeMillis();
 			this.onConnect(transceiver);
 		}
 	}
@@ -128,19 +128,20 @@ public abstract class TcpClient implements Runnable {
 		}
 	}
 
-	public void closeTimer(){
-		connect=false;
-		socketStartCount=0;
-		if(timerSocket!=null){
+	public void closeTimer() {
+		connect = false;
+		socketStartCount = 0;
+		if (timerSocket != null) {
 			timerSocket.cancel();
-			timerSocket=null;
+			timerSocket = null;
 		}
-		if(taskSocket!=null){
+		if (taskSocket != null) {
 			taskSocket.cancel();
-			taskSocket=null;
+			taskSocket = null;
 		}
 
 	}
+
 	/**
 	 * 判断是否连接
 	 *
@@ -162,8 +163,7 @@ public abstract class TcpClient implements Runnable {
 	/**
 	 * 连接建立
 	 *
-	 * @param transceiver
-	 *            SocketTransceiver对象
+	 * @param transceiver SocketTransceiver对象
 	 */
 	public abstract void onConnect(SocketTransceiver transceiver);
 
@@ -177,20 +177,17 @@ public abstract class TcpClient implements Runnable {
 	 * <p>
 	 * 注意：此回调是在新线程中执行的
 	 *
-	 * @param transceiver
-	 *            SocketTransceiver对象
-	 * @param s
-	 *            字符串
+	 * @param transceiver SocketTransceiver对象
+	 * @param s           字符串
 	 */
-	public abstract void onReceive(SocketTransceiver transceiver, byte[] s,int length);
+	public abstract void onReceive(SocketTransceiver transceiver, byte[] s, int length);
 
 	/**
 	 * 连接断开
 	 * <p>
 	 * 注意：此回调是在新线程中执行的
 	 *
-	 * @param transceiver
-	 *            SocketTransceiver对象
+	 * @param transceiver SocketTransceiver对象
 	 */
 	public abstract void onDisconnect(SocketTransceiver transceiver);
 }

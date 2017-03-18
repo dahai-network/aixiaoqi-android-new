@@ -48,7 +48,6 @@ import cn.com.johnson.adapter.FragmentAdapter;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -614,8 +613,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (deviceAddress != null)
 							deviceAddress = deviceAddress.toUpperCase();
 						SharedUtils utils = SharedUtils.getInstance();
-						//证明app绑定过设备
-						BluetoothConstant.IS_BIND = true;
+
 						utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
 						utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
 						//防止返回“”或者null
@@ -662,6 +660,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			if (http.getStatus() == 1) {
 				requestCount = 0;
 				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
+					Log.i(TAG, "SocketConstant.hostIP:" + SocketConstant.hostIP + ",SocketConstant.port:" + SocketConstant.port);
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
 					if (SocketConstant.REGISTER_STATUE_CODE == 2) {

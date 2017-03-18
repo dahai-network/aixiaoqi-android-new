@@ -277,7 +277,7 @@ public class CommitCallTimeOrderActivity extends BaseActivity implements Interfa
 
 				PaySuccessActivity.launch(CommitCallTimeOrderActivity.this, PaySuccessActivity.BUY_CALL_TIME, PaySuccessActivity.BALANCE,
 						bean.getPrice() + "", orderEntity.getOrder().getOrderID());
-
+                finish();
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
 			BalanceHttp http = (BalanceHttp) object;

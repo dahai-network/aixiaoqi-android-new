@@ -34,19 +34,18 @@ public class TlvAnalyticalUtils {
 		int responeCode = Integer.parseInt(responeString, 16);
 		responeCode = responeCode & 127;
 		if (responeCode == 41) {
-			registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
+			registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.REGISTER_FAIL);
 			return null;
 		} else if (responeCode == 39) {
-			registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
+			registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.REGISTER_FAIL);
 			return null;
 		}
 		tag = tag & 127;
 		position = position + 8;
 		String sessionId = hexString.substring(position, position + 8);
-		if(tag==4){
-		SocketConstant.SESSION_ID = sessionId;
-		}
-		else if (!SocketConstant.SESSION_ID.equals(sessionId) && !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
+		if (tag == 4) {
+			SocketConstant.SESSION_ID = sessionId;
+		} else if (!SocketConstant.SESSION_ID.equals(sessionId) && !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
 //			SocketConstant.SESSION_ID = sessionId;
 			return null;
 		}
@@ -65,15 +64,16 @@ public class TlvAnalyticalUtils {
 
 
 	public static void builderMessagePackageList(String hexString) {
-		String dataLength = hexString.substring(20, 24);
-		int index = Integer.parseInt(dataLength, 16) * 2;
-		if (index + 24 < hexString.length()) {
-			builderMessagePackage(hexString.substring(0, index + 24));
-			builderMessagePackageList(hexString.substring(index + 24));
-		} else {
-			builderMessagePackage(hexString);
-		}
+			String dataLength = hexString.substring(20, 24);
+			int index = Integer.parseInt(dataLength, 16) * 2;
+			if (index + 24 < hexString.length()) {
+				builderMessagePackage(hexString.substring(0, index + 24));
+				builderMessagePackageList(hexString.substring(index + 24));
+			} else {
+				builderMessagePackage(hexString);
+			}
 	}
+
 	private static List<TlvEntity> builderTlvList(String orData, String hexString, int tag) {
 		int position = 0;
 		String tempTag = "";
@@ -118,7 +118,7 @@ public class TlvAnalyticalUtils {
 					}
 				} else if (typeParams == 199) {
 //					if (REGISTER_STATUE_CODE == 2) {//第一次是010101的时候不去复位SDK,第二次的时候才对SDK进行复位
-						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
+					sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 //					}
 
 					String rpValue = "000100163b9f94801fc78031e073fe211b573786609b30800119";
@@ -160,7 +160,7 @@ public class TlvAnalyticalUtils {
 						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
 						REGISTER_STATUE_CODE = 2;
-						registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
+						registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.REGISTER_FAIL);
 					}
 				}
 			}
@@ -169,8 +169,6 @@ public class TlvAnalyticalUtils {
 		}
 		return tlvs;
 	}
-
-
 
 
 	/**
@@ -183,9 +181,9 @@ public class TlvAnalyticalUtils {
 		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
 		stringBuilder.replace(6, 8, "00");
 		sendToSdkLisener.sendServer(stringBuilder.toString());
-		if (TestProvider.sendYiZhengService != null){
+		if (TestProvider.sendYiZhengService != null) {
 			CommonTools.delayTime(2000);
-			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
+			SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
 			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "service disconncet :\n");
 			TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}

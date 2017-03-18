@@ -493,4 +493,5 @@
     <string name="finded_bracelet">已搜索到设备，请点击设备确认绑定</string>
     <string name="click_bracelet_sure_bind">敲击设备确认绑定</string>
     <string name="no_device_around">未能搜索到设备请重新搜索</string>
+    <string name="message_remind">消息提醒</string>
 </resources>

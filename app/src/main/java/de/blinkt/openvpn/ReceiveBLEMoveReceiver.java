@@ -10,7 +10,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
+import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,6 +32,7 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.ActivationLocalCompletedHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
 import de.blinkt.openvpn.http.HistoryStepHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
@@ -38,6 +41,8 @@ import de.blinkt.openvpn.model.SportStepEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
+import static com.aixiaoqi.socket.EventBusUtil.registerFail;
+import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 import static de.blinkt.openvpn.activities.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.isUpgrade;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
@@ -85,6 +90,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	public static String nullCardId = null;
 	private int UPDATE_HISTORY_DATE = 1;
 	private int WRITE_CARD_COMPLETE = 2;
+	private int CHECK_SIGNAL = 3;
 	//	private String dataType;//发出数据以后需要把dataType重置为-1；
 	private Handler handler = new Handler() {
 		@Override
@@ -94,6 +100,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				updateHistoryDate();
 			} else if (msg.what == WRITE_CARD_COMPLETE) {
 				activationLocalCompletedHttp();
+			} else if (msg.what == CHECK_SIGNAL) {
+				getDeviceSimRegStatues();
 			}
 		}
 	};
@@ -119,12 +127,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					try {
 						Thread.sleep(3000);
 						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
-						if (!BluetoothConstant.IS_BIND) {
+						String braceletname = utils.readString(Constant.BRACELETNAME);
+						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.equals(Constant.UNIBOX)) {
 							Thread.sleep(1000);
 							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
 						} else {
 							Log.i("toBLue", "连接成功");
-
 							sendMessageToBlueTooth(UP_TO_POWER);
 							CommonTools.delayTime(500);
 							//更新时间操作
@@ -441,6 +449,38 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										messages.clear();
 									}
 									break;
+								case Constant.IS_INSERT_CARD:
+									Log.i(TAG, "接收数据：是否插卡：" + messages);
+									if (messages.get(0).substring(10, 12).equals("00")) {
+										Log.i(TAG, "未插卡");
+										sendEventBusChangeBluetoothStatus(context
+												.getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
+									} else if (messages.get(0).substring(10, 12).equals("01")) {
+										Log.i(TAG, "已插卡");
+										//如果激活卡成功后，刷新按钮点击需要将标记激活
+										isGetnullCardid = true;
+										nullCardId = null;
+										//TODO 处理异常
+										//如没有没插卡检测插卡并且提示用户重启手环。
+										//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
+										//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
+
+										if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
+											SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+										} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
+											if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+												//从预读取数据那里重新注册
+												connectGoip();
+											} else {
+												registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+											}
+
+										} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+											//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
+											handler.sendEmptyMessage(CHECK_SIGNAL);
+										}
+									}
+									break;
 //								case (byte) 0xDB:
 //								case (byte) 0xDA:
 //									if (IS_TEXT_SIM) {
@@ -661,6 +701,15 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				CommonTools.showShortToast(ICSOpenVPNApplication.getContext()
 						, object.getMsg());
 			}
+		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES) {
+			GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp = (GetDeviceSimRegStatuesHttp) object;
+			if (getDeviceSimRegStatuesHttp.getStatus() == 1)
+				if (!getDeviceSimRegStatuesHttp.getSimRegStatue().getRegStatus().equals("1")) {
+					connectGoip();
+				} else {
+					CommonTools.showShortToast(context, context.getString(R.string.tip_high_signal));
+				}
+
 		}
 	}
 
@@ -672,6 +721,28 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
+	 */
+	private void sendEventBusChangeBluetoothStatus(String status, int statusDrawableInt) {
+		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
+		entity.setStatus(status);
+		entity.setStatusDrawableInt(statusDrawableInt);
+		EventBus.getDefault().post(entity);
+	}
+
+	private void connectGoip() {
+		if (sendYiZhengService != null) {
+			sendEventBusChangeBluetoothStatus(context.getString(R.string.index_registing), R.drawable.index_no_signal);
+			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+		}
+	}
+
+	private void getDeviceSimRegStatues() {
+		GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp = new GetDeviceSimRegStatuesHttp(this, HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES);
+		new Thread(getDeviceSimRegStatuesHttp).start();
 	}
 
 	@Override

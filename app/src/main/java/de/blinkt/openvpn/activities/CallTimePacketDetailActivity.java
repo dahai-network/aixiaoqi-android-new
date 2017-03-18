@@ -31,6 +31,7 @@ import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.orderStatus;
 
 public class CallTimePacketDetailActivity extends BaseActivity implements InterfaceCallback {
 
+	public static CallTimePacketDetailActivity activity;
 	@BindView(R.id.retryTextView)
 	TextView retryTextView;
 	@BindView(R.id.NoNetRelativeLayout)
@@ -53,6 +54,7 @@ public class CallTimePacketDetailActivity extends BaseActivity implements Interf
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		activity = this;
 		addData();
 	}
 

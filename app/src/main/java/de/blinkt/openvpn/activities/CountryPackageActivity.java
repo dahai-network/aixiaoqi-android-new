@@ -38,6 +38,7 @@ import static android.view.View.GONE;
 
 public class CountryPackageActivity extends BaseActivity implements InterfaceCallback {
 
+	public static CountryPackageActivity activity = null;
 	@BindView(R.id.packageImageView)
 	ImageView packageImageView;
 	@BindView(R.id.packageDetailRecyclerView)
@@ -66,6 +67,7 @@ public class CountryPackageActivity extends BaseActivity implements InterfaceCal
 	}
 	 String countryPic;
 	private void initSet() {
+		activity = this;
 		Intent intent = getIntent();
 		String countryStr = intent.getStringExtra("country");
 		titleBar.setLeftBtnIcon(R.drawable.btn_top_back);

@@ -5,9 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import de.blinkt.openvpn.util.DateUtils;
-import de.blinkt.openvpn.util.NetworkUtils;
-
 import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 
 /**
@@ -27,7 +24,7 @@ public class AutoReceiver extends BroadcastReceiver {
 				@Override
 				public void run() {
 					if (TestProvider.sendYiZhengService != null) {
-						Log.i(TAG, DateUtils.getCurrentDateForFileDetail() + " 发送心跳包，是否联网：" + NetworkUtils.isNetworkAvailable(context));
+//						Log.i(TAG, DateUtils.getCurrentDateForFileDetail() + " 发送心跳包，是否联网：" + NetworkUtils.isNetworkAvailable(context));
 						TestProvider.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
 					} else {
 						Log.e(TAG, "AutoReceiver 异常！");

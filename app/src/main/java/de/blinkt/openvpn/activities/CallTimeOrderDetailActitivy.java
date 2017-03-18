@@ -32,6 +32,7 @@ import de.blinkt.openvpn.util.DateUtils;
 
 public class CallTimeOrderDetailActitivy extends BaseNetActivity   {
 
+	public static CallTimeOrderDetailActitivy actitivy ;
 	@BindView(R.id.retryTextView)
 	TextView retryTextView;
 	@BindView(R.id.NoNetRelativeLayout)
@@ -72,6 +73,7 @@ public class CallTimeOrderDetailActitivy extends BaseNetActivity   {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		actitivy = this;
 		addData();
 	}
 
@@ -94,6 +96,7 @@ public class CallTimeOrderDetailActitivy extends BaseNetActivity   {
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.retryTextView:
+				addData();
 				break;
 			case R.id.headBarRelativeLayout:
 				CallTimePacketDetailActivity.launch(CallTimeOrderDetailActitivy.this, bean.getPackageId());

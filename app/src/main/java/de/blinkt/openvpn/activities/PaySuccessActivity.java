@@ -101,10 +101,40 @@ public class PaySuccessActivity extends BaseActivity implements InterfaceCallbac
 		if (type == RECHARGE) {
 			finish();
 		} else if (type == BUY) {
+			if (CountryPackageActivity.activity != null) {
+				CountryPackageActivity.activity.finish();
+				CountryPackageActivity.activity = null;
+			}
+			if (PackageMarketActivity.activity != null) {
+				PackageMarketActivity.activity.finish();
+				PackageMarketActivity.activity = null;
+			}
+			if (PackageDetailActivity.activity != null) {
+				PackageDetailActivity.activity.finish();
+				PackageDetailActivity.activity = null;
+			}
 			MyOrderDetailActivity.launch(this, getIntent().getStringExtra("orderId"));
 			finish();
 		} else if (type == BUY_CALL_TIME) {
+			if (CallTimeOrderDetailActitivy.actitivy != null) {
+				CallTimeOrderDetailActitivy.actitivy.finish();
+				CallTimeOrderDetailActitivy.actitivy = null;
+			}
+			if (PackageMarketActivity.activity != null) {
+				PackageMarketActivity.activity.finish();
+				PackageMarketActivity.activity = null;
+			}
+			if (CallTimePacketDetailActivity.activity != null) {
+				CallTimePacketDetailActivity.activity.finish();
+				CallTimePacketDetailActivity.activity = null;
+			}
+
+			if (CallPackageLlistActivity.activity != null) {
+				CallPackageLlistActivity.activity.finish();
+				CallPackageLlistActivity.activity = null;
+			}
 			CallTimeOrderDetailActitivy.launch(this, getIntent().getStringExtra("orderId"));
+			finish();
 		}
 	}
 
