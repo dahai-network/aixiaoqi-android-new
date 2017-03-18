@@ -63,10 +63,10 @@ public class BoughtPacketHttp extends BaseHttp {
 		sendMethod_ = GET_MODE;
 		params.put("PageNumber", URLEncoder.encode(PageNumber + "", "utf-8"));
 		params.put("PageSize", URLEncoder.encode(PageSize + "", "utf-8"));
-		params.put("PackageIsCategoryFlow", URLEncoder.encode(PackageIsCategoryFlow + "", "utf-8"));
-		params.put("PackageIsCategoryCall", URLEncoder.encode(PackageIsCategoryCall + "", "utf-8"));
-		params.put("PackageIsCategoryDualSimStandby", URLEncoder.encode(PackageIsCategoryDualSimStandby + "", "utf-8"));
-		params.put("PackageIsCategoryKingCard", URLEncoder.encode(PackageIsCategoryKingCard + "", "utf-8"));
+//		params.put("PackageIsCategoryFlow", URLEncoder.encode(PackageIsCategoryFlow + "", "utf-8"));
+//		params.put("PackageIsCategoryCall", URLEncoder.encode(PackageIsCategoryCall + "", "utf-8"));
+//		params.put("PackageIsCategoryDualSimStandby", URLEncoder.encode(PackageIsCategoryDualSimStandby + "", "utf-8"));
+//		params.put("PackageIsCategoryKingCard", URLEncoder.encode(PackageIsCategoryKingCard + "", "utf-8"));
 		if (type != -1)
 			params.put("PackageCategory", URLEncoder.encode(type + "", "utf-8"));
 

@@ -58,6 +58,7 @@ import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
+import de.blinkt.openvpn.model.UIOperatorEntity;
 import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -309,31 +310,31 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				break;
 			case register_sim_statue:
 				if (!CommonTools.isFastDoubleClick(3000)) {
-				//如果激活卡成功后，刷新按钮点击需要将标记激活
-				isGetnullCardid = true;
-				nullCardId = null;
-				percentInt = 0;
-				//TODO 处理异常
-				//如没有没插卡检测插卡并且提示用户重启手环。
-				//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
-				//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
+					//如果激活卡成功后，刷新按钮点击需要将标记激活
+					isGetnullCardid = true;
+					nullCardId = null;
+					percentInt = 0;
+					//TODO 处理异常
+					//如没有没插卡检测插卡并且提示用户重启手环。
+					//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
+					//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
-				startAnim();
-				if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
-					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
-				} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
-					if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
-						//从预读取数据那里重新注册
-						connectGoip();
-					} else {
-						registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+					startAnim();
+					if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
+						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+					} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
+						if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+							//从预读取数据那里重新注册
+							connectGoip();
+						} else {
+							registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+						}
+
+					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+						//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
+						getDeviceSimRegStatues();
 					}
-
-				} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-					//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
-					getDeviceSimRegStatues();
 				}
-			}
 				break;
 
 			case R.id.statueTextView:
@@ -1115,9 +1116,19 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		percentTextView.setText(percentInt + "%");
 	}
 
+	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
+	public void onUIOperatorEntity(UIOperatorEntity entity) {
+		if (entity.getType() == UIOperatorEntity.onError) {
+			CommonTools.showShortToast(MyDeviceActivity.this, getString(R.string.update_fail_retry));
+		} else if (entity.getType() == UIOperatorEntity.onCompelete) {
+			CommonTools.showShortToast(MyDeviceActivity.this, getString(R.string.dfu_status_completed));
+		}
+	}
+
+
 	private void showNoCardDialog() {
 		//不能按返回键，只能二选其一
-		if(cardRuleBreakDialog!=null) cardRuleBreakDialog.getDialog().dismiss();
+		if (cardRuleBreakDialog != null) cardRuleBreakDialog.getDialog().dismiss();
 		cardRuleBreakDialog = new DialogBalance(MyDeviceActivity.this, MyDeviceActivity.this, R.layout.dialog_balance, 3);
 		cardRuleBreakDialog.setCanClickBack(false);
 		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));
