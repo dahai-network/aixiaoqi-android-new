@@ -272,4 +272,25 @@ public class Constant {
 	 */
 
 	public static final int VERTIFICATION_ERROR = 1009;
+
+
+	/**
+	 * 手机厂商硬件名
+	 */
+	public static final String LEMOBILE = "LEMobile";//乐视
+	public static final String LENOVO = "Lenovo";//联想
+	public static final String MEIZU = "meizu";//魅族
+	public static final String SAMSUNG = "samsung";//三星
+	public static final String ONEPLUS = "OnePlus";//一加
+
+	/**
+	 * 手机提示
+	 */
+	public static final String APP_PERTECT = "应用保护";
+	public static final String PHONE_NO_OMIT = "不漏接任何来电";
+	public static final String AUTO_RUN = "自启动管理";
+	public static final String PERTECT_AIXIAOQI_RUN_NORMAL = "保障爱小器正常运行";
+	public static final String KEEP_WLAN_CONNECT = "休眠状态下保持WLAN连接";
+	public static final String KEEP_RUN_IN_STANDBY = "在待机时保持运行";
+
 }

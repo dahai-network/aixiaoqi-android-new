@@ -455,6 +455,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										Log.i(TAG, "未插卡");
 										sendEventBusChangeBluetoothStatus(context
 												.getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
+										//未插卡（需要修改：由于没有获取ICCID无法判断所以日后需要修改，暂时这样写）
+										SocketConstant.REGISTER_STATUE_CODE = 0;
 									} else if (messages.get(0).substring(10, 12).equals("01")) {
 										Log.i(TAG, "已插卡");
 										//如果激活卡成功后，刷新按钮点击需要将标记激活

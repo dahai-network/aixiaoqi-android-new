@@ -14,7 +14,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.CallTimePacketDetailActivity;
 import de.blinkt.openvpn.model.PacketEntity;
@@ -56,10 +55,16 @@ public class CallPacketAdapter extends RecyclerView.Adapter<CallPacketAdapter.Vi
 	}
 
 	@Override
-	public void onBindViewHolder(ViewHolder holder, int position) {
+	public void onBindViewHolder(ViewHolder holder, final int position) {
 		holder.nameTextView.setText(data.get(position).getPackageName());
 		holder.timeTextView.setText(context.getResources().getString(R.string.expiry_date) + "：" + data.get(position).getExpireDays() + "天");
 		holder.numberTextView.setText(data.get(position).getPrice());
+		holder.rootRelativeLayout.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				CallTimePacketDetailActivity.launch(context,data.get(position).getPackageId());
+			}
+		});
 	}
 
 	@Override
@@ -84,9 +89,5 @@ public class CallPacketAdapter extends RecyclerView.Adapter<CallPacketAdapter.Vi
 			ButterKnife.bind(this, itemView);
 		}
 
-		@OnClick(R.id.rootRelativeLayout)
-		public void onClick() {
-			CallTimePacketDetailActivity.launch(context,data.get(getPosition()-1).getPackageId());
-		}
 	}
 }
