@@ -141,22 +141,12 @@ public class SdkAndBluetoothDataInchange {
 
 			}
 		}
-		for(int i=0;i<messages.size();i++){
-			Log.e("TlvAnalyticalUtils ", "接收到蓝牙发过来的数据"+"["+i+"]"+messages.get(i));
-
-		}
-
-
 		count=count+1;
-		Log.e("TlvAnalyticalUtils ", "count="+count);
 		if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
 
-//						TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[count+4]);
             //判断是否是电信还是联通的卡
             saveBluetoothData= PacketeUtil.Combination(messages);
-            Log.e("TlvAnalyticalUtils","saveBluetoothData="+saveBluetoothData);
             String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
-            Log.e("TlvAnalyticalUtils","IMSI="+imsi);
             if (imsi.startsWith("46000")
                     || imsi.startsWith("46001")
                     || imsi.startsWith("46002")

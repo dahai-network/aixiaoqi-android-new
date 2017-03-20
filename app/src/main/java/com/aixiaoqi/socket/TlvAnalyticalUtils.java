@@ -103,7 +103,7 @@ public class TlvAnalyticalUtils {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
 					SocketConstant.REGISTER_REMOTE_ADDRESS = value.substring(value.indexOf("_") + 1, value.lastIndexOf("."));
 					SocketConstant.REGISTER_ROMOTE_PORT = value.substring(value.lastIndexOf(".") + 1, value.length());
-					Log.e("RemoteAddress", "REGISTER_REMOTE_ADDRESS=" + SocketConstant.REGISTER_REMOTE_ADDRESS + "\nREGISTER_ROMOTE_PORT" + SocketConstant.REGISTER_ROMOTE_PORT);
+
 				}
 			} else if (tag == 16) {
 				if (typeParams == 1) {
@@ -134,9 +134,7 @@ public class TlvAnalyticalUtils {
 								sendToBlue(preData[6]);
 							}else if(responeCode==0&&preCode!=0){
 								for(int i=0;i<4;i++){
-
 									int	responeC=getResponeCode(preData[i+2].substring(preData[i+2].length()-4,preData[i+2].length()),2);
-									Log.e("TlvAnalyticalUtils","responeC="+responeC);
 									if(responeC==0){
 										break;
 									}
@@ -149,9 +147,6 @@ public class TlvAnalyticalUtils {
 
 							}
 							preData[8]=orData.replace("8a1000", "8a9000").substring(0,20);
-							for(int i=0;i<9;i++){
-								Log.e("isHasPreData","TlvAnalyticalUtils.preData["+i+"]"+TlvAnalyticalUtils.preData[i]);
-							}
 						}else{
 							byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
 							sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);}

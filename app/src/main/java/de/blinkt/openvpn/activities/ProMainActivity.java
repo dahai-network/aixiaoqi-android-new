@@ -910,7 +910,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				}
 				try {
 					String dataType = message.get(0).substring(6, 10);
-					Log.e(TAG, "dataType=" + dataType + "  " + (dataType.equals(RETURN_POWER)));
 					switch (dataType) {
 						case RETURN_POWER:
 							Log.e(TAG, "进入0700 ProMainActivity");
