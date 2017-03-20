@@ -115,7 +115,7 @@ public class TlvAnalyticalUtils {
 				}
 				if ("00".equals(tempTag)) {
 					if (typeParams == 199) {
-						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_USED_TO_SDK);
+//						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_USED_TO_SDK);
 						if(SdkAndBluetoothDataInchange.isHasPreData) {
 							if(preData==null){
 								preData= new String[9];
@@ -128,24 +128,24 @@ public class TlvAnalyticalUtils {
 							preData(value, preData);
 							String valideData = value.substring(32, value.length());
 							preData[6]=valideData;
-							int
-									preCode=getResponeCode(preData[2].substring(preData.length-4,preData.length),2);
-
+							int preCode=getResponeCode(preData[2].substring(preData[2].length()-4,preData[2].length()),2);
 							if(responeCode==0&&preCode==0){
-								sendToBlue(preData[6]);
 								getOrderNumber(0);
+								sendToBlue(preData[6]);
 							}else if(responeCode==0&&preCode!=0){
-								sendToBlue(preData[2]);
 								for(int i=0;i<4;i++){
-									int	responeC=getResponeCode(preData[i+4],2);
+
+									int	responeC=getResponeCode(preData[i+2].substring(preData[i+2].length()-4,preData[i+2].length()),2);
+									Log.e("TlvAnalyticalUtils","responeC="+responeC);
 									if(responeC==0){
 										break;
 									}
 									getOrderNumber(i+1);
 								}
-							}else{
 								sendToBlue(preData[2]);
+							}else{
 								getOrderNumber(responeCode);
+								sendToBlue(preData[2]);
 
 							}
 							preData[8]=orData.replace("8a1000", "8a9000").substring(0,20);
@@ -217,6 +217,7 @@ public class TlvAnalyticalUtils {
 		}else{
 			preData[7]=(responeCode+1)+"";
 		}
+		Log.e("TlvAnalyticalUtils","preData[7]="+preData[7]);
 	}
 
 	public static int getResponeCode(String preNumber,int type) {
@@ -233,17 +234,18 @@ public class TlvAnalyticalUtils {
 		for(int i=16;i<32;i=i+4){
 			int index=(i-16)/4;
 			String cmd=	value.substring(i,i+4);
-			preData[index+2]="a0a4000002"+cmd.length()+cmd;
+			preData[index+2]="a0a4000002"+cmd;
 		}
 	}
 
 
 	public static void sendToBlue(String value){
+		Log.e("TlvAnalyticalUtils","发送给蓝牙的数据"+value);
 		String[] messages = PacketeUtil.Separate(value,Constant.READED_SIM_DATA);
 		for (int i = 0; i < messages.length; i++) {
 			byte[] valueData = HexStringExchangeBytesUtil.hexStringToBytes(messages[i]);
 			ICSOpenVPNApplication.uartService.writeRXCharacteristic(valueData);
-			Log.e("isHasPreData","messages["+i+"]"+messages[i]);
+
 		}
 	}
 
@@ -251,6 +253,7 @@ public class TlvAnalyticalUtils {
 	 * 注册中不成功再次注册
 	 */
 	public static void reRegistering(String orData, int tag) {
+		if(!SdkAndBluetoothDataInchange.isHasPreData)
 		sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));//重置SDK
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(orData);
@@ -260,7 +263,6 @@ public class TlvAnalyticalUtils {
 		if (ProMainActivity.sendYiZhengService != null){
 			CommonTools.delayTime(2000);
 			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
-			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "service disconncet :\n");
 			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}

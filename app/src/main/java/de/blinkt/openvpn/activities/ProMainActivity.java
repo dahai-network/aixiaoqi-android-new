@@ -671,14 +671,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 					}
-//					getIccid();
-					//运行注册流程
-//					new Thread(new Runnable() {
-//						@Override
-//						public void run() {
-
-//						}
-//					}).start();
+					getIccid();
 				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
@@ -821,13 +814,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			JNIUtil.getInstance().startSDK(1);
 		}else if(Constant.REGISTER_SIM_PRE_DATA.equals(simRegisterType.getSimRegisterType())){
 			startSocketService();
-			Log.e(TAG,"startTcpSocket22222222");
 			startTcpSocket();
 			SocketConnection.mReceiveSocketService.setListener(new ReceiveSocketService.CreateSocketLisener() {
 				@Override
 				public void create() {
-					Log.e(TAG,"startTcpSocket3333333");
-						ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+					TestProvider.isCreate=true;
+					CommonTools.delayTime(500);
+					ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 				}
 
 			});
@@ -841,7 +834,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		if (sendYiZhengService != null&&SocketConnection.mReceiveSocketService!=null){
 			sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
 		}
-	bindTcpSucceed();
+		bindTcpSucceed();
 	}
 
 	private void bindTcpSucceed() {
@@ -925,8 +918,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 								if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
 									//当有通话套餐的时候才允许注册操作
-									getIccid();
-//									requestPacket();
+									requestPacket();
 								}
 							} else if (message.get(0).substring(10, 12).equals("11")) {
 								sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);

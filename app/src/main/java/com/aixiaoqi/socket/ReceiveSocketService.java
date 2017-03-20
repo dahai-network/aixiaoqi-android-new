@@ -127,6 +127,7 @@ public class ReceiveSocketService extends Service {
 				REGISTER_STATUE_CODE = 2;
 				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.TCP_DISCONNECT);
 			}
+			if(!SdkAndBluetoothDataInchange.isHasPreData)
 			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "restart connect :\n");
 			reConnect();

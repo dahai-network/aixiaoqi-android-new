@@ -400,6 +400,7 @@
 
         <service
             android:name="de.blinkt.openvpn.bluetooth.service.UartService"
+            android:exported="false"
             android:enabled="true"/>
         <service
             android:name="de.blinkt.openvpn.service.CallPhoneService"
@@ -414,6 +415,7 @@
         <service
             android:name="com.aixiaoqi.socket.ReceiveSocketService"
             android:enabled="true"
+            android:exported="false"
             android:persistent="true"/>
 
         <activity

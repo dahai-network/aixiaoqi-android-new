@@ -82,8 +82,7 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
 
     @Override
     public void sendServer(String hexString) {
-        Log.e("sendYISerivce","sendYISerivce="+ hexString);
-        Log.e("mReceiveSocketService","mReceiveSocketService="+ (mReceiveSocketService==null));
+        Log.e("TlvAnalyticalUtils","发给一正服务器的数据="+ hexString);
         mReceiveSocketService.sendMessage(hexString);
     }
 
