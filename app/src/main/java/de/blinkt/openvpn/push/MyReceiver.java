@@ -25,6 +25,7 @@ import de.blinkt.openvpn.activities.LoginMainActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.SMSAcivity;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -65,8 +66,10 @@ public class MyReceiver extends BroadcastReceiver {
 			Log.e(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
 //
 			String type=	bundle.getString(JPushInterface.EXTRA_CONTENT_TYPE);
-			if("SMSReceiveNew".equals(type)){
-			processNotification(context, bundle);
+			if("SMSReceiveNew".equals(type)) {
+				processNotification(context, bundle);
+				//推送短信到设备
+				SendCommandToBluetooth.sendMessageToBlueTooth(Constant.MESSAGE_PUSH);//发送给手环短信通知
 			}else if("SMSSendResult".equals(type)){
 				processCustomMessage(context, bundle);
 			}	if("EjoDVCloseLontTime" .equals(type)){

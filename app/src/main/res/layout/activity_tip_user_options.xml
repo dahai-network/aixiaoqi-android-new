@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/gray_back_2"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/phone_link_blurtooth_rl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_250dp"
+        android:background="@color/color333a48">
+
+        <LinearLayout
+            android:id="@+id/optionBackLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/phoneImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tip_phone_fail"/>
+
+            <ImageView
+                android:id="@+id/option_type_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/padding"/>
+
+            <ImageView
+                android:id="@+id/deviceImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bluetooth_fail"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/padding_20dp"
+            android:text="@string/phone_link_bluetooth_tip"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_marginTop="@dimen/padding_15dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:id="@+id/openNotificationRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_60dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/openNotificationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:drawableLeft="@drawable/bluetooth_close"
+                    android:drawablePadding="@dimen/padding_5dp"
+                    android:paddingLeft="@dimen/padding_15dp"
+                    android:text="@string/notification_unopened"
+                    android:textColor="@color/order_money"/>
+
+                <LinearLayout
+                    android:id="@+id/openNotificationLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_60dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/openNotificationImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/common_anim_list_loading_tiny"/>
+
+                    <TextView
+                        android:id="@+id/openNotificationLoadTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/padding_5dp"
+                        android:text="@string/linking"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/openNotiCLickTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/padding_15dp"
+                    android:background="@drawable/half_circle"
+                    android:paddingBottom="@dimen/padding"
+                    android:paddingLeft="@dimen/padding_15dp"
+                    android:paddingRight="@dimen/padding_15dp"
+                    android:paddingTop="@dimen/padding"
+                    android:text="@string/opening"
+                    android:textColor="@color/color01d0c0"/>
+            </RelativeLayout>
+
+            <View
+                style="@style/horizontal_line_view"/>
+
+            <RelativeLayout
+                android:id="@+id/open_bluetooth_ll"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_60dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/bluetooth_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:drawableLeft="@drawable/bluetooth_close"
+                    android:drawablePadding="@dimen/padding_5dp"
+                    android:paddingLeft="@dimen/padding_15dp"
+                    android:text="@string/bluetooth_unopened"
+                    android:textColor="@color/order_money"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_load_push"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_60dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/iv_load_push"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/common_anim_list_loading_tiny"/>
+
+                    <TextView
+                        android:id="@+id/tv_load_push"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/padding_5dp"
+                        android:text="@string/linking"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/open_bluetooth_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/padding_15dp"
+                    android:background="@drawable/half_circle"
+                    android:paddingBottom="@dimen/padding"
+                    android:paddingLeft="@dimen/padding_15dp"
+                    android:paddingRight="@dimen/padding_15dp"
+                    android:paddingTop="@dimen/padding"
+                    android:text="@string/opening"
+                    android:textColor="@color/color01d0c0"/>
+            </RelativeLayout>
+
+            <View
+                style="@style/horizontal_line_view"/>
+
+            <RelativeLayout
+                android:id="@+id/callCommingRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_60dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/padding_40dp"
+                    android:layout_marginLeft="@dimen/padding_15dp"
+                    android:layout_marginTop="@dimen/padding_10dp"
+                    android:drawableLeft="@drawable/coming_tel_tip"
+                    android:gravity="center_vertical"
+                    android:text="@string/coming_tel_tip"
+                    android:textSize="14sp"/>
+
+
+                <de.blinkt.openvpn.views.SwitchView
+                    android:id="@+id/callCommingSwitchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/padding_15dp"
+                    />
+
+            </RelativeLayout>
+
+            <View
+                style="@style/horizontal_line_view"/>
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_60dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/padding_40dp"
+                    android:layout_marginLeft="@dimen/padding_15dp"
+                    android:layout_marginTop="@dimen/padding_10dp"
+                    android:drawableLeft="@drawable/sms_tip"
+                    android:gravity="center_vertical"
+                    android:text="@string/sms_tip"
+                    android:textSize="14sp"/>
+
+
+                <de.blinkt.openvpn.views.SwitchView
+                    android:id="@+id/smsSwitchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/padding_15dp"
+                    />
+
+            </RelativeLayout>
+
+            <View
+                style="@style/horizontal_line_view"/>
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_60dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/padding_40dp"
+                    android:layout_marginLeft="@dimen/padding_15dp"
+                    android:layout_marginTop="@dimen/padding_10dp"
+                    android:drawableLeft="@drawable/weixin_meg"
+                    android:gravity="center_vertical"
+                    android:text="@string/weixin_tip"
+                    android:textSize="14sp"/>
+
+
+                <de.blinkt.openvpn.views.SwitchView
+                    android:id="@+id/weixinSwitchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/padding_15dp"
+                    />
+
+            </RelativeLayout>
+
+            <View
+                style="@style/horizontal_line_view"/>
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_60dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/padding_40dp"
+                    android:layout_marginLeft="@dimen/padding_15dp"
+                    android:layout_marginTop="@dimen/padding_10dp"
+                    android:drawableLeft="@drawable/qq_mes"
+                    android:gravity="center_vertical"
+                    android:text="@string/qq_tip"
+                    android:textSize="14sp"/>
+
+
+                <de.blinkt.openvpn.views.SwitchView
+                    android:id="@+id/qqSwitchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/padding_15dp"
+                    />
+
+            </RelativeLayout>
+
+            <View
+                style="@style/horizontal_line_view"/>
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

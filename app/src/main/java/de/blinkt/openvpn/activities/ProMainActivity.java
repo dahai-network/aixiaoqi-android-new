@@ -617,8 +617,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (deviceAddress != null)
 							deviceAddress = deviceAddress.toUpperCase();
 						SharedUtils utils = SharedUtils.getInstance();
-						//证明app绑定过设备
-						BluetoothConstant.IS_BIND = true;
+
 						utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
 						utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
 						//防止返回“”或者null
@@ -788,10 +787,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					case SocketConstant.RESTART_TCP:
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 						startSocketService();
-						if (sendYiZhengService == null) {
-							sendYiZhengService = new SendYiZhengService();
+						if (ProMainActivity.sendYiZhengService == null) {
+							ProMainActivity.sendYiZhengService = new SendYiZhengService();
 						}
-						Log.e(TAG,"startTcpSocket1111111");
 						startTcpSocket();
 						break;
 					case SocketConstant.REG_STATUE_CHANGE:
@@ -835,14 +833,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			});
 
 		}
-
 	}
 
 	private int bindtime = 0;
 
 	private void startTcpSocket() {
 		if (sendYiZhengService != null&&SocketConnection.mReceiveSocketService!=null){
-			Log.e(TAG,"initSocket1111");
 			sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
 		}
 	bindTcpSucceed();

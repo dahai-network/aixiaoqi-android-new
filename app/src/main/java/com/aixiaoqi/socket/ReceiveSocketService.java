@@ -78,7 +78,7 @@ public class ReceiveSocketService extends Service {
 			TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s, length));
 			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
-			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "read :" + HexStringExchangeBytesUtil.bytesToHexString(s, length));
+//			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "read :" + HexStringExchangeBytesUtil.bytesToHexString(s, length));
 
 		}
 

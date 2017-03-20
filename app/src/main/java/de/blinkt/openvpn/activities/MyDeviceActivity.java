@@ -58,6 +58,7 @@ import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PercentEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
+import de.blinkt.openvpn.model.UIOperatorEntity;
 import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -115,6 +116,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	Button registerSimStatu;
 	@BindView(R.id.alarmClockLinearLayout)
 	LinearLayout alarmClockLinearLayout;
+	@BindView(R.id.messageRemindLinearLayout)
+	LinearLayout messageRemindLinearLayout;
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_ENABLE_BT = 2;
@@ -184,7 +187,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			int DeviceType = 0;
 			String braceletname = utils.readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(braceletname)) {
-				if (braceletname.equals(MyDeviceActivity.UNITOYS)) {
+				if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
 					DeviceType = 0;
 				} else {
 					DeviceType = 1;
@@ -202,6 +205,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		bracelettype = getIntent().getStringExtra(BRACELETTYPE);
 		if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
 			alarmClockLinearLayout.setVisibility(GONE);
+			messageRemindLinearLayout.setVisibility(GONE);
 		}
 
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
@@ -268,7 +272,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	public static boolean isUpgrade = false;
 
-	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, register_sim_statue, R.id.findStatusLinearLayout, R.id.statueTextView, R.id.alarmClockLinearLayout})
+	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, register_sim_statue, R.id.findStatusLinearLayout, R.id.statueTextView, R.id.alarmClockLinearLayout, R.id.messageRemindLinearLayout})
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.unBindButton:
@@ -344,6 +348,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				registerSimStatu.setVisibility(View.VISIBLE);
 				Intent intent = new Intent(MyDeviceActivity.this, AlarmClockActivity.class);
 				startActivity(intent);
+				break;
+			case R.id.messageRemindLinearLayout:
+				//当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
+				registerSimStatu.setVisibility(View.VISIBLE);
+				Intent remindIntent = new Intent(MyDeviceActivity.this, TipUserOptionsActivity.class);
+				startActivity(remindIntent);
 				break;
 		}
 	}
@@ -508,7 +518,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							String braceletname = utils.readString(Constant.BRACELETNAME);
 							if (!TextUtils.isEmpty(braceletname)) {
 
-								if (braceletname.equals(MyDeviceActivity.UNITOYS)) {
+								if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
 									DeviceType = 0;
 								} else {
 									DeviceType = 1;
@@ -1105,8 +1115,19 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		percentTextView.setText(percentInt + "%");
 	}
 
+	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
+	public void onUIOperatorEntity(UIOperatorEntity entity) {
+		if (entity.getType() == UIOperatorEntity.onError) {
+			CommonTools.showShortToast(MyDeviceActivity.this, getString(R.string.update_fail_retry));
+		} else if (entity.getType() == UIOperatorEntity.onCompelete) {
+			CommonTools.showShortToast(MyDeviceActivity.this, getString(R.string.dfu_status_completed));
+		}
+	}
+
+
 	private void showNoCardDialog() {
 		//不能按返回键，只能二选其一
+		if (cardRuleBreakDialog != null) cardRuleBreakDialog.getDialog().dismiss();
 		cardRuleBreakDialog = new DialogBalance(MyDeviceActivity.this, MyDeviceActivity.this, R.layout.dialog_balance, 3);
 		cardRuleBreakDialog.setCanClickBack(false);
 		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));

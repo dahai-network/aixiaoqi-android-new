@@ -20,13 +20,13 @@ public class IsHavePacketHttp extends BaseHttp {
 
 	/**
 	 * PackageIsCategoryFlow（是否流量类型）
-	 * <p>
+			* <p>
 	 * PackageIsCategoryCall（是否通话类型）
-	 * <p>
+			* <p>
 	 * PackageIsCategoryDualSimStandby（是否双卡双待类型）
-	 * <p>
+			* <p>
 	 * PackageIsCategoryKingCard（是否双卡双待类型）
-	 */
+			*/
 	private String PackageIsCategoryFlow;
 	private String PackageIsCategoryCall;
 	private String PackageIsCategoryDualSimStandby;
@@ -43,10 +43,10 @@ public class IsHavePacketHttp extends BaseHttp {
 		super.BuildParams();
 		slaverDomain_ = HttpConfigUrl.CHECK_IS_HAVE_PACKET;
 		params.put("PackageCategory", PackageCategory);
-		params.put("PackageIsCategoryFlow", PackageIsCategoryFlow);
-		params.put("PackageIsCategoryCall", PackageIsCategoryCall);
-		params.put("PackageIsCategoryDualSimStandby", PackageIsCategoryDualSimStandby);
-		params.put("PackageIsCategoryKingCard", PackageIsCategoryKingCard);
+//		params.put("PackageIsCategoryFlow", PackageIsCategoryFlow);
+//		params.put("PackageIsCategoryCall", PackageIsCategoryCall);
+//		params.put("PackageIsCategoryDualSimStandby", PackageIsCategoryDualSimStandby);
+//		params.put("PackageIsCategoryKingCard", PackageIsCategoryKingCard);
 	}
 
 	//设置筛选条件

@@ -260,7 +260,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 					int DeviceType = 0;
 					String braceletname = utils.readString(Constant.BRACELETNAME);
 					if (!TextUtils.isEmpty(braceletname)) {
-						if (braceletname.equals(MyDeviceActivity.UNITOYS)) {
+						if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
 							DeviceType = 0;
 						} else {
 							DeviceType = 1;

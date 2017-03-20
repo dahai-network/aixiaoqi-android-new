@@ -72,8 +72,13 @@ public class Constant {
 	public static final String FIND_DEVICE = "8880020C00";//查找手环
 	public static final String BASIC_MESSAGE = "8880020600";//基本信息获取
 	public static final String SKY_UPGRADE_ORDER = "8880030A00B1";//空中升级指令
-	//		public static final String FIND_VERSION = "AA0A0401A5";//版本号（以后的版本）
 	public static final String RESTORATION = "8880020100";//复位命令
+
+	public static final String HANG_UP_PUSH = "888003040000";//挂电推送到设备
+	public static final String COMING_TEL_PUSH = "888003040001";//来电推送到设备
+	public static final String MESSAGE_PUSH = "888003040002";//消息推送到设备
+	public static final String WEIXIN_PUSH = "888003040003";//微信推送到设备
+	public static final String QQ_PUSH = "888003040004";//QQ推送到设备
 
 	public static final String APP_CONNECT = "8880021400";//绑定命令
 	public static final String BIND_DEVICE = "8880020700";//绑定命令
@@ -179,7 +184,7 @@ public class Constant {
 	public static final String READ_SIM_DATA = "0900";//读卡返回数据
 	public static final String LAST_CHARGE_POWER_TIMER = "0a00";//上一次充电时间
 	public static final String REQUEST_POWER = "0b00";//请求电量
-	public static final String SEARCH_DEVICE = "0c00";//查找手环
+	public static final String IS_INSERT_CARD = "0c00";//检测是否插卡
 	public static final String THE_HAND_FUNCTION = "0d00";//是否使用抬手功能
 	public static final String HISTORY_STEP = "0e00";//历史步数
 	public static final String SETTING_ALARM = "0f00";//设置闹钟
@@ -256,14 +261,14 @@ public class Constant {
 	public static final int PHONE_UNREGIST = 1008;
 
 	/**
-	 *  发送验证短信
-	 验证类型错误 = 1009,
-	 您输入的手机号码已注册2 = 1010,
-	 您输入的手机号码未注册 = 1011,
-	 短信服务器异常_请联系客服人员 = 1012,
-	 您发送的太频繁了 = 1013,
-	 阿里云短信调用失败 = 1014,
-	 一分钟内不能再次发送_RemainingSeconds秒以后可以再次发送 = 1015,
+	 * 发送验证短信
+	 * 验证类型错误 = 1009,
+	 * 您输入的手机号码已注册2 = 1010,
+	 * 您输入的手机号码未注册 = 1011,
+	 * 短信服务器异常_请联系客服人员 = 1012,
+	 * 您发送的太频繁了 = 1013,
+	 * 阿里云短信调用失败 = 1014,
+	 * 一分钟内不能再次发送_RemainingSeconds秒以后可以再次发送 = 1015,
 	 */
 
 	public static final int VERTIFICATION_ERROR = 1009;

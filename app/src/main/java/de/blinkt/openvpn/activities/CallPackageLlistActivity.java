@@ -22,6 +22,7 @@ import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
 
 public class CallPackageLlistActivity extends BaseActivity implements XRecyclerView.LoadingListener, InterfaceCallback {
 
+	public static CallPackageLlistActivity activity;
 	@BindView(R.id.retryTextView)
 	TextView retryTextView;
 	@BindView(R.id.callListRecylerView)
@@ -46,7 +47,7 @@ public class CallPackageLlistActivity extends BaseActivity implements XRecyclerV
 
 	//初始化
 	private void init() {
-
+		activity = this;
 		hasLeftViewTitle(R.string.communication_packet, 0);
 		LinearLayoutManager manager = new LinearLayoutManager(this);
 		callListRecylerView.setLayoutManager(manager);

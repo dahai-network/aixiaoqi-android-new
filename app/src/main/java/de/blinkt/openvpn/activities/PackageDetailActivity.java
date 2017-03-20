@@ -40,6 +40,7 @@ import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKPACKAGEDETAILPURCHASE;
 
 public class PackageDetailActivity extends BaseActivity implements InterfaceCallback {
+	public static PackageDetailActivity activity;
 	@BindView(R.id.packageDetailImageView)
 	ImageView packageDetailImageView;
 	@BindView(R.id.priceTextView)
@@ -66,7 +67,7 @@ public class PackageDetailActivity extends BaseActivity implements InterfaceCall
 	ScrollView detailScrollView;
 	private PacketDtailEntity.ListBean bean;
 
-	public static void launch(Context context, String id,String countryPic) {
+	public static void launch(Context context, String id, String countryPic) {
 		Intent intent = new Intent(context, PackageDetailActivity.class);
 		intent.putExtra("id", id);
 		intent.putExtra("countryPic", countryPic);
@@ -83,30 +84,31 @@ public class PackageDetailActivity extends BaseActivity implements InterfaceCall
 	}
 
 	private void initSet() {
+		activity = this;
 		initViews();
 		addData();
-		String	countryPic= getIntent().getStringExtra("countryPic");
-		if (countryPic != null){
+		String countryPic = getIntent().getStringExtra("countryPic");
+		if (countryPic != null) {
 			Glide.with(ICSOpenVPNApplication.getContext()).load(countryPic).asBitmap().into(new SimpleTarget<Bitmap>() {
-			@Override
-			public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-				int imageWidth = resource.getWidth();
-				int imageHeight = resource.getHeight();
-				int height = CommonTools.getScreenWidth(PackageDetailActivity.this) * imageHeight / imageWidth;
-				ViewGroup.LayoutParams para = packageDetailImageView.getLayoutParams();
-				para.height = height;
-				packageDetailImageView.setLayoutParams(para);
-				packageDetailImageView.setImageBitmap(resource);
-			}
-		});
+				@Override
+				public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+					int imageWidth = resource.getWidth();
+					int imageHeight = resource.getHeight();
+					int height = CommonTools.getScreenWidth(PackageDetailActivity.this) * imageHeight / imageWidth;
+					ViewGroup.LayoutParams para = packageDetailImageView.getLayoutParams();
+					para.height = height;
+					packageDetailImageView.setLayoutParams(para);
+					packageDetailImageView.setImageBitmap(resource);
+				}
+			});
 		}
 	}
 
 	private void initViews() {
-		hasLeftViewTitle(R.string.package_detail,0);
-		String paymentOfTerms=SharedUtils.getInstance().readString(IntentPutKeyConstant.PAYMENT_OF_TERMS);
-		if(!TextUtils.isEmpty(paymentOfTerms))
-		paymentTermText.setText(SharedUtils.getInstance().readString(IntentPutKeyConstant.PAYMENT_OF_TERMS));
+		hasLeftViewTitle(R.string.package_detail, 0);
+		String paymentOfTerms = SharedUtils.getInstance().readString(IntentPutKeyConstant.PAYMENT_OF_TERMS);
+		if (!TextUtils.isEmpty(paymentOfTerms))
+			paymentTermText.setText(SharedUtils.getInstance().readString(IntentPutKeyConstant.PAYMENT_OF_TERMS));
 	}
 
 
@@ -119,35 +121,35 @@ public class PackageDetailActivity extends BaseActivity implements InterfaceCall
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 		PacketDtailHttp http = (PacketDtailHttp) object;
-		if(cmdType==HttpConfigUrl.COMTYPE_PACKET_DETAIL)
-		if (http.getStatus() == 1) {
-			NoNetRelativeLayout.setVisibility(View.GONE);
-			detailScrollView.setVisibility(View.VISIBLE);
-			bean = http.getPacketDtailEntity().getList();
-			detailTextView.setText(bean.getDetails());
-			featuresTextView.setText(bean.getFeatures());
-			packageNameTextView.setText(bean.getPackageName());
-			flowTextView.setText(bean.getFlow());
-			howToUseTv.setText(bean.getUseDescr());
-			priceTextView.setText("￥" + bean.getPrice());
-			setSpan(priceTextView);
-			String	countryPic= getIntent().getStringExtra("countryPic");
-            if(countryPic==null)
-			Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getPic()).asBitmap().into(new SimpleTarget<Bitmap>() {
-				@Override
-				public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-					int imageWidth = resource.getWidth();
-					int imageHeight = resource.getHeight();
-					int height = CommonTools.getScreenWidth(PackageDetailActivity.this) * imageHeight / imageWidth;
-					ViewGroup.LayoutParams para = packageDetailImageView.getLayoutParams();
-					para.height = height;
-					packageDetailImageView.setLayoutParams(para);
-					packageDetailImageView.setImageBitmap(resource);
-				}
-			});
-		} else {
-			CommonTools.showShortToast(PackageDetailActivity.this, object.getMsg());
-		}
+		if (cmdType == HttpConfigUrl.COMTYPE_PACKET_DETAIL)
+			if (http.getStatus() == 1) {
+				NoNetRelativeLayout.setVisibility(View.GONE);
+				detailScrollView.setVisibility(View.VISIBLE);
+				bean = http.getPacketDtailEntity().getList();
+				detailTextView.setText(bean.getDetails());
+				featuresTextView.setText(bean.getFeatures());
+				packageNameTextView.setText(bean.getPackageName());
+				flowTextView.setText(bean.getFlow());
+				howToUseTv.setText(bean.getUseDescr());
+				priceTextView.setText("￥" + bean.getPrice());
+				setSpan(priceTextView);
+				String countryPic = getIntent().getStringExtra("countryPic");
+				if (countryPic == null)
+					Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getPic()).asBitmap().into(new SimpleTarget<Bitmap>() {
+						@Override
+						public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+							int imageWidth = resource.getWidth();
+							int imageHeight = resource.getHeight();
+							int height = CommonTools.getScreenWidth(PackageDetailActivity.this) * imageHeight / imageWidth;
+							ViewGroup.LayoutParams para = packageDetailImageView.getLayoutParams();
+							para.height = height;
+							packageDetailImageView.setLayoutParams(para);
+							packageDetailImageView.setImageBitmap(resource);
+						}
+					});
+			} else {
+				CommonTools.showShortToast(PackageDetailActivity.this, object.getMsg());
+			}
 	}
 
 	//设置大小字体
