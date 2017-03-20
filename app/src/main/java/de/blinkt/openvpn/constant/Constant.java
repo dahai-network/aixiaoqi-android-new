@@ -267,4 +267,9 @@ public class Constant {
 	 */
 
 	public static final int VERTIFICATION_ERROR = 1009;
+
+
+
+	public static final String REGISTER_SIM_NOT_PRE_DATA = "not_pre_data";
+	public static final String REGISTER_SIM_PRE_DATA = "pre_data";
 }

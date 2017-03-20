@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.aixiaoqi.socket.SocketConnection;
+import com.aixiaoqi.socket.TestProvider;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
+import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
@@ -429,7 +431,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 								case Constant.READ_SIM_DATA:
 									Log.i(TAG, "发送给SDK");
 									if (IS_TEXT_SIM) {
-										SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
+
+										ProMainActivity.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
 									}
 									break;
 								case Constant.LAST_CHARGE_POWER_TIMER:

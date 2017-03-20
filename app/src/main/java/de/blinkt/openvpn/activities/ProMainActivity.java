@@ -31,10 +31,12 @@ import android.widget.Toast;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
+import com.aixiaoqi.socket.SdkAndBluetoothDataInchange;
 import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 import com.aixiaoqi.socket.TestProvider;
+import com.aixiaoqi.socket.TlvAnalyticalUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,6 +50,8 @@ import cn.com.johnson.adapter.FragmentAdapter;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
+import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -67,6 +71,7 @@ import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
+import de.blinkt.openvpn.model.SimRegisterType;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
@@ -667,18 +672,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 					}
+//					getIccid();
 					//运行注册流程
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							startDataframService();
-							startSocketService();
-							bindTcpSucceed();
-							CommonTools.delayTime(5000);
-							Log.e("phoneAddress", "main.start()");
-							JNIUtil.getInstance().startSDK(1);
-						}
-					}).start();
+//					new Thread(new Runnable() {
+//						@Override
+//						public void run() {
+
+//						}
+//					}).start();
 				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
@@ -787,9 +788,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					case SocketConstant.RESTART_TCP:
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 						startSocketService();
-						if (TestProvider.sendYiZhengService == null) {
-							TestProvider.sendYiZhengService = new SendYiZhengService();
+						if (sendYiZhengService == null) {
+							sendYiZhengService = new SendYiZhengService();
 						}
+						Log.e(TAG,"startTcpSocket1111111");
 						startTcpSocket();
 						break;
 					case SocketConstant.REG_STATUE_CHANGE:
@@ -803,18 +805,47 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						break;
 				}
 			}
-		} else if (entity.getType() == Constant.BLUE_CONNECTED_INT) {
+		}
+//		else if (entity.getType() == Constant.BLUE_CONNECTED_INT) {
+//			startDataframService();
+//			startSocketService();
+//		}
+	}
+	@Subscribe(threadMode = ThreadMode.ASYNC)
+	public void onIsSuccessEntity(SimRegisterType simRegisterType){
+		if(Constant.REGISTER_SIM_NOT_PRE_DATA.equals(simRegisterType.getSimRegisterType())){
+			isGetIccid=false;
+			isStartSdk=true;
 			startDataframService();
 			startSocketService();
+			CommonTools.delayTime(5000);
+			Log.e("phoneAddress", "main.start()");
+			JNIUtil.getInstance().startSDK(1);
+		}else if(Constant.REGISTER_SIM_PRE_DATA.equals(simRegisterType.getSimRegisterType())){
+			startSocketService();
+			Log.e(TAG,"startTcpSocket22222222");
+			startTcpSocket();
+			SocketConnection.mReceiveSocketService.setListener(new ReceiveSocketService.CreateSocketLisener() {
+				@Override
+				public void create() {
+					Log.e(TAG,"startTcpSocket3333333");
+						ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+				}
+
+			});
+
 		}
+
 	}
 
 	private int bindtime = 0;
 
 	private void startTcpSocket() {
-		bindTcpSucceed();
-		if (TestProvider.sendYiZhengService != null)
-			TestProvider.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+		if (sendYiZhengService != null&&SocketConnection.mReceiveSocketService!=null){
+			Log.e(TAG,"initSocket1111");
+			sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+		}
+	bindTcpSucceed();
 	}
 
 	private void bindTcpSucceed() {
@@ -898,7 +929,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 								if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
 									//当有通话套餐的时候才允许注册操作
-									requestPacket();
+									getIccid();
+//									requestPacket();
 								}
 							} else if (message.get(0).substring(10, 12).equals("11")) {
 								sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
@@ -918,6 +950,20 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	};
 
+	public static boolean isGetIccid=false;
+	public static boolean  isStartSdk=false;
+	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
+	public static SendYiZhengService sendYiZhengService = null;
+	private  void  getIccid(){
+		if(sdkAndBluetoothDataInchange==null) {
+			sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
+		}
+		if (sendYiZhengService == null) {
+			sendYiZhengService = new SendYiZhengService();
+		}
+		isGetIccid=true;
+		TlvAnalyticalUtils.sendToBlue("a0a40000023f00");
+	}
 	private void requestPacket() {
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET,"3");
 		checkRegisterStatuGoIp();

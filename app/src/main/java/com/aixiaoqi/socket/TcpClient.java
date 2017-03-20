@@ -34,7 +34,6 @@ public abstract class TcpClient implements Runnable {
 	 * 连接建立失败，回调{@code onConnectFailed()}
 	 */
 	public void connect() {
-		Log.e("connectSocket","connect");
 		new Thread(this).start();
 	}
 
@@ -87,8 +86,9 @@ public abstract class TcpClient implements Runnable {
 	}
 
 	private void connectSocket() throws IOException {
-		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
-//		SocketAddress address = new InetSocketAddress("192.168.1.133", 5089);
+//		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
+		Log.e("Blue_Chanl","hostIP="+SocketConstant.hostIP+"\nIp="+SocketConstant.port);
+		SocketAddress address = new InetSocketAddress("120.76.240.82", 5090);
 		Socket socket = new Socket();
 		//TCP保活
 		socket.setKeepAlive(true);

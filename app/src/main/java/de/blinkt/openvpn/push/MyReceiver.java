@@ -23,6 +23,7 @@ import cn.com.aixiaoqi.R;
 import cn.jpush.android.api.JPushInterface;
 import de.blinkt.openvpn.activities.LoginMainActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
+import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.SMSAcivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -34,7 +35,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
-import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
+
 
 /**
  * 自定义接收器
@@ -46,9 +47,9 @@ import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 public class MyReceiver extends BroadcastReceiver {
 	private static final String TAG = "JPush";
 	private void connectGoip() {
-		if (sendYiZhengService != null){
+		if (ProMainActivity.sendYiZhengService != null){
 			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "push service :\n" );
-			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 	}
 	}
 	@Override

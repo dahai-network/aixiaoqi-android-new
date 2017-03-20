@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.util.CommonTools;
@@ -48,7 +49,6 @@ public class ReceiveSocketService extends Service {
 
 
 	public void initSocket() {
-
 		tcpClient.connect();
 	}
 
@@ -62,6 +62,7 @@ public class ReceiveSocketService extends Service {
 
 		@Override
 		public void onConnectFailed() {
+			Log.e("Blue_Chanl", "onConnectFailed");
 			connectFailReconnect();
 		}
 
@@ -73,6 +74,7 @@ public class ReceiveSocketService extends Service {
 //				AutoReceiver.t_wakelock.release();
 //				AutoReceiver.t_wakelock=null;
 //			}
+			Log.e("Blue_Chanl", "onReceive");
 			TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s, length));
 			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
@@ -189,15 +191,15 @@ public class ReceiveSocketService extends Service {
 
 		if (tcpClient != null && tcpClient.getTransceiver() != null) {
 			tcpClient.getTransceiver().send(s);
-			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "write :\n" + s);
+//			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "write :\n" + s);
 		}
 	}
 
 	@Override
 	public void onDestroy() {
 		Log.e(TAG, "onDestroy()");
-		if (SocketConnection.sdkAndBluetoothDataInchange != null)
-			SocketConnection.sdkAndBluetoothDataInchange.closeReceviceBlueData();
+		if (ProMainActivity.sdkAndBluetoothDataInchange != null)
+			ProMainActivity.sdkAndBluetoothDataInchange.closeReceviceBlueData();
 		if (tcpClient != null) {
 			tcpClient.closeTimer();
 			tcpClient.disconnect();
