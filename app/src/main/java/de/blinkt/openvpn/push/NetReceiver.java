@@ -11,12 +11,13 @@ import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 
+import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.DateUtils;
 
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
-import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
+
 
 /**
  * Created by Administrator on 2017/2/24 0024.
@@ -25,9 +26,9 @@ import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 public class NetReceiver extends BroadcastReceiver {
 
     private void connectGoip() {
-        if (sendYiZhengService != null){
+        if (ProMainActivity.sendYiZhengService != null){
             registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REG_STATUE_CHANGE);
-            sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+            ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
         }
     }
 private void restartConnect(){

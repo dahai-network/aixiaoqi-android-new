@@ -87,8 +87,8 @@ public abstract class TcpClient implements Runnable {
 	}
 
 	private void connectSocket() throws IOException {
-		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
-//		SocketAddress address = new InetSocketAddress("192.168.1.133", 5090);
+//		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
+		SocketAddress address = new InetSocketAddress("120.76.240.82", 5090);
 		Socket socket = new Socket();
 		//TCP保活
 		socket.setKeepAlive(true);
@@ -141,7 +141,6 @@ public abstract class TcpClient implements Runnable {
 		}
 
 	}
-
 	/**
 	 * 判断是否连接
 	 *
@@ -163,7 +162,8 @@ public abstract class TcpClient implements Runnable {
 	/**
 	 * 连接建立
 	 *
-	 * @param transceiver SocketTransceiver对象
+	 * @param transceiver
+	 *            SocketTransceiver对象
 	 */
 	public abstract void onConnect(SocketTransceiver transceiver);
 

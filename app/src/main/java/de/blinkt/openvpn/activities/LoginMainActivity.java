@@ -395,7 +395,8 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		} else if (cmdType == HttpConfigUrl.COMTYPE_SECURITY_CONFIG) {
 			SecurityConfigHttp securityConfigHttp = (SecurityConfigHttp) object;
 			if (securityConfigHttp.getStatus() == 1) {
-
+				//友盟帐号统计
+				MobclickAgent.onProfileSignIn(usernameEdit.getText().toString());
 				SecurityConfig.InBean in = securityConfigHttp.getSecurityConfig().getIn();
 				SecurityConfig.OutBean out = securityConfigHttp.getSecurityConfig().getOut();
 				sharedUtils.writeString(Constant.ASTERISK_IP_IN, in.getAsteriskIp());
@@ -405,8 +406,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				sharedUtils.writeString(Constant.PUBLIC_PASSWORD, out.getPublicPassword());
 
 				startActivity(new Intent(this, ProMainActivity.class));
-				//友盟帐号统计
-				MobclickAgent.onProfileSignIn(usernameEdit.getText().toString());
+
 				finish();
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG) {

@@ -293,4 +293,7 @@ public class Constant {
 	public static final String KEEP_WLAN_CONNECT = "休眠状态下保持WLAN连接";
 	public static final String KEEP_RUN_IN_STANDBY = "在待机时保持运行";
 
+
+	public static final String REGISTER_SIM_NOT_PRE_DATA = "not_pre_data";
+	public static final String REGISTER_SIM_PRE_DATA = "pre_data";
 }

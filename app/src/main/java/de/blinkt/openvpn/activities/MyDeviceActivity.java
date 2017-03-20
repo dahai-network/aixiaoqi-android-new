@@ -73,7 +73,6 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 import static android.view.View.GONE;
 import static cn.com.aixiaoqi.R.id.register_sim_statue;
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
-import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
@@ -365,9 +364,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	private void connectGoip() {
-		if (sendYiZhengService != null) {
+		if (ProMainActivity.sendYiZhengService != null) {
 			sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
-			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
 

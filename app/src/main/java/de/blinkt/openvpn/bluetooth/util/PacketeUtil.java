@@ -26,6 +26,7 @@ public class PacketeUtil {
 			} else {
 				packets[0] = "8880" + Integer.toHexString(message.length() / 2 + 2) + type + message;
 			}
+			Log.e("PacketeUtil","packets"+packets[0]);
 		} else {
 			int totalNum = ((message.length() - startLength) % (onrPackageLength) != 0 ? ((message.length() - startLength) / (onrPackageLength) + 1) : (message.length() - startLength) / (onrPackageLength)) + 1;
 			Log.e("PacketeUtil", "totalNum=" + totalNum);
@@ -64,6 +65,7 @@ public class PacketeUtil {
 		}
 		return builder.toString();
 	}
+
 
 
 }

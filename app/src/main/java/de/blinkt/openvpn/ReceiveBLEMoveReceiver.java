@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
+import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
@@ -42,7 +43,6 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
-import static com.aixiaoqi.socket.TestProvider.sendYiZhengService;
 import static de.blinkt.openvpn.activities.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.isUpgrade;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
@@ -437,7 +437,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 								case Constant.READ_SIM_DATA:
 									Log.i(TAG, "发送给SDK");
 									if (IS_TEXT_SIM) {
-										SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
+
+										ProMainActivity.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
 									}
 									break;
 								case Constant.LAST_CHARGE_POWER_TIMER:
@@ -736,9 +737,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	}
 
 	private void connectGoip() {
-		if (sendYiZhengService != null) {
+		if (ProMainActivity.sendYiZhengService != null) {
 			sendEventBusChangeBluetoothStatus(context.getString(R.string.index_registing), R.drawable.index_no_signal);
-			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
 

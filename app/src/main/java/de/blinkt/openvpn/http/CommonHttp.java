@@ -367,8 +367,6 @@ public abstract class CommonHttp implements Callback, Runnable {
 					String value = (String) entry.getValue();
 					if (key != null && value != null) {
 						formEncodingBuilder.add(key, value);
-					} else {
-						Log.i(TAG, "请求网络键值对出现null: key:" + key + "," + " value:" + value);
 					}
 				}
 			}

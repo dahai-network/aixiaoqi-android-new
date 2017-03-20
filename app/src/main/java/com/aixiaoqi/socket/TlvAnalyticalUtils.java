@@ -7,9 +7,12 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
@@ -31,21 +34,21 @@ public class TlvAnalyticalUtils {
 		String tagString = hexString.substring(4, 6);
 		int tag = Integer.parseInt(tagString, 16);
 		String responeString = hexString.substring(6, 8);
-		int responeCode = Integer.parseInt(responeString, 16);
-		responeCode = responeCode & 127;
+		int responeCode = getResponeCode(responeString,1);
 		if (responeCode == 41) {
-			registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.REGISTER_FAIL);
+			registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
 			return null;
 		} else if (responeCode == 39) {
-			registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.REGISTER_FAIL);
+			registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
 			return null;
 		}
 		tag = tag & 127;
 		position = position + 8;
 		String sessionId = hexString.substring(position, position + 8);
-		if (tag == 4) {
+		if(tag==4){
 			SocketConstant.SESSION_ID = sessionId;
-		} else if (!SocketConstant.SESSION_ID.equals(sessionId) && !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
+		}
+		else if (!SocketConstant.SESSION_ID.equals(sessionId) && !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
 //			SocketConstant.SESSION_ID = sessionId;
 			return null;
 		}
@@ -64,16 +67,16 @@ public class TlvAnalyticalUtils {
 
 
 	public static void builderMessagePackageList(String hexString) {
-			String dataLength = hexString.substring(20, 24);
-			int index = Integer.parseInt(dataLength, 16) * 2;
-			if (index + 24 < hexString.length()) {
-				builderMessagePackage(hexString.substring(0, index + 24));
-				builderMessagePackageList(hexString.substring(index + 24));
-			} else {
-				builderMessagePackage(hexString);
-			}
+		String dataLength = hexString.substring(20, 24);
+		int index = Integer.parseInt(dataLength, 16) * 2;
+		if (index + 24 < hexString.length()) {
+			builderMessagePackage(hexString.substring(0, index + 24));
+			builderMessagePackageList(hexString.substring(index + 24));
+		} else {
+			builderMessagePackage(hexString);
+		}
 	}
-
+	public static	String[] preData;
 	private static List<TlvEntity> builderTlvList(String orData, String hexString, int tag) {
 		int position = 0;
 		String tempTag = "";
@@ -100,7 +103,7 @@ public class TlvAnalyticalUtils {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
 					SocketConstant.REGISTER_REMOTE_ADDRESS = value.substring(value.indexOf("_") + 1, value.lastIndexOf("."));
 					SocketConstant.REGISTER_ROMOTE_PORT = value.substring(value.lastIndexOf(".") + 1, value.length());
-					Log.e("RemoteAddress", "REGISTER_REMOTE_ADDRESS=" + SocketConstant.REGISTER_REMOTE_ADDRESS + "\nREGISTER_ROMOTE_PORT" + SocketConstant.REGISTER_ROMOTE_PORT);
+
 				}
 			} else if (tag == 16) {
 				if (typeParams == 1) {
@@ -112,13 +115,46 @@ public class TlvAnalyticalUtils {
 				}
 				if ("00".equals(tempTag)) {
 					if (typeParams == 199) {
-						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_USED_TO_SDK);
-						byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
-						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
+//						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_USED_TO_SDK);
+						if(SdkAndBluetoothDataInchange.isHasPreData) {
+							if(preData==null){
+								preData= new String[9];
+							}
+							String messageSeq = value.substring(0, 4);
+							preData[0]=messageSeq;
+							String preNumber = value.substring(14, 16);
+							preData[1]=preNumber;
+							int responeCode = getResponeCode(preNumber,1);
+							preData(value, preData);
+							String valideData = value.substring(32, value.length());
+							preData[6]=valideData;
+							int preCode=getResponeCode(preData[2].substring(preData[2].length()-4,preData[2].length()),2);
+							if(responeCode==0&&preCode==0){
+								getOrderNumber(0);
+								sendToBlue(preData[6]);
+							}else if(responeCode==0&&preCode!=0){
+								for(int i=0;i<4;i++){
+									int	responeC=getResponeCode(preData[i+2].substring(preData[i+2].length()-4,preData[i+2].length()),2);
+									if(responeC==0){
+										break;
+									}
+									getOrderNumber(i+1);
+								}
+								sendToBlue(preData[2]);
+							}else{
+								getOrderNumber(responeCode);
+								sendToBlue(preData[2]);
+
+							}
+							preData[8]=orData.replace("8a1000", "8a9000").substring(0,20);
+						}else{
+							byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
+							sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);}
 					}
 				} else if (typeParams == 199) {
 //					if (REGISTER_STATUE_CODE == 2) {//第一次是010101的时候不去复位SDK,第二次的时候才对SDK进行复位
-					sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
+					if(!SdkAndBluetoothDataInchange.isHasPreData)
+						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 //					}
 
 					String rpValue = "000100163b9f94801fc78031e073fe211b573786609b30800119";
@@ -160,7 +196,7 @@ public class TlvAnalyticalUtils {
 						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
 						REGISTER_STATUE_CODE = 2;
-						registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.REGISTER_FAIL);
+						registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
 					}
 				}
 			}
@@ -170,22 +206,59 @@ public class TlvAnalyticalUtils {
 		return tlvs;
 	}
 
+	private static void getOrderNumber(int responeCode) {
+		if(preData[6].startsWith("a088")){
+			preData[7]=(responeCode+2)+"";
+		}else{
+			preData[7]=(responeCode+1)+"";
+		}
+		Log.e("TlvAnalyticalUtils","preData[7]="+preData[7]);
+	}
+
+	public static int getResponeCode(String preNumber,int type) {
+		int responeCode = Integer.parseInt(preNumber, 16);
+		if(type==1)
+			responeCode = responeCode & 127;
+		else if(type==2){
+			responeCode = responeCode & 65535;
+		}
+		return responeCode;
+	}
+
+	private static void preData(String value, String[] preData) {
+		for(int i=16;i<32;i=i+4){
+			int index=(i-16)/4;
+			String cmd=	value.substring(i,i+4);
+			preData[index+2]="a0a4000002"+cmd;
+		}
+	}
+
+
+	public static void sendToBlue(String value){
+		Log.e("TlvAnalyticalUtils","发送给蓝牙的数据"+value);
+		String[] messages = PacketeUtil.Separate(value,Constant.READED_SIM_DATA);
+		for (int i = 0; i < messages.length; i++) {
+			byte[] valueData = HexStringExchangeBytesUtil.hexStringToBytes(messages[i]);
+			ICSOpenVPNApplication.uartService.writeRXCharacteristic(valueData);
+
+		}
+	}
 
 	/**
 	 * 注册中不成功再次注册
 	 */
 	public static void reRegistering(String orData, int tag) {
+		if(!SdkAndBluetoothDataInchange.isHasPreData)
 		sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));//重置SDK
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(orData);
 		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
 		stringBuilder.replace(6, 8, "00");
 		sendToSdkLisener.sendServer(stringBuilder.toString());
-		if (TestProvider.sendYiZhengService != null) {
+		if (ProMainActivity.sendYiZhengService != null){
 			CommonTools.delayTime(2000);
-			SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
-			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "service disconncet :\n");
-			TestProvider.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
+			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
 
