@@ -538,7 +538,7 @@
         <activity
             android:name="de.blinkt.openvpn.activities.ShadeActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:theme="@style/translucent">
         </activity>
     </application>

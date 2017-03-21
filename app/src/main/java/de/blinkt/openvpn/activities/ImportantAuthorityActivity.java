@@ -57,7 +57,9 @@ public class ImportantAuthorityActivity extends BaseActivity {
 		int version = Build.VERSION.SDK_INT;
 		AuthorityEntity entity = new AuthorityEntity();
 		Intent shadeIntent = new Intent(this, ShadeActivity.class);
+		//判断硬件厂商
 		switch (Build.MANUFACTURER) {
+			//乐视
 			case Constant.LEMOBILE:
 				if (version == 21) {
 					appPertectSet(entity);
@@ -72,6 +74,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
 					data.add(new AuthorityEntity(entity));
 				}
 				break;
+			//联想
 			case Constant.LENOVO:
 				if (version == 19 || version == 20) {
 					wifiSet(entity);
@@ -80,6 +83,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
 					data.add(new AuthorityEntity(entity));
 				}
 				break;
+			//魅族
 			case Constant.MEIZU:
 				if (version == 22 || version == 21) {
 					keepStandbySet(entity);
@@ -99,10 +103,11 @@ public class ImportantAuthorityActivity extends BaseActivity {
 					data.add(new AuthorityEntity(entity));
 				}
 				break;
+			//三星
 			case Constant.SAMSUNG:
-				if (version == 21 || version == 22) {
+				if (version == 21 || version == 22 || version == 23) {
 					autoRunSet(entity);
-					Intent samsungLIntent = ICSOpenVPNApplication.getInstance().getPackageManager().getLaunchIntentForPackage("com.samsung.android.sm");
+					Intent samsungLIntent = getPackageManager().getLaunchIntentForPackage("com.samsung.android.sm");
 					if (samsungLIntent != null) {
 						entity.setintentEntity(new IntentEntity(samsungLIntent, shadeIntent));
 						data.add(new AuthorityEntity(entity));
@@ -113,6 +118,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
 					data.add(new AuthorityEntity(entity));
 				}
 				break;
+			//一加
 			case Constant.ONEPLUS:
 				wifiSet(entity);
 				Intent netWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);

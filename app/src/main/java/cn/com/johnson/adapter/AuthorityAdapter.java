@@ -1,7 +1,6 @@
 package cn.com.johnson.adapter;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,13 +48,18 @@ public class AuthorityAdapter extends RecyclerView.Adapter<AuthorityAdapter.Auth
 //				CommonTools.showShortToast(context, "产品信息: " + android.os.Build.MODEL + ","
 //						+ android.os.Build.VERSION.SDK + ","
 //						+ android.os.Build.VERSION.RELEASE);
-				context.startActivity(entity.getintentEntity().getAuthorityIntent());
-				new Handler().postDelayed(new Runnable() {
+				new Thread(new Runnable() {
 					@Override
 					public void run() {
+						context.startActivity(entity.getintentEntity().getAuthorityIntent());
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						context.startActivity(entity.getintentEntity().getShadeIntent());
 					}
-				},500);
+				}).start();
 			}
 		});
 	}
