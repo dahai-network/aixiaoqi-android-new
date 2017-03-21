@@ -495,4 +495,9 @@
     <string name="no_device_around">未能搜索到设备请重新搜索</string>
     <string name="message_remind">消息提醒</string>
     <string name="update_fail_retry">升级失败，请重试！</string>
+    <string name="choice_type_unitoys_tip">请点击搜索爱小器手环进行绑定</string>
+    <string name="choice_type_unibox_tip">请点击搜索双待王进行绑定</string>
+    <string name="important_autohrity">重要权限设置</string>
+    <string name="authority_tip">为保证爱小器正常运行，必须开启以下权限:</string>
+    <string name="set_now">立即设置</string>
 </resources>

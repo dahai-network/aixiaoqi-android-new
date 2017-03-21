@@ -80,13 +80,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 	 */
 	@Override
 	public void uncaughtException(Thread thread, Throwable ex) {
-		if (!handleException(ex) && mDefaultHandler != null) {
-			//如果用户没有处理则让系统默认的异常处理器来处理
-			mDefaultHandler.uncaughtException(thread, ex);
-		} else {
-			CommonTools.delayTime(100);
+//		if (!handleException(ex) && mDefaultHandler != null) {
+//			//如果用户没有处理则让系统默认的异常处理器来处理
+//			mDefaultHandler.uncaughtException(thread, ex);
+//		} else {
+		handleException(ex);
+		CommonTools.delayTime(100);
 //			Intent intent = new Intent(application.getApplicationContext(), LaunchActivity.class);
-
 
 
 //			PendingIntent restartIntent = PendingIntent.getActivity(
@@ -96,10 +96,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 //			AlarmManager mgr = (AlarmManager)application.getSystemService(Context.ALARM_SERVICE);
 //			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
 //					restartIntent); // 1秒钟后重启应用
-			application.AppExit();
-			//退出程序
-            System.exit(0);
-		}
+		application.AppExit();
+		//退出程序
+		System.exit(0);
+//		}
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 			String time = formatter.format(new Date());
 			String fileName = time + ".text";
 			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-				String path = Environment.getExternalStorageDirectory().getPath()+"/aixiaoqi/";
+				String path = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi/";
 				File dir = new File(path);
 				if (!dir.exists()) {
 					dir.mkdirs();

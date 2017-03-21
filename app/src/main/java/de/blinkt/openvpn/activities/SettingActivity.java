@@ -72,7 +72,6 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 	private void init() {
 		hasLeftViewTitle(R.string.setting, 0);
 		appVersionTextView.setText(CommonTools.getVersion(this));
-
 	}
 
 	@OnClick({R.id.contactUsTextView, R.id.userFeedbackTextView, R.id.agreementUsTextView, R.id.exitBtn, R.id.ll_upgrade})

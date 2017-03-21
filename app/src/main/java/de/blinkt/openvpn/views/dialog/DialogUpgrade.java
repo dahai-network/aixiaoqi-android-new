@@ -142,9 +142,9 @@ public class DialogUpgrade extends DialogBase {
 			Log.e("DialogUpgrade", "onProgressChanged");
 			mProgressBar.setProgress(percent);
 			mTextPercentage.setText(percent + "%");
-//			if (percent == 100) {
-//				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), ICSOpenVPNApplication.getContext().getString(R.string.dfu_status_completed));
-//			}
+			if (percent == 100) {
+				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), ICSOpenVPNApplication.getContext().getString(R.string.dfu_status_completed));
+			}
 			if (partsTotal > 1)
 				mTextUploading.setText(context.getString(R.string.dfu_status_uploading_part, currentPart, partsTotal));
 			else
