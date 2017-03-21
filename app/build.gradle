@@ -31,7 +31,7 @@ dependencies {
     compile 'com.github.lzyzsd:circleprogress:1.1.0@aar'
     compile 'com.jakewharton:butterknife:8.3.0'
     compile 'cn.jiguang:jpush:2.1.8'
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:23.4.0'
     compile 'no.nordicsemi.android:dfu:1.0.4'
     compile 'com.umeng.analytics:analytics:latest.integration'
@@ -52,13 +52,13 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
     }
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "cn.com.aixiaoqi"
         minSdkVersion 18
-        targetSdkVersion 22
+        targetSdkVersion 25
         versionCode = 7
         versionName = "1.2.2"
         ndk {

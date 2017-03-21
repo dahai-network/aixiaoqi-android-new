@@ -606,7 +606,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (isDfuServiceRunning()) {
 			stopService(new Intent(this, DfuService.class));
 		}
-
 		try {
 			LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(UARTStatusChangeReceiver);
 			EventBus.getDefault().unregister(this);
@@ -1118,9 +1117,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onUIOperatorEntity(UIOperatorEntity entity) {
 		if (entity.getType() == UIOperatorEntity.onError) {
-			CommonTools.showShortToast(MyDeviceActivity.this, getString(R.string.update_fail_retry));
+			CommonTools.showShortToast(MyDeviceActivity.this, MyDeviceActivity.this.getString(R.string.update_fail_retry));
 		} else if (entity.getType() == UIOperatorEntity.onCompelete) {
-			CommonTools.showShortToast(MyDeviceActivity.this, getString(R.string.dfu_status_completed));
+			CommonTools.showShortToast(MyDeviceActivity.this, MyDeviceActivity.this.getString(R.string.dfu_status_completed));
 		}
 	}
 
