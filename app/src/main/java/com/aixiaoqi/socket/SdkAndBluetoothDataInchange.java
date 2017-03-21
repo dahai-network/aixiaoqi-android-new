@@ -23,6 +23,7 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
+import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 
 /**
  * Created by Administrator on 2017/1/5 0005.
@@ -229,6 +230,7 @@ public class SdkAndBluetoothDataInchange {
 					SocketConstant.CONNENCT_VALUE[3] =RadixAsciiChange.convertStringToHex(token);
 					count=0;
 					isHasPreData=true;
+					REGISTER_STATUE_CODE = 2;
 					EventBusUtil.simRegisterType(Constant.REGISTER_SIM_PRE_DATA);
 					SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = preReadEntity.getPreReadData();
 					SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preReadEntity.getDataLength();

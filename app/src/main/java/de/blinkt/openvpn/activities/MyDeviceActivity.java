@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConstant;
+import com.aixiaoqi.socket.TlvAnalyticalUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -200,7 +201,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void initSet() {
 		Log.e(TAG, "initSet");
-
 		utils = SharedUtils.getInstance();
 		bracelettype = getIntent().getStringExtra(BRACELETTYPE);
 		if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
@@ -498,13 +498,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					}
 					String dataType = messages.get(0).substring(6, 10);
 					switch (dataType) {
-//					case (byte) 0xBB:
-//						if (txValue[1] == (byte) 0x05) {
-//							setView();
-//						} else if (txValue[1] == (byte) 0x04) {
-//							slowSetPercent(((float) Integer.parseInt(String.valueOf(txValue[3]))) / 100);
-//						}
-//						break;
 						case Constant.SYSTEM_BASICE_INFO:
 							String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
 							Log.i(TAG, "版本号:" + deviceVesion);
@@ -527,11 +520,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							UpdateConnectInfoHttp http = new UpdateConnectInfoHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, deviceVesion, Integer.parseInt(messages.get(0).substring(14, 16), 16), DeviceType);
 							new Thread(http).start();
 							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-//								BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
-//								entity.setBlueType(BluetoothConstant.BLUE_VERSION);
-//								entity.setBraceletversion(deviceVesion);
-//								entity.setSuccess(true);
-//								EventBus.getDefault().post(entity);
 								Log.i(TAG, "进入版本号:" + deviceVesion);
 							}
 							break;
@@ -696,6 +684,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = (DownloadSkyUpgradePackageHttp) object;
 			if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
 				isUpgrade = true;
+				SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);
 				SendCommandToBluetooth.sendMessageToBlueTooth(SKY_UPGRADE_ORDER);
 				showSkyUpgrade();
 
