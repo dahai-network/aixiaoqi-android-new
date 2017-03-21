@@ -59,8 +59,8 @@ android {
         applicationId "cn.com.aixiaoqi"
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode = 7
-        versionName = "1.2.2"
+        versionCode = 8
+        versionName = "1.2.3"
         ndk {
 //            abiFilters "armeabi", "x86", "x86_64", "mips", "arm64-v8a", "armeabi-v7a", "mips64"
             abiFilters "armeabi", "armeabi-v7a"
@@ -93,13 +93,13 @@ android {
     }*/
     signingConfigs {
         release {
-            storeFile file("d:/debug.keystore")
+            storeFile file("D:/debug.keystore")
             storePassword "dahai1qaz"
             keyAlias "dahai"
             keyPassword "dahai1qaz"
         }
         debug {
-            storeFile file("d:/debug.keystore")
+            storeFile file("D:/debug.keystore")
             storePassword "dahai1qaz"
             keyAlias "dahai"
             keyPassword "dahai1qaz"

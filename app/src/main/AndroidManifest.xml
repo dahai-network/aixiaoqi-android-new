@@ -59,10 +59,11 @@
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false"/>
-
+    adb root
     <!-- <uses-permission android:name="com.android.vending.BILLING" />   android:theme="@style/blinkt" -->
     <!-- " -->
     <application
+
         android:name="de.blinkt.openvpn.core.ICSOpenVPNApplication"
         android:allowBackup="true"
         android:banner="@drawable/login_icon"

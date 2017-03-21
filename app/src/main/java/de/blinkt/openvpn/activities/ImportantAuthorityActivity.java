@@ -93,6 +93,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
 					meizuGodIntent.setComponent(new ComponentName("com.meizu.safe", "com.meizu.safe.SecurityCenterActivity"));
 					entity.setintentEntity(new IntentEntity(meizuIntent, shadeIntent));
 					data.add(new AuthorityEntity(entity));
+
 					wifiSet(entity);
 					Intent netWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
 					entity.setintentEntity(new IntentEntity(netWorkIntent, shadeIntent));
