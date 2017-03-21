@@ -183,6 +183,7 @@ public class UartService extends Service implements Serializable {
 //				if (lengthData - 1 == 0) {
 //					dataType = messageFromBlueTooth.substring(6, 10);
 //				}
+
 				messages.add(messageFromBlueTooth);
 				if (messages.size() < lengthData) {
 					if (dataStatue == 0x80) {
@@ -191,8 +192,10 @@ public class UartService extends Service implements Serializable {
 					return;
 				}
 				if (isWholeDataPackage || dataStatue == 0x80) {
+					isWholeDataPackage=false;
 					sortMessage();
 					intent.putStringArrayListExtra(EXTRA_DATA, messages);
+					Log.e("UartService", messages.toString());
 					LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
 				}
 
@@ -208,10 +211,12 @@ public class UartService extends Service implements Serializable {
 	}
 
 	private void sortMessage() {
+
 		if (messages.size() > 1) {
 			ArrayList<String> messagesList = new ArrayList<>();
 			int z = 0;
 			for (int i = 0; i < messages.size(); i++) {
+				Log.e("messages", "messages===========" + messages.get(i));
 				for (int j = 0; j < messages.size(); j++) {
 					if ((Integer.parseInt(messages.get(j).substring(2, 4), 16) & 127) == i) {
 						z = j;

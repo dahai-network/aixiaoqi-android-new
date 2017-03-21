@@ -120,27 +120,13 @@ public class SdkAndBluetoothDataInchange {
 				Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
 						+ mStrSimPowerOnPacket);
 				sendToSDKAboutBluetoothInfo(socketTag + mStrSimPowerOnPacket);
-				messages.clear();
+
 			}
+			messages.clear();
 		}
 	}
 
 	private void registerGoip(ArrayList<String> messages) {
-
-
-
-		for (int i = 0; i < messages.size(); i++)  //外循环是循环的次数
-		{
-			for (int j = messages.size() - 1 ; j > i; j--)  //内循环是 外循环一次比较的次数
-			{
-
-				if (messages.get(i) == messages.get(j))
-				{
-					messages.remove(j);
-				}
-
-			}
-		}
 		count=count+1;
 		if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
 
@@ -169,7 +155,7 @@ public class SdkAndBluetoothDataInchange {
 
         }else{
             // 组数据
-//					SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);
+					SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);
             count=0;
             String  toServerMessage="";
             String value=PacketeUtil.Combination(messages);
@@ -206,7 +192,7 @@ public class SdkAndBluetoothDataInchange {
             TlvAnalyticalUtils.sendToSdkLisener.sendServer(toServerMessage);
 
         }
-		messages.clear();
+
 	}
 
 	private void getIccid(ArrayList<String> messages) {
@@ -229,7 +215,7 @@ public class SdkAndBluetoothDataInchange {
 				stringBuilder.append(value.charAt(i+1));
 				stringBuilder.append(value.charAt(i+0));
 			}
-			messages.clear();
+
 			DBHelp dbHelp=new DBHelp(ProMainActivity.instance);
 			PreReadEntity preReadEntity= dbHelp.getPreReadEntity(RadixAsciiChange.convertStringToHex(stringBuilder.toString()));
 			dbHelp.close();
@@ -257,6 +243,7 @@ public class SdkAndBluetoothDataInchange {
 
 
 		}
+
 	}
 
 

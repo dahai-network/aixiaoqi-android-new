@@ -213,7 +213,6 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 				@Override
 				public void onClick(View v) {
 					if (!TextUtils.isEmpty(selectContactPeople)) {
-
 						Intent  intent=new Intent();
 						contactBean.setPhoneNum("");
 						contactBean.setPhoneNum(phonenum);
@@ -246,6 +245,7 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 			case R.id.cell_phone_linearlayout:
 				break;
 			case R.id.network_phone_tv:
+				hideCellPhoneDialog();
 				if(CommonTools.isFastDoubleClick(500)){
 					return;
 				}
@@ -255,6 +255,7 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 				hideCellPhoneDialog();
 				break;
 			case R.id.sim_register_phone_tv:
+				hideCellPhoneDialog();
 				if(SocketConstant.REGISTER_STATUE_CODE==3){
 					simCellPhone();
 				}else{

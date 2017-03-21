@@ -68,6 +68,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		initView();
 		initData();
 		addListener();
+		setQuite();
 		IntentFilter filter = getIntentFilter();
 		connectedReceive = new ConnectedReceive();
 		registerReceiver(connectedReceive, filter);
@@ -251,15 +252,20 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (ICSOpenVPNApplication.the_sipengineReceive != null) {
-			ICSOpenVPNApplication.the_sipengineReceive.MuteMic(true);
-			ICSOpenVPNApplication.the_sipengineReceive.SetLoudspeakerStatus(true);
-		}
+		setQuite();
 		if (connectedReceive != null) {
 			unregisterReceiver(connectedReceive);
 			connectedReceive = null;
 		}
 		cancelNotify();
+	}
+
+	private void setQuite() {
+		if (ICSOpenVPNApplication.the_sipengineReceive != null) {
+			ICSOpenVPNApplication.the_sipengineReceive.MuteMic(true);
+			ICSOpenVPNApplication.the_sipengineReceive.MuteSpk(true);
+			ICSOpenVPNApplication.the_sipengineReceive.SetLoudspeakerStatus(true);
+		}
 	}
 
 
