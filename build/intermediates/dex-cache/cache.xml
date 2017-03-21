@@ -2,193 +2,157 @@
 <items version="2" >
 
     <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\fce8e4c9b9483092ee1805f7329fc31756ce9cba\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="67eb33110dbacb46a48175b08ae0c96761d2c17d">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_d35fc4cc0415d4c05d16c196511446867eddc848\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\ea48f7a05493669a95b5847836066da75ebc4a0f\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_158d51860f7a31eea80ed84a6f67719ff658ca23\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\9224a0ee01177f19862a8aec6a76767b1295d5c5\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="ee394a892dd21c03a528139c1e8d4e0e1264ac84">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_4cc84cf9f14cc31680f27dce3c5a9b9c42623acb\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\57c3dd932dc4a12a2b021a4d6474fd1cdb2252e7\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_06fa6dc2d41c1496ddc5faa7de30a3e799a10757\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\incremental-classes\baidu\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="44cedfb15f227d638a71415783439c7a59b71d25">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10000\instant-run-bootstrap_6fca5fec070da32c300e79d44da498bd3689894d\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\alipaySdk-20161129.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="9356473ed942faa70a18f34883af52681e1c7223">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\2\alipaySdk-20161129_c80810fa12d9ffc4c62e43c60265ef2a6d5a1902\classes.dex" />
-    </item>
-    <item
         is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\alipaySdk-20161129.jar"
+        jar="C:\Users\Administrator\.android\build-cache\e98300c2dc27bc8be1eada55d81205642f47394a\output\jars\classes.jar"
         jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="9356473ed942faa70a18f34883af52681e1c7223">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\alipaySdk-20161129_c80810fa12d9ffc4c62e43c60265ef2a6d5a1902.jar" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\56ced7a161bbbf9014775296f1127522530f3217\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_8e82e6011cd9530fe9b0021f0b50b23e5f8f5839\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\bugly_crash_upgrade_v1.1.5.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="e5394982bca4f57dfd3912646098cbee7d8197a6">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\2\bugly_crash_upgrade_v1.1.5_e2ab73007b6a1287097e9fcf16b74cbe7f809c23\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\1675c80b950a33acb23be2382e7f4771aeb49a63\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_9466557e84b3efcc8690da83e99a15577830db9a\classes.dex" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\bugly_crash_upgrade_v1.1.5.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="e5394982bca4f57dfd3912646098cbee7d8197a6">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\bugly_crash_upgrade_v1.1.5_e2ab73007b6a1287097e9fcf16b74cbe7f809c23.jar" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\cb54585dea5c45ec4d594f90169ce36fe21a61b3\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="8fe8a8f77d651982ce5e18f6187dc4daf914ac57">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_5b6fc0cf3694bc9fe73f0f7b535f94825b5563bb\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\android project\aixiaoqi-android-new\app\build\intermediates\incremental-runtime-classes\baidu\debug\instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10000\instant-run_c76e5554c5d0ec672358abd5717d7c4db758768f\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\1868dfa22f5d4fdc8b62b3eae000f3fdcf3cca74\output\jars\classes.jar"
-        jumboMode="true"
         optimize="true"
         revision="25.0.0"
         sha1="fa0446a14ed5dd3725047d6399ffea771a564b30">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_1233911f8d7c460bc24fa047497c4b167df68dc8\classes.dex" />
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_36d8580ed6f4f7ae911801e10a327db63299706b.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\libammsdk.jar"
+        jar="C:\Users\Administrator\.android\build-cache\86a51338b470e084c39a18fd3f10beda6f9ea4c9\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_f8d19a025561bec0c493902726af6f2c8cca18b8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.android\build-cache\1f4764223fc43ce4795deb6d59025e7e0afc3ce3\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_c4efb1e62d9d7754385542436658e8c7642ccda6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\libs\alipaySdk-20161129.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="9356473ed942faa70a18f34883af52681e1c7223">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\alipaySdk-20161129_ddebc09dffd0b100020dba48b01a8383a2cb42ab.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.android\build-cache\b34a2648eb2537763e137d194c62a0e18d9ce235\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_f4310023ae210950f5375ca428ab48e780546a82.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.android\build-cache\3202e3c1331d6fbfb503f008d2dee8d9b5df6848\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_22f1fc27fd94816adef390362ad7856a5a88b295.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.android\build-cache\f9cacf35c4fba55be4a45e6217e044c22b45f69d\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="20e6d443b368a3cbcfd9121e6f424708e772967e">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_0a9f9b70f8974923780351f3abf688267003d3b2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.android\build-cache\ecd6e600cda700e82d7548f925520ec8f7e9df84\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_78b3192fbb14343908de3f9279218ecdf8e74e12.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.android\build-cache\2d6c7df96237ecc4e245abb15495e56e58b7f3ef\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="ee394a892dd21c03a528139c1e8d4e0e1264ac84">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_706cbe036f9de0c74581c94d0ee13007d3223c56.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.android\build-cache\4541e141a07837f9efc4f98f3c14f6c72610586f\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="67eb33110dbacb46a48175b08ae0c96761d2c17d">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_5dd538b209bdcd7e27b790aadc04f882ed4612f4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.2.0\support-annotations-25.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="4a5a82a027706397fff621b22fd6fa796e91d7c5">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\support-annotations-25.2.0_2d5d2da140f3a50e8356370a284f216f6194acde.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.android\build-cache\56710ba6ee62b65f61f949b1209cd0bb37363350\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e820b7be8c035dd522da4bc822e8a76c8e27921a">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_08998e42c9c592e933a43db604386b2c2d430dab.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\libs\bugly_crash_upgrade_v1.1.5.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e5394982bca4f57dfd3912646098cbee7d8197a6">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\bugly_crash_upgrade_v1.1.5_c04e30592c37286b3036e7645db159c1a6c69738.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.android\build-cache\7667499aa837c6a598850700150e44411ae5a0fc\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="8fe8a8f77d651982ce5e18f6187dc4daf914ac57">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_612cc10bf6ab346a5ffb6e6b585e4627f5d373d5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Administrator\.android\build-cache\594a60798912b476e36421a6ef291fabe9309e51\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_2b80f91f25b1f199d4d3a296fb729eacdfa6c824.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\libs\libammsdk.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
         sha1="d7c2f29c05b35e8c8713be2b81c41cf18f98b64a">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\libammsdk_191f2bf46c7d90fe6828f748bf753aa8cb765a4a.jar" />
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\libammsdk_8fbd03ca9068b1925ea2873887d146e8fe7bbde9.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="D:\android project\aixiaoqi-android-new\app\libs\libammsdk.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="d7c2f29c05b35e8c8713be2b81c41cf18f98b64a">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\2\libammsdk_191f2bf46c7d90fe6828f748bf753aa8cb765a4a\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\0ca6f681b8ddf95b2b5376c49291c6aaef48a9a6\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="e820b7be8c035dd522da4bc822e8a76c8e27921a">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_d3775cdd8157a8386b2e9e6f47375749149460e6\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\5a4d0a6ddea1f7966a9ec4a257415280021d4b76\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_6f3ab6891a3715155a77671a2c755d66be3c51a4\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\8be69b31286af05a2e0f435708c16e80b6fa206a\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_8420f7f8dd0362e49b141f387be987d863198657\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\456103eefbd6620935ac8cbcb9b33bdbc31875f1\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="20e6d443b368a3cbcfd9121e6f424708e772967e">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_c5f68624dc69ff821e1d1894cffb5a39cacdd2d0\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Administrator\.android\build-cache\a2959146c6b89dd1bf611cea39ca87c9427880f6\output\jars\classes.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="C:\Users\Administrator\.android\build-cache\230bc6459d3aa9ce733eae456012c1e958e1964b\output\jars\classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.0"
         sha1="30a4938ea5235ccf532b3e9f04200e68547e36ad">
-        <dex dex="D:\android project\aixiaoqi-android-new\app\build\intermediates\transforms\dex\baidu\debug\folders\1000\10\classes_e71fa188d9c1f047a85d3ddbff64c721f9f24de4\classes.dex" />
+        <dex dex="D:\aixiaoqi-android-code\aixiaoqi-android\aixiaoqi-android-new\app\build\intermediates\pre-dexed\baidu\debug\classes_fc18025e24cc183e3c84bb72100a3b6df7755f8f.jar" />
     </item>
 
 </items>
