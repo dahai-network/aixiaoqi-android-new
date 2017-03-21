@@ -143,7 +143,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 		}
 
-
 		public void onServiceDisconnected(ComponentName classname) {
 			//mService.disconnect(mDevice);
 			mService = null;

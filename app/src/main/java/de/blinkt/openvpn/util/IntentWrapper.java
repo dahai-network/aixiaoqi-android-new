@@ -197,6 +197,8 @@ public class IntentWrapper {
             Intent zteGodIntent = new Intent();
             zteGodIntent.setComponent(new ComponentName("com.zte.heartyservice", "com.zte.heartyservice.setting.ClearAppSettingsActivity"));
             sIntentWrapperList.add(new IntentWrapper(zteGodIntent, ZTE_GOD));
+
+
         }
         return sIntentWrapperList;
     }
