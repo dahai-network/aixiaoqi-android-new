@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConstant;
 import com.google.gson.JsonObject;
@@ -35,7 +36,6 @@ import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 
-import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 
 
 /**
@@ -77,10 +77,10 @@ public class MyReceiver extends BroadcastReceiver {
 					SocketConstant.REGISTER_STATUE_CODE = 2;
 					if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
 						//从预读取数据那里重新注册
-						registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REG_STATUE_CHANGE);
+						EventBusUtil.simRegisterStatue(SocketConstant.REG_STATUE_CHANGE);
 						connectGoip();
 					} else {
-						registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+						EventBusUtil.simRegisterStatue(SocketConstant.RESTART_TCP);
 					}
 
 				}

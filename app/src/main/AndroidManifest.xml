@@ -524,6 +524,7 @@
             android:name="de.blinkt.openvpn.activities.KeepAliveActivity"
             android:excludeFromRecents="true"
             android:exported="false"
+            android:launchMode="singleInstance"
             android:finishOnTaskLaunch="false"
             android:theme="@style/LiveActivityStyle">
         </activity>

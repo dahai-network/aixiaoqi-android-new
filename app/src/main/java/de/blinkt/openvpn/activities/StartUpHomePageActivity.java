@@ -1,35 +1,19 @@
 package de.blinkt.openvpn.activities;
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.umeng.analytics.MobclickAgent;
-
 import java.util.ArrayList;
-
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.OutsideAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
-
-import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
-import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKOPENAPNSET;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKOPENSYSTEMSET;
 
 /**
  * Created by Administrator on 2017/3/22 0022.

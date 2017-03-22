@@ -3,14 +3,11 @@ package com.aixiaoqi.socket;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
-
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.database.DBHelp;
-import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.util.SharedUtils;
 
@@ -62,7 +59,7 @@ public class TestProvider {
 		if(!TextUtils.isEmpty(iccidEntity.getImmsi()))
 			imsi = iccidEntity.getImmsi().trim();
 		else{
-			EventBusUtil.registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 			return;
 		}
 		Log.e("preDataSplit", "ICCID:" + iccidEntity.getIccid() + "\nIMMSI:" + iccidEntity.getImmsi());
@@ -81,7 +78,7 @@ public class TestProvider {
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
 				String token=SharedUtils.getInstance().readString(Constant.TOKEN);
 				if(TextUtils.isEmpty(token)){
-					EventBusUtil.registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.TOKEN_IS_NULL);
+					EventBusUtil.simRegisterStatue(SocketConstant.TOKEN_IS_NULL);
 				}else{
 					SocketConstant.CONNENCT_VALUE[3] =RadixAsciiChange.convertStringToHex(token);
 					REGISTER_STATUE_CODE = 2;
@@ -101,10 +98,10 @@ public class TestProvider {
 					}
 				}
 			} else {
-				EventBusUtil.registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR);
+				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR);
 			}
 		} else {
-			EventBusUtil.registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 
 		}
 	}

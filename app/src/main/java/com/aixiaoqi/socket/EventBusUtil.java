@@ -2,7 +2,7 @@ package com.aixiaoqi.socket;
 
 import org.greenrobot.eventbus.EventBus;
 
-import de.blinkt.openvpn.model.IsSuccessEntity;
+import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.SimRegisterType;
 
 /**
@@ -11,11 +11,9 @@ import de.blinkt.openvpn.model.SimRegisterType;
 
 public class EventBusUtil {
 
-    public static void registerFail(int callbacktype,int regstatues) {
-        IsSuccessEntity entity = new IsSuccessEntity();
-        entity.setType(callbacktype);
-        entity.setFailType(regstatues);
-        entity.setSuccess(false);
+    public static void simRegisterStatue(int regstatues) {
+        SimRegisterStatue entity = new SimRegisterStatue();
+        entity.setRigsterSimStatue(regstatues);
         EventBus.getDefault().post(entity);
     }
     public static void simRegisterType(String registerType) {

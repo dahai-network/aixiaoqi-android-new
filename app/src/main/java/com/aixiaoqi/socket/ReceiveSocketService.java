@@ -19,8 +19,6 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
-
-import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
@@ -102,7 +100,7 @@ public class ReceiveSocketService extends Service {
 					contactFailCount++;
 				} else {
 					contactFailCount = 0;
-					registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.START_TCP_FAIL);
+					EventBusUtil.simRegisterStatue(SocketConstant.START_TCP_FAIL);
 				}
 			}
 
@@ -125,7 +123,7 @@ public class ReceiveSocketService extends Service {
 		if (tcpClient != null && !tcpClient.isConnected()) {
 			if (REGISTER_STATUE_CODE == 3) {
 				REGISTER_STATUE_CODE = 2;
-				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.TCP_DISCONNECT);
+				EventBusUtil.simRegisterStatue( SocketConstant.TCP_DISCONNECT);
 			}
 			if(!SdkAndBluetoothDataInchange.isHasPreData)
 			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
