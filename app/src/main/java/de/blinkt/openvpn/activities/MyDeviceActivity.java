@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConstant;
-import com.aixiaoqi.socket.TlvAnalyticalUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -469,6 +468,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
 					if (!isUpgrade && isConnectOnce) {
 						showProgress(getString(R.string.reconnecting), true);
+						//多次重连无效后关闭蓝牙重启
+						if (retryTime == 5) {
+							mBtAdapter.disable();
+							Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+							startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+						}
 					}
 				} else {
 					unBindButton.setVisibility(GONE);
@@ -855,10 +860,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (mService == null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 					return;
 				}
-
 				if (mBtAdapter != null) {
 					if (enable) {
-
 						// Stops scanning after a pre-defined scan period.
 						mBtAdapter.startLeScan(mLeScanCallback);
 					} else {
@@ -880,6 +883,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (mService == null || mService.mConnectionState == UartService.STATE_CONNECTED) {
 					return;
 				}
+				//防止连接后却显示不出来的问题
+				mService.disconnect();
 				if (mBtAdapter != null) {
 					mService.connect(deviceAddress);
 					CommonTools.delayTime(SCAN_PERIOD);
@@ -1050,18 +1055,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						break;
 					case SocketConstant.TCP_DISCONNECT:
 						startAnim();
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+//						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 						break;
 					case SocketConstant.RESTART_TCP:
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+//						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 						break;
 					case SocketConstant.REG_STATUE_CHANGE:
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+//						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 						break;
 					default:
-						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
-							sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
-						}
+//						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
+//							sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
+//						}
 						break;
 				}
 			}

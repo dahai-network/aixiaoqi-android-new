@@ -151,7 +151,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		dualSimTextView.setOnClickListener(this);
 		manager = Glide.with(ICSOpenVPNApplication.getContext());
 		ICSOpenVPNApplication.getInstance().registerReceiver(realStepReceiver, getFilter());
-		changeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
+		changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 	}
 
 	private void findById(View view) {

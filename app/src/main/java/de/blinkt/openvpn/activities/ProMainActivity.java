@@ -17,7 +17,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -50,9 +49,6 @@ import cn.com.johnson.adapter.FragmentAdapter;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
-import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
-import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -372,6 +368,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+				//防止连接后却显示不出来的问题
+				mService.disconnect();
 				sendEventBusChangeBluetoothStatus(getResources().getString(R.string.index_connecting), R.drawable.index_connecting);
 				if (stopHandler == null) {
 					stopHandler = new Handler();
@@ -383,12 +381,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
-								if (indexFragment.getBlutoothStatus().equals(getResources().getString(R.string.index_unconnect)))
+								if (indexFragment!=null&&indexFragment.getBlutoothStatus().equals(getResources().getString(R.string.index_unconnect)))
 									sendEventBusChangeBluetoothStatus(getResources().getString(R.string.index_unconnect), R.drawable.index_unconnect);
 							}
 						});
 					}
-				}, 5000);
+				}, 10000);
 			}
 		});
 	}

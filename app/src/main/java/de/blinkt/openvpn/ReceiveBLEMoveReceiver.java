@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.aixiaoqi.socket.ReceiveSocketService;
-import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
 
@@ -117,7 +116,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			ICSOpenVPNApplication.isConnect = true;
 			IS_TEXT_SIM = false;
 			isGetnullCardid = true;
-			retryTime = 0;
 			BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 			entity.setBlueType(BluetoothConstant.BLUE_BIND);
 			EventBus.getDefault().post(entity);
@@ -132,6 +130,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							Thread.sleep(1000);
 							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
 						} else {
+							retryTime = 0;
 							Log.i("toBLue", "连接成功");
 							sendMessageToBlueTooth(UP_TO_POWER);
 							CommonTools.delayTime(500);
