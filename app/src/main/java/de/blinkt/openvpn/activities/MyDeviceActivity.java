@@ -461,6 +461,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							CommonTools.delayTime(1000);
 							if (isUpgrade) {
 								Log.e(TAG, "空中升级重连");
+								startDfuCount=0;
 								scanLeDevice(true);
 							}
 						}
@@ -1108,9 +1109,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					break;
 			}
 		}
-
 	}
 
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
+		setConStatus(entity.getStatus());
+	}
 	@Override
 	protected void onRestart() {
 		super.onRestart();
@@ -1120,10 +1125,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 	}
 
-	@Subscribe(threadMode = ThreadMode.MAIN)
-	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
-		setConStatus(entity.getStatus());
-	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onUIOperatorEntity(UIOperatorEntity entity) {

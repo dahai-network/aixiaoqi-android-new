@@ -99,6 +99,13 @@ public class SdkAndBluetoothDataInchange {
 				getIccid(messages);
 
 			}else if(isHasPreData){
+				if (simRegisterStatue == null) {
+					simRegisterStatue = new SimRegisterStatue();
+				}
+				int percent=simRegisterStatue.getProgressCount()+1;
+				simRegisterStatue.setRigsterSimStatue(SocketConstant.REGISTER_CHANGING);
+				simRegisterStatue.setProgressCount(percent);
+				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_CHANGING);
 				registerGoip(messages);
 			}else if(ProMainActivity.isStartSdk) {
 				if (simRegisterStatue == null) {
