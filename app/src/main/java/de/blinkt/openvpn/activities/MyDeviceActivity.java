@@ -56,8 +56,8 @@ import de.blinkt.openvpn.http.UnBindDeviceHttp;
 import de.blinkt.openvpn.http.UpdateConnectInfoHttp;
 import de.blinkt.openvpn.model.BlueToothDeviceEntity;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
-import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
+import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.UIOperatorEntity;
 import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.util.CommonTools;
@@ -72,6 +72,7 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 import static android.view.View.GONE;
 import static cn.com.aixiaoqi.R.id.register_sim_statue;
+import static cn.com.aixiaoqi.R.string.device;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
@@ -213,7 +214,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (macAddressStr != null)
 			macAddressStr = macAddressStr.toUpperCase();
 		macTextView.setText(macAddressStr);
-		hasLeftViewTitle(R.string.device, 0);
+		hasLeftViewTitle(device, 0);
 		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 			int electricityInt = utils.readInt(ELECTRICITY);
 			noConnectImageView.setVisibility(GONE);
@@ -371,7 +372,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void registFail() {
 		Log.e(TAG, "registFail");
-		EventBusUtil.simRegisterStatue( SocketConstant.REGISTER_FAIL_INITIATIVE);
+		EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_INITIATIVE);
 	}
 
 	private void restartUartService() {
@@ -466,14 +467,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					});
 					connectThread.start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
+					//多次重连无效后关闭蓝牙重启
+					if (retryTime > 6) {
+						mBtAdapter.disable();
+						Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+					}
 					if (!isUpgrade && isConnectOnce) {
 						showProgress(getString(R.string.reconnecting), true);
-						//多次重连无效后关闭蓝牙重启
-						if (retryTime == 5) {
-							mBtAdapter.disable();
-							Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-							startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-						}
+
 					}
 				} else {
 					unBindButton.setVisibility(GONE);
@@ -819,12 +821,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				downloadSkyUpgradePackageHttp(url);
 			}
 		} else if (type == NOT_YET_REARCH) {
+			retryTime = 0;
 			connDevice(utils.readString(Constant.IMEI));
 		} else {
 			onBackPressed();
 		}
 	}
-
 
 	private boolean isDfuServiceRunning() {
 		return ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName());
@@ -980,7 +982,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
 		entity.setStatus(status);
 		entity.setStatusDrawableInt(statusDrawable);
-		EventBus.getDefault().post(0);
+		EventBus.getDefault().post(entity);
 	}
 
 	public void setConStatus(String conStatus) {
@@ -1000,6 +1002,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_regist_fail))) {
 			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
+			percentInt = 0;
+			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_registing))) {
 			percentTextView.setText("");
 			registerSimStatu.setVisibility(View.VISIBLE);
@@ -1012,6 +1017,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			registerSimStatu.setVisibility(GONE);
 		} else if (conStatus.equals(getString(R.string.index_un_insert_card))) {
 			percentTextView.setText("");
+			registerSimStatu.setVisibility(View.VISIBLE);
 		} else if (conStatus.equals(getString(R.string.index_high_signal))) {
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 			percentTextView.setVisibility(GONE);
@@ -1025,7 +1031,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(SimRegisterStatue entity) {
-		synchronized (MyDeviceActivity.this){
+		synchronized (MyDeviceActivity.this) {
 			switch (entity.getRigsterSimStatue()) {
 				case SocketConstant.REGISTER_SUCCESS:
 					conStatusTextView.setText(getString(R.string.index_high_signal));
@@ -1038,24 +1044,24 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
 					break;
 				case SocketConstant.REGISTER_FAIL:
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					CommonTools.showShortToast(this, getString(R.string.regist_fail));
+					CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
 					break;
 				case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
 					break;
 				case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
 					break;
 				case SocketConstant.NOT_NETWORK:
@@ -1114,6 +1120,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 			finish();
 		}
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
+		setConStatus(entity.getStatus());
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程

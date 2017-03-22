@@ -186,10 +186,10 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 			@Override
 			public void onClick(View v) {
 				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-					 intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
+					intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
 				} else {
-					 intent = new Intent(getActivity(), MyDeviceActivity.class);
-					 intent.putExtra(MyDeviceActivity.BRACELETTYPE,SharedUtils.getInstance().readString(BRACELETNAME,""));
+					intent = new Intent(getActivity(), MyDeviceActivity.class);
+					intent.putExtra(MyDeviceActivity.BRACELETTYPE, SharedUtils.getInstance().readString(BRACELETNAME, ""));
 				}
 				int status = R.string.index_connecting;
 				if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBlutoothStatus())) {
@@ -208,6 +208,8 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 					status = R.string.index_registing;
 				} else if (getString(R.string.index_aixiaoqicard).equals(getBlutoothStatus())) {
 					status = R.string.index_aixiaoqicard;
+				} else if (getString(R.string.index_regist_fail).equals(getBlutoothStatus())) {
+					status = R.string.index_regist_fail;
 				}
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
 				startActivity(intent);
@@ -223,20 +225,20 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	}
 
 	private void getHotPackage() {
-		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_HOT,12+"");
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_HOT, 12 + "");
 	}
 
 	private void getBoughtPackage() {
-		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_ORDER,"1","3","-1");
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, "1", "3", "-1");
 	}
 
 	private void getSportTotal() {
-		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL);
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL);
 	}
 
 	//获取banner图
 	private void getIndexBanner() {
-		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_INDEX_BANNER);
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_INDEX_BANNER);
 	}
 
 	@Override
