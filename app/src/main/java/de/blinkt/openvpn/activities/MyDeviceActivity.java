@@ -140,7 +140,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public static boolean isConnectOnce = false;
 	//手环类型
 	private String bracelettype;
-
+	public static boolean isUpgrade = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -269,7 +269,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 	}
 
-	public static boolean isUpgrade = false;
+
 
 	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, register_sim_statue, R.id.findStatusLinearLayout, R.id.statueTextView, R.id.alarmClockLinearLayout, R.id.messageRemindLinearLayout})
 	public void onClick(View v) {
@@ -364,6 +364,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void connectGoip() {
 		if (ProMainActivity.sendYiZhengService != null) {
+			conStatusTextView.setText(getString(R.string.index_registing));
 			sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
@@ -532,6 +533,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						case Constant.RETURN_POWER:
 							if (messages.get(0).substring(10, 12).equals("01")) {
 								if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
+									conStatusTextView.setText(getString(R.string.index_registing));
 									sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 								}
 							} else if (messages.get(0).substring(10, 12).equals("11")) {
@@ -918,6 +920,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						Log.e(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
 						if (mService != null) {
 							scanLeDevice(false);
+							Log.i(TAG, "startDfuCount:" + startDfuCount);
 							if (startDfuCount == 0) {
 								Log.i(TAG, "startDfuCount:" + startDfuCount);
 								startDfuCount++;
@@ -1029,6 +1032,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			switch (entity.getRigsterSimStatue()) {
 				case SocketConstant.REGISTER_SUCCESS:
 					conStatusTextView.setText(getString(R.string.index_high_signal));
+					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
 					percentInt = 0;
 					percentTextView.setVisibility(GONE);
@@ -1036,18 +1040,25 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					break;
 				case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 					percentTextView.setVisibility(GONE);
+					conStatusTextView.setText(getString(R.string.index_regist_fail));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
 					CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
 					break;
 				case SocketConstant.REGISTER_FAIL:
 					percentTextView.setVisibility(GONE);
+					conStatusTextView.setText(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.regist_fail));
 					break;
 				case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
 					percentTextView.setVisibility(GONE);
+					conStatusTextView.setText(getString(R.string.index_regist_fail));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
 					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
 					break;
 				case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
 					percentTextView.setVisibility(GONE);
+					conStatusTextView.setText(getString(R.string.index_regist_fail));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
 					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
 					break;
 				case SocketConstant.NOT_NETWORK:
@@ -1058,13 +1069,16 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					break;
 				case SocketConstant.TCP_DISCONNECT:
 					startAnim();
-//						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+					conStatusTextView.setText(getString(R.string.index_registing));
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.RESTART_TCP:
-//						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+					conStatusTextView.setText(getString(R.string.index_registing));
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.REG_STATUE_CHANGE:
-//						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+					conStatusTextView.setText(getString(R.string.index_registing));
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.REGISTER_CHANGING:
 					if (SocketConstant.REGISTER_STATUE_CODE == 3) {
@@ -1100,28 +1114,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			finish();
 		}
 	}
-
-//	@Subscribe(threadMode = ThreadMode.MAIN)
-//	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
-//		setConStatus(entity.getStatus());
-//	}
-
-//	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
-//	public void onPercentEntity(PercentEntity entity) {
-//		if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-//			percentTextView.setVisibility(GONE);
-//			return;
-//		} else {
-//			percentTextView.setVisibility(View.VISIBLE);
-//		}
-//		double percent = entity.getPercent();
-//		percentInt = (int) (percent / 1.6);
-//		Log.i(TAG, "写卡进度：" + percentInt + "%");
-//		if (percentInt >= 100) {
-//			percentInt = 98;
-//		}
-//		percentTextView.setText(percentInt + "%");
-//	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onUIOperatorEntity(UIOperatorEntity entity) {

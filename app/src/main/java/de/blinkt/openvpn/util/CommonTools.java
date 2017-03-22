@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ public class CommonTools {
 	 * @param message
 	 */
 	public static void showShortToast(Context context, String message) {
+		if(!TextUtils.isEmpty(message)&&context!=null)
 		Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 	}
 
