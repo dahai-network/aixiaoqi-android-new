@@ -1067,15 +1067,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				case SocketConstant.TCP_DISCONNECT:
 					startAnim();
 					conStatusTextView.setText(getString(R.string.index_registing));
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.RESTART_TCP:
 					conStatusTextView.setText(getString(R.string.index_registing));
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.REG_STATUE_CHANGE:
 					conStatusTextView.setText(getString(R.string.index_registing));
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.REGISTER_CHANGING:
 					if (SocketConstant.REGISTER_STATUE_CODE == 3) {
@@ -1100,9 +1100,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					break;
 			}
 		}
-
 	}
 
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
+		setConStatus(entity.getStatus());
+	}
 	@Override
 	protected void onRestart() {
 		super.onRestart();

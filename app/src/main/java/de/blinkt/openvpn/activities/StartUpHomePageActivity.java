@@ -72,9 +72,9 @@ initSubView();
             imageView.setLayoutParams(lp);
             imageViews[i] = imageView;
             if (i == 0) {
-                imageView.setBackgroundResource(R.drawable.page_indicator_focused);
+                imageView.setBackgroundResource(R.drawable.start_up_ret_select);
             } else {
-                imageView.setBackgroundResource(R.drawable.page_indicator_unfocused);
+                imageView.setBackgroundResource(R.drawable.start_up_cir_default);
             }
             group.addView(imageView);
         }
@@ -124,9 +124,9 @@ private  void addListener(){
         int length = imageViews.length;
         for (int i = 0; i < length; i++) {
             if (i == selectItems) {
-                imageViews[i].setBackgroundResource(R.drawable.page_indicator_focused);
+                imageViews[i].setBackgroundResource(R.drawable.start_up_ret_select);
             } else {
-                imageViews[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
+                imageViews[i].setBackgroundResource(R.drawable.start_up_cir_default);
             }
         }
     }
