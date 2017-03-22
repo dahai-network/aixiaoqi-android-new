@@ -982,7 +982,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
 		entity.setStatus(status);
 		entity.setStatusDrawableInt(statusDrawable);
-		EventBus.getDefault().post(0);
+		EventBus.getDefault().post(entity);
 	}
 
 	public void setConStatus(String conStatus) {
@@ -1002,6 +1002,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_regist_fail))) {
 			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
+			percentInt = 0;
+			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_registing))) {
 			percentTextView.setText("");
 			registerSimStatu.setVisibility(View.VISIBLE);
@@ -1041,24 +1044,24 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
 					break;
 				case SocketConstant.REGISTER_FAIL:
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					CommonTools.showShortToast(this, getString(R.string.regist_fail));
+					CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
 					break;
 				case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
 					break;
 				case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
 					break;
 				case SocketConstant.NOT_NETWORK:
@@ -1113,6 +1116,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 			finish();
 		}
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
+		setConStatus(entity.getStatus());
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程

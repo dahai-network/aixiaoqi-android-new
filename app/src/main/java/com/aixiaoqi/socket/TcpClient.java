@@ -87,8 +87,8 @@ public abstract class TcpClient implements Runnable {
 	}
 
 	private void connectSocket() throws IOException {
-//		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
-		SocketAddress address = new InetSocketAddress("120.76.240.82", 5090);
+		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
+//		SocketAddress address = new InetSocketAddress("120.76.240.82", 5090);
 		Socket socket = new Socket();
 		//TCP保活
 		socket.setKeepAlive(true);
