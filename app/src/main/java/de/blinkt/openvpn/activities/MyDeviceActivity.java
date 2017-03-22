@@ -72,6 +72,7 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 import static android.view.View.GONE;
 import static cn.com.aixiaoqi.R.id.register_sim_statue;
+import static cn.com.aixiaoqi.R.string.device;
 import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
@@ -214,7 +215,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (macAddressStr != null)
 			macAddressStr = macAddressStr.toUpperCase();
 		macTextView.setText(macAddressStr);
-		hasLeftViewTitle(R.string.device, 0);
+		hasLeftViewTitle(device, 0);
 		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 			int electricityInt = utils.readInt(ELECTRICITY);
 			noConnectImageView.setVisibility(GONE);
@@ -466,14 +467,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					});
 					connectThread.start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
+					//多次重连无效后关闭蓝牙重启
+					if (retryTime > 6) {
+						mBtAdapter.disable();
+						Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+					}
 					if (!isUpgrade && isConnectOnce) {
 						showProgress(getString(R.string.reconnecting), true);
-						//多次重连无效后关闭蓝牙重启
-						if (retryTime == 5) {
-							mBtAdapter.disable();
-							Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-							startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-						}
+
 					}
 				} else {
 					unBindButton.setVisibility(GONE);
@@ -821,12 +823,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				downloadSkyUpgradePackageHttp(url);
 			}
 		} else if (type == NOT_YET_REARCH) {
+			retryTime = 0;
 			connDevice(utils.readString(Constant.IMEI));
 		} else {
 			onBackPressed();
 		}
 	}
-
 
 	private boolean isDfuServiceRunning() {
 		return ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName());
@@ -919,12 +921,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					if (isUpgrade && device.getName().contains(utils.readString(Constant.IMEI).replace(":", ""))) {
 						Log.e(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
 						if (mService != null) {
-							scanLeDevice(false);
-							if (startDfuCount == 0) {
-								Log.i(TAG, "startDfuCount:" + startDfuCount);
-								startDfuCount++;
-								CommonTools.delayTime(1000);
-								uploadToBlueTooth(device.getName(), device.getAddress());
+							synchronized (MyDeviceActivity.this) {
+								scanLeDevice(false);
+								if (startDfuCount == 0) {
+									Log.i(TAG, "startDfuCount:" + startDfuCount);
+									startDfuCount++;
+									CommonTools.delayTime(1000);
+									uploadToBlueTooth(device.getName(), device.getAddress());
+								}
 							}
 						}
 					} else if (!isUpgrade && macAddressStr != null && macAddressStr.equalsIgnoreCase(device.getAddress())) {
