@@ -234,6 +234,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //					if (dataID == 0) {
 //						dataType = messageFromBlueTooth.substring(6, 10);
 //					}
+					try {
+
+
 					String firstPackage = messages.get(0).substring(0, 2);
 					String dataType = messages.get(0).substring(6, 10);
 
@@ -506,7 +509,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									break;
 							}
 					}
-				}
+				}catch ( Exception e){
+
+					}
+			}
 			}
 			).start();
 		}
