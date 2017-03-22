@@ -10,6 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
@@ -40,8 +41,6 @@ import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.SportStepEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
-
-import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static de.blinkt.openvpn.activities.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.isUpgrade;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
@@ -474,7 +473,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 												//从预读取数据那里重新注册
 												connectGoip();
 											} else {
-												registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+												EventBusUtil.simRegisterStatue(SocketConstant.RESTART_TCP);
 											}
 
 										} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {

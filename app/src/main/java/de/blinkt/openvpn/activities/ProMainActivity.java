@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
@@ -65,7 +66,7 @@ import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
-import de.blinkt.openvpn.model.IsSuccessEntity;
+import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterType;
 import de.blinkt.openvpn.service.CallPhoneService;
@@ -73,8 +74,6 @@ import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
-
-import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
@@ -692,14 +691,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				requestCount++;
 				requestPacket();
 			}else{
-				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
+				EventBusUtil.simRegisterStatue(SocketConstant.NOT_NETWORK);
 			}
 		}else if(cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG){
 			if(requestCount<3){
 				requestCount++;
 				getConfigInfo();
 			}else{
-				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
+				EventBusUtil.simRegisterStatue(SocketConstant.NOT_NETWORK);
 			}
 		}
 	}
@@ -738,14 +737,16 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
-	public void onIsSuccessEntity(IsSuccessEntity entity) {
-		Log.e(TAG, "registerType=" + entity.getType());
-		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
-			if (entity.isSuccess()) {
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
-			} else {
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
-				switch (entity.getFailType()) {
+	public void onIsSuccessEntity(SimRegisterStatue entity) {
+
+//			if (entity.isSuccess()) {
+
+//			} else {
+//				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
+				switch (entity.getRigsterSimStatue()) {
+					case SocketConstant.REGISTER_SUCCESS:
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+						break;
 					case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 						CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
 						break;
@@ -787,18 +788,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 						break;
 					default:
-						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
-							sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
-							CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
-						}
+//						if (entity.getRigsterSimStatue() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
+//							sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
+//							CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
+//						}
 						break;
-				}
 			}
-		}
-//		else if (entity.getType() == Constant.BLUE_CONNECTED_INT) {
-//			startDataframService();
-//			startSocketService();
-//		}
+
 	}
 	@Subscribe(threadMode = ThreadMode.ASYNC)
 	public void onIsSuccessEntity(SimRegisterType simRegisterType){

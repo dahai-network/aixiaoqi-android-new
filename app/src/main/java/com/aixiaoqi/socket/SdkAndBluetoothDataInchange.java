@@ -2,28 +2,21 @@ package com.aixiaoqi.socket;
 
 import android.text.TextUtils;
 import android.util.Log;
-
 import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.database.DBHelp;
-import de.blinkt.openvpn.model.PercentEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
+import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
-
-import static com.aixiaoqi.socket.EventBusUtil.registerFail;
-import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 
 /**
  * Created by Administrator on 2017/1/5 0005.
@@ -60,7 +53,7 @@ public class SdkAndBluetoothDataInchange {
 	TimerTask timerTaskMessage ;
 
 	private void notifyRegisterFail() {
-		registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
+		EventBusUtil.simRegisterStatue(SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
 	}
 	private String saveBluetoothData;
 	long getSendBlueToothTime;
@@ -108,12 +101,13 @@ public class SdkAndBluetoothDataInchange {
 			}else if(isHasPreData){
 				registerGoip(messages);
 			}else if(ProMainActivity.isStartSdk) {
-				if (percentEntity == null) {
-					percentEntity = new PercentEntity();
+				if (simRegisterStatue == null) {
+					simRegisterStatue = new SimRegisterStatue();
 				}
 				int percent = Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag()) ? "-1" : mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length() - 4, mReceiveDataframSocketService.getSorcketTag().length() - 1));
-				percentEntity.setPercent(percent);
-				EventBus.getDefault().post(percentEntity);
+				simRegisterStatue.setRigsterSimStatue(SocketConstant.REGISTER_CHANGING);
+				simRegisterStatue.setProgressCount(percent);
+				EventBus.getDefault().post(simRegisterStatue);
 				isReceiveBluetoothData = true;
 				notCanReceiveBluetoothDataCount = 0;
 				mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
@@ -225,12 +219,12 @@ public class SdkAndBluetoothDataInchange {
 				//发送直接从预读取数据开始注册
 				String token= SharedUtils.getInstance().readString(Constant.TOKEN);
 				if(TextUtils.isEmpty(token)){
-					EventBusUtil.registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.TOKEN_IS_NULL);
+					EventBusUtil.simRegisterStatue(SocketConstant.TOKEN_IS_NULL);
 				}else{
 					SocketConstant.CONNENCT_VALUE[3] =RadixAsciiChange.convertStringToHex(token);
 					count=0;
 					isHasPreData=true;
-					REGISTER_STATUE_CODE = 2;
+					SocketConstant.REGISTER_STATUE_CODE = 2;
 					EventBusUtil.simRegisterType(Constant.REGISTER_SIM_PRE_DATA);
 					SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = preReadEntity.getPreReadData();
 					SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preReadEntity.getDataLength();
@@ -269,7 +263,7 @@ public class SdkAndBluetoothDataInchange {
 
 
 	public static boolean isHasPreData=false;
-	PercentEntity percentEntity;
+	SimRegisterStatue simRegisterStatue;
 
 	private void sendToSDKAboutBluetoothInfo(final String finalMessage) {
 		if (mReceiveDataframSocketService != null) {
@@ -281,7 +275,7 @@ public class SdkAndBluetoothDataInchange {
 
 	private void sendToBluetoothAboutCardInfo(String msg) {
 		if(TextUtils.isEmpty(msg)){
-			registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
 			return;
 		}
 		Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + msg);

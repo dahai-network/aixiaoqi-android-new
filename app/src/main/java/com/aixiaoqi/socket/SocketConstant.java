@@ -63,6 +63,8 @@ public class SocketConstant {
 	public static final String EN_APPEVT_SIMDATA = "06";
 	public static final String EN_APPEVT_SIMINFO = "07";
 
+
+	public static final int REGISTER_SUCCESS = 0;
 	//注册失败
 	public static final int REGISTER_FAIL = 1;
 	public static final int REGISTER_FAIL_IMSI_IS_NULL = 2;
@@ -75,6 +77,11 @@ public class SocketConstant {
 	public static final int TCP_DISCONNECT = 9;//TCP断开
 	public static final int REG_STATUE_CHANGE = 11;//注册状态改变
 	public static final int RESTART_TCP = 10;//重连TCP
+	public static final int REGISTER_CHANGING=12;
+
+
+
+
 	public static int REGISTER_STATUE_CODE = 0;//0，表示还没有开始注册。1，表示获取预读取数据没有完成（已经写卡但未完成）。2，表示注册中，3表示注册成功
 	public static final String TRAN_DATA_TO_SDK = "88888888";
 
