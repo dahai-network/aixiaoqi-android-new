@@ -797,10 +797,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	@Override
 	public void noNet() {
-//		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
-//		macTextView.setText(utils.readString(Constant.IMEI));
-//		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//		startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+
 		CommonTools.showShortToast(this, getString(R.string.no_wifi));
 	}
 
@@ -985,7 +982,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
 		entity.setStatus(status);
 		entity.setStatusDrawableInt(statusDrawable);
-		EventBus.getDefault().post(entity);
+		EventBus.getDefault().post(0);
 	}
 
 	public void setConStatus(String conStatus) {
@@ -1019,7 +1016,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			percentTextView.setText("");
 		} else if (conStatus.equals(getString(R.string.index_high_signal))) {
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
-			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
 			percentInt = 0;
 			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
