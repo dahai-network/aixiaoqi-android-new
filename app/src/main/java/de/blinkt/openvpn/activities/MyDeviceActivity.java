@@ -141,6 +141,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	//手环类型
 	private String bracelettype;
 	public static boolean isUpgrade = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -268,7 +269,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				break;
 		}
 	}
-
 
 
 	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, register_sim_statue, R.id.findStatusLinearLayout, R.id.statueTextView, R.id.alarmClockLinearLayout, R.id.messageRemindLinearLayout})
@@ -863,6 +863,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (mService == null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 					return;
 				}
+				//重置
+				startDfuCount = 0;
 				if (mBtAdapter != null) {
 					if (enable) {
 						// Stops scanning after a pre-defined scan period.
@@ -1073,15 +1075,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				case SocketConstant.TCP_DISCONNECT:
 					startAnim();
 					conStatusTextView.setText(getString(R.string.index_registing));
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.RESTART_TCP:
 					conStatusTextView.setText(getString(R.string.index_registing));
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.REG_STATUE_CHANGE:
 					conStatusTextView.setText(getString(R.string.index_registing));
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.REGISTER_CHANGING:
 					if (SocketConstant.REGISTER_STATUE_CODE == 3) {
