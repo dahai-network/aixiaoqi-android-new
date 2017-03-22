@@ -1,5 +1,9 @@
 package com.aixiaoqi.socket;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import java.io.IOException;
@@ -8,6 +12,9 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+
+import de.blinkt.openvpn.activities.LaunchActivity;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 
 /**
  * Created by Administrator on 2016/12/30 0030.
@@ -36,8 +43,8 @@ public abstract class UdpClient implements Runnable {
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			while (flag) {
 				socket.receive(packet);
-
 				sendPort = packet.getPort();
+
 				String receiveMsg = new String(packet.getData(), 0, packet.getLength());
 				Log.e("receiveMsg","receiveMsg="+receiveMsg);
 				String tag = receiveMsg.substring(0, 7);
@@ -87,6 +94,20 @@ public abstract class UdpClient implements Runnable {
 			InetAddress addr = InetAddress.getByName(sendAddress);
 			byte[] data = msg.getBytes();
 			DatagramPacket sendSocket = new DatagramPacket(data, data.length, addr, sendPort);
+			if(sendPort==0){
+				Intent intent = new Intent(ICSOpenVPNApplication.getContext().getApplicationContext(), LaunchActivity.class);
+
+
+				PendingIntent restartIntent = PendingIntent.getActivity(
+						ICSOpenVPNApplication.getContext().getApplicationContext().getApplicationContext(), 0, intent,
+						PendingIntent.FLAG_UPDATE_CURRENT);
+				//退出程序
+				AlarmManager mgr = (AlarmManager)ICSOpenVPNApplication.getContext().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+				mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
+						restartIntent);
+				ICSOpenVPNApplication.getInstance().finishAllActivity();
+				System.exit(0);
+			}
 			Log.e("UDPSOCKET", "addr=" + addr.getHostAddress() + "\naddrname=" + addr.getHostName() + "\nsendPort=" + sendPort);
 			datagramSocket.send(sendSocket);
 		} catch (SocketException e) {
