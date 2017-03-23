@@ -24,9 +24,15 @@ import de.blinkt.openvpn.util.SharedUtils;
 public class SdkAndBluetoothDataInchange {
 	public static final String TAG = "Blue_Chanl";
 	UartService mService;
-	//	ArrayList<String> messages;
 	ReceiveDataframSocketService mReceiveDataframSocketService;
-
+	private String saveBluetoothData;
+	long getSendBlueToothTime;
+	private int countMessage = 0;
+	private int notCanReceiveBluetoothDataCount = 0;
+	private String finalTemp;//保存上一次发给蓝牙的数据，以免出错，需要重发
+	private boolean isReceiveBluetoothData = true;//判断5s内是否接收完成，没有完成则重新发送
+	private int count =0;
+	private String[] IccidCommand={"a0a40000022fe2","a0c000000f","a0b000000a"};
 	public void initReceiveDataframSocketService(ReceiveDataframSocketService receiveDataframSocketService, UartService mService) {
 		receiveDataframSocketService.setListener(new ReceiveDataframSocketService.MessageOutLisener() {
 													 @Override
@@ -55,45 +61,11 @@ public class SdkAndBluetoothDataInchange {
 	private void notifyRegisterFail() {
 		EventBusUtil.simRegisterStatue(SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
 	}
-	private String saveBluetoothData;
-	long getSendBlueToothTime;
-	private int countMessage = 0;
-	private int notCanReceiveBluetoothDataCount = 0;
-	private String finalTemp;//保存上一次发给蓝牙的数据，以免出错，需要重发
-	private boolean isReceiveBluetoothData = true;//判断5s内是否接收完成，没有完成则重新发送
-	private int count =0;
+
 	public void sendToSDKAboutBluetoothInfo(ArrayList<String> messages) {
 
 		synchronized (this){
-			if (countMessage ==0) {
-				Log.e("timer", "开启定时器");
-				countMessage++;
-				if(timerMessage==null){
-					timerMessage= new Timer();
-				}
-				if(timerTaskMessage==null){
-					timerTaskMessage= new TimerTask() {
-						@Override
-						public void run() {
 
-							if (SocketConstant.REGISTER_STATUE_CODE != 3) {
-								if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
-									Log.e("timer", "接收不到蓝牙数据");
-									sendToBluetoothAboutCardInfo(finalTemp);
-									notCanReceiveBluetoothDataCount++;
-								}else if(notCanReceiveBluetoothDataCount>=3){
-									Log.e("timer", "注册失败");
-									notifyRegisterFail();
-									clearTimer();
-									notCanReceiveBluetoothDataCount=0;
-								}
-							}
-						}
-					};
-				}
-				timerMessage.schedule(timerTaskMessage, 5000, 5000);
-
-			}
 			if(ProMainActivity.isGetIccid){
 				getIccid(messages);
 			}else if(isHasPreData){
@@ -104,6 +76,7 @@ public class SdkAndBluetoothDataInchange {
 				eventPercent(percent);
 				registerGoip(messages);
 			}else if(ProMainActivity.isStartSdk) {
+				startTimer();
 				if (simRegisterStatue == null) {
 					simRegisterStatue = new SimRegisterStatue();
 				}
@@ -120,6 +93,38 @@ public class SdkAndBluetoothDataInchange {
 			}
 			messages.clear();
 		}
+	}
+
+	private void startTimer() {
+		if (countMessage ==0) {
+            Log.e("timer", "开启定时器");
+            countMessage++;
+            if(timerMessage==null){
+                timerMessage= new Timer();
+            }
+            if(timerTaskMessage==null){
+                timerTaskMessage= new TimerTask() {
+                    @Override
+                    public void run() {
+
+                        if (SocketConstant.REGISTER_STATUE_CODE != 3) {
+                            if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
+                                Log.e("timer", "接收不到蓝牙数据");
+                                sendToBluetoothAboutCardInfo(finalTemp);
+                                notCanReceiveBluetoothDataCount++;
+                            }else if(notCanReceiveBluetoothDataCount>=3){
+                                Log.e("timer", "注册失败");
+                                notifyRegisterFail();
+                                clearTimer();
+                                notCanReceiveBluetoothDataCount=0;
+                            }
+                        }
+                    }
+                };
+            }
+            timerMessage.schedule(timerTaskMessage, 5000, 5000);
+
+        }
 	}
 
 	private void eventPercent(int percent) {
@@ -140,6 +145,7 @@ public class SdkAndBluetoothDataInchange {
 			}else if( telType(imsi)==TELECOM){//电信
 				TlvAnalyticalUtils.sendToBlue("a0c0000003");
 			}
+
 		}else if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&!TlvAnalyticalUtils.preData[6].startsWith("a088")){
 			TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[6]);
 		}else if(count+1<Integer.parseInt(TlvAnalyticalUtils.preData[7])){
@@ -213,7 +219,7 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 
-	private String[] IccidCommand={"a0a40000022fe2","a0c000000f","a0b000000a"};
+
 
 	private void getIccid(ArrayList<String> messages) {
 		count=count+1;
