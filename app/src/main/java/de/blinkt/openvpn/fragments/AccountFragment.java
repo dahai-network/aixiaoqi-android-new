@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -250,6 +251,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 //				CommonTools.showShortToast(getActivity(), "产品信息: " + Build.MANUFACTURER + ","
 //						+ android.os.Build.VERSION.SDK + ","
 //						+ android.os.Build.VERSION.RELEASE);
+
+				//Log.d(TAG, "onClick: permission_set");
+
 				intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
 				break;
 			case R.id.tv_setting:

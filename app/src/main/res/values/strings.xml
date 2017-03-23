@@ -66,6 +66,68 @@
     <string name="bind_packet_giftcard">绑定套餐礼包卡</string>
     <string name="are_you_sure_exit_login">确定退出登陆吗？</string>
 
+    <!--权限引导-->
+    <string name="lemobile_test_1_1">找到爱小器App，关闭开关</string>
+    <string name="lemobile_test_2_1">找到爱小器App，打开对应开关</string>
+    <string name="lemobile_test_3_1">点击下方更多的按钮弹出小框</string>
+    <string name="lemobile_test_3_2">点击小框内高级按钮</string>
+    <string name="lemobile_test_3_3">点击在休眠状态下保持WLAN连接，选择始终</string>
+
+    <string name="oneplus_test1">点击下方高级按钮</string>
+    <string name="oneplus_test2">点击在休眠状态下保持WLAN连接，选择始终</string>
+
+    <!--小米神隐模式的步骤-->
+    <string name="xiaomi_test_1_1">点击立即设置，打开已安装应用</string>
+    <string name="xiaomi_test_1_2">找到爱小器APP</string>
+    <string name="xiaomi_spirit_test_1_3">选择无限制</string>
+
+    <string name="xiaomi_spirit_test_2_1">找到爱小器APP,点击打开</string>
+    <string name="xiaomi_test_3_1">滑动到底部，可以看到高级设置，打开高级设置</string>
+    <string name="xiaomi_test_3_2">点击在休眠状态下保持WLAN连接，选择始终</string>
+
+    <string name="xiaomi_test3">在自启中，把爱小器开关打开</string>
+
+    <!--mate9 -->
+    <string name="huawei_mate9_test_1_1">找到爱小器APP，打开开关</string>
+
+    <string name="huawei_mate9_test_2_1">找到爱小器App，打开自启动开关</string>
+
+    <string name="huawei_mate9_test_3_1">点击下方的菜单按钮</string>
+    <string name="huawei_mate9_test_3_2">点击高级设置</string>
+    <string name="huawei_mate9_test_3_3">点击在休眠状态下保持WLAN连接，选择始终</string>
+
+    <string name="gionee_test_1_1">点击应用管理</string>
+    <string name="gionee_test_1_2">点击应用自启</string>
+    <string name="gionee_test_1_3">把爱小器APP设置在应用自启列表里</string>
+
+    <string name="gionee_test_2_1">在下方有一个更多按钮，点击会弹出一个小窗口</string>
+    <string name="gionee_test_2_2">在弹小窗口中，点击高级按钮</string>
+    <string name="gionee_test_2_3">点击在休眠状态下保持WLAN连接，选择始终</string>
+
+    <string name="oppo_test1">点击下方高级设置按钮</string>
+    <string name="oppo_test2">打开休眠状态下保持WLAN连接开关</string>
+
+
+    <string name="lenovo_test_1_0">打开WLAN开关</string>
+    <string name="lenovo_test_1_1">点击下面三个小点弹出一个框,点击框内高级按钮</string>
+    <string name="lenovo_test_1_2">点击在休眠状态下保持WLAN连接，选择始终</string>
+
+
+    <string name="meizu_test_2_1">打开自启动开关</string>
+    <string name="meizu_test_3_1">点击上方的更多下拉框里面的高级按钮</string>
+    <string name="meizu_test_3_2">打开WLAN休眠开关</string>
+
+
+    <!-- <string name="vivo_test1">点击立即设置，弹出后台高费电</string>-->
+    <string name="vivo_test_1_1">将爱小器对应的开关打开</string>
+
+    <string name="samsung_test_1_1">点击内存按钮</string>
+    <string name="samsung_test_1_2">点击自启动应用程序列表找到爱小器APP，打开对应开关</string>
+
+    <string name="samsung_test_2_1">点击上方更多按钮弹出小框，然后点击弹出框的高级选项</string>
+    <string name="samsung_test_2_2">点击上方更多按钮弹出小框，然后点击弹出框的高级选项，进入到高级设置界面，设置睡眠期间保持WLAN开启，选择始终连接</string>
+
+    <!--end-->
     <string name="setting">设置</string>
     <string name="step_all">总共步行</string>
     <string name="order_detail">订单详情</string>
