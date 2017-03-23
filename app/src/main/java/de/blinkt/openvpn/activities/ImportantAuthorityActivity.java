@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,47 +23,41 @@ import de.blinkt.openvpn.util.IntentWrapper;
 
 public class ImportantAuthorityActivity extends BaseActivity {
 
+	@BindView(R.id.authorityRecyclerView)
+	RecyclerView authorityRecyclerView;
 
-    private static final String TAG = "aixiaoqi__";
-    @BindView(R.id.authorityRecyclerView)
-    RecyclerView authorityRecyclerView;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_important_authority);
+		ButterKnife.bind(this);
+		initSet();
+	}
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_important_authority);
-        ButterKnife.bind(this);
-        initSet();
-    }
+	private void initSet() {
+		hasLeftViewTitle(R.string.important_autohrity, 0);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		authorityRecyclerView.setLayoutManager(layoutManager);
+		AuthorityAdapter adapter = new AuthorityAdapter(this, getPhoneTypeEntity());
+		authorityRecyclerView.setAdapter(adapter);
+	}
 
-    private void initSet() {
-
-        hasLeftViewTitle(R.string.important_autohrity, 0);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-        authorityRecyclerView.setLayoutManager(layoutManager);
-        AuthorityAdapter adapter = new AuthorityAdapter(this, getPhoneTypeEntity());
-        authorityRecyclerView.setAdapter(adapter);
-    }
-
-    public ArrayList<AuthorityEntity> getPhoneTypeEntity() {
-        ArrayList<AuthorityEntity> data = new ArrayList<>();
-        setPhoneTypeEntity(data);
-        if (data.size() == 0) {
-            IntentWrapper.whiteListMatters(ProMainActivity.instance, "服务的持续运行");
-            finish();
-        }
-        return data;
-    }
+	public ArrayList<AuthorityEntity> getPhoneTypeEntity() {
+		ArrayList<AuthorityEntity> data = new ArrayList<>();
+		setPhoneTypeEntity(data);
+		if (data.size() == 0) {
+			IntentWrapper.whiteListMatters(ProMainActivity.instance, "服务的持续运行");
+			finish();
+		}
+		return data;
+	}
 
     public void setPhoneTypeEntity(ArrayList<AuthorityEntity> data) {
         int version = Build.VERSION.SDK_INT;
         AuthorityEntity entity = new AuthorityEntity();
         Intent shadeIntent = new Intent(this, ShadeActivity.class);
 
-        Log.d(TAG, "机型"+Build.MANUFACTURER);
         String phoneType=Build.MANUFACTURER.toLowerCase();
         switch (phoneType) {
             case Constant.LEMOBILE:

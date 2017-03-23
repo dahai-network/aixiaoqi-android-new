@@ -27,16 +27,16 @@ import de.blinkt.openvpn.util.SharedUtils;
 
 public class NotificationMonitor extends NotificationListenerService {
 	private static String TAG = "NotificationMonitor";
-	private static boolean isQQCalling = true;
+	private  static boolean isQQCalling = true;
 	private static boolean isWeixinCalling = true;
 	private static boolean isIncome = true;
 	private static boolean isHangup = true;
 	private static boolean isComeMessage = true;
 	private static boolean isBeginTimer = false;
 	private static boolean isRepeat = true;
-	private static SharedUtils utils = SharedUtils.getInstance();
-	private static Timer refreshTimer = new Timer(true);
-	private static TimerTask task = new TimerTask() {
+	private  static SharedUtils utils = SharedUtils.getInstance();
+	private  Timer refreshTimer = new Timer(true);
+	private  TimerTask task = new TimerTask() {
 		@Override
 		public void run() {
 			isQQCalling = true;

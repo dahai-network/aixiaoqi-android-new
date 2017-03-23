@@ -31,7 +31,4 @@ public class UploadRemindConfigHttp extends BaseHttp {
 		params.put("Name", URLEncoder.encode(Name, "utf-8"));
 		params.put("Status", URLEncoder.encode(Status+"", "utf-8"));
 	}
-
-
-
 }

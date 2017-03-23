@@ -94,9 +94,9 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 
 		bracelettype = getIntent().getStringExtra(MyDeviceActivity.BRACELETTYPE);
 
-		if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
+		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			bluetoothName = Constant.UNIBOX;
-		} else if (MyDeviceActivity.UNITOYS.equals(bracelettype)) {
+		} else {
 			bluetoothName = Constant.UNITOYS;
 		}
 
@@ -120,10 +120,12 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 
 	//查看选择设备类型
 	private void afterConnDevice() {
-		if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
-			showIsBindLayout();
-		} else if (MyDeviceActivity.UNITOYS.equals(bracelettype)) {
-			finish();
+		if (bracelettype != null) {
+			if (bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+				showIsBindLayout();
+			} else {
+				finish();
+			}
 		}
 	}
 
@@ -152,10 +154,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		//不能按返回键，只能二选其一
 		noDevicedialog = new DialogBalance(BindDeviceActivity.this, BindDeviceActivity.this, R.layout.dialog_balance, 2);
 		noDevicedialog.setCanClickBack(false);
-		if (MyDeviceActivity.UNITOYS.equals(bracelettype)) {
-			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
-		} else if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
+		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
+		} else if (bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
 		}
 	}
 
@@ -217,7 +219,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 													}
 													//排序后连接操作
 													scanLeDevice(false);
-													if (infos.size() == 0) {
+													if (infos.size() == 0 || mService.isConnecttingBlueTooth()) {
 														CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.no_device_around));
 														finish();
 														return;
@@ -347,15 +349,14 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 					@Override
 					public void run() {
 						BluetoothConstant.IS_BIND = true;
-						//测试代码
-						sendMessageToBlueTooth(UP_TO_POWER);
-						CommonTools.delayTime(500);
 						//更新时间操作
 						sendMessageToBlueTooth(getBLETime());
 						CommonTools.delayTime(500);
-						//android 标记，给蓝牙设备标记是否是android设备用的
-//						sendMessageToBlueTooth(ANDROID_TARGET);
+						//基本信息
 						sendMessageToBlueTooth(BASIC_MESSAGE);
+						CommonTools.delayTime(500);
+						//上电指令
+						sendMessageToBlueTooth(UP_TO_POWER);
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {

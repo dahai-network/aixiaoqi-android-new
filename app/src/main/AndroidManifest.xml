@@ -158,6 +158,9 @@
         <activity
             android:name="de.blinkt.openvpn.activities.RegistActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name="de.blinkt.openvpn.activities.StartUpHomePageActivity"
+            android:screenOrientation="portrait"/>
         <!--
         <receiver android:name="core.GetRestrictionReceiver">
             <intent-filter>
@@ -457,11 +460,6 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="de.blinkt.openvpn.activities.ProMainActivity$screenoffReceive">
-            <intent-filter>
-                <action android:name="android.intent.action.SCREEN_OFF"/>
-            </intent-filter>
-        </receiver>
 
         <activity
             android:name="de.blinkt.openvpn.activities.SetAlarmActivity"
@@ -527,6 +525,7 @@
             android:name="de.blinkt.openvpn.activities.KeepAliveActivity"
             android:excludeFromRecents="true"
             android:exported="false"
+            android:launchMode="singleInstance"
             android:finishOnTaskLaunch="false"
             android:theme="@style/LiveActivityStyle">
         </activity>
@@ -539,7 +538,7 @@
         <activity
             android:name="de.blinkt.openvpn.activities.ShadeActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:theme="@style/translucent">
         </activity>
     </application>

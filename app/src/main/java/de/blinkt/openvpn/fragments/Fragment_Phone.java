@@ -374,7 +374,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 			protected void publishResults(CharSequence constraint, FilterResults results) {
 				if(results.values!=null)
 					Log.e(TAG,"str="+str);
-					contactRecodeAdapter.setSearchChar(str);
+				contactRecodeAdapter.setSearchChar(str);
 				contactRecodeAdapter.addAll((ArrayList<ContactRecodeEntity>)results.values);
 			}
 			protected FilterResults performFiltering(CharSequence s) {
@@ -473,8 +473,14 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 			String action= intent.getAction();
 			if(ReceiveCallActivity.UPDATE_CONTACT_REDORE.equals(action)){
 				ContactRecodeEntity contactRecodeEntity=(ContactRecodeEntity)intent.getSerializableExtra(IntentPutKeyConstant.CONTACT_RECODE_ENTITY);
+				for(int i=0;i<mAllList.size();i++){
+					if(mAllList.get(i).getPhoneNumber().equals(contactRecodeEntity.getPhoneNumber())){
+						mAllList.remove(i);
+						break;
+					}
+				}
 				mAllList.add(0,contactRecodeEntity);
-				contactRecodeAdapter.add(0,contactRecodeEntity);
+				contactRecodeAdapter.addAll(mAllList);
 			}
 		}
 	}

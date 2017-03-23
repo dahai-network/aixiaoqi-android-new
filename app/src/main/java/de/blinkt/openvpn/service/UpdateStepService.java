@@ -16,11 +16,7 @@ import de.blinkt.openvpn.http.InterfaceCallback;
  * Created by Administrator on 2016/10/6.
  */
 
-public class UpdateStepService extends Service implements InterfaceCallback {
-
-	private UartService mService = ICSOpenVPNApplication.uartService;
-
-
+public class UpdateStepService extends Service   {
 
 	@Override
 	public void onCreate() {
@@ -51,20 +47,5 @@ public class UpdateStepService extends Service implements InterfaceCallback {
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
-	}
-
-	@Override
-	public void rightComplete(int cmdType, CommonHttp object) {
-
-	}
-
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
-
-	}
-
-	@Override
-	public void noNet() {
-
 	}
 }

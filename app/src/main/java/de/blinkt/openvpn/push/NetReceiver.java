@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
@@ -16,7 +17,6 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.DateUtils;
 
-import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 
 
 /**
@@ -27,7 +27,7 @@ public class NetReceiver extends BroadcastReceiver {
 
     private void connectGoip() {
         if (ProMainActivity.sendYiZhengService != null){
-            registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REG_STATUE_CHANGE);
+            EventBusUtil.simRegisterStatue(SocketConstant.REG_STATUE_CHANGE);
             ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
         }
     }
@@ -38,7 +38,7 @@ private void restartConnect(){
             //从预读取数据那里重新注册
             connectGoip();
         } else {
-            registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+            EventBusUtil.simRegisterStatue( SocketConstant.RESTART_TCP);
         }
 
     }

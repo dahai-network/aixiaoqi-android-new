@@ -3,14 +3,11 @@ package com.aixiaoqi.socket;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
-
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.database.DBHelp;
-import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.util.SharedUtils;
 
@@ -62,51 +59,57 @@ public class TestProvider {
 		if(!TextUtils.isEmpty(iccidEntity.getImmsi()))
 			imsi = iccidEntity.getImmsi().trim();
 		else{
-			EventBusUtil.registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 			return;
 		}
 		Log.e("preDataSplit", "ICCID:" + iccidEntity.getIccid() + "\nIMMSI:" + iccidEntity.getImmsi());
 		if (!TextUtils.isEmpty(imsi)) {
-			if (imsi.startsWith("46000")
-					|| imsi.startsWith("46001")
-					|| imsi.startsWith("46002")
-					|| imsi.startsWith("46006")
-					|| imsi.startsWith("46007")
-					|| imsi.startsWith("46009")
-					|| imsi.startsWith("46020")
-					||imsi.startsWith("46003")
-					|| imsi.startsWith("46005")
-					|| imsi.startsWith("460011")) {//因为移动网络编号46000下的IMSI已经用完，所以虚拟了一个46002编号，134/159号段使用了此编号
+			if (validSim(imsi)) {//因为移动网络编号46000下的IMSI已经用完，所以虚拟了一个46002编号，134/159号段使用了此编号
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
 				String token=SharedUtils.getInstance().readString(Constant.TOKEN);
 				if(TextUtils.isEmpty(token)){
-					EventBusUtil.registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.TOKEN_IS_NULL);
+					EventBusUtil.simRegisterStatue(SocketConstant.TOKEN_IS_NULL);
 				}else{
 					SocketConstant.CONNENCT_VALUE[3] =RadixAsciiChange.convertStringToHex(token);
 					REGISTER_STATUE_CODE = 2;
 					isIccid = true;
-					DBHelp db=new DBHelp(ICSOpenVPNApplication.getContext());
-					PreReadEntity preReadEntity=new PreReadEntity();
-					preReadEntity.setIccid(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
-					preReadEntity.setImsi(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
-					preReadEntity.setPreReadData(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1]);
-					preReadEntity.setDataLength(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2]);
-					db.insertPreData(preReadEntity);
-
-					db.close();
+					savePreData();
 					ProMainActivity.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
 					if (isCreate && isIccid) {
 						ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 					}
 				}
 			} else {
-				EventBusUtil.registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR);
+				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR);
 			}
 		} else {
-			EventBusUtil.registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
-
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 		}
+	}
+
+	private static void savePreData() {
+		DBHelp db=new DBHelp(ICSOpenVPNApplication.getContext());
+		PreReadEntity preReadEntity=new PreReadEntity();
+		preReadEntity.setIccid(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
+		preReadEntity.setImsi(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
+		preReadEntity.setPreReadData(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1]);
+		preReadEntity.setDataLength(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2]);
+		db.insertPreData(preReadEntity);
+		db.close();
+	}
+
+	private static boolean validSim(String imsi) {
+		return imsi.startsWith("46000")
+                || imsi.startsWith("46001")
+                || imsi.startsWith("46002")
+                || imsi.startsWith("46006")
+                || imsi.startsWith("46007")
+                || imsi.startsWith("46009")
+                || imsi.startsWith("46020")
+                ||imsi.startsWith("46003")
+                || imsi.startsWith("46005")
+                || imsi.startsWith("460011");
 	}
 
 

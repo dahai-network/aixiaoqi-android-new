@@ -183,6 +183,7 @@ public class UartService extends Service implements Serializable {
 //				if (lengthData - 1 == 0) {
 //					dataType = messageFromBlueTooth.substring(6, 10);
 //				}
+
 				messages.add(messageFromBlueTooth);
 				if (messages.size() < lengthData) {
 					if (dataStatue == 0x80) {
@@ -191,8 +192,10 @@ public class UartService extends Service implements Serializable {
 					return;
 				}
 				if (isWholeDataPackage || dataStatue == 0x80) {
+					isWholeDataPackage = false;
 					sortMessage();
 					intent.putStringArrayListExtra(EXTRA_DATA, messages);
+					Log.e("UartService", messages.toString());
 					LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
 				}
 
@@ -208,10 +211,12 @@ public class UartService extends Service implements Serializable {
 	}
 
 	private void sortMessage() {
+
 		if (messages.size() > 1) {
 			ArrayList<String> messagesList = new ArrayList<>();
 			int z = 0;
 			for (int i = 0; i < messages.size(); i++) {
+				Log.e("messages", "messages===========" + messages.get(i));
 				for (int j = 0; j < messages.size(); j++) {
 					if ((Integer.parseInt(messages.get(j).substring(2, 4), 16) & 127) == i) {
 						z = j;
@@ -454,45 +459,49 @@ public class UartService extends Service implements Serializable {
 	}
 
 	public boolean writeRXCharacteristic(byte[] value) {
-		//如果mBluetoothGatt为空，意味着连接中断，所以不允许继续传输数据
-		if (mBluetoothGatt == null) {
-			Log.e("Blue_Chanl", "蓝牙已断开，发送失败！");
-			mConnectionState = STATE_DISCONNECTED;
-			broadcastUpdate(ACTION_GATT_DISCONNECTED);
-			return false;
-		}
-		BluetoothGattService RxService = null;
-		if (RxService == null) {
-			RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
-		}
-
-		showMessage("mBluetoothGatt null" + mBluetoothGatt);
-		if (RxService == null) {
-			showMessage("Rx service not found!");
-			broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
-			return false;
-		}
-		BluetoothGattCharacteristic RxChar = null;
-		if (RxChar == null) {
-			RxChar = RxService.getCharacteristic(RX_CHAR_UUID);
-		}
-		if (RxChar == null) {
-			showMessage("Rx charateristic not found!");
-			broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
-			return false;
-		}
-		RxChar.setValue(value);
-		boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
-
-		Log.e("Blue_Chanl", "write TXchar - status=" + status);
-		if (!status) {
-			try {
-				Thread.sleep(500);
-				status = mBluetoothGatt.writeCharacteristic(RxChar);
-				Log.e("Blue_Chanl", "重发：write TXchar - status=" + status);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		try {
+			//如果mBluetoothGatt为空，意味着连接中断，所以不允许继续传输数据
+			if (mBluetoothGatt == null) {
+				Log.e("Blue_Chanl", "蓝牙已断开，发送失败！");
+				mConnectionState = STATE_DISCONNECTED;
+				broadcastUpdate(ACTION_GATT_DISCONNECTED);
+				return false;
 			}
+			BluetoothGattService RxService = null;
+			if (RxService == null) {
+				RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
+			}
+
+			showMessage("mBluetoothGatt null" + mBluetoothGatt);
+			if (RxService == null) {
+				showMessage("Rx service not found!");
+				broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+				return false;
+			}
+			BluetoothGattCharacteristic RxChar = null;
+			if (RxChar == null) {
+				RxChar = RxService.getCharacteristic(RX_CHAR_UUID);
+			}
+			if (RxChar == null) {
+				showMessage("Rx charateristic not found!");
+				broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
+				return false;
+			}
+			RxChar.setValue(value);
+			boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
+
+			Log.e("Blue_Chanl", "write TXchar - status=" + status);
+			if (!status) {
+				try {
+					Thread.sleep(500);
+					status = mBluetoothGatt.writeCharacteristic(RxChar);
+					Log.e("Blue_Chanl", "重发：write TXchar - status=" + status);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 		}
 		return true;
 	}

@@ -33,7 +33,6 @@ import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
 import de.blinkt.openvpn.activities.SettingActivity;
 import de.blinkt.openvpn.activities.TipUserOptionActivity;
-import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -170,10 +169,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 		new Thread(http).start();
 		if (utils.readInt(Constant.LIFT_WRIST) == 1) {
 			liftWristTextView.setText(getResources().getString(R.string.opened));
-			SendCommandToBluetooth.sendMessageToBlueTooth("AA0C0401A3");
+//			SendCommandToBluetooth.sendMessageToBlueTooth("AA0C0401A3");
 		} else {
 			liftWristTextView.setText(getResources().getString(R.string.unopened));
-			SendCommandToBluetooth.sendMessageToBlueTooth("AA0C0400A2");
+//			SendCommandToBluetooth.sendMessageToBlueTooth("AA0C0400A2");
 		}
 		if (utils.readInt(Constant.COMING_TEL_REMIND) == 1) {
 			tvComingTelTip.setText(getResources().getString(R.string.opened));

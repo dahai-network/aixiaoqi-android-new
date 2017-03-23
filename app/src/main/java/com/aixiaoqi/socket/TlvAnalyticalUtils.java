@@ -2,8 +2,6 @@ package com.aixiaoqi.socket;
 
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +11,8 @@ import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.DateUtils;
 
-import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
 
@@ -36,10 +31,10 @@ public class TlvAnalyticalUtils {
 		String responeString = hexString.substring(6, 8);
 		int responeCode = getResponeCode(responeString,1);
 		if (responeCode == 41) {
-			registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
 			return null;
 		} else if (responeCode == 39) {
-			registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
 			return null;
 		}
 		tag = tag & 127;
@@ -115,7 +110,7 @@ public class TlvAnalyticalUtils {
 				}
 				if ("00".equals(tempTag)) {
 					if (typeParams == 199) {
-//						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_USED_TO_SDK);
+						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_USED_TO_SDK);
 						if(SdkAndBluetoothDataInchange.isHasPreData) {
 							if(preData==null){
 								preData= new String[9];
@@ -188,15 +183,12 @@ public class TlvAnalyticalUtils {
 				if (typeParams == 162) {
 					if (Integer.parseInt(value, 16) == 3) {
 						REGISTER_STATUE_CODE = 3;
-						IsSuccessEntity entity = new IsSuccessEntity();
-						entity.setType(Constant.REGIST_CALLBACK_TYPE);
-						entity.setSuccess(true);
-						EventBus.getDefault().post(entity);
+						EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_SUCCESS);
 						registerOrTime = System.currentTimeMillis();
 						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
 						REGISTER_STATUE_CODE = 2;
-						registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.REGISTER_FAIL);
+						EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
 					}
 				}
 			}
@@ -212,7 +204,7 @@ public class TlvAnalyticalUtils {
 		}else{
 			preData[7]=(responeCode+1)+"";
 		}
-		Log.e("TlvAnalyticalUtils","preData[7]="+preData[7]);
+
 	}
 
 	public static int getResponeCode(String preNumber,int type) {

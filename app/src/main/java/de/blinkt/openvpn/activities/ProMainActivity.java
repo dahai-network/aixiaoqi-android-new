@@ -17,7 +17,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
@@ -50,8 +50,6 @@ import cn.com.johnson.adapter.FragmentAdapter;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
-import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -69,8 +67,8 @@ import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
-import de.blinkt.openvpn.model.IsSuccessEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
+import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.SimRegisterType;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.GrayService;
@@ -78,7 +76,6 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
 
-import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
@@ -371,6 +368,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+				//防止连接后却显示不出来的问题
+				mService.disconnect();
 				sendEventBusChangeBluetoothStatus(getResources().getString(R.string.index_connecting), R.drawable.index_connecting);
 				if (stopHandler == null) {
 					stopHandler = new Handler();
@@ -382,12 +381,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
-								if (indexFragment.getBlutoothStatus().equals(getResources().getString(R.string.index_unconnect)))
+								if (indexFragment != null && indexFragment.getBlutoothStatus().equals(getResources().getString(R.string.index_unconnect)))
 									sendEventBusChangeBluetoothStatus(getResources().getString(R.string.index_unconnect), R.drawable.index_unconnect);
 							}
 						});
 					}
-				}, 5000);
+				}, 10000);
 			}
 		});
 	}
@@ -613,8 +612,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
 					if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
 						deviceAddress = getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI();
-						if (deviceAddress != null)
+						if (deviceAddress != null) {
 							deviceAddress = deviceAddress.toUpperCase();
+							BluetoothConstant.IS_BIND = true;
+						}
 						SharedUtils utils = SharedUtils.getInstance();
 
 						utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
@@ -661,7 +662,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
 			GetHostAndPortHttp http = (GetHostAndPortHttp) object;
 			if (http.getStatus() == 1) {
-				requestCount=0;
+				requestCount = 0;
 				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
@@ -684,23 +685,24 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		new Thread(http).start();
 	}
 
-	private int requestCount=0;
+	private int requestCount = 0;
+
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		super.errorComplete(cmdType, errorMessage);
-		if(cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET){
-			if(requestCount<3){
+		if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
+			if (requestCount < 3) {
 				requestCount++;
 				requestPacket();
-			}else{
-				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
+			} else {
+				EventBusUtil.simRegisterStatue(SocketConstant.NOT_NETWORK);
 			}
-		}else if(cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG){
-			if(requestCount<3){
+		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
+			if (requestCount < 3) {
 				requestCount++;
 				getConfigInfo();
-			}else{
-				registerFail(Constant.REGIST_CALLBACK_TYPE,SocketConstant.NOT_NETWORK);
+			} else {
+				EventBusUtil.simRegisterStatue(SocketConstant.NOT_NETWORK);
 			}
 		}
 	}
@@ -739,85 +741,83 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
-	public void onIsSuccessEntity(IsSuccessEntity entity) {
-		Log.e(TAG, "registerType=" + entity.getType());
-		if (entity.getType() == Constant.REGIST_CALLBACK_TYPE) {
-			if (entity.isSuccess()) {
+	public void onIsSuccessEntity(SimRegisterStatue entity) {
+
+//			if (entity.isSuccess()) {
+
+//			} else {
+//				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
+		switch (entity.getRigsterSimStatue()) {
+			case SocketConstant.REGISTER_SUCCESS:
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
-			} else {
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
-				switch (entity.getFailType()) {
-					case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
-						CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
-						break;
-					case SocketConstant.REGISTER_FAIL:
-						CommonTools.showShortToast(this, getString(R.string.regist_fail));
-						break;
-					case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
-						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
-						break;
-					case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
-						CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
-						break;
-					case SocketConstant.NOT_NETWORK:
-						CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
-						break;
-					case SocketConstant.START_TCP_FAIL:
-						unbindTcpService();
-						CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
-						break;
-					case SocketConstant.TCP_DISCONNECT:
-						//更改为注册中
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
-						break;
-					case SocketConstant.REGISTER_FAIL_INITIATIVE:
-						//更改为注册中
-						unbindTcpService();
-						destorySocketService();
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
-						break;
-					case SocketConstant.RESTART_TCP:
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
-						startSocketService();
-						if (ProMainActivity.sendYiZhengService == null) {
-							ProMainActivity.sendYiZhengService = new SendYiZhengService();
-						}
-						startTcpSocket();
-						break;
-					case SocketConstant.REG_STATUE_CHANGE:
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
-						break;
-					default:
-						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
-							sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
-							CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
-						}
-						break;
+				break;
+			case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
+				CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
+				break;
+			case SocketConstant.REGISTER_FAIL:
+				CommonTools.showShortToast(this, getString(R.string.regist_fail));
+				break;
+			case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
+				CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
+				break;
+			case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
+				CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
+				break;
+			case SocketConstant.NOT_NETWORK:
+				CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
+				break;
+			case SocketConstant.START_TCP_FAIL:
+				unbindTcpService();
+				CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
+				break;
+			case SocketConstant.TCP_DISCONNECT:
+				//更改为注册中
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+				break;
+			case SocketConstant.REGISTER_FAIL_INITIATIVE:
+				//更改为注册中
+				unbindTcpService();
+				destorySocketService();
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
+				break;
+			case SocketConstant.RESTART_TCP:
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+				startSocketService();
+				if (ProMainActivity.sendYiZhengService == null) {
+					ProMainActivity.sendYiZhengService = new SendYiZhengService();
 				}
-			}
+				startTcpSocket();
+				break;
+			case SocketConstant.REG_STATUE_CHANGE:
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+				break;
+			default:
+//						if (entity.getRigsterSimStatue() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
+//							sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
+//							CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
+//						}
+				break;
 		}
-//		else if (entity.getType() == Constant.BLUE_CONNECTED_INT) {
-//			startDataframService();
-//			startSocketService();
-//		}
+
 	}
+
 	@Subscribe(threadMode = ThreadMode.ASYNC)
-	public void onIsSuccessEntity(SimRegisterType simRegisterType){
-		if(Constant.REGISTER_SIM_NOT_PRE_DATA.equals(simRegisterType.getSimRegisterType())){
-			isGetIccid=false;
-			isStartSdk=true;
+	public void onIsSuccessEntity(SimRegisterType simRegisterType) {
+		if (Constant.REGISTER_SIM_NOT_PRE_DATA.equals(simRegisterType.getSimRegisterType())) {
+			isGetIccid = false;
+			isStartSdk = true;
 			startDataframService();
 			startSocketService();
 			CommonTools.delayTime(5000);
 			Log.e("phoneAddress", "main.start()");
 			JNIUtil.getInstance().startSDK(1);
-		}else if(Constant.REGISTER_SIM_PRE_DATA.equals(simRegisterType.getSimRegisterType())){
+		} else if (Constant.REGISTER_SIM_PRE_DATA.equals(simRegisterType.getSimRegisterType())) {
 			startSocketService();
 			startTcpSocket();
 			SocketConnection.mReceiveSocketService.setListener(new ReceiveSocketService.CreateSocketLisener() {
 				@Override
 				public void create() {
-					TestProvider.isCreate=true;
+					TestProvider.isCreate = true;
 					CommonTools.delayTime(500);
 					ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 				}
@@ -830,7 +830,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private int bindtime = 0;
 
 	private void startTcpSocket() {
-		if (sendYiZhengService != null&&SocketConnection.mReceiveSocketService!=null){
+		if (sendYiZhengService != null && SocketConnection.mReceiveSocketService != null) {
 			sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
 		}
 		bindTcpSucceed();
@@ -936,22 +936,24 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	};
 
-	public static boolean isGetIccid=false;
-	public static boolean  isStartSdk=false;
+	public static boolean isGetIccid = false;
+	public static boolean isStartSdk = false;
 	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
 	public static SendYiZhengService sendYiZhengService = null;
-	private  void  getIccid(){
-		if(sdkAndBluetoothDataInchange==null) {
+
+	private void getIccid() {
+		if (sdkAndBluetoothDataInchange == null) {
 			sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
 		}
 		if (sendYiZhengService == null) {
 			sendYiZhengService = new SendYiZhengService();
 		}
-		isGetIccid=true;
+		isGetIccid = true;
 		TlvAnalyticalUtils.sendToBlue("a0a40000023f00");
 	}
+
 	private void requestPacket() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET,"3");
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 		checkRegisterStatuGoIp();
 	}
 

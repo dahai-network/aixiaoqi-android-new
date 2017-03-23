@@ -10,8 +10,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.ReceiveSocketService;
-import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
 
@@ -42,7 +42,6 @@ import de.blinkt.openvpn.model.SportStepEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
-import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static de.blinkt.openvpn.activities.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.isUpgrade;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
@@ -117,7 +116,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			ICSOpenVPNApplication.isConnect = true;
 			IS_TEXT_SIM = false;
 			isGetnullCardid = true;
-			retryTime = 0;
 			BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 			entity.setBlueType(BluetoothConstant.BLUE_BIND);
 			EventBus.getDefault().post(entity);
@@ -128,36 +126,19 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						Thread.sleep(3000);
 						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
 						String braceletname = utils.readString(Constant.BRACELETNAME);
-						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.equals(Constant.UNIBOX)) {
+						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
 							Thread.sleep(1000);
 							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
 						} else {
 							Log.i("toBLue", "连接成功");
-							sendMessageToBlueTooth(UP_TO_POWER);
-							CommonTools.delayTime(500);
 							//更新时间操作
 							sendMessageToBlueTooth(getBLETime());
 							CommonTools.delayTime(500);
-							//android 标记，给蓝牙设备标记是否是android设备用的
-//						sendMessageToBlueTooth(ANDROID_TARGET);
 							sendMessageToBlueTooth(BASIC_MESSAGE);
+							CommonTools.delayTime(500);
+							sendMessageToBlueTooth(UP_TO_POWER);
 						}
-//						if (!isConnect) {
-//							if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-//								sendMessageToBlueTooth("AAEEEEAA");//绑定命令
-//								isConnect = true;
-//							} else {
-//								//更新时间操作
-//								isConnect = true;
-//								if (sendStepThread != null)
-//									sendStepThread = null;
-//								sendMessageToBlueTooth(getBLETime());
-//							}
-//						}
-////						如果有复位命令储存在全局变量的话发送给设备
-//						if (!TextUtils.isEmpty(resetOrderStr)) {
-//							sendMessageToBlueTooth(resetOrderStr);
-//						}
+
 						Thread.sleep(20000);
 						if (!isConnect && action.equals(UartService.ACTION_GATT_CONNECTED)
 								&& TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
@@ -223,290 +204,133 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			if (messages.size() == 0) {
 				return;
 			}
+			retryTime = 0;
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-//					String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
+					try {
+						String firstPackage = messages.get(0).substring(0, 2);
+						String dataType = messages.get(0).substring(6, 10);
 
-					//通过SDK收发Service发送信息到SDK
-//					Log.e("Blue_Chanl", "接收从蓝牙发出的消息：" + HexStringExchangeBytesUtil.bytesToHexString(txValue));
-//					//是否第一个包，判断类型
-//					int dataID = Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) & 127;
-//					Log.e("Blue_Chanl", "txValue[1]" + Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) + "dataID：" + dataID);
-//					if (dataID == 0) {
-//						dataType = messageFromBlueTooth.substring(6, 10);
-//					}
-					String firstPackage = messages.get(0).substring(0, 2);
-					String dataType = messages.get(0).substring(6, 10);
-
-					if (messages.size() == 1) {
-						Log.e(TAG, messages.get(0));
-					} else {
-						for (int i = 0; i < messages.size(); i++) {
-							Log.e(TAG, messages.get(i));
+						if (messages.size() == 1) {
+							Log.e(TAG, messages.get(0));
+						} else {
+							for (int i = 0; i < messages.size(); i++) {
+								Log.e(TAG, messages.get(i));
+							}
 						}
-					}
-//					messages.add(messageFromBlueTooth);
-//					int lengthData=(txValue[1]&0x7f)+1;
-//					if(messages.size()<lengthData){
-//						return;
-//					}
-//			if (isWholeDataPackage||dataStatue==0x80) {
-//				isWholeDataPackage=false;
-//			}
+						Log.e("Blue_Chanl", "dataType：" + dataType);
+						switch (firstPackage) {
+							case "55":
+								switch (dataType) {
 
-					Log.e("Blue_Chanl", "dataType：" + dataType);
-					switch (firstPackage) {
-						case "55":
-							switch (dataType) {
-								//获取步数
-//								case (byte) 0x01:
-//									byte[] stepBytes = new byte[2];
-//									stepBytes[0] = txValue[3];
-//									stepBytes[1] = txValue[4];
-//									long currentTimeLong = System.currentTimeMillis() / 1000;
-//									int currentStepInt = Integer.parseInt(HexStringExchangeBytesUtil.bytesToHexString(stepBytes), 16);
-//									Intent realTimeStepIntent = new Intent();
-//									realTimeStepIntent.putExtra(Constant.REAL_TIME_STEPS, currentStepInt);
-//									realTimeStepIntent.setAction(SportFragment.REALTIMESTEP);
-//									ICSOpenVPNApplication.getInstance().sendBroadcast(realTimeStepIntent);
-////							saveRealTimeStep(currentTimeLong, currentStepInt);
-//									break;
-//								case (byte) 0x02:
-//									break;
-//								//获取历史步数
-//								case (byte) 0x03:
-//									messages.add(messageFromBlueTooth);
-//									//如果历史步数到了第四行，则要输出
-//									if (txValue[4] == (byte) 0x03) {
-//										mStrStepHistory = PacketeUtil.CombinationForHistory(messages);
-//										messages.clear();
-//										//判断是哪天的步数
-//										switch (txValue[3]) {
-//											//今天的数据
-//											case 0x00:
-//												Log.i("test", "今天的步数" + mStrStepHistory + "length:" + mStrStepHistory.length());
-//												ArrayList<Integer> todayList = StepStrToList(mStrStepHistory);
-//												entity.setTodayList(todayList);
-//												break;
-//											//昨天的数据
-//											case 0x01:
-//												Log.i("test", "昨天的步数" + mStrStepHistory + "length:" + mStrStepHistory.length());
-//												ArrayList<Integer> yesterdayList = StepStrToList(mStrStepHistory);
-//												entity.setYesterdayList(yesterdayList);
-//												break;
-//											//前天的数据
-//											case 0x02:
-//												Log.i("test", "前天的步数" + mStrStepHistory + "length:" + mStrStepHistory.length());
-//												ArrayList<Integer> beforeYesterdayList = StepStrToList(mStrStepHistory);
-//												entity.setBeforeyesterdayList(beforeYesterdayList);
-//												break;
-//										}
-//									}
-//									//如果不是记录前三天数据，那么就要判断类型是不是0x03
-//									else if (txValue[3] == 0x03) {
-//										mStrStepHistory = PacketeUtil.CombinationForHistory(messages);
-//										messages.clear();
-//										ArrayList<Integer> sixDayList = StepStrToList(mStrStepHistory);
-//										entity.setSixDayList(sixDayList);
-//										//更新历史步数到UI线程
-//										handler.sendEmptyMessage(UPDATE_HISTORY_DATE);
-//									}
-//
-//									break;
-								//电量多少
-								case RECEIVE_ELECTRICITY:
-									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(10, 12), 16));
-									break;
-//								case (byte) 0x05:
-//									//充电状态
-//									Log.i("test", "充电状态");
-//									resetOrderStr = null;
-//									if (sendStepThread != null)
-//										sendStepThread = null;
-//									if (!isOpenStepService) {
-//										Intent updateStepIntent = new Intent(context, UpdateStepService.class);
-//										context.startService(updateStepIntent);
-//										isOpenStepService = true;
-//									}
-////							//结束BindDeviceActivity
-////							Intent bindCompeleteIntent = new Intent();
-////							bindCompeleteIntent.setAction(BindDeviceActivity.BIND_COMPELETE);
-////							LocalBroadcastManager.getInstance(context).sendBroadcast(bindCompeleteIntent);
-//									break;
-//								case (byte) 0x09:
-//									Log.i("test", "上一次充电时间");
-//									break;
-//								case (byte) 0x11:
-//									if (!IS_TEXT_SIM) {
-//										Intent cardBreakIntent = new Intent();
-//										cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
-//										LocalBroadcastManager.getInstance(context).sendBroadcast(cardBreakIntent);
-//									}
-//									break;
-//								case (byte) 0x33:
-//									//添加计时器20秒后没有回复则写卡失败
-////							Timer overTimer = new Timer();
-////							overTimer.schedule(new TimerTask() {
-////								@Override
-////								public void run() {
-////									orderStatus = 4;
-////									Intent intent = new Intent();
-////									intent.setAction(MyOrderDetailActivity.FINISH_PROCESS);
-////									ICSOpenVPNApplication.getInstance().sendBroadcast(intent);
-////									repeatReceive33 = false;
-////								}
-////							}, 30000);
-//									//当上电完成则需要发送写卡命令
-//									Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
-//									if (!IS_TEXT_SIM && isGetnullCardid) {
-//										//空卡ID是否不为空，若不为空则
-//										if (nullCardId != null) {
-//											Log.i(TAG, "nullcardid上电返回");
-//										} else {
-//											Log.i(TAG, "发送A0A40000023F00");
-//											sendMessageSeparate("A0A40000023F00");
-//										}
-//									}
-//									break;
+									//电量多少
+									case RECEIVE_ELECTRICITY:
+										utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(10, 12), 16));
+										break;
 
-//								case (byte) 0xDB:
-//								case (byte) 0xDA:
-//									if (IS_TEXT_SIM) {
-//										if (SocketConnection.sdkAndBluetoothDataInchange != null) {
-//											SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
-//										} else {
-//											Log.i(TAG,context.getString(R.string.error_to_restart_ble));
-////											CommonTools.showShortToast(context, context.getString(R.string.error_to_restart_ble));
-//											ICSOpenVPNApplication.uartService.disconnect();
-//										}
-//									} else {
-//										messages.add(messageFromBlueTooth);
-//										if (txValue[3] == txValue[4]) {
-//											mStrSimCmdPacket = PacketeUtil.Combination(messages);
-//											// 接收到一个完整的数据包,处理信息
-//											ReceiveDBOperate(mStrSimCmdPacket);
-//											messages.clear();
-//										}
-								case AGREE_BIND:
-									//绑定流程成功命令
-									CommonTools.delayTime(500);
-									//android 标记，给蓝牙设备标记是否是android设备用的
-									SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
-									isConnect = true;
-									if (sendStepThread != null)
-										sendStepThread = null;
-									BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
-									entity.setBlueType(BluetoothConstant.BLUE_BIND_SUCCESS);
-									entity.setSuccess(true);
-									EventBus.getDefault().post(entity);
-									break;
-								case Constant.SYSTEM_BASICE_INFO:
+									case AGREE_BIND:
+										//绑定流程成功命令
+										CommonTools.delayTime(500);
+										//android 标记，给蓝牙设备标记是否是android设备用的
+										SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
+										isConnect = true;
+										if (sendStepThread != null)
+											sendStepThread = null;
+										BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
+										entity.setBlueType(BluetoothConstant.BLUE_BIND_SUCCESS);
+										entity.setSuccess(true);
+										EventBus.getDefault().post(entity);
+										break;
+									case Constant.SYSTEM_BASICE_INFO:
 //									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
 //										Log.i(TAG,"老版本设备，修改上电命令");
 //										Constant.UP_TO_POWER = "AADB040174";
 //									}
-									String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
-									Log.i(TAG, "固件版本号：" + deviceVesion + "，电量：" + messages.get(0).substring(14, 16));
-									utils.writeString(Constant.BRACELETVERSION, deviceVesion);
-									utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(14, 16), 16));
-									break;
+										String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
+										Log.i(TAG, "固件版本号：" + deviceVesion + "，电量：" + messages.get(0).substring(14, 16));
+										utils.writeString(Constant.BRACELETVERSION, deviceVesion);
+										utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(14, 16), 16));
+										break;
 
-								case Constant.RETURN_POWER:
-									if (messages.get(0).substring(10, 12).equals("01")) {
-										//当上电完成则需要发送写卡命令
-										Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
-										if (!IS_TEXT_SIM && isGetnullCardid) {
-											//空卡ID是否不为空，若不为空则
-											if (nullCardId != null) {
-												Log.i(TAG, "nullcardid上电返回");
-											} else {
-												Log.i(TAG, "发送" + Constant.WRITE_SIM_STEP_ONE);
-												sendMessageSeparate(Constant.WRITE_SIM_STEP_ONE, Constant.WRITE_SIM_DATA);
-											}
-										}
-
-									} else if (messages.get(0).substring(10, 12).equals("11")) {
-										if (!IS_TEXT_SIM) {
-											Intent cardBreakIntent = new Intent();
-											cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
-											LocalBroadcastManager.getInstance(context).sendBroadcast(cardBreakIntent);
-										}
-									}
-									break;
-								case Constant.READ_SIM_DATA:
-									Log.i(TAG, "发送给SDK");
-									if (IS_TEXT_SIM) {
-
-										ProMainActivity.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
-									}
-									break;
-								case Constant.LAST_CHARGE_POWER_TIMER:
-
-									if ((Integer.parseInt(messages.get(0).substring(2, 4), 16) & 0x80) == 0x80) {
-										mStrSimCmdPacket = PacketeUtil.Combination(messages);
-										// 接收到一个完整的数据包,处理信息
-										ReceiveDBOperate(mStrSimCmdPacket);
-										messages.clear();
-									}
-									break;
-								case Constant.IS_INSERT_CARD:
-									Log.i(TAG, "接收数据：是否插卡：" + messages);
-									if (messages.get(0).substring(10, 12).equals("00")) {
-										Log.i(TAG, "未插卡");
-										sendEventBusChangeBluetoothStatus(context
-												.getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
-										//未插卡（需要修改：由于没有获取ICCID无法判断所以日后需要修改，暂时这样写）
-										SocketConstant.REGISTER_STATUE_CODE = 0;
-									} else if (messages.get(0).substring(10, 12).equals("01")) {
-										Log.i(TAG, "已插卡");
-										//如果激活卡成功后，刷新按钮点击需要将标记激活
-										isGetnullCardid = true;
-										nullCardId = null;
-										//TODO 处理异常
-										//如没有没插卡检测插卡并且提示用户重启手环。
-										//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
-										//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
-
-										if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
-											SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
-										} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
-											if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
-												//从预读取数据那里重新注册
-												connectGoip();
-											} else {
-												registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.RESTART_TCP);
+									case Constant.RETURN_POWER:
+										if (messages.get(0).substring(10, 12).equals("01")) {
+											//当上电完成则需要发送写卡命令
+											Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
+											if (!IS_TEXT_SIM && isGetnullCardid) {
+												//空卡ID是否不为空，若不为空则
+												if (nullCardId != null) {
+													Log.i(TAG, "nullcardid上电返回");
+												} else {
+													Log.i(TAG, "发送" + Constant.WRITE_SIM_STEP_ONE);
+													sendMessageSeparate(Constant.WRITE_SIM_STEP_ONE, Constant.WRITE_SIM_DATA);
+												}
 											}
 
-										} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-											//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
-											handler.sendEmptyMessage(CHECK_SIGNAL);
+										} else if (messages.get(0).substring(10, 12).equals("11")) {
+											if (!IS_TEXT_SIM) {
+												Intent cardBreakIntent = new Intent();
+												cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
+												LocalBroadcastManager.getInstance(context).sendBroadcast(cardBreakIntent);
+											}
 										}
-									}
-									break;
-//								case (byte) 0xDB:
-//								case (byte) 0xDA:
-//									if (IS_TEXT_SIM) {
-//										SocketConnection.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messageFromBlueTooth, txValue);
-//									} else {
-//										messages.add(messageFromBlueTooth);
-//										if (txValue[3] == txValue[4]) {
-//											mStrSimCmdPacket = PacketeUtil.Combination(messages);
-//											// 接收到一个完整的数据包,处理信息
-//											ReceiveDBOperate(mStrSimCmdPacket);
-//											messages.clear();
-//										}
-//									}
-//									break;
-//						case (byte) 0xAA:
-//							Log.i("toBlue", "已收到重置信息：" + messageFromBlueTooth);
-//							resetOrderStr = messageFromBlueTooth;
-//							break;
+										break;
+									case Constant.READ_SIM_DATA:
+										Log.i(TAG, "发送给SDK");
+										if (IS_TEXT_SIM) {
 
-								default:
-//							updateMessage(messageFromBlueTooth);
-									break;
-							}
+											ProMainActivity.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
+										}
+										break;
+									case Constant.LAST_CHARGE_POWER_TIMER:
+
+										if ((Integer.parseInt(messages.get(0).substring(2, 4), 16) & 0x80) == 0x80) {
+											mStrSimCmdPacket = PacketeUtil.Combination(messages);
+											// 接收到一个完整的数据包,处理信息
+											ReceiveDBOperate(mStrSimCmdPacket);
+											messages.clear();
+										}
+										break;
+									case Constant.IS_INSERT_CARD:
+										Log.i(TAG, "接收数据：是否插卡：" + messages);
+										if (messages.get(0).substring(10, 12).equals("00")) {
+											Log.i(TAG, "未插卡");
+											sendEventBusChangeBluetoothStatus(context
+													.getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
+											//未插卡（需要修改：由于没有获取ICCID无法判断所以日后需要修改，暂时这样写）
+											SocketConstant.REGISTER_STATUE_CODE = 0;
+										} else if (messages.get(0).substring(10, 12).equals("01")) {
+											Log.i(TAG, "已插卡");
+											//如果激活卡成功后，刷新按钮点击需要将标记激活
+											isGetnullCardid = true;
+											nullCardId = null;
+											//TODO 处理异常
+											//如没有没插卡检测插卡并且提示用户重启手环。
+											//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
+											//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
+
+											if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
+												SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+											} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
+												if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+													//从预读取数据那里重新注册
+													connectGoip();
+												} else {
+													EventBusUtil.simRegisterStatue(SocketConstant.RESTART_TCP);
+												}
+
+											} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+												//请求服务器，当卡在线的时候，不进行任何操作。当卡不在线的时候，重新从预读取数据注册
+												handler.sendEmptyMessage(CHECK_SIGNAL);
+											}
+										}
+										break;
+									default:
+										break;
+								}
+						}
+					} catch (Exception e) {
+
 					}
 				}
 			}

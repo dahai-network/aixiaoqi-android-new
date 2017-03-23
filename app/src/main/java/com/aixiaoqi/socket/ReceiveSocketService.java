@@ -19,8 +19,6 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
-
-import static com.aixiaoqi.socket.EventBusUtil.registerFail;
 import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
@@ -69,17 +67,10 @@ public class ReceiveSocketService extends Service {
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
-//			Log.e("Blue_Chanl", "接收数据 - onReceive");
-//			if(AutoReceiver.t_wakelock!=null){
-//				AutoReceiver.t_wakelock.release();
-//				AutoReceiver.t_wakelock=null;
-//			}
 			Log.e("Blue_Chanl", "onReceive");
 			TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s, length));
 			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
-//			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "read :" + HexStringExchangeBytesUtil.bytesToHexString(s, length));
-
 		}
 
 		@Override
@@ -87,8 +78,6 @@ public class ReceiveSocketService extends Service {
 			Log.e("Blue_Chanl", "断开连接 - onDisconnect");
 			disConnectReconnect();
 		}
-
-
 	};
 
 	//首次创建连接失败，重试三次还不成功，则断开连接，并且提示注册失败。
@@ -102,10 +91,9 @@ public class ReceiveSocketService extends Service {
 					contactFailCount++;
 				} else {
 					contactFailCount = 0;
-					registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.START_TCP_FAIL);
+					EventBusUtil.simRegisterStatue(SocketConstant.START_TCP_FAIL);
 				}
 			}
-
 		}
 	}
 
@@ -119,13 +107,11 @@ public class ReceiveSocketService extends Service {
 	//断开连接，如果注册成功，需要重新注册，并且改变注册状态
 	private void disConnectReconnect() {
 		isDisconnect = true;
-
-//		cancelTimer();
 		CommonTools.delayTime(5000);
 		if (tcpClient != null && !tcpClient.isConnected()) {
 			if (REGISTER_STATUE_CODE == 3) {
 				REGISTER_STATUE_CODE = 2;
-				registerFail(Constant.REGIST_CALLBACK_TYPE, SocketConstant.TCP_DISCONNECT);
+				EventBusUtil.simRegisterStatue( SocketConstant.TCP_DISCONNECT);
 			}
 			if(!SdkAndBluetoothDataInchange.isHasPreData)
 			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
@@ -171,7 +157,6 @@ public class ReceiveSocketService extends Service {
 		Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
 		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && am == null) {
 			count = count + 1;
-			Log.e("onReceive", "开启定时器");
 			Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
 			intent.setAction(HEARTBEAT_PACKET_TIMER);
 			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
@@ -188,11 +173,8 @@ public class ReceiveSocketService extends Service {
 	public void sendMessage(String s) {
 		Log.e("sendMessage", s);
 		Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
-		Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null) + "\n发送到GOIPtcpClient" + (tcpClient.getTransceiver() != null));
-
 		if (tcpClient != null && tcpClient.getTransceiver() != null) {
 			tcpClient.getTransceiver().send(s);
-//			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "write :\n" + s);
 		}
 	}
 
@@ -204,7 +186,6 @@ public class ReceiveSocketService extends Service {
 		if (tcpClient != null) {
 			tcpClient.closeTimer();
 			tcpClient.disconnect();
-//			tcpClient=null;
 		}
 		Log.e(TAG, "tcpClient=null" + (tcpClient == null));
 		count = 0;

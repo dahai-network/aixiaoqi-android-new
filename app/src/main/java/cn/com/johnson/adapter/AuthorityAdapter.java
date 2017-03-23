@@ -1,7 +1,6 @@
 package cn.com.johnson.adapter;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import android.os.Handler;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -104,5 +103,5 @@ public class AuthorityAdapter extends RecyclerView.Adapter<AuthorityAdapter.Auth
             ButterKnife.bind(this, itemView);
         }
 
-    }
+	}
 }

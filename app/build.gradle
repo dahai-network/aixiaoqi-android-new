@@ -12,7 +12,7 @@ repositories {
 def AAVersion = '4.0.0' // change this to your desired version, for example the latest stable: 4.0.0
 dependencies {
 
-    //    compile project(':sipEngineSDK')
+//    compile project(':sipEngineSDK')
     compile "org.androidannotations:androidannotations-api:$AAVersion"
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile files('libs/bugly_crash_upgrade_v1.1.5.jar')
@@ -52,7 +52,7 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
     }
-    compileSdkVersion 25
+    compileSdkVersion 23
     buildToolsVersion '25.0.0'
 
     defaultConfig {

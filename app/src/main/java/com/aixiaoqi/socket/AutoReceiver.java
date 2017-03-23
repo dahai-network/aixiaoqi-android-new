@@ -28,7 +28,6 @@ public class AutoReceiver extends BroadcastReceiver {
 				@Override
 				public void run() {
 					if (ProMainActivity.sendYiZhengService != null&&TestProvider.isCreate) {
-//						Log.i(TAG, DateUtils.getCurrentDateForFileDetail() + " 发送心跳包，是否联网：" + NetworkUtils.isNetworkAvailable(context));
 						ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
 					} else {
 						Log.e(TAG, "AutoReceiver 异常！");
