@@ -213,20 +213,13 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 
+	private String[] IccidCommand={"a0a40000022fe2","a0c000000f","a0b000000a"};
 
 	private void getIccid(ArrayList<String> messages) {
-		if(count==0){
-			count=count+1;
-			TlvAnalyticalUtils.sendToBlue("a0a40000022fe2");
-		}else if(count==1){
-			count=count+1;
-			TlvAnalyticalUtils.sendToBlue("a0c000000f");
-		}else if(count==2){
-
-			count=count+1;
-			TlvAnalyticalUtils.sendToBlue("a0b000000a");
-
-		}else if(count==3){
+		count=count+1;
+		if(count<4){
+			TlvAnalyticalUtils.sendToBlue(IccidCommand[count-1]);
+		}else if(count==4){
 			ProMainActivity.isGetIccid=false;
 			String value= PacketeUtil.Combination(messages);
 			StringBuilder stringBuilder=new StringBuilder();
@@ -235,35 +228,40 @@ public class SdkAndBluetoothDataInchange {
 				stringBuilder.append(value.charAt(i+0));
 			}
 
-			DBHelp dbHelp=new DBHelp(ProMainActivity.instance);
-			PreReadEntity preReadEntity= dbHelp.getPreReadEntity(RadixAsciiChange.convertStringToHex(stringBuilder.toString()));
-			dbHelp.close();
-
+			PreReadEntity preReadEntity = getPreReadEntity(stringBuilder);
 			if(preReadEntity!=null){
 				//发送直接从预读取数据开始注册
+				count=0;
+				isHasPreData=true;
 				String token= SharedUtils.getInstance().readString(Constant.TOKEN);
 				if(TextUtils.isEmpty(token)){
 					EventBusUtil.simRegisterStatue(SocketConstant.TOKEN_IS_NULL);
 				}else{
-					SocketConstant.CONNENCT_VALUE[3] =RadixAsciiChange.convertStringToHex(token);
-					count=0;
-					isHasPreData=true;
-					SocketConstant.REGISTER_STATUE_CODE = 2;
 					EventBusUtil.simRegisterType(Constant.REGISTER_SIM_PRE_DATA);
-					SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = preReadEntity.getPreReadData();
-					SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preReadEntity.getDataLength();
-					SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = preReadEntity.getImsi();
-					SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = preReadEntity.getIccid();
+					initPre(preReadEntity, token);
 				}
 			}else{
 				//发送启动SDK
 				isHasPreData=false;
 				EventBusUtil.simRegisterType(Constant.REGISTER_SIM_NOT_PRE_DATA);
 			}
-
-
 		}
+	}
 
+	private PreReadEntity getPreReadEntity(StringBuilder stringBuilder) {
+		DBHelp dbHelp=new DBHelp(ProMainActivity.instance);
+		PreReadEntity preReadEntity= dbHelp.getPreReadEntity(RadixAsciiChange.convertStringToHex(stringBuilder.toString()));
+		dbHelp.close();
+		return preReadEntity;
+	}
+
+	private void initPre(PreReadEntity preReadEntity, String token) {
+		SocketConstant.REGISTER_STATUE_CODE = 2;
+		SocketConstant.CONNENCT_VALUE[3] = RadixAsciiChange.convertStringToHex(token);
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = preReadEntity.getPreReadData();
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preReadEntity.getDataLength();
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = preReadEntity.getImsi();
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = preReadEntity.getIccid();
 	}
 
 
