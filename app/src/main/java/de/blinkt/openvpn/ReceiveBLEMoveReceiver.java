@@ -126,7 +126,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						Thread.sleep(3000);
 						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
 						String braceletname = utils.readString(Constant.BRACELETNAME);
-						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.equals(Constant.UNIBOX)) {
+						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
 							Thread.sleep(1000);
 							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
 						} else {
@@ -139,22 +139,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							CommonTools.delayTime(500);
 							sendMessageToBlueTooth(UP_TO_POWER);
 						}
-//						if (!isConnect) {
-//							if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-//								sendMessageToBlueTooth("AAEEEEAA");//绑定命令
-//								isConnect = true;
-//							} else {
-//								//更新时间操作
-//								isConnect = true;
-//								if (sendStepThread != null)
-//									sendStepThread = null;
-//								sendMessageToBlueTooth(getBLETime());
-//							}
-//						}
-////						如果有复位命令储存在全局变量的话发送给设备
-//						if (!TextUtils.isEmpty(resetOrderStr)) {
-//							sendMessageToBlueTooth(resetOrderStr);
-//						}
+
 						Thread.sleep(20000);
 						if (!isConnect && action.equals(UartService.ACTION_GATT_CONNECTED)
 								&& TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
@@ -224,19 +209,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-//					String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
-
-					//通过SDK收发Service发送信息到SDK
-//					Log.e("Blue_Chanl", "接收从蓝牙发出的消息：" + HexStringExchangeBytesUtil.bytesToHexString(txValue));
-//					//是否第一个包，判断类型
-//					int dataID = Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) & 127;
-//					Log.e("Blue_Chanl", "txValue[1]" + Integer.parseInt(messageFromBlueTooth.substring(2, 4) + "", 16) + "dataID：" + dataID);
-//					if (dataID == 0) {
-//						dataType = messageFromBlueTooth.substring(6, 10);
-//					}
 					try {
-
-
 						String firstPackage = messages.get(0).substring(0, 2);
 						String dataType = messages.get(0).substring(6, 10);
 
@@ -247,15 +220,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 								Log.e(TAG, messages.get(i));
 							}
 						}
-//					messages.add(messageFromBlueTooth);
-//					int lengthData=(txValue[1]&0x7f)+1;
-//					if(messages.size()<lengthData){
-//						return;
-//					}
-//			if (isWholeDataPackage||dataStatue==0x80) {
-//				isWholeDataPackage=false;
-//			}
-
 						Log.e("Blue_Chanl", "dataType：" + dataType);
 						switch (firstPackage) {
 							case "55":
