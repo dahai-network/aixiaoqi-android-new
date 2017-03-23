@@ -1020,6 +1020,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_un_insert_card))) {
 			percentTextView.setText("");
 			registerSimStatu.setVisibility(View.VISIBLE);
+			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_high_signal))) {
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 			percentTextView.setVisibility(GONE);

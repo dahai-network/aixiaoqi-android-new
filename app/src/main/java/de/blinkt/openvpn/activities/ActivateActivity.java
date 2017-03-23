@@ -6,13 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -31,11 +27,9 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.OrderActivationHttp;
 import de.blinkt.openvpn.http.OrderDataHttp;
-
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.SharedUtils;
-import de.blinkt.openvpn.util.SmsHelper;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.dialog.DialogYearMonthDayPicker;
@@ -187,7 +181,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 //					else{
 					orderActivationHttp();
 //				}
-		}
+				}
 				break;
 			case R.id.payWayTextView:
 				new DialogYearMonthDayPicker(this, this, R.layout.picker_year_month_day_layout, 0);
@@ -225,7 +219,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	@Override
 	public void dialogText(int type, String text) {
 		if (type == 2) {
-			SendCommandToBluetooth.sendMessageToBlueTooth("AA112233AA");
+			SendCommandToBluetooth.sendMessageToBlueTooth(Constant.RESTORATION);
 		} else if (type == 0) {
 			if (System.currentTimeMillis() > DateUtils.getStringToDate(text + " 00:00:00")) {
 				CommonTools.showShortToast(this, getString(R.string.less_current_time));
