@@ -461,7 +461,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							CommonTools.delayTime(1000);
 							if (isUpgrade) {
 								Log.e(TAG, "空中升级重连");
-								startDfuCount=0;
+								startDfuCount = 0;
 								scanLeDevice(true);
 							}
 						}
@@ -469,7 +469,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					connectThread.start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
 					//多次重连无效后关闭蓝牙重启
-					if (retryTime > 6) {
+					if (retryTime == 6) {
 						mBtAdapter.disable();
 						Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -894,7 +894,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (mBtAdapter != null) {
 					mService.connect(deviceAddress);
 					CommonTools.delayTime(SCAN_PERIOD);
-					if (mService.mConnectionState != UartService.STATE_CONNECTED) {
+					if (CommonTools.isFastDoubleClick(5000) && mService.mConnectionState != UartService.STATE_CONNECTED) {
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
@@ -913,7 +913,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 				@Override
 				public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
-
 
 					if (device.getName() == null) {
 						return;
@@ -1116,6 +1115,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
 		setConStatus(entity.getStatus());
 	}
+
 	@Override
 	protected void onRestart() {
 		super.onRestart();
