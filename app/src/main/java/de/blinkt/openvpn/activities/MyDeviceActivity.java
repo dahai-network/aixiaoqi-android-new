@@ -203,9 +203,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		Log.e(TAG, "initSet");
 		utils = SharedUtils.getInstance();
 		bracelettype = getIntent().getStringExtra(BRACELETTYPE);
-		if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
+		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			alarmClockLinearLayout.setVisibility(GONE);
 			messageRemindLinearLayout.setVisibility(GONE);
+			findStatusLinearLayout.setVisibility(GONE);
 		}
 
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
@@ -626,11 +627,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				registerSimStatu.setVisibility(GONE);
 				statueTextView.setText(getString(R.string.conn_bluetooth));
 				statueTextView.setEnabled(true);
-				//传出注册失败
-				utils.delete(ELECTRICITY);
 				firmwareTextView.setText("");
 				percentTextView.setText("");
 				macTextView.setText("");
+				//传出注册失败
+				if (utils == null)
+					utils = SharedUtils.getInstance();
+				utils.delete(ELECTRICITY);
 				utils.delete(Constant.IMEI);
 				utils.delete(Constant.BRACELETNAME);
 				utils.delete(Constant.BRACELETVERSION);
@@ -949,11 +952,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		//不能按返回键，只能二选其一
 		noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, NOT_YET_REARCH);
 		noDevicedialog.setCanClickBack(false);
-		if (MyDeviceActivity.UNITOYS.equals(bracelettype)) {
-			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
-		} else if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
+		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
+		} else if (bracelettype.contains(MyDeviceActivity.UNITOYS)) {
+			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
 		}
+
 	}
 
 	/**

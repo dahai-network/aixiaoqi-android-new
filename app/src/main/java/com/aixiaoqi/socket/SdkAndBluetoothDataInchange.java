@@ -67,6 +67,7 @@ public class SdkAndBluetoothDataInchange {
 		synchronized (this){
 
 			if(ProMainActivity.isGetIccid){
+				simRegisterStatue=null;
 				getIccid(messages);
 			}else if(isHasPreData){
 				if (simRegisterStatue == null) {
@@ -76,7 +77,7 @@ public class SdkAndBluetoothDataInchange {
 				eventPercent(percent);
 				registerGoip(messages);
 			}else if(ProMainActivity.isStartSdk) {
-				startTimer();
+//				startTimer();
 				if (simRegisterStatue == null) {
 					simRegisterStatue = new SimRegisterStatue();
 				}

@@ -131,7 +131,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
 						} else {
 							Log.i("toBLue", "连接成功");
-
 							//更新时间操作
 							sendMessageToBlueTooth(getBLETime());
 							CommonTools.delayTime(500);

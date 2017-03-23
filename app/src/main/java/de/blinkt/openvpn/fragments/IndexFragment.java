@@ -189,7 +189,8 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 					intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
 				} else {
 					intent = new Intent(getActivity(), MyDeviceActivity.class);
-					intent.putExtra(MyDeviceActivity.BRACELETTYPE, SharedUtils.getInstance().readString(BRACELETNAME, ""));
+					String braceleName = SharedUtils.getInstance().readString(BRACELETNAME, "");
+					intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceleName);
 				}
 				int status = R.string.index_connecting;
 				if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBlutoothStatus())) {
