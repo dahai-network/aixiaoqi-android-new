@@ -65,56 +65,50 @@ public class SdkAndBluetoothDataInchange {
 	public void sendToSDKAboutBluetoothInfo(ArrayList<String> messages) {
 
 		synchronized (this){
-//			if (countMessage ==0) {
-//				Log.e("timer", "开启定时器");
-//				countMessage++;
-//				if(timerMessage==null){
-//					timerMessage= new Timer();
-//				}
-//				if(timerTaskMessage==null){
-//					timerTaskMessage= new TimerTask() {
-//						@Override
-//						public void run() {
-//
-//							if (SocketConstant.REGISTER_STATUE_CODE != 3) {
-//								if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
-//									Log.e("timer", "接收不到蓝牙数据");
-//									sendToBluetoothAboutCardInfo(finalTemp);
-//									notCanReceiveBluetoothDataCount++;
-//								}else if(notCanReceiveBluetoothDataCount>=3){
-//									Log.e("timer", "注册失败");
-//									notifyRegisterFail();
-//									clearTimer();
-//									notCanReceiveBluetoothDataCount=0;
-//								}
-//							}
-//						}
-//					};
-//				}
-//				timerMessage.schedule(timerTaskMessage, 5000, 5000);
-//
-//			}
+			if (countMessage ==0) {
+				Log.e("timer", "开启定时器");
+				countMessage++;
+				if(timerMessage==null){
+					timerMessage= new Timer();
+				}
+				if(timerTaskMessage==null){
+					timerTaskMessage= new TimerTask() {
+						@Override
+						public void run() {
+
+							if (SocketConstant.REGISTER_STATUE_CODE != 3) {
+								if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
+									Log.e("timer", "接收不到蓝牙数据");
+									sendToBluetoothAboutCardInfo(finalTemp);
+									notCanReceiveBluetoothDataCount++;
+								}else if(notCanReceiveBluetoothDataCount>=3){
+									Log.e("timer", "注册失败");
+									notifyRegisterFail();
+									clearTimer();
+									notCanReceiveBluetoothDataCount=0;
+								}
+							}
+						}
+					};
+				}
+				timerMessage.schedule(timerTaskMessage, 5000, 5000);
+
+			}
 			if(ProMainActivity.isGetIccid){
-
 				getIccid(messages);
-
 			}else if(isHasPreData){
 				if (simRegisterStatue == null) {
 					simRegisterStatue = new SimRegisterStatue();
 				}
 				int percent=simRegisterStatue.getProgressCount()+1;
-				simRegisterStatue.setRigsterSimStatue(SocketConstant.REGISTER_CHANGING);
-				simRegisterStatue.setProgressCount(percent);
-				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_CHANGING);
+				eventPercent(percent);
 				registerGoip(messages);
 			}else if(ProMainActivity.isStartSdk) {
 				if (simRegisterStatue == null) {
 					simRegisterStatue = new SimRegisterStatue();
 				}
 				int percent = Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag()) ? "-1" : mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length() - 4, mReceiveDataframSocketService.getSorcketTag().length() - 1));
-				simRegisterStatue.setRigsterSimStatue(SocketConstant.REGISTER_CHANGING);
-				simRegisterStatue.setProgressCount(percent);
-				EventBus.getDefault().post(simRegisterStatue);
+				eventPercent(percent);
 				isReceiveBluetoothData = true;
 				notCanReceiveBluetoothDataCount = 0;
 				mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
@@ -128,74 +122,97 @@ public class SdkAndBluetoothDataInchange {
 		}
 	}
 
+	private void eventPercent(int percent) {
+		simRegisterStatue.setRigsterSimStatue(SocketConstant.REGISTER_CHANGING);
+		simRegisterStatue.setProgressCount(percent);
+		EventBus.getDefault().post(simRegisterStatue);
+	}
+
 	private void registerGoip(ArrayList<String> messages) {
 		count=count+1;
 		if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
 
-            //判断是否是电信还是联通的卡
-            saveBluetoothData= PacketeUtil.Combination(messages);
-            String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
-            if (imsi.startsWith("46000")
-                    || imsi.startsWith("46001")
-                    || imsi.startsWith("46002")
-                    || imsi.startsWith("46006")
-                    || imsi.startsWith("46007")
-                    || imsi.startsWith("46009")
-                    || imsi.startsWith("46020")){//移动和联通
-                TlvAnalyticalUtils.sendToBlue("a0c000000c");
-            }else if( imsi.startsWith("46003") || imsi.startsWith("46005")|| imsi.startsWith("460011")){//电信
-                TlvAnalyticalUtils.sendToBlue("a0c0000003");
-            }
-        }else if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&!TlvAnalyticalUtils.preData[6].startsWith("a088")){
-            TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[6]);
-        }else if(count+1<Integer.parseInt(TlvAnalyticalUtils.preData[7])){
-            if(count+2==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
-                TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[6]);
-                return;
-            }
-            TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[count+2]);
+			//判断是否是电信还是联通的卡
+			saveBluetoothData= PacketeUtil.Combination(messages);
+			String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
+			if (telType(imsi)==CUCC_OR_CMCC){//移动和联通
+				TlvAnalyticalUtils.sendToBlue("a0c000000c");
+			}else if( telType(imsi)==TELECOM){//电信
+				TlvAnalyticalUtils.sendToBlue("a0c0000003");
+			}
+		}else if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&!TlvAnalyticalUtils.preData[6].startsWith("a088")){
+			TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[6]);
+		}else if(count+1<Integer.parseInt(TlvAnalyticalUtils.preData[7])){
+			if(count+2==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
+				TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[6]);
+				return;
+			}
+			TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[count+2]);
 
-        }else{
-            // 组数据
-					SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);
-            count=0;
-            String  toServerMessage="";
-            String value=PacketeUtil.Combination(messages);
-            if(TlvAnalyticalUtils.preData[6].startsWith("a088")){
-                String number=formatByte(Integer.toHexString(value.length()/2+1+saveBluetoothData.length()/2),1);
-                String subNumber=formatByte(Integer.toHexString(value.length()/2+1),2);
-                String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
-                Log.e("TlvAnalyticalUtils","imsi="+imsi);
-                if (imsi.startsWith("46000")
-                        || imsi.startsWith("46001")
-                        || imsi.startsWith("46002")
-                        || imsi.startsWith("46006")
-                        || imsi.startsWith("46007")
-                        || imsi.startsWith("46009")
-                        || imsi.startsWith("46020")){
-                    toServerMessage=TlvAnalyticalUtils.preData[0]+number+subNumber+"a0c000000c"+saveBluetoothData+"c0"+value;
-                }else if(imsi.startsWith("46003") || imsi.startsWith("46005")|| imsi.startsWith("460011")){
-                    toServerMessage=TlvAnalyticalUtils.preData[0]+number+subNumber+"a0c0000003"+saveBluetoothData+"c0"+value;
-                }
-            }else if(TlvAnalyticalUtils.preData[6].startsWith("a0c0")
-                    ||TlvAnalyticalUtils.preData[6].startsWith("a0b0")
-                    ||TlvAnalyticalUtils.preData[6].startsWith("a0b2")
-                    ||TlvAnalyticalUtils.preData[6].startsWith("a0f2")
-                    ||TlvAnalyticalUtils.preData[6].startsWith("a012")){
-                String number=formatByte(Integer.toHexString(value.length()/2+1),1);
-                toServerMessage=TlvAnalyticalUtils.preData[0]+number+"000000000000"+TlvAnalyticalUtils.preData[6].substring(2,4)+value;
-            }else{
-                String number=formatByte(Integer.toHexString(value.length()/2),1);
-                toServerMessage=TlvAnalyticalUtils.preData[0]+number+"000000000000"+value;
-            }
-            String subNumber=formatByte(Integer.toHexString(toServerMessage.length()/2),2);
-            String number=formatByte(Integer.toHexString(toServerMessage.length()/2+5),1);
-            toServerMessage=TlvAnalyticalUtils.preData[8]+number+"010100"+"c7"+subNumber+toServerMessage;
-            TlvAnalyticalUtils.sendToSdkLisener.sendServer(toServerMessage);
+		}else{
+			// 组数据
+			SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);
+			count=0;
+			String  toServerMessage="";
+			String value=PacketeUtil.Combination(messages);
+			if(TlvAnalyticalUtils.preData[6].startsWith("a088")){
+				String number=formatByte(Integer.toHexString(value.length()/2+1+saveBluetoothData.length()/2),1);
+				String subNumber=formatByte(Integer.toHexString(value.length()/2+1),2);
+				String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
+				Log.e("TlvAnalyticalUtils","imsi="+imsi);
+				if (telType(imsi)==CUCC_OR_CMCC){
+					toServerMessage=TlvAnalyticalUtils.preData[0]+number+subNumber+"a0c000000c"+saveBluetoothData+"c0"+value;
+				}else if(telType(imsi)==TELECOM){
+					toServerMessage=TlvAnalyticalUtils.preData[0]+number+subNumber+"a0c0000003"+saveBluetoothData+"c0"+value;
+				}
+			}else if(speData(TlvAnalyticalUtils.preData[6])){
+				String number=formatByte(Integer.toHexString(value.length()/2+1),1);
+				toServerMessage=TlvAnalyticalUtils.preData[0]+number+"000000000000"+TlvAnalyticalUtils.preData[6].substring(2,4)+value;
+			}else{
+				String number=formatByte(Integer.toHexString(value.length()/2),1);
+				toServerMessage=TlvAnalyticalUtils.preData[0]+number+"000000000000"+value;
+			}
+			String subNumber=formatByte(Integer.toHexString(toServerMessage.length()/2),2);
+			String number=formatByte(Integer.toHexString(toServerMessage.length()/2+5),1);
+			toServerMessage=TlvAnalyticalUtils.preData[8]+number+"010100"+"c7"+subNumber+toServerMessage;
+			TlvAnalyticalUtils.sendToSdkLisener.sendServer(toServerMessage);
 
-        }
+		}
 
 	}
+
+	private  boolean speData(String message){
+		if(message.startsWith("a0c0")
+				||message.startsWith("a0b0")
+				||message.startsWith("a0b2")
+				||message.startsWith("a0f2")
+				||message.startsWith("a012")){
+			return true;
+		}
+		return false;
+	}
+
+
+	private static final int TELECOM=0;
+	private static final int CUCC_OR_CMCC=1;
+	private static final int NOT_TELECOM=-1;
+	private int telType(String imsi){
+		if(imsi.startsWith("46000")
+				|| imsi.startsWith("46001")
+				|| imsi.startsWith("46002")
+				|| imsi.startsWith("46006")
+				|| imsi.startsWith("46007")
+				|| imsi.startsWith("46009")
+				|| imsi.startsWith("46020")){
+			return CUCC_OR_CMCC;
+		}else if(imsi.startsWith("46003") || imsi.startsWith("46005")|| imsi.startsWith("460011")){
+			return TELECOM;
+		}else{
+			return NOT_TELECOM;
+		}
+	}
+
+
 
 	private void getIccid(ArrayList<String> messages) {
 		if(count==0){

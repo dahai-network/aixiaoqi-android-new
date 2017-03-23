@@ -102,7 +102,6 @@ public class TestProvider {
 			}
 		} else {
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
-
 		}
 	}
 
