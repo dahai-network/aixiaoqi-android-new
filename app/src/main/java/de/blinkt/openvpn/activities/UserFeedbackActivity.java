@@ -14,13 +14,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.UserFeedBackHttp;
 import de.blinkt.openvpn.util.CommonTools;
 
-public class UserFeedbackActivity extends BaseActivity implements InterfaceCallback {
+public class UserFeedbackActivity extends BaseNetActivity   {
 
 	@BindView(R.id.infoEditText)
 	EditText infoEditText;
@@ -70,26 +71,18 @@ public class UserFeedbackActivity extends BaseActivity implements InterfaceCallb
 			CommonTools.showShortToast(this,getString(R.string.feedback_content_is_too_long));
 			return;
 		}
-		UserFeedBackHttp http = new UserFeedBackHttp(this, HttpConfigUrl.COMTYPE_USER_FEED_BACK, Build.BRAND + Build.MODEL, "" + getAppVersionName(this), infoEditText.getText().toString());
+		UserFeedBackHttp http = new UserFeedBackHttp(this, HttpConfigUrl.COMTYPE_USER_FEED_BACK,Build.MANUFACTURER + Build.BRAND + Build.MODEL, "" + getAppVersionName(this), infoEditText.getText().toString());
 		new Thread(http).start();
 	}
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
-		UserFeedBackHttp http = (UserFeedBackHttp) object;
-		if (http.getStatus() == 1) {
-			CommonTools.showShortToast(UserFeedbackActivity.this, http.getMsg());
+
+		if (object.getStatus() == 1) {
+
 			finish();
 		}
+		CommonTools.showShortToast(UserFeedbackActivity.this, object.getMsg());
 	}
 
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
-		CommonTools.showShortToast(this, errorMessage);
-	}
-
-	@Override
-	public void noNet() {
-		CommonTools.showShortToast(this, "网络异常，请检查您的网络");
-	}
 }

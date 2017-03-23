@@ -206,7 +206,7 @@ public class TlvAnalyticalUtils {
 		}else{
 			preData[7]=(responeCode+1)+"";
 		}
-		Log.e("TlvAnalyticalUtils","preData[7]="+preData[7]);
+
 	}
 
 	public static int getResponeCode(String preNumber,int type) {

@@ -22,8 +22,6 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 
 public abstract class UdpClient implements Runnable {
 
-
-	private String TAG = "ReceiveSocketService";
 	private boolean flag;
 	DatagramSocket datagramSocket;
 	DatagramSocket socket;
@@ -31,7 +29,6 @@ public abstract class UdpClient implements Runnable {
 	private String sendAddress = "127.0.0.1";
 	public static String tag = null;
 	private int port = 4567;
-
 	@Override
 	public void run() {
 		try {
@@ -60,14 +57,18 @@ public abstract class UdpClient implements Runnable {
 
 			}
 			if (socket != null) {
-				socket.disconnect();
-				socket.close();
-				socket = null;
+				closeReceiveSocket();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			flag = false;
 		}
+	}
+
+	private void closeReceiveSocket() {
+		socket.disconnect();
+		socket.close();
+		socket = null;
 	}
 
 	public String getSorcketTag() {
@@ -111,30 +112,29 @@ public abstract class UdpClient implements Runnable {
 			Log.e("UDPSOCKET", "addr=" + addr.getHostAddress() + "\naddrname=" + addr.getHostName() + "\nsendPort=" + sendPort);
 			datagramSocket.send(sendSocket);
 		} catch (SocketException e) {
-			datagramSocket.close();
-			datagramSocket = null;
+			closeSendUdp();
 			e.printStackTrace();
 		} catch (UnknownHostException e) {
-			datagramSocket.close();
-			datagramSocket = null;
+			closeSendUdp();
 			e.printStackTrace();
 		} catch (IOException e) {
-			datagramSocket.close();
-			datagramSocket = null;
+			closeSendUdp();
 			e.printStackTrace();
 		}
+	}
+
+	private void closeSendUdp() {
+		datagramSocket.disconnect();
+		datagramSocket.close();
+		datagramSocket = null;
 	}
 
 
 	public void disconnect() {
 		if (datagramSocket != null) {
 			flag = false;
-			socket.disconnect();
-			socket.close();
-			socket = null;
-			datagramSocket.disconnect();
-			datagramSocket.close();
-			datagramSocket = null;
+			closeReceiveSocket();
+			closeSendUdp();
 		}
 	}
 }

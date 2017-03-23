@@ -23,11 +23,13 @@ public class SocketConnection implements ServiceConnection {
             mReceiveDataframSocketService = ((ReceiveDataframSocketService.LocalBinder) service)
                     .getService();
             //TODO UDP 发送给蓝牙
-			Log.i(TAG,"两个服务ReceiveSocketService,ReceiveDataframSocketService同时打开");
+            Log.i(TAG,"ReceiveDataframSocketService打开");
             if(ICSOpenVPNApplication.uartService!=null){
+
             ProMainActivity.sdkAndBluetoothDataInchange.initReceiveDataframSocketService(mReceiveDataframSocketService, ICSOpenVPNApplication.uartService);
             }
         }else if(service instanceof ReceiveSocketService.LocalBinder ){
+            Log.i(TAG,"ReceiveSocketService打开");
             mReceiveSocketService = ((ReceiveSocketService.LocalBinder) service)
                     .getService();
         }

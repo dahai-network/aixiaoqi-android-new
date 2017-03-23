@@ -35,7 +35,6 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener{
         }else if(number.length()%4==3){
             number="0"+number;
         }
-        Log.e("C_TAG","number="+number);
         List<TlvEntity> yiZhengTlvList=new ArrayList<>();
         if(SocketConstant.CONNECTION.equals(header)){
             SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;

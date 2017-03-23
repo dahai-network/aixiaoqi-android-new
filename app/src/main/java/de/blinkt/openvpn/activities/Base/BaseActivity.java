@@ -19,7 +19,6 @@ public class BaseActivity extends CommenActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 		initActionBar();
 	}

@@ -164,29 +164,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				if (!CommonTools.isFastDoubleClick(3000)) {
 					//友盟方法统计
 					MobclickAgent.onEvent(context, CLICKACTIVEPACKAGE);
-//					TelephonyManager telephonyManager=((TelephonyManager) getSystemService(TELEPHONY_SERVICE));
-//					String android_imsi = telephonyManager.getSubscriberId();
-
-//					if(android_imsi.startsWith("4540")){
-//					String	str1=	SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER);
-//							if (!str1.isEmpty())
-//							{
-//								String str2 = SmsHelper.bytesToHex(Base64.decode(str1, 2));
-//								if (SmsHelper.getInstance().writeCMDSmall(str2))
-//								{
-//									CommonTools.showShortToast(this,"写卡成功");
-//
-//									return;
-//								}
-//								CommonTools.showShortToast(this,"写卡失败");
-//
-//								return;
-//							}
-//						CommonTools.showShortToast(this,"密钥为空");
-//					}
-//					else{
 					orderActivationHttp();
-//				}
 		}
 				break;
 			case R.id.payWayTextView:
