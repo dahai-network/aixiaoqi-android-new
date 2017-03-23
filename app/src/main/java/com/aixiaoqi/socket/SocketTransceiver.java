@@ -83,7 +83,6 @@ public abstract class SocketTransceiver implements Runnable {
 			Log.e("toBLue", "发送字符串out1=" + (out != null));
 			if (out == null)
 				out = new DataOutputStream(this.socket.getOutputStream());
-			Log.e("toBLue", "发送字符串out2=" + (out != null));
 		} catch (IOException e) {
 			e.printStackTrace();
 			Log.e("toBLue", "发送字符串IOException=" + e.getMessage());
@@ -91,7 +90,6 @@ public abstract class SocketTransceiver implements Runnable {
 			this.onDisconnect(addr);
 			return false;
 		}
-		Log.e("toBLue", "发送字符串out3=" + (out != null));
 		if (out != null) {
 			try {
 				Log.e("toBLue", "发送字符串");

@@ -64,16 +64,7 @@ public class TestProvider {
 		}
 		Log.e("preDataSplit", "ICCID:" + iccidEntity.getIccid() + "\nIMMSI:" + iccidEntity.getImmsi());
 		if (!TextUtils.isEmpty(imsi)) {
-			if (imsi.startsWith("46000")
-					|| imsi.startsWith("46001")
-					|| imsi.startsWith("46002")
-					|| imsi.startsWith("46006")
-					|| imsi.startsWith("46007")
-					|| imsi.startsWith("46009")
-					|| imsi.startsWith("46020")
-					||imsi.startsWith("46003")
-					|| imsi.startsWith("46005")
-					|| imsi.startsWith("460011")) {//因为移动网络编号46000下的IMSI已经用完，所以虚拟了一个46002编号，134/159号段使用了此编号
+			if (validSim(imsi)) {//因为移动网络编号46000下的IMSI已经用完，所以虚拟了一个46002编号，134/159号段使用了此编号
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
 				String token=SharedUtils.getInstance().readString(Constant.TOKEN);
@@ -83,15 +74,7 @@ public class TestProvider {
 					SocketConstant.CONNENCT_VALUE[3] =RadixAsciiChange.convertStringToHex(token);
 					REGISTER_STATUE_CODE = 2;
 					isIccid = true;
-					DBHelp db=new DBHelp(ICSOpenVPNApplication.getContext());
-					PreReadEntity preReadEntity=new PreReadEntity();
-					preReadEntity.setIccid(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
-					preReadEntity.setImsi(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
-					preReadEntity.setPreReadData(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1]);
-					preReadEntity.setDataLength(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2]);
-					db.insertPreData(preReadEntity);
-
-					db.close();
+					savePreData();
 					ProMainActivity.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
 					if (isCreate && isIccid) {
 						ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
@@ -103,6 +86,30 @@ public class TestProvider {
 		} else {
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 		}
+	}
+
+	private static void savePreData() {
+		DBHelp db=new DBHelp(ICSOpenVPNApplication.getContext());
+		PreReadEntity preReadEntity=new PreReadEntity();
+		preReadEntity.setIccid(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
+		preReadEntity.setImsi(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
+		preReadEntity.setPreReadData(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1]);
+		preReadEntity.setDataLength(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2]);
+		db.insertPreData(preReadEntity);
+		db.close();
+	}
+
+	private static boolean validSim(String imsi) {
+		return imsi.startsWith("46000")
+                || imsi.startsWith("46001")
+                || imsi.startsWith("46002")
+                || imsi.startsWith("46006")
+                || imsi.startsWith("46007")
+                || imsi.startsWith("46009")
+                || imsi.startsWith("46020")
+                ||imsi.startsWith("46003")
+                || imsi.startsWith("46005")
+                || imsi.startsWith("460011");
 	}
 
 
