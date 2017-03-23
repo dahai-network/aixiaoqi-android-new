@@ -126,7 +126,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public static String UNITOYS = "unitoys";
 	public static String UNIBOX = "unibox";
 
-	private SharedUtils utils = null;
+//	private SharedUtils utils = null;
 	private UartService mService = ICSOpenVPNApplication.uartService;
 	private String macAddressStr;
 	private int SCAN_PERIOD = 10000;//原本120000毫秒
@@ -182,11 +182,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	//空中升级
 	private void skyUpgradeHttp() {
 		Log.e(TAG, "skyUpgradeHttp");
-		long beforeRequestTime = utils.readLong(Constant.UPGRADE_INTERVAL);
+		long beforeRequestTime = SharedUtils.getInstance().readLong(Constant.UPGRADE_INTERVAL);
 		if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
 		{
 			int DeviceType = 0;
-			String braceletname = utils.readString(Constant.BRACELETNAME);
+			String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(braceletname)) {
 				if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
 					DeviceType = 0;
@@ -194,14 +194,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					DeviceType = 1;
 				}
 			}
-			SkyUpgradeHttp skyUpgradeHttp = new SkyUpgradeHttp(this, HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, utils.readString(Constant.BRACELETVERSION), DeviceType);
+			SkyUpgradeHttp skyUpgradeHttp = new SkyUpgradeHttp(this, HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType);
 			new Thread(skyUpgradeHttp).start();
 		}
 	}
 
 	private void initSet() {
 		Log.e(TAG, "initSet");
-		utils = SharedUtils.getInstance();
 		bracelettype = getIntent().getStringExtra(BRACELETTYPE);
 		if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
 			alarmClockLinearLayout.setVisibility(GONE);
@@ -211,13 +210,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
 		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 
-		macAddressStr = utils.readString(Constant.IMEI);
+		macAddressStr = SharedUtils.getInstance().readString(Constant.IMEI);
 		if (macAddressStr != null)
 			macAddressStr = macAddressStr.toUpperCase();
 		macTextView.setText(macAddressStr);
 		hasLeftViewTitle(device, 0);
 		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
-			int electricityInt = utils.readInt(ELECTRICITY);
+			int electricityInt = SharedUtils.getInstance().readInt(ELECTRICITY);
 			noConnectImageView.setVisibility(GONE);
 			unBindButton.setVisibility(View.VISIBLE);
 			sinking.setVisibility(View.VISIBLE);
@@ -236,7 +235,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			new Thread(http).start();
 		}
 
-		firmwareTextView.setText(utils.readString(Constant.BRACELETVERSION));
+		firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
 		//如果是在注册中才能打开动画
 		if ((SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 2)
 				&& conStatusTextView.getText().toString().equals(getResources().getString(R.string.index_registing))) {
@@ -252,7 +251,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		switch (requestCode) {
 			case REQUEST_ENABLE_BT:
 				if (resultCode == Activity.RESULT_OK) {
-					String deviceAddress = utils.readString(Constant.IMEI);
+					String deviceAddress = SharedUtils.getInstance().readString(Constant.IMEI);
 					if (!TextUtils.isEmpty(deviceAddress)) {
 						connDevice(deviceAddress);
 					} else {
@@ -289,8 +288,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
-				if (!TextUtils.isEmpty(utils.readString(Constant.BRACELETVERSION)) && !isUpgrade) {
-					utils.writeLong(Constant.UPGRADE_INTERVAL, 0);
+				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETVERSION)) && !isUpgrade) {
+					SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, 0);
 					skyUpgradeHttp();
 				} else if (isUpgrade) {
 					showSkyUpgrade();
@@ -445,8 +444,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						noConnectImageView.setVisibility(View.VISIBLE);
 						statueTextView.setVisibility(View.VISIBLE);
 						unBindButton.setVisibility(GONE);
-						utils.delete(Constant.IMEI);
-						utils.delete(Constant.BRACELETNAME);
+						SharedUtils.getInstance().delete(Constant.IMEI);
+						SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 						macTextView.setText("");
 						firmwareTextView.setText("");
 						statueTextView.setText(getString(R.string.conn_bluetooth));
@@ -480,7 +479,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					}
 				} else {
 					unBindButton.setVisibility(GONE);
-					utils.delete(Constant.IMEI);
+					SharedUtils.getInstance().delete(Constant.IMEI);
 					macTextView.setText("");
 					firmwareTextView.setText("");
 					statueTextView.setText(getString(R.string.conn_bluetooth));
@@ -516,7 +515,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 							slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
 							int DeviceType = 0;
-							String braceletname = utils.readString(Constant.BRACELETNAME);
+							String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 							if (!TextUtils.isEmpty(braceletname)) {
 
 								if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
@@ -527,7 +526,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							}
 							UpdateConnectInfoHttp http = new UpdateConnectInfoHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, deviceVesion, Integer.parseInt(messages.get(0).substring(14, 16), 16), DeviceType);
 							new Thread(http).start();
-							if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+							if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
 								Log.i(TAG, "进入版本号:" + deviceVesion);
 							}
 							break;
@@ -558,7 +557,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void setView() {
 		dismissProgress();
-		int electricityInt = utils.readInt(ELECTRICITY);
+		int electricityInt = SharedUtils.getInstance().readInt(ELECTRICITY);
 		noConnectImageView.setVisibility(GONE);
 		sinking.setVisibility(View.VISIBLE);
 //		resetDeviceTextView.setVisibility(View.VISIBLE);
@@ -569,7 +568,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 		statueTextView.setVisibility(GONE);
 		if (macTextView.getText().length() == 0) {
-			macTextView.setText(utils.readString(Constant.IMEI));
+			macTextView.setText(SharedUtils.getInstance().readString(Constant.IMEI));
 		}
 	}
 
@@ -579,7 +578,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		super.onResume();
 		Log.d(TAG, "onResume");
 		isForeground = true;
-		int electricityInt = utils.readInt(Constant.ELECTRICITY);
+		int electricityInt = SharedUtils.getInstance().readInt(Constant.ELECTRICITY);
 		sinking.setPercent(((float) electricityInt) / 100);
 		DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
 	}
@@ -589,15 +588,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		Log.d(TAG, "onPause");
 		super.onPause();
 		sinking.setStatus(MySinkingView.Status.NONE);
-		DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
+
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-
 		stopAnim();
 		isForeground = false;
+		DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
 		Log.d(TAG, "onDestroy()");
 		isUpgrade = false;
 		if (isDfuServiceRunning()) {
@@ -609,7 +608,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} catch (Exception ignore) {
 			Log.e(TAG, ignore.toString());
 		}
-		utils = null;
 
 	}
 
@@ -627,13 +625,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				statueTextView.setText(getString(R.string.conn_bluetooth));
 				statueTextView.setEnabled(true);
 				//传出注册失败
-				utils.delete(ELECTRICITY);
+				SharedUtils.getInstance().delete(ELECTRICITY);
 				firmwareTextView.setText("");
 				percentTextView.setText("");
 				macTextView.setText("");
-				utils.delete(Constant.IMEI);
-				utils.delete(Constant.BRACELETNAME);
-				utils.delete(Constant.BRACELETVERSION);
+				SharedUtils.getInstance().delete(Constant.IMEI);
+				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
+				SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
 				BluetoothConstant.IS_BIND = false;
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
@@ -654,12 +652,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (mBluetoothDevice != null) {
 					if (!TextUtils.isEmpty(mBluetoothDevice.getVersion())) {
 						firmwareTextView.setText(mBluetoothDevice.getVersion());
-						utils.writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
+						SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
 					} else {
 						Log.i(TAG, "mBluetoothDevice.getVersion()为空");
 					}
 					if (!TextUtils.isEmpty(mBluetoothDevice.getIMEI())) {
-						utils.writeString(Constant.IMEI, mBluetoothDevice.getIMEI());
+						SharedUtils.getInstance().writeString(Constant.IMEI, mBluetoothDevice.getIMEI());
 					} else {
 						Log.i(TAG, "mBluetoothDevice.getIMEI()为空");
 					}
@@ -679,7 +677,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
 			if (skyUpgradeHttp.getStatus() == 1) {
 				if (skyUpgradeHttp.getUpgradeEntity() != null) {
-					if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(utils.readString(Constant.BRACELETVERSION))) {
+					if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
 						url = skyUpgradeHttp.getUpgradeEntity().getUrl();
 						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
 					} else {
@@ -717,6 +715,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 		}
 	}
+
 
 
 	String url;
@@ -793,7 +792,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public void errorComplete(int cmdType, String errorMessage) {
 		CommonTools.showShortToast(this, errorMessage);
 		if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
-			utils.writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
+			SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
 		}
 	}
 
@@ -823,7 +822,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 		} else if (type == NOT_YET_REARCH) {
 			retryTime = 0;
-			connDevice(utils.readString(Constant.IMEI));
+			connDevice(SharedUtils.getInstance().readString(Constant.IMEI));
 		} else {
 			onBackPressed();
 		}
@@ -917,8 +916,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					if (device.getName() == null) {
 						return;
 					}
-					Log.e(TAG, "isUpgrade:" + isUpgrade + "deviceName:" + device.getName() + "保存的IMEI地址:" + utils.readString(Constant.IMEI).replace(":", ""));
-					if (isUpgrade && device.getName().contains(utils.readString(Constant.IMEI).replace(":", ""))) {
+					Log.e(TAG, "isUpgrade:" + isUpgrade + "deviceName:" + device.getName() + "保存的IMEI地址:" + SharedUtils.getInstance().readString(Constant.IMEI).replace(":", ""));
+					if (isUpgrade && device.getName().contains(SharedUtils.getInstance().readString(Constant.IMEI).replace(":", ""))) {
 						Log.e(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
 						if (mService != null) {
 							scanLeDevice(false);
@@ -934,7 +933,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						Log.e(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
 						if (mService != null) {
 							scanLeDevice(false);
-							utils.writeString(Constant.IMEI, macAddressStr);
+							SharedUtils.getInstance().writeString(Constant.IMEI, macAddressStr);
 							mService.connect(macAddressStr);
 						}
 					}
@@ -1121,7 +1120,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	protected void onRestart() {
 		super.onRestart();
 		//如果没有IMEI就退出页面
-		if (TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
 			finish();
 		}
 	}
