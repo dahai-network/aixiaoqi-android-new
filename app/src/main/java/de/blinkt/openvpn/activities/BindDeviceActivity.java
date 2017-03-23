@@ -347,15 +347,14 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 					@Override
 					public void run() {
 						BluetoothConstant.IS_BIND = true;
-						//测试代码
-						sendMessageToBlueTooth(UP_TO_POWER);
-						CommonTools.delayTime(500);
 						//更新时间操作
 						sendMessageToBlueTooth(getBLETime());
 						CommonTools.delayTime(500);
-						//android 标记，给蓝牙设备标记是否是android设备用的
-//						sendMessageToBlueTooth(ANDROID_TARGET);
+						//基本信息
 						sendMessageToBlueTooth(BASIC_MESSAGE);
+						CommonTools.delayTime(500);
+						//上电指令
+						sendMessageToBlueTooth(UP_TO_POWER);
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
