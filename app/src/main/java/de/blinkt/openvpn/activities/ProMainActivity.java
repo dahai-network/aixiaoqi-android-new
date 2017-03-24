@@ -943,6 +943,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public static SendYiZhengService sendYiZhengService = null;
 
 	private void getIccid() {
+		Log.e(TAG, "getIccid:" );
 		if (sdkAndBluetoothDataInchange == null) {
 			sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
 		}

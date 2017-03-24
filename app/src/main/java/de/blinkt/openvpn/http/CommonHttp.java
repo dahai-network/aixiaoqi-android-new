@@ -27,10 +27,12 @@ import javax.net.ssl.TrustManagerFactory;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.BaseEntry;
 import de.blinkt.openvpn.activities.LoginMainActivity;
+import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.PublicEncoderTools;
@@ -162,10 +164,16 @@ public abstract class CommonHttp implements Callback, Runnable {
 //				ICSOpenVPNApplication.getInstance().finishAllActivity();
 				//token过期
 				if (!CommonTools.isFastDoubleClick(1000)) {
+					Intent intent1 = new Intent();
+					intent1.setAction(SportFragment.CLEARSPORTDATA);
+					intent1.setAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
+					ICSOpenVPNApplication.uartService.disconnect();
+					ICSOpenVPNApplication.getInstance().sendBroadcast(intent1);
 					Intent intent = new Intent(context_, LoginMainActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.putExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN, context_.getResources().getString(R.string.token_interrupt));
 					context_.startActivity(intent);
+
 				}
 			} else {
 				right("");
