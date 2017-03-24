@@ -277,23 +277,33 @@ public class Constant {
 	/**
 	 * 手机厂商硬件名
 	 */
-	public static final String LEMOBILE = "LEMobile";//乐视
-	public static final String LENOVO = "Lenovo";//联想
+	public static final String LEMOBILE = "lemobile";//乐视
+	public static final String LENOVO = "lenovo";//联想
 	public static final String MEIZU = "meizu";//魅族
 	public static final String SAMSUNG = "samsung";//三星
-	public static final String ONEPLUS = "OnePlus";//一加
+	public static final String ONEPLUS = "oneplus";//一加
+
+	//------------------------------------------
+	public static final String HUAWEI="huawei";//华为
+	public static final String GIONEE="gionee";//金立
+	public static final String VIVO="vivo";//vivo
+	public static final String OPPO="oppo";//OPPO
+	public static final String XIAOMI="xiaomi";
 
 	/**
 	 * 手机提示
 	 */
-	public static final String APP_PERTECT = "应用保护";
+	public static final String APP_PERTECT = "开启应用保护";
 	public static final String PHONE_NO_OMIT = "不漏接任何来电";
-	public static final String AUTO_RUN = "自启动管理";
+	public static final String AUTO_RUN = "开启 “自启动管理”";
 	public static final String PERTECT_AIXIAOQI_RUN_NORMAL = "保障爱小器正常运行";
 	public static final String KEEP_WLAN_CONNECT = "休眠状态下保持WLAN连接";
 	public static final String KEEP_RUN_IN_STANDBY = "在待机时保持运行";
 
+	public static final String LOCK_SCREEN_CLEAR_WHITE_LIST= "开启 ”锁屏清理白名单“";
+	public static final String BACKGROUND_HIGH_POWER="后台高耗电时允许运行";
 
+	public static final String SPIRIT_AWAY_MODE="关闭“神隐模式”";
 	public static final String REGISTER_SIM_NOT_PRE_DATA = "not_pre_data";
 	public static final String REGISTER_SIM_PRE_DATA = "pre_data";
 }

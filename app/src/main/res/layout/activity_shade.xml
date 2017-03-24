@@ -1,10 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_root"
     android:layout_width="match_parent"
-    android:background="@color/transparent_gray"
     android:layout_height="match_parent"
-    tools:context="de.blinkt.openvpn.activities.ShadeActivity">
+    android:orientation="vertical">
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/ll_01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:drawableLeft="@drawable/blue_number1_3"
+            android:drawablePadding="@dimen/padding_5dp"
+            android:text="@string/oppo_test1"
+            android:textColor="@color/colorf_01d0c0"
+            android:textSize="@dimen/little_16" />
+
+        <ImageView
+            android:id="@+id/iv_01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:layout_marginTop="@dimen/little_22"
+            android:background="@drawable/oppo_image_1_1" />
+        <ImageView
+            android:id="@+id/iv_hand"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/padding_15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/hand"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_02"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:drawableLeft="@drawable/blue_number2_3"
+            android:drawablePadding="@dimen/padding_5dp"
+            android:text="@string/oppo_test1"
+            android:textColor="@color/colorf_01d0c0"
+            android:textSize="@dimen/little_16" />
+
+        <ImageView
+            android:id="@+id/iv_02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:layout_marginTop="@dimen/little_22"
+            android:background="@drawable/oppo_image_1_1" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_03"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:drawableLeft="@drawable/blue_number3_3"
+            android:drawablePadding="@dimen/padding_5dp"
+            android:text="@string/oppo_test1"
+            android:textColor="@color/colorf_01d0c0"
+            android:textSize="@dimen/little_16" />
+
+        <ImageView
+            android:id="@+id/iv_03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:layout_marginTop="@dimen/little_22"
+            android:background="@drawable/oppo_image_1_1" />
+    </LinearLayout>
+
+</LinearLayout>
