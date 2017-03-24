@@ -128,9 +128,6 @@ public class ShadeActivity extends Activity {
                         setResourceOne(true,meizu_s1,R.drawable.meizu_image_3_1);
                         setResourceTwo(false,meizu_s2,R.drawable.meizu_image_3_2);
                         setResourceThree(true,null,0);
-
-
-
                         break;
                 }
 
