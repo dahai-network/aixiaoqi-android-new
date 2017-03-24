@@ -76,9 +76,6 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 	public void onCreate() {
 		super.onCreate();
 
-//		if (BuildConfig.DEBUG) {
-//			//ACRA.init(this);
-//		}
 		instance = this;
 
 		CommonHttp.setContext(getApplicationContext());
