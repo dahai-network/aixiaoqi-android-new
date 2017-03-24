@@ -92,9 +92,12 @@
 
     <string name="huawei_mate9_test_2_1">找到爱小器App，打开自启动开关</string>
 
-    <string name="huawei_mate9_test_3_1">点击下方的菜单按钮</string>
-    <string name="huawei_mate9_test_3_2">点击高级设置</string>
-    <string name="huawei_mate9_test_3_3">点击在休眠状态下保持WLAN连接，选择始终</string>
+    <string name="huawei_mateP8_test_3_1">点击下方的菜单按钮</string>
+    <string name="huawei_mateP8_test_3_2">点击高级设置</string>
+    <string name="huawei_mateP8_test_3_3">点击在休眠状态下保持WLAN连接，选择始终</string>
+
+    <string name="huawei_mate9_test_3_1">点击下方的更多按钮，然后再点击高级设置按钮</string>
+    <string name="huawei_mate9_test_3_2">把WLAN安全检测打开</string>
 
     <string name="gionee_test_1_1">点击应用管理</string>
     <string name="gionee_test_1_2">点击应用自启</string>
@@ -113,19 +116,27 @@
     <string name="lenovo_test_1_2">点击在休眠状态下保持WLAN连接，选择始终</string>
 
 
-    <string name="meizu_test_2_1">打开自启动开关</string>
+    <string name="meizu_test_1_1">点击下方的省电模式按钮</string>
+    <string name="meizu_test_1_2">点击下方的四方格组成的按钮</string>
+    <string name="meizu_test_1_3">找到爱小器APP打开对应的开关</string>
+
+    <string name="meizu_test_2_1">找到爱小器APP打自开启动对应的开关</string>
     <string name="meizu_test_3_1">点击上方的更多下拉框里面的高级按钮</string>
     <string name="meizu_test_3_2">打开WLAN休眠开关</string>
 
 
     <!-- <string name="vivo_test1">点击立即设置，弹出后台高费电</string>-->
     <string name="vivo_test_1_1">将爱小器对应的开关打开</string>
+    <string name="vivo_test_2_1">打开WLAN，点击手机左下侧的菜单键，然后再点击高级设置</string>
+    <string name="vivo_test_2_2">将休眠策略设置为永不休眠</string>
+
+
 
     <string name="samsung_test_1_1">点击内存按钮</string>
     <string name="samsung_test_1_2">点击自启动应用程序列表找到爱小器APP，打开对应开关</string>
 
-    <string name="samsung_test_2_1">点击上方更多按钮弹出小框，然后点击弹出框的高级选项</string>
-    <string name="samsung_test_2_2">点击上方更多按钮弹出小框，然后点击弹出框的高级选项，进入到高级设置界面，设置睡眠期间保持WLAN开启，选择始终连接</string>
+    <string name="samsung_test_2_1">点击上方更多按钮弹出小框，然后点击弹出框的高级设定选项</string>
+    <string name="samsung_test_2_2">设置睡眠期间保持WLAN开启，选择始终连接</string>
 
     <!--end-->
     <string name="setting">设置</string>

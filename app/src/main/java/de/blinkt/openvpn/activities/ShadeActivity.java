@@ -3,10 +3,13 @@ package de.blinkt.openvpn.activities;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.PhoneAuthonCountEntity;
@@ -37,17 +40,23 @@ public class ShadeActivity extends Activity {
 
     }
 
+    /**
+     * 初始化点击事件
+     */
     private void initEvent() {
         ll_root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                   finish();
+                finish();
             }
         });
     }
 
+    /**
+     * 初始化界面
+     */
     private void initView() {
-        ll_root=(LinearLayout) findViewById(R.id.ll_root);
+        ll_root = (LinearLayout) findViewById(R.id.ll_root);
 
         //第一列
         ll_01 = (LinearLayout) findViewById(R.id.ll_01);
@@ -68,35 +77,38 @@ public class ShadeActivity extends Activity {
 
     }
 
+    /**
+     * 初始化数据
+     */
     private void initData() {
 
-        String phoneType=Build.MANUFACTURER.toLowerCase();
+        String phoneType = Build.MANUFACTURER.toLowerCase();
+
         switch (phoneType) {
             case Constant.LEMOBILE:
                 String le_s1;
                 String le_s2;
                 String le_s3;
-                switch (PhoneAuthonCountEntity.getInstance().getPosition())
-                {
+                switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
                     case 1:
                         le_s1 = getResources().getString(R.string.lemobile_test_1_1);
-                        setResourceOne(false,le_s1,R.drawable.lemobile_image_1_1);
-                        setResourceTwo(true,null,0);
-                        setResourceThree(true,null,0);
+                        setResourceOne(false, le_s1, R.drawable.lemobile_image_1_1);
+                        setResourceTwo(true, null, 0);
+                        setResourceThree(true, null, 0);
                         break;
                     case 2:
                         le_s1 = getResources().getString(R.string.lemobile_test_2_1);
-                        setResourceOne(false,le_s1,R.drawable.lemobile_image_2_1);
-                        setResourceTwo(true,null,0);
-                        setResourceThree(true,null,0);
+                        setResourceOne(false, le_s1, R.drawable.lemobile_image_2_1);
+                        setResourceTwo(true, null, 0);
+                        setResourceThree(true, null, 0);
                         break;
                     case 3:
                         le_s1 = getResources().getString(R.string.lemobile_test_3_1);
                         le_s2 = getResources().getString(R.string.lemobile_test_3_2);
                         le_s3 = getResources().getString(R.string.lemobile_test_3_3);
-                        setResourceOne(true,le_s1,R.drawable.lemobile_image_3_1);
-                        setResourceTwo(false,le_s2,R.drawable.lemobile_image_3_2);
-                        setResourceThree(false,le_s3,R.drawable.lemobile_image_3_3);
+                        setResourceOne(true, le_s1, R.drawable.lemobile_image_3_1);
+                        setResourceTwo(false, le_s2, R.drawable.lemobile_image_3_2);
+                        setResourceThree(false, le_s3, R.drawable.lemobile_image_3_3);
                         break;
                 }
 
@@ -105,51 +117,62 @@ public class ShadeActivity extends Activity {
                 String lenovn_s1 = getResources().getString(R.string.lenovo_test_1_0);
                 String lenovn_s2 = getResources().getString(R.string.lenovo_test_1_1);
                 String lenovn_s3 = getResources().getString(R.string.lenovo_test_1_2);
-                setResourceOne(true,lenovn_s1,R.drawable.lenovo_image_1_0);
-                setResourceTwo(false,lenovn_s2,R.drawable.lenovo_image_1_1);
-                setResourceThree(false,lenovn_s3,R.drawable.lenovo_image_1_2);
+                setResourceOne(true, lenovn_s1, R.drawable.lenovo_image_1_0);
+                setResourceTwo(false, lenovn_s2, R.drawable.lenovo_image_1_1);
+                setResourceThree(false, lenovn_s3, R.drawable.lenovo_image_1_2);
 
                 break;
-            case Constant.MEIZU:
-                String meizu_s1 ;
-                String meizu_s2 ;
-                switch (PhoneAuthonCountEntity.getInstance().getPosition())
-                {
 
-                    case 1://自启动
-                        meizu_s1 = getResources().getString(R.string.meizu_test_2_1);
-                        setResourceOne(false,meizu_s1,R.drawable.meizu_note2_image_2_1);
-                        setResourceTwo(true,null,0);
-                        setResourceThree(true,null,0);
+            case Constant.MEIZU:
+                String meizu_s1;
+                String meizu_s2;
+                String meizu_s3;
+                switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
+
+                    case 1://保持后台运行
+                        meizu_s1 = getResources().getString(R.string.meizu_test_1_1);
+                        meizu_s2 = getResources().getString(R.string.meizu_test_1_2);
+                        meizu_s3 = getResources().getString(R.string.meizu_test_1_3);
+                        setResourceOne(true, meizu_s1, R.drawable.meizu_image_1_1);
+                        setResourceTwo(false, meizu_s2, R.drawable.meizu_image_1_2);
+                        setResourceThree(false, meizu_s3, R.drawable.meizu_image_1_3);
                         break;
-                    case 2://网络
-                        meizu_s1=getResources().getString(R.string.meizu_test_3_1);
-                        meizu_s2=getResources().getString(R.string.meizu_test_3_2);
-                        setResourceOne(true,meizu_s1,R.drawable.meizu_image_3_1);
-                        setResourceTwo(false,meizu_s2,R.drawable.meizu_image_3_2);
-                        setResourceThree(true,null,0);
+                    case 2://自启动
+                        meizu_s1 = getResources().getString(R.string.meizu_test_2_1);
+                        setResourceOne(false, meizu_s1, R.drawable.meizu_note2_image_2_1);
+                        setResourceTwo(true, null, 0);
+                        setResourceThree(true, null, 0);
+                        break;
+                    case 3://网络
+                        meizu_s1 = getResources().getString(R.string.meizu_test_3_1);
+                        meizu_s2 = getResources().getString(R.string.meizu_test_3_2);
+                        setResourceOne(true, meizu_s1, R.drawable.meizu_image_3_1);
+                        setResourceTwo(false, meizu_s2, R.drawable.meizu_image_3_2);
+                        setResourceThree(true, null, 0);
                         break;
                 }
 
                 break;
             case Constant.SAMSUNG:
                 String samsung_s1;
-                String samsung_s2 ;
+                String samsung_s2;
 
-                switch (PhoneAuthonCountEntity.getInstance().getPosition())
-                {
+                switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
                     case 1:
                         samsung_s1 = getResources().getString(R.string.samsung_test_1_1);
                         samsung_s2 = getResources().getString(R.string.samsung_test_1_2);
-                        setResourceOne(true,samsung_s1,R.drawable.samsung_image_1_1);
-                        setResourceTwo(false,samsung_s2,R.drawable.samsung_image_1_2);
-                        setResourceThree(true,null,0);
+                        setResourceOne(true, samsung_s1, R.drawable.samsung_image_1_1);
+                        setResourceTwo(false, samsung_s2, R.drawable.samsung_image_1_2);
+                        setResourceThree(true, null, 0);
                         break;
                     case 2:
+
+                        samsung_s1 = getResources().getString(R.string.samsung_test_2_1);
                         samsung_s2 = getResources().getString(R.string.samsung_test_2_2);
-                        setResourceOne(true,samsung_s2,R.drawable.samsung_image_2_2);
-                        setResourceTwo(true,null,0);
-                        setResourceThree(true,null,0);
+
+                        setResourceOne(true, samsung_s1, R.drawable.sansung_image_2_1);
+                        setResourceTwo(false, samsung_s2, R.drawable.samsung_image_2_2);
+                        setResourceThree(true, null, 0);
 
                         break;
 
@@ -160,14 +183,12 @@ public class ShadeActivity extends Activity {
             case Constant.ONEPLUS:
                 String oneplus_s1 = getResources().getString(R.string.oneplus_test1);
                 String oneplus_s2 = getResources().getString(R.string.oneplus_test2);
-                setResourceOne(true,oneplus_s1,R.drawable.oneplus_image_01);
-                setResourceTwo(false,oneplus_s1,R.drawable.oppo_image_1_2);
-                setResourceThree(true,null,0);
+                setResourceOne(true, oneplus_s1, R.drawable.oneplus_image_01);
+                setResourceTwo(false, oneplus_s1, R.drawable.oppo_image_1_2);
+                setResourceThree(true, null, 0);
 
                 break;
             case Constant.HUAWEI:
-                //
-               // int version = Build.VERSION.SDK_INT;
                 String huawei_s1;
                 String huawei_s2;
                 String huawei_s3;
@@ -179,7 +200,6 @@ public class ShadeActivity extends Activity {
                         setResourceOne(false, huawei_s1, R.drawable.huawei_mate9_image_1_1);
                         setResourceTwo(true, null, 0);
                         setResourceThree(true, null, 0);
-
                         break;
 
                     case 2://自启动
@@ -188,13 +208,25 @@ public class ShadeActivity extends Activity {
                         setResourceTwo(true, null, 0);
                         setResourceThree(true, null, 0);
 
+                        break;
+
                     case 3://p8
-                        huawei_s1=getResources().getString(R.string.huawei_mate9_test_3_1);
-                        huawei_s2=getResources().getString(R.string.huawei_mate9_test_3_2);
-                        huawei_s3=getResources().getString(R.string.huawei_mate9_test_3_3);
-                        setResourceOne(true,huawei_s1,R.drawable.huawei_p8_image_3_1);
-                        setResourceTwo(false,huawei_s2,R.drawable.huawei_p8_image_3_2);
-                        setResourceThree(false,huawei_s3,R.drawable.huawei_p8_image_3_3);
+
+                        if (Build.VERSION.SDK_INT > 18 && Build.VERSION.SDK_INT < 24) {
+                            huawei_s1 = getResources().getString(R.string.huawei_mateP8_test_3_1);
+                            huawei_s2 = getResources().getString(R.string.huawei_mateP8_test_3_2);
+                            huawei_s3 = getResources().getString(R.string.huawei_mateP8_test_3_3);
+                            setResourceOne(true, huawei_s1, R.drawable.huawei_p8_image_3_1);
+                            setResourceTwo(false, huawei_s2, R.drawable.huawei_p8_image_3_2);
+                            setResourceThree(false, huawei_s3, R.drawable.huawei_p8_image_3_3);
+                        } else if (Build.VERSION.SDK_INT == 24) {
+                            huawei_s1 = getResources().getString(R.string.huawei_mate9_test_3_1);
+                            huawei_s2 = getResources().getString(R.string.huawei_mate9_test_3_2);
+                            setResourceOne(true, huawei_s1, R.drawable.huawei_mate9_image_3_1);
+                            setResourceTwo(false, huawei_s2, R.drawable.huawei_mate9_image_3_2);
+                            setResourceThree(true, null, 0);
+
+                        }
                         break;
 
                 }
@@ -224,16 +256,32 @@ public class ShadeActivity extends Activity {
                         setResourceTwo(false, gionee_s2, R.drawable.goinee_image_2_2);
                         setResourceThree(false, gionee_s3, R.drawable.goinee_image_2_3);
                         break;
-
-
                 }
 
                 break;
             case Constant.VIVO:
-                String vivo_test = getResources().getString(R.string.vivo_test_1_1);
-                setResourceOne(false, vivo_test, R.drawable.vivo_image_1_1);
-                setResourceTwo(true, null, 0);
-                setResourceThree(true, null, 0);
+
+                String vivo_test;
+                String vivo_test1;
+
+                switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
+                    case 1:
+                        vivo_test = getResources().getString(R.string.vivo_test_1_1);
+                        setResourceOne(false, vivo_test, R.drawable.vivo_image_1_1);
+                        setResourceTwo(true, null, 0);
+                        setResourceThree(true, null, 0);
+                        break;
+
+                    case 2:
+                        vivo_test = getResources().getString(R.string.vivo_test_2_1);
+                        vivo_test1 = getResources().getString(R.string.vivo_test_2_2);
+                        setResourceOne(true, vivo_test, R.drawable.vivo_image_2_1);
+                        setResourceTwo(false, vivo_test1, R.drawable.vivo_image_2_2);
+                        setResourceThree(true, null, 0);
+                        break;
+
+                }
+
                 break;
 
             //OPPO
@@ -246,8 +294,6 @@ public class ShadeActivity extends Activity {
                 break;
 
             case Constant.XIAOMI:
-
-
                 String xiaomi_s1;
                 String xiaomi_s2;
                 String xiaomi_s3;
@@ -287,8 +333,8 @@ public class ShadeActivity extends Activity {
         }
     }
 
+
     /**
-     * \
      *
      * @param flg 是否显示手点击胡图标
      * @param s   文字描述
@@ -300,9 +346,6 @@ public class ShadeActivity extends Activity {
         textView1.setText(s);
         iv_01.setBackgroundResource(iv1);
     }
-
-
-
     /**
      * @param flg 是否隐藏该条目
      * @param s2  文字描述
@@ -319,8 +362,11 @@ public class ShadeActivity extends Activity {
         }
 
     }
-
-    //第三列
+    /**
+     * @param flg 是否隐藏该条目
+     * @param s   文字描述
+     * @param iv3 图片设置
+     */
     public void setResourceThree(boolean flg, String s, int iv3) {
         if (flg) {
             ll_03.setVisibility(View.GONE);
