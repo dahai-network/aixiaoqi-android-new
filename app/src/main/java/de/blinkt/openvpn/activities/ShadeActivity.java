@@ -302,10 +302,18 @@ public class ShadeActivity extends Activity {
 
                         }
                         break;
+
                     case 2:
 
                         oppo_test1 = getResources().getString(R.string.oppo_test_2_1);
-                        oppo_test2 = getResources().getString(R.string.oppo_test_2_2);
+                        setResourceOne(false, oppo_test1, R.drawable.oppo_r9_image_2_1);
+                        setResourceTwo(true, null, 0);
+                        setResourceThree(true, null, 0);
+                        break;
+                    case 3:
+
+                        oppo_test1 = getResources().getString(R.string.oppo_test_3_1);
+                        oppo_test2 = getResources().getString(R.string.oppo_test_3_2);
                         setResourceOne(true, oppo_test1, R.drawable.oppo_image_1_1);
                         setResourceTwo(false, oppo_test2, R.drawable.oppo_image_1_2);
                         setResourceThree(true, null, 0);

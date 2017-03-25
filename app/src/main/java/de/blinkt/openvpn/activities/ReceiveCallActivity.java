@@ -81,9 +81,9 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 		setContentView(R.layout.activity_receive_call);
+		registerEndCallReceiver();
 		initViews();
 		setData();
-		registerEndCallReceiver();
 		addListener();
 		initDB();
 		searchArea();
@@ -103,7 +103,6 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	}
 
 	private  void searchArea(){
-
 		String address;
 		String phoneNumStr =getPhoneNumber();
 		address= PhoneNumberZero.getAddress(dao,phoneNumStr);
@@ -215,7 +214,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 		}
 		mBuilder.setContentTitle(getString(R.string.unitoys_phone))
 				.setContentText(getString(R.string.call_phoning,nametxt.getText().toString(),getIntent().getStringExtra("phoneNum")))
-				.setNumber(3)//显示数量
+				.setNumber(1)//显示数量
 //				.setTicker("有新短信来啦")//通知首次出现在通知栏，带上升动画效果的
 				.setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示
 				.setPriority(Notification.PRIORITY_DEFAULT)//设置该通知优先级
@@ -340,14 +339,15 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		if(receiver!=null)
+			unregisterReceiver(receiver);
+		receiver=null;
 		if(sipEngineCore!=null){
 			sipEngineCore.MuteMic(true);
 			sipEngineCore.SetLoudspeakerStatus(true);
 			sipEngineCore=null;
 		}
-		if(receiver!=null)
-			unregisterReceiver(receiver);
-		receiver=null;
+
 		cancelNotify();
 	}
 

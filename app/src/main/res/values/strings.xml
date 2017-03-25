@@ -110,8 +110,10 @@
     <string name="oppo_test_1_1">找到爱小器APP条目并且点击</string>
     <string name="oppo_test_1_2">分别关闭“后台冻结”和”检测到异常时自动优化“</string>
 
-    <string name="oppo_test_2_1">点击下方高级设置按钮</string>
-    <string name="oppo_test_2_2">打开休眠状态下保持WLAN连接开关</string>
+    <string name="oppo_test_2_1">开启“悬浮窗管理”开关</string>
+
+    <string name="oppo_test_3_1">点击下方高级设置按钮</string>
+    <string name="oppo_test_3_2">打开休眠状态下保持WLAN连接开关</string>
 
     <string name="oppoR7_test_1_1">找到爱小器APP对应的开关打开</string>
 

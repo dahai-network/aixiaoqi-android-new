@@ -196,12 +196,21 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     oppoIntent.setComponent(new ComponentName("com.coloros.oppoguardelf", "com.coloros.powermanager.fuelgaue.PowerUsageModelActivity"));
                     dataSave(oppoIntent, data);
 
+
+                    OpenSystemSuspendWindow(entity);
+                    Intent oppoOpenSysIntent=new Intent();
+                    oppoOpenSysIntent.setComponent(new ComponentName("com.coloros.safecenter","com.coloros.safecenter.sysfloatwindow.FloatWindowListActivity"));
+                    dataSave(oppoOpenSysIntent,data);
+
+
                 } else if (version == 19) {
                     autoRunSet(entity);
                     Intent oppoIntent = new Intent();
                     oppoIntent.setComponent(new ComponentName("com.color.safecenter", "com.color.safecenter.permission.startup.StartupAppListActivity"));
                     dataSave(oppoIntent, data);
                 }
+
+
 
                 wifiSet(entity);
                 Intent vivoNetWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
@@ -246,7 +255,6 @@ public class ImportantAuthorityActivity extends BaseActivity {
     }
 
 
-
     private void appPertectSet(AuthorityEntity entity) {
         entity.setTitle(Constant.APP_PERTECT);
         entity.setTip(Constant.PHONE_NO_OMIT);
@@ -284,10 +292,24 @@ public class ImportantAuthorityActivity extends BaseActivity {
         entity.setTip(Constant.PERTECT_AIXIAOQI_RUN_NORMAL);
     }
 
+    /***
+     * 设置 关闭后台冻结 标题
+     * @param entity
+     */
     public void ShutDownBackground(AuthorityEntity entity) {
         entity.setTitle(Constant.SHUT_DOWN_BACKGROUND);
         entity.setTip(Constant.PERTECT_AIXIAOQI_RUN_NORMAL);
 
     }
+
+    /**
+     * 开启系统悬浮窗
+     */
+    public void OpenSystemSuspendWindow(AuthorityEntity entity) {
+        entity.setTitle(Constant.OPEN_SUSPEND_WINDOW);
+        entity.setTip(Constant.PERTECT_AIXIAOQI_RUN_NORMAL);
+
+    }
+
 
 }

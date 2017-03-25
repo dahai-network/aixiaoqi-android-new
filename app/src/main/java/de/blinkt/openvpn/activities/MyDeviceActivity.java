@@ -725,7 +725,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		Log.d(TAG, "showDialogGOUpgrade");
 		//不能按返回键，只能二选其一
 		if (Upgrade == null) {
-			Upgrade = new DialogBalance(this, MyDeviceActivity.this, R.layout.dialog_balance, DOWNLOAD_SKY_UPGRADE);
+			Upgrade = new DialogBalance(this, getParent(), R.layout.dialog_balance, DOWNLOAD_SKY_UPGRADE);
 		}
 		if (!Upgrade.getDialog().isShowing()) {
 			Upgrade.getDialog().show();
@@ -946,12 +946,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		dismissProgress();
 		if (noDevicedialog != null) noDevicedialog.getDialog().dismiss();
 		//不能按返回键，只能二选其一
-		noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, NOT_YET_REARCH);
+		noDevicedialog = new DialogBalance(this, getParent(), R.layout.dialog_balance, NOT_YET_REARCH);
 		noDevicedialog.setCanClickBack(false);
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
-		} else {
+		} else if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)){
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
+		}else{
+			noDevicedialog.getDialog().dismiss();
 		}
 
 	}
@@ -1045,23 +1047,27 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					stopAnim();
 					break;
 				case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
+					stopAnim();
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
 					break;
 				case SocketConstant.REGISTER_FAIL:
+					stopAnim();
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
 					break;
 				case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
+					stopAnim();
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
 					break;
 				case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
+					stopAnim();
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
@@ -1079,10 +1085,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.RESTART_TCP:
+					startAnim();
 					conStatusTextView.setText(getString(R.string.index_registing));
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.REG_STATUE_CHANGE:
+					startAnim();
 					conStatusTextView.setText(getString(R.string.index_registing));
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
@@ -1140,7 +1148,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void showNoCardDialog() {
 		//不能按返回键，只能二选其一
 		if (cardRuleBreakDialog != null) cardRuleBreakDialog.getDialog().dismiss();
-		cardRuleBreakDialog = new DialogBalance(MyDeviceActivity.this, MyDeviceActivity.this, R.layout.dialog_balance, 3);
+		cardRuleBreakDialog = new DialogBalance(this, getParent(), R.layout.dialog_balance, 3);
 		cardRuleBreakDialog.setCanClickBack(false);
 		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));
 	}
