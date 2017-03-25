@@ -198,7 +198,6 @@ public class ImportantAuthorityActivity extends BaseActivity {
 
                 } else if (version == 19) {
 
-                    //com.color.safecenter.permission.startup.StartupAppListActivity
                     autoRunSet(entity);
                     Intent oppoIntent = new Intent();
                     oppoIntent.setComponent(new ComponentName("com.color.safecenter", "com.color.safecenter.permission.startup.StartupAppListActivity"));
