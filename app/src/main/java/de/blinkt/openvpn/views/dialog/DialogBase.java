@@ -36,19 +36,19 @@ abstract public class DialogBase{
     abstract protected void setDialogContentView(View view);
     abstract protected void setDialogStyle();
     private void initDialog(){
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(layoutId, null);
-        dialog = new Dialog(context, R.style.dialog);
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.setContentView(view);
-        setDialogContentView(view);
-        setDialogStyle();
-		try {
-			dialog.show();
-		}catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+        try {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(layoutId, null);
+            dialog = new Dialog(context, R.style.dialog);
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.setContentView(view);
+            setDialogContentView(view);
+            setDialogStyle();
+            dialog.show();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

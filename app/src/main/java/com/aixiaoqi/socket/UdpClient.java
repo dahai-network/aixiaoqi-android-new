@@ -41,7 +41,6 @@ public abstract class UdpClient implements Runnable {
 			while (flag) {
 				socket.receive(packet);
 				sendPort = packet.getPort();
-
 				String receiveMsg = new String(packet.getData(), 0, packet.getLength());
 				Log.e("receiveMsg","receiveMsg="+receiveMsg);
 				String tag = receiveMsg.substring(0, 7);

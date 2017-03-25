@@ -248,7 +248,7 @@ public class TlvAnalyticalUtils {
 		stringBuilder.replace(6, 8, "00");
 		sendToSdkLisener.sendServer(stringBuilder.toString());
 		if (ProMainActivity.sendYiZhengService != null){
-			CommonTools.delayTime(2000);
+//			CommonTools.delayTime(2000);
 			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
 			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}

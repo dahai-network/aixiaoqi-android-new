@@ -174,6 +174,7 @@ public class ReceiveSocketService extends Service {
 		Log.e("sendMessage", s);
 		Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
 		if (tcpClient != null && tcpClient.getTransceiver() != null) {
+			Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
 			tcpClient.getTransceiver().send(s);
 		}
 	}

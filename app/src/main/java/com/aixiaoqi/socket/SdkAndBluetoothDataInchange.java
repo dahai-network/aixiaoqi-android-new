@@ -179,14 +179,20 @@ public class SdkAndBluetoothDataInchange {
 				String number=formatByte(Integer.toHexString(value.length()/2),1);
 				toServerMessage=TlvAnalyticalUtils.preData[0]+number+"000000000000"+value;
 			}
-			String subNumber=formatByte(Integer.toHexString(toServerMessage.length()/2),2);
-			String number=formatByte(Integer.toHexString(toServerMessage.length()/2+5),1);
-			toServerMessage=TlvAnalyticalUtils.preData[8]+number+"010100"+"c7"+subNumber+toServerMessage;
+
+			TlvEntity tlvEntity=new TlvEntity();
+			String vString=tlvEntity.getValueLength(toServerMessage.length()/2)+toServerMessage;
+			int vLength=vString.length();
+			toServerMessage=TlvAnalyticalUtils.preData[8]+
+					formatByte(Integer.toHexString(vLength/2+4),1)+
+					"010100"+"c7"
+					+vString;
 			TlvAnalyticalUtils.sendToSdkLisener.sendServer(toServerMessage);
 
 		}
 
 	}
+
 
 	private  boolean speData(String message){
 		if(message.startsWith("a0c0")

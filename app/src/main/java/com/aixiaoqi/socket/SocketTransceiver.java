@@ -1,5 +1,7 @@
 package com.aixiaoqi.socket;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import java.io.DataInputStream;
@@ -9,6 +11,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.DateUtils;
 
 /**
  * Socket收发器 通过Socket发送数据，并使用新线程监听Socket接收到的数据
@@ -83,6 +88,7 @@ public abstract class SocketTransceiver implements Runnable {
 			Log.e("toBLue", "发送字符串out1=" + (out != null));
 			if (out == null)
 				out = new DataOutputStream(this.socket.getOutputStream());
+			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() +"端口："+socket.getLocalPort()+" \nIP:"+socket.getLocalSocketAddress().toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 			Log.e("toBLue", "发送字符串IOException=" + e.getMessage());

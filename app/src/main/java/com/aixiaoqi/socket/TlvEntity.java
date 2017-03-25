@@ -33,6 +33,16 @@ public class TlvEntity implements Serializable{
         }
         return hexStringLength;
     }
+    protected String getValueLength(int length) {
+        String hexStringLength;
+        if(length<127){
+            hexStringLength=AddZero(length);
+        }else{
+            hexStringLength=AddZero(length);
+            hexStringLength=Integer.toHexString((Integer.parseInt(hexStringLength,16)|0x8000));
+        }
+        return hexStringLength;
+    }
 
     private String AddZero(int  length){
         String    hexStringLength=Integer.toHexString(length);
