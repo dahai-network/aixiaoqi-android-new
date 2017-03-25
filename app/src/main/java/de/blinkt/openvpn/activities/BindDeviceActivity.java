@@ -73,7 +73,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	private Handler findDeviceHandler;
 	private HashSet<BluetoothModel> deviceSet;
 	private BluetoothAdapter mBluetoothAdapter;
-	private static final long SCAN_PERIOD = 10000; //120 seconds
+	private static final long SCAN_PERIOD = 120000; //120 seconds
 	private String deviceAddress = "";
 	SharedUtils utils = SharedUtils.getInstance();
 	private DialogBalance noDevicedialog;
@@ -82,6 +82,8 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	private String bracelettype;
 	//设备名称：类型不同名称不同，分别有【unitoys、unibox】
 	private String bluetoothName = Constant.UNITOYS;
+	//设备类型
+	private int DeviceType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +124,12 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	private void afterConnDevice() {
 		if (bracelettype != null) {
 			if (bracelettype.contains(MyDeviceActivity.UNIBOX)) {
-				showIsBindLayout();
+				new Handler().postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						showIsBindLayout();
+					}
+				}, 2000);
 			} else {
 				finish();
 			}
@@ -153,10 +160,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	private void showDialog() {
 		//不能按返回键，只能二选其一
 		noDevicedialog = new DialogBalance(BindDeviceActivity.this, BindDeviceActivity.this, R.layout.dialog_balance, 2);
-		noDevicedialog.setCanClickBack(false);
+//		noDevicedialog.setCanClickBack(false);
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
-		} else if (bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+		} else {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
 		}
 	}
@@ -257,20 +264,19 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_ISBIND_DEVICE) {
 			IsBindHttp http = (IsBindHttp) object;
+			utils.writeString(Constant.IMEI, deviceAddress);
 			if (http.getIsBindEntity().getBindStatus() == 0 && http.getStatus() == 1) {
 				if (mService != null) {
-					int DeviceType = 0;
 					String braceletname = utils.readString(Constant.BRACELETNAME);
 					if (!TextUtils.isEmpty(braceletname)) {
 						if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
-							DeviceType = 0;
+							BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE
+									, deviceAddress, "0", 0);
+							new Thread(bindDevicehttp).start();
 						} else {
-							DeviceType = 1;
+							mService.connect(deviceAddress);
 						}
 					}
-					BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE
-							, deviceAddress, "0", DeviceType);
-					new Thread(bindDevicehttp).start();
 				} else {
 					CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.connect_failure));
 					restartUartService();
@@ -288,8 +294,17 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			Log.i(TAG, "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
-				utils.writeString(Constant.IMEI, deviceAddress);
-				mService.connect(deviceAddress);
+				if (bluetoothName.contains(Constant.UNITOYS)) {
+					mService.connect(deviceAddress);
+				} else {
+					connectedRelativeLayout.setVisibility(View.VISIBLE);
+					new Handler().postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							finish();
+						}
+					}, 2000);
+				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
@@ -344,7 +359,11 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		if (BluetoothConstant.BLUE_BIND_SUCCESS.equals(type)) {
 			if (entity.isSuccess()) {
 				Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + utils.readString(Constant.IMEI) + ",版本号：" + utils.readString(Constant.BRACELETVERSION));
-				connectedRelativeLayout.setVisibility(View.VISIBLE);
+				if (bluetoothName.contains(Constant.UNIBOX)) {
+					final BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE
+							, deviceAddress, "0", 1);
+					new Thread(bindDevicehttp).start();
+				}
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -357,12 +376,14 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 						CommonTools.delayTime(500);
 						//上电指令
 						sendMessageToBlueTooth(UP_TO_POWER);
-						runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								finish();
-							}
-						});
+						if (!bluetoothName.contains(Constant.UNIBOX)) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									finish();
+								}
+							});
+						}
 					}
 				}).start();
 			} else {

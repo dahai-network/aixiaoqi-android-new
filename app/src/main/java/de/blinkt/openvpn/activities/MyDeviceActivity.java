@@ -860,7 +860,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if (mService == null && mService.mConnectionState == UartService.STATE_CONNECTED) {
+				if (mService == null || mService.mConnectionState == UartService.STATE_CONNECTED) {
 					return;
 				}
 				//重置
@@ -950,7 +950,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		noDevicedialog.setCanClickBack(false);
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
-		} else if (bracelettype.contains(MyDeviceActivity.UNITOYS)) {
+		} else {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
 		}
 
