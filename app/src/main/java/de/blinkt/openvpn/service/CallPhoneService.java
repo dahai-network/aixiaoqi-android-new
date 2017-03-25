@@ -132,7 +132,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 
 	@Override
 	public void OnNewCall(int CallDir, final String peer_caller, boolean is_video_call) {
-		Log.e(TAG, "新来电");
+		Log.e(TAG, "新来电 CAllDir="+CallDir);
 		if (CallDir != 0) {
 			CALL_DIR = 0;
 			ReceiveCallActivity.launch(CallPhoneService.this, peer_caller);
