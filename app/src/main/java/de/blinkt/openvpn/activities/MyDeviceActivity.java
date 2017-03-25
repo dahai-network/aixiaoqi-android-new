@@ -1045,23 +1045,27 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					stopAnim();
 					break;
 				case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
+					stopAnim();
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
 					break;
 				case SocketConstant.REGISTER_FAIL:
+					stopAnim();
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
 					break;
 				case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
+					stopAnim();
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
 					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
 					break;
 				case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
+					stopAnim();
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
@@ -1079,10 +1083,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.RESTART_TCP:
+					startAnim();
 					conStatusTextView.setText(getString(R.string.index_registing));
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.REG_STATUE_CHANGE:
+					startAnim();
 					conStatusTextView.setText(getString(R.string.index_registing));
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
