@@ -52,13 +52,13 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
     }
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "cn.com.aixiaoqi"
         minSdkVersion 18
-        targetSdkVersion 25
+        targetSdkVersion 22
         versionCode = 7
         versionName = "1.2.2"
         ndk {
@@ -93,13 +93,13 @@ android {
     }*/
     signingConfigs {
         release {
-            storeFile file("D:/debug.keystore")
+            storeFile file("E:/DahaiFile/aixiaoqiFile/aixiaoqiKeyStore/debug.keystore")
             storePassword "dahai1qaz"
             keyAlias "dahai"
             keyPassword "dahai1qaz"
         }
         debug {
-            storeFile file("D:/debug.keystore")
+            storeFile file("E:/DahaiFile/aixiaoqiFile/aixiaoqiKeyStore/debug.keystore")
             storePassword "dahai1qaz"
             keyAlias "dahai"
             keyPassword "dahai1qaz"
