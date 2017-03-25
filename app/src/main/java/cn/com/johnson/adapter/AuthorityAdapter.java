@@ -101,5 +101,5 @@ public class AuthorityAdapter extends RecyclerView.Adapter<AuthorityAdapter.Auth
 			ButterKnife.bind(this, itemView);
 		}
 
-	}
+    }
 }

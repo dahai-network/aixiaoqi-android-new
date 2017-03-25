@@ -64,9 +64,6 @@
     <color name="transparent">#00FFFFFF</color>
 
     <color name="colorf7f7f8">#f7f7f8</color>
-    <color name="colorf_01d0c0">#01d0c0</color>
-
-
     <!--进度条颜色-->
     <color name="color06c6b8">#06c6b8</color>
     <color name="color_ff4a57">#ff4a57</color>
@@ -79,4 +76,6 @@
     <color name="color_2bbf55">#2bbf55</color>
     <color name="color_dddddd">#dddddd</color>
     <color name="color_1892df">#1892df</color>
+    <color name="colorf_01d0c0">#01d0c0</color>
+
 </resources>

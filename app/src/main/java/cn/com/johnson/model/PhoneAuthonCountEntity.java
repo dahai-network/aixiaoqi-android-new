@@ -1,9 +1,7 @@
 package cn.com.johnson.model;
 
 
-import android.os.Build;
-
-import de.blinkt.openvpn.constant.Constant;
+import java.io.Serializable;
 
 /**
  * Created by kim
@@ -11,7 +9,7 @@ import de.blinkt.openvpn.constant.Constant;
  * phone 的实例
  */
 
-public class PhoneAuthonCountEntity {
+public class PhoneAuthonCountEntity  implements Serializable{
 
 
     private static PhoneAuthonCountEntity instance = null;
