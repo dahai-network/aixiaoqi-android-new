@@ -174,8 +174,10 @@ public abstract class CommonHttp implements Callback, Runnable {
 			error(response.message());
 		} else if (response.code() >= 500 && response.code() < 600) {//服务器异常
 			//大部分是没有缓存该页面所以出现了504的返回
-			if (response.code() == 504)
+			if (response.code() == 504){
 				noNetShow();
+				return;
+			}
 			error(response.message());
 		} else {
 			error(response.message());
