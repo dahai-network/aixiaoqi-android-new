@@ -1,13 +1,15 @@
 package cn.com.johnson.model;
 
 
+import java.io.Serializable;
+
 /**
  * Created by kim
  * on 2017/3/22.
  * phone 的实例
  */
 
-public class PhoneAuthonCountEntity {
+public class PhoneAuthonCountEntity  implements Serializable{
 
 
     private static PhoneAuthonCountEntity instance = null;
