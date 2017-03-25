@@ -304,6 +304,11 @@ public class Constant {
 	public static final String BACKGROUND_HIGH_POWER="后台高耗电时允许运行";
 
 	public static final String SPIRIT_AWAY_MODE="关闭“神隐模式”";
+
+	public static final String SHUT_DOWN_BACKGROUND="关闭“后台冻结”";
 	public static final String REGISTER_SIM_NOT_PRE_DATA = "not_pre_data";
 	public static final String REGISTER_SIM_PRE_DATA = "pre_data";
+
+
+
 }
