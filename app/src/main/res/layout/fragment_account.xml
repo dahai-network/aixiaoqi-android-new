@@ -194,7 +194,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/padding_40dp"
                     android:background="@drawable/call_phone_selector"
-                    android:drawableLeft="@drawable/my_device"
+                    android:drawableLeft="@drawable/permission_image"
                     android:drawablePadding="@dimen/padding"
                     android:drawableRight="@drawable/arrow"
                     android:gravity="center_vertical"

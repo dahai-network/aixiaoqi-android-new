@@ -267,6 +267,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
 		intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
 		intentFilter.addAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
+		intentFilter.addAction(UartService.FINDED_SERVICE);
 		return intentFilter;
 	}
 
@@ -889,7 +890,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		@Override
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
-			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+			if (action.equals(UartService.FINDED_SERVICE)) {
 				MyDeviceActivity.isConnectOnce = true;
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				Log.i(TAG, "被主动断掉连接！");

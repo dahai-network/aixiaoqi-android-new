@@ -19,7 +19,7 @@
             android:layout_marginLeft="@dimen/padding_20dp"
             android:drawableLeft="@drawable/blue_number1_3"
             android:drawablePadding="@dimen/padding_5dp"
-            android:text="@string/oppo_test1"
+            android:text="@string/oppo_test_1_1"
             android:textColor="@color/colorf_01d0c0"
             android:textSize="@dimen/little_16" />
 
@@ -53,7 +53,7 @@
             android:layout_marginLeft="@dimen/padding_20dp"
             android:drawableLeft="@drawable/blue_number2_3"
             android:drawablePadding="@dimen/padding_5dp"
-            android:text="@string/oppo_test1"
+            android:text="@string/oppo_test_1_2"
             android:textColor="@color/colorf_01d0c0"
             android:textSize="@dimen/little_16" />
 
@@ -81,7 +81,7 @@
             android:layout_marginLeft="@dimen/padding_20dp"
             android:drawableLeft="@drawable/blue_number3_3"
             android:drawablePadding="@dimen/padding_5dp"
-            android:text="@string/oppo_test1"
+            android:text="@string/oppo_test_1_1"
             android:textColor="@color/colorf_01d0c0"
             android:textSize="@dimen/little_16" />
 

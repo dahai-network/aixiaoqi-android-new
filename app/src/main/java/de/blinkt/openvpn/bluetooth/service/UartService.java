@@ -29,6 +29,7 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -72,6 +73,9 @@ public class UartService extends Service implements Serializable {
 			"com.nordicsemi.nrfUART.EXTRA_DATA";//蓝牙发送额外数据
 	public final static String DEVICE_DOES_NOT_SUPPORT_UART =
 			"com.nordicsemi.nrfUART.DEVICE_DOES_NOT_SUPPORT_UART";//不支持操作
+	public final static String FINDED_SERVICE =
+			"finded_service";//找到服务
+
 
 	public static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 	public static final UUID RX_SERVICE_UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
@@ -103,10 +107,8 @@ public class UartService extends Service implements Serializable {
 				broadcastUpdate(intentAction);
 				Log.i(TAG, "Connected to GATT server.");
 				// Attempts to discover services after successful connection.
-				CommonTools.delayTime(1000);
 				boolean isFindServiceSuccess = mBluetoothGatt.discoverServices();
 				Log.i(TAG, "Attempting to start service discovery:" + isFindServiceSuccess);
-
 			} else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
 				intentAction = ACTION_GATT_DISCONNECTED;
 				mConnectionState = STATE_DISCONNECTED;
@@ -122,7 +124,12 @@ public class UartService extends Service implements Serializable {
 				Log.w(TAG, "mBluetoothGatt = " + mBluetoothGatt);
 //				BluetoothGattServices = mBluetoothGatt.getServices();
 //				Log.e("getService", "mBluetoothGatt size = " + BluetoothGattServices.size());
-				broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
+				enableTXNotification();
+				//如果版本号小于android N
+				if (Build.VERSION.SDK_INT < 24) {
+					boolean isSuccess = ensureServiceChangedEnabled();
+					Log.i(TAG, "ensureServiceChangedEnabled:" + isSuccess);
+				}
 			} else {
 				Log.w(TAG, "onServicesDiscovered received: " + status);
 			}
@@ -404,13 +411,13 @@ public class UartService extends Service implements Serializable {
 		}
 		BluetoothGattService RxService;
 		RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
-		Log.i("getService", "获取服务：" + RxService);
 
 		if (RxService == null) {
 			showMessage("Rx service not found!");
 			broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
 			return;
 		}
+		Log.i("getService", "获取服务：" + RxService);
 		setDescriptor(RxService, TX_CHAR_UUID1);
 //		setDescriptor(RxService, TX_CHAR_UUID2);
 //		setDescriptor(RxService, TX_CHAR_UUID3);
@@ -456,6 +463,8 @@ public class UartService extends Service implements Serializable {
 		descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 //		mBluetoothGatt.readDescriptor(descriptor);
 		mBluetoothGatt.writeDescriptor(descriptor);
+		//找到设备后正式连接上
+		broadcastUpdate(FINDED_SERVICE);
 	}
 
 	public boolean writeRXCharacteristic(byte[] value) {

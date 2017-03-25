@@ -49,7 +49,6 @@ import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
-import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
@@ -82,8 +81,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	private String bracelettype;
 	//设备名称：类型不同名称不同，分别有【unitoys、unibox】
 	private String bluetoothName = Constant.UNITOYS;
-	//设备类型
-	private int DeviceType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,12 +92,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		}
 
 		bracelettype = getIntent().getStringExtra(MyDeviceActivity.BRACELETTYPE);
-
-		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
-			bluetoothName = Constant.UNIBOX;
-		} else {
-			bluetoothName = Constant.UNITOYS;
-		}
 
 		final BluetoothManager bluetoothManager =
 				(BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -114,6 +105,14 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		setContentView(R.layout.activity_bind_device);
 		EventBus.getDefault().register(this);
 		ButterKnife.bind(this);
+
+		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+			bluetoothName = Constant.UNIBOX;
+			search_bluetooth.setText(getString(R.string.searching_unibox_strap));
+		} else {
+			bluetoothName = Constant.UNITOYS;
+		}
+
 		deviceSet = new HashSet<>();
 		mHandler = new Handler();
 		findDeviceHandler = new Handler();
@@ -264,7 +263,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_ISBIND_DEVICE) {
 			IsBindHttp http = (IsBindHttp) object;
-			utils.writeString(Constant.IMEI, deviceAddress);
 			if (http.getIsBindEntity().getBindStatus() == 0 && http.getStatus() == 1) {
 				if (mService != null) {
 					String braceletname = utils.readString(Constant.BRACELETNAME);
@@ -294,6 +292,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			Log.i(TAG, "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
+				utils.writeString(Constant.IMEI, deviceAddress);
 				if (bluetoothName.contains(Constant.UNITOYS)) {
 					mService.connect(deviceAddress);
 				} else {
@@ -370,9 +369,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 						BluetoothConstant.IS_BIND = true;
 						//更新时间操作
 						sendMessageToBlueTooth(getBLETime());
-						CommonTools.delayTime(500);
-						//基本信息
-						sendMessageToBlueTooth(BASIC_MESSAGE);
 						CommonTools.delayTime(500);
 						//上电指令
 						sendMessageToBlueTooth(UP_TO_POWER);
