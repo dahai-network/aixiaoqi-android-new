@@ -172,7 +172,8 @@
             android:theme="@android:style/Theme.Translucent"/>
         <activity
             android:name="de.blinkt.openvpn.activities.ReceiveCallActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
+          
             android:screenOrientation="portrait">
         </activity>
         <activity
