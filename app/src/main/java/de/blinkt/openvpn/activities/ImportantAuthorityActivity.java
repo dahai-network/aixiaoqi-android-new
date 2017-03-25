@@ -197,7 +197,6 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     dataSave(oppoIntent, data);
 
                 } else if (version == 19) {
-
                     autoRunSet(entity);
                     Intent oppoIntent = new Intent();
                     oppoIntent.setComponent(new ComponentName("com.color.safecenter", "com.color.safecenter.permission.startup.StartupAppListActivity"));
