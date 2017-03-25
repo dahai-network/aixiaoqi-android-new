@@ -11,8 +11,6 @@
         android:id="@+id/search_bluetooth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/pointProgressBar"
-        android:layout_below="@+id/include2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="43dp"
         android:text="@string/searching_wrist_strap"

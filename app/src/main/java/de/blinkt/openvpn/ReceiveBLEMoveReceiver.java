@@ -111,7 +111,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		this.context = context;
 		final String action = intent.getAction();
 		mService = ICSOpenVPNApplication.uartService;
-		if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+		if (action.equals(UartService.FINDED_SERVICE)) {
 			Log.d(TAG, "UART_CONNECT_MSG");
 			ICSOpenVPNApplication.isConnect = true;
 			IS_TEXT_SIM = false;
@@ -123,8 +123,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				@Override
 				public void run() {
 					try {
-						Thread.sleep(3000);
 						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
+						Log.i(TAG,"发送了专属命令");
+						Thread.sleep(500);
+						sendMessageToBlueTooth(BASIC_MESSAGE);
 						String braceletname = utils.readString(Constant.BRACELETNAME);
 						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
 							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
@@ -132,8 +134,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							Log.i("toBLue", "连接成功");
 							//更新时间操作
 							sendMessageToBlueTooth(getBLETime());
-							CommonTools.delayTime(500);
-							sendMessageToBlueTooth(BASIC_MESSAGE);
 							CommonTools.delayTime(500);
 							sendMessageToBlueTooth(UP_TO_POWER);
 						}
@@ -309,6 +309,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
 											if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
+												SendCommandToBluetooth.sendMessageToBlueTooth(BASIC_MESSAGE);
+												Thread.sleep(500);
 												SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 											} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
 												if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {

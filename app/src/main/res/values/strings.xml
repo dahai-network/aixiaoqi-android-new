@@ -564,7 +564,7 @@
     <string name="unibox">爱小器钥匙扣</string>
     <string name="choice_bind_device">选择绑定设备</string>
     <string name="finded_bracelet">已搜索到设备，请点击设备确认绑定</string>
-    <string name="click_bracelet_sure_bind">敲击设备确认绑定</string>
+    <string name="click_bracelet_sure_bind">点击设备按钮确认绑定</string>
     <string name="no_device_around">未能搜索到设备请重新搜索</string>
     <string name="message_remind">消息提醒</string>
     <string name="update_fail_retry">升级失败，请重试！</string>
@@ -573,4 +573,5 @@
     <string name="important_autohrity">重要权限设置</string>
     <string name="authority_tip">为保证爱小器正常运行，必须开启以下权限:</string>
     <string name="set_now">立即设置</string>
+    <string name="searching_unibox_strap">正在搜索周围双待王</string>
 </resources>

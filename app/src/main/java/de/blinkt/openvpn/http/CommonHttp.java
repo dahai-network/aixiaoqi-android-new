@@ -167,7 +167,9 @@ public abstract class CommonHttp implements Callback, Runnable {
 					Intent intent1 = new Intent();
 					intent1.setAction(SportFragment.CLEARSPORTDATA);
 					intent1.setAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
+					if(ICSOpenVPNApplication.uartService!=null)
 					ICSOpenVPNApplication.uartService.disconnect();
+					if(ICSOpenVPNApplication.getInstance()!=null)
 					ICSOpenVPNApplication.getInstance().sendBroadcast(intent1);
 					Intent intent = new Intent(context_, LoginMainActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

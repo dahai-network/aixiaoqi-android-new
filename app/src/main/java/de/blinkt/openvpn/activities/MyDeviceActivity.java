@@ -126,7 +126,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public static String UNITOYS = "unitoys";
 	public static String UNIBOX = "unibox";
 
-//	private SharedUtils utils = null;
+	//	private SharedUtils utils = null;
 	private UartService mService = ICSOpenVPNApplication.uartService;
 	private String macAddressStr;
 	private int SCAN_PERIOD = 10000;//原本120000毫秒
@@ -424,7 +424,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+			if (action.equals(UartService.STATE_CONNECTED)) {
 				//TODO 连接成功，操作问题
 				//测试代码
 				unBindButton.setVisibility(View.VISIBLE);
@@ -568,9 +568,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			sinking.setPercent(0f);
 		}
 		statueTextView.setVisibility(GONE);
-		if (macTextView.getText().length() == 0) {
-			macTextView.setText(SharedUtils.getInstance().readString(Constant.IMEI));
-		}
 	}
 
 
@@ -581,6 +578,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		isForeground = true;
 		int electricityInt = SharedUtils.getInstance().readInt(Constant.ELECTRICITY);
 		sinking.setPercent(((float) electricityInt) / 100);
+		macTextView.setText(SharedUtils.getInstance().readString(Constant.IMEI));
 		DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
 	}
 
@@ -638,12 +636,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				ICSOpenVPNApplication.isConnect = false;
 				ReceiveBLEMoveReceiver.isConnect = false;
 				registFail();
-				CommonTools.showShortToast(this, "已解绑设备");
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
+				CommonTools.showShortToast(this, "已解绑设备");
 				mService.disconnect();
 				finish();
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
+				Log.i(TAG,object.getMsg());
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
 			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
