@@ -950,8 +950,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		noDevicedialog.setCanClickBack(false);
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
-		} else {
+		} else if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)){
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
+		}else{
+			noDevicedialog.getDialog().dismiss();
 		}
 
 	}
