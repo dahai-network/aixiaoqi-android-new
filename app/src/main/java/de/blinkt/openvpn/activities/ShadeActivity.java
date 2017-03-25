@@ -3,13 +3,10 @@ package de.blinkt.openvpn.activities;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.PhoneAuthonCountEntity;
@@ -83,7 +80,7 @@ public class ShadeActivity extends Activity {
     private void initData() {
 
         String phoneType = Build.MANUFACTURER.toLowerCase();
-
+        int version = Build.VERSION.SDK_INT;
         switch (phoneType) {
             case Constant.LEMOBILE:
                 String le_s1;
@@ -169,7 +166,6 @@ public class ShadeActivity extends Activity {
 
                         samsung_s1 = getResources().getString(R.string.samsung_test_2_1);
                         samsung_s2 = getResources().getString(R.string.samsung_test_2_2);
-
                         setResourceOne(true, samsung_s1, R.drawable.sansung_image_2_1);
                         setResourceTwo(false, samsung_s2, R.drawable.samsung_image_2_2);
                         setResourceThree(true, null, 0);
@@ -286,11 +282,47 @@ public class ShadeActivity extends Activity {
 
             //OPPO
             case Constant.OPPO:
-                String oppo_test1 = getResources().getString(R.string.oppo_test1);
-                String oppo_test2 = getResources().getString(R.string.oppo_test2);
-                setResourceOne(true, oppo_test1, R.drawable.oppo_image_1_1);
-                setResourceTwo(false, oppo_test2, R.drawable.oppo_image_1_2);
-                setResourceThree(true, null, 0);
+                String oppo_test1;
+                String oppo_test2;
+
+                switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
+                    case 1:
+                        if (version > 19) {
+                            oppo_test1 = getResources().getString(R.string.oppo_test_1_1);
+                            oppo_test2 = getResources().getString(R.string.oppo_test_1_2);
+                            setResourceOne(true, oppo_test1, R.drawable.oppo_image_2_1);
+                            setResourceTwo(false, oppo_test2, R.drawable.oppo_image_2_2);
+                            setResourceThree(true, null, 0);
+                        } else if (version == 19) {
+
+                            oppo_test1 = getResources().getString(R.string.oppoR7_test_1_1);
+                            setResourceOne(false, oppo_test1, R.drawable.oppor7_image_2_1);
+                            setResourceTwo(true, null, 0);
+                            setResourceThree(true, null, 0);
+
+                        }
+                        break;
+
+                    case 2:
+
+                        oppo_test1 = getResources().getString(R.string.oppo_test_2_1);
+                        setResourceOne(false, oppo_test1, R.drawable.oppo_r9_image_2_1);
+                        setResourceTwo(true, null, 0);
+                        setResourceThree(true, null, 0);
+                        break;
+                    case 3:
+
+                        oppo_test1 = getResources().getString(R.string.oppo_test_3_1);
+                        oppo_test2 = getResources().getString(R.string.oppo_test_3_2);
+                        setResourceOne(true, oppo_test1, R.drawable.oppo_image_1_1);
+                        setResourceTwo(false, oppo_test2, R.drawable.oppo_image_1_2);
+                        setResourceThree(true, null, 0);
+
+                        break;
+
+
+                }
+
                 break;
 
             case Constant.XIAOMI:
@@ -309,7 +341,6 @@ public class ShadeActivity extends Activity {
                         setResourceThree(false, xiaomi_s3, R.drawable.xiaomi_image_1_3);
                         break;
                     case 2:
-
                         xiaomi_s1 = getResources().getString(R.string.xiaomi_spirit_test_2_1);
                         setResourceOne(false, xiaomi_s1, R.drawable.xiaomi_image_2_2);
                         setResourceTwo(true, null, 0);
@@ -335,7 +366,6 @@ public class ShadeActivity extends Activity {
 
 
     /**
-     *
      * @param flg 是否显示手点击胡图标
      * @param s   文字描述
      * @param iv1 图片
@@ -346,6 +376,7 @@ public class ShadeActivity extends Activity {
         textView1.setText(s);
         iv_01.setBackgroundResource(iv1);
     }
+
     /**
      * @param flg 是否隐藏该条目
      * @param s2  文字描述
@@ -362,6 +393,7 @@ public class ShadeActivity extends Activity {
         }
 
     }
+
     /**
      * @param flg 是否隐藏该条目
      * @param s   文字描述

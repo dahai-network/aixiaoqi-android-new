@@ -302,8 +302,13 @@ public class Constant {
 
 	public static final String LOCK_SCREEN_CLEAR_WHITE_LIST= "开启 ”锁屏清理白名单“";
 	public static final String BACKGROUND_HIGH_POWER="后台高耗电时允许运行";
-
+	public static final String OPEN_SUSPEND_WINDOW="开启“系统悬浮窗”";
 	public static final String SPIRIT_AWAY_MODE="关闭“神隐模式”";
+
+	public static final String SHUT_DOWN_BACKGROUND="关闭“后台冻结”";
 	public static final String REGISTER_SIM_NOT_PRE_DATA = "not_pre_data";
 	public static final String REGISTER_SIM_PRE_DATA = "pre_data";
+
+
+
 }
