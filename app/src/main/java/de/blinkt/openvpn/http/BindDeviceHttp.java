@@ -29,7 +29,7 @@ public class BindDeviceHttp extends BaseHttp {
 		sendMethod_ = POST_MODE;
 		params.put("Version", URLEncoder.encode(Version, "utf-8"));
 		params.put("IMEI", URLEncoder.encode(IMEI, "utf-8"));
-		params.put("DeviceType", URLEncoder.encode(DeviceType, "utf-8"));
+		params.put("DeviceType", URLEncoder.encode(DeviceType+"", "utf-8"));
 	}
 
 }

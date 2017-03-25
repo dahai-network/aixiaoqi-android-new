@@ -71,6 +71,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	{
 		Intent intent = new Intent(context,ReceiveCallActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		intent.putExtra("phoneNum",phoneNum);
 		context.startActivity(intent);
 	}

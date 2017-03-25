@@ -223,7 +223,9 @@ public class SdkAndBluetoothDataInchange {
 
 
 	private void getIccid(ArrayList<String> messages) {
+
 		count=count+1;
+		Log.e(TAG,"count="+count);
 		if(count<4){
 			TlvAnalyticalUtils.sendToBlue(IccidCommand[count-1]);
 		}else if(count==4){
