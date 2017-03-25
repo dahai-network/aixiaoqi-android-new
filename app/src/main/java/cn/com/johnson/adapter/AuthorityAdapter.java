@@ -69,6 +69,8 @@ public class AuthorityAdapter extends RecyclerView.Adapter<AuthorityAdapter.Auth
 //						+ android.os.Build.VERSION.SDK + ","
 //						+ android.os.Build.VERSION.RELEASE);
                 context.startActivity(entity.getintentEntity().getAuthorityIntent());
+
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

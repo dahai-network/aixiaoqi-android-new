@@ -19,12 +19,12 @@
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
-        android:maxLines="8"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/padding_60dp"
         android:layout_toEndOf="@+id/iv_01"
-        android:autoLink="all"
+        android:lines="1"
+        android:maxLength="10"
         android:textSize="@dimen/little_16"
         tools:text="This is Title" />
 

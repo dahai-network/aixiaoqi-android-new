@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -23,45 +24,47 @@ import de.blinkt.openvpn.util.IntentWrapper;
 
 public class ImportantAuthorityActivity extends BaseActivity {
 
-	@BindView(R.id.authorityRecyclerView)
-	RecyclerView authorityRecyclerView;
+    private static final String TAG = "aixiaoqi__";
+    @BindView(R.id.authorityRecyclerView)
+    RecyclerView authorityRecyclerView;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_important_authority);
-		ButterKnife.bind(this);
-		initSet();
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_important_authority);
+        ButterKnife.bind(this);
+        initSet();
+    }
 
-	private void initSet() {
-		hasLeftViewTitle(R.string.important_autohrity, 0);
-		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-		authorityRecyclerView.setLayoutManager(layoutManager);
-		AuthorityAdapter adapter = new AuthorityAdapter(this, getPhoneTypeEntity());
-		authorityRecyclerView.setAdapter(adapter);
-	}
+    private void initSet() {
+        hasLeftViewTitle(R.string.important_autohrity, 0);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        authorityRecyclerView.setLayoutManager(layoutManager);
+        AuthorityAdapter adapter = new AuthorityAdapter(this, getPhoneTypeEntity());
+        authorityRecyclerView.setAdapter(adapter);
+    }
 
-	public ArrayList<AuthorityEntity> getPhoneTypeEntity() {
-		ArrayList<AuthorityEntity> data = new ArrayList<>();
-		setPhoneTypeEntity(data);
-		if (data.size() == 0) {
-			IntentWrapper.whiteListMatters(ProMainActivity.instance, "服务的持续运行");
-			finish();
-		}
-		return data;
-	}
+    public ArrayList<AuthorityEntity> getPhoneTypeEntity() {
+        ArrayList<AuthorityEntity> data = new ArrayList<>();
+        setPhoneTypeEntity(data);
+        if (data.size() == 0) {
+            IntentWrapper.whiteListMatters(ProMainActivity.instance, "服务的持续运行");
+            finish();
+        }
+        return data;
+    }
 
     public void setPhoneTypeEntity(ArrayList<AuthorityEntity> data) {
         int version = Build.VERSION.SDK_INT;
         AuthorityEntity entity = new AuthorityEntity();
         Intent shadeIntent = new Intent(this, ShadeActivity.class);
 
-        String phoneType=Build.MANUFACTURER.toLowerCase();
+        String phoneType = Build.MANUFACTURER.toLowerCase();
+        Log.d(TAG, "phoneType: "+phoneType);
         switch (phoneType) {
             case Constant.LEMOBILE:
-                if (version>18) {
+                if (version > 18) {
 
                     appPertectSet(entity);
                     Intent letvIntent = new Intent();
@@ -83,7 +86,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
                 break;
             //  case Constant.LENOVO
             case Constant.LENOVO:
-                if (version>18) {
+                if (version > 18) {
                     wifiSet(entity);
                     Intent netWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     entity.setintentEntity(new IntentEntity(netWorkIntent, shadeIntent));
@@ -91,19 +94,23 @@ public class ImportantAuthorityActivity extends BaseActivity {
                 }
                 break;
             case Constant.MEIZU:
-                if (version >18) {
-                  /*  keepStandbySet(entity);
-                    Intent meizuIntent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
-                    meizuIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                    meizuIntent.putExtra("packageName", ICSOpenVPNApplication.getInstance().getPackageName());
-                    entity.setintentEntity(new IntentEntity(meizuIntent, shadeIntent));
-                    data.add(new AuthorityEntity(entity));*/
+                if (version > 18) {
 
-                    autoRunSet(entity);
+                    //保持后台运行
+                    keepStandbySet(entity);
                     Intent meizuGodIntent = new Intent();
                     meizuGodIntent.setComponent(new ComponentName("com.meizu.safe", "com.meizu.safe.SecurityCenterActivity"));
                     entity.setintentEntity(new IntentEntity(meizuGodIntent, shadeIntent));
                     data.add(new AuthorityEntity(entity));
+
+                    //自启动
+                    autoRunSet(entity);
+                    Intent meizuIntent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
+                    meizuIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                    meizuIntent.putExtra("packageName", ICSOpenVPNApplication.getInstance().getPackageName());
+                    entity.setintentEntity(new IntentEntity(meizuIntent, shadeIntent));
+                    data.add(new AuthorityEntity(entity));
+
 
                     wifiSet(entity);
                     Intent netWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
@@ -113,7 +120,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
                 break;
             case Constant.SAMSUNG:
 
-                if (version > 18 ) {
+                if (version > 18) {
                     autoRunSet(entity);
                     Intent samsungLIntent = ICSOpenVPNApplication.getInstance().getPackageManager().getLaunchIntentForPackage("com.samsung.android.sm");
                     if (samsungLIntent != null) {
@@ -137,10 +144,11 @@ public class ImportantAuthorityActivity extends BaseActivity {
             //华为
             case Constant.HUAWEI:
                 //lock screen clear white list
-                if ( version >18) {
+                if (version > 18) {
+                    //锁屏清理
                     lockScreenSet(entity);
                     Intent huaweiGodIntent = new Intent();
-                    huaweiGodIntent.setComponent(new ComponentName("com.meizu.safe", "com.meizu.safe.SecurityCenterActivity"));
+                    huaweiGodIntent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity"));
                     entity.setintentEntity(new IntentEntity(huaweiGodIntent, shadeIntent));
                     data.add(new AuthorityEntity(entity));
                     //auto running
@@ -150,6 +158,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     entity.setintentEntity(new IntentEntity(huaweiIntent, shadeIntent));
                     data.add(new AuthorityEntity(entity));
 
+
                     wifiSet(entity);
                     Intent huaweinetWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     entity.setintentEntity(new IntentEntity(huaweinetWorkIntent, shadeIntent));
@@ -157,13 +166,11 @@ public class ImportantAuthorityActivity extends BaseActivity {
                 }
 
 
-
-
                 break;
 
             //金立
             case Constant.GIONEE:
-                if (version >18) {
+                if (version > 18) {
                     //auto running
                     autoRunSet(entity);
                     Intent gioneeIntent = new Intent();
@@ -180,7 +187,8 @@ public class ImportantAuthorityActivity extends BaseActivity {
 
             //vivo
             case Constant.VIVO:
-                if (version >18) {
+
+                if (version > 18) {
                     //background high power
                     highPowerSet(entity);
                     Intent vivoGodIntent = new Intent();
@@ -188,10 +196,10 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     entity.setintentEntity(new IntentEntity(vivoGodIntent, shadeIntent));
                     data.add(new AuthorityEntity(entity));
 
-                   /*wifiSet(entity);
+                    wifiSet(entity);
                     Intent vivoNetWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     entity.setintentEntity(new IntentEntity(vivoNetWorkIntent, shadeIntent));
-                    data.add(new AuthorityEntity(entity));*/
+                    data.add(new AuthorityEntity(entity));
                 }
                 break;
             //oppo
