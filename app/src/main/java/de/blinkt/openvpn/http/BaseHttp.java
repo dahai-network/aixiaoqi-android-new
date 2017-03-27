@@ -11,9 +11,16 @@ public class BaseHttp extends CommonHttp {
     protected  InterfaceCallback interfaceCallback;
     protected  int cmdType_;
     protected  boolean  isCreateHashMap=true;
+    protected  String[] valueParams;
     public  BaseHttp(InterfaceCallback interfaceCallback,int cmdType_){
         this.interfaceCallback=interfaceCallback;
         this.cmdType_=cmdType_;
+    }
+
+    public  BaseHttp(InterfaceCallback interfaceCallback,int cmdType_,String...params){
+        this.interfaceCallback=interfaceCallback;
+        this.cmdType_=cmdType_;
+        valueParams=params;
     }
     public  BaseHttp(){
 

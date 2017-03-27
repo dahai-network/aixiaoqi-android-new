@@ -28,6 +28,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.http.AddAlarmHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.UpdateAlarmHttp;
 import de.blinkt.openvpn.model.AlarmClockEntity;
 import de.blinkt.openvpn.util.BLECheckBitUtil;
@@ -68,32 +69,26 @@ public class SetAlarmActivity extends BaseNetActivity  {
 		@Override
 		public void dispatchMessage(Message msg) {
 			super.dispatchMessage(msg);
-
+			String repeat=getRepeatString(repeatDayList);
 			if (msg.what == ADD_ALARM) {
 				if (!CommonTools.isFastDoubleClick(1000)) {
-					AddAlarmHttp http = new AddAlarmHttp(SetAlarmActivity.this, HttpConfigUrl.COMTYPE_ADD_ALARM,
+					CreateHttpFactory.instanceHttp(SetAlarmActivity.this, HttpConfigUrl.COMTYPE_ADD_ALARM,
 							pickerscrlllviewHour.getCurrentString() + ":" + pickerscrlllviewMiunue.getCurrentString(),
-							repeatDayList, lableTextView.getText().toString(), 1
-					);
-					new Thread(http).start();
-
+							repeat, lableTextView.getText().toString(), 1+"");
 				}
 			} else if (msg.what == UPDATE_ALARM) {
 				alarmClockEntity.setStatus(1 + "");
 				alarmClockEntity.setTime(pickerscrlllviewHour.getCurrentString() + ":" + pickerscrlllviewMiunue.getCurrentString());
-				alarmClockEntity.setRepeat(getRepeatString(repeatDayList));
-
+				alarmClockEntity.setRepeat(repeat);
 				alarmClockEntity.setTag(lableTextView.getText().toString());
-				UpdateAlarmHttp http = new UpdateAlarmHttp(SetAlarmActivity.this, HttpConfigUrl.COMTYPE_UPDATE_ALARM,
+				CreateHttpFactory.instanceHttp(SetAlarmActivity.this, HttpConfigUrl.COMTYPE_UPDATE_ALARM,
 						pickerscrlllviewHour.getCurrentString() + ":" + pickerscrlllviewMiunue.getCurrentString(),
-						repeatDayList, lableTextView.getText().toString(), alarmClockEntity.getAlarmClockId(), 1 + "");
-				new Thread(http).start();
+						repeat, lableTextView.getText().toString(), alarmClockEntity.getAlarmClockId(), 1 + "");
 			}
 		}
 	};
 	//新创建闹钟的位置
 	private int alarmPosition = -1;
-
 	private String getRepeatString(List<String> repeatList) {
 		StringBuilder repeatStrB = new StringBuilder();
 		for (String i : repeatList) {

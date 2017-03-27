@@ -19,9 +19,9 @@ public class ActivationLocalCompletedHttp extends BaseHttp {
 
 	private OrderDataEntity orderDataEntity;
 
-	public ActivationLocalCompletedHttp(InterfaceCallback call, int cmdType_, String OrderID) {
+	public ActivationLocalCompletedHttp(InterfaceCallback call, int cmdType_, String... params) {
 		super(call,cmdType_);
-		this.OrderID = OrderID;
+		this.OrderID = params[0];
 
 	}
 

@@ -39,6 +39,7 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.AlarmClockCountHttp;
 import de.blinkt.openvpn.http.BalanceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -153,8 +154,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	}
 
 	private void getAlarmClock() {
-		AlarmClockCountHttp alarmClockCountHttp = new AlarmClockCountHttp(this, HttpConfigUrl.COMTYPE_ALARM_CLOCK_COUNT);
-		new Thread(alarmClockCountHttp).start();
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ALARM_CLOCK_COUNT);
 	}
 
 	private void getData() {

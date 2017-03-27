@@ -12,10 +12,10 @@ public class ActivateKingCardHttp extends BaseHttp {
 	private final String OrderID;
 	private final String Tel;
 
-	public ActivateKingCardHttp(InterfaceCallback interfaceCallback, int cmdType_, String OrderID, String Tel) {
+	public ActivateKingCardHttp(InterfaceCallback interfaceCallback, int cmdType_, String ...params) {
 		super(interfaceCallback, cmdType_);
-		this.OrderID = OrderID;
-		this.Tel = Tel;
+		this.OrderID = params[0];
+		this.Tel = params[1];
 	}
 
 	@Override

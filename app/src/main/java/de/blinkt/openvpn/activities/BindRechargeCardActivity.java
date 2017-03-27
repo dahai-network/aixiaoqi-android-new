@@ -16,6 +16,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.BindGiftHttp;
 import de.blinkt.openvpn.http.BindRechargeHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.util.CommonTools;
 
 
@@ -55,13 +56,11 @@ public class BindRechargeCardActivity extends BaseNetActivity {
 	public void onClick(View v) {
 		if (cardPswswEditText.getText().toString().length() != 0) {
 			if(bindType == RECHARGE) {
-				BindRechargeHttp http = new BindRechargeHttp(this, HttpConfigUrl.COMTYPE_BIND_RECHARGE_CARD, cardPswswEditText.getText().toString());
-				new Thread(http).start();
+				CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_BIND_RECHARGE_CARD, cardPswswEditText.getText().toString());
 			}
 			else
 			{
-				BindGiftHttp http = new BindGiftHttp(this,HttpConfigUrl.COMTYPE_BIND_GIFT,cardPswswEditText.getText().toString());
-				new Thread(http).start();
+				CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_BIND_GIFT,cardPswswEditText.getText().toString());
 			}
 		} else {
 			CommonTools.showShortToast(this, getResources().getString(R.string.input_compelete_password));

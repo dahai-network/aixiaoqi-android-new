@@ -37,6 +37,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.BindDeviceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
@@ -268,9 +269,8 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 					String braceletname = utils.readString(Constant.BRACELETNAME);
 					if (!TextUtils.isEmpty(braceletname)) {
 						if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
-							BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE
-									, deviceAddress, "0", 0);
-							new Thread(bindDevicehttp).start();
+							CreateHttpFactory.instanceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE
+									, deviceAddress, "0", 0+"");
 						} else {
 							mService.connect(deviceAddress);
 						}
@@ -359,9 +359,10 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 			if (entity.isSuccess()) {
 				Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + utils.readString(Constant.IMEI) + ",版本号：" + utils.readString(Constant.BRACELETVERSION));
 				if (bluetoothName.contains(Constant.UNIBOX)) {
-					final BindDeviceHttp bindDevicehttp = new BindDeviceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE
-							, deviceAddress, "0", 1);
-					new Thread(bindDevicehttp).start();
+//					final BindDeviceHttp bindDevicehttp = new BindDeviceHttp();
+//					new Thread(bindDevicehttp).start();
+					CreateHttpFactory.instanceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE
+							, deviceAddress, "0", 1+"");
 				}
 				new Thread(new Runnable() {
 					@Override

@@ -11,15 +11,15 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 
 public class BindDeviceHttp extends BaseHttp {
 
-	private String IMEI;
-	private String Version;
-	private String DeviceType;
+//	private String IMEI;
+//	private String Version;
+//	private String DeviceType;
 
-	public BindDeviceHttp(InterfaceCallback call, int cmdType_, String IMEI, String Version, int DeviceType) {
-		super(call, cmdType_);
-		this.IMEI = IMEI;
-		this.Version = Version;
-		this.DeviceType = DeviceType + "";
+	public BindDeviceHttp(InterfaceCallback call, int cmdType_, String...params) {
+		super(call, cmdType_,params);
+//		this.IMEI = IMEI;
+//		this.Version = Version;
+//		this.DeviceType = DeviceType + "";
 	}
 
 	@Override
@@ -27,9 +27,9 @@ public class BindDeviceHttp extends BaseHttp {
 		super.BuildParams();
 		slaverDomain_ = HttpConfigUrl.BIND_DEVICE;
 		sendMethod_ = POST_MODE;
-		params.put("Version", URLEncoder.encode(Version, "utf-8"));
-		params.put("IMEI", URLEncoder.encode(IMEI, "utf-8"));
-		params.put("DeviceType", URLEncoder.encode(DeviceType+"", "utf-8"));
+		params.put("IMEI", URLEncoder.encode(valueParams[0], "utf-8"));
+		params.put("Version", URLEncoder.encode(valueParams[1], "utf-8"));
+		params.put("DeviceType", URLEncoder.encode(valueParams[2]+"", "utf-8"));
 	}
 
 }
