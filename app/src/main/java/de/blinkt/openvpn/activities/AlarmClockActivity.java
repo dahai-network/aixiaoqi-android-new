@@ -88,13 +88,11 @@ public class AlarmClockActivity extends BaseNetActivity implements AlarmClockAda
 	}
 
 	private void findAlarmClockHttp() {
-		FindAlarmClockHttp findAlarmClockHttp = new FindAlarmClockHttp(this, HttpConfigUrl.COMTYPE_ALARM_CLOCK_GET);
-		new Thread(findAlarmClockHttp).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_ALARM_CLOCK_GET);
 	}
 
 	private void deleteAlarmClock(String id) {
-		DeleteAlarmClockHttp deleteAlarmClock = new DeleteAlarmClockHttp(this, HttpConfigUrl.COMTYPE_ALARM_CLOCK_DELETE, id);
-		new Thread(deleteAlarmClock).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_ALARM_CLOCK_DELETE, id);
 	}
 
 	private void updateAlarmClockStatue(String statue, String id) {
@@ -311,8 +309,7 @@ public class AlarmClockActivity extends BaseNetActivity implements AlarmClockAda
 				}
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_ALARM_CLOCK_DELETE) {
-			DeleteAlarmClockHttp deleteAlarmClock = (DeleteAlarmClockHttp) object;
-			if (deleteAlarmClock.getStatus() == 1) {
+			if (object.getStatus() == 1) {
 				alarmClockAdapter.remove(position);
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_ALARM_CLOCK_STATUE) {

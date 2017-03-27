@@ -9,18 +9,13 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 
 public class BalanceGetPayIdHttp extends BaseHttp {
 
-//	private String OrderID;
-
 	public BalanceGetPayIdHttp(InterfaceCallback call, int cmdType_, String... params) {
-		super(call,cmdType_,params);
-//		this.OrderID = OrderID;
-
+		super(call,cmdType_,HttpConfigUrl.BALANCE_GETPAYID,params);
 	}
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.BALANCE_GETPAYID;
 		params.put("OrderID", valueParams[0]);
 	}
 

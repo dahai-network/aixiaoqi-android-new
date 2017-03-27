@@ -22,12 +22,11 @@ public class AddAlarmHttp extends BaseHttp {
 	}
 
 	public AddAlarmHttp(InterfaceCallback call, int cmdType_ , String ...params) {
-		super(call,cmdType_,params);
+		super(call,cmdType_,HttpConfigUrl.ADD_ALARM,params);
 	}
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.ADD_ALARM;
 		params.put("Time", valueParams[0]);
 		params.put("Repeat",  valueParams[1]);
 		params.put("Tag",  valueParams[2]);

@@ -683,8 +683,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private void getConfigInfo() {
-		GetHostAndPortHttp http = new GetHostAndPortHttp(this, HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
-		new Thread(http).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
 	}
 
 	private int requestCount = 0;

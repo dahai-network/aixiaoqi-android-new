@@ -9,23 +9,21 @@ import de.blinkt.openvpn.model.EBizOrderDetailEntity;
  * Created by Administrator on 2016/11/30 0030.
  */
 public class GetOrderDetailHttp extends BaseHttp {
-    private String orderId;
+
     EBizOrderDetailEntity eBizOrderDetailEntity;
     public  EBizOrderDetailEntity geteBizOrderDetailEntity(){
         return eBizOrderDetailEntity;
     }
-    public GetOrderDetailHttp(InterfaceCallback call, int cmdType_, String orderId) {
-        super(call,cmdType_);
-        this.orderId = orderId;
+    public GetOrderDetailHttp(InterfaceCallback call, int cmdType_, String ...params) {
+        super(call,cmdType_,GET_MODE,HttpConfigUrl.ORDER_DETAIL,params);
+
 
     }
 
     @Override
     protected void BuildParams() throws Exception {
         super.BuildParams();
-        sendMethod_=GET_MODE;
-        slaverDomain_= HttpConfigUrl.ORDER_DETAIL;
-        params.put("id",orderId);
+        params.put("id",valueParams[0]);
     }
 
     @Override

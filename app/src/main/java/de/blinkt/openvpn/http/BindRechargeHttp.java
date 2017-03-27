@@ -14,7 +14,7 @@ public class BindRechargeHttp extends BaseHttp {
 
 
 	public BindRechargeHttp(InterfaceCallback call, int cmdType_, String...params) {
-		super(call,cmdType_,params);
+		super(call,cmdType_,HttpConfigUrl.BIND_RECHARGE_CARD,params);
 
 
 	}
@@ -22,8 +22,6 @@ public class BindRechargeHttp extends BaseHttp {
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.BIND_RECHARGE_CARD;
-		sendMethod_ = POST_MODE;
 		params.put("CardPwd", URLEncoder.encode(valueParams[0], "utf-8"));
 	}
 

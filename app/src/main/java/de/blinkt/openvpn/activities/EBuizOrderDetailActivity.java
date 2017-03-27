@@ -72,8 +72,7 @@ public class EBuizOrderDetailActivity extends BaseNetActivity {
         }
     }
     private void httpOrderDatail(String orderID) {
-        GetOrderDetailHttp getOrderDetailHttp = new GetOrderDetailHttp(this, HttpConfigUrl.COMTYPE_ORDER_DETAIL, orderID);
-        new Thread(getOrderDetailHttp).start();
+        createHttpRequest( HttpConfigUrl.COMTYPE_ORDER_DETAIL, orderID);
     }
 
     @Override

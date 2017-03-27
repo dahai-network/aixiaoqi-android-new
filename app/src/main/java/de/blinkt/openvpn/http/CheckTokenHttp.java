@@ -20,18 +20,8 @@ public class CheckTokenHttp extends BaseHttp {
 
 	String updateConfigTime;
 	public CheckTokenHttp(InterfaceCallback call, int cmdType_) {
-		super(call,cmdType_);
-		isCreateHashMap=false;
+		super(call,cmdType_,false,GET_MODE,HttpConfigUrl.CHECKTOKEN);
 	}
-
-
-	@Override
-	protected void BuildParams() throws Exception {
-		slaverDomain_ = HttpConfigUrl.CHECKTOKEN;
-		sendMethod_ = GET_MODE;
-
-	}
-
 	@Override
 	protected void parseObject(String response) {
 		JsonObject jsonObject = new JsonParser().parse(response).getAsJsonObject();

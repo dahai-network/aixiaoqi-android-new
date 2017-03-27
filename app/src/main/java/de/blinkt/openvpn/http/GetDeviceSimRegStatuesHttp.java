@@ -16,15 +16,10 @@ public class GetDeviceSimRegStatuesHttp extends BaseHttp {
 
     private  SimRegStatue simRegStatue;
     public  GetDeviceSimRegStatuesHttp(InterfaceCallback interfaceCallback,int cmdType_){
-      super(interfaceCallback,cmdType_);
-        isCreateHashMap=false;
+      super(interfaceCallback,cmdType_,false,GET_MODE,HttpConfigUrl.GET_DEVICE_SIM_REG_STATUES);
+
     }
-    @Override
-    protected void BuildParams() throws Exception {
-        super.BuildParams();
-        slaverDomain_ = HttpConfigUrl.GET_DEVICE_SIM_REG_STATUES;
-        sendMethod_ = GET_MODE;
-    }
+
 
     @Override
     protected void parseObject(String response) {

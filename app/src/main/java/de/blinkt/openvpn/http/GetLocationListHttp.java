@@ -21,17 +21,7 @@ public class GetLocationListHttp  extends BaseHttp{
         return  locationEntityList;
     }
     public GetLocationListHttp(InterfaceCallback call, int cmdType_ ) {
-        super(call,cmdType_);
-        isCreateHashMap=false;
-
-
-    }
-
-    @Override
-    protected void BuildParams() throws Exception {
-        super.BuildParams();
-        slaverDomain_=HttpConfigUrl.GET_LOCATION_LIST;
-        sendMethod_=GET_MODE;
+        super(call,cmdType_,false,GET_MODE,HttpConfigUrl.GET_LOCATION_LIST);
     }
 
     @Override

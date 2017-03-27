@@ -11,12 +11,11 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 public class CancelOrderHttp extends BaseHttp {
 
 	public CancelOrderHttp(InterfaceCallback call, int cmdType_, String...params) {
-	super(call,cmdType_,params);
+	super(call,cmdType_,HttpConfigUrl.CANCEL_ORDER,params);
 	}
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.CANCEL_ORDER;
 		params.put("OrderID", URLEncoder.encode(valueParams[0], "utf-8"));
 	}
 

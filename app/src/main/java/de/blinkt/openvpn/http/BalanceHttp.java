@@ -18,18 +18,11 @@ public class BalanceHttp extends BaseHttp {
 	}
 
 	public BalanceHttp(InterfaceCallback call, int cmdType_) {
-		super(call,cmdType_);
-		isCreateHashMap=false;
-
+		super(call,cmdType_,false,GET_MODE, HttpConfigUrl.GET_BALANCE);
 	}
 
 
-	@Override
-	protected void BuildParams() throws Exception {
-		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.GET_BALANCE;
-		sendMethod_ = GET_MODE;
-	}
+
 
 	@Override
 	protected void parseObject(String response) {

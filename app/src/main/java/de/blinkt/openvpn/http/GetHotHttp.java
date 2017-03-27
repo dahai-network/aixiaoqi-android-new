@@ -26,8 +26,8 @@ public class GetHotHttp extends BaseHttp {
 	}
 
 	public GetHotHttp(InterfaceCallback call, int cmdType_, String...params) {
-	super(call,cmdType_);
-		this.pageSize = params[0];
+	super(call,cmdType_,HttpConfigUrl.GET_HOT,params);
+		sendMethod_ = GET_MODE;
 
 	}
 
@@ -35,9 +35,7 @@ public class GetHotHttp extends BaseHttp {
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.GET_HOT;
-		sendMethod_ = GET_MODE;
-		params.put("pageSize", URLEncoder.encode(pageSize + "", "utf-8"));
+		params.put("pageSize", URLEncoder.encode(valueParams[0] + "", "utf-8"));
 	}
 
 	@Override

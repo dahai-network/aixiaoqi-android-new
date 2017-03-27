@@ -19,15 +19,8 @@ public class GetHostAndPortHttp extends BaseHttp {
 	}
 
 	public GetHostAndPortHttp(InterfaceCallback call, int cmdType_) {
-		super(call,cmdType_);
-		isCreateHashMap=false;
-	}
+		super(call,cmdType_,false,GET_MODE,HttpConfigUrl.GET_SECURITY_CONFIG);
 
-	@Override
-	protected void BuildParams() throws Exception {
-		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.GET_SECURITY_CONFIG;
-		sendMethod_ = GET_MODE;
 	}
 
 	@Override

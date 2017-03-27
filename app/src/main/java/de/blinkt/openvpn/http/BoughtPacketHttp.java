@@ -29,17 +29,15 @@ public class BoughtPacketHttp extends BaseHttp {
 	}
 
 	public BoughtPacketHttp(InterfaceCallback call, int cmdType_, String ...params) {
-		super(call, cmdType_,params);
-
+		super(call, cmdType_,HttpConfigUrl.GET_ORDER,params);
+		sendMethod_ = GET_MODE;
 	}
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.GET_ORDER;
-		sendMethod_ = GET_MODE;
+
 		params.put("PageNumber", URLEncoder.encode(valueParams[0] + "", "utf-8"));
 		params.put("PageSize", URLEncoder.encode(valueParams[1] + "", "utf-8"));
-
 		if (!"-1".equals(valueParams[2]))
 			params.put("PackageCategory", URLEncoder.encode(valueParams[2] + "", "utf-8"));
 

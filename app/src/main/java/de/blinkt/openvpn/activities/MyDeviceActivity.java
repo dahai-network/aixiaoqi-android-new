@@ -232,8 +232,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			skyUpgradeHttp();
 		} else {
-			GetBindDeviceHttp http = new GetBindDeviceHttp(MyDeviceActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
-			new Thread(http).start();
+			createHttpRequest(HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 		}
 
 		firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));

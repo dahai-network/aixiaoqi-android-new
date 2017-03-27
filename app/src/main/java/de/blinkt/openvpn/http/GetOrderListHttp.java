@@ -9,23 +9,18 @@ import de.blinkt.openvpn.model.EBizOrderListEntity;
  * Created by Administrator on 2016/11/30 0030.
  */
 public class GetOrderListHttp  extends BaseHttp{
-    private String phoneNumber;
     EBizOrderListEntity eBizOrderListEntity;
     public  EBizOrderListEntity geteBizOrderListEntity(){
         return  eBizOrderListEntity;
     }
-    public GetOrderListHttp(InterfaceCallback call, int cmdType_, String phoneNumber) {
-        super(call,cmdType_);
-        this.phoneNumber = phoneNumber;
-
+    public GetOrderListHttp(InterfaceCallback call, int cmdType_, String ...params) {
+        super(call,cmdType_,GET_MODE,HttpConfigUrl.ORDER_LIST,params);
     }
 
     @Override
     protected void BuildParams() throws Exception {
         super.BuildParams();
-        sendMethod_=GET_MODE;
-        slaverDomain_= HttpConfigUrl.ORDER_LIST;
-        params.put("CallPhone",phoneNumber);
+        params.put("CallPhone",valueParams[0]);
         params.put("PageNumber","1");
         params.put("PageSize","1000");
     }

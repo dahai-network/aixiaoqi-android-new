@@ -19,17 +19,8 @@ public class AlarmClockCountHttp extends BaseHttp{
     private  AlarmClockCount alarmClockCount;
 
     public AlarmClockCountHttp(InterfaceCallback interfaceCallback,int cmdType_){
-        super(interfaceCallback,cmdType_);
-        isCreateHashMap=false;
+        super(interfaceCallback,cmdType_,false,GET_MODE,HttpConfigUrl.ALARM_CLOCK_COUNT);
     }
-
-    @Override
-    protected void BuildParams() throws Exception {
-        super.BuildParams();
-        slaverDomain_= HttpConfigUrl.ALARM_CLOCK_COUNT;
-        sendMethod_=GET_MODE;
-    }
-
     @Override
     protected void parseObject(String response) {
         alarmClockCount=new Gson().fromJson(response,AlarmClockCount.class);

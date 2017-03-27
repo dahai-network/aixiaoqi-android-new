@@ -569,8 +569,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	}
 
 	private void getDeviceSimRegStatues() {
-		GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp = new GetDeviceSimRegStatuesHttp(this, HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES);
-		new Thread(getDeviceSimRegStatuesHttp).start();
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES);
 	}
 
 	@Override

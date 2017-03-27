@@ -74,6 +74,39 @@ public class CreateHttpFactory {
             case  HttpConfigUrl.COMTYPE_CHECKTOKEN://检查token
                 startHttp(new CheckTokenHttp(interfaceCallback, cmdType));
                 break;
+            case  HttpConfigUrl.COMTYPE_COUNTRY_PACKET://国家套餐
+                startHttp(new CountryPacketHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_EXIT://退出登录
+                startHttp(new ExitHttp(interfaceCallback, cmdType));
+                break;
+            case  HttpConfigUrl.COMTYPE_ALARM_CLOCK_GET://获取闹钟
+                startHttp(new FindAlarmClockHttp(interfaceCallback, cmdType));
+                break;
+            case  HttpConfigUrl.COMTYPE_FORGET_PSW://忘记密码
+                startHttp(new ForgetPswHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG://获取基本配置
+                startHttp(new GetBasicConfigHttp(interfaceCallback, cmdType));
+                break;
+            case  HttpConfigUrl.COMTYPE_GET_BIND_DEVICE://绑定设备
+                startHttp(new GetBindDeviceHttp(interfaceCallback, cmdType));
+                break;
+            case  HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES://绑定设备
+                startHttp(new GetDeviceSimRegStatuesHttp(interfaceCallback, cmdType));
+                break;
+            case  HttpConfigUrl.COMTYPE_GET_LOCATION_LIST://绑定设备
+                startHttp(new GetLocationListHttp(interfaceCallback, cmdType));
+                break;
+            case  HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID://绑定设备
+                startHttp(new GetOrderByIdHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_ORDER_DETAIL://绑定设备
+                startHttp(new GetOrderDetailHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_ORDER_LIST://绑定设备
+                startHttp(new GetOrderListHttp(interfaceCallback, cmdType,params));
+                break;
         }
     }
 

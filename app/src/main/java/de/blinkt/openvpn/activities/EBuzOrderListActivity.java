@@ -107,8 +107,7 @@ public class EBuzOrderListActivity extends BaseNetActivity implements RecyclerBa
     }
 
     private void httpOrder(String number){
-        GetOrderListHttp getOrderListHttp=new GetOrderListHttp(this,HttpConfigUrl.COMTYPE_ORDER_LIST,number);
-        new Thread(getOrderListHttp).start();
+        createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_LIST,number);
     }
 
     @OnClick({R.id.add_new_phone_number})
