@@ -226,7 +226,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 													}
 													//排序后连接操作
 													scanLeDevice(false);
-													if (infos.size() == 0 || mService.isConnecttingBlueTooth()) {
+													if (infos.size() == 0 || mService==null||mService.isConnecttingBlueTooth()) {
 														CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.no_device_around));
 														finish();
 														return;

@@ -37,6 +37,7 @@ import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CancelOrderHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetOrderByIdHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.OrderDataHttp;
@@ -351,8 +352,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 					if (!CommonTools.isFastDoubleClick(1000)) {
 						//友盟方法统计
 						MobclickAgent.onEvent(context, CLICKCANCELORDER);
-						CancelOrderHttp http = new CancelOrderHttp(this, HttpConfigUrl.COMTYPE_CANCEL_ORDER, bean.getOrderID());
-						new Thread(http).start();
+						CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CANCEL_ORDER, bean.getOrderID());
 					}
 				}
 				break;

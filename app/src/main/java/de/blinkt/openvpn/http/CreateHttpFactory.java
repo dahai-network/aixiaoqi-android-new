@@ -68,6 +68,12 @@ public class CreateHttpFactory {
             case  HttpConfigUrl.COMTYPE_BIND_RECHARGE_CARD://绑定充值
                 startHttp(new BindRechargeHttp(interfaceCallback, cmdType,params));
                 break;
+            case  HttpConfigUrl.COMTYPE_CANCEL_ORDER://取消订单
+                startHttp(new CancelOrderHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_CHECKTOKEN://检查token
+                startHttp(new CheckTokenHttp(interfaceCallback, cmdType));
+                break;
         }
     }
 

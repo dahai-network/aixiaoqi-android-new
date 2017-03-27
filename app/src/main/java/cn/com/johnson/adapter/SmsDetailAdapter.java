@@ -2,6 +2,7 @@ package cn.com.johnson.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,6 @@ public class SmsDetailAdapter extends RecyclerBaseAdapter<RecyclerView.ViewHolde
 			} else {
 				((RightViewHolder) holder).sendErrorIv.setVisibility(View.VISIBLE);
 				((RightViewHolder) holder).sendingPb.setVisibility(View.GONE);
-
 				((RightViewHolder) holder).sendErrorIv.setOnClickListener(this);
 				((RightViewHolder) holder).sendErrorIv.setTag(position);
 			}
@@ -67,7 +67,7 @@ public class SmsDetailAdapter extends RecyclerBaseAdapter<RecyclerView.ViewHolde
 
 	@Override
 	public int getItemViewType(int position) {
-		return User.isCurrentUser(mList.get(position).getFm()) ? RIGTH_ME : LEFT_OTHER;
+		return mList.get(position).isSend()? RIGTH_ME : LEFT_OTHER;
 	}
 	public interface OnItemLongClickListener{
 		void onItemLongClick(View view, Object data);

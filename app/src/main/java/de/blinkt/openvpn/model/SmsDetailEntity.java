@@ -11,7 +11,16 @@ public class SmsDetailEntity implements Serializable {
     private String To ;
     private String SMSTime;
     private String SMSContent;
-    private String IsSend;
+
+    public boolean isSend() {
+        return IsSend;
+    }
+
+    public void setSend(boolean send) {
+        IsSend = send;
+    }
+
+    private boolean IsSend;
     private String IsRead;
     private String Status;
     private String SMSID;
@@ -55,13 +64,7 @@ public class SmsDetailEntity implements Serializable {
         this.SMSContent = SMSContent;
     }
 
-    public String getIsSend() {
-        return IsSend;
-    }
 
-    public void setIsSend(String isSend) {
-        IsSend = isSend;
-    }
 
     public String getIsRead() {
         return IsRead;
