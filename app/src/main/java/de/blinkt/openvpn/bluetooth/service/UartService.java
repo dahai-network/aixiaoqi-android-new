@@ -101,7 +101,7 @@ public class UartService extends Service implements Serializable {
 		public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
 			String intentAction;
 
-			if (newState == BluetoothProfile.STATE_CONNECTED) {
+			if ((newState == BluetoothProfile.STATE_CONNECTED) && (status == BluetoothGatt.GATT_SUCCESS)) {
 				intentAction = ACTION_GATT_CONNECTED;
 				mConnectionState = STATE_CONNECTED;
 				broadcastUpdate(intentAction);
@@ -457,6 +457,15 @@ public class UartService extends Service implements Serializable {
 			broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
 			return;
 		}
+
+//		final int rxProperties = TxChar.getProperties();
+//		boolean writeRequest = (rxProperties & BluetoothGattCharacteristic.PROPERTY_WRITE) > 0;
+//
+//		// Set the WRITE REQUEST type when the characteristic supports it. This will allow to send long write (also if the characteristic support it).
+//		// In case there is no WRITE REQUEST property, this manager will divide texts longer then 20 bytes into up to 20 bytes chunks.
+//		if (writeRequest)
+//			TxChar.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+
 		mBluetoothGatt.setCharacteristicNotification(TxChar, true);
 
 		BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
