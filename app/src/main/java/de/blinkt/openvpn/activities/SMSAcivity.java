@@ -264,7 +264,6 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 		sendSmsTv.setOnClickListener(this);
 		addContactIv.setOnClickListener(this);
 		NoNetRelativeLayout.setOnClickListener(this);
-
 		smsContentEt.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
