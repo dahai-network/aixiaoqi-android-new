@@ -15,6 +15,8 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.ParticularAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
@@ -23,7 +25,7 @@ import de.blinkt.openvpn.model.ParticularEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
 
-public class BalanceParticularsActivity extends BaseActivity implements InterfaceCallback, XRecyclerView.LoadingListener {
+public class BalanceParticularsActivity extends BaseNetActivity implements InterfaceCallback, XRecyclerView.LoadingListener {
 
 	@BindView(R.id.particularsRecyclerView)
 	XRecyclerView particularsRecyclerView;
@@ -60,8 +62,7 @@ public class BalanceParticularsActivity extends BaseActivity implements Interfac
 	}
 
 	private void addData() {
-		ParticularHttp http = new ParticularHttp(this, HttpConfigUrl.COMTYPE_PARTICULAR, pageNumber, 20);
-		new Thread(http).start();
+		createHttpRequest( HttpConfigUrl.COMTYPE_PARTICULAR, pageNumber+"", Constant.PAGESIZE+"");
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class BalanceParticularsActivity extends BaseActivity implements Interfac
 			NoNetRelativeLayout.setVisibility(View.GONE);
 			if (pageNumber == 1) {
 //				if (particularAdapter.getItemCount() == 0) {
-				if (http.getParticularEntity().getList().size() < 20) {
+				if (http.getParticularEntity().getList().size() < Constant.PAGESIZE) {
 					particularAdapter.add(http.getParticularEntity().getList());
 					particularsRecyclerView.noMoreLoading();
 				} else {
@@ -107,15 +108,15 @@ public class BalanceParticularsActivity extends BaseActivity implements Interfac
 	@Override
 	public void onRefresh() {
 		pageNumber = 1;
-		ParticularHttp http = new ParticularHttp(this, HttpConfigUrl.COMTYPE_PARTICULAR, pageNumber, 20);
-		new Thread(http).start();
+		addData();
+
+
 	}
 
 	@Override
 	public void onLoadMore() {
 		pageNumber++;
-		ParticularHttp http = new ParticularHttp(this, HttpConfigUrl.COMTYPE_PARTICULAR, pageNumber, 20);
-		new Thread(http).start();
+		addData();
 	}
 
 	@Override

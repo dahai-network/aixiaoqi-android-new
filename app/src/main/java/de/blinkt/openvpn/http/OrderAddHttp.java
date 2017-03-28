@@ -27,7 +27,7 @@ public class OrderAddHttp extends BaseHttp {
 	}
 
 	public OrderAddHttp(InterfaceCallback call, int cmdType_, String PackageID, int Quantity, int PaymentMethod, boolean IsPayUserAmount) {
-		super(call, cmdType_);
+		super(call, cmdType_,HttpConfigUrl.CREATE_ORDER);
 		this.PackageID = PackageID;
 		this.Quantity = Quantity;
 		this.PaymentMethod = PaymentMethod;
@@ -38,7 +38,6 @@ public class OrderAddHttp extends BaseHttp {
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.CREATE_ORDER;
 		params.put("PackageID", URLEncoder.encode(PackageID, "utf-8"));
 		params.put("Quantity", URLEncoder.encode(Quantity + "", "utf-8"));
 		params.put("PayUserAmount", URLEncoder.encode(0 + "", "utf-8"));

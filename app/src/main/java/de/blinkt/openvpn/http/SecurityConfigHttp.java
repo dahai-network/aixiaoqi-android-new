@@ -20,16 +20,7 @@ public class SecurityConfigHttp extends BaseHttp {
 	}
 
 	public SecurityConfigHttp(InterfaceCallback call, int cmdType_) {
-		super(call,cmdType_);
-		isCreateHashMap=false;
-	}
-
-
-	@Override
-	protected void BuildParams() throws Exception {
-		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.SECURITY_CONFIG;
-		sendMethod_ = GET_MODE;
+		super(call,cmdType_,false,GET_MODE,HttpConfigUrl.SECURITY_CONFIG);
 
 	}
 

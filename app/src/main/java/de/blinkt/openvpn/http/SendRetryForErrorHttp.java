@@ -9,13 +9,10 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
  */
 public class SendRetryForErrorHttp extends BaseHttp {
 
-	private String SmsID;
 
 
-	public SendRetryForErrorHttp(InterfaceCallback call, int cmdType_, String SmsID) {
-	super(call,cmdType_);
-		this.SmsID = SmsID;
-
+	public SendRetryForErrorHttp(InterfaceCallback call, int cmdType_, String...params ) {
+	super(call,cmdType_,HttpConfigUrl.SEND_RETRY_FOR_ERROR,params);
 
 	}
 
@@ -23,9 +20,8 @@ public class SendRetryForErrorHttp extends BaseHttp {
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.SEND_RETRY_FOR_ERROR;
 
-		params.put("SMSID", URLEncoder.encode(SmsID + "", "utf-8"));
+		params.put("SMSID", URLEncoder.encode(valueParams[0] + "", "utf-8"));
 
 	}
 

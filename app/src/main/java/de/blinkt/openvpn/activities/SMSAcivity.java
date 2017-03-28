@@ -42,6 +42,7 @@ import cn.com.johnson.adapter.RecyclerBaseAdapter;
 import cn.com.johnson.adapter.SmsDetailAdapter;
 import cn.com.johnson.adapter.SmsListAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -71,7 +72,7 @@ import static de.blinkt.openvpn.constant.UmengContant.INPUTPHONENUMBER;
 /**
  * Created by Administrator on 2016/9/1 0001.
  */
-public class SMSAcivity extends BaseActivity implements View.OnClickListener, InterfaceCallback, SwipeRefreshLayout.OnRefreshListener, RecyclerBaseAdapter.OnItemClickListener, DialogInterfaceTypeBase,SmsDetailAdapter.OnItemLongClickListener {
+public class SMSAcivity extends BaseNetActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, RecyclerBaseAdapter.OnItemClickListener, DialogInterfaceTypeBase,SmsDetailAdapter.OnItemLongClickListener {
 	SmsEntity smsEntity;
 	SwipeRefreshLayout swipeRefreshLayout;
 	RecyclerView recyclerView;
@@ -255,8 +256,7 @@ public class SMSAcivity extends BaseActivity implements View.OnClickListener, In
 	}
 
 	private void smsDetailHttp() {
-		SmsDetailHttp smsDetailHttp = new SmsDetailHttp(this, HttpConfigUrl.COMTYPE_GET_SMS_DETAIL, User.isCurrentUser(smsEntity.getFm()) ? smsEntity.getTo() : smsEntity.getFm(), pageNumber, Constant.PAGESIZE);
-		new Thread(smsDetailHttp).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_GET_SMS_DETAIL, User.isCurrentUser(smsEntity.getFm()) ? smsEntity.getTo() : smsEntity.getFm(), pageNumber+"", Constant.PAGESIZE+"");
 	}
 
 	private void addListener() {
@@ -589,13 +589,13 @@ public class SMSAcivity extends BaseActivity implements View.OnClickListener, In
 
 
 	private void sendSmsHttp(String phoneNumber, String content) {
-		SendSmsHttp sendMsgHttp = new SendSmsHttp(this, HttpConfigUrl.COMTYPE_SEND_SMS_MESSAGE, phoneNumber, content);
-		new Thread(sendMsgHttp).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_SEND_SMS_MESSAGE, phoneNumber, content);
 	}
 
 	private void sendOnceSmsHttp(String SmsID) {
-		SendRetryForErrorHttp sendRetryForErrorHttp = new SendRetryForErrorHttp(this, HttpConfigUrl.COMTYPE_SEND_RETRY_FOR_ERROR, SmsID);
-		new Thread(sendRetryForErrorHttp).start();
+
+		createHttpRequest(HttpConfigUrl.COMTYPE_SEND_RETRY_FOR_ERROR, SmsID);
+
 	}
 
 	@Override

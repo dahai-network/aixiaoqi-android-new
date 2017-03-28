@@ -407,13 +407,13 @@ public class CommitOrderActivity extends BaseNetActivity {
 	 */
 	private void payForWeixin() {
 		showProgress(getResources().getString(R.string.weixin_paying),true);
-		WeixinGetPayIdHttp http = new WeixinGetPayIdHttp(this, HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID, orderEntity.getOrder().getOrderNum());
+
 		SharedPreferences preferences = getSharedPreferences("order", MODE_PRIVATE);
 		SharedPreferences.Editor editor = preferences.edit();
 		editor.putString("orderId", orderEntity.getOrder().getOrderID());
 		editor.putString("orderAmount", orderEntity.getOrder().getTotalPrice() + "");
 		editor.commit();
-		new Thread(http).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID, orderEntity.getOrder().getOrderNum());
 		sureTextView.setEnabled(true);
 	}
 

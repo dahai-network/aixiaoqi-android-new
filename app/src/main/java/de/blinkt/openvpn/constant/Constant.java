@@ -50,7 +50,7 @@ public class Constant {
 	public static final String JPUSH_ALIAS = "jpush_alias";
 	public static final String JPUSH_ALIAS_SUCCESS = "success";
 	//页码
-	public static final int PAGESIZE = 10;
+	public static final int PAGESIZE = 20;
 	//统计错误信息
 	public static final String APPID = "0cd55873f3";
 

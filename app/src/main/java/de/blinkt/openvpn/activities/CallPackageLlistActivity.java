@@ -1,6 +1,7 @@
 package de.blinkt.openvpn.activities;
 
 import android.os.Bundle;
+import android.support.annotation.Size;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -12,6 +13,8 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CallPacketAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.GetPakcetHttp;
@@ -20,7 +23,7 @@ import de.blinkt.openvpn.model.PacketEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
 
-public class CallPackageLlistActivity extends BaseActivity implements XRecyclerView.LoadingListener, InterfaceCallback {
+public class CallPackageLlistActivity extends BaseNetActivity implements XRecyclerView.LoadingListener, InterfaceCallback {
 
 	public static CallPackageLlistActivity activity;
 	@BindView(R.id.retryTextView)
@@ -60,8 +63,7 @@ public class CallPackageLlistActivity extends BaseActivity implements XRecyclerV
 
 	//加入数据
 	private void addData() {
-		GetPakcetHttp http = new GetPakcetHttp(this, HttpConfigUrl.COMTYPE_PACKET_GET, pageNumber, 20, CATOGORY);
-		new Thread(http).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_PACKET_GET, pageNumber+"", Constant.PAGESIZE+"", CATOGORY+"");
 	}
 
 	@Override
@@ -91,7 +93,7 @@ public class CallPackageLlistActivity extends BaseActivity implements XRecyclerV
 					callListRecylerView.setVisibility(View.VISIBLE);
 					if (pageNumber == 1) {
 						//页码为1且没有数据，则显示无数据页面
-						if (bean.getList().size() < 20) {
+						if (bean.getList().size() < Constant.PAGESIZE) {
 							callPacketAdapter.add(bean.getList());
 							callListRecylerView.noMoreLoading();
 						} else {
@@ -114,11 +116,6 @@ public class CallPackageLlistActivity extends BaseActivity implements XRecyclerV
 		callPacketAdapter.notifyDataSetChanged();
 	}
 
-
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
-		CommonTools.showShortToast(this, errorMessage);
-	}
 
 	@Override
 	public void noNet() {

@@ -36,6 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.CommonHttp;
@@ -56,7 +57,7 @@ import static de.blinkt.openvpn.constant.Constant.WEIXIN_APPID;
 import static de.blinkt.openvpn.constant.UmengContant.CHARGE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDCHARGECARD;
 
-public class RechargeActivity extends BaseActivity implements InterfaceCallback, RadioGroup.OnCheckedChangeListener {
+public class RechargeActivity extends BaseNetActivity implements InterfaceCallback, RadioGroup.OnCheckedChangeListener {
 
 	@BindView(R.id.amountEditText)
 	EditText amountEditText;
@@ -246,8 +247,7 @@ public class RechargeActivity extends BaseActivity implements InterfaceCallback,
 	private void pay(int payWay) {
 		if (!"".equals(moneyAmount + "")) {
 			if (moneyAmount != 0) {
-				RechargeHttp http = new RechargeHttp(this, HttpConfigUrl.COMTYPE_RECHARGE_ORDER, moneyAmount + "", payWay);
-				new Thread(http).start();
+				createHttpRequest(HttpConfigUrl.COMTYPE_RECHARGE_ORDER, moneyAmount + "", payWay+"");
 			} else {
 				nextBtn.setEnabled(true);
 				CommonTools.showShortToast(RechargeActivity.this, getResources().getString(R.string.input_money_0));
@@ -330,8 +330,7 @@ public class RechargeActivity extends BaseActivity implements InterfaceCallback,
 
 	private void payForWeixin(RechargeEntity rechargeEntity) {
 		showProgress(getResources().getString(R.string.weixin_paying),true);
-		WeixinGetPayIdHttp http = new WeixinGetPayIdHttp(this, HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID, rechargeEntity.getPayment().getPaymentNum());
-		new Thread(http).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID, rechargeEntity.getPayment().getPaymentNum());
 		nextBtn.setEnabled(true);
 		if (receiver == null) {
 			receiver = new RechargeReceiver();

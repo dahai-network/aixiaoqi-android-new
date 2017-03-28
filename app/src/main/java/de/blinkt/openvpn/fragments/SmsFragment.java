@@ -155,8 +155,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 
 	private void smsListHttp() {
 		requestNetCount++;
-		SMSListHttp smsListHttp = new SMSListHttp(this, HttpConfigUrl.COMTYPE_GET_SMS_LIST, pageNumber, Constant.PAGESIZE);
-		new Thread(smsListHttp).start();
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_SMS_LIST, pageNumber+"", Constant.PAGESIZE+"");
 	}
 
 	@Override

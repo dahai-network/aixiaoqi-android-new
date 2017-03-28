@@ -92,21 +92,112 @@ public class CreateHttpFactory {
             case  HttpConfigUrl.COMTYPE_GET_BIND_DEVICE://绑定设备
                 startHttp(new GetBindDeviceHttp(interfaceCallback, cmdType));
                 break;
-            case  HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES://绑定设备
+            case  HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES://获取sim卡状态
                 startHttp(new GetDeviceSimRegStatuesHttp(interfaceCallback, cmdType));
                 break;
-            case  HttpConfigUrl.COMTYPE_GET_LOCATION_LIST://绑定设备
+            case  HttpConfigUrl.COMTYPE_GET_LOCATION_LIST://获取国家
                 startHttp(new GetLocationListHttp(interfaceCallback, cmdType));
                 break;
-            case  HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID://绑定设备
+            case  HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID://通过id查询订单
                 startHttp(new GetOrderByIdHttp(interfaceCallback, cmdType,params));
                 break;
-            case  HttpConfigUrl.COMTYPE_ORDER_DETAIL://绑定设备
+            case  HttpConfigUrl.COMTYPE_ORDER_DETAIL://订单详情
                 startHttp(new GetOrderDetailHttp(interfaceCallback, cmdType,params));
                 break;
-            case  HttpConfigUrl.COMTYPE_ORDER_LIST://绑定设备
+            case  HttpConfigUrl.COMTYPE_ORDER_LIST://订单列表
                 startHttp(new GetOrderListHttp(interfaceCallback, cmdType,params));
                 break;
+            case  HttpConfigUrl.COMTYPE_PACKET_GET://获取包
+                startHttp(new GetPakcetHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_GET_SELECT_NUMBER_URL://获取选择号码
+                startHttp(new GetSelectPhoneNumberUrl(interfaceCallback, cmdType));
+                break;
+            case  HttpConfigUrl.COMTYPE_ISBIND_DEVICE://获取选择号码
+                startHttp(new IsBindHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_LOGIN://获取选择号码
+                startHttp(new LoginHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME://获取选择号码
+                startHttp(new OnlyCallHttp(interfaceCallback, cmdType));
+                break;
+            case  HttpConfigUrl.COMTYPE_ORDER_ACTIVATION://获取选择号码
+                startHttp(new OrderActivationHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_ORDER_DATA://获取选择号码
+                startHttp(new OrderDataHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_PACKET_DETAIL://获取选择号码
+                startHttp(new PacketDtailHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_PACKET_MARKET://获取选择号码
+                startHttp(new PacketMarketHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_PARTICULAR://获取选择号码
+                startHttp(new ParticularHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_RECHARGE_ORDER://获取选择号码
+                startHttp(new RechargeHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_REGIST://获取选择号码
+                startHttp(new RegistHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_SECURITY_CONFIG://获取选择号码
+                startHttp(new SecurityConfigHttp(interfaceCallback, cmdType));
+                break;
+            case  HttpConfigUrl.COMTYPE_GET_SELECT_NUMBER://获取选择号码
+                startHttp(new SelectNumberHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_ADD_SELECT_NUMBER_INFO://获取选择号码
+                startHttp(new SelectNumberInfoHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_SEND_SMS://获取选择号码
+                startHttp(new SendMsgHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_SEND_RETRY_FOR_ERROR://获取选择号码
+                startHttp(new SendRetryForErrorHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_SEND_SMS_MESSAGE://获取选择号码
+                startHttp(new SendSmsHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA://获取选择号码
+                startHttp(new SkyUpgradeHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_GET_SMS_DETAIL://获取选择号码
+                startHttp(new SmsDetailHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_GET_SMS_LIST://获取选择号码
+                startHttp(new SMSListHttp(interfaceCallback,cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_SPORT_GET_TIME_PERIOD_DATE://获取选择号码
+                startHttp(new SportPeriodHttp(interfaceCallback,cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_SPORT_GET_RECORD_DATE://获取选择号码
+                startHttp(new SportRecordDateHttp(interfaceCallback,cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_UN_BIND_DEVICE://获取选择号码
+                startHttp(new UnBindDeviceHttp(interfaceCallback,cmdType));
+                break;
+            case  HttpConfigUrl.COMTYPE_UPDATE_ALARM_CLOCK_STATUE://获取选择号码
+                startHttp(new UpdateAlarmClockStatueHttp(interfaceCallback,cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO://获取选择号码
+                startHttp(new UpdateConnectInfoHttp(interfaceCallback,cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_UPLOAD_HEADER://获取选择号码
+                startHttp(new UploadHeaderHttp(interfaceCallback,cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG://获取选择号码
+                startHttp(new UploadRemindConfigHttp(interfaceCallback,cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_USER_FEED_BACK://获取选择号码
+                startHttp(new UserFeedBackHttp(interfaceCallback,cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID://获取选择号码
+                startHttp(new WeixinGetPayIdHttp(interfaceCallback,cmdType,params));
+                break;
+
         }
     }
 

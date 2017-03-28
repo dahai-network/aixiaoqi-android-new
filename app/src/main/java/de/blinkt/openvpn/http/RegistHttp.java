@@ -13,18 +13,11 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 public class RegistHttp extends BaseHttp {
 
 
-	private String tel;
-
-	private String password;
-	private String smsVerCode;
 
 
-	public RegistHttp(InterfaceCallback call, int cmdType_, String tel, String password, String smsVerCode) {
-		super(call,cmdType_);
-		this.tel = tel;
-		this.password = password;
-		this.smsVerCode = smsVerCode;
 
+	public RegistHttp(InterfaceCallback call, int cmdType_, String ...params) {
+		super(call,cmdType_,HttpConfigUrl.REGIST,params);
 
 	}
 
@@ -32,11 +25,9 @@ public class RegistHttp extends BaseHttp {
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.REGIST;
-
-		params.put("tel", URLEncoder.encode(tel, "utf-8"));
-		params.put("password", URLEncoder.encode(password, "utf-8"));
-		params.put("smsVerCode", URLEncoder.encode(smsVerCode, "utf-8"));
+		params.put("tel", URLEncoder.encode(valueParams[0], "utf-8"));
+		params.put("password", URLEncoder.encode(valueParams[1], "utf-8"));
+		params.put("smsVerCode", URLEncoder.encode(valueParams[2], "utf-8"));
 	}
 
 

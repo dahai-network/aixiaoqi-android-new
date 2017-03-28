@@ -7,17 +7,16 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
  */
 
 public class SmsDeleteByTelHttp extends BaseHttp {
-  private   String Tel;
+
     public SmsDeleteByTelHttp(InterfaceCallback interfaceCallback, int cmdType_, String... params) {
-        super(interfaceCallback, cmdType_);
-       this.Tel=params[0];
+        super(interfaceCallback, cmdType_,HttpConfigUrl.SMS_DELETE_BY_TEL,params);
+
     }
 
     @Override
     protected void BuildParams() throws Exception {
         super.BuildParams();
-        slaverDomain_= HttpConfigUrl.SMS_DELETE_BY_TEL;
-        sendMethod_=POST_MODE;
-        params.put("Tel",Tel);
+
+        params.put("Tel",valueParams[0]);
     }
 }

@@ -52,7 +52,6 @@ import de.blinkt.openvpn.http.DownloadSkyUpgradePackageHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
-import de.blinkt.openvpn.http.UnBindDeviceHttp;
 import de.blinkt.openvpn.model.BlueToothDeviceEntity;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
@@ -193,8 +192,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					DeviceType = 1;
 				}
 			}
-			SkyUpgradeHttp skyUpgradeHttp = new SkyUpgradeHttp(this, HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType);
-			new Thread(skyUpgradeHttp).start();
+			createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
 		}
 	}
 
@@ -275,9 +273,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					return;
 				}
 				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
-				UnBindDeviceHttp http = new UnBindDeviceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
-				new Thread(http).start();
-
+				createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				break;
 			case R.id.callPayLinearLayout:
 				if (CommonTools.isFastDoubleClick(1000)) {

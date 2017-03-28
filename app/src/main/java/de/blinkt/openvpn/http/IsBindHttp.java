@@ -14,25 +14,20 @@ import de.blinkt.openvpn.model.IsBindEntity;
 public class IsBindHttp extends BaseHttp {
 
 	private IsBindEntity isBindEntity;
-	private final String IMEI;
 
 	public IsBindEntity getIsBindEntity() {
 		return isBindEntity;
 	}
 
-	public IsBindHttp(InterfaceCallback call, int cmdType_, String IMEI) {
-		super(call,cmdType_);
-		this.IMEI = IMEI;
-		this.sendMethod_ = GET_MODE;
+	public IsBindHttp(InterfaceCallback call, int cmdType_, String... params) {
+		super(call,cmdType_,GET_MODE,HttpConfigUrl.ISBIND_DEVICE,params);
+
 	}
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.ISBIND_DEVICE;
-		sendMethod_ = GET_MODE;
-
-		params.put("IMEI", URLEncoder.encode(IMEI, "utf-8"));
+		params.put("IMEI", URLEncoder.encode(valueParams[0], "utf-8"));
 	}
 
 	@Override

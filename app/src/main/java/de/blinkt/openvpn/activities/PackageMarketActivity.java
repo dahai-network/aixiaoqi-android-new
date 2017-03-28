@@ -15,6 +15,7 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.PackageMarketAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
@@ -23,7 +24,7 @@ import de.blinkt.openvpn.model.PacketMarketEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.pinyin.CharacterParser;
 
-public class PackageMarketActivity extends BaseActivity implements InterfaceCallback {
+public class PackageMarketActivity extends BaseNetActivity implements InterfaceCallback {
 
 	public static PackageMarketActivity activity ;
 	@BindView(R.id.marketRecyclerView)
@@ -57,8 +58,7 @@ public class PackageMarketActivity extends BaseActivity implements InterfaceCall
 	//模拟数据
 	private void initData() {
 		//全部展示国家套餐，200个
-		PacketMarketHttp http = new PacketMarketHttp(this, HttpConfigUrl.COMTYPE_PACKET_MARKET, 200);
-		new Thread(http).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_PACKET_MARKET, 200+"");
 	}
 	CharacterParser characterParser;
 	@Override

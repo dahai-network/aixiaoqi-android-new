@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -24,7 +25,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 
-public class PaySuccessActivity extends BaseActivity implements InterfaceCallback {
+public class PaySuccessActivity extends BaseNetActivity implements InterfaceCallback {
 
 	@BindView(R.id.completeTextView)
 	TextView completeTextView;
@@ -90,8 +91,7 @@ public class PaySuccessActivity extends BaseActivity implements InterfaceCallbac
 		//支付成功即检测是否有套餐，有套餐则开始上电
 		if (type == BUY_CALL_TIME) {
 			//当有通话套餐的时候才允许注册操作
-			IsHavePacketHttp http = new IsHavePacketHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
-			new Thread(http).start();
+			createHttpRequest(HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 		}
 		moneyTextView.setText("￥" + getIntent.getStringExtra("money"));
 	}

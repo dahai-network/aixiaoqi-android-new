@@ -16,16 +16,10 @@ public class OnlyCallHttp extends BaseHttp {
 	}
 
 	public OnlyCallHttp(InterfaceCallback callback, int cmdType) {
-		super(callback,cmdType);
-		isCreateHashMap=false;
+		super(callback,cmdType,false,GET_MODE,HttpConfigUrl.GET_MAX_PHONE_CALL_TIME);
 	}
 
-	@Override
-	protected void BuildParams() throws Exception {
-		super.BuildParams();
-		sendMethod_ = GET_MODE;
-		slaverDomain_ = HttpConfigUrl.GET_MAX_PHONE_CALL_TIME;
-	}
+
 
 	@Override
 	protected void parseObject(String response) {

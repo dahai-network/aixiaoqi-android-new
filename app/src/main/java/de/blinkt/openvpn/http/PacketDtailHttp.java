@@ -12,26 +12,22 @@ import de.blinkt.openvpn.model.PacketDtailEntity;
  */
 public class PacketDtailHttp extends BaseHttp {
 
-	private String id;
-
 	private PacketDtailEntity packetDtailEntity;
 
 	public PacketDtailEntity getPacketDtailEntity() {
 		return packetDtailEntity;
 	}
 
-	public PacketDtailHttp(InterfaceCallback call, int cmdType_, String id) {
-		super(call,cmdType_);
-		this.id = id;
-		sendMethod_ = GET_MODE;
+	public PacketDtailHttp(InterfaceCallback call, int cmdType_, String...params) {
+		super(call,cmdType_,GET_MODE,HttpConfigUrl.PACKET_DETAIL,params);
+
 	}
 
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.PACKET_DETAIL;
-		params.put("id", URLEncoder.encode(id, "utf-8"));
+		params.put("id", URLEncoder.encode(valueParams[0], "utf-8"));
 	}
 
 	@Override

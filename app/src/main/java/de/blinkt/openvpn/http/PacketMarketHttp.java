@@ -14,7 +14,7 @@ import de.blinkt.openvpn.model.PacketMarketEntity;
  */
 public class PacketMarketHttp extends BaseHttp {
 
-	private int pagesize;
+
 
 	public List<List<PacketMarketEntity>> getPacketMarketEntityList() {
 		return packetMarketEntityList;
@@ -23,18 +23,16 @@ public class PacketMarketHttp extends BaseHttp {
 
 	private List<List<PacketMarketEntity>> packetMarketEntityList;
 
-	public PacketMarketHttp(InterfaceCallback call, int cmdType_, int pagesize) {
-		super(call, cmdType_);
-		this.pagesize = pagesize;
+	public PacketMarketHttp(InterfaceCallback call, int cmdType_, String... params) {
+		super(call, cmdType_,GET_MODE,HttpConfigUrl.PACKET_MARKET,params);
+
 	}
 
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		sendMethod_ = GET_MODE;
-		slaverDomain_ = HttpConfigUrl.PACKET_MARKET;
-		params.put("pagesize", URLEncoder.encode(pagesize + "", "utf-8"));
+		params.put("pagesize", URLEncoder.encode(valueParams[0] + "", "utf-8"));
 	}
 
 	@Override

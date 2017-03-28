@@ -8,20 +8,16 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
  */
 public class OrderActivationHttp extends BaseHttp {
 
-	private String OrderID;
-	private String time;
-	public OrderActivationHttp(InterfaceCallback call, int cmdType_, String OrderID, String time) {
-		super(call,cmdType_);
-		this.OrderID = OrderID;
-		this.time = time;
+	public OrderActivationHttp(InterfaceCallback call, int cmdType_, String...params) {
+		super(call,cmdType_,HttpConfigUrl.ORDER_ACTIVATION,params);
+
 	}
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.ORDER_ACTIVATION;
-		params.put("OrderID", OrderID);
-		params.put("BeginTime", time);
+		params.put("OrderID", valueParams[0]);
+		params.put("BeginTime", valueParams[1]);
 	}
 
 

@@ -71,8 +71,7 @@ public class UserFeedbackActivity extends BaseNetActivity   {
 			CommonTools.showShortToast(this,getString(R.string.feedback_content_is_too_long));
 			return;
 		}
-		UserFeedBackHttp http = new UserFeedBackHttp(this, HttpConfigUrl.COMTYPE_USER_FEED_BACK,Build.MANUFACTURER + Build.BRAND + Build.MODEL, "" + getAppVersionName(this), infoEditText.getText().toString());
-		new Thread(http).start();
+		createHttpRequest( HttpConfigUrl.COMTYPE_USER_FEED_BACK,Build.MANUFACTURER + Build.BRAND + Build.MODEL, "" + getAppVersionName(this), infoEditText.getText().toString());
 	}
 
 	@Override

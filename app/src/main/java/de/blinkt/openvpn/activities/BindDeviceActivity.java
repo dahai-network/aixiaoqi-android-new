@@ -29,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.Base.CommenActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
@@ -37,9 +37,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
-import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.IsBindHttp;
-import de.blinkt.openvpn.http.UpdateConnectInfoHttp;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.BluetoothModel;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
@@ -54,7 +52,7 @@ import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 
-public class BindDeviceActivity extends CommenActivity implements InterfaceCallback, DialogInterfaceTypeBase {
+public class BindDeviceActivity extends BaseNetActivity implements DialogInterfaceTypeBase {
 
 	@BindView(R.id.stopImageView)
 	ImageView stopImageView;
@@ -233,8 +231,7 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 													}
 													deviceAddress = infos.get(0).getAddress();
 													utils.writeString(Constant.BRACELETNAME, infos.get(0).getDiviceName());
-													IsBindHttp http = new IsBindHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
-													new Thread(http).start();
+													createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
 													isStartFindDeviceDelay = false;
 													deviceSet.clear();
 												}
@@ -319,9 +316,9 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 		//绑定完成更新设备信息
 		if (utils == null)
 			utils = SharedUtils.getInstance();
-		UpdateConnectInfoHttp http = new UpdateConnectInfoHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, utils.readString(Constant.BRACELETVERSION),
-				utils.readInt(Constant.BRACELETPOWER), utils.readInt(Constant.BRACELETTYPE));
-		new Thread(http).start();
+
+		createHttpRequest(HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, utils.readString(Constant.BRACELETVERSION),
+				utils.readInt(Constant.BRACELETPOWER) + "", utils.readInt(Constant.BRACELETTYPE) + "");
 	}
 
 	private void restartUartService() {
@@ -339,16 +336,6 @@ public class BindDeviceActivity extends CommenActivity implements InterfaceCallb
 				EventBus.getDefault().post(serviceOperationEntity);
 			}
 		}).start();
-	}
-
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
-		CommonTools.showShortToast(mContext, errorMessage);
-	}
-
-	@Override
-	public void noNet() {
-		CommonTools.showShortToast(mContext, getString(R.string.no_wifi));
 	}
 
 	@Override

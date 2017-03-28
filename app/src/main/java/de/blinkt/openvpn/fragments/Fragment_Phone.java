@@ -37,6 +37,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.OnlyCallHttp;
 import de.blinkt.openvpn.model.ContactBean;
@@ -271,8 +272,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	}
 
 	private void requestTimeHttp() {
-		OnlyCallHttp onlyCallHttp = new OnlyCallHttp(this, HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME);
-		new Thread(onlyCallHttp).start();
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME);
 	}
 
 	@Override

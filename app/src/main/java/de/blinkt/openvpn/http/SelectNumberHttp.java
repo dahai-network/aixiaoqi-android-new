@@ -11,11 +11,7 @@ import de.blinkt.openvpn.model.SelectNumberEntity;
  * Created by Administrator on 2016/11/30 0030.
  */
 public class SelectNumberHttp extends BaseHttp{
-    private String province;
-    private String city;
-    private String mobileNumber;
-    private  int pageNumber;
-    private  int pageSize;
+
    SelectNumberEntity selectNumberEntity;
 
     public  SelectNumberEntity getSelectNumberEntity(){
@@ -25,26 +21,20 @@ public class SelectNumberHttp extends BaseHttp{
 
         return selectNumberEntity;
     }
-    public SelectNumberHttp(InterfaceCallback call, int cmdType_, int pageNumber,int pageSize, String province, String city,String MobileNumber) {
-        super(call,cmdType_);
-        this.province = province;
-        this.city = city;
-        this.mobileNumber=MobileNumber;
-        this.pageNumber=pageNumber;
-        this.pageSize=pageSize;
+    public SelectNumberHttp(InterfaceCallback call, int cmdType_, String...params ) {
+        super(call,cmdType_,GET_MODE,HttpConfigUrl.GET_SELECT_NUMBER,params);
+
     }
 
     @Override
     protected void BuildParams() throws Exception {
         super.BuildParams();
-        sendMethod_=GET_MODE;
-        slaverDomain_= HttpConfigUrl.GET_SELECT_NUMBER;
-        params.put("PageNumber",pageNumber+"");
-        params.put("PageSize",pageSize+"");
-        params.put("Province",province);
-        params.put("City",city);
-        if(!TextUtils.isEmpty(mobileNumber))
-            params.put("MobileNumber",mobileNumber);
+        params.put("PageNumber",valueParams[0]+"");
+        params.put("PageSize",valueParams[1]+"");
+        params.put("Province",valueParams[2]);
+        params.put("City",valueParams[3]);
+        if(!TextUtils.isEmpty(valueParams[4]))
+            params.put("MobileNumber",valueParams[4]);
     }
 
     @Override

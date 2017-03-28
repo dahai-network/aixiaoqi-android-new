@@ -257,8 +257,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				if(pwdEdit!=null) {
 					if (CheckUtil.isPassWordNo(pwdEdit.getText().toString(), LoginMainActivity.this)) {
 						showProgress(R.string.login_loading);
-						LoginHttp loginHttp = new LoginHttp(this, HttpConfigUrl.COMTYPE_LOGIN, usernameEdit.getText().toString(), pwdEdit.getText().toString());
-						new Thread(loginHttp).start();
+						createHttpRequest(HttpConfigUrl.COMTYPE_LOGIN, usernameEdit.getText().toString(), pwdEdit.getText().toString());
 					}
 				}
 				break;
@@ -384,8 +383,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 					if (!usernameEdit.getText().toString().equals(sharedUtils.readString(Constant.TEL)) || !Constant.JPUSH_ALIAS_SUCCESS.equals(sharedUtils.readString(Constant.JPUSH_ALIAS))) {
 						setAlias();
 					}
-					SecurityConfigHttp securityConfigHttp = new SecurityConfigHttp(this, HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
-					new Thread(securityConfigHttp).start();
+					createHttpRequest(HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
 				}
 			} else {
 				CommonTools.showShortToast(this, loginHttp.getMsg());

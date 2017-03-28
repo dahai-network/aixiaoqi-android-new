@@ -27,6 +27,7 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -54,7 +55,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CHANGENAME;
 import static de.blinkt.openvpn.constant.UmengContant.CHANGESPORTTARGET;
 import static de.blinkt.openvpn.constant.UmengContant.CHANGEWEIGHT;
 
-public class PersonalCenterActivity extends BaseActivity implements InterfaceCallback, View.OnClickListener, DialogInterfaceTypeBase {
+public class PersonalCenterActivity extends BaseNetActivity implements  View.OnClickListener, DialogInterfaceTypeBase {
 
 	@BindView(R.id.headImageView)
 	ImageView headImageView;
@@ -448,8 +449,7 @@ public class PersonalCenterActivity extends BaseActivity implements InterfaceCal
 	}
 
 	private void uploadHeaderHttp(String url){
-		UploadHeaderHttp uploadHeaderHttp=new UploadHeaderHttp(this, HttpConfigUrl.COMTYPE_UPLOAD_HEADER,url);
-		new Thread(uploadHeaderHttp).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_UPLOAD_HEADER,url);
 	}
 
 	/**

@@ -12,7 +12,7 @@ import de.blinkt.openvpn.model.DataEntitiy;
  */
 public class SportRecordDateHttp extends BaseHttp {
 
-	String dateTime;
+
 
 	public List<DataEntitiy> getDataEntitiyList() {
 		return dataEntitiyList;
@@ -20,18 +20,13 @@ public class SportRecordDateHttp extends BaseHttp {
 
 
     private List<DataEntitiy> dataEntitiyList=new ArrayList<>();
-    public SportRecordDateHttp(InterfaceCallback interfaceCallback, int cmdType_,String dateTime){
-       super(interfaceCallback,cmdType_);
-        this.dateTime=dateTime;
-
-
+    public SportRecordDateHttp(InterfaceCallback interfaceCallback, int cmdType_,String...params ){
+       super(interfaceCallback,cmdType_,GET_MODE,HttpConfigUrl.SPORT_GET_RECORD_DATE,params);
     }
     @Override
     protected void BuildParams() throws Exception {
 		super.BuildParams();
-        sendMethod_=GET_MODE;
-        slaverDomain_= HttpConfigUrl.SPORT_GET_RECORD_DATE;
-        params.put("startDate",dateTime);
+        params.put("startDate",valueParams[0]);
         params.put("days","31");
     }
 

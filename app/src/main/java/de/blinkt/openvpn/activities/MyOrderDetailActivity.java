@@ -29,6 +29,7 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
@@ -56,7 +57,7 @@ import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCANCELORDER;
 
-public class MyOrderDetailActivity extends BaseActivity implements InterfaceCallback, DialogInterfaceTypeBase {
+public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceCallback, DialogInterfaceTypeBase {
 
 	public static String FINISH_PROCESS = "finish";
 	public static String FINISH_PROCESS_ONLY = "finish_process_only";
@@ -430,8 +431,7 @@ public class MyOrderDetailActivity extends BaseActivity implements InterfaceCall
 
 	private void orderDataHttp(String nullcardNumber) {
 		if (nullcardNumber != null) {
-			OrderDataHttp orderDataHttp = new OrderDataHttp(this, HttpConfigUrl.COMTYPE_ORDER_DATA, bean.getOrderID(), nullcardNumber);
-			new Thread(orderDataHttp).start();
+			createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_DATA, bean.getOrderID(), nullcardNumber);
 		} else {
 			CommonTools.showShortToast(this, getString(R.string.no_nullcard_id));
 		}

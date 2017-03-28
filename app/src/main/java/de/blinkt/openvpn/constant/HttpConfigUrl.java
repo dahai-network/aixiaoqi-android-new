@@ -66,8 +66,6 @@ public class HttpConfigUrl {
 	public static final String ORDER_ACTIVATION = "Order/Activation";
 	public static final String ORDER_DATA = "Order/QueryOrderData";
 	public static final String ORDER_ACTIVATION_LOCAL_COMPLETED = "Order/ActivationLocalCompleted";
-	public static final String CANCEL_CALL_TRANSFER = "CallTransferNum/ClosedCallTransferAndSMS";
-	public static final String OPEN_CALL_TRANSFER = "CallTransferNum/OpenCallTransferAndSMS";
 	public static final String SEND_RETRY_FOR_ERROR = "SMS/SendRetryForError";
 	public static final String DEVICE_BRACELET_OTA = "DeviceBracelet/OTA";
 	public static final String ISBIND_DEVICE = "DeviceBracelet/IsBind";
@@ -111,19 +109,18 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_COUNTRY_PACKET = 0x0012;
 	public static final int COMTYPE_PACKET_DETAIL = 0x0013;
 	public static final int COMTYPE_GET_USER_PACKET_BY_ID = 0x0014;
+	public static final int COMTYPE_PACKET_MARKET = 0x0015;
 	public static final int COMTYPE_CREATE_ORDER = 0x0016;
 	public static final int COMTYPE_WEIXIN_GETPAYID = 0x0017;
 	public static final int COMTYPE_RECHARGE_ORDER = 0x0018;
-	public static final int COMTYPE_PACKET_MARKET = 0x0015;
-	public static final int COMTYPE_GET_MAX_PHONE_CALL_TIME = 0x0016;
-	public static final int COMTYPE_GET_SMS_DETAIL = 0x0017;
-	public static final int COMTYPE_SEND_SMS_MESSAGE = 0x0018;
 	public static final int COMTYPE_CANCEL_ORDER = 0x0019;
 	public static final int COMTYPE_UPLOAD_HEADER = 0x0020;
+	public static final int COMTYPE_GET_MAX_PHONE_CALL_TIME = 0x0021;
+	public static final int COMTYPE_GET_SMS_DETAIL = 0x0022;
+	public static final int COMTYPE_SEND_SMS_MESSAGE = 0x00123;
+
 	public static final int COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE = 0x0037;
 	public static final int COMTYPE_DEVICE_BRACELET_OTA = 0x0036;
-	public static final int COMTYPE_CANCEL_CALL_TRANSFER = 0x0037;
-	public static final int COMTYPE_OPEN_CALL_TRANSFER = 0x0038;
 	public static final int COMTYPE_SEND_RETRY_FOR_ERROR = 0x0039;
 	public static final int COMTYPE_GET_BASIC_CONFIG = 0x0040;
 	public static final int COMTYPE_ADD_NUMBER = 0x0041;

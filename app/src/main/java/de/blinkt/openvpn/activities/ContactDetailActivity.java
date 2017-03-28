@@ -295,8 +295,7 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 	ContactRecodeEntity contactRecodeEntity;
 
 	private void requestTimeHttp() {
-		OnlyCallHttp onlyCallHttp = new OnlyCallHttp(this, HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME);
-		new Thread(onlyCallHttp).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME);
 	}
 
 	private void setListener() {

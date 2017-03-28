@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
@@ -50,7 +51,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKTIPSWITCH;
 /**
  * Created by Administrator on 2016/10/26 0026.
  */
-public class TipUserOptionActivity extends BaseActivity implements InterfaceCallback {
+public class TipUserOptionActivity extends BaseNetActivity implements InterfaceCallback {
 
 
 	@BindView(R.id.open_bluetooth_tv)
@@ -251,17 +252,13 @@ public class TipUserOptionActivity extends BaseActivity implements InterfaceCall
 	@Override
 	public void onBackPressed() {
 		((AnimationDrawable) ivLoadPush.getBackground()).stop();
-		UploadRemindConfigHttp http = null;
+
 		if (switchView != null) {
-			if (switchView.isOpened()) {
-				http = new UploadRemindConfigHttp(this, HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, type, 1);
-			} else {
-				http = new UploadRemindConfigHttp(this, HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, type, 0);
-			}
+			createHttpRequest(HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, type,switchView.isOpened()?"1":"0");
 		} else {
 			super.onBackPressed();
 		}
-		new Thread(http).start();
+
 	}
 
 	@Override

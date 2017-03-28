@@ -10,7 +10,6 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 public class ActivateKingCardHttp extends BaseHttp {
 	public ActivateKingCardHttp(InterfaceCallback interfaceCallback, int cmdType_, String ...params) {
 		super(interfaceCallback, cmdType_,HttpConfigUrl.ACTIVATE_KINGCARD,params);
-
 	}
 	@Override
 	protected void BuildParams() throws Exception {

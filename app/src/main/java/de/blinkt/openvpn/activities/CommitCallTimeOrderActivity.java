@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -56,7 +57,7 @@ import static de.blinkt.openvpn.constant.Constant.RSA_PRIVATE;
 import static de.blinkt.openvpn.constant.Constant.WEIXIN_APPID;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKSUREPAGMENT;
 
-public class CommitCallTimeOrderActivity extends BaseActivity implements InterfaceCallback {
+public class CommitCallTimeOrderActivity extends BaseNetActivity implements InterfaceCallback {
 
 	@BindView(R.id.countryImageView)
 	ImageView countryImageView;
@@ -359,13 +360,13 @@ public class CommitCallTimeOrderActivity extends BaseActivity implements Interfa
 	 */
 	private void payForWeixin() {
 		showProgress(getResources().getString(R.string.weixin_paying),true);
-		WeixinGetPayIdHttp http = new WeixinGetPayIdHttp(this, HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID, orderEntity.getOrder().getOrderNum());
 		SharedPreferences preferences = getSharedPreferences("order", MODE_PRIVATE);
 		SharedPreferences.Editor editor = preferences.edit();
 		editor.putString("orderId", orderEntity.getOrder().getOrderID());
 		editor.putString("orderAmount", orderEntity.getOrder().getTotalPrice() + "");
 		editor.commit();
-		new Thread(http).start();
+		createHttpRequest( HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID, orderEntity.getOrder().getOrderNum());
+
 		sureTextView.setEnabled(true);
 	}
 

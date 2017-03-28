@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
@@ -29,7 +30,7 @@ import de.blinkt.openvpn.util.CommonTools;
 
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.orderStatus;
 
-public class CallTimePacketDetailActivity extends BaseActivity implements InterfaceCallback {
+public class CallTimePacketDetailActivity extends BaseNetActivity implements InterfaceCallback {
 
 	public static CallTimePacketDetailActivity activity;
 	@BindView(R.id.retryTextView)
@@ -80,8 +81,7 @@ public class CallTimePacketDetailActivity extends BaseActivity implements Interf
 	//获取数据
 	private void addData() {
 		showDefaultProgress();
-		PacketDtailHttp http = new PacketDtailHttp(this, HttpConfigUrl.COMTYPE_PACKET_DETAIL, getIntent().getStringExtra("id"));
-		new Thread(http).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_PACKET_DETAIL, getIntent().getStringExtra("id"));
 	}
 
 	//设置大小字体
