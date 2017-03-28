@@ -88,8 +88,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 	private void basicConfigHttp() {
 		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(IntentPutKeyConstant.USER_AGREEMENT_URL))) {
-			GetBasicConfigHttp getBasicConfigHttp = new GetBasicConfigHttp(this, HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG);
-			new Thread(getBasicConfigHttp).start();
+			createHttpRequest(HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG);
 		}
 	}
 

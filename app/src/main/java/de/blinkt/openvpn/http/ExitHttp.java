@@ -9,18 +9,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 
 public class ExitHttp extends BaseHttp {
 
-
 	public ExitHttp(InterfaceCallback call, int cmdType_) {
-		super(call,cmdType_);
-		isCreateHashMap=false;
+		super(call,cmdType_,false,GET_MODE,HttpConfigUrl.EXIT);
 	}
-
-
-	@Override
-	protected void BuildParams() throws Exception {
-		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.EXIT;
-		sendMethod_ = GET_MODE;
-	}
-
 }

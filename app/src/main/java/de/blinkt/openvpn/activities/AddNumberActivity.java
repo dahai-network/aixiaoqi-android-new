@@ -20,6 +20,7 @@ import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.CheckUtil;
 import de.blinkt.openvpn.http.AddNumberHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.SendMsgHttp;
 import de.blinkt.openvpn.util.CommonTools;
 
@@ -83,8 +84,7 @@ public class AddNumberActivity extends BaseNetActivity {
             CommonTools.showShortToast(this,getString(R.string.input_verification));
             return ;
         }
-        AddNumberHttp addNumberHttp=new AddNumberHttp(this,HttpConfigUrl.COMTYPE_ADD_NUMBER,phoneNum,verificationEdit.getText().toString());
-        new Thread(addNumberHttp).start();
+        CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_ADD_NUMBER,phoneNum,verificationEdit.getText().toString());
     }
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {

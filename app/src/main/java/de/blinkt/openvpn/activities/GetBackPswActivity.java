@@ -144,11 +144,10 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
 						if (CheckUtil.isPassWordNo(pswStr, GetBackPswActivity.this)) {
 							//友盟方法统计
 							MobclickAgent.onEvent(this, CLICKFINDBACKBUTTON);
-							ForgetPswHttp forgetHttp = new ForgetPswHttp(this, HttpConfigUrl.COMTYPE_FORGET_PSW,
+							createHttpRequest(HttpConfigUrl.COMTYPE_FORGET_PSW,
 									phoneStr,
 									pswStr,
 									vertificationStr);
-							new Thread(forgetHttp).start();
 						}
 					}
 				} else {

@@ -18,16 +18,10 @@ public class GetBindDeviceHttp extends BaseHttp  {
 	}
 
 	public GetBindDeviceHttp(InterfaceCallback call, int cmdType_) {
-		super(call,cmdType_);
-		isCreateHashMap=false;
+		super(call,cmdType_,false,GET_MODE, HttpConfigUrl.GET_BIND_DEVICE);
 	}
 
-	@Override
-	protected void BuildParams() throws Exception {
-		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.GET_BIND_DEVICE;
-		sendMethod_ = GET_MODE;
-	}
+
 
 	@Override
 	protected void parseObject(String response) {

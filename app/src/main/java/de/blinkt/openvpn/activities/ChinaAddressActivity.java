@@ -52,8 +52,7 @@ public class ChinaAddressActivity extends BaseNetActivity implements DialogInter
         }
     }
     private void httpAddress() {
-        GetLocationListHttp getLocationListHttp = new GetLocationListHttp(this, HttpConfigUrl.COMTYPE_GET_LOCATION_LIST);
-        new Thread(getLocationListHttp).start();
+        createHttpRequest(HttpConfigUrl.COMTYPE_GET_LOCATION_LIST);
     }
     @OnClick({R.id.provice_tv,R.id.city_tv})
     public void onClick(View v){

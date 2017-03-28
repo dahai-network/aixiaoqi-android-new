@@ -40,6 +40,7 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.BalanceGetPayIdHttp;
 import de.blinkt.openvpn.http.BalanceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.OrderAddHttp;
 import de.blinkt.openvpn.http.WeixinGetPayIdHttp;
@@ -331,8 +332,7 @@ public class CommitCallTimeOrderActivity extends BaseActivity implements Interfa
 	protected void onResume() {
 		super.onResume();
 		//查询余额
-		BalanceHttp http = new BalanceHttp(this, HttpConfigUrl.COMTYPE_GET_BALANCE);
-		new Thread(http).start();
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_BALANCE);
 		dismissProgress();
 	}
 
@@ -350,8 +350,8 @@ public class CommitCallTimeOrderActivity extends BaseActivity implements Interfa
 	 * 余额支付
 	 */
 	private void payForBalance() {
-		BalanceGetPayIdHttp http = new BalanceGetPayIdHttp(this, HttpConfigUrl.COMTYPE_BALANCE_GETPAYID, orderEntity.getOrder().getOrderID());
-		new Thread(http).start();
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_BALANCE_GETPAYID, orderEntity.getOrder().getOrderID());
+
 	}
 
 	/**

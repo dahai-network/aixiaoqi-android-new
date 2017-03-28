@@ -23,6 +23,7 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import cn.qfishphone.sipengine.SipEngineCore;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -43,7 +44,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKEXITLOGIN;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUSERFEEDBACKSEND;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKVERSIONUPGRADE;
 
-public class SettingActivity extends BaseActivity implements InterfaceCallback, DialogInterfaceTypeBase {
+public class SettingActivity extends BaseNetActivity implements InterfaceCallback, DialogInterfaceTypeBase {
 
 	@BindView(R.id.contactUsTextView)
 	TextView contactUsTextView;
@@ -244,8 +245,7 @@ public class SettingActivity extends BaseActivity implements InterfaceCallback, 
 		if (type == 2) {
 			if (!CommonTools.isFastDoubleClick(2000)) {
 				//暂不使用退出接口
-				ExitHttp http = new ExitHttp(this, HttpConfigUrl.COMTYPE_EXIT);
-				new Thread(http).start();
+				createHttpRequest(HttpConfigUrl.COMTYPE_EXIT);
 			}
 		}
 	}

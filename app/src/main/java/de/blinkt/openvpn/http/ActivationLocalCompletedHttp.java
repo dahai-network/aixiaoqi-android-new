@@ -19,17 +19,16 @@ public class ActivationLocalCompletedHttp extends BaseHttp {
 
 	private OrderDataEntity orderDataEntity;
 
-	public ActivationLocalCompletedHttp(InterfaceCallback call, int cmdType_, String OrderID) {
-		super(call,cmdType_);
-		this.OrderID = OrderID;
+	public ActivationLocalCompletedHttp(InterfaceCallback call, int cmdType_, String... params) {
+		super(call,cmdType_,HttpConfigUrl.ORDER_ACTIVATION_LOCAL_COMPLETED,params);
+
 
 	}
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.ORDER_ACTIVATION_LOCAL_COMPLETED;
-		params.put("OrderID", OrderID);
+		params.put("OrderID", valueParams[0]);
 	}
 
 

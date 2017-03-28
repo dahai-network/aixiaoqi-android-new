@@ -12,7 +12,7 @@ import de.blinkt.openvpn.model.OrderEntity;
  */
 public class GetOrderByIdHttp extends BaseHttp {
 
-	private String id;
+
 	private OrderEntity orderEntity;
 
 	public OrderEntity getOrderEntity() {
@@ -22,19 +22,15 @@ public class GetOrderByIdHttp extends BaseHttp {
 		return orderEntity;
 	}
 
-	public GetOrderByIdHttp(InterfaceCallback call, int cmdType_, String id) {
-	super(call,cmdType_);
-		this.id = id;
+	public GetOrderByIdHttp(InterfaceCallback call, int cmdType_, String... params) {
+	super(call,cmdType_,GET_MODE,HttpConfigUrl.GET_USER_PACKET_BY_ID,params);
 	}
 
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.GET_USER_PACKET_BY_ID;
-		sendMethod_ = GET_MODE;
-
-		params.put("id", URLEncoder.encode(id, "utf-8"));
+		params.put("id", URLEncoder.encode(valueParams[0], "utf-8"));
 	}
 
 	@Override

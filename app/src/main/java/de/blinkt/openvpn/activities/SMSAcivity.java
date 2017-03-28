@@ -525,23 +525,7 @@ public class SMSAcivity extends BaseActivity implements View.OnClickListener, In
 			}
 			final View view = LayoutInflater.from(this).inflate(R.layout.select_more_contact, null);
 			TextView tvContact = (TextView) view.findViewById(R.id.tv_contact);
-//			final ImageView deleteContactIv = (ImageView) view.findViewById(R.id.delete_contact_iv);
-//			deleteContactIv.setTag(phoneNumberKey);
-//			deleteContactIv.setOnClickListener(this);
-//			tvContact.setOnClickListener(new View.OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					deleteContactIv.setVisibility(View.VISIBLE);
-//				}
-//			});
-//			deleteContactIv.setOnClickListener(new View.OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					String phone = (String) v.getTag();
-//					map.remove(phone);
-//					view.setVisibility(View.GONE);
-//				}
-//			});
+
 			tvContact.setText(realNameValue);
 			linearLayout.addView(view);
 			if (i % 3 == 0) {

@@ -8,22 +8,15 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
  */
 
 public class ActivateKingCardHttp extends BaseHttp {
+	public ActivateKingCardHttp(InterfaceCallback interfaceCallback, int cmdType_, String ...params) {
+		super(interfaceCallback, cmdType_,HttpConfigUrl.ACTIVATE_KINGCARD,params);
 
-	private final String OrderID;
-	private final String Tel;
-
-	public ActivateKingCardHttp(InterfaceCallback interfaceCallback, int cmdType_, String OrderID, String Tel) {
-		super(interfaceCallback, cmdType_);
-		this.OrderID = OrderID;
-		this.Tel = Tel;
 	}
-
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.ACTIVATE_KINGCARD;
-		params.put("OrderID", OrderID);
-		params.put("Tel", Tel);
+		params.put("OrderID", valueParams[0]);
+		params.put("Tel", valueParams[1]);
 	}
 
 }

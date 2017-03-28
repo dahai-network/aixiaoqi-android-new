@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CountryDetailPackageAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
@@ -36,7 +37,7 @@ import de.blinkt.openvpn.views.contact.DividerDecoration;
 
 import static android.view.View.GONE;
 
-public class CountryPackageActivity extends BaseActivity implements InterfaceCallback {
+public class CountryPackageActivity extends BaseNetActivity implements InterfaceCallback {
 
 	public static CountryPackageActivity activity = null;
 	@BindView(R.id.packageImageView)
@@ -106,8 +107,7 @@ public class CountryPackageActivity extends BaseActivity implements InterfaceCal
 	private void addData() {
 		String countryId = getIntent().getStringExtra("id");
 		if (countryId != null) {
-			CountryPacketHttp http = new CountryPacketHttp(this, HttpConfigUrl.COMTYPE_COUNTRY_PACKET, countryId);
-			new Thread(http).start();
+			createHttpRequest(HttpConfigUrl.COMTYPE_COUNTRY_PACKET, countryId);
 		}
 	}
 
@@ -126,11 +126,6 @@ public class CountryPackageActivity extends BaseActivity implements InterfaceCal
 				nodataTextView.setVisibility(View.VISIBLE);
 			}
 		}
-	}
-
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
-		CommonTools.showShortToast(this, errorMessage);
 	}
 
 	@Override

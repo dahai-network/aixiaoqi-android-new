@@ -20,16 +20,15 @@ public class BindGiftHttp extends BaseHttp {
 	{
 		return data;
 	}
-	public BindGiftHttp(InterfaceCallback interfaceCallback, int cmdType_, String CardPwd) {
-		super(interfaceCallback, cmdType_);
-		this.CardPwd = CardPwd;
+	public BindGiftHttp(InterfaceCallback interfaceCallback, int cmdType_, String...params ) {
+		super(interfaceCallback, cmdType_,HttpConfigUrl.BIND_GIFT,params);
+
 	}
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.BIND_GIFT;
-		params.put("CardPwd", URLEncoder.encode(CardPwd, "utf-8"));
+		params.put("CardPwd", URLEncoder.encode(valueParams[0], "utf-8"));
 	}
 
 	@Override

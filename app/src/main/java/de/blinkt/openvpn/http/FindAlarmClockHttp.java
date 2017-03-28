@@ -19,15 +19,8 @@ public class FindAlarmClockHttp extends BaseHttp{
 
     List<AlarmClockEntity> alarmClockEntityList;
     public FindAlarmClockHttp(InterfaceCallback interfaceCallback,int cmdType_){
-        super(interfaceCallback,cmdType_);
-        isCreateHashMap=false;
+        super(interfaceCallback,cmdType_,false,GET_MODE,HttpConfigUrl.ALARM_CLOCK_GET);
 
-    }
-    @Override
-    protected void BuildParams() throws Exception {
-        super.BuildParams();
-        slaverDomain_= HttpConfigUrl.ALARM_CLOCK_GET;
-        sendMethod_=GET_MODE;
     }
 
     @Override

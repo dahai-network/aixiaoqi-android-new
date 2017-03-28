@@ -14,25 +14,22 @@ import de.blinkt.openvpn.model.CountryPacketEntity;
  */
 public class CountryPacketHttp extends BaseHttp {
 
-	private String CountryID;
 	private List<CountryPacketEntity> countryPacketList;
 
 	public List<CountryPacketEntity> getCountryPacketList() {
 		return countryPacketList;
 	}
 
-	public CountryPacketHttp(InterfaceCallback call, int cmdType_, String CountryID) {
-	super(call,cmdType_);
-		this.CountryID = CountryID;
+	public CountryPacketHttp(InterfaceCallback call, int cmdType_, String... params) {
+	super(call,cmdType_,HttpConfigUrl.COUNTRY_PACKET,params);
+		sendMethod_ = GET_MODE;
 	}
 
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.COUNTRY_PACKET;
-		sendMethod_ = GET_MODE;
-		params.put("CountryID", URLEncoder.encode(CountryID + "", "utf-8"));
+		params.put("CountryID", URLEncoder.encode(valueParams[0] + "", "utf-8"));
 	}
 
 	@Override

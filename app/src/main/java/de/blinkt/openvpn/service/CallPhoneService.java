@@ -21,6 +21,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CheckTokenHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.SecurityConfigHttp;
 import de.blinkt.openvpn.util.CommonTools;
@@ -51,35 +52,10 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
     public void onCreate() {
         super.onCreate();
         httpToken();
-        setWifiDormancy();
     }
     private void httpToken(){
         sharedUtils = SharedUtils.getInstance();
-        CheckTokenHttp http = new CheckTokenHttp(this, HttpConfigUrl.COMTYPE_CHECKTOKEN);
-        new Thread(http).start();
-    }
-    public void setWifiDormancy( ){
-//        int wifiSleepValue= Settings.Global.getInt(getContentResolver(),Settings.Global.WIFI_SLEEP_POLICY,Settings.Global.WIFI_SLEEP_POLICY_DEFAULT);
-//        Log.e("wifiSleepValue11111","wifiSleepValue="+wifiSleepValue);
-//        Settings.Global.putInt(getContentResolver(), Settings.Global.WIFI_SLEEP_POLICY,Settings.Global.WIFI_SLEEP_POLICY_NEVER);
-//        wifiSleepValue= Settings.Global.getInt(getContentResolver(),Settings.Global.WIFI_SLEEP_POLICY,Settings.Global.WIFI_SLEEP_POLICY_DEFAULT);
-//        Log.e("wifiSleepValue22222","wifiSleepValue="+wifiSleepValue);
-//        int wifiSleepPolicy=0;
-//        wifiSleepPolicy=Settings.System.getInt(getContentResolver(),
-//                android.provider.Settings.System.WIFI_SLEEP_POLICY,
-//                Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-//        Log.e("wifiSleepValue11111","---> 修改前的Wifi休眠策略值 WIFI_SLEEP_POLICY="+wifiSleepPolicy);
-//
-//
-//        Settings.System.putInt(getContentResolver(),
-//                android.provider.Settings.System.WIFI_SLEEP_POLICY,
-//                Settings.System.WIFI_SLEEP_POLICY_NEVER);
-//
-//
-//        wifiSleepPolicy=Settings.System.getInt(getContentResolver(),
-//                android.provider.Settings.System.WIFI_SLEEP_POLICY,
-//                Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
-//        Log.e("wifiSleepValue22222","---> 修改后的Wifi休眠策略值 WIFI_SLEEP_POLICY="+wifiSleepPolicy);
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECKTOKEN);
     }
 
 	private void registSipForReceive() {
@@ -120,12 +96,6 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 	@Override
 	public void OnRegistrationState(int code, int error_code) {
 		Log.e(TAG, "code=" + code + "  , errorcode=" + error_code);
-//        if (code == 1) {
-//
-//        } else if (code == 2) {
-//
-//        }else if(code==4){
-//        }
 	}
 
 	public static int CALL_DIR = 0;

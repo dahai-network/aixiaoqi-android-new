@@ -88,8 +88,8 @@ public class CallTimeOrderDetailActitivy extends BaseNetActivity   {
 	//获取数据
 	private void addData() {
 		showDefaultProgress();
-		GetOrderByIdHttp http = new GetOrderByIdHttp(this, HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID, getIntent().getStringExtra("id"));
-		new Thread(http).start();
+
+		createHttpRequest(HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID, getIntent().getStringExtra("id"));
 	}
 
 	@OnClick({R.id.retryTextView, R.id.headBarRelativeLayout})

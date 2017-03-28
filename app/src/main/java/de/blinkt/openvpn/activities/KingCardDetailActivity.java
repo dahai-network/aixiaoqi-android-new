@@ -24,6 +24,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.ActivateKingCardHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetOrderByIdHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.model.OrderEntity;
@@ -178,8 +179,7 @@ public class KingCardDetailActivity extends BaseActivity implements InterfaceCal
 	@Override
 	public void dialogText(int type, String text) {
 		if (type != 1) {
-			ActivateKingCardHttp http = new ActivateKingCardHttp(this, HttpConfigUrl.COMTYPE_ACTIVATE_KINGCARD, bean.getOrderID(), text);
-			new Thread(http).start();
+			CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ACTIVATE_KINGCARD, bean.getOrderID(), text);
 		}
 	}
 }
