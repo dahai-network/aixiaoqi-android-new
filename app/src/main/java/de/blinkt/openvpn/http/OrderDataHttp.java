@@ -10,9 +10,6 @@ import de.blinkt.openvpn.model.OrderDataEntity;
  */
 public class OrderDataHttp extends BaseHttp {
 
-	private String OrderID;
-
-	private String EmptyCardSerialNumber;
 
 	public OrderDataEntity getOrderDataEntity() {
 		return orderDataEntity;
@@ -20,18 +17,16 @@ public class OrderDataHttp extends BaseHttp {
 
 	private OrderDataEntity orderDataEntity;
 
-	public OrderDataHttp(InterfaceCallback call, int cmdType_, String OrderID , String EmptyCardSerialNumber) {
-		super(call,cmdType_);
-		this.OrderID = OrderID;
-		this.EmptyCardSerialNumber = EmptyCardSerialNumber;
+	public OrderDataHttp(InterfaceCallback call, int cmdType_, String ...params) {
+		super(call,cmdType_,HttpConfigUrl.ORDER_DATA,params);
+
 	}
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.ORDER_DATA;
-		params.put("OrderID", OrderID);
-		params.put("EmptyCardSerialNumber", EmptyCardSerialNumber);
+		params.put("OrderID", valueParams[0]);
+		params.put("EmptyCardSerialNumber", valueParams[1]);
 	}
 
 	@Override

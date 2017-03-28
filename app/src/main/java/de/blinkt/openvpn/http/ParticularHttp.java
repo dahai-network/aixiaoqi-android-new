@@ -13,8 +13,6 @@ import de.blinkt.openvpn.model.ParticularEntity;
 public class ParticularHttp extends BaseHttp {
 
 
-	private int pageNumber;
-	private int pageSize;
 
 	private ParticularEntity particularEntity;
 
@@ -22,21 +20,20 @@ public class ParticularHttp extends BaseHttp {
 		return particularEntity;
 	}
 
-	public ParticularHttp(InterfaceCallback call, int cmdType_, int pageNumber, int pageSize) {
-super(call,cmdType_);
-		this.pageSize = pageSize;
-		this.pageNumber = pageNumber;
-		this.sendMethod_ = GET_MODE;
+	public ParticularHttp(InterfaceCallback call, int cmdType_, String...params) {
+		super(call,cmdType_,GET_MODE,HttpConfigUrl.PARTICULAR,params);
+
+
 	}
 
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.PARTICULAR;
 
-		params.put("pageSize", URLEncoder.encode(pageSize + "", "utf-8"));
-		params.put("pageNumber", URLEncoder.encode(pageNumber + "", "utf-8"));
+
+		params.put("pageSize", URLEncoder.encode(valueParams[0] + "", "utf-8"));
+		params.put("pageNumber", URLEncoder.encode(valueParams[1] + "", "utf-8"));
 	}
 
 	@Override

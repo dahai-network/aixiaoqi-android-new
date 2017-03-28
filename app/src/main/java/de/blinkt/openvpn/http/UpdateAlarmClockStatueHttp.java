@@ -7,21 +7,18 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
  */
 public class UpdateAlarmClockStatueHttp extends BaseHttp {
 
-    private  String  id;
-    private String statue;
-    public UpdateAlarmClockStatueHttp(InterfaceCallback interfaceCallback,int cmdType_,String id,String statue){
-     super(interfaceCallback,cmdType_);
-        this.id=id;
-        this.statue=statue;
+
+    public UpdateAlarmClockStatueHttp(InterfaceCallback interfaceCallback,int cmdType_,String... params){
+     super(interfaceCallback,cmdType_,HttpConfigUrl.UPDATE_ALARM_CLOCK_STATUE,params);
+
     }
 
     @Override
     protected void BuildParams() throws Exception {
         super.BuildParams();
-        slaverDomain_= HttpConfigUrl.UPDATE_ALARM_CLOCK_STATUE;
 
-        params.put("ID",id+"");
-        params.put("Status",statue);
+        params.put("ID",valueParams[0]+"");
+        params.put("Status",valueParams[1]);
     }
 
 }

@@ -9,27 +9,21 @@ public class UserFeedBackHttp extends BaseHttp {
 
 
 
-	private String Model;
-	private String version;
-	private String Info;
 
 
-	public UserFeedBackHttp(InterfaceCallback call, int cmdType_, String version, String Model, String Info) {
-	super(call,cmdType_);
-		this.version = version;
-		this.Model = Model;
-		this.Info = Info;
+
+	public UserFeedBackHttp(InterfaceCallback call, int cmdType_,String...params) {
+	super(call,cmdType_,HttpConfigUrl.USER_FEED_BACK,params);
 	}
 
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.USER_FEED_BACK;
-		params.put("version", URLEncoder.encode(version, "utf-8"));
-		params.put("Model", URLEncoder.encode(Model, "utf-8"));
-		params.put("smsVerCode", URLEncoder.encode(version, "utf-8"));
-		params.put("Info", Info);
+		params.put("version", URLEncoder.encode(valueParams[0], "utf-8"));
+		params.put("Model", URLEncoder.encode(valueParams[1], "utf-8"));
+		params.put("smsVerCode", URLEncoder.encode(valueParams[0], "utf-8"));
+		params.put("Info", valueParams[2]);
 	}
 
 

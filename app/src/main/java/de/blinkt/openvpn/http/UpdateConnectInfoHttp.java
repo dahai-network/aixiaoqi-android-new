@@ -7,24 +7,19 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
  */
 
 public class UpdateConnectInfoHttp extends BaseHttp {
-	private final String Version;
-	private final int Power;
-	private final int DeviceType;
 
-	public UpdateConnectInfoHttp(InterfaceCallback interfaceCallback, int cmdType_, String Version, int Power, int DeviceType) {
-		super(interfaceCallback, cmdType_);
-		this.Version = Version;
-		this.Power = Power;
-		this.DeviceType = DeviceType;
+
+	public UpdateConnectInfoHttp(InterfaceCallback interfaceCallback, int cmdType_, String...params ) {
+		super(interfaceCallback, cmdType_, HttpConfigUrl.UPDATE_CONN_INFO,params);
+
 	}
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.UPDATE_CONN_INFO;
-		params.put("Version", Version);
-		params.put("Power", Power+"");
-		params.put("DeviceType", DeviceType+"");
+		params.put("Version", valueParams[0]);
+		params.put("Power", valueParams[1]+"");
+		params.put("DeviceType", valueParams[2]+"");
 	}
 
 }

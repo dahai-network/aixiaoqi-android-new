@@ -13,10 +13,7 @@ import de.blinkt.openvpn.model.RechargeEntity;
 
 public class RechargeHttp extends BaseHttp {
 
-	//金额
-	private String Amount;
-	//1支付宝/2微信
-	private int PaymentMethod;
+
 	private RechargeEntity rechargeEntity;
 
 
@@ -24,19 +21,16 @@ public class RechargeHttp extends BaseHttp {
 		return rechargeEntity;
 	}
 
-	public RechargeHttp(InterfaceCallback call, int cmdType_, String Amount, int PaymentMethod) {
-		super(call,cmdType_);
-		this.Amount = Amount;
-		this.PaymentMethod = PaymentMethod;
+	public RechargeHttp(InterfaceCallback call, int cmdType_, String ...params) {
+		super(call,cmdType_,HttpConfigUrl.RECHARGE_ORDER,params);
 	}
 
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.RECHARGE_ORDER;
-		params.put("Amount", URLEncoder.encode(Amount, "utf-8"));
-		params.put("PaymentMethod", URLEncoder.encode(PaymentMethod + "", "utf-8"));
+		params.put("Amount", URLEncoder.encode(valueParams[0], "utf-8"));
+		params.put("PaymentMethod", URLEncoder.encode(valueParams[1] + "", "utf-8"));
 	}
 
 	@Override

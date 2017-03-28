@@ -190,8 +190,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	//获取写卡数据，然后发给蓝牙写卡
 	private void orderDataHttp(String nullcardNumber) {
 		if (nullcardNumber != null) {
-			OrderDataHttp orderDataHttp = new OrderDataHttp(this, HttpConfigUrl.COMTYPE_ORDER_DATA, orderId, nullcardNumber);
-			new Thread(orderDataHttp).start();
+			createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_DATA, orderId, nullcardNumber);
 		} else {
 			CommonTools.showShortToast(this, getString(R.string.no_nullcard_id));
 		}

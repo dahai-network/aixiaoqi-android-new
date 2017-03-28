@@ -128,15 +128,13 @@ public class SelectNumberInfoActivity extends BaseNetActivity implements DialogI
 
     }
     private void httpSelectInfo(String paymentType){
-
-        SelectNumberInfoHttp selectNumberInfoHttp=new SelectNumberInfoHttp(this,
-                HttpConfigUrl.COMTYPE_ADD_SELECT_NUMBER_INFO,
+        createHttpRequest(  HttpConfigUrl.COMTYPE_ADD_SELECT_NUMBER_INFO,
                 getIntent().getStringExtra(IntentPutKeyConstant.E_BUIZ_ORDER_ID),
                 name ,
                 idCard ,
                 number ,
                 paymentType );
-        new Thread(selectNumberInfoHttp).start();
+
 
     }
 public static final int COMMIT_USER_INFO_SUCCEED=100;

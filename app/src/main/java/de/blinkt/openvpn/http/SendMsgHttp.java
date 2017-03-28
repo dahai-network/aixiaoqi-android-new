@@ -12,13 +12,11 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
  */
 public class SendMsgHttp extends BaseHttp {
 
-	private String ToNum;
-	private int type;
 
-	public SendMsgHttp(InterfaceCallback call, int cmdType_, String ToNum, int type) {
-super(call,cmdType_);
-		this.ToNum = ToNum;
-		this.type = type;
+
+	public SendMsgHttp(InterfaceCallback call, int cmdType_, String ...params ) {
+		super(call,cmdType_, HttpConfigUrl.SEND_SMS,params);
+
 
 	}
 
@@ -26,9 +24,8 @@ super(call,cmdType_);
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.SEND_SMS;
-		params.put("ToNum", URLEncoder.encode(ToNum, "utf-8"));
-		params.put("Type", URLEncoder.encode(type + "", "utf-8"));
+		params.put("ToNum", URLEncoder.encode(valueParams[0], "utf-8"));
+		params.put("Type", URLEncoder.encode(valueParams[1] + "", "utf-8"));
 	}
 
 

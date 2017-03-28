@@ -43,6 +43,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.SportPeriodHttp;
 import de.blinkt.openvpn.http.SportRecordDateHttp;
@@ -375,8 +376,7 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 	}
 
 	private void SportPeriodHttp(String time) {
-		SportPeriodHttp sportPeriodHttp = new SportPeriodHttp(this, HttpConfigUrl.COMTYPE_SPORT_GET_TIME_PERIOD_DATE, time);
-		new Thread(sportPeriodHttp).start();
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_SPORT_GET_TIME_PERIOD_DATE, time);
 	}
 
 	@Override
@@ -389,8 +389,7 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 	}
 
 	private void SportRecordHttp(String time) {
-		SportRecordDateHttp sportRecordDateHttp = new SportRecordDateHttp(this, HttpConfigUrl.COMTYPE_SPORT_GET_RECORD_DATE, time);
-		new Thread(sportRecordDateHttp).start();
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_SPORT_GET_RECORD_DATE, time);
 	}
 
 

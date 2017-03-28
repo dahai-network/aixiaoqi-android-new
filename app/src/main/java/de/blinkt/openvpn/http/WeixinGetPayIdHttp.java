@@ -14,12 +14,12 @@ import de.blinkt.openvpn.model.WeiXinResultEntity;
 public class WeixinGetPayIdHttp extends BaseHttp {
 
 
-	private String orderOrPayment;
+
 	private WeiXinResultEntity weixinResultEntity;
 
-	public WeixinGetPayIdHttp(InterfaceCallback call, int cmdType_, String orderOrPayment) {
-		super(call,cmdType_);
-		this.orderOrPayment = orderOrPayment;
+	public WeixinGetPayIdHttp(InterfaceCallback call, int cmdType_, String...params  ) {
+		super(call,cmdType_,HttpConfigUrl.WEIXIN_GETPAYID,params);
+
 	}
 
 	public WeiXinResultEntity getWeixinResultEntity() {
@@ -29,8 +29,7 @@ public class WeixinGetPayIdHttp extends BaseHttp {
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.WEIXIN_GETPAYID;
-		params.put("orderOrPayment", URLEncoder.encode(orderOrPayment, "utf-8"));
+		params.put("orderOrPayment", URLEncoder.encode(valueParams[0], "utf-8"));
 	}
 
 	@Override

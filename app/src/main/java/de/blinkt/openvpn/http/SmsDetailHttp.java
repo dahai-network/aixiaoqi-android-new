@@ -13,31 +13,24 @@ import de.blinkt.openvpn.model.SmsDetailEntity;
  */
 public class SmsDetailHttp extends BaseHttp {
 
-	private int pageNumber;
-	private int pageSize;
-	private String tel;
+
 	private List<SmsDetailEntity> smsEntityList;
 
 	public List<SmsDetailEntity> getSmsDetailEntityList() {
 		return smsEntityList;
 	}
 
-	public SmsDetailHttp(InterfaceCallback interfaceCallback, int cmdType_, String tel, int pageNumber, int pageSize) {
-	super(interfaceCallback,cmdType_);
-		this.pageNumber = pageNumber;
-		this.tel = tel;
-		this.pageSize = pageSize;
+	public SmsDetailHttp(InterfaceCallback interfaceCallback, int cmdType_, String...params ) {
+	super(interfaceCallback,cmdType_,GET_MODE,HttpConfigUrl.GET_SMS_DETAIL,params);
+
 	}
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		sendMethod_ = GET_MODE;
-		slaverDomain_ = HttpConfigUrl.GET_SMS_DETAIL;
-
-		params.put("Tel", tel);
-		params.put("pageNumber", pageNumber + "");
-		params.put("pageSize", pageSize + "");
+		params.put("Tel", valueParams[0]);
+		params.put("pageNumber", valueParams[1] );
+		params.put("pageSize", valueParams[2] );
 	}
 
 	@Override

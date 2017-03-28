@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
@@ -48,7 +49,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKTIPSWITCH;
 /**
  * Created by Administrator on 2016/10/26 0026.
  */
-public class TipUserOptionsActivity extends BaseActivity implements InterfaceCallback {
+public class TipUserOptionsActivity extends BaseNetActivity implements InterfaceCallback {
 
 
 	@BindView(R.id.open_bluetooth_tv)
@@ -239,41 +240,27 @@ public class TipUserOptionsActivity extends BaseActivity implements InterfaceCal
 	private void updateSwitchViewState() {
 		UploadRemindConfigHttp http = null;
 		if (callCommingSwitchView != null) {
-			if (callCommingSwitchView.isOpened()) {
-				http = new UploadRemindConfigHttp(this, HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.COMING_TEL_REMIND, 1);
-			} else {
-				http = new UploadRemindConfigHttp(this, HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.COMING_TEL_REMIND, 0);
-			}
+			createHttpRequest( HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.COMING_TEL_REMIND,callCommingSwitchView.isOpened()?"1":"0");
 		} else {
 			super.onBackPressed();
 		}
 		new Thread(http).start();
 		if (smsSwitchView != null) {
-			if (smsSwitchView.isOpened()) {
-				http = new UploadRemindConfigHttp(this, HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.MESSAGE_REMIND, 1);
-			} else {
-				http = new UploadRemindConfigHttp(this, HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.MESSAGE_REMIND, 0);
-			}
+			createHttpRequest( HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.MESSAGE_REMIND,smsSwitchView.isOpened()?"1":"0");
 		} else {
 			super.onBackPressed();
 		}
 		new Thread(http).start();
 		if (qqSwitchView != null) {
-			if (qqSwitchView.isOpened()) {
-				http = new UploadRemindConfigHttp(this, HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.QQ_REMIND, 1);
-			} else {
-				http = new UploadRemindConfigHttp(this, HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.QQ_REMIND, 0);
-			}
+
+			createHttpRequest( HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.QQ_REMIND,qqSwitchView.isOpened()?"1":"0");
 		} else {
 			super.onBackPressed();
 		}
 		new Thread(http).start();
 		if (weixinSwitchView != null) {
-			if (weixinSwitchView.isOpened()) {
-				http = new UploadRemindConfigHttp(this, HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.WEIXIN_REMIND, 1);
-			} else {
-				http = new UploadRemindConfigHttp(this, HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.WEIXIN_REMIND, 0);
-			}
+
+			createHttpRequest( HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.WEIXIN_REMIND,weixinSwitchView.isOpened()?"1":"0");
 			isCanSendBluetooth = true;
 		} else {
 			super.onBackPressed();

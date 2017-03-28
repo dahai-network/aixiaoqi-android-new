@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -39,7 +40,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKPACKAGEDETAILPURCHASE;
 
-public class PackageDetailActivity extends BaseActivity implements InterfaceCallback {
+public class PackageDetailActivity extends BaseNetActivity implements InterfaceCallback {
 	public static PackageDetailActivity activity;
 	@BindView(R.id.packageDetailImageView)
 	ImageView packageDetailImageView;
@@ -113,8 +114,7 @@ public class PackageDetailActivity extends BaseActivity implements InterfaceCall
 
 
 	private void addData() {
-		PacketDtailHttp http = new PacketDtailHttp(this, HttpConfigUrl.COMTYPE_PACKET_DETAIL, getIntent().getStringExtra("id"));
-		new Thread(http).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_PACKET_DETAIL, getIntent().getStringExtra("id"));
 	}
 
 

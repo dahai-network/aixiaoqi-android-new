@@ -79,8 +79,7 @@ public class SelectNumberActivity extends BaseNetActivity implements XRecyclerVi
         String province=getIntent().getStringExtra(IntentPutKeyConstant.PROVINCE);
         String city=getIntent().getStringExtra(IntentPutKeyConstant.CITY);
         if(!TextUtils.isEmpty(province)&&!TextUtils.isEmpty(city)){
-        SelectNumberHttp selectNumberHttp = new SelectNumberHttp(this, HttpConfigUrl.COMTYPE_GET_SELECT_NUMBER, page, Constant.PAGESIZE,province , city, "");
-        new Thread(selectNumberHttp).start();
+            createHttpRequest(HttpConfigUrl.COMTYPE_GET_SELECT_NUMBER, page+"", Constant.PAGESIZE+"",province , city, "");
         }
     }
 

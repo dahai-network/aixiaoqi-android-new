@@ -11,26 +11,23 @@ import de.blinkt.openvpn.model.UpgradeEntity;
 public class SkyUpgradeHttp extends BaseHttp {
 
 	UpgradeEntity upgradeEntity;
-	private String Version;
-	private String DeviceType;
+
 
 	public UpgradeEntity getUpgradeEntity() {
 		return upgradeEntity;
 	}
 
-	public SkyUpgradeHttp(InterfaceCallback interfaceCallback, int cmdType_, String Version, int deviceType) {
-		super(interfaceCallback, cmdType_);
-		this.Version = Version;
-		this.DeviceType = deviceType + "";
+	public SkyUpgradeHttp(InterfaceCallback interfaceCallback, int cmdType_, String...params) {
+		super(interfaceCallback, cmdType_,GET_MODE,HttpConfigUrl.DEVICE_BRACELET_OTA,params);
+
 	}
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.DEVICE_BRACELET_OTA;
-		sendMethod_ = GET_MODE;
-		params.put("Version", Version);
-		params.put("DeviceType", DeviceType);
+
+		params.put("Version", valueParams[0]);
+		params.put("DeviceType", valueParams[1]);
 	}
 
 	@Override

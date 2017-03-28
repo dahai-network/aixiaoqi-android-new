@@ -64,8 +64,7 @@ public class AddNumberActivity extends BaseNetActivity {
                 if (CheckUtil.isMobileNO(phoneNum, AddNumberActivity.this)) {
                     sendBtn.setEnabled(false);
                     sendBtn.setTextColor(ContextCompat.getColor(this, R.color.regist_send_sms_unenable));
-                    SendMsgHttp http = new SendMsgHttp(this, HttpConfigUrl.COMTYPE_SEND_SMS, phoneNum, 3);
-                    new Thread(http).start();
+                    createHttpRequest(HttpConfigUrl.COMTYPE_SEND_SMS, phoneNum, 3+"");
                 }
                 break;
             case R.id.add_btn:

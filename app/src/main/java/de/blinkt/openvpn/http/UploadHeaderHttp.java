@@ -11,21 +11,18 @@ import de.blinkt.openvpn.model.ImageEntity;
 
 public class UploadHeaderHttp extends BaseHttp{
     InterfaceCallback call;
-    private String url;
     private ImageEntity imageEntity;
     public ImageEntity getImageEntity(){
         return imageEntity;
     }
-    public UploadHeaderHttp(InterfaceCallback interfaceCallback,int cmdType_,String url){
-        super(interfaceCallback,cmdType_);
-        this.url=url;
+    public UploadHeaderHttp(InterfaceCallback interfaceCallback,int cmdType_,String...params){
+        super(interfaceCallback,cmdType_,POST_IMAGE,HttpConfigUrl.POST_UPLOAD_HEADER,params);
+
     }
     @Override
     protected void BuildParams() throws Exception {
         super.BuildParams();
-        sendMethod_=POST_IMAGE;
-        slaverDomain_= HttpConfigUrl.POST_UPLOAD_HEADER;
-        params.put("file",url);
+        params.put("file",valueParams[0]);
 
     }
 

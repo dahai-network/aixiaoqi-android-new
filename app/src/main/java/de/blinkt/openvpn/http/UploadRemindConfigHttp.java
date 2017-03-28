@@ -11,24 +11,16 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 public class UploadRemindConfigHttp extends BaseHttp {
 
 
-	private InterfaceCallback call;
-	private int cmdType_;
-	private String Name;
-	private int Status;
+	public UploadRemindConfigHttp(InterfaceCallback call, int cmdType_, String...params ) {
+		super(call,cmdType_, HttpConfigUrl.UPLOAD_REMIND_CONFIG,params);
 
-
-	public UploadRemindConfigHttp(InterfaceCallback call, int cmdType_, String Name, int Status) {
-		super(call,cmdType_);
-		this.Name = Name;
-		this.Status = Status;
 	}
 
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.UPLOAD_REMIND_CONFIG;
-		params.put("Name", URLEncoder.encode(Name, "utf-8"));
-		params.put("Status", URLEncoder.encode(Status+"", "utf-8"));
+		params.put("Name", URLEncoder.encode(valueParams[0], "utf-8"));
+		params.put("Status", URLEncoder.encode(valueParams[1]+"", "utf-8"));
 	}
 }

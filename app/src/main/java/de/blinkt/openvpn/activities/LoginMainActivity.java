@@ -383,8 +383,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 					if (!usernameEdit.getText().toString().equals(sharedUtils.readString(Constant.TEL)) || !Constant.JPUSH_ALIAS_SUCCESS.equals(sharedUtils.readString(Constant.JPUSH_ALIAS))) {
 						setAlias();
 					}
-					SecurityConfigHttp securityConfigHttp = new SecurityConfigHttp(this, HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
-					new Thread(securityConfigHttp).start();
+					createHttpRequest(HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
 				}
 			} else {
 				CommonTools.showShortToast(this, loginHttp.getMsg());

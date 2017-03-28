@@ -96,8 +96,7 @@ public class AlarmClockActivity extends BaseNetActivity implements AlarmClockAda
 	}
 
 	private void updateAlarmClockStatue(String statue, String id) {
-		UpdateAlarmClockStatueHttp updateAlarmClockStatueHttp = new UpdateAlarmClockStatueHttp(this, HttpConfigUrl.COMTYPE_UPDATE_ALARM_CLOCK_STATUE, id, statue);
-		new Thread(updateAlarmClockStatueHttp).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_UPDATE_ALARM_CLOCK_STATUE, id, statue);
 	}
 
 	UartService uartservice;

@@ -11,7 +11,7 @@ import de.blinkt.openvpn.model.SportPeriodEntity;
 public class SportPeriodHttp extends BaseHttp {
 
 
-    private String dateTime;
+
 
     public SportPeriodEntity getSportPeriodEntity() {
         return sportPeriodEntity;
@@ -20,19 +20,13 @@ public class SportPeriodHttp extends BaseHttp {
     private  SportPeriodEntity     sportPeriodEntity;
 
 
-    public SportPeriodHttp(InterfaceCallback interfaceCallback, int cmdType_,String dateTime){
-      super(interfaceCallback,cmdType_);
-        this.dateTime=dateTime;
-
-
+    public SportPeriodHttp(InterfaceCallback interfaceCallback, int cmdType_,String...params ){
+      super(interfaceCallback,cmdType_,GET_MODE,HttpConfigUrl.SPORT_GET_TIME_PERIOD_DATE,params);
     }
     @Override
     protected void BuildParams() throws Exception {
         super.BuildParams();
-        sendMethod_=GET_MODE;
-        slaverDomain_= HttpConfigUrl.SPORT_GET_TIME_PERIOD_DATE;
-
-        params.put("Date",dateTime);
+        params.put("Date",valueParams[0]);
     }
 
     @Override

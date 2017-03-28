@@ -81,7 +81,7 @@ public class SetAlarmActivity extends BaseNetActivity  {
 				alarmClockEntity.setTime(pickerscrlllviewHour.getCurrentString() + ":" + pickerscrlllviewMiunue.getCurrentString());
 				alarmClockEntity.setRepeat(repeat);
 				alarmClockEntity.setTag(lableTextView.getText().toString());
-				CreateHttpFactory.instanceHttp(SetAlarmActivity.this, HttpConfigUrl.COMTYPE_UPDATE_ALARM,
+				createHttpRequest( HttpConfigUrl.COMTYPE_UPDATE_ALARM,
 						pickerscrlllviewHour.getCurrentString() + ":" + pickerscrlllviewMiunue.getCurrentString(),
 						repeat, lableTextView.getText().toString(), alarmClockEntity.getAlarmClockId(), 1 + "");
 			}

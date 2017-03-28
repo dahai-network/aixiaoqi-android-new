@@ -162,9 +162,8 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
 							//友盟方法统计
 							MobclickAgent.onEvent(this, CLICKREGISTERBUTTON);
 							regist_btn.setEnabled(false);
-							RegistHttp registHttp = new RegistHttp(RegistActivity.this, HttpConfigUrl.COMTYPE_REGIST, phoneNumberEdit.getText().toString(),
+							createHttpRequest(HttpConfigUrl.COMTYPE_REGIST, phoneNumberEdit.getText().toString(),
 									passwordEdit.getText().toString(), verification_edit.getText().toString());
-							new Thread(registHttp).start();
 						}
 					}
 				} else {
