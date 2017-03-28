@@ -19,17 +19,6 @@
         android:text="@string/balance_rechange"
         />
 
-    <TextView
-        android:id="@+id/upgradeTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/little_16"
-        android:visibility="gone"
-        android:paddingBottom="@dimen/padding_25dp"
-        android:paddingRight="@dimen/padding_15dp"
-        android:paddingLeft="@dimen/padding_15dp"
-        android:text="@string/balance_rechange"
-        />
     <View
         style="@style/horizontal_line_view"
         />
