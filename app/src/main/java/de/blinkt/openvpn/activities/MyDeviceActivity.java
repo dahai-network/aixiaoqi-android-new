@@ -429,7 +429,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				//测试代码
 				unBindButton.setVisibility(View.VISIBLE);
 				dismissProgress();
-				setView();
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
 //				if(isUpgrade&&startDfuCount==0){
 //					startDfuCount++;
@@ -576,9 +575,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		super.onResume();
 		Log.d(TAG, "onResume");
 		isForeground = true;
-		int electricityInt = SharedUtils.getInstance().readInt(Constant.ELECTRICITY);
-		sinking.setPercent(((float) electricityInt) / 100);
-		macTextView.setText(SharedUtils.getInstance().readString(Constant.IMEI));
+		setView();
 		DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
 	}
 
@@ -642,7 +639,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				finish();
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
-				Log.i(TAG,object.getMsg());
+				Log.i(TAG, object.getMsg());
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
 			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
@@ -949,9 +946,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		noDevicedialog.setCanClickBack(false);
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
-		} else if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)){
+		} else if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
-		}else{
+		} else {
 			noDevicedialog.getDialog().dismiss();
 		}
 
