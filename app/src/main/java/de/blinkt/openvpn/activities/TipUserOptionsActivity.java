@@ -238,26 +238,26 @@ public class TipUserOptionsActivity extends BaseNetActivity implements Interface
 	}
 
 	private void updateSwitchViewState() {
-		UploadRemindConfigHttp http = null;
+
 		if (callCommingSwitchView != null) {
 			createHttpRequest( HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.COMING_TEL_REMIND,callCommingSwitchView.isOpened()?"1":"0");
 		} else {
 			super.onBackPressed();
 		}
-		new Thread(http).start();
+
 		if (smsSwitchView != null) {
 			createHttpRequest( HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.MESSAGE_REMIND,smsSwitchView.isOpened()?"1":"0");
 		} else {
 			super.onBackPressed();
 		}
-		new Thread(http).start();
+
 		if (qqSwitchView != null) {
 
 			createHttpRequest( HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.QQ_REMIND,qqSwitchView.isOpened()?"1":"0");
 		} else {
 			super.onBackPressed();
 		}
-		new Thread(http).start();
+
 		if (weixinSwitchView != null) {
 
 			createHttpRequest( HttpConfigUrl.COMTYPE_UPLOAD_REMIND_CONFIG, Constant.WEIXIN_REMIND,weixinSwitchView.isOpened()?"1":"0");
@@ -265,7 +265,6 @@ public class TipUserOptionsActivity extends BaseNetActivity implements Interface
 		} else {
 			super.onBackPressed();
 		}
-		new Thread(http).start();
 	}
 
 	@Override

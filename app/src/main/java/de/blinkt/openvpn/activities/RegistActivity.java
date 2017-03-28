@@ -151,8 +151,7 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
 					MobclickAgent.onEvent(this, CLICKREGISTERSENDCODE);
 					sendBtn.setEnabled(false);
 					sendBtn.setTextColor(ContextCompat.getColor(this, R.color.regist_send_sms_unenable));
-					SendMsgHttp http = new SendMsgHttp(this, HttpConfigUrl.COMTYPE_SEND_SMS, phoneNum, 1);
-					new Thread(http).start();
+					createHttpRequest(HttpConfigUrl.COMTYPE_SEND_SMS, phoneNum, 1+"");
 				}
 				break;
 			case R.id.regist_btn:

@@ -130,9 +130,8 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
 					MobclickAgent.onEvent(this, CLICKFINDBACKSENDCODE);
 					sendBtn.setEnabled(false);
 					sendBtn.setTextColor(ContextCompat.getColor(this, R.color.regist_send_sms_unenable));
-					SendMsgHttp http = new SendMsgHttp(this, HttpConfigUrl.COMTYPE_SEND_SMS, phoneNumberEdit.getText().toString(), 2);
-					new Thread(http).start();
 
+					createHttpRequest( HttpConfigUrl.COMTYPE_SEND_SMS, phoneNumberEdit.getText().toString(), 2+"");
 				}
 				break;
 			case R.id.sure_btn:
