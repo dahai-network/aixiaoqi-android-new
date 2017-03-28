@@ -31,7 +31,7 @@ public class SdkAndBluetoothDataInchange {
 	private int notCanReceiveBluetoothDataCount = 0;
 	private String finalTemp;//保存上一次发给蓝牙的数据，以免出错，需要重发
 	private boolean isReceiveBluetoothData = true;//判断5s内是否接收完成，没有完成则重新发送
-	private int count =0;
+	public int count =0;
 	private String[] IccidCommand={"a0a40000022fe2","a0c000000f","a0b000000a"};
 	public void initReceiveDataframSocketService(ReceiveDataframSocketService receiveDataframSocketService, UartService mService) {
 		receiveDataframSocketService.setListener(new ReceiveDataframSocketService.MessageOutLisener() {

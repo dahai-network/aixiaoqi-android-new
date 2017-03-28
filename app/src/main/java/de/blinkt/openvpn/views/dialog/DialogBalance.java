@@ -19,7 +19,7 @@ public class DialogBalance extends DialogBase implements View.OnClickListener {
 	private TextView upgradeTextView;
 	public DialogBalance(DialogInterfaceTypeBase dialogInterfaceTypeBase, Context context, int layoutId, int type) {
 		super(dialogInterfaceTypeBase, context, layoutId, type);
-		addListener();
+
 	}
 
 	private void addListener() {
@@ -38,10 +38,15 @@ public class DialogBalance extends DialogBase implements View.OnClickListener {
 	}
 	public void changeText(String title, String sureText,int type) {
 		if(type==1){
-			titleTextView.setText(context.getString(R.string.dfu_upgrade));
-			upgradeTextView.setVisibility(View.VISIBLE);
-			upgradeTextView.setText(title);
-			tvRechange.setText(sureText);
+			try {
+				titleTextView.setText(context.getString(R.string.dfu_upgrade));
+				upgradeTextView.setVisibility(View.VISIBLE);
+				upgradeTextView.setText(title);
+				tvRechange.setText(sureText);
+			}catch ( Exception e){
+
+			}
+
 		}
 	}
 	public Dialog getDialog(){
@@ -81,5 +86,6 @@ public class DialogBalance extends DialogBase implements View.OnClickListener {
 		tvCancel = (TextView) view.findViewById(R.id.tv_cancel);
 		titleTextView = (TextView) view.findViewById(R.id.titleTextView);
 		upgradeTextView = (TextView) view.findViewById(R.id.upgradeTextView);
+		addListener();
 	}
 }

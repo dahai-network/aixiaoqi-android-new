@@ -950,6 +950,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		if (sendYiZhengService == null) {
 			sendYiZhengService = new SendYiZhengService();
 		}
+		sdkAndBluetoothDataInchange.count=0;
 		isGetIccid = true;
 		TlvAnalyticalUtils.sendToBlue("a0a40000023f00");
 	}

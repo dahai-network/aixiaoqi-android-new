@@ -63,6 +63,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.MySinkingView;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+import de.blinkt.openvpn.views.dialog.DialogTipUpgrade;
 import de.blinkt.openvpn.views.dialog.DialogUpgrade;
 import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
@@ -694,18 +695,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 
 	String url;
-	DialogBalance Upgrade;
+//	DialogBalance Upgrade;
 
 	private void showDialogGOUpgrade(String desc) {
 		Log.d(TAG, "showDialogGOUpgrade");
 		//不能按返回键，只能二选其一
-		if (Upgrade == null) {
-			Upgrade = new DialogBalance(this, getParent(), R.layout.dialog_balance, DOWNLOAD_SKY_UPGRADE);
-		}
-		if (!Upgrade.getDialog().isShowing()) {
-			Upgrade.getDialog().show();
-		}
-		Upgrade.changeText(desc, getResources().getString(R.string.upgrade), 1);
+
+		DialogTipUpgrade upgrade=	new DialogTipUpgrade(this, this, R.layout.dialog_tip_upgrade, DOWNLOAD_SKY_UPGRADE);
+
+		upgrade.changeText(desc);
 	}
 
 	private void uploadToBlueTooth(String deviceName, String deviceAddress) {
@@ -742,7 +740,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void initDialogUpgrade() {
 		Log.d(TAG, "initDialogUpgrade");
-		DialogUpgrade dialogUpgrade = new DialogUpgrade(this, MyDeviceActivity.this, R.layout.dialog_upgrade, 3);
+		DialogUpgrade dialogUpgrade = new DialogUpgrade(this, this, R.layout.dialog_upgrade, 3);
 		upgradeDialog = dialogUpgrade.getDialogUpgrade();
 		mDfuProgressListener = dialogUpgrade.getDfuProgressListener();
 		hideDialogUpgrade();
@@ -751,10 +749,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void showDialogUpgrade() {
 		Log.d(TAG, "showDialogUpgrade");
 		isUpgrade = true;
+		if(upgradeDialog!=null)
 		upgradeDialog.show();
 	}
 
 	private void hideDialogUpgrade() {
+		if(upgradeDialog!=null)
 		upgradeDialog.dismiss();
 	}
 
@@ -921,7 +921,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		dismissProgress();
 		if (noDevicedialog != null) noDevicedialog.getDialog().dismiss();
 		//不能按返回键，只能二选其一
-		noDevicedialog = new DialogBalance(this, getParent(), R.layout.dialog_balance, NOT_YET_REARCH);
+		noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, NOT_YET_REARCH);
 		noDevicedialog.setCanClickBack(false);
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
@@ -1123,7 +1123,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void showNoCardDialog() {
 		//不能按返回键，只能二选其一
 		if (cardRuleBreakDialog != null) cardRuleBreakDialog.getDialog().dismiss();
-		cardRuleBreakDialog = new DialogBalance(this, getParent(), R.layout.dialog_balance, 3);
+		cardRuleBreakDialog = new DialogBalance(this, this, R.layout.dialog_balance, 3);
 		cardRuleBreakDialog.setCanClickBack(false);
 		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));
 	}
