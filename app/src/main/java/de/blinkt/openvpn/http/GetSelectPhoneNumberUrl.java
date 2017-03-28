@@ -8,19 +8,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 
 public class GetSelectPhoneNumberUrl extends BaseHttp {
     public   GetSelectPhoneNumberUrl(InterfaceCallback callback,int cmdType){
-        super(callback,cmdType);
-        isCreateHashMap=false;
+        super(callback,cmdType,false,GET_MODE,HttpConfigUrl.GET_SELECT_NUMBER_URL);
     }
 
-    @Override
-    protected void BuildParams() throws Exception {
-        super.BuildParams();
-        sendMethod_=GET_MODE;
-        slaverDomain_= HttpConfigUrl.GET_SELECT_NUMBER_URL;
-    }
-
-    @Override
-    protected void parseObject(String response) {
-        super.parseObject(response);
-    }
 }

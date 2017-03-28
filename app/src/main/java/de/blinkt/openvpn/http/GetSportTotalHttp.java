@@ -19,15 +19,7 @@ public class GetSportTotalHttp extends BaseHttp {
 	}
 
 	public GetSportTotalHttp(InterfaceCallback call, int cmdType_) {
-	super(call,cmdType_);
-		isCreateHashMap=false;
-	}
-
-	@Override
-	protected void BuildParams() throws Exception {
-		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.GET_SPORT_TOTAL;
-		sendMethod_ = GET_MODE;
+	super(call,cmdType_,false,GET_MODE,HttpConfigUrl.GET_SPORT_TOTAL);
 	}
 
 	@Override

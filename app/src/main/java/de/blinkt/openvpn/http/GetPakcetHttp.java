@@ -12,9 +12,6 @@ import de.blinkt.openvpn.model.PacketEntity;
  */
 
 public class GetPakcetHttp extends BaseHttp {
-	private final int PageNumber;
-	private final int PageSize;
-	private final int category;
 	private PacketEntity packetEntity;
 	/**
 	 * IsCategoryFlow（是否流量类型）
@@ -25,43 +22,39 @@ public class GetPakcetHttp extends BaseHttp {
 	 * <p>
 	 * IsCategoryKingCard（是否双卡双待类型）
 	 */
-	private String IsCategoryFlow;
-	private String IsCategoryCall;
-	private String IsCategoryDualSimStandby;
-	private String IsCategoryKingCard;
+//	private String IsCategoryFlow;
+//	private String IsCategoryCall;
+//	private String IsCategoryDualSimStandby;
+//	private String IsCategoryKingCard;
 
 
 	public PacketEntity getPacketEntity() {
 		return packetEntity;
 	}
 
-	public GetPakcetHttp(InterfaceCallback call, int cmdType_, int PageNumber, int PageSize, int category) {
-		super(call, cmdType_);
-		this.PageNumber = PageNumber;
-		this.PageSize = PageSize;
-		this.category = category;
+	public GetPakcetHttp(InterfaceCallback call, int cmdType_, String...params) {
+		super(call, cmdType_,GET_MODE,HttpConfigUrl.PACKET_GET,params);
+
 	}
 
-	//设置筛选条件
-	public void setScreenType(String IsCategoryFlow, String IsCategoryCall, String IsCategoryDualSimStandby, String IsCategoryKingCard) {
-		this.IsCategoryFlow = IsCategoryFlow;
-		this.IsCategoryCall = IsCategoryCall;
-		this.IsCategoryDualSimStandby = IsCategoryDualSimStandby;
-		this.IsCategoryKingCard = IsCategoryKingCard;
-	}
+//	//设置筛选条件
+//	public void setScreenType(String IsCategoryFlow, String IsCategoryCall, String IsCategoryDualSimStandby, String IsCategoryKingCard) {
+//		this.IsCategoryFlow = IsCategoryFlow;
+//		this.IsCategoryCall = IsCategoryCall;
+//		this.IsCategoryDualSimStandby = IsCategoryDualSimStandby;
+//		this.IsCategoryKingCard = IsCategoryKingCard;
+//	}
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		slaverDomain_ = HttpConfigUrl.PACKET_GET;
-		sendMethod_ = GET_MODE;
-		params.put("pageNumber", URLEncoder.encode(PageNumber + "", "utf-8"));
-		params.put("pageSize", URLEncoder.encode(PageSize + "", "utf-8"));
-		params.put("category", URLEncoder.encode(category + "", "utf-8"));
-		params.put("IsCategoryFlow", URLEncoder.encode(IsCategoryFlow + "", "utf-8"));
-		params.put("IsCategoryCall", URLEncoder.encode(IsCategoryCall + "", "utf-8"));
-		params.put("IsCategoryDualSimStandby", URLEncoder.encode(IsCategoryDualSimStandby + "", "utf-8"));
-		params.put("IsCategoryKingCard", URLEncoder.encode(IsCategoryKingCard + "", "utf-8"));
+		params.put("pageNumber", URLEncoder.encode(valueParams[0] + "", "utf-8"));
+		params.put("pageSize", URLEncoder.encode(valueParams[1] + "", "utf-8"));
+		params.put("category", URLEncoder.encode(valueParams[2] + "", "utf-8"));
+//		params.put("IsCategoryFlow", URLEncoder.encode(IsCategoryFlow + "", "utf-8"));
+//		params.put("IsCategoryCall", URLEncoder.encode(IsCategoryCall + "", "utf-8"));
+//		params.put("IsCategoryDualSimStandby", URLEncoder.encode(IsCategoryDualSimStandby + "", "utf-8"));
+//		params.put("IsCategoryKingCard", URLEncoder.encode(IsCategoryKingCard + "", "utf-8"));
 	}
 
 	@Override

@@ -61,8 +61,7 @@ public class InlandSaveActivity extends BaseNetActivity {
 	protected void onClickRightView() {
 //		toActivity(EBuzOrderListActivity.class);
 		if(NetworkUtils.isNetworkAvailable(this)){
-			GetSelectPhoneNumberUrl getSelectPhoneNumberUrl=new GetSelectPhoneNumberUrl(this, HttpConfigUrl.COMTYPE_GET_SELECT_NUMBER_URL);
-			new Thread(getSelectPhoneNumberUrl).start();
+			createHttpRequest(HttpConfigUrl.COMTYPE_GET_SELECT_NUMBER_URL);
 			//友盟方法统计
 			MobclickAgent.onEvent(context, CLICKSELECTNUMBER);
 		}else {
