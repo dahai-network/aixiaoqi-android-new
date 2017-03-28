@@ -28,6 +28,7 @@ import cn.com.aixiaoqi.R;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -49,7 +50,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKREGISTERBUTTON;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKREGISTERSENDCODE;
 import static de.blinkt.openvpn.constant.UmengContant.REGISTERSHOWPASSWORD;
 
-public class RegistActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, InterfaceCallback {
+public class RegistActivity extends BaseNetActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, InterfaceCallback {
 
 	private String TAG = "RegistActivity";
 	private EditText phoneNumberEdit;
@@ -276,8 +277,7 @@ public class RegistActivity extends BaseActivity implements View.OnClickListener
 				CommonTools.showShortToast(RegistActivity.this, RegistActivity.this.getResources().getString(R.string.regist_success));
 				sendBtn.setEnabled(true);
 				showProgress(R.string.login_loading);
-				LoginHttp loginHttp = new LoginHttp(this, HttpConfigUrl.COMTYPE_LOGIN, phoneNumberEdit.getText().toString(), passwordEdit.getText().toString());
-				new Thread(loginHttp).start();
+				createHttpRequest(HttpConfigUrl.COMTYPE_LOGIN,phoneNumberEdit.getText().toString(), passwordEdit.getText().toString());
 			} else {
 				regist_btn.setEnabled(true);
 				CommonTools.showShortToast(RegistActivity.this, entity.getMsg());

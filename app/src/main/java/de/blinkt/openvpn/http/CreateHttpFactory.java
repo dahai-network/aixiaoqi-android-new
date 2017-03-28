@@ -116,6 +116,16 @@ public class CreateHttpFactory {
             case  HttpConfigUrl.COMTYPE_ISBIND_DEVICE://获取选择号码
                 startHttp(new IsBindHttp(interfaceCallback, cmdType,params));
                 break;
+            case  HttpConfigUrl.COMTYPE_LOGIN://获取选择号码
+                startHttp(new LoginHttp(interfaceCallback, cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME://获取选择号码
+                startHttp(new OnlyCallHttp(interfaceCallback, cmdType));
+                break;
+            case  HttpConfigUrl.COMTYPE_ORDER_ACTIVATION://获取选择号码
+                startHttp(new OrderActivationHttp(interfaceCallback, cmdType,params));
+                break;
+
         }
     }
 

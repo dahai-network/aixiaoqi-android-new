@@ -16,9 +16,6 @@ public class BaseHttp extends CommonHttp {
         this.interfaceCallback=interfaceCallback;
         this.cmdType_=cmdType_;
     }
-    public  BaseHttp(InterfaceCallback interfaceCallback,int cmdType_,String url){
-        initParams(interfaceCallback, cmdType_, url);
-    }
     public  BaseHttp(InterfaceCallback interfaceCallback,int cmdType_,String url,String...params){
         initParams(interfaceCallback, cmdType_, url);
         valueParams=params;
