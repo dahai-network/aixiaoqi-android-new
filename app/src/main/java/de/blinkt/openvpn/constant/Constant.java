@@ -7,7 +7,7 @@ import android.os.Environment;
  */
 public class Constant {
 
-	public static final boolean IS_DEBUG = true;
+	public static final boolean IS_DEBUG = false;
 	public static final String UNITOYS = "unitoys";
 	public static final String UNIBOX = "unibox";
 
@@ -36,6 +36,8 @@ public class Constant {
 	public static final String IMEI = "BraceletIMEI";
 	public static final String BRACELETVERSION = "BraceletVersion";
 	public static final String BRACELETNAME = "braceletname";
+	public static final String BRACELETTYPE = "bracelettype";
+	public static final String BRACELETPOWER = "braceletpower";
 	public static final String NULLCARD_SERIALNUMBER = "NULLCARD_SERIALNUMBER";
 	public static final String VERSION_HEADER = "Version";
 	public static final String TERMINAL_HEADER = "Terminal";
@@ -284,11 +286,11 @@ public class Constant {
 	public static final String ONEPLUS = "oneplus";//一加
 
 	//------------------------------------------
-	public static final String HUAWEI="huawei";//华为
-	public static final String GIONEE="gionee";//金立
-	public static final String VIVO="vivo";//vivo
-	public static final String OPPO="oppo";//OPPO
-	public static final String XIAOMI="xiaomi";
+	public static final String HUAWEI = "huawei";//华为
+	public static final String GIONEE = "gionee";//金立
+	public static final String VIVO = "vivo";//vivo
+	public static final String OPPO = "oppo";//OPPO
+	public static final String XIAOMI = "xiaomi";
 
 	/**
 	 * 手机提示
@@ -300,15 +302,14 @@ public class Constant {
 	public static final String KEEP_WLAN_CONNECT = "休眠状态下保持WLAN连接";
 	public static final String KEEP_RUN_IN_STANDBY = "在待机时保持运行";
 
-	public static final String LOCK_SCREEN_CLEAR_WHITE_LIST= "开启 ”锁屏清理白名单“";
-	public static final String BACKGROUND_HIGH_POWER="后台高耗电时允许运行";
-	public static final String OPEN_SUSPEND_WINDOW="开启“系统悬浮窗”";
-	public static final String SPIRIT_AWAY_MODE="关闭“神隐模式”";
+	public static final String LOCK_SCREEN_CLEAR_WHITE_LIST = "开启 ”锁屏清理白名单“";
+	public static final String BACKGROUND_HIGH_POWER = "后台高耗电时允许运行";
+	public static final String OPEN_SUSPEND_WINDOW = "开启“系统悬浮窗”";
+	public static final String SPIRIT_AWAY_MODE = "关闭“神隐模式”";
 
-	public static final String SHUT_DOWN_BACKGROUND="关闭“后台冻结”";
+	public static final String SHUT_DOWN_BACKGROUND = "关闭“后台冻结”";
 	public static final String REGISTER_SIM_NOT_PRE_DATA = "not_pre_data";
 	public static final String REGISTER_SIM_PRE_DATA = "pre_data";
-
 
 
 }

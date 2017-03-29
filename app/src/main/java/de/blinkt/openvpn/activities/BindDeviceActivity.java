@@ -30,16 +30,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
-import de.blinkt.openvpn.activities.Base.CommenActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.http.BindDeviceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
-import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.BluetoothModel;
@@ -55,7 +52,7 @@ import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 
-public class BindDeviceActivity extends BaseNetActivity implements  DialogInterfaceTypeBase {
+public class BindDeviceActivity extends BaseNetActivity implements DialogInterfaceTypeBase {
 
 	@BindView(R.id.stopImageView)
 	ImageView stopImageView;
@@ -227,7 +224,7 @@ public class BindDeviceActivity extends BaseNetActivity implements  DialogInterf
 													}
 													//排序后连接操作
 													scanLeDevice(false);
-													if (infos.size() == 0 || mService==null||mService.isConnecttingBlueTooth()) {
+													if (infos.size() == 0 || mService == null || mService.isConnecttingBlueTooth()) {
 														CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.no_device_around));
 														finish();
 														return;
@@ -266,11 +263,13 @@ public class BindDeviceActivity extends BaseNetActivity implements  DialogInterf
 			IsBindHttp http = (IsBindHttp) object;
 			if (http.getIsBindEntity().getBindStatus() == 0 && http.getStatus() == 1) {
 				if (mService != null) {
+					//判断无人连接后记录MAC地址
+					utils.writeString(Constant.IMEI, deviceAddress);
 					String braceletname = utils.readString(Constant.BRACELETNAME);
 					if (!TextUtils.isEmpty(braceletname)) {
 						if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
 							CreateHttpFactory.instanceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE
-									, deviceAddress, "0", 0+"");
+									, deviceAddress, "0", 0 + "");
 						} else {
 							mService.connect(deviceAddress);
 						}
@@ -292,7 +291,6 @@ public class BindDeviceActivity extends BaseNetActivity implements  DialogInterf
 			Log.i(TAG, "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
-				utils.writeString(Constant.IMEI, deviceAddress);
 				if (bluetoothName.contains(Constant.UNITOYS)) {
 					mService.connect(deviceAddress);
 				} else {
@@ -304,11 +302,23 @@ public class BindDeviceActivity extends BaseNetActivity implements  DialogInterf
 						}
 					}, 2000);
 				}
+				updateDeviceInfo();
+
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 //			finish();
 		}
+	}
+
+	//更新设备信息
+	private void updateDeviceInfo() {
+		//绑定完成更新设备信息
+		if (utils == null)
+			utils = SharedUtils.getInstance();
+
+		createHttpRequest(HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, utils.readString(Constant.BRACELETVERSION),
+				utils.readInt(Constant.BRACELETPOWER) + "", utils.readInt(Constant.BRACELETTYPE) + "");
 	}
 
 	private void restartUartService() {
@@ -352,7 +362,7 @@ public class BindDeviceActivity extends BaseNetActivity implements  DialogInterf
 //					final BindDeviceHttp bindDevicehttp = new BindDeviceHttp();
 //					new Thread(bindDevicehttp).start();
 					CreateHttpFactory.instanceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE
-							, deviceAddress, "0", 1+"");
+							, deviceAddress, "0", 1 + "");
 				}
 				new Thread(new Runnable() {
 					@Override
@@ -367,6 +377,7 @@ public class BindDeviceActivity extends BaseNetActivity implements  DialogInterf
 							runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
+									updateDeviceInfo();
 									finish();
 								}
 							});

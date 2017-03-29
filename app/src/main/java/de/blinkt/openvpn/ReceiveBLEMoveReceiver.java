@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
@@ -31,7 +32,6 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.SportFragment;
-import de.blinkt.openvpn.http.ActivationLocalCompletedHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
@@ -60,7 +60,6 @@ import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP1;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP5;
-
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
@@ -124,10 +123,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				@Override
 				public void run() {
 					try {
+						Thread.sleep(100);
 						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
-						Log.i(TAG,"发送了专属命令");
-						Thread.sleep(500);
+						Log.i(TAG, "发送了专属命令");
+						Thread.sleep(400);
 						sendMessageToBlueTooth(BASIC_MESSAGE);
+						Thread.sleep(100);
 						String braceletname = utils.readString(Constant.BRACELETNAME);
 						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
 							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
@@ -170,18 +171,17 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			if (sendStepThread != null && !sendStepThread.isInterrupted())
 				sendStepThread.interrupt();
 			//如果保存的IMEI没有的话，那么就是在MyDevice里面，在Mydevice里面会有连接操作
-			if (retryTime < 20) {
+			if (retryTime < 20 && ICSOpenVPNApplication.isConnect) {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
 						Log.d(TAG, "IMEI=" + TextUtils.isEmpty(utils.readString(Constant.IMEI)) + "\nisConnect=" + ICSOpenVPNApplication.isConnect);
-						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI)) && ICSOpenVPNApplication.isConnect) {
+						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
 							if (isUpgrade) {
 								return;
 							}
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
-							CommonTools.delayTime(2000);
 							mService.connect(utils.readString(Constant.IMEI));
 						} else {
 							Log.d(TAG, "UART_DISCONNECT_MSG");
@@ -243,14 +243,26 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										EventBus.getDefault().post(entity);
 										break;
 									case Constant.SYSTEM_BASICE_INFO:
-//									if (Integer.parseInt(String.valueOf(txValue[2]), 16) < Constant.OLD_VERSION_DEVICE) {
-//										Log.i(TAG,"老版本设备，修改上电命令");
-//										Constant.UP_TO_POWER = "AADB040174";
-//									}
 										String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
-										Log.i(TAG, "固件版本号：" + deviceVesion + "，电量：" + messages.get(0).substring(14, 16));
-										utils.writeString(Constant.BRACELETVERSION, deviceVesion);
-										utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(14, 16), 16));
+										Log.i(TAG, "版本号:" + deviceVesion);
+
+										int DeviceType = 0;
+										String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+										if (!TextUtils.isEmpty(braceletname)) {
+
+											if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
+												DeviceType = 0;
+											} else {
+												DeviceType = 1;
+											}
+										}
+										SharedUtils.getInstance().writeInt(Constant.BRACELETTYPE, DeviceType);
+										SharedUtils.getInstance().writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(14, 16), 16));
+										SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, deviceVesion);
+
+										if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
+											Log.i(TAG, "进入版本号:" + deviceVesion);
+										}
 										break;
 
 									case Constant.RETURN_POWER:
@@ -278,7 +290,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									case Constant.READ_SIM_DATA:
 										Log.i(TAG, "发送给SDK");
 										if (IS_TEXT_SIM) {
-
 											ProMainActivity.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
 										}
 										break;

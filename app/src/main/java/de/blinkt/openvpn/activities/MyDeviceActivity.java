@@ -52,8 +52,6 @@ import de.blinkt.openvpn.http.DownloadSkyUpgradePackageHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
-import de.blinkt.openvpn.http.UnBindDeviceHttp;
-import de.blinkt.openvpn.http.UpdateConnectInfoHttp;
 import de.blinkt.openvpn.model.BlueToothDeviceEntity;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
@@ -195,7 +193,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					DeviceType = 1;
 				}
 			}
-			createHttpRequest( HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType+"");
+			createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
 		}
 	}
 
@@ -211,10 +209,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
 		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 
-		macAddressStr = SharedUtils.getInstance().readString(Constant.IMEI);
-		if (macAddressStr != null)
-			macAddressStr = macAddressStr.toUpperCase();
-		macTextView.setText(macAddressStr);
 		hasLeftViewTitle(device, 0);
 		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 			int electricityInt = SharedUtils.getInstance().readInt(ELECTRICITY);
@@ -280,7 +274,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					return;
 				}
 				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
-createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
+				createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				break;
 			case R.id.callPayLinearLayout:
 				if (CommonTools.isFastDoubleClick(1000)) {
@@ -426,7 +420,6 @@ createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				//测试代码
 				unBindButton.setVisibility(View.VISIBLE);
 				dismissProgress();
-				setView();
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
 //				if(isUpgrade&&startDfuCount==0){
 //					startDfuCount++;
@@ -505,28 +498,12 @@ createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 					switch (dataType) {
 						case Constant.SYSTEM_BASICE_INFO:
 							String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
-							Log.i(TAG, "版本号:" + deviceVesion);
 							firmwareTextView.setText(deviceVesion);
 							//不让无设备dialog弹出
 							if (noDevicedialog != null)
 								noDevicedialog.getDialog().dismiss();
 
 							slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
-							int DeviceType = 0;
-							String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-							if (!TextUtils.isEmpty(braceletname)) {
-
-								if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
-									DeviceType = 0;
-								} else {
-									DeviceType = 1;
-								}
-							}
-
-							createHttpRequest( HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, deviceVesion, Integer.parseInt(messages.get(0).substring(14, 16), 16)+"", DeviceType+"");
-							if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-								Log.i(TAG, "进入版本号:" + deviceVesion);
-							}
 							break;
 						case Constant.RETURN_POWER:
 							if (messages.get(0).substring(10, 12).equals("01")) {
@@ -559,6 +536,11 @@ createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 		noConnectImageView.setVisibility(GONE);
 		sinking.setVisibility(View.VISIBLE);
 //		resetDeviceTextView.setVisibility(View.VISIBLE);
+		macAddressStr = SharedUtils.getInstance().readString(Constant.IMEI);
+		if (macAddressStr != null)
+			macAddressStr = macAddressStr.toUpperCase();
+		macTextView.setText(macAddressStr);
+
 		if (electricityInt != 0) {
 			sinking.setPercent(((float) electricityInt) / 100);
 		} else {
@@ -573,9 +555,7 @@ createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 		super.onResume();
 		Log.d(TAG, "onResume");
 		isForeground = true;
-		int electricityInt = SharedUtils.getInstance().readInt(Constant.ELECTRICITY);
-		sinking.setPercent(((float) electricityInt) / 100);
-		macTextView.setText(SharedUtils.getInstance().readString(Constant.IMEI));
+		setView();
 		DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
 	}
 
@@ -639,7 +619,7 @@ createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				finish();
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
-				Log.i(TAG,object.getMsg());
+				Log.i(TAG, object.getMsg());
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
 			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
@@ -945,9 +925,9 @@ createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 		noDevicedialog.setCanClickBack(false);
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
-		} else if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)){
+		} else if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
-		}else{
+		} else {
 			noDevicedialog.getDialog().dismiss();
 		}
 
