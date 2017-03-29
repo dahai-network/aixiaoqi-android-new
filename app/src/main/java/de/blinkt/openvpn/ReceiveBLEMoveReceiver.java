@@ -55,6 +55,7 @@ import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
+import static de.blinkt.openvpn.constant.Constant.RECEIVE_CARD_MSG;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
@@ -226,7 +227,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 									//电量多少
 									case RECEIVE_ELECTRICITY:
-										utils.writeInt(Constant.ELECTRICITY, Integer.parseInt(messages.get(0).substring(10, 12), 16));
+										utils.writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(10, 12), 16));
 										break;
 
 									case AGREE_BIND:
@@ -293,7 +294,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											ProMainActivity.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
 										}
 										break;
-									case Constant.LAST_CHARGE_POWER_TIMER:
+									case RECEIVE_CARD_MSG:
 
 										if ((Integer.parseInt(messages.get(0).substring(2, 4), 16) & 0x80) == 0x80) {
 											mStrSimCmdPacket = PacketeUtil.Combination(messages);
@@ -310,6 +311,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 													.getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 											//未插卡（需要修改：由于没有获取ICCID无法判断所以日后需要修改，暂时这样写）
 											SocketConstant.REGISTER_STATUE_CODE = 0;
+											//保证程序正常所以要下电
+											sendMessageToBlueTooth(OFF_TO_POWER);
+											//恢复测试写卡流程
+											IS_TEXT_SIM = false;
 										} else if (messages.get(0).substring(10, 12).equals("01")) {
 											Log.i(TAG, "已插卡");
 											//如果激活卡成功后，刷新按钮点击需要将标记激活
@@ -440,6 +445,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					}
 					registFlowPath();
 				}
+//				//最后发送信息复位
+//				lastSendMessageStr = "";
 				break;
 			default:
 				if (mStrSimCmdPacket.startsWith("9000") && !CommonTools.isFastDoubleClick(1000)) {

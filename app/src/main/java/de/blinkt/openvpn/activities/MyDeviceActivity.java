@@ -76,7 +76,7 @@ import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.retryTime;
-import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
+import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
@@ -211,7 +211,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		hasLeftViewTitle(device, 0);
 		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
-			int electricityInt = SharedUtils.getInstance().readInt(ELECTRICITY);
+			int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
 			noConnectImageView.setVisibility(GONE);
 			unBindButton.setVisibility(View.VISIBLE);
 			sinking.setVisibility(View.VISIBLE);
@@ -499,6 +499,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						case Constant.SYSTEM_BASICE_INFO:
 							String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
 							firmwareTextView.setText(deviceVesion);
+							dismissProgress();
 							//不让无设备dialog弹出
 							if (noDevicedialog != null)
 								noDevicedialog.getDialog().dismiss();
@@ -532,7 +533,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void setView() {
 		dismissProgress();
-		int electricityInt = SharedUtils.getInstance().readInt(ELECTRICITY);
+		int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
 		noConnectImageView.setVisibility(GONE);
 		sinking.setVisibility(View.VISIBLE);
 //		resetDeviceTextView.setVisibility(View.VISIBLE);
@@ -600,11 +601,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				registerSimStatu.setVisibility(GONE);
 				statueTextView.setText(getString(R.string.conn_bluetooth));
 				statueTextView.setEnabled(true);
-				//传出注册失败
-				SharedUtils.getInstance().delete(ELECTRICITY);
 				firmwareTextView.setText("");
 				percentTextView.setText("");
 				macTextView.setText("");
+				SharedUtils.getInstance().delete(BRACELETPOWER);
 				SharedUtils.getInstance().delete(Constant.IMEI);
 				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 				SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
@@ -701,7 +701,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		Log.d(TAG, "showDialogGOUpgrade");
 		//不能按返回键，只能二选其一
 
-		DialogTipUpgrade upgrade=	new DialogTipUpgrade(this, this, R.layout.dialog_tip_upgrade, DOWNLOAD_SKY_UPGRADE);
+		DialogTipUpgrade upgrade = new DialogTipUpgrade(this, this, R.layout.dialog_tip_upgrade, DOWNLOAD_SKY_UPGRADE);
 
 		upgrade.changeText(desc);
 	}
@@ -749,13 +749,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void showDialogUpgrade() {
 		Log.d(TAG, "showDialogUpgrade");
 		isUpgrade = true;
-		if(upgradeDialog!=null)
-		upgradeDialog.show();
+		if (upgradeDialog != null)
+			upgradeDialog.show();
 	}
 
 	private void hideDialogUpgrade() {
-		if(upgradeDialog!=null)
-		upgradeDialog.dismiss();
+		if (upgradeDialog != null)
+			upgradeDialog.dismiss();
 	}
 
 	private void downloadSkyUpgradePackageHttp(String path) {
@@ -972,6 +972,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			percentTextView.setText("");
 		} else if (conStatus.equals(getString(R.string.index_aixiaoqicard))) {
 			percentTextView.setText("");
+			noDevicedialog.getDialog().dismiss();
 			stopAnim();
 			//重新上电清空
 			SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
@@ -987,6 +988,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_registing))) {
 			percentTextView.setText("");
 			registerSimStatu.setVisibility(View.VISIBLE);
+			noDevicedialog.getDialog().dismiss();
 			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_unbind))) {
 			percentTextView.setText("");
