@@ -16,10 +16,10 @@ public class DialogBalance extends DialogBase implements View.OnClickListener {
 	private TextView tvRechange;
 	private TextView tvCancel;
 	private TextView titleTextView;
-	private TextView upgradeTextView;
+
 	public DialogBalance(DialogInterfaceTypeBase dialogInterfaceTypeBase, Context context, int layoutId, int type) {
 		super(dialogInterfaceTypeBase, context, layoutId, type);
-
+        addListener();
 	}
 
 	private void addListener() {
@@ -36,23 +36,9 @@ public class DialogBalance extends DialogBase implements View.OnClickListener {
 		titleTextView.setText(title);
 		tvRechange.setText(sureText);
 	}
-	public void changeText(String title, String sureText,int type) {
-		if(type==1){
-			try {
-				titleTextView.setText(context.getString(R.string.dfu_upgrade));
-				upgradeTextView.setVisibility(View.VISIBLE);
-				upgradeTextView.setText(title);
-				tvRechange.setText(sureText);
-			}catch ( Exception e){
-
-			}
-
-		}
-	}
 	public Dialog getDialog(){
 		return dialog;
 	}
-
 	public void setCanClickBack(boolean isCanClickBack) {
 		dialog.setCancelable(isCanClickBack);
 	}
@@ -85,7 +71,6 @@ public class DialogBalance extends DialogBase implements View.OnClickListener {
 		tvRechange = (TextView) view.findViewById(R.id.tv_rechange);
 		tvCancel = (TextView) view.findViewById(R.id.tv_cancel);
 		titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-		upgradeTextView = (TextView) view.findViewById(R.id.upgradeTextView);
-		addListener();
+
 	}
 }

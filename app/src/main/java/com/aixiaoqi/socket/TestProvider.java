@@ -75,10 +75,15 @@ public class TestProvider {
 					REGISTER_STATUE_CODE = 2;
 					isIccid = true;
 					savePreData();
-					ProMainActivity.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
-					if (isCreate && isIccid) {
+					if(SocketConnection.mReceiveSocketService!=null&&SocketConnection.mReceiveSocketService.CONNECT_STATUE==SocketConnection.mReceiveSocketService.CONNECT_SUCCEED){
 						ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+					}else if(SocketConnection.mReceiveSocketService!=null&&SocketConnection.mReceiveSocketService.CONNECT_STATUE==SocketConnection.mReceiveSocketService.CONNECT_FAIL){
+						SocketConnection.mReceiveSocketService.disconnect();
+						connectTcp();
+					}else{
+						connectTcp();
 					}
+
 				}
 			} else {
 				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR);
@@ -86,6 +91,13 @@ public class TestProvider {
 		} else {
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 		}
+	}
+
+	private static void connectTcp() {
+		ProMainActivity.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+		if (isCreate && isIccid) {
+            ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+        }
 	}
 
 	private static void savePreData() {

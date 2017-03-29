@@ -813,19 +813,29 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			Log.e("phoneAddress", "main.start()");
 			JNIUtil.getInstance().startSDK(1);
 		} else if (Constant.REGISTER_SIM_PRE_DATA.equals(simRegisterType.getSimRegisterType())) {
-			startSocketService();
-			startTcpSocket();
-			SocketConnection.mReceiveSocketService.setListener(new ReceiveSocketService.CreateSocketLisener() {
-				@Override
-				public void create() {
-					TestProvider.isCreate = true;
-					CommonTools.delayTime(500);
-					ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-				}
-
-			});
-
+			if(SocketConnection.mReceiveSocketService!=null&&SocketConnection.mReceiveSocketService.CONNECT_STATUE==SocketConnection.mReceiveSocketService.CONNECT_SUCCEED){
+				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			}else if(SocketConnection.mReceiveSocketService!=null&&SocketConnection.mReceiveSocketService.CONNECT_STATUE==SocketConnection.mReceiveSocketService.CONNECT_FAIL){
+				SocketConnection.mReceiveSocketService.disconnect();
+				startTcp();
+			}else{
+				startTcp();
+			}
 		}
+	}
+
+	private void startTcp() {
+		startSocketService();
+		startTcpSocket();
+		SocketConnection.mReceiveSocketService.setListener(new ReceiveSocketService.CreateSocketLisener() {
+			@Override
+			public void create() {
+				TestProvider.isCreate = true;
+				CommonTools.delayTime(500);
+				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			}
+
+		});
 	}
 
 	private int bindtime = 0;
@@ -833,6 +843,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private void startTcpSocket() {
 		if (sendYiZhengService != null && SocketConnection.mReceiveSocketService != null) {
 			sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+			return;
 		}
 		bindTcpSucceed();
 	}

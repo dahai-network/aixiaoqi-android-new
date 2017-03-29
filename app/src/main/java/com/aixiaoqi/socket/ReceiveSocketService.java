@@ -32,6 +32,9 @@ public class ReceiveSocketService extends Service {
 	private int contactFailCount = 1;
 	PendingIntent sender;
 	AlarmManager am;
+	public static int CONNECT_SUCCEED=0;
+	public static int CONNECT_FAIL=1;
+	public static int CONNECT_STATUE=-1;
 	private static String TAG = "ReceiveSocketService";
 
 	@Override
@@ -56,12 +59,14 @@ public class ReceiveSocketService extends Service {
 			Log.i("Blue_Chanl", "正在注册GOIP");
 			SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
 			createSocketLisener.create();
+			CONNECT_STATUE=CONNECT_SUCCEED;
 		}
 
 		@Override
 		public void onConnectFailed() {
 			Log.e("Blue_Chanl", "onConnectFailed");
 			connectFailReconnect();
+			CONNECT_STATUE=CONNECT_FAIL;
 		}
 
 
@@ -76,6 +81,7 @@ public class ReceiveSocketService extends Service {
 		@Override
 		public void onDisconnect(SocketTransceiver transceiver) {
 			Log.e("Blue_Chanl", "断开连接 - onDisconnect");
+			CONNECT_STATUE=CONNECT_FAIL;
 			disConnectReconnect();
 		}
 	};
