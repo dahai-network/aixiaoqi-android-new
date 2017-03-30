@@ -824,6 +824,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	}
 
+
+
 	private void startTcp() {
 		startSocketService();
 		startTcpSocket();
