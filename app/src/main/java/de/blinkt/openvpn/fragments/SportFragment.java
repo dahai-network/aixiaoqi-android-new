@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -402,7 +403,9 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 				sportDataRecylerView.setVisibility(View.VISIBLE);
 				i = 0;
 				arcProgress.invalidate();
-				mhandler.removeCallbacksAndMessages(null);
+				if (mhandler != null && mhandler.getLooper() == Looper.getMainLooper()){
+					mhandler.removeCallbacksAndMessages(null);
+				}
 				if (timer != null) {
 					timer.cancel();
 					timer = null;
@@ -494,6 +497,10 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		if (mhandler != null && mhandler.getLooper() == Looper.getMainLooper()){
+			mhandler.removeCallbacksAndMessages(null);
+		}
+		mhandler = null;
 		ICSOpenVPNApplication.getInstance().unregisterReceiver(realStepReceiver);
 	}
 

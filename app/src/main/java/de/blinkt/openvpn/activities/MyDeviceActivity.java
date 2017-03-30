@@ -309,7 +309,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
 					startAnim();
-					if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
+					if (!conStatusTextView.getText().toString().equals(getString(R.string.index_high_signal))||SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
 						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
 						if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
@@ -919,9 +919,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void showDialog() {
 		scanLeDevice(false);
 		dismissProgress();
-		if (noDevicedialog != null) noDevicedialog.getDialog().dismiss();
-		//不能按返回键，只能二选其一
-		noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, NOT_YET_REARCH);
+		if (noDevicedialog != null) {
+			noDevicedialog.getDialog().dismiss();
+		} else {
+			//不能按返回键，只能二选其一
+			noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, NOT_YET_REARCH);
+		}
 		noDevicedialog.setCanClickBack(false);
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
@@ -972,7 +975,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			percentTextView.setText("");
 		} else if (conStatus.equals(getString(R.string.index_aixiaoqicard))) {
 			percentTextView.setText("");
-			noDevicedialog.getDialog().dismiss();
+			if (noDevicedialog != null && noDevicedialog.getDialog() != null)
+				noDevicedialog.getDialog().dismiss();
 			stopAnim();
 			//重新上电清空
 			SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
@@ -988,7 +992,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_registing))) {
 			percentTextView.setText("");
 			registerSimStatu.setVisibility(View.VISIBLE);
-			noDevicedialog.getDialog().dismiss();
+			if (noDevicedialog != null && noDevicedialog.getDialog() != null)
+				noDevicedialog.getDialog().dismiss();
 			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_unbind))) {
 			percentTextView.setText("");
