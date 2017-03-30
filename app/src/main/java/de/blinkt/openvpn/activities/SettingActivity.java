@@ -3,6 +3,7 @@ package de.blinkt.openvpn.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,6 @@ import cn.com.aixiaoqi.R;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import cn.qfishphone.sipengine.SipEngineCore;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -183,7 +183,7 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 
 	};
 
-	private final JpushHandler handler = new JpushHandler(mAliasCallback);
+	private JpushHandler handler = new JpushHandler(mAliasCallback);
 
 	private static class JpushHandler extends Handler {
 
@@ -248,5 +248,14 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 				createHttpRequest(HttpConfigUrl.COMTYPE_EXIT);
 			}
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (handler != null && handler.getLooper() == Looper.getMainLooper()){
+			handler.removeCallbacksAndMessages(null);
+		}
+		handler = null;
 	}
 }

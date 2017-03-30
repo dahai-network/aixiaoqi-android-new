@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -455,5 +456,14 @@ public class CommitOrderActivity extends BaseNetActivity {
 	public void noNet() {
 		CommonTools.showShortToast(CommitOrderActivity.this, "请检查您的网络设置！");
 		sureTextView.setEnabled(true);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (mHandler != null && mHandler.getLooper() == Looper.getMainLooper()){
+			mHandler.removeCallbacksAndMessages(null);
+		}
+		mHandler = null;
 	}
 }

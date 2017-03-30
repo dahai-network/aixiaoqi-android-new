@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -125,7 +126,10 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	public void onDestroy() {
 		super.onDestroy();
 		getActivity().unregisterReceiver(connectedRecoderReceive);
-		mHandler.removeCallbacksAndMessages(null);
+		if (mHandler != null && mHandler.getLooper() == Looper.getMainLooper()){
+			mHandler.removeCallbacksAndMessages(null);
+		}
+		mHandler = null;
 		sqliteDB.close();
 		dao.closeDB();
 	}

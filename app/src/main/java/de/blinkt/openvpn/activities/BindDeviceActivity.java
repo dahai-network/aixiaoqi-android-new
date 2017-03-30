@@ -283,8 +283,9 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 				CommonTools.showShortToast(this, "该设备已经绑定过了！");
 				scanLeDevice(false);
 				mService.disconnect();
-				utils.delete(Constant.IMEI);
-				utils.delete(Constant.BRACELETNAME);
+				BluetoothConstant.IS_BIND = false;
+				SharedUtils.getInstance().delete(Constant.IMEI);
+				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 				finish();
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {

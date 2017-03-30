@@ -91,11 +91,11 @@ public class CycleViewPager extends LinearLayout implements OnPageChangeListener
 		handler.postDelayed(runnable, time);
 	}
 
-	private  Context context;
+	private Context context;
 
 	public CycleViewPager(Context context) {
 		super(context);
-		this.context=context;
+		this.context = context;
 		this.addView(onCreateView(context));
 	}
 
@@ -105,16 +105,15 @@ public class CycleViewPager extends LinearLayout implements OnPageChangeListener
 	 */
 	public CycleViewPager(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.context=context;
+		this.context = context;
 		this.addView(onCreateView(context));
 	}
 
-	public CycleViewPager(Context context, AttributeSet attrs,int defStyle) {
-		super(context, attrs,defStyle);
-		this.context=context;
+	public CycleViewPager(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		this.context = context;
 		this.addView(onCreateView(context));
 	}
-
 
 
 	public void setData(List<ImageView> views, List<IndexBannerEntity> list, ImageCycleViewListener listener) {
@@ -124,10 +123,8 @@ public class CycleViewPager extends LinearLayout implements OnPageChangeListener
 	/**
 	 * 初始化viewpager
 	 *
-	 * @param views
-	 *            要显示的views
-	 * @param showPosition
-	 *            默认显示位置
+	 * @param views        要显示的views
+	 * @param showPosition 默认显示位置
 	 */
 	public void setData(List<ImageView> views, List<IndexBannerEntity> list, ImageCycleViewListener listener, int showPosition) {
 		mImageCycleViewListener = listener;
@@ -152,12 +149,12 @@ public class CycleViewPager extends LinearLayout implements OnPageChangeListener
 		indicatorLayout.removeAllViews();
 		for (int i = 0; i < indicators.length; i++) {
 			indicators[i] = new ImageView(context);
-			LayoutParams layoutParams=new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-			layoutParams.setMargins(0,0,10,0);
+			LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			layoutParams.setMargins(0, 0, 10, 0);
 			indicators[i].setLayoutParams(layoutParams);
 			indicatorLayout.addView(indicators[i]);
 		}
-		if(adapter==null) {
+		if (adapter == null) {
 			adapter = new ViewPagerAdapter();
 		}
 		// 默认指向第一项，下方viewPager.setCurrentItem将触发重新计算指示器指向
@@ -190,8 +187,7 @@ public class CycleViewPager extends LinearLayout implements OnPageChangeListener
 	/**
 	 * 是否循环，默认不开启，开启前，请将views的最前面与最后面各加入一个视图，用于循环
 	 *
-	 * @param isCycle
-	 *            是否循环
+	 * @param isCycle 是否循环
 	 */
 	public void setCycle(boolean isCycle) {
 		this.isCycle = isCycle;
@@ -256,8 +252,7 @@ public class CycleViewPager extends LinearLayout implements OnPageChangeListener
 	/**
 	 * 设置轮播暂停时间，即没多少秒切换到下一张视图.默认5000ms
 	 *
-	 * @param time
-	 *            毫秒为单位
+	 * @param time 毫秒为单位
 	 */
 	public void setTime(int time) {
 		this.time = time;
@@ -291,7 +286,6 @@ public class CycleViewPager extends LinearLayout implements OnPageChangeListener
 	 * 页面适配器 返回对应的view
 	 *
 	 * @author Yuedong Li
-	 *
 	 */
 	private class ViewPagerAdapter extends PagerAdapter {
 
@@ -390,8 +384,7 @@ public class CycleViewPager extends LinearLayout implements OnPageChangeListener
 	/**
 	 * 设置指示器
 	 *
-	 * @param selectedPosition
-	 *            默认指示器位置
+	 * @param selectedPosition 默认指示器位置
 	 */
 	private void setIndicator(int selectedPosition) {
 		for (int i = 0; i < indicators.length; i++) {
@@ -418,7 +411,7 @@ public class CycleViewPager extends LinearLayout implements OnPageChangeListener
 	 *
 	 * @author minking
 	 */
-	public  interface ImageCycleViewListener {
+	public interface ImageCycleViewListener {
 
 		/**
 		 * 单击图片事件

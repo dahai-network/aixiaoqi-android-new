@@ -184,7 +184,7 @@ public class Constant {
 	public static final String RETURN_POWER = "0700";//回应上电
 	public static final String BIND_STATUE = "0800";//是否绑定成功
 	public static final String READ_SIM_DATA = "0900";//读卡返回数据
-	public static final String LAST_CHARGE_POWER_TIMER = "0a00";//上一次充电时间
+	public static final String RECEIVE_CARD_MSG = "0a00";//爱小器卡
 	public static final String REQUEST_POWER = "0b00";//请求电量
 	public static final String IS_INSERT_CARD = "0c00";//检测是否插卡
 	public static final String THE_HAND_FUNCTION = "0d00";//是否使用抬手功能
