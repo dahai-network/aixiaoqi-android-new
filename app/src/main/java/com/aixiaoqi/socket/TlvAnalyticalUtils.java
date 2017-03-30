@@ -37,11 +37,13 @@ public class TlvAnalyticalUtils {
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
 			return null;
 		}
+
 		tag = tag & 127;
 		position = position + 8;
 		String sessionId = hexString.substring(position, position + 8);
 		if(tag==4){
 			SocketConstant.SESSION_ID = sessionId;
+			EventBusUtil.simRegisterStatue(SocketConstant.REG_STATUE_CHANGE);
 		}
 		else if (!SocketConstant.SESSION_ID.equals(sessionId) && !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
 //			SocketConstant.SESSION_ID = sessionId;

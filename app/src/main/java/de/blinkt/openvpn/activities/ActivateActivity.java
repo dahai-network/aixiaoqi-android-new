@@ -61,6 +61,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	public static void launch(Context context) {
 		Intent intent = new Intent(context, ActivateActivity.class);
 		context.startActivity(intent);
+
 	}
 
 	@Override
