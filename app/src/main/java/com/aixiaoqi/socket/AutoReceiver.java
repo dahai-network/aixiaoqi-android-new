@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import de.blinkt.openvpn.activities.ProMainActivity;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.NetworkUtils;
 
@@ -27,7 +28,7 @@ public class AutoReceiver extends BroadcastReceiver {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					if (ProMainActivity.sendYiZhengService != null&&TestProvider.isCreate) {
+					if (ProMainActivity.sendYiZhengService != null&& !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
 						ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
 					} else {
 						Log.e(TAG, "AutoReceiver 异常！");

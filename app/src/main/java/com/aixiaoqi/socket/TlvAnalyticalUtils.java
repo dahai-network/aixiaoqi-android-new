@@ -54,7 +54,6 @@ public class TlvAnalyticalUtils {
 		String hexStringMessageNumber = hexString.substring(position, position + 4);
 		position = position + 4;
 		String hexStringDatalength = hexString.substring(position, position + 4);
-
 		position = position + 4;
 		List<TlvEntity> list = builderTlvList(hexString, hexString.substring(position, hexString.length()), tag);
 		MessagePackageEntity messagePackageEntity = new MessagePackageEntity(list, sessionId, hexStringMessageNumber, hexStringDatalength, responeHeader);
