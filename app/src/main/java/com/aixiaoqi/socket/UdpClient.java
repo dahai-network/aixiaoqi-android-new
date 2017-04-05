@@ -1,5 +1,6 @@
 package com.aixiaoqi.socket;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -53,7 +54,6 @@ public abstract class UdpClient implements Runnable {
 					setSorketTag(tag);
 					sendToBluetoothMsg(receiveMsg);
 				}
-
 			}
 			if (socket != null) {
 				closeReceiveSocket();

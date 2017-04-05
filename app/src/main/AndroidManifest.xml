@@ -148,9 +148,7 @@
             android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
-
                 <data android:scheme="wxff7e7ee82cd9afc4"/> <!-- 需修改 -->
             </intent-filter>
         </activity>
