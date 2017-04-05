@@ -82,7 +82,7 @@ import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOMECONTACT;
 
-public class ProMainActivity extends BaseNetActivity implements View.OnClickListener {
+public class ProMainActivity extends BaseNetActivity implements View.OnClickListener, View.OnLongClickListener {
 
 	public static ProMainActivity instance = null;
 	private ViewPager mViewPager;
@@ -287,6 +287,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		phoneNumberImageView.setOnClickListener(this);
 		callImageView.setOnClickListener(this);
 		deleteImageView.setOnClickListener(this);
+		deleteImageView.setOnLongClickListener(this);
 		llArray[0].performClick();
 	}
 
@@ -1013,6 +1014,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		} else {
 			sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 		}
+	}
+
+	@Override
+	public boolean onLongClick(View view) {
+		phoneFragment.clearInputEdit();
+		return false;
 	}
 
 //	private boolean isDfuServiceRunning() {

@@ -41,8 +41,6 @@ public class Constant {
 	public static final String NULLCARD_SERIALNUMBER = "NULLCARD_SERIALNUMBER";
 	public static final String VERSION_HEADER = "Version";
 	public static final String TERMINAL_HEADER = "Terminal";
-	//旧版本蓝牙设备
-	public static final String ELECTRICITY = "electricity";
 	public static final String PHONE_NUMBER_LIST = "phone_number_list";
 	//更新请求的时间间隔（一小时提示一次升级）
 	public static final String UPGRADE_INTERVAL = "upgrade_interval";

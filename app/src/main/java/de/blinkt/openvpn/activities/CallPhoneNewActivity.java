@@ -72,8 +72,9 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		IntentFilter filter = getIntentFilter();
 		connectedReceive = new ConnectedReceive();
 		registerReceiver(connectedReceive, filter);
-			callPhone();
+		callPhone();
 	}
+
 
 	@Override
 	protected void onResume() {
@@ -147,8 +148,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 			return;
 		}
 
-		if(ICSOpenVPNApplication.the_sipengineReceive==null)
-		{
+		if (ICSOpenVPNApplication.the_sipengineReceive == null) {
 			CommonTools.showShortToast(this, "电话异常请稍后重试");
 			return;
 		}
