@@ -63,11 +63,15 @@ public class TestProvider {
 			return;
 		}
 		Log.e("preDataSplit", "ICCID:" + iccidEntity.getIccid() + "\nIMMSI:" + iccidEntity.getImmsi());
+		createTcp(imsi);
+	}
+
+	private static void createTcp(String imsi) {
 		if (!TextUtils.isEmpty(imsi)) {
 			if (validSim(imsi)) {//因为移动网络编号46000下的IMSI已经用完，所以虚拟了一个46002编号，134/159号段使用了此编号
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
-				String token=SharedUtils.getInstance().readString(Constant.TOKEN);
+				String token= SharedUtils.getInstance().readString(Constant.TOKEN);
 				if(TextUtils.isEmpty(token)){
 					EventBusUtil.simRegisterStatue(SocketConstant.TOKEN_IS_NULL);
 				}else{
@@ -137,11 +141,9 @@ public class TestProvider {
 		if (SocketConstant.EN_APPEVT_PRDATA.equals(preDataEntity.getEvtIndex())) {
 			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = hex;
 			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preDataEntity.getLenString();
-
 		} else if (SocketConstant.EN_APPEVT_SIMDATA.equals(preDataEntity.getEvtIndex())) {
 			SocketConstant.SDK_VALUE = hex;
 			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.PRE_DATA);
-
 		}
 	}
 
