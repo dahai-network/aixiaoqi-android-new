@@ -54,9 +54,9 @@ public class HttpConfigUrl {
 	public static final String SPORT_REPORT_HISTORY_STEP = "Sport/AddHistorys";
 	public static final String SPORT_GET_RECORD_DATE = "Sport/GetRecordDate";
 	//绑定设备
-	public static final String BIND_DEVICE = "DeviceBracelet/Bind";
+	public static final String BIND_DEVICE = "DeviceBracelet/Bind";	public static final String GET_BIND_DEVICE = "DeviceBracelet/Get";
 	//获取当前账号绑定的设备
-	public static final String GET_BIND_DEVICE = "DeviceBracelet/Get";
+
 	public static final String UN_BIND_DEVICE = "DeviceBracelet/UnBind";
 	//运动总量
 

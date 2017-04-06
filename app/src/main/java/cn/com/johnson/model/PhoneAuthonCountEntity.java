@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class PhoneAuthonCountEntity  implements Serializable{
 
 
-    private static PhoneAuthonCountEntity instance = null;
+    private volatile static PhoneAuthonCountEntity instance = null;
       public static PhoneAuthonCountEntity getInstance() {
               if (instance == null) {
                       synchronized (PhoneAuthonCountEntity.class) {

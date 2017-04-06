@@ -26,7 +26,7 @@ public class SocketConnection implements ServiceConnection {
             Log.i(TAG,"ReceiveDataframSocketService打开");
             if(ICSOpenVPNApplication.uartService!=null){
 
-            ProMainActivity.sdkAndBluetoothDataInchange.initReceiveDataframSocketService(mReceiveDataframSocketService, ICSOpenVPNApplication.uartService);
+               ProMainActivity.sdkAndBluetoothDataInchange.initReceiveDataframSocketService(mReceiveDataframSocketService, ICSOpenVPNApplication.uartService);
             }
         }else if(service instanceof ReceiveSocketService.LocalBinder ){
             Log.i(TAG,"ReceiveSocketService打开");

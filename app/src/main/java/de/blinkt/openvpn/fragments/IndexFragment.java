@@ -78,392 +78,405 @@ import static de.blinkt.openvpn.fragments.SportFragment.REFRESHSTEP;
 
 public class IndexFragment extends Fragment implements View.OnClickListener, InterfaceCallback {
 
-	private String TAG = "IndexFragment";
-	private TextView dualSimTextView;
+    private String TAG = "IndexFragment";
+    private TextView dualSimTextView;
 
-	private TextView foreignTextView;
+    private TextView foreignTextView;
 
-	private List<ImageView> pageViews;
+    private List<ImageView> pageViews;
 
-	private TextView callPacketTextView;
+    private TextView callPacketTextView;
 
-	private FullyRecylerView hotPackageRecyclerView;
-	private RecyclerView boughtPackgeRecyclerView;
-	private TextView hotMessageMoreTextView;
-	private TextView boughtMessageMoreTextView;
-	private CycleViewPager scrollViewPagerLayout;
-	private List<IndexBannerEntity> bannerData;
-	//图片加载类
-	private RequestManager manager;
-	public ScrollView indexScrollView;
-	private RelativeLayout boughtPacketLinearLayout;
-	private LinearLayout sportTabLienarLayout;
-	private LinearLayout scrollLinearlayout;
-	private RelativeLayout hotPacketLinearLayout;
-	private LinearLayout dots_layout;
-	private OrderAdapter orderAdapter;
-	private TextView totalStepTextView;
-	private TextView totalKmTextView;
-	private TextView totalDayTextView;
-	private TextView totalKalTextView;
-	private View view;
-	private TitleBar title;
-
-
-	public OrderAdapter getOrderAdapter() {
-		return orderAdapter;
-	}
+    private FullyRecylerView hotPackageRecyclerView;
+    private RecyclerView boughtPackgeRecyclerView;
+    private TextView hotMessageMoreTextView;
+    private TextView boughtMessageMoreTextView;
+    private CycleViewPager scrollViewPagerLayout;
+    private List<IndexBannerEntity> bannerData;
+    //图片加载类
+    private RequestManager manager;
+    public ScrollView indexScrollView;
+    private RelativeLayout boughtPacketLinearLayout;
+    private LinearLayout sportTabLienarLayout;
+    private LinearLayout scrollLinearlayout;
+    private RelativeLayout hotPacketLinearLayout;
+    private LinearLayout dots_layout;
+    private OrderAdapter orderAdapter;
+    private TextView totalStepTextView;
+    private TextView totalKmTextView;
+    private TextView totalDayTextView;
+    private TextView totalKalTextView;
+    private View view;
+    private TitleBar title;
 
 
-	public IndexFragment() {
-		// Required empty public constructor
-	}
+    public OrderAdapter getOrderAdapter() {
+        return orderAdapter;
+    }
 
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
+    public IndexFragment() {
+        // Required empty public constructor
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
-		view = inflater.inflate(R.layout.fragment_index, container, false);
-		ButterKnife.bind(this, view);
-		findById(view);
-		return view;
-	}
 
-	@Override
-	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		init();
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
-	private void init() {
-		addData();
-		callPacketTextView.setOnClickListener(this);
-		foreignTextView.setOnClickListener(this);
-		hotMessageMoreTextView.setOnClickListener(this);
-		boughtMessageMoreTextView.setOnClickListener(this);
-		sportTabLienarLayout.setOnClickListener(this);
-		dualSimTextView.setOnClickListener(this);
-		manager = Glide.with(ICSOpenVPNApplication.getContext());
-		ICSOpenVPNApplication.getInstance().registerReceiver(realStepReceiver, getFilter());
-		changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_index, container, false);
+        ButterKnife.bind(this, view);
+        findById(view);
+        return view;
+    }
 
-	private void findById(View view) {
-		indexScrollView = (ScrollView) view.findViewById(R.id.indexScrollView);
-		scrollLinearlayout = (LinearLayout) view.findViewById(R.id.scrollLinearlayout);
-		title = (TitleBar) view.findViewById(R.id.title);
-		title.setTextTitle(getString(R.string.index));
-		foreignTextView = (TextView) view.findViewById(R.id.foreignTextView);
-		callPacketTextView = (TextView) view.findViewById(R.id.callPacketTextView);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        init();
+    }
 
-		dualSimTextView = (TextView) view.findViewById(R.id.dualSimTextView);
-		boughtPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.boughtPacketLinearLayout);
-		scrollViewPagerLayout = (CycleViewPager) view.findViewById(R.id.scrollViewPagerLayout);
-		hotMessageMoreTextView = (TextView) view.findViewById(R.id.hotMessageMoreTextView);
-		boughtMessageMoreTextView = (TextView) view.findViewById(R.id.boughtMessageMoreTextView);
-		sportTabLienarLayout = (LinearLayout) view.findViewById(R.id.sportTabLienarLayout);
-		boughtPackgeRecyclerView = (RecyclerView) view.findViewById(R.id.boughtPackgeRecyclerView);
-		hotPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.hotPacketLinearLayout);
-		totalStepTextView = (TextView) view.findViewById(R.id.totalStepTextView);
-		totalKmTextView = (TextView) view.findViewById(R.id.totalKmTextView);
-		totalDayTextView = (TextView) view.findViewById(R.id.totalDayTextView);
-		totalKalTextView = (TextView) view.findViewById(R.id.totalKalTextView);
-		orderAdapter = new OrderAdapter(getActivity(), null, false, R.layout.item_order_index);
-		boughtPackgeRecyclerView.setNestedScrollingEnabled(false);
+    private void init() {
+        addData();
+        callPacketTextView.setOnClickListener(this);
+        foreignTextView.setOnClickListener(this);
+        hotMessageMoreTextView.setOnClickListener(this);
+        boughtMessageMoreTextView.setOnClickListener(this);
+        sportTabLienarLayout.setOnClickListener(this);
+        dualSimTextView.setOnClickListener(this);
+        manager = Glide.with(ICSOpenVPNApplication.getContext());
+        ICSOpenVPNApplication.getInstance().registerReceiver(realStepReceiver, getFilter());
+        changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
+    }
+
+    private void findById(View view) {
+        indexScrollView = (ScrollView) view.findViewById(R.id.indexScrollView);
+        scrollLinearlayout = (LinearLayout) view.findViewById(R.id.scrollLinearlayout);
+        title = (TitleBar) view.findViewById(R.id.title);
+        title.setTextTitle(getString(R.string.index));
+        foreignTextView = (TextView) view.findViewById(R.id.foreignTextView);
+        callPacketTextView = (TextView) view.findViewById(R.id.callPacketTextView);
+
+        dualSimTextView = (TextView) view.findViewById(R.id.dualSimTextView);
+        boughtPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.boughtPacketLinearLayout);
+        scrollViewPagerLayout = (CycleViewPager) view.findViewById(R.id.scrollViewPagerLayout);
+        hotMessageMoreTextView = (TextView) view.findViewById(R.id.hotMessageMoreTextView);
+        boughtMessageMoreTextView = (TextView) view.findViewById(R.id.boughtMessageMoreTextView);
+        sportTabLienarLayout = (LinearLayout) view.findViewById(R.id.sportTabLienarLayout);
+        boughtPackgeRecyclerView = (RecyclerView) view.findViewById(R.id.boughtPackgeRecyclerView);
+        hotPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.hotPacketLinearLayout);
+        totalStepTextView = (TextView) view.findViewById(R.id.totalStepTextView);
+        totalKmTextView = (TextView) view.findViewById(R.id.totalKmTextView);
+        totalDayTextView = (TextView) view.findViewById(R.id.totalDayTextView);
+        totalKalTextView = (TextView) view.findViewById(R.id.totalKalTextView);
+        orderAdapter = new OrderAdapter(getActivity(), null, false, R.layout.item_order_index);
+        boughtPackgeRecyclerView.setNestedScrollingEnabled(false);
 //		FullyLinearLayoutManager linearManager = new FullyLinearLayoutManager(getActivity());
-		boughtPackgeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-		boughtPackgeRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
-		boughtPackgeRecyclerView.setAdapter(orderAdapter);
-		title.getLeftText().setOnClickListener(new View.OnClickListener() {
-			public Intent intent;
+        boughtPackgeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        boughtPackgeRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
+        boughtPackgeRecyclerView.setAdapter(orderAdapter);
+        title.getLeftText().setOnClickListener(new View.OnClickListener() {
+            public Intent intent;
 
-			@Override
-			public void onClick(View v) {
-				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-					intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
-				} else {
-					intent = new Intent(getActivity(), MyDeviceActivity.class);
-					String braceleName = SharedUtils.getInstance().readString(BRACELETNAME, "");
-					intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceleName);
-				}
-				int status = R.string.index_connecting;
-				if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBlutoothStatus())) {
-					status = R.string.index_no_signal;
-				} else if (getActivity().getResources().getString(R.string.index_connecting).equals(getBlutoothStatus())) {
-					status = R.string.index_connecting;
-				} else if (getActivity().getResources().getString(R.string.index_high_signal).equals(getBlutoothStatus())) {
-					status = R.string.index_high_signal;
-				} else if (getActivity().getResources().getString(R.string.index_no_packet).equals(getBlutoothStatus())) {
-					status = R.string.index_no_packet;
-				} else if (getString(R.string.index_un_insert_card).equals(getBlutoothStatus())) {
-					status = R.string.index_un_insert_card;
-				} else if (getString(R.string.index_high_signal).equals(getBlutoothStatus())) {
-					status = R.string.index_high_signal;
-				} else if (getString(R.string.index_registing).equals(getBlutoothStatus())) {
-					status = R.string.index_registing;
-				} else if (getString(R.string.index_aixiaoqicard).equals(getBlutoothStatus())) {
-					status = R.string.index_aixiaoqicard;
-				} else if (getString(R.string.index_regist_fail).equals(getBlutoothStatus())) {
-					status = R.string.index_regist_fail;
-				}
-				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
-				startActivity(intent);
-			}
-		});
-	}
+            @Override
+            public void onClick(View v) {
+                //判断是否绑定过设备
+                if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
+
+                    intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);// 选择设备界面
+
+                } else {
+
+                    intent = new Intent(getActivity(), MyDeviceActivity.class);
+                    //手环的名字
+                    String braceleName = SharedUtils .getInstance().readString(BRACELETNAME, "");
+
+                    intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceleName);
+
+                }
+                int status = R.string.index_connecting;
+                if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBlutoothStatus())) {
+                    status = R.string.index_no_signal;
+                } else if (getActivity().getResources().getString(R.string.index_connecting).equals(getBlutoothStatus())) {
+                    status = R.string.index_connecting;
+                } else if (getActivity().getResources().getString(R.string.index_high_signal).equals(getBlutoothStatus())) {
+                    status = R.string.index_high_signal;
+                } else if (getActivity().getResources().getString(R.string.index_no_packet).equals(getBlutoothStatus())) {
+                    status = R.string.index_no_packet;
+                } else if (getString(R.string.index_un_insert_card).equals(getBlutoothStatus())) {
+                    status = R.string.index_un_insert_card;
+                } else if (getString(R.string.index_high_signal).equals(getBlutoothStatus())) {
+                    status = R.string.index_high_signal;
+                } else if (getString(R.string.index_registing).equals(getBlutoothStatus())) {
+                    status = R.string.index_registing;
+                } else if (getString(R.string.index_aixiaoqicard).equals(getBlutoothStatus())) {
+                    status = R.string.index_aixiaoqicard;
+                } else if (getString(R.string.index_regist_fail).equals(getBlutoothStatus())) {
+                    status = R.string.index_regist_fail;
+                }
+                intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
+                startActivity(intent);
+            }
+        });
+    }
 
 
-	private void addData() {
-		getIndexBanner();
-		pageViews = new ArrayList<>();
-		getHotPackage();
-	}
+    /**
+     * 增加轮播图
+     */
+    private void addData() {
+        getIndexBanner();
+        pageViews = new ArrayList<>();
+        getHotPackage();
+    }
 
-	private void getHotPackage() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_HOT, 12 + "");
-	}
+    /**
+     * 获取热门套餐
+     */
+    private void getHotPackage() {
+        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_HOT, 12 + "");
+    }
 
-	private void getBoughtPackage() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, "1", "3", "-1");
-	}
+    private void getBoughtPackage() {
+        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, "1", "3", "-1");
+    }
 
-	private void getSportTotal() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL);
-	}
+    private void getSportTotal() {
+        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL);
+    }
 
-	//获取banner图
-	private void getIndexBanner() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_INDEX_BANNER);
-	}
+    //获取banner图
+    private void getIndexBanner() {
+        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_INDEX_BANNER);
+    }
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.foreignTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKABROADFEE);
-				Intent fastSetIntent = new Intent(getActivity(), OrderedOutsidePurchaseActivity.class);
-				startActivity(fastSetIntent);
-				break;
-			case R.id.callPacketTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKDEVICE);
-				Intent callPacketIntent = new Intent(getActivity(), CallPackageLlistActivity.class);
-				startActivity(callPacketIntent);
-				break;
-			case R.id.hotMessageMoreTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKHOTPACKAGEMORE);
-				Intent marketIntent = new Intent(getActivity(), PackageMarketActivity.class);
-				startActivity(marketIntent);
-				break;
-			case R.id.boughtMessageMoreTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICORDERMORE);
-				Intent boughtIntent = new Intent(getActivity(), MyPackageActivity.class);
-				startActivity(boughtIntent);
-				break;
-			case R.id.sportTabLienarLayout:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKSPORTTOTALDATA);
-				((ProMainActivity) getActivity()).getLlArrayToSport().performClick();
-				break;
-			case R.id.dualSimTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKINLANDFEE);
-				WebViewActivity.launch(getActivity(), SharedUtils.getInstance().readString(IntentPutKeyConstant.DUALSIM_STANDBYTUTORIAL_URL), getString(R.string.dual_sim_standby_tutorial));
-				break;
-		}
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.foreignTextView:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICKABROADFEE);
+                Intent fastSetIntent = new Intent(getActivity(), OrderedOutsidePurchaseActivity.class);
+                startActivity(fastSetIntent);
+                break;
+            case R.id.callPacketTextView:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICKDEVICE);
+                Intent callPacketIntent = new Intent(getActivity(), CallPackageLlistActivity.class);
+                startActivity(callPacketIntent);
+                break;
+            case R.id.hotMessageMoreTextView:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICKHOTPACKAGEMORE);
+                Intent marketIntent = new Intent(getActivity(), PackageMarketActivity.class);
+                startActivity(marketIntent);
+                break;
+            case R.id.boughtMessageMoreTextView:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICORDERMORE);
+                Intent boughtIntent = new Intent(getActivity(), MyPackageActivity.class);
+                startActivity(boughtIntent);
+                break;
+            case R.id.sportTabLienarLayout:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICKSPORTTOTALDATA);
+                ((ProMainActivity) getActivity()).getLlArrayToSport().performClick();
+                break;
+            case R.id.dualSimTextView:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICKINLANDFEE);
+                WebViewActivity.launch(getActivity(), SharedUtils.getInstance().readString(IntentPutKeyConstant.DUALSIM_STANDBYTUTORIAL_URL), getString(R.string.dual_sim_standby_tutorial));
+                break;
+        }
 
-	}
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		getBoughtPackage();
-		controlWheel(true);
+    @Override
+    public void onResume() {
+        super.onResume();
+        getBoughtPackage();
+        controlWheel(true);
 //		getSportTotal();
-	}
+    }
 
 
-	@SuppressLint("NewApi")
-	private void initialize(List<IndexBannerEntity> infos) {
-		// 将最后一个ImageView添加进来
-		pageViews.add(getImageView(getActivity(), infos.get(infos.size() - 1).getImage()));
-		for (int i = 0; i < infos.size(); i++) {
-			pageViews.add(getImageView(getActivity(), infos.get(i).getImage()));
-		}
-		// 将第一个ImageView添加进来
-		pageViews.add(getImageView(getActivity(), infos.get(0).getImage()));
+    @SuppressLint("NewApi")
+    private void initialize(List<IndexBannerEntity> infos) {
+        // 将最后一个ImageView添加进来
+        pageViews.add(getImageView(getActivity(), infos.get(infos.size() - 1).getImage()));
+        for (int i = 0; i < infos.size(); i++) {
+            pageViews.add(getImageView(getActivity(), infos.get(i).getImage()));
+        }
+        // 将第一个ImageView添加进来
+        pageViews.add(getImageView(getActivity(), infos.get(0).getImage()));
 
-		// 设置循环，在调用setData方法前调用
-		scrollViewPagerLayout.setCycle(true);
+        // 设置循环，在调用setData方法前调用
+        scrollViewPagerLayout.setCycle(true);
 
-		// 在加载数据前设置是否循环
-		scrollViewPagerLayout.setData(pageViews, infos, mAdCycleViewListener);
-		//设置轮播
-		scrollViewPagerLayout.setWheel(true);
-		//设置圆点指示图标组居中显示，默认靠右
-		scrollViewPagerLayout.setIndicatorCenter();
-	}
+        // 在加载数据前设置是否循环
+        scrollViewPagerLayout.setData(pageViews, infos, mAdCycleViewListener);
+        //设置轮播
+        scrollViewPagerLayout.setWheel(true);
+        //设置圆点指示图标组居中显示，默认靠右
+        scrollViewPagerLayout.setIndicatorCenter();
+    }
 
-	public static ImageView getImageView(Context context, String url) {
-		ImageView imageView = (ImageView) LayoutInflater.from(context).inflate(
-				R.layout.view_banner, null);
-		Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
-		return imageView;
-	}
+    public static ImageView getImageView(Context context, String url) {
+        ImageView imageView = (ImageView) LayoutInflater.from(context).inflate(
+                R.layout.view_banner, null);
+        Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+        return imageView;
+    }
 
-	private CycleViewPager.ImageCycleViewListener mAdCycleViewListener = new CycleViewPager.ImageCycleViewListener() {
+    private CycleViewPager.ImageCycleViewListener mAdCycleViewListener = new CycleViewPager.ImageCycleViewListener() {
 
-		@Override
-		public void onImageClick(IndexBannerEntity info, int position, View imageView) {
-			if (scrollViewPagerLayout.isCycle()) {
-				if (!TextUtils.isEmpty(info.getUrl())) {
-					//友盟方法统计
-					MobclickAgent.onEvent(getActivity(), CLICKBANNER);
-					WebViewActivity.launch(getActivity(), info.getUrl(), info.getTitle());
-				}
-			}
+        @Override
+        public void onImageClick(IndexBannerEntity info, int position, View imageView) {
+            if (scrollViewPagerLayout.isCycle()) {
+                if (!TextUtils.isEmpty(info.getUrl())) {
+                    //友盟方法统计
+                    MobclickAgent.onEvent(getActivity(), CLICKBANNER);
+                    WebViewActivity.launch(getActivity(), info.getUrl(), info.getTitle());
+                }
+            }
 
-		}
+        }
 
-	};
+    };
 
-	@Override
-	public void rightComplete(int cmdType, CommonHttp object) {
-		if (cmdType == HttpConfigUrl.COMTYPE_INDEX_BANNER) {
-			BannerHttp http = (BannerHttp) object;
-			bannerData = http.getBannerList();
-			if (bannerData != null && bannerData.size() != 0) {
-				initialize(bannerData);
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_ORDER) {
-			BoughtPacketHttp http = (BoughtPacketHttp) object;
-			BoughtPackageEntity boughtPackageEntity = http.getBoughtPackageEntity();
-			if (boughtPackageEntity != null) {
-				if (boughtPackageEntity.getList().size() == 0) {
-					boughtPacketLinearLayout.setVisibility(View.GONE);
-					orderAdapter.clear();
-					return;
-				} else {
-					boughtPacketLinearLayout.setVisibility(View.VISIBLE);
-					List<BoughtPackageEntity.ListBean> getDataList = http.getBoughtPackageEntity().getList();
-					orderAdapter.addAll(getDataList);
-				}
-			} else {
-				boughtPacketLinearLayout.setVisibility(View.GONE);
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_HOT) {
-			GetHotHttp http = (GetHotHttp) object;
-			List<HotPackageEntity> hotList = http.getHotPackageEntityList();
-			if (hotList.size() != 0) {
-				hotPackageRecyclerView = new FullyRecylerView(getActivity());
+    @Override
+    public void rightComplete(int cmdType, CommonHttp object) {
+        if (cmdType == HttpConfigUrl.COMTYPE_INDEX_BANNER) {
+            BannerHttp http = (BannerHttp) object;
+            bannerData = http.getBannerList();
+            if (bannerData != null && bannerData.size() != 0) {
+                initialize(bannerData);
+            }
+        } else if (cmdType == HttpConfigUrl.COMTYPE_GET_ORDER) {
+            BoughtPacketHttp http = (BoughtPacketHttp) object;
+            BoughtPackageEntity boughtPackageEntity = http.getBoughtPackageEntity();
+            if (boughtPackageEntity != null) {
+                if (boughtPackageEntity.getList().size() == 0) {
+                    boughtPacketLinearLayout.setVisibility(View.GONE);
+                    orderAdapter.clear();
+                    return;
+                } else {
+                    boughtPacketLinearLayout.setVisibility(View.VISIBLE);
+                    List<BoughtPackageEntity.ListBean> getDataList = http.getBoughtPackageEntity().getList();
+                    orderAdapter.addAll(getDataList);
+                }
+            } else {
+                boughtPacketLinearLayout.setVisibility(View.GONE);
+            }
+        } else if (cmdType == HttpConfigUrl.COMTYPE_GET_HOT) {
+            GetHotHttp http = (GetHotHttp) object;
+            List<HotPackageEntity> hotList = http.getHotPackageEntityList();
+            if (hotList.size() != 0) {
+                hotPackageRecyclerView = new FullyRecylerView(getActivity());
 //				hotPackageRecyclerView.setBackgroundResource(R.color.white);
-				hotPackageRecyclerView.setNestedScrollingEnabled(false);
+                hotPackageRecyclerView.setNestedScrollingEnabled(false);
 //				FullyGridLayoutManager GridManager = new FullyGridLayoutManager(getActivity(), 4);
-				hotPackageRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-				hotPackageRecyclerView.addItemDecoration(new DividerGridItemDecoration(getActivity()));
-				hotPackageRecyclerView.setAdapter(new HotPackageAdapter(hotList, getActivity()));
-				scrollLinearlayout.addView(hotPackageRecyclerView);
-			} else {
-				hotPacketLinearLayout.setVisibility(View.GONE);
-			}
-		} else if (cmdType == COMTYPE_GET_SPORT_TOTAL) {
-			GetSportTotalHttp http = (GetSportTotalHttp) object;
-			SportTotalEntity sportTotalEntity = http.getSportTotalEntity();
-			//如果获取总步数为空，那么其他数据也是空。
-			if (sportTotalEntity != null && !TextUtils.isEmpty(sportTotalEntity.getStepNum())) {
-				totalStepTextView.setText(sportTotalEntity.getStepNum());
-				totalKmTextView.setText(sportTotalEntity.getKM());
-				totalDayTextView.setText(sportTotalEntity.getDate());
-				totalKalTextView.setText(sportTotalEntity.getKcal());
-			} else {
-				totalStepTextView.setText("0");
-				totalKmTextView.setText("0");
-				totalDayTextView.setText("0");
-				totalKalTextView.setText("--");
-			}
-		}
-	}
+                hotPackageRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+                hotPackageRecyclerView.addItemDecoration(new DividerGridItemDecoration(getActivity()));
+                hotPackageRecyclerView.setAdapter(new HotPackageAdapter(hotList, getActivity()));
+                scrollLinearlayout.addView(hotPackageRecyclerView);
+            } else {
+                hotPacketLinearLayout.setVisibility(View.GONE);
+            }
+        } else if (cmdType == COMTYPE_GET_SPORT_TOTAL) {
+            GetSportTotalHttp http = (GetSportTotalHttp) object;
+            SportTotalEntity sportTotalEntity = http.getSportTotalEntity();
+            //如果获取总步数为空，那么其他数据也是空。
+            if (sportTotalEntity != null && !TextUtils.isEmpty(sportTotalEntity.getStepNum())) {
+                totalStepTextView.setText(sportTotalEntity.getStepNum());
+                totalKmTextView.setText(sportTotalEntity.getKM());
+                totalDayTextView.setText(sportTotalEntity.getDate());
+                totalKalTextView.setText(sportTotalEntity.getKcal());
+            } else {
+                totalStepTextView.setText("0");
+                totalKmTextView.setText("0");
+                totalDayTextView.setText("0");
+                totalKalTextView.setText("--");
+            }
+        }
+    }
 
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
+    @Override
+    public void errorComplete(int cmdType, String errorMessage) {
 
-	}
+    }
 
-	@Override
-	public void noNet() {
+    @Override
+    public void noNet() {
 
-	}
+    }
 
-	BroadcastReceiver realStepReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if (REFRESHSTEP.equals(intent.getAction())) {
+    BroadcastReceiver realStepReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (REFRESHSTEP.equals(intent.getAction())) {
 //				getSportTotal();
-			}
-		}
-	};
+            }
+        }
+    };
 
-	public IntentFilter getFilter() {
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(REFRESHSTEP);
-		return filter;
-	}
+    public IntentFilter getFilter() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(REFRESHSTEP);
+        return filter;
+    }
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		ICSOpenVPNApplication.getInstance().unregisterReceiver(realStepReceiver);
-	}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ICSOpenVPNApplication.getInstance().unregisterReceiver(realStepReceiver);
+    }
 
 
-	@Override
-	public void setUserVisibleHint(boolean isVisibleToUser) {
-		super.setUserVisibleHint(isVisibleToUser);
-		//当页面跳出的时候停止轮播
-		if (scrollViewPagerLayout != null) {
-			if (isVisibleToUser) {
-				if (pageViews.size() >= 1) {
-					controlWheel(true);
-				}
-			} else {
-				controlWheel(false);
-			}
-		}
-	}
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        //当页面跳出的时候停止轮播
+        if (scrollViewPagerLayout != null) {
+            if (isVisibleToUser) {
+                if (pageViews.size() >= 1) {
+                    controlWheel(true);
+                }
+            } else {
+                controlWheel(false);
+            }
+        }
+    }
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		controlWheel(false);
-	}
+    @Override
+    public void onPause() {
+        super.onPause();
+        controlWheel(false);
+    }
 
-	private void controlWheel(boolean isWheel) {
-		Log.e("controlWheel", "isWheel:" + isWheel);
-		scrollViewPagerLayout.setCycle(isWheel);
-		scrollViewPagerLayout.setWheel(isWheel);
-	}
+    private void controlWheel(boolean isWheel) {
+        Log.e("controlWheel", "isWheel:" + isWheel);
+        scrollViewPagerLayout.setCycle(isWheel);
+        scrollViewPagerLayout.setWheel(isWheel);
+    }
 
-	//修改蓝牙状态
-	public void changeBluetoothStatus(String leftText, int leftIconId) {
-		if (title == null)
-			title = (TitleBar) view.findViewById(R.id.title);
-		if (leftText != null && leftIconId != 0 && title != null) {
-			Log.i("changeBluetoothStatus", "title=" + (title == null) + "\nleftText=" + leftText + "\nleftIconId=" + leftIconId);
-			title.setLeftIvIconAndText(leftIconId, leftText);
-		}
-	}
+    //修改蓝牙状态
+    public void changeBluetoothStatus(String leftText, int leftIconId) {
+        if (title == null)
+            title = (TitleBar) view.findViewById(R.id.title);
+        if (leftText != null && leftIconId != 0 && title != null) {
+            Log.i("changeBluetoothStatus", "title=" + (title == null) + "\nleftText=" + leftText + "\nleftIconId=" + leftIconId);
+            title.setLeftIvIconAndText(leftIconId, leftText);
+        }
+    }
 
-	//获取蓝牙状态
-	public String getBlutoothStatus() {
-		return title != null ? title.getLeftText().getText().toString() : "";
-	}
+    //获取蓝牙状态
+    public String getBlutoothStatus() {
+        return title != null ? title.getLeftText().getText().toString() : "";
+    }
 }

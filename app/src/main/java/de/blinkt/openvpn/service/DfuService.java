@@ -23,7 +23,6 @@
 package de.blinkt.openvpn.service;
 
 import android.app.Activity;
-
 import de.blinkt.openvpn.activities.NotificationActivity;
 import de.blinkt.openvpn.constant.Constant;
 import no.nordicsemi.android.dfu.DfuBaseService;

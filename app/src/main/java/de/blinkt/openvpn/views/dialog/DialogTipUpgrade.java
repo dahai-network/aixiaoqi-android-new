@@ -43,7 +43,7 @@ public class DialogTipUpgrade extends DialogBase implements View.OnClickListener
                 break;
             case R.id.tv_upgrade:
                 dialog.dismiss();
-                dialogInterfaceTypeBase.dialogText(type, "");
+               dialogInterfaceTypeBase.dialogText(type, "");
                 break;
         }
     }

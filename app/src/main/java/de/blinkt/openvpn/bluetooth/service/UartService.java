@@ -56,9 +56,9 @@ public class UartService extends Service implements Serializable {
 	private BluetoothGatt mBluetoothGatt;
 	public int mConnectionState = STATE_DISCONNECTED;
 
-	private static final int STATE_DISCONNECTED = 0;
-	private static final int STATE_CONNECTING = 1;
-	public static final int STATE_CONNECTED = 2;
+	private static final int STATE_DISCONNECTED = 0;//断开
+	private static final int STATE_CONNECTING = 1;//正在连接
+	public static final int STATE_CONNECTED = 2;//已经连接
 
 
 	public final static String ACTION_GATT_CONNECTED =
@@ -175,8 +175,11 @@ public class UartService extends Service implements Serializable {
 				//TODO 单包处理
 //				messages.add(messageFromBlueTooth);
 				ArrayList<String> onePackagemessage = new ArrayList<>();
+
 				onePackagemessage.add(messageFromBlueTooth);
+
 				intent.putStringArrayListExtra(EXTRA_DATA, onePackagemessage);
+
 				LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
 				return;
 			} else {
@@ -269,7 +272,12 @@ public class UartService extends Service implements Serializable {
 	 *
 	 * @return Return true if the initialization is successful.
 	 */
-	//初始化蓝牙
+
+
+	/***
+	 * 初始化蓝牙
+	 * @return  是否初始化成功
+	 */
 	public boolean initialize() {
 		// For API level 18 and above, get a reference to BluetoothAdapter through
 		// BluetoothManager.
@@ -476,6 +484,11 @@ public class UartService extends Service implements Serializable {
 		broadcastUpdate(FINDED_SERVICE);
 	}
 
+	/***
+	 * 向设备发送指令
+	 * @param value  指令值
+	 * @return
+	 */
 	public boolean writeRXCharacteristic(byte[] value) {
 		try {
 			//如果mBluetoothGatt为空，意味着连接中断，所以不允许继续传输数据
@@ -486,7 +499,10 @@ public class UartService extends Service implements Serializable {
 				return false;
 			}
 			BluetoothGattService RxService = null;
+
+			//获取服务
 			if (RxService == null) {
+				//"6E400001-B5A3-F393-E0A9-E50E24DCCA9E" 写入
 				RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
 			}
 
@@ -496,16 +512,25 @@ public class UartService extends Service implements Serializable {
 				broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
 				return false;
 			}
+
+			//获取服务对应的特征值
 			BluetoothGattCharacteristic RxChar = null;
 			if (RxChar == null) {
+
+				//"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 				RxChar = RxService.getCharacteristic(RX_CHAR_UUID);
 			}
+
 			if (RxChar == null) {
 				showMessage("Rx charateristic not found!");
 				broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
 				return false;
 			}
+			//向特征值设置数据
 			RxChar.setValue(value);
+			Log.d(TAG, "writeRXCharacteristic: "+value);
+
+			//返回的状态
 			boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
 
 			Log.e("Blue_Chanl", "write TXchar - status=" + status);

@@ -4,7 +4,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
         <de.blinkt.openvpn.views.CustomViewPager
             android:id="@+id/mViewPager"
             android:layout_width="match_parent"

@@ -120,11 +120,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 			entity.setBlueType(BluetoothConstant.BLUE_BIND);
 			EventBus.getDefault().post(entity);
+
 			sendStepThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					try {
 						Thread.sleep(100);
+                        //8880021400
 						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
 						Log.i(TAG, "发送了专属命令");
 						Thread.sleep(400);
@@ -160,6 +162,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					}
 				}
 			});
+
+
 			//五秒内不可以再次启动
 			if (!CommonTools.isFastDoubleClick(1000) && !isUpgrade) {
 				sendStepThread.start();
@@ -210,7 +214,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				@Override
 				public void run() {
 					try {
-						String firstPackage = messages.get(0).substring(0, 2);
+
+                        Log.d(TAG, "run: 接受数据");
+                        String firstPackage = messages.get(0).substring(0, 2);
 						String dataType = messages.get(0).substring(6, 10);
 
 						if (messages.size() == 1) {
@@ -221,8 +227,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							}
 						}
 						Log.e("Blue_Chanl", "dataType：" + dataType);
+
+
 						switch (firstPackage) {
 							case "55":
+
+
 								switch (dataType) {
 
 									//电量多少
@@ -487,7 +497,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ORDER_ACTIVATION_LOCAL_COMPLETED, MyOrderDetailActivity.OrderID);
 	}
 
-	//更新历史数据
+	/**
+	 * 更新历史数据
+	 */
 	private void updateHistoryDate() {
 		HistoryStepHttp http = new HistoryStepHttp(this, HttpConfigUrl.COMTYPE_SPORT_REPORT_HISTORY_STEP, entity);
 		new Thread(http).start();

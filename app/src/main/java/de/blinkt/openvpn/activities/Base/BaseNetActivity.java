@@ -31,6 +31,7 @@ public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 	public void createHttpRequest(int cmdType){
 		CreateHttpFactory.instanceHttp(this,cmdType);
 	}
+
 	public void createHttpRequest(int cmdType,String...params){
 		CreateHttpFactory.instanceHttp(this,cmdType,params);
 	}

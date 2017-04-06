@@ -88,6 +88,8 @@ public abstract class CommonHttp implements Callback, Runnable {
 	private String PARTNER = "2006808";
 	private Handler mHandler = new Handler();
 	private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/*");
+
+
 	private final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {
 		@Override
 		public synchronized Response intercept(Chain chain) throws IOException {
