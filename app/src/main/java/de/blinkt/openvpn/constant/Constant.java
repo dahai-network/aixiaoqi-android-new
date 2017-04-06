@@ -175,7 +175,7 @@ public class Constant {
 	public static final String SYSTEM_BASICE_INFO = "0100";//系统基本信息
 
 	public static final String RECEIVE_ELECTRICITY = "0200";//接收电量
-	public static final String USER_NOTIFY = "0300";//是否使用通知
+	public static final String RECHARGE_STATE = "0300";//充电状态
 	public static final String AGREE_BIND = "0400";//同意绑定
 	public static final String UPDATE_TIME = "0500";//更新时间
 	public static final String REQUEST_SYSTEM_BASICE_INFO = "0600";//系统基本信息请求

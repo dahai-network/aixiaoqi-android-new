@@ -79,6 +79,7 @@ import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.retryTime;
 import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
+import static de.blinkt.openvpn.constant.Constant.RECHARGE_STATE;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.Constant.SKY_UPGRADE_ORDER;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
@@ -521,6 +522,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 								stopAnim();
 							}
 							break;
+						case RECHARGE_STATE:
+							String rechargeState = messages.get(0).substring(10, 12);
+							if (rechargeState != null) {
+								if (rechargeState.equals("01")) {
+									sinking.setStronly(getString(R.string.only_power));
+								} else if (rechargeState.equals("02")) {
+									sinking.setStronly(getString(R.string.rechargeing));
+								} else if (rechargeState.equals("03")) {
+									sinking.setStronly(getString(R.string.recharge_over));
+								}
+								break;
+							}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
