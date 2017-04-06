@@ -80,6 +80,7 @@ import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.Constant.ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
+import static de.blinkt.openvpn.constant.Constant.RECHARGE_STATE;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.Constant.SKY_UPGRADE_ORDER;
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
@@ -275,7 +276,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					return;
 				}
 				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
-				createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
+				createHttpRequestNoCache(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 				break;
 			case R.id.callPayLinearLayout:
 				if (CommonTools.isFastDoubleClick(1000)) {
@@ -310,7 +311,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
 					startAnim();
-					if (!conStatusTextView.getText().toString().equals(getString(R.string.index_high_signal))||SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
+					if (!conStatusTextView.getText().toString().equals(getString(R.string.index_high_signal)) || SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
 						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
 						if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
@@ -522,6 +523,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 								stopAnim();
 							}
 							break;
+						case RECHARGE_STATE:
+							String rechargeState = messages.get(0).substring(10, 12);
+							if (rechargeState != null) {
+								if (rechargeState.equals("01")) {
+									sinking.setStronly(getString(R.string.only_power));
+								} else if (rechargeState.equals("02")) {
+									sinking.setStronly(getString(R.string.rechargeing));
+								} else if (rechargeState.equals("03")) {
+									sinking.setStronly(getString(R.string.recharge_over));
+								}
+								break;
+							}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -774,7 +787,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	@Override
 	public void noNet() {
-
 		CommonTools.showShortToast(this, getString(R.string.no_wifi));
 	}
 
@@ -989,6 +1001,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			percentTextView.setText("");
 			percentTextView.setVisibility(GONE);
 			percentInt = 0;
+			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_registing))) {
 			percentTextView.setText("");
@@ -1078,6 +1091,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 					break;
 				case SocketConstant.REGISTER_CHANGING:
+					String status = conStatusTextView.getText().toString();
+					if (status != null && status.equals(getString(R.string.index_high_signal))) {
+						return;
+					}
 					if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 						percentTextView.setVisibility(GONE);
 						return;

@@ -256,6 +256,5 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 		if (handler != null && handler.getLooper() == Looper.getMainLooper()){
 			handler.removeCallbacksAndMessages(null);
 		}
-		handler = null;
 	}
 }

@@ -500,7 +500,6 @@ public class SportFragment extends Fragment implements View.OnClickListener, Cal
 		if (mhandler != null && mhandler.getLooper() == Looper.getMainLooper()){
 			mhandler.removeCallbacksAndMessages(null);
 		}
-		mhandler = null;
 		ICSOpenVPNApplication.getInstance().unregisterReceiver(realStepReceiver);
 	}
 

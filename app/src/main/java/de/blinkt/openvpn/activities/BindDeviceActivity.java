@@ -261,7 +261,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_ISBIND_DEVICE) {
 			IsBindHttp http = (IsBindHttp) object;
-			if (http.getIsBindEntity().getBindStatus() == 0 && http.getStatus() == 1) {
+			if (http.getStatus() == 1 && http.getIsBindEntity() != null && http.getIsBindEntity().getBindStatus() == 0) {
 				if (mService != null) {
 					//判断无人连接后记录MAC地址
 					utils.writeString(Constant.IMEI, deviceAddress);

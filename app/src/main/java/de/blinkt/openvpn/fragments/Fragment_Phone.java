@@ -59,19 +59,20 @@ import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
 import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
 
 
-public class Fragment_Phone extends Fragment implements View.OnClickListener,InterfaceCallback,T9TelephoneDialpadView.OnT9TelephoneDialpadView,RecyclerBaseAdapter.OnItemClickListener,QueryCompleteListener<ContactRecodeEntity>,DialogInterfaceTypeBase{
+public class Fragment_Phone extends Fragment implements View.OnClickListener, InterfaceCallback, T9TelephoneDialpadView.OnT9TelephoneDialpadView, RecyclerBaseAdapter.OnItemClickListener, QueryCompleteListener<ContactRecodeEntity>, DialogInterfaceTypeBase {
 
 
 	private static Fragment_Phone fragment;
 	RecyclerView rvContactRecode;
 	public
 	T9TelephoneDialpadView t9dialpadview;
-	public	ImageView dial_delete_btn;
+	public ImageView dial_delete_btn;
 	TextView tv_no_permission;
 	ContactRecodeAdapter contactRecodeAdapter;
 	public SQLiteDatabase sqliteDB;
 	public DatabaseDAO dao;
 	ConnectedRecoderReceive connectedRecoderReceive;
+
 	public static Fragment_Phone newInstance() {
 		if (fragment == null) {
 			fragment = new Fragment_Phone();
@@ -81,7 +82,6 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	}
 
 
-
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
@@ -89,16 +89,23 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_phone, container, false);
 		initView(rootView);
 		return rootView;
 	}
 
-	private void initView(View view){
+	private void initView(View view) {
 		rvContactRecode = ((RecyclerView) view.findViewById(R.id.rv_contact_recode));
 		t9dialpadview = ((T9TelephoneDialpadView) view.findViewById(R.id.t9dialpadview));
 		tv_no_permission = ((TextView) view.findViewById(R.id.tv_no_permission));
+		mHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				contactRecodeAdapter.addAll(mAllList);
+			}
+		};
 		inited();
 	}
 
@@ -126,43 +133,43 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	public void onDestroy() {
 		super.onDestroy();
 		getActivity().unregisterReceiver(connectedRecoderReceive);
-		if (mHandler != null && mHandler.getLooper() == Looper.getMainLooper()){
+		if (mHandler != null && mHandler.getLooper() == Looper.getMainLooper()) {
 			mHandler.removeCallbacksAndMessages(null);
 		}
-		mHandler = null;
 		sqliteDB.close();
 		dao.closeDB();
 	}
 
 	protected boolean noWifi() {
-		if(!NetworkUtils.isNetworkAvailable(getActivity())){
+		if (!NetworkUtils.isNetworkAvailable(getActivity())) {
 			CommonTools.showShortToast(getActivity(), getActivity().getString(R.string.no_wifi));
 			return false;
 		}
 		return true;
 	}
+
 	public void inited() {
-		IntentFilter filter=new IntentFilter();
+		IntentFilter filter = new IntentFilter();
 		filter.addAction(ReceiveCallActivity.UPDATE_CONTACT_REDORE);
-		connectedRecoderReceive= new ConnectedRecoderReceive();
-		getActivity().registerReceiver(connectedRecoderReceive,filter);
+		connectedRecoderReceive = new ConnectedRecoderReceive();
+		getActivity().registerReceiver(connectedRecoderReceive, filter);
 		initDB();
 		searchContactRedocer();
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		rvContactRecode.setLayoutManager(layoutManager);
-		contactRecodeAdapter = new ContactRecodeAdapter(dao,getActivity(), mAllList);
+		contactRecodeAdapter = new ContactRecodeAdapter(dao, getActivity(), mAllList);
 		contactRecodeAdapter.setOnItemClickListener(this);
 		rvContactRecode.setAdapter(contactRecodeAdapter);
 		t9dialpadview.setOnT9TelephoneDialpadView(this);
-		dial_delete_btn=t9dialpadview.getDeteleBtn();
+		dial_delete_btn = t9dialpadview.getDeteleBtn();
 
 		if (this.dial_delete_btn != null) {
 			this.dial_delete_btn.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 
-					if (!TextUtils.isEmpty(curInputStr)&&curInputStr.length() > 0) {
+					if (!TextUtils.isEmpty(curInputStr) && curInputStr.length() > 0) {
 						String newCurInputStr = curInputStr.substring(0, curInputStr.length() - 1);
 						if (TextUtils.isEmpty(newCurInputStr)) {
 							hidePhoneBottomBar();
@@ -179,10 +186,12 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 
 	}
 
+	public void clearInputEdit() {
+		t9dialpadview.mT9InputEt.setText("");
+	}
 
-
-	private void searchContactRedocer( ) {
-		AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler=new AsyncQueryContactRecodeHandler(this,getActivity().getContentResolver(),mAllList);
+	private void searchContactRedocer() {
+		AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, getActivity().getContentResolver(), mAllList);
 		FindContactUtil.queryContactRecoderData(asyncQueryContactRecodeHandler);
 	}
 
@@ -190,47 +199,47 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 		ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
 		ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
 	}
+
 	public void showPhoneBottomBar() {
 		ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
 		ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
 	}
+
 	public void clickPhoneLinearLayout() {
 		ProMainActivity.llArray[1].performClick();
 	}
-	List<ContactRecodeEntity> mAllList=new ArrayList<>();
+
+	List<ContactRecodeEntity> mAllList = new ArrayList<>();
+
 	@Override
 	public void queryComplete(List<ContactRecodeEntity> mAllLists) {
-		if(mAllLists==null||mAllLists.size()==0){
+		if (mAllLists == null || mAllLists.size() == 0) {
 			tv_no_permission.setVisibility(View.VISIBLE);
-		}else{
+		} else {
 			tv_no_permission.setVisibility(View.GONE);
-			time=System.currentTimeMillis();
-			mAllList=mAllLists;
+			time = System.currentTimeMillis();
+			mAllList = mAllLists;
 			mHandler.sendEmptyMessage(0);
 		}
 
 
 	}
+
 	long time;
 
-	Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			contactRecodeAdapter.addAll(mAllList);
-		}
-	};
+	Handler mHandler = null;
 	ContactRecodeEntity contactRecodeEntity;
+
 	@Override
 	public void onItemClick(View view, Object data) {
 
-		if(noWifi()){
+		if (noWifi()) {
 			contactRecodeEntity = (ContactRecodeEntity) data;
 			showCellPhoneDialog();
 		}
 	}
 
-	private void showCellPhoneDialog(){
+	private void showCellPhoneDialog() {
 		ProMainActivity.showCellPhoneDialogBackground.setVisibility(View.VISIBLE);
 		ProMainActivity.showCellPhoneDialogBackground.setOnClickListener(this);
 		ProMainActivity.cellPhoneLinearlayout.setOnClickListener(this);
@@ -238,20 +247,21 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 		ProMainActivity.cancelPhone.setOnClickListener(this);
 		ProMainActivity.simRegisterPhoneTv.setOnClickListener(this);
 	}
-	private  void hideCellPhoneDialog(){
+
+	private void hideCellPhoneDialog() {
 		ProMainActivity.showCellPhoneDialogBackground.setVisibility(View.GONE);
 	}
 
 
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()){
+		switch (v.getId()) {
 			case R.id.show_cell_phone_dialog_background:
 				break;
 			case R.id.cell_phone_linearlayout:
 				break;
 			case R.id.network_phone_tv:
-				if(CommonTools.isFastDoubleClick(500)){
+				if (CommonTools.isFastDoubleClick(500)) {
 					return;
 				}
 				hideCellPhoneDialog();
@@ -262,14 +272,14 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 				break;
 			case R.id.sim_register_phone_tv:
 				hideCellPhoneDialog();
-				if(CommonTools.isFastDoubleClick(500)){
+				if (CommonTools.isFastDoubleClick(500)) {
 					return;
 				}
-				if(SocketConstant.REGISTER_STATUE_CODE==3){
+				if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 
 					simCellPhone();
-				}else{
-					CommonTools.showShortToast(getActivity(),getString(R.string.sim_register_phone_tip));
+				} else {
+					CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
 				}
 				break;
 		}
@@ -301,7 +311,6 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 		} else {
 			contactRecodeAdapter.setSearchChar("");
 			contactRecodeAdapter.addAll(mAllList);
-
 		}
 	}
 
@@ -325,11 +334,11 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
-		if(isVisibleToUser) {
+		if (isVisibleToUser) {
 			if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
 				showPhoneBottomBar();
 			}
-		}else{
+		} else {
 			hidePhoneBottomBar();
 		}
 	}
@@ -339,7 +348,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 		if (!TextUtils.isEmpty(curCharacter)) {
 			CellPhoneFragment.operation_rg.setVisibility(View.GONE);
 			CellPhoneFragment.dial_input_edit_text.setVisibility(View.VISIBLE);
-		}else{
+		} else {
 			CellPhoneFragment.operation_rg.setVisibility(View.VISIBLE);
 			CellPhoneFragment.dial_input_edit_text.setVisibility(View.GONE);
 		}
@@ -348,39 +357,43 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 
 	private void searchContect(String str, List<ContactRecodeEntity> searchResultList, boolean isExist) {
 		for (ContactBean contactBean : ICSOpenVPNApplication.getInstance().getContactList()) {
-			for(int i=0;i<searchResultList.size();i++) {
-				if(contactBean.getPhoneNum().equals(searchResultList.get(i).getPhoneNumber())||contactBean.getDesplayName().equals(searchResultList.get(i).getName())){
-					isExist=true;
+			for (int i = 0; i < searchResultList.size(); i++) {
+				if (contactBean.getPhoneNum().equals(searchResultList.get(i).getPhoneNumber()) || contactBean.getDesplayName().equals(searchResultList.get(i).getName())) {
+					isExist = true;
 					break;
 				}
 
 			}
-			if (!isExist&&contactBean.getFormattedNumber()[0].indexOf(str)>-1 ||contactBean.getFormattedNumber()[1].indexOf(str)>-1|| contactBean.getPhoneNum().indexOf(str)>-1) {
-				ContactRecodeEntity contactRecodeEntity=new ContactRecodeEntity();
-				String phoneNumber=	contactBean.getPhoneNum().split(",")[0];
+			if (!isExist && contactBean.getFormattedNumber()[0].indexOf(str) > -1 || contactBean.getFormattedNumber()[1].indexOf(str) > -1 || contactBean.getPhoneNum().indexOf(str) > -1) {
+				ContactRecodeEntity contactRecodeEntity = new ContactRecodeEntity();
+				String phoneNumber = contactBean.getPhoneNum().split(",")[0];
 				contactRecodeEntity.setPhoneNumber(phoneNumber);
-				if(!TextUtils.isEmpty(contactBean.getDesplayName()))
+				if (!TextUtils.isEmpty(contactBean.getDesplayName()))
 					contactRecodeEntity.setName(contactBean.getDesplayName());
-				else{
+				else {
 					contactRecodeEntity.setName(contactBean.getPhoneNum());
 				}
 				contactRecodeEntity.setFormattedNumber(contactBean.getFormattedNumber());
 				searchResultList.add(contactRecodeEntity);
-			}else{
-				isExist=false;
+			} else {
+				isExist = false;
 			}
 		}
 	}
-	private String TAG="Fragment_Phone";
+
+	private String TAG = "Fragment_Phone";
+
 	public Filter getFilter() {
 		Filter filter = new Filter() {
 			String str;
+
 			protected void publishResults(CharSequence constraint, FilterResults results) {
-				if(results.values!=null)
-					Log.e(TAG,"str="+str);
+				if (results.values != null)
+					Log.e(TAG, "str=" + str);
 				contactRecodeAdapter.setSearchChar(str);
-				contactRecodeAdapter.addAll((ArrayList<ContactRecodeEntity>)results.values);
+				contactRecodeAdapter.addAll((ArrayList<ContactRecodeEntity>) results.values);
 			}
+
 			protected FilterResults performFiltering(CharSequence s) {
 				str = s.toString();
 				FilterResults results = new FilterResults();
@@ -396,22 +409,22 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	}
 
 	private void searchContactRecoder(String str, List<ContactRecodeEntity> searchResultList) {
-		try{
+		try {
 			for (ContactRecodeEntity contactRecodeEntityntact : mAllList) {
-				if(contactRecodeEntityntact.getFormattedNumber()[0].indexOf(str)>-1 ||contactRecodeEntityntact.getFormattedNumber()[1].indexOf(str)>-1 || contactRecodeEntityntact.getPhoneNumber().indexOf(str)>-1){
+				if (contactRecodeEntityntact.getFormattedNumber()[0].indexOf(str) > -1 || contactRecodeEntityntact.getFormattedNumber()[1].indexOf(str) > -1 || contactRecodeEntityntact.getPhoneNumber().indexOf(str) > -1) {
 					if (!searchResultList.contains(contactRecodeEntityntact)) {
 						searchResultList.add(contactRecodeEntityntact);
 					}
 				}
 			}
-		}catch (Exception e){
+		} catch (Exception e) {
 
 		}
 	}
 
-	public  List<ContactRecodeEntity> removeDuplicate(List<ContactRecodeEntity> list) {
-		for ( int i = 0 ; i < list.size() - 1 ; i ++ ) {
-			for ( int j = list.size() - 1 ; j > i; j -- ) {
+	public List<ContactRecodeEntity> removeDuplicate(List<ContactRecodeEntity> list) {
+		for (int i = 0; i < list.size() - 1; i++) {
+			for (int j = list.size() - 1; j > i; j--) {
 				if (list.get(j).getPhoneNumber().equals(list.get(i).getPhoneNumber())) {
 					list.remove(j);
 				}
@@ -423,15 +436,15 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 	//对话框
 	@Override
 	public void dialogText(int type, String text) {
-		Intent intent=new Intent(getActivity(), RechargeActivity.class);
+		Intent intent = new Intent(getActivity(), RechargeActivity.class);
 		getActivity().startActivity(intent);
 	}
 
-	private void simCellPhone(){
+	private void simCellPhone() {
 		CommonTools.delayTime(500);
-		Intent intent=new Intent(getActivity(),CallPhoneNewActivity.class);
-		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO,contactRecodeEntity);
-		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,SIM_CELL_PHONE);
+		Intent intent = new Intent(getActivity(), CallPhoneNewActivity.class);
+		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO, contactRecodeEntity);
+		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE, SIM_CELL_PHONE);
 		getActivity().startActivity(intent);
 	}
 
@@ -446,16 +459,16 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 			if (1 == onlyCallHttp.getStatus()) {
 				OnlyCallModel onlyCallModel = onlyCallHttp.getOnlyCallModel();
 				if (!onlyCallModel.getMaximumPhoneCallTime().equals("0")) {
-					Intent intent=new Intent(getActivity(),CallPhoneNewActivity.class);
-					intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO,contactRecodeEntity);
-					intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,NETWORK_CELL_PHONE);
-					intent.putExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME,onlyCallModel.getMaximumPhoneCallTime());
+					Intent intent = new Intent(getActivity(), CallPhoneNewActivity.class);
+					intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO, contactRecodeEntity);
+					intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE, NETWORK_CELL_PHONE);
+					intent.putExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME, onlyCallModel.getMaximumPhoneCallTime());
 					getActivity().startActivity(intent);
-				}else{
-					new DialogBalance(this,getActivity(),R.layout.dialog_balance,0);
+				} else {
+					new DialogBalance(this, getActivity(), R.layout.dialog_balance, 0);
 				}
-			}else{
-				CommonTools.showShortToast(getActivity(),onlyCallHttp.getMsg());
+			} else {
+				CommonTools.showShortToast(getActivity(), onlyCallHttp.getMsg());
 			}
 		}
 	}
@@ -467,23 +480,24 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener,Int
 
 	@Override
 	public void noNet() {
-		CommonTools.showShortToast(getActivity(),getResources().getString(R.string.no_wifi));
+		CommonTools.showShortToast(getActivity(), getResources().getString(R.string.no_wifi));
 
 	}
+
 	//更新列表
 	class ConnectedRecoderReceive extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			String action= intent.getAction();
-			if(ReceiveCallActivity.UPDATE_CONTACT_REDORE.equals(action)){
-				ContactRecodeEntity contactRecodeEntity=(ContactRecodeEntity)intent.getSerializableExtra(IntentPutKeyConstant.CONTACT_RECODE_ENTITY);
-				for(int i=0;i<mAllList.size();i++){
-					if(mAllList.get(i).getPhoneNumber().equals(contactRecodeEntity.getPhoneNumber())){
+			String action = intent.getAction();
+			if (ReceiveCallActivity.UPDATE_CONTACT_REDORE.equals(action)) {
+				ContactRecodeEntity contactRecodeEntity = (ContactRecodeEntity) intent.getSerializableExtra(IntentPutKeyConstant.CONTACT_RECODE_ENTITY);
+				for (int i = 0; i < mAllList.size(); i++) {
+					if (mAllList.get(i).getPhoneNumber().equals(contactRecodeEntity.getPhoneNumber())) {
 						mAllList.remove(i);
 						break;
 					}
 				}
-				mAllList.add(0,contactRecodeEntity);
+				mAllList.add(0, contactRecodeEntity);
 				contactRecodeAdapter.addAll(mAllList);
 			}
 		}

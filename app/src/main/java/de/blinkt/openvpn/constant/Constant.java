@@ -8,7 +8,7 @@ import android.os.Environment;
 public class Constant {
 
 	public static final boolean IS_DEBUG = true;
-	public static final boolean PRINT_LOGS = true;
+	public static final boolean PRINT_LOGS = false;
 	public static final String UNITOYS = "unitoys";
 	public static final String UNIBOX = "unibox";
 
@@ -42,8 +42,6 @@ public class Constant {
 	public static final String NULLCARD_SERIALNUMBER = "NULLCARD_SERIALNUMBER";
 	public static final String VERSION_HEADER = "Version";
 	public static final String TERMINAL_HEADER = "Terminal";
-	//旧版本蓝牙设备
-	public static final String ELECTRICITY = "electricity";
 	public static final String PHONE_NUMBER_LIST = "phone_number_list";
 	//更新请求的时间间隔（一小时提示一次升级）
 	public static final String UPGRADE_INTERVAL = "upgrade_interval";
@@ -178,7 +176,7 @@ public class Constant {
 	public static final String SYSTEM_BASICE_INFO = "0100";//系统基本信息
 
 	public static final String RECEIVE_ELECTRICITY = "0200";//接收电量
-	public static final String USER_NOTIFY = "0300";//是否使用通知
+	public static final String RECHARGE_STATE = "0300";//充电状态
 	public static final String AGREE_BIND = "0400";//同意绑定
 	public static final String UPDATE_TIME = "0500";//更新时间
 	public static final String REQUEST_SYSTEM_BASICE_INFO = "0600";//系统基本信息请求

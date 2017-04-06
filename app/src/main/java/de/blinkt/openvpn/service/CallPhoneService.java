@@ -1,7 +1,11 @@
 package de.blinkt.openvpn.service;
 
+import android.annotation.TargetApi;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -32,31 +36,34 @@ import de.blinkt.openvpn.util.querylocaldatebase.TipHelper;
 /**
  * Created by Administrator on 2016/11/21 0021.
  */
-public class CallPhoneService extends Service implements SipEngineEventListener,InterfaceCallback {
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-    public static String endFlag = "endCall";
-    public static String connectedFlag = "startCall";
-    public static String callProcessing = "callProcessing";
-    public static String waitConnected = "waitConnected";
-    public static String reportFlag = "reportFlag";
-    public static String CALL_FAIL = "callfail";
-    private String TAG = "CallPhoneService";
-    public  SipEngineCore the_sipengineReceive;
-    private Timer mTimerReceive = new Timer("51DTY scheduler");
-    private SharedUtils sharedUtils;
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        httpToken();
-    }
-    private void httpToken(){
-        sharedUtils = SharedUtils.getInstance();
+public class CallPhoneService extends Service implements SipEngineEventListener, InterfaceCallback {
+	@Nullable
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
+	}
+
+	public static String endFlag = "endCall";
+	public static String connectedFlag = "startCall";
+	public static String callProcessing = "callProcessing";
+	public static String waitConnected = "waitConnected";
+	public static String reportFlag = "reportFlag";
+	public static String CALL_FAIL = "callfail";
+	private String TAG = "CallPhoneService";
+	public SipEngineCore the_sipengineReceive;
+	private Timer mTimerReceive = new Timer("51DTY scheduler");
+	private SharedUtils sharedUtils;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		httpToken();
+	}
+
+	private void httpToken() {
+		sharedUtils = SharedUtils.getInstance();
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECKTOKEN);
-    }
+	}
 
 	private void registSipForReceive() {
 		SharedUtils sharedUtils = SharedUtils.getInstance();
@@ -102,7 +109,8 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 
 	@Override
 	public void OnNewCall(int CallDir, final String peer_caller, boolean is_video_call) {
-		Log.e(TAG, "新来电 CAllDir="+CallDir);
+		Log.e(TAG, "新来电 CAllDir=" + CallDir);
+		muteAudioFocus(this, true);
 		if (CallDir != 0) {
 			CALL_DIR = 0;
 			ReceiveCallActivity.launch(CallPhoneService.this, peer_caller);
@@ -179,7 +187,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 	@Override
 	public void OnCallEnded() {
 		Log.e(TAG, "呼叫结束");
-
+		muteAudioFocus(this, false);
 		TipHelper.stopSound();
 		TipHelper.stopShock();
 		Intent intent = new Intent();
@@ -275,5 +283,27 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 			CommonTools.showShortToast(getApplicationContext(), getString(R.string.no_wifi));
 		count++;
 		httpToken();
+	}
+
+	/**
+	 * @param bMute 值为true时为关闭背景音乐。
+	 */
+	@TargetApi(Build.VERSION_CODES.FROYO)
+	private boolean muteAudioFocus(Context context, boolean bMute) {
+		if (context == null) {
+			Log.d("ANDROID_LAB", "context is null.");
+			return false;
+		}
+		boolean bool = false;
+		AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		if (bMute) {
+			int result = am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+			bool = result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
+		} else {
+			int result = am.abandonAudioFocus(null);
+			bool = result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
+		}
+		Log.d("ANDROID_LAB", "pauseMusic bMute=" + bMute + " result=" + bool);
+		return bool;
 	}
 }

@@ -155,7 +155,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							entity.setBlueType(BluetoothConstant.BLUE_BIND_SUCCESS);
 							entity.setSuccess(false);
 							EventBus.getDefault().post(entity);
-
 						}
 					} catch (InterruptedException e) {
 						e.printStackTrace();

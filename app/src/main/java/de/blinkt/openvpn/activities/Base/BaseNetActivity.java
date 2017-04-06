@@ -5,6 +5,7 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.NetworkUtils;
 
 /**
  * Created by Administrator on 2016/11/25 0025.
@@ -28,11 +29,19 @@ public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 		CommonTools.showShortToast(mContext, getString(R.string.no_wifi));
 	}
 
-	public void createHttpRequest(int cmdType){
-		CreateHttpFactory.instanceHttp(this,cmdType);
+	public void createHttpRequest(int cmdType) {
+		CreateHttpFactory.instanceHttp(this, cmdType);
 	}
 
-	public void createHttpRequest(int cmdType,String...params){
-		CreateHttpFactory.instanceHttp(this,cmdType,params);
+	public void createHttpRequestNoCache(int cmdType) {
+		if (NetworkUtils.isNetworkAvailable(this)) {
+			CreateHttpFactory.instanceHttp(this, cmdType);
+		} else {
+			noNet();
+		}
+	}
+
+	public void createHttpRequest(int cmdType, String... params) {
+		CreateHttpFactory.instanceHttp(this, cmdType, params);
 	}
 }
