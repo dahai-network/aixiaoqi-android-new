@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 /**
  * Created by Administrator on 2016/8/4.
@@ -24,10 +25,8 @@ public class SearchConnectterHelper {
 				ContactsContract.PhoneLookup.TYPE, ContactsContract.PhoneLookup.LABEL }, null, null,   null );
 
 		if(c!=null&&c.getCount() > 0) {
-
 			c.moveToFirst();
 			return c.getString(2); //获取姓名
-
 		}
 		if(c!=null)
 			c.close();

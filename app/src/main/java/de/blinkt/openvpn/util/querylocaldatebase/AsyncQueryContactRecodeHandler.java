@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.CallLog;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class AsyncQueryContactRecodeHandler extends AsyncQueryHandler {
      */
 
     private  List<ContactRecodeEntity> mAllLists;
-    public AsyncQueryContactRecodeHandler(  QueryCompleteListener queryCompleteListener , ContentResolver cr ,List<ContactRecodeEntity> list) {
+    public AsyncQueryContactRecodeHandler(  QueryCompleteListener queryCompleteListener , ContentResolver cr  ) {
         super(cr);
         this.queryCompleteListener=queryCompleteListener;
         if(mAllLists==null)
