@@ -11,7 +11,6 @@ import android.provider.ContactsContract;
  * Created by Administrator on 2016/8/4.
  */
 public class SearchConnectterHelper {
-	private static final String TAG = "SearchConnectterHelper";
 
 	/*
 		 * 根据电话号码取得联系人姓名

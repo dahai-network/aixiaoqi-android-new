@@ -94,20 +94,7 @@ public abstract class UdpClient implements Runnable {
 			InetAddress addr = InetAddress.getByName(sendAddress);
 			byte[] data = msg.getBytes();
 			DatagramPacket sendSocket = new DatagramPacket(data, data.length, addr, sendPort);
-			if(sendPort==0){
-				Intent intent = new Intent(ICSOpenVPNApplication.getContext().getApplicationContext(), LaunchActivity.class);
-
-
-				PendingIntent restartIntent = PendingIntent.getActivity(
-						ICSOpenVPNApplication.getContext().getApplicationContext().getApplicationContext(), 0, intent,
-						PendingIntent.FLAG_UPDATE_CURRENT);
-				//退出程序
-				AlarmManager mgr = (AlarmManager)ICSOpenVPNApplication.getContext().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-				mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
-						restartIntent);
-				ICSOpenVPNApplication.getInstance().finishAllActivity();
-				System.exit(0);
-			}
+			exceptionPort();
 			Log.e("UDPSOCKET", "addr=" + addr.getHostAddress() + "\naddrname=" + addr.getHostName() + "\nsendPort=" + sendPort);
 			datagramSocket.send(sendSocket);
 		} catch (SocketException e) {
@@ -120,6 +107,23 @@ public abstract class UdpClient implements Runnable {
 			closeSendUdp();
 			e.printStackTrace();
 		}
+	}
+
+	private void exceptionPort() {
+		if(sendPort==0){
+            Intent intent = new Intent(ICSOpenVPNApplication.getContext().getApplicationContext(), LaunchActivity.class);
+
+
+            PendingIntent restartIntent = PendingIntent.getActivity(
+                    ICSOpenVPNApplication.getContext().getApplicationContext().getApplicationContext(), 0, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            //退出程序
+            AlarmManager mgr = (AlarmManager)ICSOpenVPNApplication.getContext().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
+                    restartIntent);
+            ICSOpenVPNApplication.getInstance().finishAllActivity();
+            System.exit(0);
+        }
 	}
 
 	private void closeSendUdp() {

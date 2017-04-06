@@ -8,6 +8,7 @@ import android.os.Environment;
 public class Constant {
 
 	public static final boolean IS_DEBUG = true;
+	public static final boolean PRINT_LOGS = false;
 	public static final String UNITOYS = "unitoys";
 	public static final String UNIBOX = "unibox";
 

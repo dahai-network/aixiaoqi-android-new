@@ -102,7 +102,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private ImageView deleteImageView;
 	//判断是否展开了键盘
 	public static boolean isDeploy = true;
-	private String TAG = "ProMainActivity";
+//	private String TAG = "ProMainActivity";
 	private ReceiveBLEMoveReceiver bleMoveReceiver;
 	private UartService mService = null;
 	//进入主页后打开蓝牙设备搜索绑定过的设备
@@ -132,9 +132,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			mService = ((UartService.LocalBinder) rawBinder).getService();
 			//存在Application供全局使用
 			ICSOpenVPNApplication.uartService = mService;
-			Log.d(TAG, "onServiceConnected mService= " + mService);
+			d("onServiceConnected mService= " + mService);
 			if (!mService.initialize()) {
-				Log.d(TAG, "Unable to initialize Bluetooth");
+				d("Unable to initialize Bluetooth");
 				finish();
 			}
 
@@ -195,7 +195,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	public void initServices() {
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
-			Log.i(TAG, "开启UartService");
+			i("开启UartService");
 			Intent bindIntent = new Intent(this, UartService.class);
 			bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
 		}
@@ -338,7 +338,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_ENABLE_BT) {
 			if (resultCode == Activity.RESULT_OK) {
-				Toast.makeText(this, "蓝牙已启动", Toast.LENGTH_SHORT).show();
+				CommonTools.showShortToast(this, "蓝牙已启动");
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -356,8 +356,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					}
 				}).start();
 			} else {
-				Log.d(TAG, "BT not enabled");
-				Toast.makeText(this, "蓝牙未打开", Toast.LENGTH_SHORT).show();
+				d("BT not enabled");
+				CommonTools.showShortToast(this, "蓝牙未打开");
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
 			}
 		}
@@ -409,13 +409,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				viewPagerCurrentPageIndex = 1;
 				if (isDeploy) {
 					//如果展开则收回
-					Log.e(TAG, "isDeploy" + isDeploy);
+					e("isDeploy" + isDeploy);
 					ViewUtil.showView(phoneFragment.t9dialpadview);
 					ivArray[viewPagerCurrentPageIndex].setBackgroundResource(R.drawable.phone_icon_check);
 					isDeploy = false;
 				} else if (!isDeploy) {
 					//如果展开则收回
-					Log.e(TAG, "isDeploy1" + isDeploy);
+					e("isDeploy1" + isDeploy);
 					ViewUtil.hideView(phoneFragment.t9dialpadview);
 					ivArray[viewPagerCurrentPageIndex].setBackgroundResource(R.drawable.phone_icon_check_open);
 					isDeploy = true;
@@ -501,17 +501,17 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			public void onPageSelected(int position) {
 				if (position != 1) {
 					isClick = false;
-					Log.e(TAG, "isClick2" + isClick + ",position=" + position);
+					e("isClick2" + isClick + ",position=" + position);
 					hidePhoneBottomBar();
 					llArray[position].performClick();
 				} else {
 					if (!isClick) {
 						removeAllStatus();
 						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-							Log.e(TAG, "isClick" + isClick);
+							e("isClick" + isClick);
 							ivArray[1].setBackgroundResource(R.drawable.phone_icon_check);
 						} else {
-							Log.e(TAG, "isClick1" + isClick);
+							e("isClick1" + isClick);
 							if (phoneFragment == null) {
 								phoneFragment = Fragment_Phone.newInstance();
 							}
@@ -711,7 +711,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
 	private void scanLeDevice(final boolean enable) {
-		Log.e(TAG, "scanLeDevice");
+		e("scanLeDevice");
 		if (enable) {
 			mBluetoothAdapter.startLeScan(mLeScanCallback);
 		} else {
@@ -731,7 +731,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							if (device.getName() == null) {
 								return;
 							}
-							Log.i("test", "deviceName:" + device.getName());
+							i("deviceName:" + device.getName());
 							if (deviceAddress.equalsIgnoreCase(device.getAddress())) {
 								scanLeDevice(false);
 								mService.connect(deviceAddress);
@@ -811,7 +811,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			startDataframService();
 			startSocketService();
 			CommonTools.delayTime(5000);
-			Log.e("phoneAddress", "main.start()");
+			e( "main.start()");
 			JNIUtil.getInstance().startSDK(1);
 		} else if (Constant.REGISTER_SIM_PRE_DATA.equals(simRegisterType.getSimRegisterType())) {
 			if(SocketConnection.mReceiveSocketService!=null&&SocketConnection.mReceiveSocketService.CONNECT_STATUE==SocketConnection.mReceiveSocketService.CONNECT_SUCCEED){
@@ -883,7 +883,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		switch (entity.getOperationType()) {
 			case ServiceOperationEntity.REMOVE_SERVICE:
 				if (UartService.class.getName().equals(entity.getServiceName())) {
-					Log.i(TAG, "关闭UartService");
+					i("关闭UartService");
 					unbindService(mServiceConnection);
 				}
 				break;
@@ -906,7 +906,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			if (action.equals(UartService.FINDED_SERVICE)) {
 				MyDeviceActivity.isConnectOnce = true;
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-				Log.i(TAG, "被主动断掉连接！");
+				i("被主动断掉连接！");
 				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
 				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
@@ -926,7 +926,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					String dataType = message.get(0).substring(6, 10);
 					switch (dataType) {
 						case RETURN_POWER:
-							Log.e(TAG, "进入0700 ProMainActivity");
+							e("进入0700 ProMainActivity");
 							if (message.get(0).substring(10, 12).equals("01")) {
 
 								if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
@@ -957,7 +957,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public static SendYiZhengService sendYiZhengService = null;
 
 	private void getIccid() {
-		Log.e(TAG, "getIccid:" );
+		e("getIccid:" );
 		if (sdkAndBluetoothDataInchange == null) {
 			sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
 		}
@@ -983,14 +983,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						BluetoothAdapter.ERROR);
 				switch (state) {
 					case BluetoothAdapter.STATE_OFF:
-						Log.d("aaa", "STATE_OFF 手机蓝牙关闭");
+						d("STATE_OFF 手机蓝牙关闭");
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
 						break;
 					case BluetoothAdapter.STATE_TURNING_OFF:
-						Log.d("aaa", "STATE_TURNING_OFF 手机蓝牙正在关闭");
+						d( "STATE_TURNING_OFF 手机蓝牙正在关闭");
 						break;
 					case BluetoothAdapter.STATE_ON:
-						Log.d("aaa", "STATE_ON 手机蓝牙开启");
+						d( "STATE_ON 手机蓝牙开启");
 						if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
 							sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 						} else {
@@ -998,7 +998,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						}
 						break;
 					case BluetoothAdapter.STATE_TURNING_ON:
-						Log.d("aaa", "STATE_TURNING_ON 手机蓝牙正在开启");
+						d( "STATE_TURNING_ON 手机蓝牙正在开启");
 						break;
 				}
 			}
