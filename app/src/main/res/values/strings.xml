@@ -22,12 +22,12 @@
     <string name="readed">我已阅读</string>
     <string name="agreement_mark">《用户许可及服务协议》</string>
     <string name="login">登录</string>
-    <string name="phone">拨打</string>
-    <string name="index">首页</string>
+    <string name="phone">电话</string>
+    <string name="index">商城</string>
     <string name="reset">重启</string>
     <string name="address_list">通讯录</string>
     <string name="sport">运动</string>
-    <string name="personal_center">个人中心</string>
+    <string name="personal_center">我的</string>
     <string name="personal_info">个人信息</string>
     <string name="no_sms">无短信记录</string>
     <string name="contact_personal_center">详情</string>
@@ -168,6 +168,7 @@
     <string name="app_version">APP版本号</string>
     <string name="conn_bluetooth">蓝牙未连接，点击开启</string>
 
+<!--    <string name="message">短信记录</string>-->
     <string name="message">短信</string>
     <string name="message_record">短信记录</string>
     <string name="active">活动</string>
@@ -384,6 +385,8 @@
     <string name="t9_keyboard_input_prompt">输入号码或拼音</string>
     <string name="call_phone">拨打</string>
     <string name="call_history">通话历史</string>
+   <!-- <string name="call_phone">拨打</string>-->
+ <!--   <string name="call_phone">通话历史</string>-->
     <string name="no_card_or_rule_break">未能检测到手环内有电话卡，您需要重启手环重新检测吗</string>
     <string name="no_aixiaoqi_or_rule_break">未能检测到手环内有爱小器卡，您需要重启手环重新检测吗</string>
     <string name="sport_no_data">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;暂无运动数据\n绑定手环后可以分析运动情况</string>

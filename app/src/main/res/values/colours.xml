@@ -18,7 +18,7 @@
     <color name="black">#000000</color>
     <color name="blue_title">#00a0e9</color>
     <color name="bottom_bar">#f7f7f8</color>
-    <color name="bottom_bar_text_enable">#01d0c0</color>
+    <color name="bottom_bar_text_enable">#00a0e9</color>
     <color name="bottom_bar_text_enable_click">#8001d0c0</color>
     <color name="bottom_bar_text_normal">#73777c</color>
     <color name="gray_back">#E7E7E7</color>

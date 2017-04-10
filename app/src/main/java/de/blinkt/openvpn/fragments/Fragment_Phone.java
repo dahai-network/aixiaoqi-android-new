@@ -23,12 +23,16 @@ import android.widget.TextView;
 
 import com.aixiaoqi.socket.SocketConstant;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.ContactRecodeAdapter;
 import cn.com.johnson.adapter.RecyclerBaseAdapter;
+import cn.com.johnson.model.AppMode;
+import cn.com.johnson.model.EvenBusSign;
 import cn.com.johnson.model.OnlyCallModel;
 import de.blinkt.openvpn.activities.CallDetailActivity;
 import de.blinkt.openvpn.activities.CallPhoneNewActivity;
@@ -48,6 +52,7 @@ import de.blinkt.openvpn.util.AssetsDatabaseManager;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DatabaseDAO;
 import de.blinkt.openvpn.util.NetworkUtils;
+import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactRecodeHandler;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.QueryCompleteListener;
@@ -108,10 +113,25 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 		contactRecodeEntity = new ContactRecodeEntity();
 		contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
 		contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
-		showCellPhoneDialog();
+		//showCellPhoneDialog();
+		braceletDial();
 		closedialClicked();
 	}
+	/***
+	 *手环拨打电话
+	 */
+	public void braceletDial() {
+		hideCellPhoneDialog();
+		if (CommonTools.isFastDoubleClick(500)) {
+			return;
+		}
+		if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 
+			simCellPhone();
+		} else {
+			CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
+		}
+	}
 
 	public void closedialClicked() {
 		t9dialpadview.clearT9Input();
@@ -313,16 +333,22 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 		}
 	}
 
-	@Override
-	public void onDialInputTextChanged(String curCharacter) {
-		// TODO Auto-generated method stub
-		if (!curCharacter.equals("")) {
-			showPhoneBottomBar();
-		} else {
-			hidePhoneBottomBar();
-			if (!TextUtils.isEmpty(this.curInputStr)) {
-				clickPhoneLinearLayout();
-			}
+    /**
+     * 监听拨打电话输入文本的变化
+     *
+     * @param curCharacter
+     */
+    @Override
+    public void onDialInputTextChanged(String curCharacter) {
+        // TODO Auto-generated method stub
+        if (!curCharacter.equals("")) {
+            showPhoneBottomBar();
+        } else {
+
+            hidePhoneBottomBar();
+            if (!TextUtils.isEmpty(this.curInputStr)) {
+                clickPhoneLinearLayout();
+            }
 
 		}
 		this.curInputStr = curCharacter;
@@ -334,9 +360,9 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser) {
-			if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
+			/*if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
 				showPhoneBottomBar();
-			}
+			}*/
 		} else {
 			hidePhoneBottomBar();
 		}
@@ -346,12 +372,14 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	public void notifyCellPhoneFragment(String curCharacter) {
 		if (!TextUtils.isEmpty(curCharacter)) {
 			CellPhoneFragment.operation_rg.setVisibility(View.GONE);
-			CellPhoneFragment.dial_input_edit_text.setVisibility(View.VISIBLE);
+			//CellPhoneFragment.dial_input_edit_text.setVisibility(View.VISIBLE);
+			CellPhoneFragment.dial_tittle_fl.setVisibility(View.VISIBLE);
 		} else {
 			CellPhoneFragment.operation_rg.setVisibility(View.VISIBLE);
-			CellPhoneFragment.dial_input_edit_text.setVisibility(View.GONE);
+			//CellPhoneFragment.dial_input_edit_text.setVisibility(View.GONE);
+			CellPhoneFragment.dial_tittle_fl.setVisibility(View.GONE);
 		}
-		CellPhoneFragment.dial_input_edit_text.setText(curCharacter);
+		//CellPhoneFragment.dial_input_edit_text.setText(curCharacter);
 	}
 
 	private void searchContect(String str, List<ContactRecodeEntity> searchResultList, boolean isExist) {
