@@ -4,6 +4,7 @@
     android:paddingLeft="@dimen/padding_15dp"
     android:paddingRight="@dimen/padding_15dp"
     android:paddingTop="@dimen/padding_10dp"
+    android:background="@color/white"
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/call_dir_iv"

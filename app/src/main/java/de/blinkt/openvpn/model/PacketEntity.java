@@ -41,7 +41,7 @@ public class PacketEntity implements Serializable {
 				'}';
 	}
 
-	public static class ListBean implements Serializable {
+	public  class ListBean implements Serializable {
 		/**
 		 * PackageId : 6e9d162f-ea8d-4625-86f1-3aba1860891b
 		 * PackageName : 200分钟通话时长

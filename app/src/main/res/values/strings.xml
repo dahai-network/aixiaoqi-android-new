@@ -598,4 +598,7 @@
     <string name="yuan">元</string>
     <string name="shop">商城</string>
     <string name="call_detail">拨打详情</string>
+    <string name="activited">已激活</string>
+    <string name="no_activite">未激活</string>
+    <string name="expire">已过期</string>
 </resources>

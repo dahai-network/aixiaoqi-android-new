@@ -1,6 +1,8 @@
 package de.blinkt.openvpn.http;
 
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 
 import java.net.URLEncoder;
@@ -40,6 +42,8 @@ public class BoughtPacketHttp extends BaseHttp {
 		params.put("PageSize", URLEncoder.encode(valueParams[1] + "", "utf-8"));
 		if (!"-1".equals(valueParams[2]))
 			params.put("PackageCategory", URLEncoder.encode(valueParams[2] + "", "utf-8"));
+		if(!TextUtils.isEmpty(valueParams[3] ));
+		params.put("OrderStatus", URLEncoder.encode(valueParams[3] + "", "utf-8"));
 
 	}
 
