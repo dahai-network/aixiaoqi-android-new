@@ -3,6 +3,7 @@ package de.blinkt.openvpn.fragments;
 /**
  * Created by Administrator on 2016/9/8 0008.
  */
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -70,7 +71,6 @@ public class CellPhoneFragment extends Fragment {
         addListener();
         return view;
     }
-
 
 
     @Override
@@ -142,6 +142,10 @@ public class CellPhoneFragment extends Fragment {
                 //展示电话键
                 ViewUtil.showView(phoneFragment.t9dialpadview);
                 hidePhoneBottomBar();
+                if (ProMainActivity.phone_fl.getVisibility() == View.GONE || ProMainActivity.phone_fl.getVisibility() == View.INVISIBLE)
+
+                    ProMainActivity.phone_fl.setVisibility(View.VISIBLE);
+
 
                 if (null != AppMode.getInstance().curCharacter) {
                     if (AppMode.getInstance().curCharacter.length() > 0) {
@@ -264,7 +268,7 @@ public class CellPhoneFragment extends Fragment {
         mViewPager.setCurrentItem(1);
         editTv.setVisibility(View.VISIBLE);
 
-      //  ViewUtil.hideView(phoneFragment.t9dialpadview);
+        //  ViewUtil.hideView(phoneFragment.t9dialpadview);
         floatingActionButton.setVisibility(View.GONE);
     }
 
