@@ -146,6 +146,10 @@
             android:label="@string/app"
             android:windowSoftInputMode="adjustPan"/>
         <activity
+            android:name="de.blinkt.openvpn.activities.PackageCategoryActivity"
+            android:label="@string/app"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
             android:name="de.blinkt.openvpn.activities.LoginMainActivity"
             android:label="@string/app"
             android:screenOrientation="portrait"

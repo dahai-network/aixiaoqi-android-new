@@ -41,33 +41,45 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 
 
 		ContactRecodeEntity contactRecodeEntity = mList.get(position);
+
 		final 	String phoneNumber = contactRecodeEntity.getPhoneNumber();
+
 		final 	String name = contactRecodeEntity.getName();
+
 		String address= PhoneNumberZero.getAddress(dao,deleteprefix(" ",phoneNumber));
 		if (!TextUtils.isEmpty(name)) {
 			holder.mNameTv.setVisibility(View.VISIBLE);
 			holder.mNameTv.setText(contactRecodeEntity.getName());
-			holder.mPhoneNumber.setText(phoneNumber + "  " + address);
+			//holder.mPhoneNumber.setText(phoneNumber + "  " + address);
+			holder.mPhoneNumber.setText(address);
 
 		} else if (!TextUtils.isEmpty(phoneNumber)) {
 			holder.mNameTv.setText(phoneNumber);
 			holder.mPhoneNumber.setText(address);
 		}
 
+
+
 		holder.mCallStatusImg.setImageResource(R.drawable.icon_bd);
+		//来电
 		if (Constant.CALL_INCOMING.equals(contactRecodeEntity.getTypeString())) {
 			holder.mNameTv.setTextColor(Color.BLACK);
-			holder.mCallStatusImg.setVisibility(View.INVISIBLE);
+			//holder.mCallStatusImg.setVisibility(View.INVISIBLE);
+			holder.mCallStatusImg.setVisibility(View.VISIBLE);
+			holder.mCallStatusImg.setImageResource(R.drawable.image_answer_state);
 		}
+		//未接
 		if (Constant.CALL_MISSED.equals(contactRecodeEntity.getTypeString())) {
 			holder.mNameTv.setTextColor(Color.RED);
 			holder.mCallStatusImg.setVisibility(View.INVISIBLE);
 		}
+		//拨出
 		if (Constant.CALL_OUTGOING.equals(contactRecodeEntity.getTypeString())) {
 			holder.mNameTv.setTextColor(Color.BLACK);
 			holder.mCallStatusImg.setVisibility(View.VISIBLE);
-			holder.mCallStatusImg.setImageResource(R.drawable.icon_bd);
+			holder.mCallStatusImg.setImageResource(R.drawable.image_dial_state);
 		}
+
 		if (!TextUtils.isEmpty(contactRecodeEntity.getData())) {
 			holder.mDateTime.setText(contactRecodeEntity.getData());
 		}
@@ -134,7 +146,7 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 
 		public ViewHolder(View itemView) {
 			super(itemView);
-
+			//phone_number_text_view
 			mNameTv = (TextView) itemView.findViewById(R.id.name_text_view);
 			mPhoneNumber = (TextView) itemView.findViewById(R.id.phone_number_text_view);
 			mCallStatusImg = (ImageView) itemView.findViewById(R.id.callstatusimg);

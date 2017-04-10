@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,12 +17,14 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aixiaoqi.socket.SocketConstant;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.ContactRecodeAdapter;
 import cn.com.johnson.adapter.RecyclerBaseAdapter;
@@ -67,7 +66,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	RecyclerView rvContactRecode;
 	public
 	T9TelephoneDialpadView t9dialpadview;
-	public ImageView dial_delete_btn;
+	public TextView dial_delete_btn;
 	TextView tv_no_permission;
 	ContactRecodeAdapter contactRecodeAdapter;
 	public SQLiteDatabase sqliteDB;
@@ -105,13 +104,39 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	}
 
 	public void phonecallClicked() {
-		contactRecodeEntity = new ContactRecodeEntity();
-		contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
-		contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
-		showCellPhoneDialog();
-		closedialClicked();
-	}
 
+		if(t9dialpadview.getT9Input()!=null&&t9dialpadview.getT9Input().length()>0)
+		{
+
+			contactRecodeEntity = new ContactRecodeEntity();
+			contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
+			contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
+			//showCellPhoneDialog();
+			braceletDial();
+			closedialClicked();
+		}else
+			{
+
+				Toast.makeText(getActivity(),"请输入要拨打的电话号码",Toast.LENGTH_SHORT).show();
+
+			}
+
+	}
+	/***
+	 *手环拨打电话
+	 */
+	public void braceletDial() {
+		hideCellPhoneDialog();
+		if (CommonTools.isFastDoubleClick(500)) {
+			return;
+		}
+		if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+
+			simCellPhone();
+		} else {
+			CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
+		}
+	}
 
 	public void closedialClicked() {
 		t9dialpadview.clearT9Input();
@@ -164,7 +189,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 					if (!TextUtils.isEmpty(curInputStr) && curInputStr.length() > 0) {
 						String newCurInputStr = curInputStr.substring(0, curInputStr.length() - 1);
 						if (TextUtils.isEmpty(newCurInputStr)) {
-							hidePhoneBottomBar();
+							//hidePhoneBottomBar();
 						}
 						t9dialpadview.mT9InputEt.setText(newCurInputStr);
 						onDialInputTextChanged(newCurInputStr);
@@ -189,7 +214,9 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	}
 
 	public void hidePhoneBottomBar() {
+
 		ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
+
 		ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
 	}
 
@@ -313,16 +340,22 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 		}
 	}
 
-	@Override
-	public void onDialInputTextChanged(String curCharacter) {
-		// TODO Auto-generated method stub
-		if (!curCharacter.equals("")) {
-			showPhoneBottomBar();
-		} else {
-			hidePhoneBottomBar();
-			if (!TextUtils.isEmpty(this.curInputStr)) {
-				clickPhoneLinearLayout();
-			}
+    /**
+     * 监听拨打电话输入文本的变化
+     *
+     * @param curCharacter
+     */
+    @Override
+    public void onDialInputTextChanged(String curCharacter) {
+        // TODO Auto-generated method stub
+        if (!curCharacter.equals("")) {
+            showPhoneBottomBar();
+        } else {
+
+            hidePhoneBottomBar();
+            if (!TextUtils.isEmpty(this.curInputStr)) {
+                clickPhoneLinearLayout();
+            }
 
 		}
 		this.curInputStr = curCharacter;
@@ -334,9 +367,9 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser) {
-			if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
+			/*if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
 				showPhoneBottomBar();
-			}
+			}*/
 		} else {
 			hidePhoneBottomBar();
 		}
@@ -346,12 +379,15 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	public void notifyCellPhoneFragment(String curCharacter) {
 		if (!TextUtils.isEmpty(curCharacter)) {
 			CellPhoneFragment.operation_rg.setVisibility(View.GONE);
-			CellPhoneFragment.dial_input_edit_text.setVisibility(View.VISIBLE);
+			//CellPhoneFragment.dial_input_edit_text.setVisibility(View.VISIBLE);
+
+			CellPhoneFragment.dial_tittle_fl.setVisibility(View.VISIBLE);
 		} else {
 			CellPhoneFragment.operation_rg.setVisibility(View.VISIBLE);
-			CellPhoneFragment.dial_input_edit_text.setVisibility(View.GONE);
+			//CellPhoneFragment.dial_input_edit_text.setVisibility(View.GONE);
+			CellPhoneFragment.dial_tittle_fl.setVisibility(View.GONE);
 		}
-		CellPhoneFragment.dial_input_edit_text.setText(curCharacter);
+		//CellPhoneFragment.dial_input_edit_text.setText(curCharacter);
 	}
 
 	private void searchContect(String str, List<ContactRecodeEntity> searchResultList, boolean isExist) {

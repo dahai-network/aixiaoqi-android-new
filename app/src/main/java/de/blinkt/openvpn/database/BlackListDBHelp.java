@@ -64,8 +64,7 @@ public class BlackListDBHelp {
         boolean isBlackList=false;
 
         Cursor mCursor =
-                db.query(BlackListSQLite.BLACK_LIST_DATA_TABLE, new String[]{ BlackListSQLite.BLACK_LIST_PHONE,
-                }, BlackListSQLite.UESR_PHONE + " = "+SharedUtils.getInstance().readString(Constant.USER_NAME)+" and " +BlackListSQLite.BLACK_LIST_PHONE+" = ? " , new String[]{blackListPhone} , null, null, null, null);
+                db.query(BlackListSQLite.BLACK_LIST_DATA_TABLE, new String[]{ BlackListSQLite.BLACK_LIST_PHONE}, BlackListSQLite.UESR_PHONE + " = "+SharedUtils.getInstance().readString(Constant.USER_NAME)+" and " +BlackListSQLite.BLACK_LIST_PHONE+" = ? " , new String[]{blackListPhone} , null, null, null, null);
         if (mCursor != null&&mCursor.moveToFirst()){
             isBlackList=true;
         }

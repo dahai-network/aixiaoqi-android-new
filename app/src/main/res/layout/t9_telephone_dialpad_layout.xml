@@ -8,47 +8,45 @@
         android:id="@+id/search_et_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/bottom_bar"
         android:gravity="center_vertical"
         android:minHeight="@dimen/dialpad_row_height"
-        android:visibility="gone"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="visible">
 
 
         <Button
             android:id="@+id/telephone_dial_close_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_gravity="center"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:visibility="gone" />
 
 
         <EditText
             android:id="@+id/dial_input_edit_text"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:hint="@string/t9_keyboard_input_prompt"
+            android:gravity="center"
             android:inputType="phone"
-            android:padding="@dimen/padding"/>
+            android:padding="@dimen/padding" />
 
 
-
-        <ImageView
+        <TextView
             android:id="@+id/dial_delete_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="@dimen/padding"
-            android:visibility="gone"
-            />
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/deletenumber_selector"
+            android:gravity="center"
+            android:paddingRight="@dimen/padding_15dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 
-    <View
-        style="@style/horizontal_line_view"/>
+    <View style="@style/horizontal_line_view" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,35 +58,38 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/t9_1"
-            android:textSize="@dimen/little_22"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="1"/>
-        <View
-            style="@style/vertical_line_view"/>
+            android:tag="1"
+            android:text="@string/t9_1"
+            android:textSize="@dimen/little_22" />
+
+        <View style="@style/vertical_line_view" />
+
         <Button
             android:id="@+id/dialNum2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/t9_2"
-            android:textSize="@dimen/little_22"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="2"/>
-        <View
-            style="@style/vertical_line_view"/>
+            android:tag="2"
+            android:text="@string/t9_2"
+            android:textSize="@dimen/little_22" />
+
+        <View style="@style/vertical_line_view" />
+
         <Button
             android:id="@+id/dialNum3"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/t9_3"
-            android:textSize="@dimen/little_22"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="3"/>
+            android:tag="3"
+            android:text="@string/t9_3"
+            android:textSize="@dimen/little_22" />
     </LinearLayout>
-    <View
-        style="@style/horizontal_line_view"/>
+
+    <View style="@style/horizontal_line_view" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_55dp"
@@ -99,35 +100,38 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="@dimen/little_22"
-            android:text="@string/t9_4"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="4"/>
-        <View
-            style="@style/vertical_line_view"/>
+            android:tag="4"
+            android:text="@string/t9_4"
+            android:textSize="@dimen/little_22" />
+
+        <View style="@style/vertical_line_view" />
+
         <Button
             android:id="@+id/dialNum5"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/t9_5"
-            android:textSize="@dimen/little_22"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="5"/>
-        <View
-            style="@style/vertical_line_view"/>
+            android:tag="5"
+            android:text="@string/t9_5"
+            android:textSize="@dimen/little_22" />
+
+        <View style="@style/vertical_line_view" />
+
         <Button
             android:id="@+id/dialNum6"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="@dimen/little_22"
-            android:text="@string/t9_6"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="6"/>
+            android:tag="6"
+            android:text="@string/t9_6"
+            android:textSize="@dimen/little_22" />
     </LinearLayout>
-    <View
-        style="@style/horizontal_line_view"/>
+
+    <View style="@style/horizontal_line_view" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_55dp"
@@ -138,35 +142,38 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/t9_7"
-            android:textSize="@dimen/little_22"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="7"/>
-        <View
-            style="@style/vertical_line_view"/>
+            android:tag="7"
+            android:text="@string/t9_7"
+            android:textSize="@dimen/little_22" />
+
+        <View style="@style/vertical_line_view" />
+
         <Button
             android:id="@+id/dialNum8"
-            android:text="@string/t9_8"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="@dimen/little_22"
             android:layout_weight="1"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="8"/>
-        <View
-            style="@style/vertical_line_view"/>
+            android:tag="8"
+            android:text="@string/t9_8"
+            android:textSize="@dimen/little_22" />
+
+        <View style="@style/vertical_line_view" />
+
         <Button
             android:id="@+id/dialNum9"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="@dimen/little_22"
-            android:text="@string/t9_9"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="9"/>
+            android:tag="9"
+            android:text="@string/t9_9"
+            android:textSize="@dimen/little_22" />
     </LinearLayout>
-    <View
-        style="@style/horizontal_line_view"/>
+
+    <View style="@style/horizontal_line_view" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_55dp"
@@ -177,33 +184,35 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/t9_10"
-            android:textSize="@dimen/little_22"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="*"/>
-        <View
-            style="@style/vertical_line_view"/>
+            android:tag="*"
+            android:text="@string/t9_10"
+            android:textSize="@dimen/little_22" />
+
+        <View style="@style/vertical_line_view" />
+
         <Button
             android:id="@+id/dialNum0"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/t9_11"
-            android:textSize="@dimen/little_22"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="0"/>
-        <View
-            style="@style/vertical_line_view"/>
+            android:tag="0"
+            android:text="@string/t9_11"
+            android:textSize="@dimen/little_22" />
+
+        <View style="@style/vertical_line_view" />
+
         <Button
             android:id="@+id/dialj"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="@dimen/little_22"
-            android:text="@string/t9_12"
             android:background="@drawable/click_phone_key_selector"
-            android:tag="#"/>
+            android:tag="#"
+            android:text="@string/t9_12"
+            android:textSize="@dimen/little_22" />
     </LinearLayout>
-    <View
-        style="@style/horizontal_line_view"/>
+
+    <View style="@style/horizontal_line_view" />
 </LinearLayout>
