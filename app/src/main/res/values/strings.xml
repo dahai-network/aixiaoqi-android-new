@@ -589,6 +589,9 @@
     <string name="only_power">剩余电量</string>
     <string name="rechargeing">正在充电</string>
     <string name="recharge_over">已充满</string>
+    <string name="dual_standby_king">双待王</string>
+    <string name="defriend">拉黑</string>
+    <string name="call_record">拨打记录</string>
     <string name="yuan">元</string>
     <string name="shop">商城</string>
 </resources>

@@ -39,13 +39,12 @@ public class DBHelp {
 
     public PreReadEntity getPreReadEntity(String iccid)
     {
-        Log.e("preDataSplit","iccid="+iccid);
+
         PreReadEntity preReadEntity=null;
 
         Cursor mCursor =
                 db.query(PreReadSimData.DATABASE_TABLE, new String[]{ PreReadSimData.KEY_ICCID,
                         PreReadSimData.KEY_IMSSI, PreReadSimData.KEY_PRE_READ_DATA,PreReadSimData.KEY_DATA_LENGTH}, PreReadSimData.KEY_ICCID + " = ?" , new String[]{iccid} , null, null, null, null);
-        Log.e("preDataSplit","mCursor="+(mCursor==null)+"mCursor.moveToFirst()"+mCursor.moveToFirst());
         if (mCursor != null&&mCursor.moveToFirst()){
             if(preReadEntity==null){
                 preReadEntity=new PreReadEntity();
@@ -54,11 +53,6 @@ public class DBHelp {
             preReadEntity.setImsi( mCursor.getString(mCursor.getColumnIndex(PreReadSimData.KEY_IMSSI)));
             preReadEntity.setPreReadData(mCursor.getString(mCursor.getColumnIndex(PreReadSimData.KEY_PRE_READ_DATA)));
             preReadEntity.setDataLength( mCursor.getString(mCursor.getColumnIndex(PreReadSimData.KEY_DATA_LENGTH)));
-        }
-        if(preReadEntity!=null)
-        Log.e("preDataSplit","preReadEntity="+preReadEntity.toString());
-        else{
-            Log.e("preDataSplit","preReadEntity="+(preReadEntity==null));
         }
         return  preReadEntity;
     }

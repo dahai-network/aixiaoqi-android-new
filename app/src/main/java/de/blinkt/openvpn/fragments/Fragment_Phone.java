@@ -191,8 +191,9 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	}
 
 	private void searchContactRedocer() {
-		AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, getActivity().getContentResolver(), mAllList);
+		AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, getActivity().getContentResolver());
 		FindContactUtil.queryContactRecoderData(asyncQueryContactRecodeHandler);
+
 	}
 
 	public void hidePhoneBottomBar() {
