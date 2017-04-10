@@ -17,6 +17,7 @@ import java.util.List;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.HotPackageEntity;
+import cn.com.johnson.widget.GlideCircleTransform;
 import cn.com.johnson.widget.GlideRoundTransform;
 import de.blinkt.openvpn.activities.CountryPackageActivity;
 
@@ -29,31 +30,43 @@ public class HotPackageAdapter extends RecyclerView.Adapter<HotPackageAdapter.Vi
 
 	private List<HotPackageEntity> data;
 	private Context context = null;
+	private boolean isFromIndex = false;
 
-	public HotPackageAdapter(List<HotPackageEntity> data, Context context) {
+	public HotPackageAdapter(List<HotPackageEntity> data, Context context, boolean isFromIndex) {
 		this.data = data;
 		this.context = context;
+		this.isFromIndex = isFromIndex;
 	}
 
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(
-				context).inflate(R.layout.item_hot_package, parent,
-				false));
+		ViewHolder viewHolder;
+		if (!isFromIndex) {
+			viewHolder = new ViewHolder(LayoutInflater.from(
+					context).inflate(R.layout.item_hot_package, parent,
+					false));
+		} else {
+			viewHolder = new ViewHolder(LayoutInflater.from(
+					context).inflate(R.layout.item_hot_package_index, parent,
+					false));
+		}
 		return viewHolder;
 	}
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, final int position) {
 		holder.countryTextView.setText(data.get(position).getCountryName());
-		Glide.with(context).load(data.get(position).getLogoPic()).transform(new GlideRoundTransform(context)).into(holder.hotPackageImageView);
+		if (!isFromIndex)
+			Glide.with(context).load(data.get(position).getLogoPic()).transform(new GlideRoundTransform(context)).into(holder.hotPackageImageView);
+		else
+			Glide.with(context).load(data.get(position).getLogoPic()).transform(new GlideCircleTransform(context)).into(holder.hotPackageImageView);
 		holder.packageLinearLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				//友盟方法统计
 				HashMap<String, String> map = new HashMap<>();
 				map.put("zone", data.get(position).getCountryName());
-				MobclickAgent.onEvent(context, CLICKHOTPACKAGE,map);
+				MobclickAgent.onEvent(context, CLICKHOTPACKAGE, map);
 				CountryPackageActivity.launch(context, data.get(position).getPic(),
 						data.get(position).getCountryName(),
 						data.get(position).getCountryID());

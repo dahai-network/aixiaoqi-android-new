@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Administrator on 2016/12/24.
  */
 
-public class PacketEntity implements Serializable{
+public class PacketEntity implements Serializable {
 
 	/**
 	 * totalRows : 1
@@ -33,7 +33,15 @@ public class PacketEntity implements Serializable{
 		this.list = list;
 	}
 
-	public static class ListBean implements Serializable{
+	@Override
+	public String toString() {
+		return "PacketEntity{" +
+				"totalRows=" + totalRows +
+				", list=" + list +
+				'}';
+	}
+
+	public static class ListBean implements Serializable {
 		/**
 		 * PackageId : 6e9d162f-ea8d-4625-86f1-3aba1860891b
 		 * PackageName : 200分钟通话时长
@@ -136,6 +144,22 @@ public class PacketEntity implements Serializable{
 
 		public void setExpireDays(String ExpireDays) {
 			this.ExpireDays = ExpireDays;
+		}
+
+		@Override
+		public String toString() {
+			return "ListBean{" +
+					"PackageId='" + PackageId + '\'' +
+					", PackageName='" + PackageName + '\'' +
+					", PackageNum='" + PackageNum + '\'' +
+					", Operators='" + Operators + '\'' +
+					", Price='" + Price + '\'' +
+					", Flow='" + Flow + '\'' +
+					", Desction=" + Desction +
+					", CallMinutes=" + CallMinutes +
+					", Pic='" + Pic + '\'' +
+					", ExpireDays='" + ExpireDays + '\'' +
+					'}';
 		}
 	}
 }

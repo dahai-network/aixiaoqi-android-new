@@ -1,9 +1,7 @@
 package de.blinkt.openvpn.activities;
 
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -26,12 +24,14 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -40,8 +40,6 @@ import java.util.Map;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.RecyclerBaseAdapter;
 import cn.com.johnson.adapter.SmsDetailAdapter;
-import cn.com.johnson.adapter.SmsListAdapter;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -50,13 +48,13 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.SmsFragment;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
-import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.SendRetryForErrorHttp;
 import de.blinkt.openvpn.http.SendSmsHttp;
 import de.blinkt.openvpn.http.SmsDetailHttp;
 import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.model.SmsDetailEntity;
 import de.blinkt.openvpn.model.SmsEntity;
+import de.blinkt.openvpn.model.SmsIdsEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.User;
@@ -72,7 +70,8 @@ import static de.blinkt.openvpn.constant.UmengContant.INPUTPHONENUMBER;
 /**
  * Created by Administrator on 2016/9/1 0001.
  */
-public class SMSAcivity extends BaseNetActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, RecyclerBaseAdapter.OnItemClickListener, DialogInterfaceTypeBase,SmsDetailAdapter.OnItemLongClickListener {
+public class SMSAcivity extends BaseNetActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,
+		RecyclerBaseAdapter.OnItemClickListener, DialogInterfaceTypeBase, SmsDetailAdapter.OnItemLongAndResendClickListener {
 	SmsEntity smsEntity;
 	SwipeRefreshLayout swipeRefreshLayout;
 	RecyclerView recyclerView;
@@ -85,6 +84,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	ImageView addContactIv;
 	RelativeLayout NoNetRelativeLayout;
 	LinearLayout selectContactLl;
+	ImageView deleteSmsImageView;
 	Map<String, String> map = new LinkedHashMap<>();
 	public static boolean isForeground = false;
 	public static final String MESSAGE_RECEIVED_ACTION = "com.aixiaoqi.jpushdemo.MESSAGE_RECEIVED_ACTION";
@@ -99,6 +99,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	private boolean isNoFocus;
 	private boolean isDelete;
 	int pageNumber = 1;
+	private HashSet<SmsDetailEntity> ids = new HashSet<>();
 
 	@Override
 	protected void onResume() {
@@ -216,6 +217,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 			swipeRefreshLayout.setOnRefreshListener(this);
 		else
 			swipeRefreshLayout.setEnabled(false);
+		deleteSmsImageView = (ImageView) findViewById(R.id.deleteSmsImageView);
 		recyclerView = (RecyclerView) findViewById(R.id.sms_detail_rv);
 		selectContactLl = (LinearLayout) findViewById(R.id.select_contact_ll);
 		scrollView = (ScrollView) findViewById(R.id.scrollView);
@@ -227,11 +229,11 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 		recyclerView.setLayoutManager(layoutManager);
 		smsDetailAdapter = new SmsDetailAdapter(this, list);
 		smsDetailAdapter.setOnItemClickListener(this);
-		smsDetailAdapter.setOnItemLongClickListener(this);
+		smsDetailAdapter.setOnItemLongAndResendClickListener(this);
 		recyclerView.setAdapter(smsDetailAdapter);
 		smsContentEt = (EditText) findViewById(R.id.sms_content_et);
 		consigneeLl = (RelativeLayout) findViewById(R.id.consignee_ll);
-//        contactNameEt =(EditText)findViewById(R.id.contact_name_et);
+//      contactNameEt =(EditText)findViewById(R.id.contact_name_et);
 		addContactIv = (ImageView) findViewById(R.id.add_contact_iv);
 		sendSmsTv = (TextView) findViewById(R.id.send_sms_tv);
 		NoNetRelativeLayout = (RelativeLayout) findViewById(R.id.NoNetRelativeLayout);
@@ -256,13 +258,14 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	}
 
 	private void smsDetailHttp() {
-		createHttpRequest(HttpConfigUrl.COMTYPE_GET_SMS_DETAIL, User.isCurrentUser(smsEntity.getFm()) ? smsEntity.getTo() : smsEntity.getFm(), pageNumber+"", Constant.PAGESIZE+"");
+		createHttpRequest(HttpConfigUrl.COMTYPE_GET_SMS_DETAIL, User.isCurrentUser(smsEntity.getFm()) ? smsEntity.getTo() : smsEntity.getFm(), pageNumber + "", Constant.PAGESIZE + "");
 	}
 
 	private void addListener() {
 		titleBar.getLeftText().setOnClickListener(this);
 		sendSmsTv.setOnClickListener(this);
 		addContactIv.setOnClickListener(this);
+		deleteSmsImageView.setOnClickListener(this);
 		NoNetRelativeLayout.setOnClickListener(this);
 		smsContentEt.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -348,6 +351,18 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 		}
 		titleBar.setLeftBtnIcon(R.drawable.btn_top_back);
 
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (smsDetailAdapter.isDeleteState()) {
+			smsDetailAdapter.setDeleteState(false);
+			deleteSmsImageView.setVisibility(View.GONE);
+			smsDetailAdapter.notifyDataSetChanged();
+			ids.clear();
+		} else {
+			super.onBackPressed();
+		}
 	}
 
 	private int[] headIcon = {
@@ -451,6 +466,19 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 			case R.id.NoNetRelativeLayout:
 				smsDetailHttp();
 				break;
+			case R.id.deleteSmsImageView:
+				Iterator<SmsDetailEntity> iter = ids.iterator();
+				ArrayList<String> fms = new ArrayList<>();
+				while (iter.hasNext()) {
+					SmsDetailEntity entity = iter.next();
+					if (entity.isCheck()) {
+						fms.add(entity.getSMSID());
+					}
+				}
+				if (fms.size() > 0)
+					CommonTools.showShortToast(this, "删除这些短信：" + new Gson().toJson(new SmsIdsEntity(null, fms)));
+				CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS, new Gson().toJson(new SmsIdsEntity(null, fms)));
+				break;
 		}
 	}
 
@@ -502,7 +530,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	LinearLayout linearLayout;
 
 	public void selectContactTextView() {
-		scrollView.smoothScrollTo(0,0);
+		scrollView.smoothScrollTo(0, 0);
 		if (linearLayout != null) {
 			linearLayout.removeAllViews();
 		}
@@ -555,10 +583,11 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 		if (data == null) {
 			return;
 		}
-		ContactBean contactBean=new ContactBean();
-		switch (resultCode){
+		ContactBean contactBean = new ContactBean();
+		switch (resultCode) {
 			case RESULT_OK:
-				contactBean = (ContactBean) data.getSerializableExtra("Contect");break;
+				contactBean = (ContactBean) data.getSerializableExtra("Contect");
+				break;
 			case IntentPutKeyConstant.ADD_CONTACT:
 				contactBean = (ContactBean) data.getSerializableExtra(IntentPutKeyConstant.SELECFT_CONTACT_PEOPLE);
 				break;
@@ -606,22 +635,36 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	private int position;
 
 	@Override
-	public void onItemClick(View view, Object data) {
-
-		position = (Integer) data;
-		showDialog();
-
+	public void onItemClick(View view, Object data, boolean isCheck) {
+		SmsDetailEntity smsEntity = (SmsDetailEntity) data;
+		if (isCheck) {
+			ids.add(smsEntity);
+			CommonTools.showShortToast(this, "添加短信ID:" + smsEntity.getSMSID() + "，位置：" + smsEntity.getPosition());
+		} else {
+			ids.remove(smsEntity);
+			CommonTools.showShortToast(this, "删除短信ID:" + smsEntity.getSMSID() + "，位置：" + smsEntity.getPosition());
+		}
 	}
 
 	@Override
 	public void onItemLongClick(View view, final Object data) {
-		position = (Integer) data;
-		new AlertDialog.Builder(this).setPositiveButton("删除", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				CreateHttpFactory.instanceHttp(SMSAcivity.this,HttpConfigUrl.COMTYPE_SMS_DELETE,smsDetailAdapter.getItem(position).getSMSID());
-			}
-		}).show();
+//		position = (Integer) data;
+//		new AlertDialog.Builder(this).setPositiveButton("删除", new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				CreateHttpFactory.instanceHttp(SMSAcivity.this,HttpConfigUrl.COMTYPE_SMS_DELETE,smsDetailAdapter.getItem(position).getSMSID());
+//			}
+//		}).show();
+		smsDetailAdapter.setDeleteState(true);
+		deleteSmsImageView.setVisibility(View.VISIBLE);
+		smsDetailAdapter.notifyDataSetChanged();
+		smsDetailAdapter.clearCheckState();
+		ids.clear();
+	}
+
+	@Override
+	public void onResendClick(View view, Object data) {
+		showDialog();
 	}
 
 	private void showDialog() {
@@ -695,20 +738,26 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 			}
 			smsDetailAdapter.remove(position);
 			smsDetailAdapter.add(position, smsDetailEntity);
-		}
-		else if(cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE){
-			if(object.getStatus()==1){
-				if(smsDetailAdapter.getItemCount()!=1){
-				smsDetailAdapter.remove(position);
-				smsDetailAdapter.notifyDataSetChanged();
-				}else{
+		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE) {
+			if (object.getStatus() == 1) {
+				if (smsDetailAdapter.getItemCount() != 1) {
+					smsDetailAdapter.remove(position);
+					smsDetailAdapter.notifyDataSetChanged();
+				} else {
 					Intent msgIntent = new Intent(SmsFragment.DELTE_MESSAGE);
 					sendBroadcast(msgIntent);
 					finish();
 				}
 			}
+		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS) {
+			if (object.getStatus() == 1) {
+				Iterator<SmsDetailEntity> iter
+						= ids.iterator();
+				while (iter.hasNext()) {
+					smsDetailAdapter.remove(iter.next().getPosition());
+				}
+			}
 		}
-
 	}
 
 	@Override
@@ -738,17 +787,17 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	}
 
 	private void sendFail() {
-		if (position == -1&&smsContentEt!=null) {
+		if (position == -1 && smsContentEt != null) {
 			smsContentEt.setText("");
 			SmsDetailEntity smsDetailEntity = smsDetailAdapter.getItem(smsDetailAdapter.getItemCount() - 1);
-			if(smsDetailEntity!=null){
+			if (smsDetailEntity != null) {
 				smsDetailEntity.setStatus(SEND_FAIL);
 				smsDetailAdapter.remove(smsDetailAdapter.getItemCount() - 1);
 				smsDetailAdapter.add(smsDetailEntity);
 			}
 		} else {
 			SmsDetailEntity smsDetailEntity = smsDetailAdapter.getItem(position);
-			if(smsDetailEntity!=null){
+			if (smsDetailEntity != null) {
 				smsDetailEntity.setStatus(SEND_FAIL);
 				smsDetailAdapter.remove(position);
 				smsDetailAdapter.add(position, smsDetailEntity);

@@ -20,7 +20,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CallRecordAdapter;
-import cn.com.johnson.adapter.SmsListAdapter;
 import cn.com.johnson.model.OnlyCallModel;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
@@ -279,6 +278,7 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 
     @Override
     protected void onDestroy() {
+        if(blackListDBHelp!=null)
         blackListDBHelp.close();
         super.onDestroy();
     }

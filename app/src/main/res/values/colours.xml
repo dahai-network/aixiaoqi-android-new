@@ -16,16 +16,19 @@
 
     <color name="cell_phone_background">#a0404040</color>
     <color name="black">#000000</color>
+    <color name="blue_title">#00a0e9</color>
     <color name="bottom_bar">#f7f7f8</color>
     <color name="bottom_bar_text_enable">#00a0e9</color>
     <color name="bottom_bar_text_enable_click">#8001d0c0</color>
     <color name="bottom_bar_text_normal">#73777c</color>
     <color name="gray_back">#E7E7E7</color>
+    <color name="index_gray_text">#CCCCCC</color>
     <color name="gray_back_2">#EDEDED</color>
     <color name="regist_back">#EAECF0</color>
     <color name="gray_text">#A1A1A1</color>
     <color name="gray_line">#D2D2D2</color>
     <color name="login_back">#333a48</color>
+    <color name="index_black">#333333</color>
     <color name="phone_top_color">#1f92ef</color>
     <color name="search_bar_back">#F7F7F8</color>
     <color name="login_bottom_line">#7d8698</color>

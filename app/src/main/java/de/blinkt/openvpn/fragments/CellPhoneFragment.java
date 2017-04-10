@@ -3,7 +3,7 @@ package de.blinkt.openvpn.fragments;
 /**
  * Created by Administrator on 2016/9/8 0008.
  */
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;

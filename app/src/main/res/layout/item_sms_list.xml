@@ -1,59 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-    android:background="@drawable/call_phone_selector"
-                android:layout_height="@dimen/padding_72dp">
+                android:layout_height="@dimen/padding_72dp"
+                android:background="@drawable/call_phone_selector">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_height="wrap_content">
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <ImageView
             android:id="@+id/iv_unread_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:paddingRight="@dimen/padding"
-            android:src="@drawable/unread_message"/>
+            android:src="@drawable/unread_message"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_contact_name"
-            android:layout_toRightOf="@id/iv_unread_message"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_unread_message"
             android:ellipsize="end"
             android:singleLine="true"
-            android:layout_marginRight="@dimen/padding_72dp"
-            android:textSize="@dimen/little_16"
-            android:layout_height="wrap_content"/>
+            android:textSize="@dimen/little_16"/>
+
+        <ImageView
+            android:id="@+id/arrowImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/arrow"
+            />
 
         <TextView
             android:id="@+id/tv_time"
-            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_15dp"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/tv_contact_name"
             android:drawablePadding="@dimen/padding"
             android:textColor="@color/connect_us_gray"
-            android:drawableRight="@drawable/arrow"
-            android:textSize="@dimen/little_12"
-            android:layout_height="wrap_content"/>
+            android:textSize="@dimen/little_12"/>
+
+        <CheckBox
+            android:id="@+id/deleteSmsImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:clickable="false"
+            android:button="@drawable/delete_sms_choice_selector"
+            android:checked="false"
+            />
 
         <TextView
             android:id="@+id/tv_sms_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/padding_20dp"
             android:layout_below="@id/tv_contact_name"
-            android:maxLines="2"
-            android:textSize="@dimen/little_12"
+            android:layout_marginRight="@dimen/padding_25dp"
             android:ellipsize="end"
-            android:textColor="@color/connect_us_gray"/>
+            android:maxLines="2"
+            android:textColor="@color/connect_us_gray"
+            android:textSize="@dimen/little_12"/>
 
     </RelativeLayout>
 
     <View
         style="@style/horizontal_line_view"
-        android:layout_marginLeft="15dp"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="15dp"/>
 </RelativeLayout>

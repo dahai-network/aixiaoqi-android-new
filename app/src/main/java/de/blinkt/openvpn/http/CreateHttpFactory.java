@@ -32,6 +32,12 @@ public class CreateHttpFactory {
             case HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TEL://删除某个人的短信
                 startHttp(new SmsDeleteByTelHttp(interfaceCallback, cmdType,params));
                 break;
+			case HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TELS://删除多个人的短信
+				startHttp(new SmsDeleteByTelsHttp(interfaceCallback, cmdType,params));
+				break;
+			case HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS://删除多条短信
+                startHttp(new SmsDeleteByManyHttp(interfaceCallback, cmdType,params));
+                break;
             case HttpConfigUrl.COMTYPE_SMS_DELETE://删除短信
                 startHttp(new SmsDeleteHttp(interfaceCallback, cmdType,params));
                 break;
@@ -109,6 +115,9 @@ public class CreateHttpFactory {
                 break;
             case  HttpConfigUrl.COMTYPE_PACKET_GET://获取包
                 startHttp(new GetPakcetHttp(interfaceCallback, cmdType,params));
+                break;
+			case  HttpConfigUrl.COMTYPE_GET_PRODUCTS://获取产品信息
+                startHttp(new GetProductHttp(interfaceCallback, cmdType,params));
                 break;
             case  HttpConfigUrl.COMTYPE_GET_SELECT_NUMBER_URL://获取选择号码
                 startHttp(new GetSelectPhoneNumberUrl(interfaceCallback, cmdType));

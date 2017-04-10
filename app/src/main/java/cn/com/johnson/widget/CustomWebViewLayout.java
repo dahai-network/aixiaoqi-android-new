@@ -156,6 +156,7 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 			}
 		});
 		mWebView = (WebView) findViewById(R.id.rotate_header_web_view);
+
 		webViewAddJS();
 
 		mErrorView = findViewById(R.id.error_view);
@@ -567,5 +568,6 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 		webSettings.setAllowFileAccess(false);
 		webSettings.setNeedInitialFocus(false);
 		webSettings.setLoadsImagesAutomatically(true);
+		webSettings.setDomStorageEnabled(true);
 	}
 }

@@ -66,7 +66,7 @@ public class SelectNumberActivity extends BaseNetActivity implements XRecyclerVi
     }
 
     @Override
-    public void onItemClick(View view, Object data) {
+    public void onItemClick(View view, Object data, boolean b) {
         Intent intent=new Intent();
         SelectNumberEntity.SelectInfo selectInfo=(  SelectNumberEntity.SelectInfo)  data;
         intent.putExtra(IntentPutKeyConstant.SELECT_NUMBER_FEE,selectInfo.getPrice());

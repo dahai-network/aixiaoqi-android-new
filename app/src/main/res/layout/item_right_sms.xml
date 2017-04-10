@@ -5,30 +5,30 @@
 
     <TextView
         android:id="@+id/show_time_tv"
-        android:layout_marginTop="@dimen/padding_20dp"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/readed"
-        android:layout_height="wrap_content"/>
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:textColor="@color/readed"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_below="@id/show_time_tv"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/padding_20dp"
+        android:layout_below="@id/show_time_tv"
         android:layout_marginLeft="@dimen/padding_50dp"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="@dimen/padding_20dp">
 
         <ImageView
             android:id="@+id/send_error_iv"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@+id/right_content_tv"
             android:layout_toStartOf="@+id/right_content_tv"
             android:paddingRight="@dimen/padding"
-            android:src="@drawable/click_send_sms"
-            android:layout_gravity="center_vertical"
-            android:layout_height="wrap_content"/>
+            android:src="@drawable/click_send_sms"/>
 
         <ProgressBar
             android:id="@+id/sending_pb"
@@ -43,13 +43,26 @@
         <TextView
             android:id="@+id/right_content_tv"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:layout_weight="1"
+            android:background="@drawable/right_sms"
             android:gravity="right"
             android:lineSpacingMultiplier="1.2"
-            android:background="@drawable/right_sms"
-            android:textColor="@color/white"
-            android:layout_height="wrap_content"/>
+            android:textColor="@color/white"/>
+
+        <CheckBox
+            android:id="@+id/deleteSmsDetailCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/padding_15dp"
+            android:button="@drawable/delete_sms_choice_selector"
+            android:checked="false"
+            android:visibility="gone"
+            android:clickable="false"
+            />
     </LinearLayout>
 </RelativeLayout>
