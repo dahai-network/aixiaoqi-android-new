@@ -266,7 +266,6 @@ public class SdkAndBluetoothDataInchange {
 	private PreReadEntity getPreReadEntity(StringBuilder stringBuilder) {
 		DBHelp dbHelp=new DBHelp(ProMainActivity.instance);
 		PreReadEntity preReadEntity= dbHelp.getPreReadEntity(RadixAsciiChange.convertStringToHex(stringBuilder.toString()));
-		dbHelp.close();
 		return preReadEntity;
 	}
 

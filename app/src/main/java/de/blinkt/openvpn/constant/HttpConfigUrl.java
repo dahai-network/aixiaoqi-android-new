@@ -29,7 +29,7 @@ public class HttpConfigUrl {
 	public static final String PACKET_MARKET = "Country/Get";
 	public static final String PACKET_DETAIL = "Package/GetByID";
 	public static final String GET_SMS_LIST = "SMS/GetUserContactTelLastSMS";
-	public static final String GET_SMS_DETAIL = "/SMS/GetByTel";
+	public static final String GET_SMS_DETAIL = "SMS/GetByTel";
 	//根据ID查询用户订单
 	public static final String GET_USER_PACKET_BY_ID = "Order/GetByID";
 	public static final String SEND_SMS_MESSAGE = "SMS/Send";
@@ -88,13 +88,20 @@ public class HttpConfigUrl {
 	public static final String BIND_GIFT ="GiftCard/Bind";
 	public static final String ACTIVATE_KINGCARD ="Order/ActivationKindCard";
 	public static final String GET_SELECT_NUMBER_URL ="Config/getDWKUrl";
-	public static final String CHECK_IS_HAVE_PACKET ="/Order/CheckUsedExistByPageCategory";
-	public static final String GET_SECURITY_CONFIG ="/Config/GetSecurityConfig";
-	public static final String GET_DEVICE_SIM_REG_STATUES ="/DeviceBracelet/GetRegStatus";
+	public static final String CHECK_IS_HAVE_PACKET ="Order/CheckUsedExistByPageCategory";
+	public static final String GET_SECURITY_CONFIG ="Config/GetSecurityConfig";
+	public static final String GET_DEVICE_SIM_REG_STATUES ="DeviceBracelet/GetRegStatus";
 	public static final String PACKET_GET ="Package/Get";
-	public static final String UPDATE_CONN_INFO ="/DeviceBracelet/UpdateConnectInfo";
-	public static final String SMS_DELETE_BY_TEL ="/SMS/DeletesByTel";
-	public static final String SMS_DELETE ="/SMS/Delete";
+	public static final String UPDATE_CONN_INFO ="DeviceBracelet/UpdateConnectInfo";
+	public static final String SMS_DELETE_BY_TEL ="SMS/DeletesByTel";
+	public static final String SMS_DELETE ="SMS/Delete";
+
+
+
+	public static final String BLACK_LIST_ADD ="BlackList/Add";
+	public static final String BLACK_LIST_DELETE ="BlackList/Delete";
+	public static final String BLACK_LIST_GET ="BlackList/Get";
+
 	public static final int COMTYPE_LOGIN = 0x0001;
 	public static final int COMTYPE_SECURITY_CONFIG = 0x0002;
 	public static final int COMTYPE_SEND_SMS = 0x0003;
@@ -134,6 +141,9 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_GET_SELECT_NUMBER=0x0049;
 	public static final int COMTYPE_ADD_SELECT_NUMBER_INFO=0x0050;
 	public static final int  COMTYPE_GET_SELECT_NUMBER_URL =0x0051;
+	public static final int  COMTYPE_BLACK_LIST_ADD =0x0055;
+	public static final int  COMTYPE_BLACK_LIST_DELETE =0x0056;
+	public static final int  COMTYPE_BLACK_LIST_GET =0x0057;
 	public static final int  COMTYPE_GET_DEVICE_SIM_REG_STATUES =0x0052;
 	public static final int  COMTYPE_SMS_DELETE_BY_TEL =0x0053;
 	public static final int  COMTYPE_SMS_DELETE =0x0054;

@@ -25,7 +25,7 @@ import de.blinkt.openvpn.util.PinYinConverNumber;
  */
 public class AsyncQueryContactRecodeHandler extends AsyncQueryHandler {
     private QueryCompleteListener queryCompleteListener;
-
+    private boolean isOnly;
     private Map<String, ContactRecodeEntity> contactRecodeMap = null;
 
     /**
@@ -33,9 +33,10 @@ public class AsyncQueryContactRecodeHandler extends AsyncQueryHandler {
      */
 
     private  List<ContactRecodeEntity> mAllLists;
-    public AsyncQueryContactRecodeHandler(  QueryCompleteListener queryCompleteListener , ContentResolver cr  ) {
+    public AsyncQueryContactRecodeHandler(QueryCompleteListener queryCompleteListener , ContentResolver cr,boolean isOnly) {
         super(cr);
         this.queryCompleteListener=queryCompleteListener;
+        this.isOnly=isOnly;
         if(mAllLists==null)
             mAllLists=new ArrayList<>();
     }
@@ -74,7 +75,7 @@ public class AsyncQueryContactRecodeHandler extends AsyncQueryHandler {
         if(contactRecodeMap==null){
             contactRecodeMap=new HashMap<>();
         }
-        if(!contactRecodeMap.containsKey(number)){
+        if(!contactRecodeMap.containsKey(number)||isOnly){
 
             int type = cursor.getInt(cursor.getColumnIndex(CallLog.Calls.TYPE));
 

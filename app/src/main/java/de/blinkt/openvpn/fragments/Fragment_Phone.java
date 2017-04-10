@@ -30,6 +30,7 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.ContactRecodeAdapter;
 import cn.com.johnson.adapter.RecyclerBaseAdapter;
 import cn.com.johnson.model.OnlyCallModel;
+import de.blinkt.openvpn.activities.CallDetailActivity;
 import de.blinkt.openvpn.activities.CallPhoneNewActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.ReceiveCallActivity;
@@ -99,13 +100,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 		rvContactRecode = ((RecyclerView) view.findViewById(R.id.rv_contact_recode));
 		t9dialpadview = ((T9TelephoneDialpadView) view.findViewById(R.id.t9dialpadview));
 		tv_no_permission = ((TextView) view.findViewById(R.id.tv_no_permission));
-		mHandler = new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				super.handleMessage(msg);
-				contactRecodeAdapter.addAll(mAllList);
-			}
-		};
+
 		inited();
 	}
 
@@ -133,14 +128,11 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	public void onDestroy() {
 		super.onDestroy();
 		getActivity().unregisterReceiver(connectedRecoderReceive);
-		if (mHandler != null && mHandler.getLooper() == Looper.getMainLooper()) {
-			mHandler.removeCallbacksAndMessages(null);
-		}
 		sqliteDB.close();
 		dao.closeDB();
 	}
 
-	protected boolean noWifi() {
+	protected boolean isWifi() {
 		if (!NetworkUtils.isNetworkAvailable(getActivity())) {
 			CommonTools.showShortToast(getActivity(), getActivity().getString(R.string.no_wifi));
 			return false;
@@ -191,7 +183,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	}
 
 	private void searchContactRedocer() {
-		AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, getActivity().getContentResolver());
+		AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, getActivity().getContentResolver(),false);
 		FindContactUtil.queryContactRecoderData(asyncQueryContactRecodeHandler);
 
 	}
@@ -218,26 +210,32 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 			tv_no_permission.setVisibility(View.VISIBLE);
 		} else {
 			tv_no_permission.setVisibility(View.GONE);
-			time = System.currentTimeMillis();
-			mAllList = mAllLists;
-			mHandler.sendEmptyMessage(0);
+//			time = System.currentTimeMillis();
+			mAllList=mAllLists;
+			contactRecodeAdapter.addAll(mAllList);
 		}
 
 
 	}
 
-	long time;
+//	long time;
 
-	Handler mHandler = null;
+
 	ContactRecodeEntity contactRecodeEntity;
 
 	@Override
 	public void onItemClick(View view, Object data) {
 
-		if (noWifi()) {
-			contactRecodeEntity = (ContactRecodeEntity) data;
-			showCellPhoneDialog();
-		}
+//		if (isWifi()) {
+//			contactRecodeEntity = (ContactRecodeEntity) data;
+//			showCellPhoneDialog();
+//		}
+		contactRecodeEntity = (ContactRecodeEntity) data;
+		Intent intent=new Intent(getActivity(), CallDetailActivity.class);
+
+		intent.putExtra(CallDetailActivity.PHONE_INFO,contactRecodeEntity);
+		startActivity(intent);
+
 	}
 
 	private void showCellPhoneDialog() {

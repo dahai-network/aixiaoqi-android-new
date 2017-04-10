@@ -8,9 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by Administrator on 2017/3/16 0016.
  */
 
-public class PreReadSimData extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME="aixiaoqi_preread";
-    private static final int  DATABASE_VERSION=1;
+public class PreReadSimDataSQLite extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME="aixiaoqi";
+    private static final int  DATABASE_VERSION=2;
   public   static final String KEY_ICCID = "iccid";
     static final String KEY_IMSSI = "imssi";
     static final String KEY_PRE_READ_DATA = "prereaddata";
@@ -20,7 +20,7 @@ public class PreReadSimData extends SQLiteOpenHelper {
             "create table "+DATABASE_TABLE+"( _id integer primary key autoincrement, " +
                     KEY_ICCID+"  text UNIQUE not null , "+
                     KEY_IMSSI+"  text not null,"+KEY_PRE_READ_DATA+"  text not null,"+KEY_DATA_LENGTH+"  text nut null);";
- public   PreReadSimData(Context context)
+ public PreReadSimDataSQLite(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }

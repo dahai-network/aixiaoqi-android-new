@@ -15,8 +15,6 @@ public class BindRechargeHttp extends BaseHttp {
 
 	public BindRechargeHttp(InterfaceCallback call, int cmdType_, String...params) {
 		super(call,cmdType_,HttpConfigUrl.BIND_RECHARGE_CARD,params);
-
-
 	}
 
 	@Override

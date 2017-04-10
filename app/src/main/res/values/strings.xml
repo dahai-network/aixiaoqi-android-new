@@ -588,4 +588,5 @@
     <string name="dual_standby_king">双待王</string>
     <string name="defriend">拉黑</string>
     <string name="call_record">拨打记录</string>
+    <string name="call_detail">拨打详情</string>
 </resources>

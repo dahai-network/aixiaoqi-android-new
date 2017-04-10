@@ -138,6 +138,10 @@
             android:label="@string/app"
             android:windowSoftInputMode="adjustPan"/>
         <activity
+            android:name="de.blinkt.openvpn.activities.CallDetailActivity"
+            android:label="@string/app"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
             android:name="de.blinkt.openvpn.activities.ContactDetailActivity"
             android:label="@string/app"
             android:windowSoftInputMode="adjustPan"/>

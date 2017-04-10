@@ -198,11 +198,11 @@ public class DateUtils {
 		if (isSameDay(timeStamp)) {
 			str = "HH:mm";
 		} else if (isYesterday(timeStamp)) {
-			return "昨天";
+			return "昨天 HH:mm";
 		} else if (isBeforeYesterday(timeStamp)) {
 			return "前天";
 		} else {
-			str = "M月d日";
+			str = "M月d日 HH:mm";
 		}
 		String paramDate2Str = new SimpleDateFormat(str, Locale.CHINA).format(new Date(timeStamp));
 		return paramDate2Str;

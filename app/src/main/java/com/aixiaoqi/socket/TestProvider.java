@@ -112,7 +112,6 @@ public class TestProvider {
 		preReadEntity.setPreReadData(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1]);
 		preReadEntity.setDataLength(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2]);
 		db.insertPreData(preReadEntity);
-		db.close();
 	}
 
 	private static boolean validSim(String imsi) {
