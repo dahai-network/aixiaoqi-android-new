@@ -13,8 +13,11 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
+
+import org.w3c.dom.Text;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.util.ViewUtil;
@@ -49,12 +52,12 @@ public class T9TelephoneDialpadView extends LinearLayout implements
     private View mDialpadView; // this Custom View As the T9TelephoneDialpadView
     // of children
 
-    private ImageView mDialDeleteBtn;
+    private TextView mDialDeleteBtn;
     public EditText mT9InputEt;
     private View topView;
     private OnT9TelephoneDialpadView mOnT9TelephoneDialpadView = null;
 
-    public ImageView getDeteleBtn() {
+    public TextView getDeteleBtn() {
         return mDialDeleteBtn;
     }
 
@@ -78,7 +81,7 @@ public class T9TelephoneDialpadView extends LinearLayout implements
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDialpadView = inflater.inflate(R.layout.t9_telephone_dialpad_layout,
                 this);
-        mDialDeleteBtn = (ImageView) mDialpadView
+        mDialDeleteBtn = (TextView) mDialpadView
                 .findViewById(R.id.dial_delete_btn);
         mT9InputEt = (EditText) mDialpadView
                 .findViewById(R.id.dial_input_edit_text);

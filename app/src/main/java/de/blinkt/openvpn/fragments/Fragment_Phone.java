@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,19 +17,17 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aixiaoqi.socket.SocketConstant;
 
-import org.greenrobot.eventbus.EventBus;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.ContactRecodeAdapter;
 import cn.com.johnson.adapter.RecyclerBaseAdapter;
-import cn.com.johnson.model.AppMode;
-import cn.com.johnson.model.EvenBusSign;
 import cn.com.johnson.model.OnlyCallModel;
 import de.blinkt.openvpn.activities.CallDetailActivity;
 import de.blinkt.openvpn.activities.CallPhoneNewActivity;
@@ -52,7 +47,6 @@ import de.blinkt.openvpn.util.AssetsDatabaseManager;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DatabaseDAO;
 import de.blinkt.openvpn.util.NetworkUtils;
-import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactRecodeHandler;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.QueryCompleteListener;
@@ -72,7 +66,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	RecyclerView rvContactRecode;
 	public
 	T9TelephoneDialpadView t9dialpadview;
-	public ImageView dial_delete_btn;
+	public TextView dial_delete_btn;
 	TextView tv_no_permission;
 	ContactRecodeAdapter contactRecodeAdapter;
 	public SQLiteDatabase sqliteDB;
@@ -110,12 +104,23 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	}
 
 	public void phonecallClicked() {
-		contactRecodeEntity = new ContactRecodeEntity();
-		contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
-		contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
-		//showCellPhoneDialog();
-		braceletDial();
-		closedialClicked();
+
+		if(t9dialpadview.getT9Input()!=null&&t9dialpadview.getT9Input().length()>0)
+		{
+
+			contactRecodeEntity = new ContactRecodeEntity();
+			contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
+			contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
+			//showCellPhoneDialog();
+			braceletDial();
+			closedialClicked();
+		}else
+			{
+
+				Toast.makeText(getActivity(),"请输入要拨打的电话号码",Toast.LENGTH_SHORT).show();
+
+			}
+
 	}
 	/***
 	 *手环拨打电话
@@ -184,7 +189,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 					if (!TextUtils.isEmpty(curInputStr) && curInputStr.length() > 0) {
 						String newCurInputStr = curInputStr.substring(0, curInputStr.length() - 1);
 						if (TextUtils.isEmpty(newCurInputStr)) {
-							hidePhoneBottomBar();
+							//hidePhoneBottomBar();
 						}
 						t9dialpadview.mT9InputEt.setText(newCurInputStr);
 						onDialInputTextChanged(newCurInputStr);
@@ -209,7 +214,9 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	}
 
 	public void hidePhoneBottomBar() {
+
 		ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
+
 		ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
 	}
 
@@ -373,6 +380,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 		if (!TextUtils.isEmpty(curCharacter)) {
 			CellPhoneFragment.operation_rg.setVisibility(View.GONE);
 			//CellPhoneFragment.dial_input_edit_text.setVisibility(View.VISIBLE);
+
 			CellPhoneFragment.dial_tittle_fl.setVisibility(View.VISIBLE);
 		} else {
 			CellPhoneFragment.operation_rg.setVisibility(View.VISIBLE);
