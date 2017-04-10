@@ -35,7 +35,7 @@
                 android:button="@null"
                 android:checked="true"
                 android:gravity="center"
-                android:text="@string/call_phone"
+                android:text="@string/call_history"
                 android:textColor="@color/white" />
 
             <RadioButton
@@ -45,7 +45,7 @@
                 android:layout_marginLeft="33dp"
                 android:button="@null"
                 android:gravity="center"
-                android:text="@string/message"
+                android:text="@string/message_history"
                 android:textColor="@color/white" />
         </RadioGroup>
 

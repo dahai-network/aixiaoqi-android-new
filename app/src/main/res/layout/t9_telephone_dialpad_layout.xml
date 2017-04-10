@@ -11,6 +11,7 @@
         android:gravity="center_vertical"
         android:minHeight="@dimen/dialpad_row_height"
         android:orientation="horizontal"
+        android:background="@color/bottom_bar"
         android:visibility="visible">
 
 
