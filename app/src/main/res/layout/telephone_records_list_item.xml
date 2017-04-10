@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/call_phone_selector"
+    android:paddingLeft="@dimen/padding_15dp"
     android:minHeight="@dimen/dialpad_row_height"
-    android:paddingLeft="@dimen/padding_15dp">
+    >
 
     <ImageView
         android:id="@+id/callstatusimg"
@@ -46,6 +47,7 @@
         android:text="13049415010"
         android:textColor="@color/country_packet_gray"
         android:textSize="@dimen/little_12"
+
         />
 
     <ImageView

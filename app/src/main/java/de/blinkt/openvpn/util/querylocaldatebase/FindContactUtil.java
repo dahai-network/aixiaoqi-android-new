@@ -41,17 +41,31 @@ public class FindContactUtil {
         // 按照sort_key升序查詢
         asyncQueryHandler.startQuery(0, null, uri, projection, null, null,
                 CallLog.Calls.DEFAULT_SORT_ORDER);
-
+    }
+    public static void queryContactRecoderData(AsyncQueryHandler asyncQueryHandler,String phoneNumber,String page) {
+        Uri uri = CallLog.Calls.CONTENT_URI; // 联系人Uri；
+        // 查询的字段
+        String[] projection = { CallLog.Calls.CACHED_NAME// 通话记录的联系人
+                , CallLog.Calls.NUMBER// 通话记录的电话号码
+                , CallLog.Calls.DATE// 通话记录的日期
+                , CallLog.Calls.DURATION// 通话时长
+                , CallLog.Calls.TYPE };
+        // 按照sort_key升序查詢
+        asyncQueryHandler.startQuery(0, null, uri, projection, CallLog.Calls.NUMBER+ "= ?" , new String[]{phoneNumber},
+                CallLog.Calls.DEFAULT_SORT_ORDER+ " LIMIT  10 "+" OFFSET "+ page);
     }
     public static  void  addCallRecode(Context context, ContactRecodeEntity contactRecodeEntity){
-
         ContentValues contentValues=new ContentValues();
         contentValues.put(CallLog.Calls.TYPE,contactRecodeEntity.getType());
         contentValues.put(CallLog.Calls.NUMBER,contactRecodeEntity.getPhoneNumber());
         contentValues.put(CallLog.Calls.DATE,contactRecodeEntity.getCallTime());
         contentValues.put(CallLog.Calls.CACHED_NAME,contactRecodeEntity.getName());
         contentValues.put(CallLog.Calls.DURATION,contactRecodeEntity.getDuration());
-        context.getContentResolver().insert(CallLog.Calls.CONTENT_URI,contentValues);
+        try {
+            context.getContentResolver().insert(CallLog.Calls.CONTENT_URI,contentValues);
+        }catch (SecurityException e){
+
+        }
     }
 
 }

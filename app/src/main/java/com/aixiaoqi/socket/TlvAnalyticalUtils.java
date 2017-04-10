@@ -30,10 +30,7 @@ public class TlvAnalyticalUtils {
 		int tag = Integer.parseInt(tagString, 16);
 		String responeString = hexString.substring(6, 8);
 		int responeCode = getResponeCode(responeString,1);
-		if (responeCode == 41) {
-			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
-			return null;
-		} else if (responeCode == 39) {
+		if (responeCode == 41||responeCode == 39) {
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
 			return null;
 		}
@@ -43,7 +40,7 @@ public class TlvAnalyticalUtils {
 		String sessionId = hexString.substring(position, position + 8);
 		if(tag==4){
 			SocketConstant.SESSION_ID = sessionId;
-			EventBusUtil.simRegisterStatue(SocketConstant.REG_STATUE_CHANGE);
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_CHANGING);
 		}
 		else if (!SocketConstant.SESSION_ID.equals(sessionId) && !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
 //			SocketConstant.SESSION_ID = sessionId;

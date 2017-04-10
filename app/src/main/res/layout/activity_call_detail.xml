@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/gray_back_2"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:paddingRight="@dimen/padding_15dp"
+        android:paddingBottom="@dimen/padding_10dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/user_name_tv"
+            android:layout_marginTop="@dimen/padding_10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/group_name_tv"
+            android:layout_below="@id/user_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="@dimen/padding_10dp"
+            android:layout_height="wrap_content" />
+        <View
+            android:id="@+id/line1"
+            android:layout_below="@id/group_name_tv"
+            style="@style/horizontal_line_view"/>
+        <TextView
+            android:id="@+id/phone_name_tv"
+            android:layout_marginTop="@dimen/padding_10dp"
+            android:layout_below="@id/line1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/last_call_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="@dimen/padding_10dp"
+            android:layout_below="@id/phone_name_tv"
+            android:layout_height="wrap_content" />
+        <View
+            android:id="@+id/line2"
+            android:layout_below="@id/last_call_time_tv"
+            style="@style/horizontal_line_view"/>
+        <LinearLayout
+            android:layout_below="@id/line2"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/padding_10dp"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/sms_tv"
+                android:layout_width="0dp"
+                android:drawableTop="@drawable/sms_tip"
+                android:gravity="center_horizontal"
+                android:text="@string/sms"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/net_call_tv"
+                android:layout_width="0dp"
+                android:drawableTop="@drawable/sms_tip"
+                android:text="@string/network_phone"
+                android:visibility="gone"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/dual_standby_king_tv"
+                android:layout_width="0dp"
+                android:drawableTop="@drawable/sms_tip"
+                android:text="@string/dual_standby_king"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/defriend_tv"
+                android:layout_width="0dp"
+                android:drawableTop="@drawable/sms_tip"
+                android:text="@string/defriend"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:layout_marginTop="@dimen/padding_10dp"
+        android:layout_marginBottom="@dimen/padding_10dp"
+        android:text="@string/call_record"/>
+    <de.blinkt.openvpn.views.xrecycler.XRecyclerView
+        android:id="@+id/call_record_rv"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="match_parent"/>
+</LinearLayout>

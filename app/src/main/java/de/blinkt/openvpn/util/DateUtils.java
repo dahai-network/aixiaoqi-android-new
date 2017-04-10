@@ -178,7 +178,7 @@ public class DateUtils {
 
 	}
 
-//getTimeStampString
+
 	public static String getTimeStampString(String time) {
 		String str ;
 		long timeStamp = Long.parseLong(time);
@@ -191,8 +191,7 @@ public class DateUtils {
 		localCalendar.setTimeInMillis(timeStamp);
 		int year = localCalendar.get(Calendar.YEAR);
 		if (!isSameYear(year)) {
-			//String paramDate2Str = new SimpleDateFormat("yyyy年MM月dd", Locale.getDefault()).format(new Date(timeStamp));
-			String paramDate2Str = new SimpleDateFormat("yyyy年MM月dd", Locale.CHINA).format(new Date(timeStamp));
+			String paramDate2Str = new SimpleDateFormat("yyyy年MM月dd", Locale.getDefault()).format(new Date(timeStamp));
 			return paramDate2Str;
 		}
 
@@ -211,7 +210,7 @@ public class DateUtils {
 		String paramDate2Str = new SimpleDateFormat(str, Locale.CHINA).format(new Date(timeStamp));
 		return paramDate2Str;
 	}
-//getTimeStampDetailString
+
 	public static String getTimeStampDetailString(String time) {
 		String str ;
 		long timeStamp = Long.parseLong(time);

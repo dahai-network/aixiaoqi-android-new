@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingLeft="@dimen/padding_15dp"
+    android:paddingRight="@dimen/padding_15dp"
+    android:paddingTop="@dimen/padding_10dp"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/call_dir_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginLeft="@dimen/padding_5dp"
+        android:layout_toRightOf="@id/call_dir_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/call_time_tv"/>
+
+    <View
+        android:layout_below="@id/call_time_tv"
+        android:layout_marginTop="@dimen/padding_10dp"
+        style="@style/horizontal_line_view"
+      />
+</RelativeLayout>

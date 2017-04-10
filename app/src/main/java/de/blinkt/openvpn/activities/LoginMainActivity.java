@@ -37,6 +37,9 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.CheckUtil;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.database.BlackListDBHelp;
+import de.blinkt.openvpn.http.BlackListAddHttp;
+import de.blinkt.openvpn.http.BlackListGetHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.GetBasicConfigHttp;
 import de.blinkt.openvpn.http.LoginHttp;
@@ -383,6 +386,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 					if (!usernameEdit.getText().toString().equals(sharedUtils.readString(Constant.TEL)) || !Constant.JPUSH_ALIAS_SUCCESS.equals(sharedUtils.readString(Constant.JPUSH_ALIAS))) {
 						setAlias();
 					}
+					createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_GET);
 					createHttpRequest(HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
 				}
 			} else {
@@ -415,6 +419,16 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				sharedUtils.writeString(IntentPutKeyConstant.BEFORE_GOING_ABROAD_TUTORIAL_URL, basicConfigEntity.getBeforeGoingAbroadTutorialUrl());
 				sharedUtils.writeString(IntentPutKeyConstant.PAYMENT_OF_TERMS, basicConfigEntity.getPaymentOfTerms());
 			}
+		}else if(cmdType == HttpConfigUrl.COMTYPE_BLACK_LIST_GET){
+			if(object.getStatus()==1){
+				BlackListGetHttp blackListGetHttp=(BlackListGetHttp)object;
+				if(blackListGetHttp.getBlackListEntities().size()!=0){
+					BlackListDBHelp blackListDBHelp=new BlackListDBHelp(this);
+					blackListDBHelp.deleteAllDefriend();
+					blackListDBHelp.insertDefriendList(blackListGetHttp.getBlackListEntities());
+				}
+			}
+
 		}
 	}
 
