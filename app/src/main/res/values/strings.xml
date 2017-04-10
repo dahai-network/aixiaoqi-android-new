@@ -168,7 +168,7 @@
     <string name="app_version">APP版本号</string>
     <string name="conn_bluetooth">蓝牙未连接，点击开启</string>
 
-    <string name="message">短信记录</string>
+<!--    <string name="message">短信记录</string>-->
     <string name="message">短信</string>
     <string name="message_record">短信记录</string>
     <string name="active">活动</string>
@@ -386,7 +386,7 @@
     <string name="call_phone">拨打</string>
     <string name="call_history">通话历史</string>
    <!-- <string name="call_phone">拨打</string>-->
-    <string name="call_phone">通话历史</string>
+ <!--   <string name="call_phone">通话历史</string>-->
     <string name="no_card_or_rule_break">未能检测到手环内有电话卡，您需要重启手环重新检测吗</string>
     <string name="no_aixiaoqi_or_rule_break">未能检测到手环内有爱小器卡，您需要重启手环重新检测吗</string>
     <string name="sport_no_data">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;暂无运动数据\n绑定手环后可以分析运动情况</string>

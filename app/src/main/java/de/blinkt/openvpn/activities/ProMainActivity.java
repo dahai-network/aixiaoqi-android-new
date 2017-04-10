@@ -552,7 +552,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                         if (clickCount == 0 && scrollCount == 0) {
                             scrollCount++;
 
-                            Log.d("TEST", "onPageSelected: " + scrollCount);
+                           // Log.d("TEST", "onPageSelected: " + scrollCount);
 
 
                             // ViewUtil.showView(phoneFragment.t9dialpadview);

@@ -82,7 +82,7 @@ public class CellPhoneFragment extends Fragment {
 
             operation_rg.check(cell_phone_rb.getId());
             ClickPhone();
-         /*   if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
+        /*  if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
                 showPhoneBottomBar();
             } else {
                 hidePhoneBottomBar();
