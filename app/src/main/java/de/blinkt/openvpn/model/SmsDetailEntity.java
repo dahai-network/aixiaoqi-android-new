@@ -12,7 +12,26 @@ public class SmsDetailEntity implements Serializable {
     private String SMSTime;
     private String SMSContent;
 
-    public boolean isSend() {
+	private int position;
+	private boolean isCheck;
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
+	public boolean isCheck() {
+		return isCheck;
+	}
+
+	public void setCheck(boolean check) {
+		isCheck = check;
+	}
+
+	public boolean isSend() {
         return IsSend;
     }
 

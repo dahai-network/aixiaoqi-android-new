@@ -13,8 +13,26 @@ public class SmsEntity implements Serializable {
 	public String SMSContent;
 	public String IsSend;
 	public String IsRead;
+
+	public int position;
+	public boolean isCheck;
 	private int Status;
 
+	public boolean isCheck() {
+		return isCheck;
+	}
+
+	public void setCheck(boolean check) {
+		isCheck = check;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
 
 	public String getRealName() {
 		return realName;

@@ -40,8 +40,6 @@ public class WebViewActivity extends BaseActivity {
 		String url = getIntent().getStringExtra(TAG_URL);
 		if (url == null) return;
 		layout.setUrl(this, url, url);
-
-
 	}
 
 	@Override

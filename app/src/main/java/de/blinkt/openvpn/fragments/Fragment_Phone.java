@@ -224,7 +224,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	ContactRecodeEntity contactRecodeEntity;
 
 	@Override
-	public void onItemClick(View view, Object data) {
+	public void onItemClick(View view, Object data, boolean b) {
 
 //		if (isWifi()) {
 //			contactRecodeEntity = (ContactRecodeEntity) data;

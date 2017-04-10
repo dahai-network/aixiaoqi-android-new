@@ -5,7 +5,6 @@ package de.blinkt.openvpn.fragments;
  */
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -27,9 +25,7 @@ import java.util.ArrayList;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
 import de.blinkt.openvpn.activities.ProMainActivity;
-import de.blinkt.openvpn.activities.SMSAcivity;
 
-import static de.blinkt.openvpn.constant.UmengContant.CLICKEDITSMS;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLEPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLESMS;
 
@@ -39,7 +35,7 @@ public class CellPhoneFragment extends Fragment  {
     RadioButton cell_phone_rb;
     RadioButton message_rb;
     public static  EditText dial_input_edit_text;
-    TextView editTv;
+//    TextView editTv;
     private ArrayList<Fragment> fragments = new ArrayList<>();
     Activity activity;
     ViewPager mViewPager;
@@ -97,22 +93,22 @@ public class CellPhoneFragment extends Fragment  {
                 return true;
             }
         });
-        editTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKEDITSMS);
-                Intent intent=new Intent(getActivity(), SMSAcivity.class);
-                startActivity(intent);
-            }
-        });
+//        editTv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //友盟方法统计
+//                MobclickAgent.onEvent(getActivity(), CLICKEDITSMS);
+//                Intent intent=new Intent(getActivity(), SMSAcivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
     private void initView(View view) {
         operation_rg = ((RadioGroup) view.findViewById(R.id.operation_rg));
         cell_phone_rb = ((RadioButton) view.findViewById(R.id.cell_phone_rb));
         dial_input_edit_text = ((EditText) view.findViewById(R.id.dial_input_edit_text));
         message_rb = ((RadioButton) view.findViewById(R.id.message_rb));
-        editTv = ((TextView) view.findViewById(R.id.edit_tv));
+//        editTv = ((TextView) view.findViewById(R.id.edit_tv));
         mViewPager = (ViewPager) view.findViewById(R.id.mViewPager);
         initFragment();
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -185,20 +181,20 @@ public class CellPhoneFragment extends Fragment  {
     }
 
     private void ClickMessage() {
-        cell_phone_rb.setBackgroundResource(R.drawable.default_top_cell);
-        message_rb.setBackgroundResource(R.drawable.select_top_cell_sms);
+//        cell_phone_rb.setBackgroundResource(R.drawable.default_top_cell);
+//        message_rb.setBackgroundResource(R.drawable.select_top_cell_sms);
         cell_phone_rb.setTextColor(Color.BLACK);
         message_rb.setTextColor(Color.WHITE);
         mViewPager.setCurrentItem(1);
-        editTv.setVisibility(View.VISIBLE);
+//        editTv.setVisibility(View.VISIBLE);
     }
 
     private void ClickPhone() {
-        cell_phone_rb.setBackgroundResource(R.drawable.select_top_cell);
-        message_rb.setBackgroundResource(R.drawable.default_top_cell_sms);
+//        cell_phone_rb.setBackgroundResource(R.drawable.select_top_cell);
+//        message_rb.setBackgroundResource(R.drawable.default_top_cell_sms);
         cell_phone_rb.setTextColor(Color.WHITE);
         message_rb.setTextColor(Color.BLACK);
-        editTv.setVisibility(View.GONE);
+//        editTv.setVisibility(View.GONE);
         mViewPager.setCurrentItem(0);
     }
 

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,22 +21,38 @@ import de.blinkt.openvpn.util.User;
 /**
  * Created by Administrator on 2016/9/10 0010.
  */
-public class SmsListAdapter extends RecyclerBaseAdapter<SmsListAdapter.ViewHolder, SmsEntity> implements View.OnClickListener,View.OnLongClickListener {
+public class SmsListAdapter extends RecyclerBaseAdapter<SmsListAdapter.ViewHolder, SmsEntity> implements View.OnClickListener, View.OnLongClickListener {
 
+	//是否删除
+	private boolean isDeleteState = false;
 
 	public SmsListAdapter(Context context, List<SmsEntity> list) {
 		super(context, list);
 
 	}
 
+
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position) {
 		SmsEntity smsEntity = mList.get(position);
+		smsEntity.setPosition(position);
 		if ("0".equals(smsEntity.getIsRead())) {
-			holder.ivUnreadMessage.setVisibility(View.VISIBLE);
+//			holder.ivUnreadMessage.setVisibility(View.VISIBLE);
+			holder.tvContactName.setTextColor(mContext.getResources().getColor(R.color.connect_us_red));
 		} else {
-			holder.ivUnreadMessage.setVisibility(View.GONE);
+//			holder.ivUnreadMessage.setVisibility(View.GONE);
+			holder.tvContactName.setTextColor(mContext.getResources().getColor(R.color.black));
 		}
+		if (isDeleteState) {
+			holder.deleteSmsImageView.setVisibility(View.VISIBLE);
+			//刷新一遍
+			holder.deleteSmsImageView.setChecked(false);
+			holder.arrowImageView.setVisibility(View.INVISIBLE);
+		} else {
+			holder.deleteSmsImageView.setVisibility(View.GONE);
+			holder.arrowImageView.setVisibility(View.VISIBLE);
+		}
+
 		if (TextUtils.isEmpty(smsEntity.getRealName())) {
 			if (!User.isCurrentUser(smsEntity.getFm()))
 				holder.tvContactName.setText(smsEntity.getFm().split(",")[0]);
@@ -46,9 +63,18 @@ public class SmsListAdapter extends RecyclerBaseAdapter<SmsListAdapter.ViewHolde
 			holder.tvContactName.setText(smsEntity.getRealName());
 		}
 
+		holder.deleteSmsImageView.setChecked(smsEntity.isCheck());
 		holder.tvTime.setText(DateUtils.getTimeStampString(smsEntity.getSMSTime()));
 		holder.tvSmsContent.setText(smsEntity.getSMSContent());
 		holder.itemView.setTag(smsEntity);
+	}
+
+	public void setDeleteImage(boolean isDeleteState) {
+		this.isDeleteState = isDeleteState;
+	}
+
+	public boolean isDeleteState() {
+		return isDeleteState;
 	}
 
 	@Override
@@ -62,17 +88,34 @@ public class SmsListAdapter extends RecyclerBaseAdapter<SmsListAdapter.ViewHolde
 	@Override
 	public void onClick(View v) {
 		if (onItemClickListener != null) {
-			//注意这里使用getTag方法获取数据
-			onItemClickListener.onItemClick(v, v.getTag());
+
+			if (isDeleteState) {
+				//注意这里使用getTag方法获取数据
+				CheckBox check = (CheckBox) v.findViewById(R.id.deleteSmsImageView);
+				onItemClickListener.onItemClick(v, v.getTag(), !check.isChecked());
+				((SmsEntity) v.getTag()).setCheck(!check.isChecked());
+				check.setChecked(!check.isChecked());
+			} else {
+				//注意这里使用getTag方法获取数据
+				onItemClickListener.onItemClick(v, v.getTag(), false);
+			}
 		}
 	}
-	public interface OnItemLongClickListener{
+
+	public void clearCheckState() {
+		for (SmsEntity entity : mList) {
+			entity.setCheck(false);
+		}
+	}
+
+	public interface OnItemLongClickListener {
 		void onItemLongClick(View view, Object data);
 	}
-public OnItemLongClickListener onItemLongClickListener;
+
+	public OnItemLongClickListener onItemLongClickListener;
 
 	public void setOnItemLongClickListener(OnItemLongClickListener onItemClickListener) {
-		onItemLongClickListener=onItemClickListener;
+		onItemLongClickListener = onItemClickListener;
 	}
 
 	@Override
@@ -82,18 +125,19 @@ public OnItemLongClickListener onItemLongClickListener;
 	}
 
 	public class ViewHolder extends RecyclerView.ViewHolder {
-		ImageView ivUnreadMessage;
+		CheckBox deleteSmsImageView;
+		ImageView arrowImageView;
 		TextView tvSmsContent;
 		TextView tvTime;
 		TextView tvContactName;
 
 		public ViewHolder(View itemView) {
 			super(itemView);
-			ivUnreadMessage = (ImageView) itemView.findViewById(R.id.iv_unread_message);
+			deleteSmsImageView = (CheckBox) itemView.findViewById(R.id.deleteSmsImageView);
+			arrowImageView = (ImageView) itemView.findViewById(R.id.arrowImageView);
 			tvContactName = (TextView) itemView.findViewById(R.id.tv_contact_name);
 			tvTime = (TextView) itemView.findViewById(R.id.tv_time);
 			tvSmsContent = (TextView) itemView.findViewById(R.id.tv_sms_content);
-
 		}
 	}
 

@@ -25,26 +25,31 @@ public class CommenActivity extends FragmentActivity {
 	protected MyProgressDialog myProgressDialog;
 	protected ICSOpenVPNApplication application;
 	private Configuration config;
-	protected  String TAG=getClass().toString();
+	protected String TAG = getClass().toString();
+
 	protected boolean isAndroidTV() {
 		final UiModeManager uiModeManager = (UiModeManager) getSystemService(FragmentActivity.UI_MODE_SERVICE);
 		return uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION;
 	}
-	protected  void w(String message){
-        if(Constant.PRINT_LOGS)
-		Log.w(TAG,message);
+
+	protected void w(String message) {
+		if (Constant.PRINT_LOGS)
+			Log.w(TAG, message);
 	}
-	protected  void e(String message){
-        if(Constant.PRINT_LOGS)
-		Log.e(TAG,message);
+
+	protected void e(String message) {
+		if (Constant.PRINT_LOGS)
+			Log.e(TAG, message);
 	}
-	protected  void d(String message){
-        if(Constant.PRINT_LOGS)
-		Log.d(TAG,message);
+
+	protected void d(String message) {
+		if (Constant.PRINT_LOGS)
+			Log.d(TAG, message);
 	}
-	protected  void i(String message){
-        if(Constant.PRINT_LOGS)
-		Log.i(TAG,message);
+
+	protected void i(String message) {
+		if (Constant.PRINT_LOGS)
+			Log.i(TAG, message);
 	}
 
 
@@ -85,6 +90,7 @@ public class CommenActivity extends FragmentActivity {
 		myProgressDialog = new MyProgressDialog(mContext, R.style.MyAlertDialog);
 		myProgressDialog.setMyCancelable(true);
 		myProgressDialog.setMyTouchOutside(false);
+
 	}
 
 	/**

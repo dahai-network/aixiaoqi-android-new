@@ -170,7 +170,7 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
     }
 
     @Override
-    public void onItemClick(View view, Object data) {
+    public void onItemClick(View view, Object data, boolean b) {
         ContactBean contactBean=(ContactBean)data;
         String[] arrayPhoneNum= contactBean.getPhoneNum().split(",");
         if(arrayPhoneNum.length>1){

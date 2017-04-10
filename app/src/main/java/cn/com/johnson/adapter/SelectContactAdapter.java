@@ -87,7 +87,7 @@ public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapt
 	@Override
 	public void onClick(View v) {
 		if (onItemClickListener != null) {
-			onItemClickListener.onItemClick(v, v.getTag());
+			onItemClickListener.onItemClick(v, v.getTag(), false);
 		}
 	}
 
