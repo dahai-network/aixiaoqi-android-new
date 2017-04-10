@@ -24,6 +24,7 @@ import java.util.Locale;
 import cn.com.aixiaoqi.R;
 
 import cn.com.johnson.adapter.ContactAdapter;
+import de.blinkt.openvpn.activities.CallDetailActivity;
 import de.blinkt.openvpn.activities.ContactDetailActivity;
 
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -171,11 +172,18 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 
 	@Override
 	public void gotoActivity(ContactBean contactBean,int position) {
+		String[] arrayNum = contactBean.getPhoneNum().split(",");
+		if(arrayNum.length>1){
 		Intent intent=new Intent(getActivity(),ContactDetailActivity.class);
 		ContactDetailActivity.setNotifyFragmentDataListener(this);
 		intent.putExtra("contactBean",contactBean);
 		intent.putExtra("position",position);
 		startActivity(intent);
+		}else{
+			Intent intent=new Intent(getActivity(),CallDetailActivity.class);
+			intent.putExtra("contactBean",contactBean);
+			startActivity(intent);
+		}
 	}
 
 

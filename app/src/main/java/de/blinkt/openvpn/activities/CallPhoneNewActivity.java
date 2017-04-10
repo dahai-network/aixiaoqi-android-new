@@ -50,7 +50,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	TextView callStatustxt;
 	TextView mtview;
 	TextView calmTextView;
-	Button cancelcallbtn;
+	TextView cancelcallbtn;
 	Chronometer timer;
 	String maxinumPhoneCallTime;
 	ConnectedReceive connectedReceive;
@@ -108,12 +108,17 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		mtview = (TextView) findViewById(R.id.mtview);
 		timer = (Chronometer) findViewById(R.id.chronometer);
 		calmTextView = (TextView) findViewById(R.id.calmTextView);
-		cancelcallbtn = (Button) findViewById(R.id.cancelcallbtn);
+		cancelcallbtn = (TextView) findViewById(R.id.cancelcallbtn);
 		displayStatus(R.string.calling);
+//		phonenumtxt.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				ICSOpenVPNApplication.the_sipengineReceive.SendDtmf(0,"1");
+//			}
+//		});
 	}
 
 	ContactRecodeEntity contactRecodeEntity;
-
 
 	private void initData() {
 		contactRecodeEntity = (ContactRecodeEntity) getIntent().getSerializableExtra(IntentPutKeyConstant.DATA_CALLINFO);

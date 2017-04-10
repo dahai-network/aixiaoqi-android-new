@@ -189,7 +189,6 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 			cellPhone.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					contactRecodeEntity = null;
 					contactRecodeEntity = new ContactRecodeEntity();
 					contactRecodeEntity.setPhoneNumber(deleteprefix("-",phonenum));
 					contactRecodeEntity.setName(contactName.getText().toString());
@@ -214,11 +213,16 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 				public void onClick(View v) {
 					if (!TextUtils.isEmpty(selectContactPeople)) {
 						Intent  intent=new Intent();
-						contactBean.setPhoneNum("");
 						contactBean.setPhoneNum(phonenum);
 						intent.putExtra("Contect",contactBean);
 						setResult(RESULT_OK,intent);
 						ICSOpenVPNApplication.getInstance().finishActivity(ContactDetailActivity.class);
+					}else{
+						Intent intent=new Intent(ContactDetailActivity.this,CallDetailActivity.class);
+						contactBean.setPhoneNum(phonenum);
+						intent.putExtra("contactBean",contactBean);
+						startActivity(intent);
+
 					}
 				}
 			});

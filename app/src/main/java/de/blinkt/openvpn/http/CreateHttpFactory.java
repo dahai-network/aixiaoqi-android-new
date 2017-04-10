@@ -206,6 +206,15 @@ public class CreateHttpFactory {
             case  HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID://获取选择号码
                 startHttp(new WeixinGetPayIdHttp(interfaceCallback,cmdType,params));
                 break;
+            case  HttpConfigUrl.COMTYPE_BLACK_LIST_ADD://获取选择号码
+                startHttp(new BlackListAddHttp(interfaceCallback,cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_BLACK_LIST_DELETE://获取选择号码
+                startHttp(new BlackListDeleteHttp(interfaceCallback,cmdType,params));
+                break;
+            case  HttpConfigUrl.COMTYPE_BLACK_LIST_GET://获取选择号码
+                startHttp(new BlackListGetHttp(interfaceCallback,cmdType));
+                break;
 
         }
     }

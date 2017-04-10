@@ -59,16 +59,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="72dp"
         android:orientation="horizontal"
         >
 
         <TextView
             android:id="@+id/calmTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+android:layout_marginLeft="@dimen/padding_10dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="35dp"
             android:drawableTop="@drawable/record_voice_selector"
             android:drawablePadding="10dp"
             android:gravity="center"
@@ -76,13 +77,24 @@
             android:textColor="@android:color/white"
             android:textSize="12dp"
             />
+        <TextView
+            android:id="@+id/cancelcallbtn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:drawableTop="@drawable/hang_up"
+            android:text="@string/hang_down"
+            />
 
         <TextView
             android:id="@+id/mtview"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="35dp"
-            android:layout_marginRight="25dp"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/padding_10dp"
             android:drawableTop="@drawable/hand_free_selector"
             android:drawablePadding="10dp"
             android:gravity="center"
@@ -92,13 +104,5 @@
             />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/cancelcallbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="72dp"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/hang_up"
-        />
+
 </RelativeLayout>

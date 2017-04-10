@@ -594,4 +594,5 @@
     <string name="call_record">拨打记录</string>
     <string name="yuan">元</string>
     <string name="shop">商城</string>
+    <string name="call_detail">拨打详情</string>
 </resources>

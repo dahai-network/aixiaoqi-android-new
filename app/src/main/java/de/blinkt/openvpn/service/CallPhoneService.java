@@ -23,6 +23,7 @@ import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.database.BlackListDBHelp;
 import de.blinkt.openvpn.http.CheckTokenHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
@@ -31,6 +32,7 @@ import de.blinkt.openvpn.http.SecurityConfigHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.PublicEncoderTools;
 import de.blinkt.openvpn.util.SharedUtils;
+import de.blinkt.openvpn.util.User;
 import de.blinkt.openvpn.util.querylocaldatebase.TipHelper;
 
 /**
@@ -85,6 +87,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 		the_sipengineReceive.DeRegisterSipAccount();
 		the_sipengineReceive.EnableDebug(true);
 		the_sipengineReceive.RegisterSipAccount(username, password, server, port, expire);
+
 		TimerTask lTask = new TimerTask() {
 			@Override
 			public void run() {
@@ -112,12 +115,13 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 		Log.e(TAG, "新来电 CAllDir=" + CallDir);
 		muteAudioFocus(this, true);
 		if (CallDir != 0) {
-			CALL_DIR = 0;
-			ReceiveCallActivity.launch(CallPhoneService.this, peer_caller);
-			SendCommandToBluetooth.sendMessageToBlueTooth(Constant.COMING_TEL_PUSH);//发送给手环电话设备通知
+			if(!User.isBlackList(peer_caller)) {
+				CALL_DIR = 0;
+				ReceiveCallActivity.launch(CallPhoneService.this, peer_caller);
+				SendCommandToBluetooth.sendMessageToBlueTooth(Constant.COMING_TEL_PUSH);//发送给手环电话设备通知
+			}
 		} else {
 			CALL_DIR = 1;
-
 		}
 
 

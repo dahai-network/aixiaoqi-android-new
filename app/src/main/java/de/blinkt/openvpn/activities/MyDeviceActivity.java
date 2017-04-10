@@ -1085,6 +1085,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					}
 					double percent = entity.getProgressCount();
 					conStatusTextView.setText(getString(R.string.index_registing));
+					if(percent>percentInt)
 					percentInt = (int) (percent / 1.6);
 					Log.i(TAG, "写卡进度：" + percentInt + "%");
 					if (percentInt >= 100) {
