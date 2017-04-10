@@ -279,6 +279,7 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 
     @Override
     protected void onDestroy() {
+        if(blackListDBHelp!=null)
         blackListDBHelp.close();
         super.onDestroy();
     }
