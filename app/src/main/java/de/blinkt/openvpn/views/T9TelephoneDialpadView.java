@@ -36,6 +36,7 @@ public class T9TelephoneDialpadView extends LinearLayout implements
         void onDeleteDialCharacter(String deleteCharacter);
 
         void onDialInputTextChanged(String curCharacter);
+
         void onDialInputTextChanging(String curCharacter);
 
     }
@@ -53,7 +54,7 @@ public class T9TelephoneDialpadView extends LinearLayout implements
     private View topView;
     private OnT9TelephoneDialpadView mOnT9TelephoneDialpadView = null;
 
-    public  ImageView getDeteleBtn(){
+    public ImageView getDeteleBtn() {
         return mDialDeleteBtn;
     }
 
@@ -61,7 +62,6 @@ public class T9TelephoneDialpadView extends LinearLayout implements
         super(context, attrs);
         mContext = context;
         initView();
-        initData();
         initListener();
 
     }
@@ -71,9 +71,7 @@ public class T9TelephoneDialpadView extends LinearLayout implements
     }
 
 
-    private void initData() {
 
-    }
 
     private void initView() {
         LayoutInflater inflater = (LayoutInflater) mContext
@@ -85,6 +83,8 @@ public class T9TelephoneDialpadView extends LinearLayout implements
         mT9InputEt = (EditText) mDialpadView
                 .findViewById(R.id.dial_input_edit_text);
         mT9InputEt.setCursorVisible(false);
+
+        mDialDeleteBtn.setVisibility(View.GONE);
     }
 
     private void initListener() {
@@ -107,6 +107,14 @@ public class T9TelephoneDialpadView extends LinearLayout implements
                     String inputStr = s.toString();
                     mOnT9TelephoneDialpadView.onDialInputTextChanging(inputStr);
                     mT9InputEt.setSelection(inputStr.length());
+
+                }
+                //根据输入框的字符来控制图片的显示
+                if (s.toString().length() > 0) {
+                  mDialDeleteBtn.setVisibility(View.VISIBLE);
+
+                } else {
+                   mDialDeleteBtn.setVisibility(View.GONE);
 
                 }
             }
@@ -143,18 +151,17 @@ public class T9TelephoneDialpadView extends LinearLayout implements
 
     @Override
     public void onClick(View v) {
-		//友盟方法统计
-		MobclickAgent.onEvent(mContext, CLICKKEYCALLPHONE);
+        //友盟方法统计
+        MobclickAgent.onEvent(mContext, CLICKKEYCALLPHONE);
         if (v.getId() == R.id.dial_delete_btn) {
             deleteSingleDialCharacter();
         }
 //		else if (v.getId() == R.id.dial_input_edit_text) {
 //
 //        }
-		else {
+        else {
             addSingleDialCharacter(v.getTag().toString());
         }
-
 
 
     }
@@ -181,7 +188,6 @@ public class T9TelephoneDialpadView extends LinearLayout implements
 
         }
     }
-
 
 
     private void addSingleDialCharacter(String addCharacter) {

@@ -178,7 +178,7 @@ public class DateUtils {
 
 	}
 
-
+//getTimeStampString
 	public static String getTimeStampString(String time) {
 		String str ;
 		long timeStamp = Long.parseLong(time);
@@ -191,23 +191,27 @@ public class DateUtils {
 		localCalendar.setTimeInMillis(timeStamp);
 		int year = localCalendar.get(Calendar.YEAR);
 		if (!isSameYear(year)) {
-			String paramDate2Str = new SimpleDateFormat("yyyy年MM月dd", Locale.getDefault()).format(new Date(timeStamp));
+			//String paramDate2Str = new SimpleDateFormat("yyyy年MM月dd", Locale.getDefault()).format(new Date(timeStamp));
+			String paramDate2Str = new SimpleDateFormat("yyyy年MM月dd", Locale.CHINA).format(new Date(timeStamp));
 			return paramDate2Str;
 		}
 
 		if (isSameDay(timeStamp)) {
 			str = "HH:mm";
 		} else if (isYesterday(timeStamp)) {
-			return "昨天";
+			//return "昨天";
+			str = "昨天 HH:mm";
 		} else if (isBeforeYesterday(timeStamp)) {
-			return "前天";
+			//return "前天";
+			str = "前天 HH:mm";
 		} else {
-			str = "M月d日";
+			//str = "M月d日";
+			str = "M月d日HH:mm";
 		}
 		String paramDate2Str = new SimpleDateFormat(str, Locale.CHINA).format(new Date(timeStamp));
 		return paramDate2Str;
 	}
-
+//getTimeStampDetailString
 	public static String getTimeStampDetailString(String time) {
 		String str ;
 		long timeStamp = Long.parseLong(time);

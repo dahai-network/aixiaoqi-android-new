@@ -7,20 +7,19 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 /**
- * Created by Administrator on 2016/5/6.
+ * Created by Administrator on 2017/4/8.
  */
-public class CustomViewPager extends ViewPager {
 
-
+public class MyViewPager extends ViewPager {
 
     /**是否禁止左右滑动，true为禁止，false为不禁止*/
-    public boolean noScroll = false;
+    public boolean noScroll = true;
 
-    public CustomViewPager(Context context, AttributeSet attrs) {
+    public MyViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CustomViewPager(Context context) {
+    public MyViewPager(Context context) {
         super(context);
     }
 
@@ -58,7 +57,5 @@ public class CustomViewPager extends ViewPager {
     public void setCurrentItem(int item) {
         super.setCurrentItem(item);
     }
-
-
 
 }
