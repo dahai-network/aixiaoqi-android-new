@@ -64,6 +64,7 @@
                 android:textSize="@dimen/little_18" />
 
             <ImageView
+                android:visibility="gone"
                 android:layout_marginLeft="@dimen/padding_15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
