@@ -90,8 +90,15 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     private TextView[] tvArray = new TextView[4];
     private ImageView[] ivArray = new ImageView[4];
     int viewPagerCurrentPageIndex = 0;
+    /**
+     * 主页标题
+     */
     public static LinearLayout bottom_bar_linearLayout;
+    /**
+     * 拨打电话按钮
+     */
     public static FrameLayout phone_linearLayout;
+
     public static LinearLayout showCellPhoneDialogBackground;
     public static LinearLayout cellPhoneLinearlayout;
     public static TextView networkPhoneTv;
@@ -270,6 +277,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         removeAllStatus();
     }
 
+
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
@@ -432,9 +440,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
                 if (CellPhoneFragment.floatingActionButton.getVisibility() != View.VISIBLE) {
 
-                    ViewUtil.hideView(phoneFragment.t9dialpadview);
 
-                    CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
+                   ViewUtil.hideView(phoneFragment.t9dialpadview);
+                  //  ViewUtil.hideView(phoneFragment.t9dialpadview);
+
+                   CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
                 }
 
                 //ivArray[viewPagerCurrentPageIndex].setBackgroundResource(R.drawable.phone_icon_check_open);
@@ -469,6 +479,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             //	llArray[1].performClick();
             //break;
             case R.id.callImageView:
+
+
 
                 if (phoneFragment != null) {
                     //友盟方法统计
@@ -522,8 +534,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     }
 
     public void hidePhoneBottomBar() {
-        ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
-        ProMainActivity.phone_fl.setVisibility(View.GONE);
+
+       ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
+       // ProMainActivity.phone_fl.setVisibility(View.GONE);
     }
 
     private void setListener() {

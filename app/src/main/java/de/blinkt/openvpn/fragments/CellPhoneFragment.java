@@ -82,11 +82,12 @@ public class CellPhoneFragment extends Fragment {
 
             operation_rg.check(cell_phone_rb.getId());
             ClickPhone();
-        /*  if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
+        /* if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
                 showPhoneBottomBar();
             } else {
                 hidePhoneBottomBar();
             }*/
+           // ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
         }
 
     }
@@ -268,7 +269,7 @@ public class CellPhoneFragment extends Fragment {
         mViewPager.setCurrentItem(1);
         editTv.setVisibility(View.VISIBLE);
 
-        //  ViewUtil.hideView(phoneFragment.t9dialpadview);
+      // ViewUtil.hideView(phoneFragment.t9dialpadview);
         floatingActionButton.setVisibility(View.GONE);
     }
 
@@ -278,7 +279,7 @@ public class CellPhoneFragment extends Fragment {
         //   cell_phone_rb.setTextColor(Color.WHITE);
         //  message_rb.setTextColor(Color.BLACK);
 
-        //ViewUtil.hideView(phoneFragment.t9dialpadview);
+       //ViewUtil.hideView(phoneFragment.t9dialpadview);
         floatingActionButton.setVisibility(View.VISIBLE);
 
         message_rb.setCompoundDrawables(null, null, null, null);

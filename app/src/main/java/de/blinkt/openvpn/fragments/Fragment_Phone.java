@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.aixiaoqi.socket.SocketConstant;
 
 import org.w3c.dom.Text;
@@ -102,12 +104,23 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	}
 
 	public void phonecallClicked() {
-		contactRecodeEntity = new ContactRecodeEntity();
-		contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
-		contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
-		//showCellPhoneDialog();
-		braceletDial();
-		closedialClicked();
+
+		if(t9dialpadview.getT9Input()!=null&&t9dialpadview.getT9Input().length()>0)
+		{
+
+			contactRecodeEntity = new ContactRecodeEntity();
+			contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
+			contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
+			//showCellPhoneDialog();
+			braceletDial();
+			closedialClicked();
+		}else
+			{
+
+				Toast.makeText(getActivity(),"请输入要拨打的电话号码",Toast.LENGTH_SHORT).show();
+
+			}
+
 	}
 	/***
 	 *手环拨打电话
@@ -176,7 +189,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 					if (!TextUtils.isEmpty(curInputStr) && curInputStr.length() > 0) {
 						String newCurInputStr = curInputStr.substring(0, curInputStr.length() - 1);
 						if (TextUtils.isEmpty(newCurInputStr)) {
-							hidePhoneBottomBar();
+							//hidePhoneBottomBar();
 						}
 						t9dialpadview.mT9InputEt.setText(newCurInputStr);
 						onDialInputTextChanged(newCurInputStr);
@@ -201,7 +214,9 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	}
 
 	public void hidePhoneBottomBar() {
+
 		ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
+
 		ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
 	}
 
@@ -365,6 +380,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 		if (!TextUtils.isEmpty(curCharacter)) {
 			CellPhoneFragment.operation_rg.setVisibility(View.GONE);
 			//CellPhoneFragment.dial_input_edit_text.setVisibility(View.VISIBLE);
+
 			CellPhoneFragment.dial_tittle_fl.setVisibility(View.VISIBLE);
 		} else {
 			CellPhoneFragment.operation_rg.setVisibility(View.VISIBLE);

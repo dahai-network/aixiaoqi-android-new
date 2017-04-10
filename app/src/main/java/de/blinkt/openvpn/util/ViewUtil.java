@@ -79,7 +79,7 @@ public class ViewUtil {
 		return;
 	}
 
-	public static void hideView(View view) {
+public static void hideView(View view) {
 		if (null == view) {
 			return;
 		}
