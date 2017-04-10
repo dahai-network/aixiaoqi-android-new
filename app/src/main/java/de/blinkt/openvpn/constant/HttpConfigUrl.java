@@ -94,7 +94,10 @@ public class HttpConfigUrl {
 	public static final String PACKET_GET ="Package/Get";
 	public static final String UPDATE_CONN_INFO ="/DeviceBracelet/UpdateConnectInfo";
 	public static final String SMS_DELETE_BY_TEL ="/SMS/DeletesByTel";
+	public static final String SMS_DELETE_BY_TELS ="/SMS/DeletesByTels";
+	public static final String SMS_DELETE_SMSs ="/SMS/Deletes";
 	public static final String SMS_DELETE ="/SMS/Delete";
+	public static final String GET_PRODUCTS ="/config/GetProductList";
 	public static final int COMTYPE_LOGIN = 0x0001;
 	public static final int COMTYPE_SECURITY_CONFIG = 0x0002;
 	public static final int COMTYPE_SEND_SMS = 0x0003;
@@ -169,5 +172,8 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_CHECK_IS_HAVE_PACKET = 0x1047;
 	public static final int COMTYPE_GET_SECURITY_CONFIG = 0x1048;
 	public static final int COMTYPE_UPDATE_CONN_INFO = 0x1049;
+	public static final int COMTYPE_SMS_DELETE_SMSS = 0x1050;
+	public static final int COMTYPE_SMS_DELETE_BY_TELS =0x1051;
+	public static final int COMTYPE_GET_PRODUCTS =0x1052;
 
 }

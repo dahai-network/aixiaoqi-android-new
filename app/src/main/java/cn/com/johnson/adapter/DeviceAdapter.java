@@ -53,7 +53,7 @@ public class DeviceAdapter extends RecyclerBaseAdapter<DeviceAdapter.ViewHolder,
 	public void onClick(View v) {
 		if (onItemClickListener != null) {
 			//注意这里使用getTag方法获取数据
-			onItemClickListener.onItemClick(v, v.getTag());
+			onItemClickListener.onItemClick(v, v.getTag(), false);
 		}
 	}
 

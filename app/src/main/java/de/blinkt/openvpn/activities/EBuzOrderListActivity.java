@@ -70,7 +70,7 @@ public class EBuzOrderListActivity extends BaseNetActivity implements RecyclerBa
     }
 
     @Override
-    public void onItemClick(View view, Object data) {
+    public void onItemClick(View view, Object data, boolean b) {
         toActivity(new Intent(this, EBuizOrderDetailActivity.class).putExtra(IntentPutKeyConstant.E_BUIZ_ORDER,((EBizOrderListEntity.OrderInfo)data)));
     }
 

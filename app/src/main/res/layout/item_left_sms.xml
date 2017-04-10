@@ -6,19 +6,33 @@
     <TextView
         android:id="@+id/show_time_tv"
         android:layout_width="wrap_content"
-        android:layout_marginTop="@dimen/padding_20dp"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/readed"
-        android:layout_height="wrap_content"/>
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:textColor="@color/readed"/>
 
     <TextView
         android:id="@+id/left_content_tv"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/show_time_tv"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="@dimen/padding_20dp"
         android:layout_marginRight="@dimen/padding_50dp"
+        android:layout_marginTop="@dimen/padding_20dp"
         android:background="@drawable/left_sms"
-        android:textColor="@color/black"
-        android:layout_height="wrap_content"/>
+        android:textColor="@color/black"/>
+
+    <CheckBox
+        android:id="@+id/deleteSmsDetailCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/show_time_tv"
+        android:layout_marginRight="@dimen/padding_15dp"
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:button="@drawable/delete_sms_choice_selector"
+        android:checked="false"
+        android:clickable="false"
+        android:visibility="gone"
+        />
 </RelativeLayout>

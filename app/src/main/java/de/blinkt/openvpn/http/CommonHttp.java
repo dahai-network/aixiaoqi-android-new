@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.CertificateFactory;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -170,10 +169,10 @@ public abstract class CommonHttp implements Callback, Runnable {
 					Intent intent1 = new Intent();
 					intent1.setAction(SportFragment.CLEARSPORTDATA);
 					intent1.setAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
-					if(ICSOpenVPNApplication.uartService!=null)
-					ICSOpenVPNApplication.uartService.disconnect();
-					if(ICSOpenVPNApplication.getInstance()!=null)
-					ICSOpenVPNApplication.getInstance().sendBroadcast(intent1);
+					if (ICSOpenVPNApplication.uartService != null)
+						ICSOpenVPNApplication.uartService.disconnect();
+					if (ICSOpenVPNApplication.getInstance() != null)
+						ICSOpenVPNApplication.getInstance().sendBroadcast(intent1);
 					Intent intent = new Intent(context_, LoginMainActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.putExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN, context_.getResources().getString(R.string.token_interrupt));
@@ -187,7 +186,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			error(response.message());
 		} else if (response.code() >= 500 && response.code() < 600) {//服务器异常
 			//大部分是没有缓存该页面所以出现了504的返回
-			if (response.code() == 504){
+			if (response.code() == 504) {
 				noNetShow();
 				return;
 			}

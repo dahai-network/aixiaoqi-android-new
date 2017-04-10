@@ -108,6 +108,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			bluetoothName = Constant.UNIBOX;
 			search_bluetooth.setText(getString(R.string.searching_unibox_strap));
+			tip_search.setText(getString(R.string.please_makesure_bind));
 		} else {
 			bluetoothName = Constant.UNITOYS;
 		}

@@ -20,7 +20,7 @@ public abstract class RecyclerBaseAdapter<VH extends RecyclerView.ViewHolder, T>
 	}
 
 	public interface OnItemClickListener {
-		void onItemClick(View view, Object data);
+		void onItemClick(View view, Object data, boolean b);
 	}
 
 	public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -66,7 +66,6 @@ public abstract class RecyclerBaseAdapter<VH extends RecyclerView.ViewHolder, T>
 	public void remove(int position) {
 		mList.remove(position);
 		notifyDataSetChanged();
-
 	}
 
 	public void clear() {
