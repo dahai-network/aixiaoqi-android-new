@@ -77,18 +77,18 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	RelativeLayout rlPeopleCenter;
 	@BindView(R.id.balanceTextView)
 	TextView balanceTextView;
-	@BindView(R.id.rechargeLinearLayout)
-	LinearLayout rechargeLinearLayout;
-	@BindView(R.id.tv_my_pakages)
-	TextView tvMyPakages;
-	@BindView(R.id.tv_my_device)
-	TextView tvMyDevice;
+	@BindView(R.id.billRelativeLayout)
+	RelativeLayout billRelativeLayout;
+	@BindView(R.id.activateRelativeLayout)
+	RelativeLayout activateRelativeLayout;
+	@BindView(R.id.addDeviceRelativeLayout)
+	RelativeLayout addDeviceRelativeLayout;
 	@BindView(R.id.permission_set)
 	TextView tvPermissionSet;
 	@BindView(R.id.tv_setting)
 	TextView tvSetting;
-	@BindView(R.id.balanceLinearLayout)
-	LinearLayout balanceLinearLayout;
+	@BindView(R.id.rechargeTextView)
+	TextView rechargeTextView;
 	@BindView(R.id.ll_coming_tel_tip)
 	LinearLayout llComingTelTip;
 	@BindView(R.id.tv_alarm_clock_tip)
@@ -196,10 +196,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	}
 
 
-	@OnClick({R.id.balanceLinearLayout,
-			R.id.tv_my_pakages,
-			R.id.rechargeLinearLayout,
-			R.id.tv_my_device,
+	@OnClick({R.id.rechargeTextView,
+			R.id.activateRelativeLayout,
+			R.id.billRelativeLayout,
+			R.id.addDeviceRelativeLayout,
 			R.id.tv_setting,
 			R.id.rl_people_center,
 			R.id.ll_qq_tip,
@@ -212,12 +212,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	public void onClick(View v) {
 		Intent intent = null;
 		switch (v.getId()) {
-			case R.id.tv_my_pakages:
+			case R.id.activateRelativeLayout:
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKMYPACKAGE);
 				intent = new Intent(getActivity(), MyPackageActivity.class);
 				break;
-			case R.id.tv_my_device:
+			case R.id.addDeviceRelativeLayout:
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKMYDEVICE);
 				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
@@ -261,15 +261,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				MobclickAgent.onEvent(getActivity(), CLICKENTERPERSONCENTER);
 				intent = new Intent(getActivity(), PersonalCenterActivity.class);
 				break;
-			case R.id.rechargeLinearLayout:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKRECHARGE);
-				intent = new Intent(getActivity(), RechargeActivity.class);
-				break;
-			case R.id.balanceLinearLayout:
+			case R.id.billRelativeLayout:
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKBALANCE);
 				intent = new Intent(getActivity(), BalanceParticularsActivity.class);
+				break;
+			case R.id.rechargeTextView:
+				//友盟方法统计
+				MobclickAgent.onEvent(getActivity(), CLICKRECHARGE);
+				intent = new Intent(getActivity(), RechargeActivity.class);
 				break;
 			case R.id.ll_coming_tel_tip:
 				//友盟方法统计
@@ -319,7 +319,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 		if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
 			BalanceHttp http = (BalanceHttp) object;
 			if (http.getBalanceEntity() != null)
-				balanceTextView.setText("￥" + http.getBalanceEntity().getAmount());
+				balanceTextView.setText(getString(R.string.balance) + ": " + http.getBalanceEntity().getAmount() + getString(R.string.yuan));
 		} else if (cmdType == HttpConfigUrl.COMTYPE_ALARM_CLOCK_COUNT) {
 			AlarmClockCountHttp alarmClockCountHttp = (AlarmClockCountHttp) object;
 			if (alarmClockCountHttp.getStatus() == 1) {
