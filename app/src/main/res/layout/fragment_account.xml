@@ -201,11 +201,6 @@
 
                 </RelativeLayout>
 
-                <View
-                    style="@style/horizontal_line_view"
-                    android:layout_marginTop="5dp"
-                    />
-
                 <RelativeLayout
                     android:id="@+id/addDeviceRelativeLayout"
                     android:layout_width="match_parent"
@@ -215,7 +210,9 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/padding_5dp"
                         android:background="@color/blue_title"
+                        android:visibility="gone"
                         >
 
                         <TextView
@@ -236,7 +233,7 @@
                             android:paddingBottom="12dp"
                             android:paddingRight="12dp"
                             android:paddingTop="12dp"
-                            android:text="@string/remove_bind"
+                            android:text="@string/remove_bind_under_line"
                             android:textColor="@color/white"
                             />
 
@@ -246,30 +243,98 @@
                             android:layout_below="@id/deviceTypeTextView"
                             />
 
-                        <TextView
-                            android:id="@+id/powerTitleTextView"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/addDeviceLine"
-                            android:layout_marginTop="15dp"
-                            android:paddingLeft="@dimen/padding_15dp"
-                            android:text="@string/power"
-                            android:textColor="@color/white"
-                            />
+                            >
 
-                        <TextView
-                            android:id="@+id/powerTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/powerTitleTextView"
-                            android:layout_marginLeft="@dimen/padding_15dp"
-                            android:layout_marginTop="5dp"
-                            android:textColor="@color/white"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:text="80%"
-                            />
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
 
+                                <TextView
+                                    android:id="@+id/powerTitleTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="15dp"
+                                    android:paddingLeft="@dimen/padding_15dp"
+                                    android:text="@string/power"
+                                    android:textColor="@color/white"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/powerTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/powerTitleTextView"
+                                    android:layout_marginLeft="@dimen/padding_15dp"
+                                    android:layout_marginTop="5dp"
+                                    android:text="----"
+                                    android:textColor="@color/white"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/signalIconImageView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/padding_15dp"
+                                    android:layout_marginTop="15dp"
+                                    android:background="@drawable/index_high_signal"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/operatorTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/signalIconImageView"
+                                    android:layout_marginLeft="@dimen/padding_15dp"
+                                    android:layout_marginTop="5dp"
+                                    android:text="----"
+                                    android:textColor="@color/white"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/switchTitleTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="15dp"
+                                    android:paddingLeft="@dimen/padding_15dp"
+                                    android:text="@string/OnOrOff"
+                                    android:textColor="@color/white"
+                                    />
+
+                                <de.blinkt.openvpn.views.SwitchView
+                                    android:id="@+id/switchTextView"
+                                    android:layout_width="40dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/switchTitleTextView"
+                                    android:layout_marginLeft="@dimen/padding_15dp"
+                                    android:layout_marginTop="5dp"
+                                    android:text="----"
+                                    android:textColor="@color/white"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    />
+                            </RelativeLayout>
+                        </LinearLayout>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -277,8 +342,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
+                        android:layout_marginTop="@dimen/padding_5dp"
                         android:background="@color/white"
-                        android:visibility="gone">
+                        >
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -293,6 +359,11 @@
 
                     </RelativeLayout>
                 </RelativeLayout>
+
+                <View
+                    style="@style/horizontal_line_view"
+                    android:layout_marginTop="5dp"
+                    />
 
                 <View
                     style="@style/horizontal_line_view"

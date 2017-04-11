@@ -387,6 +387,7 @@
             android:name="de.blinkt.openvpn.activities.BalanceParticularsActivity"
             android:screenOrientation="portrait">
         </activity>
+        <!--de.blinkt.openvpn.activities.LaunchActivity-->
         <activity
             android:name="de.blinkt.openvpn.activities.LaunchActivity"
             android:screenOrientation="portrait"
@@ -546,6 +547,10 @@
             android:launchMode="singleInstance"
             android:theme="@style/translucent">
         </activity>
+
+        <!--TEST-->
+       <!-- <activity android:name="de.blinkt.openvpn.fragments.PackageDetailActivityItemFragment">
+        </activity>-->
     </application>
 
 </manifest>

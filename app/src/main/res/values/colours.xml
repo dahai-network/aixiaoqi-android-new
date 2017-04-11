@@ -13,7 +13,8 @@
     <!--700-->
     <!-- Orange 400 -->
 
-
+//#F5F5F5
+    //#FF5252
     <color name="cell_phone_background">#a0404040</color>
     <color name="black">#000000</color>
     <color name="blue_title">#00a0e9</color>
@@ -65,6 +66,7 @@
     <color name="white">#ffffffff</color>
     <color name="dark_orange">#FF8C00</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="transparent_60">#3CFFFFFF</color>
 
     <color name="colorf7f7f8">#f7f7f8</color>
     <!--进度条颜色-->
@@ -82,5 +84,11 @@
     <color name="color_1892df">#1892df</color>
     <color name="color_00a0e9">#00a0e9</color>
     <color name="colorf_01d0c0">#01d0c0</color>
+    <color name="colorf_F5F5F5">#F5F5F5</color>
+    <color name="colorf_FF5252">#FF5252</color>
+
+    <color name="background_tab_pressed">#6633B5E5</color>
+    <color name="color_ffbfbf">#ffbfbf</color>
+    <color name="color_ffa0a0">#ffa0a0</color>
 
 </resources>

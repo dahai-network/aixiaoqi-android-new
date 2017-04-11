@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Window;
-
 import com.umeng.analytics.MobclickAgent;
-
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -25,7 +23,7 @@ public class CommenActivity extends FragmentActivity {
 	protected MyProgressDialog myProgressDialog;
 	protected ICSOpenVPNApplication application;
 	private Configuration config;
-	protected String TAG = getClass().toString();
+	protected String TAG = getClass().getSimpleName().toString();
 
 	protected boolean isAndroidTV() {
 		final UiModeManager uiModeManager = (UiModeManager) getSystemService(FragmentActivity.UI_MODE_SERVICE);

@@ -13,7 +13,15 @@ import android.view.MotionEvent;
 public class MyViewPager extends ViewPager {
 
     /**是否禁止左右滑动，true为禁止，false为不禁止*/
-    public boolean noScroll = true;
+
+
+    public boolean noScroll = false;
+
+    public void setScrollorNoScroll(boolean noScroll)
+    {
+        this.noScroll=noScroll;
+
+    }
 
     public MyViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);

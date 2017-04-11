@@ -62,9 +62,10 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	SmsListAdapter smsListAdapter;
 	RelativeLayout NodataRelativeLayout;
 	RelativeLayout NoNetRelativeLayout;
-	ImageView editSmsImageView;
+	public static ImageView editSmsImageView;
 	private int requestNetCount = 0;
 	TextView noDataTextView;
+
 	public static boolean isForeground = false;
 	public static final String NOTIFY_RECEIVED_ACTION = "NOTIFY_RECEIVED_ACTION";
 	public static final String DELTE_MESSAGE = "DELTE_MESSAGE";
@@ -149,6 +150,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		editSmsImageView=null;
 		getActivity().unregisterReceiver(mNotifyReceiver);
 	}
 

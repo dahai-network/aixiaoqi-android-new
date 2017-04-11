@@ -154,7 +154,8 @@
     <string name="find_bracelet">查找手环</string>
     <string name="firmware_version">固件版本</string>
     <string name="sim_indevice">设备内电话卡</string>
-    <string name="remove_bind"><u>解除绑定</u></string>
+    <string name="remove_bind">解除绑定</string>
+    <string name="remove_bind_under_line"><u>解除绑定</u></string>
     <string name="bracelet_mac">手环mac地址</string>
     <string name="order_num">订单编号：</string>
     <string name="order_num_nocolon">订单编号</string>
@@ -512,7 +513,7 @@
     <string name="packet_status">套餐状态</string>
     <string name="pay_date">支付时间</string>
     <string name="expiry_date">有效期</string>
-    <string name="click_buy">点击购买</string>
+    <string name="click_buy">购买</string>
     <!--大王卡订单详情-->
     <string name="used_introduce">使用介绍：</string>
     <string name="used_notice">注意事项：</string>
@@ -605,4 +606,6 @@
     <string name="activited">已激活</string>
     <string name="no_activite">未激活</string>
     <string name="expire">已过期</string>
+    <string name="OnOrOff">开关</string>
+    <string name="registing">正在连接运营商服务器...</string>
 </resources>
