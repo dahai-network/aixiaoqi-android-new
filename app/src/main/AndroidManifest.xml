@@ -526,8 +526,7 @@
         </activity>
         <activity android:name="de.blinkt.openvpn.activities.CallTimePacketDetailActivity">
         </activity>
-        <activity android:name="de.blinkt.openvpn.activities.CommitCallTimeOrderActivity">
-        </activity>
+
         <activity
             android:name="de.blinkt.openvpn.activities.KeepAliveActivity"
             android:excludeFromRecents="true"

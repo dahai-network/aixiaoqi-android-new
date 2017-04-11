@@ -16,6 +16,7 @@ import cn.com.johnson.adapter.OrderAdapter;
 import cn.com.johnson.model.BoughtPackageEntity;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.BoughtPacketHttp;
 import de.blinkt.openvpn.http.CommonHttp;
@@ -74,7 +75,7 @@ public class MyPackageActivity extends BaseActivity implements XRecyclerView.Loa
 
 	//加入数据
 	private void addData() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, pageNumber+"", 20+"","-1");
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, pageNumber+"", Constant.PAGESIZE+"","-1");
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public class MyPackageActivity extends BaseActivity implements XRecyclerView.Loa
 					orderListRecylerView.setVisibility(View.VISIBLE);
 					if (pageNumber == 1) {
 						//页码为1且没有数据，则显示无数据页面
-						if (bean.getList().size() < 20) {
+						if (bean.getList().size() < Constant.PAGESIZE) {
 							orderAdapter.addAll(bean.getList());
 							orderListRecylerView.noMoreLoading();
 						} else {

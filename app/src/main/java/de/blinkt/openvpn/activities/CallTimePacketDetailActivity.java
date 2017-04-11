@@ -72,7 +72,7 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
 				addData();
 				break;
 			case R.id.buyButton:
-				CommitCallTimeOrderActivity.launch(this, bean);
+				CommitOrderActivity.launch(this, bean,0);
 				break;
 		}
 	}
