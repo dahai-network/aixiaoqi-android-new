@@ -513,7 +513,7 @@
     <string name="packet_status">套餐状态</string>
     <string name="pay_date">支付时间</string>
     <string name="expiry_date">有效期</string>
-    <string name="click_buy">点击购买</string>
+    <string name="click_buy">购买</string>
     <!--大王卡订单详情-->
     <string name="used_introduce">使用介绍：</string>
     <string name="used_notice">注意事项：</string>

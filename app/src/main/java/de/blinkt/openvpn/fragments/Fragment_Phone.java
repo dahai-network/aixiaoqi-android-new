@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -64,13 +65,13 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 
 	private static Fragment_Phone fragment;
 	RecyclerView rvContactRecode;
-	public
-	T9TelephoneDialpadView t9dialpadview;
+	public static T9TelephoneDialpadView t9dialpadview;
 	public TextView dial_delete_btn;
 	TextView tv_no_permission;
 	ContactRecodeAdapter contactRecodeAdapter;
 	public SQLiteDatabase sqliteDB;
 	public DatabaseDAO dao;
+	public EditText dial_input_edit_text;
 	ConnectedRecoderReceive connectedRecoderReceive;
 
 	public static Fragment_Phone newInstance() {
@@ -155,6 +156,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 		getActivity().unregisterReceiver(connectedRecoderReceive);
 		sqliteDB.close();
 		dao.closeDB();
+		t9dialpadview=null;
 	}
 
 	protected boolean isWifi() {
@@ -189,7 +191,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 					if (!TextUtils.isEmpty(curInputStr) && curInputStr.length() > 0) {
 						String newCurInputStr = curInputStr.substring(0, curInputStr.length() - 1);
 						if (TextUtils.isEmpty(newCurInputStr)) {
-							//hidePhoneBottomBar();
+
 						}
 						t9dialpadview.mT9InputEt.setText(newCurInputStr);
 						onDialInputTextChanged(newCurInputStr);
@@ -352,7 +354,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
             showPhoneBottomBar();
         } else {
 
-            hidePhoneBottomBar();
+          //  hidePhoneBottomBar();
             if (!TextUtils.isEmpty(this.curInputStr)) {
                 clickPhoneLinearLayout();
             }

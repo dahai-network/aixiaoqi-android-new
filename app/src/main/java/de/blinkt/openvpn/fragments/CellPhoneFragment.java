@@ -4,13 +4,13 @@ package de.blinkt.openvpn.fragments;
  * Created by Administrator on 2016/9/8 0008.
  */
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +21,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
+
+import org.androidannotations.annotations.App;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -82,12 +84,12 @@ public class CellPhoneFragment extends Fragment {
 
             operation_rg.check(cell_phone_rb.getId());
             ClickPhone();
-        /* if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
+       /* if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
                 showPhoneBottomBar();
             } else {
-                hidePhoneBottomBar();
+
             }*/
-           // ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
+            hidePhoneBottomBar();
         }
 
     }
@@ -146,6 +148,7 @@ public class CellPhoneFragment extends Fragment {
                 if (ProMainActivity.phone_fl.getVisibility() == View.GONE || ProMainActivity.phone_fl.getVisibility() == View.INVISIBLE)
 
                     ProMainActivity.phone_fl.setVisibility(View.VISIBLE);
+                ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
 
 
                 if (null != AppMode.getInstance().curCharacter) {
@@ -191,6 +194,7 @@ public class CellPhoneFragment extends Fragment {
             public void onPageSelected(int position) {
                 if (position == 0) {
                     ClickPhone();
+
                 } else {
                     ClickMessage();
 
@@ -264,12 +268,18 @@ public class CellPhoneFragment extends Fragment {
         //  cell_phone_rb.setTextColor(Color.BLACK);
         //  message_rb.setTextColor(Color.WHITE);
 
+        if (dial_tittle_fl.getVisibility() == View.VISIBLE) {
+            dial_tittle_fl.setVisibility(View.GONE);
+            operation_rg.setVisibility(View.VISIBLE);
+
+        }
+
         message_rb.setCompoundDrawables(null, null, null, drawable);
         cell_phone_rb.setCompoundDrawables(null, null, null, null);
         mViewPager.setCurrentItem(1);
         editTv.setVisibility(View.VISIBLE);
 
-      // ViewUtil.hideView(phoneFragment.t9dialpadview);
+        // ViewUtil.hideView(phoneFragment.t9dialpadview);
         floatingActionButton.setVisibility(View.GONE);
     }
 
@@ -279,8 +289,32 @@ public class CellPhoneFragment extends Fragment {
         //   cell_phone_rb.setTextColor(Color.WHITE);
         //  message_rb.setTextColor(Color.BLACK);
 
-       //ViewUtil.hideView(phoneFragment.t9dialpadview);
-        floatingActionButton.setVisibility(View.VISIBLE);
+        if (Fragment_Phone.t9dialpadview != null) {
+            if (Fragment_Phone.t9dialpadview.getT9Input() != null && Fragment_Phone.t9dialpadview.getT9Input().length() > 0) {
+
+                if (dial_tittle_fl != null && operation_rg != null) {
+                    dial_tittle_fl.setVisibility(View.VISIBLE);
+                    operation_rg.setVisibility(View.GONE);
+                }
+            }
+
+        }
+
+
+        //ViewUtil.hideView(phoneFragment.t9dialpadview);
+        /**
+         * \根据键盘的显示来实现控件的显示或则隐藏
+         */
+        if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
+            floatingActionButton.setVisibility(View.GONE);
+            ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
+            ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
+
+        } else {
+
+            floatingActionButton.setVisibility(View.VISIBLE);
+        }
+
 
         message_rb.setCompoundDrawables(null, null, null, null);
         cell_phone_rb.setCompoundDrawables(null, null, null, drawable);

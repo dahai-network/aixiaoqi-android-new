@@ -8,7 +8,6 @@ package de.blinkt.openvpn.activities.Base;
 import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.View;
-
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.views.TitleBar;
 
