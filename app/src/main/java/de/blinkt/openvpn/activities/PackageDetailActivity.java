@@ -185,7 +185,7 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
                 if (bean != null) {
                     //友盟方法统计
                     MobclickAgent.onEvent(context, CLICKPACKAGEDETAILPURCHASE);
-                    CommitOrderActivity.launch(PackageDetailActivity.this, bean);
+                    CommitOrderActivity.launch(PackageDetailActivity.this, bean,1);
                 }
                 break;
             case R.id.retryTextView:

@@ -52,20 +52,20 @@ public class PackageCategoryActivity extends BaseActivity {
     private void initView() {
         mRadioGroup_content = (LinearLayout) findViewById(R.id.mRadioGroup_content);
         mViewPager = (ViewPager) findViewById(R.id.mViewPager);
+        initColumnData();
         setChangelView();
     }
     /**
      *  当栏目项发生变化时候调用
      * */
     private void setChangelView() {
-        initColumnData();
         initTabColumn();
         initFragment();
     }
     /** 获取Column栏目 数据*/
     private void initColumnData() {
-      userChannelList.add(getString(R.string.activited));
         userChannelList.add(getString(R.string.no_activite));
+        userChannelList.add(getString(R.string.activited));
         userChannelList.add(getString(R.string.expire));
     }
 
@@ -117,16 +117,6 @@ public class PackageCategoryActivity extends BaseActivity {
      * */
     private void selectTab(int tab_postion) {
         columnSelectIndex = tab_postion;
-        for (int i = 0; i < mRadioGroup_content.getChildCount(); i++) {
-            View checkView = mRadioGroup_content.getChildAt(tab_postion);
-            int k = checkView.getMeasuredWidth();
-            int l = checkView.getLeft();
-            int i2 = l + k / 2 - mScreenWidth / 2;
-            // rg_nav_content.getParent()).smoothScrollTo(i2, 0);
-//            mColumnHorizontalScrollView.smoothScrollTo(i2, 0);
-            // mColumnHorizontalScrollView.smoothScrollTo((position - 2) *
-            // mItemWidth , 0);
-        }
         //判断是否选中
         for (int j = 0; j <  mRadioGroup_content.getChildCount(); j++) {
             View checkView = mRadioGroup_content.getChildAt(j);
@@ -148,13 +138,12 @@ public class PackageCategoryActivity extends BaseActivity {
         int count =  userChannelList.size();
         for(int i = 0; i< count;i++){
             Bundle data = new Bundle();
-            data.putString("id", userChannelList.get(i));
+            data.putString("id", i+"");
             PackageCategoryFragment packageCategoryFragment = new PackageCategoryFragment();
             packageCategoryFragment.setArguments(data);
             fragments.add(packageCategoryFragment);
         }
         FragmentAdapter mAdapetr = new FragmentAdapter(getSupportFragmentManager(), fragments);
-//		mViewPager.setOffscreenPageLimit(0);
         mViewPager.setAdapter(mAdapetr);
         mViewPager.setOnPageChangeListener(pageListener);
     }
