@@ -113,6 +113,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	LinearLayout liftWristLinearLayout;
 	@BindView(R.id.tv_coming_tel_tip)
 	TextView tvComingTelTip;
+	@BindView(R.id.unBindTextView)
+	TextView unBindTextView;
 	SharedUtils utils = SharedUtils.getInstance();
 	//bluetooth status蓝牙状态
 	private String bleStatus;
@@ -208,7 +210,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 			R.id.permission_set,
 			R.id.ll_alarm_clock_tip,
 			R.id.ll_coming_tel_tip,
-			R.id.liftWristLinearLayout})
+			R.id.liftWristLinearLayout,
+			R.id.unBindTextView
+	})
 	public void onClick(View v) {
 		Intent intent = null;
 		switch (v.getId()) {
@@ -306,6 +310,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				MobclickAgent.onEvent(getActivity(), CLICKALARMTIP);
 				intent = new Intent(getActivity(), AlarmClockActivity.class);
 //                intent = new Intent(getActivity(), SetAlarmActivity.class);
+				break;
+			case R.id.unBindTextView:
+				//断开连接
+				ICSOpenVPNApplication.getInstance().uartService.disconnect();
 				break;
 
 		}

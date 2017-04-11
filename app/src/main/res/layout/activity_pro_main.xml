@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -9,13 +10,14 @@
         android:layout_alignParentTop="true"
         android:orientation="vertical">
 
+
         <de.blinkt.openvpn.views.CustomViewPager
             android:id="@+id/mViewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
-        <TextView style="@style/horizontal_line_view" />
+        <TextView style="@style/horizontal_line_view"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -41,7 +43,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginTop="3dp"
-                        android:background="@drawable/index_icon" />
+                        android:background="@drawable/index_icon"/>
 
                     <TextView
                         android:id="@+id/indexTextView"
@@ -49,7 +51,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/index"
                         android:textColor="@android:color/white"
-                        android:textSize="11sp" />
+                        android:textSize="11sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -64,7 +66,7 @@
                         android:id="@+id/phoneImageView"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginTop="3dp" />
+                        android:layout_marginTop="3dp"/>
 
                     <TextView
                         android:id="@+id/phoneTextView"
@@ -73,7 +75,7 @@
                         android:layout_marginTop="2dp"
                         android:text="@string/phone"
                         android:textColor="@android:color/white"
-                        android:textSize="11sp" />
+                        android:textSize="11sp"/>
                 </LinearLayout>
 
 
@@ -90,7 +92,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginTop="3dp"
-                        android:background="@drawable/address_list_icon" />
+                        android:background="@drawable/address_list_icon"/>
 
                     <TextView
                         android:id="@+id/addressListTextView"
@@ -98,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/address_list"
                         android:textColor="@android:color/white"
-                        android:textSize="11sp" />
+                        android:textSize="11sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -113,7 +115,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginTop="3dp"
-                        android:background="@drawable/sport_selector" />
+                        android:background="@drawable/sport_selector"/>
 
                     <TextView
                         android:id="@+id/sportTextView"
@@ -121,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/sport"
                         android:textColor="@android:color/white"
-                        android:textSize="11sp" />
+                        android:textSize="11sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -137,7 +139,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginTop="3dp"
-                        android:background="@drawable/account_icon" />
+                        android:background="@drawable/account_icon"/>
 
                     <TextView
                         android:id="@+id/accountTextView"
@@ -145,7 +147,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/personal_center"
                         android:textColor="@android:color/white"
-                        android:textSize="11sp" />
+                        android:textSize="11sp"/>
                 </LinearLayout>
 
 
@@ -172,7 +174,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center_vertical"
                         android:src="@drawable/image_local_phone_nor"
-                        android:visibility="gone" />
+                        android:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/callImageView"
@@ -181,8 +183,8 @@
                         android:layout_gravity="center_vertical|left"
                         android:layout_marginLeft="18dp"
                         android:scaleType="center"
-                        android:visibility="visible"
-                        android:src="@drawable/dial_doubleking_seletor" />
+                        android:src="@drawable/dial_doubleking_seletor"
+                        android:visibility="visible"/>
 
                 </RelativeLayout>
 
@@ -193,7 +195,7 @@
                     android:layout_gravity="center_vertical|right"
                     android:layout_marginRight="@dimen/padding_15dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/image_putaway_seletor" />
+                    android:src="@drawable/image_putaway_seletor"/>
             </FrameLayout>
         </RelativeLayout>
 
@@ -227,7 +229,7 @@
                 android:gravity="center"
                 android:text="@string/network_phone"
                 android:textColor="@color/white"
-                android:textSize="@dimen/little_18" />
+                android:textSize="@dimen/little_18"/>
 
             <TextView
                 android:id="@+id/sim_register_phone_tv"
@@ -238,7 +240,7 @@
                 android:gravity="center"
                 android:text="@string/sim_register_phone"
                 android:textColor="@color/white"
-                android:textSize="@dimen/little_18" />
+                android:textSize="@dimen/little_18"/>
 
             <TextView
                 android:id="@+id/cancel_phone"
@@ -249,8 +251,15 @@
                 android:gravity="center"
                 android:text="@string/cancel"
                 android:textColor="@color/black"
-                android:textSize="@dimen/little_18" />
+                android:textSize="@dimen/little_18"/>
         </LinearLayout>
     </LinearLayout>
 
+    <de.blinkt.openvpn.views.TopProgressView
+        android:id="@+id/topProgressView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_20dp"
+        android:layout_marginTop="50dp"
+        android:visibility="gone"
+        />
 </RelativeLayout>
