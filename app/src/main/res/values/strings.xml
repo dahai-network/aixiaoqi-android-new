@@ -47,7 +47,7 @@
     <string name="hot_package">热门境外套餐</string>
     <string name="overseas_package">海外流量套餐</string>
     <string name="residue">剩余</string>
-    <string name="more">更多></string>
+    <string name="more">更多∨</string>
     <string name="distace">距离</string>
     <string name="add_up">累计</string>
     <string name="deplete">消耗</string>
@@ -154,7 +154,7 @@
     <string name="find_bracelet">查找手环</string>
     <string name="firmware_version">固件版本</string>
     <string name="sim_indevice">设备内电话卡</string>
-    <string name="remove_bind">解除绑定</string>
+    <string name="remove_bind"><u>解除绑定</u></string>
     <string name="bracelet_mac">手环mac地址</string>
     <string name="order_num">订单编号：</string>
     <string name="order_num_nocolon">订单编号</string>
@@ -577,6 +577,7 @@
     <string name="trust_app">信任应用</string>
     <!--选择绑定设备-->
     <string name="unibox">爱小器钥匙扣</string>
+    <string name="unibox_key">双待王</string>
     <string name="choice_bind_device">选择绑定设备</string>
     <string name="finded_bracelet">已搜索到设备，请点击设备确认绑定</string>
     <string name="click_bracelet_sure_bind">点击设备按钮确认绑定</string>
@@ -590,6 +591,7 @@
     <string name="set_now">立即设置</string>
     <string name="searching_unibox_strap">正在搜索周围双待王</string>
     <string name="only_power">剩余电量</string>
+    <string name="power">电量</string>
     <string name="rechargeing">正在充电</string>
     <string name="recharge_over">已充满</string>
     <string name="dual_standby_king">双待王</string>
@@ -598,4 +600,9 @@
     <string name="yuan">元</string>
     <string name="shop">商城</string>
     <string name="call_detail">拨打详情</string>
+    <string name="add_device">添加设备</string>
+    <string name="bill">账单</string>
+    <string name="activited">已激活</string>
+    <string name="no_activite">未激活</string>
+    <string name="expire">已过期</string>
 </resources>

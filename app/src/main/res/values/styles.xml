@@ -24,7 +24,11 @@
         <item name="android:listDivider">@drawable/index_divider</item>
     </style>
 
-
+    <style name="top_category_scroll_view_item_text">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
     <style name="LoadingDialogStyle" parent="@android:style/Theme.Dialog">
 
         <item name="android:windowNoTitle">true</item>

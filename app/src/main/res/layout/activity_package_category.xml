@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/gray_back_2"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/mRadioGroup_content"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/padding_40dp"
+        android:paddingRight="@dimen/padding_40dp" />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/mViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
