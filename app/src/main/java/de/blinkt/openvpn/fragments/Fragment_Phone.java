@@ -258,10 +258,21 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 //			showCellPhoneDialog();
 //		}
 		contactRecodeEntity = (ContactRecodeEntity) data;
-		Intent intent=new Intent(getActivity(), CallDetailActivity.class);
+		switch (view.getId()){
+			case R.id.iv_arrow:
+				Intent intent=new Intent(getActivity(), CallDetailActivity.class);
+				intent.putExtra(CallDetailActivity.PHONE_INFO,contactRecodeEntity);
+				startActivity(intent);
+				break;
+			default:
+				if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+					simCellPhone();
+				} else {
+					CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
+				}
+				break;
+		}
 
-		intent.putExtra(CallDetailActivity.PHONE_INFO,contactRecodeEntity);
-		startActivity(intent);
 
 	}
 

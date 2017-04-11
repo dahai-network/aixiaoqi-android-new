@@ -95,6 +95,8 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 				setSearchContentColor(holder.mNameTv, phoneNumber);
 			}
 		}
+		holder.mIvArrow.setOnClickListener(this);
+		holder.mIvArrow.setTag(contactRecodeEntity);
 		holder.itemView.setTag(contactRecodeEntity);
 	}
 	private String deleteprefix(String type,String s) {
@@ -142,14 +144,15 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 	public class ViewHolder extends RecyclerView.ViewHolder {
 		TextView mNameTv;
 		TextView mPhoneNumber, mDateTime;
+		ImageView mIvArrow;
 		ImageView mCallStatusImg;
-
 		public ViewHolder(View itemView) {
 			super(itemView);
 			//phone_number_text_view
 			mNameTv = (TextView) itemView.findViewById(R.id.name_text_view);
 			mPhoneNumber = (TextView) itemView.findViewById(R.id.phone_number_text_view);
 			mCallStatusImg = (ImageView) itemView.findViewById(R.id.callstatusimg);
+			mIvArrow = (ImageView) itemView.findViewById(R.id.iv_arrow);
 			mDateTime = (TextView) itemView.findViewById(R.id.datatime_txt);
 
 		}

@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.activities;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -41,13 +42,11 @@ public class PackageCategoryActivity extends BaseActivity {
         setContentView(R.layout.activity_package_category);
         mScreenWidth = CommonTools.getScreenWidth(this);
         mItemWidth = mScreenWidth / 4;// 一个Item宽度为屏幕的1/7
-//        initTitle();
+
         initView();
     }
 
-//    private void initTitle(){
-//        hasLeftViewTitle(-1,R.string.activate_packet);
-//    }
+
     /** 初始化layout控件*/
     private void initView() {
         mRadioGroup_content = (LinearLayout) findViewById(R.id.mRadioGroup_content);
@@ -72,6 +71,7 @@ public class PackageCategoryActivity extends BaseActivity {
     /**
      *  初始化Column栏目项
      * */
+    Drawable   drawable;
     private void initTabColumn() {
         mRadioGroup_content.removeAllViews();
         int count =  userChannelList.size();
@@ -80,16 +80,16 @@ public class PackageCategoryActivity extends BaseActivity {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mItemWidth , LayoutParams.WRAP_CONTENT);
             params.leftMargin = 5;
             params.rightMargin = 5;
-//			TextView localTextView = (TextView) mInflater.inflate(R.layout.column_radio_item, null);
             TextView columnTextView = new TextView(this);
             columnTextView.setTextAppearance(this, R.style.top_category_scroll_view_item_text);
-//			localTextView.setBackground(getResources().getDrawable(R.drawable.top_category_scroll_text_view_bg));
-            columnTextView.setBackgroundResource(R.drawable.radio_buttong_bg);
+            if(drawable==null){
+                drawable = getResources().getDrawable(R.drawable.image_slidethetriangle);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            }
             columnTextView.setGravity(Gravity.CENTER);
             columnTextView.setPadding(5, 5, 5, 5);
             columnTextView.setId(i);
             columnTextView.setText(userChannelList.get(i));
-            columnTextView.setTextColor(getResources().getColorStateList(R.color.top_category_scroll_text_color_day));
             if(columnSelectIndex == i){
                 columnTextView.setSelected(true);
             }
@@ -98,12 +98,15 @@ public class PackageCategoryActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     for(int i = 0;i < mRadioGroup_content.getChildCount();i++){
-                        View localView = mRadioGroup_content.getChildAt(i);
-                        if (localView != v)
+                        TextView  localView = (TextView) mRadioGroup_content.getChildAt(i);
+                        if (localView != v){
                             localView.setSelected(false);
+                            localView.setCompoundDrawables(null,null,null,null);
+                        }
                         else{
                             localView.setSelected(true);
                             mViewPager.setCurrentItem(i);
+                            localView.setCompoundDrawables(null,null,null,drawable);
                         }
                     }
 
@@ -119,12 +122,15 @@ public class PackageCategoryActivity extends BaseActivity {
         columnSelectIndex = tab_postion;
         //判断是否选中
         for (int j = 0; j <  mRadioGroup_content.getChildCount(); j++) {
-            View checkView = mRadioGroup_content.getChildAt(j);
+            TextView checkView = (TextView) mRadioGroup_content.getChildAt(j);
             boolean ischeck;
             if (j == tab_postion) {
                 ischeck = true;
+                checkView.setCompoundDrawables(null,null,null,drawable);
+
             } else {
                 ischeck = false;
+                checkView.setCompoundDrawables(null,null,null,null);
             }
             checkView.setSelected(ischeck);
         }

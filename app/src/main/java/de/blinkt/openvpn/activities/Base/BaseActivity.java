@@ -53,7 +53,12 @@ public class BaseActivity extends CommenActivity {
 		titleBar.getLeftText().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onBackPressed();
+				try {
+					onBackPressed();
+				}catch (Exception e){
+
+				}
+
 			}
 		});
 	}

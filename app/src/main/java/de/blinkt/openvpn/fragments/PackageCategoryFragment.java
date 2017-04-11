@@ -42,7 +42,8 @@ public class PackageCategoryFragment extends Fragment implements XRecyclerView.L
     TextView noDataTextView;
     @BindView(R.id.NodataRelativeLayout)
     RelativeLayout NodataRelativeLayout;
-    ;
+    OrderAdapter orderAdapter;
+    LinearLayoutManager  manager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,8 +60,7 @@ public class PackageCategoryFragment extends Fragment implements XRecyclerView.L
         super.onAttach(activity);
     }
 
-    OrderAdapter orderAdapter;
-    LinearLayoutManager  manager;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
