@@ -65,8 +65,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 
 	private static Fragment_Phone fragment;
 	RecyclerView rvContactRecode;
-	public
-	T9TelephoneDialpadView t9dialpadview;
+	public static T9TelephoneDialpadView t9dialpadview;
 	public TextView dial_delete_btn;
 	TextView tv_no_permission;
 	ContactRecodeAdapter contactRecodeAdapter;
@@ -157,6 +156,7 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 		getActivity().unregisterReceiver(connectedRecoderReceive);
 		sqliteDB.close();
 		dao.closeDB();
+		t9dialpadview=null;
 	}
 
 	protected boolean isWifi() {

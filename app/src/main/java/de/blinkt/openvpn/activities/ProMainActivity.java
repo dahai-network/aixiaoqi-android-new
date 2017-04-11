@@ -439,12 +439,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 } else if (!isDeploy) {*/
                 //如果展开则收回
                 //  e("isDeploy1" + isDeploy);
-
+                ViewUtil.hideView(phoneFragment.t9dialpadview);
 
                 if (CellPhoneFragment.floatingActionButton.getVisibility() != View.VISIBLE && phoneFragment.t9dialpadview.getVisibility() != View.VISIBLE ) {
                     Log.d("aixiaoqi__", "getPosition(): "+getPosition());
                     if(SmsFragment.editSmsImageView!=null)
                     {
+                        Log.d("aixiaoqi__", "editSmsImageView: "+SmsFragment.editSmsImageView);
                         if(SmsFragment.editSmsImageView.getVisibility()!=View.VISIBLE)
                         {
                             ViewUtil.hideView(phoneFragment.t9dialpadview);

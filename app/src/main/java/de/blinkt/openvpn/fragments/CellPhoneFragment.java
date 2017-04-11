@@ -289,15 +289,17 @@ public class CellPhoneFragment extends Fragment {
         //   cell_phone_rb.setTextColor(Color.WHITE);
         //  message_rb.setTextColor(Color.BLACK);
 
+        if (Fragment_Phone.t9dialpadview != null) {
+            if (Fragment_Phone.t9dialpadview.getT9Input() != null && Fragment_Phone.t9dialpadview.getT9Input().length() > 0) {
 
-        if (!"".equals(AppMode.getInstance().curCharacter) && AppMode.getInstance().curCharacter.length() > 0) {
-
-            Log.d("aixiaoqi__", "ClickPhone: " + AppMode.getInstance().curCharacter.length());
-            if (dial_tittle_fl != null && operation_rg != null) {
-                dial_tittle_fl.setVisibility(View.VISIBLE);
-                operation_rg.setVisibility(View.GONE);
+                if (dial_tittle_fl != null && operation_rg != null) {
+                    dial_tittle_fl.setVisibility(View.VISIBLE);
+                    operation_rg.setVisibility(View.GONE);
+                }
             }
+
         }
+
 
         //ViewUtil.hideView(phoneFragment.t9dialpadview);
         /**
