@@ -23,7 +23,7 @@ public class AppMode implements Serializable {
         return instance;
     }
 
-    public String curCharacter;
+    public String curCharacter="";
 
 
 }

@@ -20,15 +20,14 @@ import com.umeng.analytics.MobclickAgent;
 import org.w3c.dom.Text;
 
 import cn.com.aixiaoqi.R;
+import cn.com.johnson.model.AppMode;
+import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.util.ViewUtil;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKKEYCALLPHONE;
 
-
 public class T9TelephoneDialpadView extends LinearLayout implements
         OnClickListener {
-
-
     /**
      * Interface definition for a callback to be invoked when a
      * T9TelephoneDialpadView is operated.
@@ -55,6 +54,8 @@ public class T9TelephoneDialpadView extends LinearLayout implements
     private TextView mDialDeleteBtn;
     public EditText mT9InputEt;
     private View topView;
+    LinearLayout searchEt;
+
     private OnT9TelephoneDialpadView mOnT9TelephoneDialpadView = null;
 
     public TextView getDeteleBtn() {
@@ -69,11 +70,14 @@ public class T9TelephoneDialpadView extends LinearLayout implements
 
     }
 
+    @Override
+    protected void cleanupLayoutState(View child) {
+        super.cleanupLayoutState(child);
+    }
+
     public void show() {
         ViewUtil.showView(this);
     }
-
-
 
 
     private void initView() {
@@ -87,7 +91,12 @@ public class T9TelephoneDialpadView extends LinearLayout implements
                 .findViewById(R.id.dial_input_edit_text);
         mT9InputEt.setCursorVisible(false);
 
+        searchEt = (LinearLayout) findViewById(R.id.search_et_linearlayout);
+
+        //初始化状态
         mDialDeleteBtn.setVisibility(View.GONE);
+        mT9InputEt.setVisibility(View.GONE);
+        searchEt.setBackgroundResource(R.color.transparent);
     }
 
     private void initListener() {
@@ -112,14 +121,25 @@ public class T9TelephoneDialpadView extends LinearLayout implements
                     mT9InputEt.setSelection(inputStr.length());
 
                 }
+                ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
                 //根据输入框的字符来控制图片的显示
-                if (s.toString().length() > 0) {
-                  mDialDeleteBtn.setVisibility(View.VISIBLE);
+                if (s != null) {
+                    if (s.toString().length() > 0) {
+                        mDialDeleteBtn.setVisibility(View.VISIBLE);
+                        searchEt.setBackgroundResource(R.color.bottom_bar);
+                        mT9InputEt.setVisibility(View.VISIBLE);
 
-                } else {
-                   mDialDeleteBtn.setVisibility(View.GONE);
+
+                    } else {
+
+
+                        mDialDeleteBtn.setVisibility(View.GONE);
+                        mT9InputEt.setVisibility(View.GONE);
+                        searchEt.setBackgroundResource(R.color.transparent);
+                    }
 
                 }
+
             }
 
             @Override
