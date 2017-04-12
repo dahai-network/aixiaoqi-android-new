@@ -37,12 +37,17 @@ public class Constant {
 	public static final String IMEI = "BraceletIMEI";
 	public static final String BRACELETVERSION = "BraceletVersion";
 	public static final String BRACELETNAME = "braceletname";
-	public static final String BRACELETTYPE = "bracelettype";
+	public static final String BRACELETTYPEINT = "bracelettypeint";
 	public static final String BRACELETPOWER = "braceletpower";
 	public static final String NULLCARD_SERIALNUMBER = "NULLCARD_SERIALNUMBER";
 	public static final String VERSION_HEADER = "Version";
 	public static final String TERMINAL_HEADER = "Terminal";
 	public static final String PHONE_NUMBER_LIST = "phone_number_list";
+	//运营商
+	public static final String OPERATER = "operater";
+	public static final String CHINA_TELECOM = "China_Telecom";
+	public static final String CHINA_MOBILE = "China_Mobile";
+	public static final String CHINA_UNICOM = "China_Unicom";
 	//更新请求的时间间隔（一小时提示一次升级）
 	public static final String UPGRADE_INTERVAL = "upgrade_interval";
 	//极光推送标签
@@ -81,7 +86,7 @@ public class Constant {
 	public static final String WEIXIN_PUSH = "888003040003";//微信推送到设备
 	public static final String QQ_PUSH = "888003040004";//QQ推送到设备
 
-	public static final String APP_CONNECT = "8880021400";//绑定命令
+	public static final String APP_CONNECT = "8880021400";//APP专属命令
 	public static final String BIND_DEVICE = "8880020700";//绑定命令
 	public static final String BIND_SUCCESS = "888003080001";//绑定成功命令
 	public static final String BIND_FAIL = "888003080000";//绑定失败命令

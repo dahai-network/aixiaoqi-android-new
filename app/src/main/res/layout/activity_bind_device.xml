@@ -15,7 +15,7 @@
         android:layout_marginTop="43dp"
         android:text="@string/searching_wrist_strap"
         android:textColor="@color/white"
-        android:textSize="18sp"/>
+        android:textSize="21sp"/>
 
     <TextView
         android:id="@+id/tip_search"
@@ -25,7 +25,7 @@
         android:layout_centerHorizontal="true"
         android:text="@string/please_close_to_the_phone"
         android:textColor="@color/white"
-        android:textSize="10sp"
+        android:textSize="12sp"
         />
 
 

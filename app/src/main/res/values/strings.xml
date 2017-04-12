@@ -139,7 +139,6 @@
     <string name="vivo_test_2_2">将休眠策略设置为永不休眠</string>
 
 
-
     <string name="samsung_test_1_1">点击内存按钮</string>
     <string name="samsung_test_1_2">点击自启动应用程序列表找到爱小器APP，打开对应开关</string>
 
@@ -169,7 +168,7 @@
     <string name="app_version">APP版本号</string>
     <string name="conn_bluetooth">蓝牙未连接，点击开启</string>
 
-<string name="message_history">短信记录</string>
+    <string name="message_history">短信记录</string>
     <string name="message">短信</string>
     <string name="message_record">短信记录</string>
     <string name="active">活动</string>
@@ -384,10 +383,10 @@
     <string name="less_current_time">生效时间不能小于当前时间</string>
     <string name="app_name">联系人搜索</string>
     <string name="t9_keyboard_input_prompt">输入号码或拼音</string>
-   <!-- <string name="call_phone">拨打</string>-->
+    <!-- <string name="call_phone">拨打</string>-->
     <string name="call_history">通话历史</string>
     <string name="call_phone">拨打</string>
- <!--   <string name="call_phone">通话历史</string>-->
+    <!--   <string name="call_phone">通话历史</string>-->
     <string name="no_card_or_rule_break">未能检测到手环内有电话卡，您需要重启手环重新检测吗</string>
     <string name="no_aixiaoqi_or_rule_break">未能检测到手环内有爱小器卡，您需要重启手环重新检测吗</string>
     <string name="sport_no_data">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;暂无运动数据\n绑定手环后可以分析运动情况</string>
@@ -579,6 +578,7 @@
     <!--选择绑定设备-->
     <string name="unibox">爱小器钥匙扣</string>
     <string name="unibox_key">双待王</string>
+    <string name="unitoy">爱小器</string>
     <string name="choice_bind_device">选择绑定设备</string>
     <string name="finded_bracelet">已搜索到设备，请点击设备确认绑定</string>
     <string name="click_bracelet_sure_bind">点击设备按钮确认绑定</string>
@@ -609,4 +609,8 @@
     <string name="OnOrOff">开关</string>
     <string name="registing">正在连接运营商服务器...</string>
     <string name="stop_seek">暂不搜索</string>
+    <string name="hardware_product">硬件产品</string>
+    <string name="china_telecom">中国电信</string>
+    <string name="china_mobile">中国移动</string>
+    <string name="china_unicom">中国联通</string>
 </resources>

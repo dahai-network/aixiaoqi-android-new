@@ -67,6 +67,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	ImageView findedImageView;
 	@BindView(R.id.seekImageView)
 	ImageView seekImageView;
+	@BindView(R.id.uniImageView)
+	ImageView uniImageView;
 
 	private Handler mHandler;
 	private Handler findDeviceHandler;
@@ -125,6 +127,11 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		Animation anim = AnimationUtils.loadAnimation(this, R.anim.anim_rotate_seek);
 		anim.setInterpolator(new LinearInterpolator());//代码设置插补器
 		seekImageView.startAnimation(anim);
+	}
+
+	@Override
+	public void onBackPressed() {
+		stopTextView.performClick();
 	}
 
 	//查看选择设备类型
@@ -304,7 +311,11 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 				if (bluetoothName.contains(Constant.UNITOYS)) {
 					mService.connect(deviceAddress);
 				} else {
-					connectedRelativeLayout.setVisibility(View.VISIBLE);
+//					connectedRelativeLayout.setVisibility(View.VISIBLE);
+					findedImageView.clearAnimation();
+					findedImageView.setVisibility(View.GONE);
+					uniImageView.setBackgroundResource(R.drawable.bind_finish);
+
 					new Handler().postDelayed(new Runnable() {
 						@Override
 						public void run() {
@@ -328,7 +339,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			utils = SharedUtils.getInstance();
 
 		createHttpRequest(HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, utils.readString(Constant.BRACELETVERSION),
-				utils.readInt(Constant.BRACELETPOWER) + "", utils.readInt(Constant.BRACELETTYPE) + "");
+				utils.readInt(Constant.BRACELETPOWER) + "", utils.readInt(Constant.BRACELETTYPEINT) + "");
 	}
 
 	private void restartUartService() {
@@ -418,7 +429,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 				findedImageView.setVisibility(View.VISIBLE);
 				Animation anim = AnimationUtils.loadAnimation(this, R.anim.anim_trans_seek_over);
 				findedImageView.startAnimation(anim);
-
 			}
 		}
 	}

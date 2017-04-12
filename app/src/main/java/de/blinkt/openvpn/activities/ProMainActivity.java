@@ -473,7 +473,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				//友盟方法统计
 				MobclickAgent.onEvent(this, CLICKHOMECONTACT);
 				viewPagerCurrentPageIndex = 3;
-				accountFragment.setBleStatus(indexFragment.getBlutoothStatus());
 				break;
 //			case R.id.sportLinearLayout:
 //				viewPagerCurrentPageIndex = 3;
@@ -498,7 +497,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				break;
 			case R.id.iv_putaway:
 			/*	if (phoneFragment != null) {
-                    phoneFragment.dial_delete_btn.performClick();
+					phoneFragment.dial_delete_btn.performClick();
 				}*/
 				// CellPhoneFragment.dial_input_edit_text.setVisibility(View.GONE);
 				CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
@@ -845,6 +844,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			case SocketConstant.REGISTER_SUCCESS:
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 				topProgressView.setVisibility(View.GONE);
+				accountFragment.setRegisted(true);
 				break;
 			case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 				CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
@@ -985,6 +985,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	@Subscribe(threadMode = ThreadMode.MAIN)
 	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
 		indexFragment.changeBluetoothStatus(entity.getStatus(), entity.getStatusDrawableInt());
+		accountFragment.setBleStatus(entity.getStatus());
 	}
 
 	@Subscribe(threadMode = ThreadMode.BACKGROUND)//非UI线程
@@ -1014,7 +1015,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			final String action = intent.getAction();
 			if (action.equals(UartService.FINDED_SERVICE)) {
 				MyDeviceActivity.isConnectOnce = true;
+				accountFragment.showDeviceSummarized(true);
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+				if (!ICSOpenVPNApplication.isConnect) {
+					accountFragment.showDeviceSummarized(false);
+					accountFragment.setRegisted(false);
+					topProgressView.setVisibility(View.GONE);
+				}
 				i("被主动断掉连接！");
 				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
 				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
@@ -1045,6 +1052,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							} else if (message.get(0).substring(10, 12).equals("11")) {
 								sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 							}
+							break;
+						case Constant.SYSTEM_BASICE_INFO:
+							//返回基本信息就更新account的仪表盘栏
+							String typeText;
+							String powerText;
+							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16) + "";
+							String bracelettype = SharedUtils.getInstance().readString(MyDeviceActivity.BRACELETTYPE);
+							if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
+								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
+							} else {
+								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
+							}
+							accountFragment.setSummarized(typeText, powerText, false);
 							break;
 					}
 				} catch (Exception e) {

@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.util.SharedUtils;
 
 import static de.blinkt.openvpn.activities.MyDeviceActivity.BLUESTATUSFROMPROMAIN;
 
@@ -49,6 +50,7 @@ public class ChoiceDeviceTypeActivity extends BaseActivity {
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
 		Intent intent = new Intent(this, MyDeviceActivity.class);
 		intent.putExtra(MyDeviceActivity.BRACELETTYPE, type);
+		SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE,type);
 		intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, blueStatus);
 		startActivity(intent);
 		finish();

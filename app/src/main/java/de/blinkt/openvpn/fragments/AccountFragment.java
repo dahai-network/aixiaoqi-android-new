@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +15,30 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aixiaoqi.socket.EventBusUtil;
+import com.aixiaoqi.socket.SocketConstant;
 import com.bumptech.glide.Glide;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.widget.GlideCircleTransform;
+import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.AlarmClockActivity;
 import de.blinkt.openvpn.activities.BalanceParticularsActivity;
 import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.ImportantAuthorityActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
-import de.blinkt.openvpn.activities.MyPackageActivity;
 import de.blinkt.openvpn.activities.PackageCategoryActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
 import de.blinkt.openvpn.activities.SettingActivity;
 import de.blinkt.openvpn.activities.TipUserOptionActivity;
+import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -42,10 +48,14 @@ import de.blinkt.openvpn.http.BalanceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
+import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
 
+import static android.view.View.GONE;
+import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
+import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKALARMTIP;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBALANCE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCOMINGTELTIP;
@@ -84,8 +94,18 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	RelativeLayout activateRelativeLayout;
 	@BindView(R.id.addDeviceRelativeLayout)
 	RelativeLayout addDeviceRelativeLayout;
+	@BindView(R.id.deviceSummarizedRelativeLayout)
+	RelativeLayout deviceSummarizedRelativeLayout;
 	@BindView(R.id.permission_set)
 	TextView tvPermissionSet;
+	@BindView(R.id.deviceNameTextView)
+	TextView deviceNameTextView;
+	@BindView(R.id.powerTextView)
+	TextView powerTextView;
+	@BindView(R.id.signalIconImageView)
+	ImageView signalIconImageView;
+	@BindView(R.id.operatorTextView)
+	TextView operatorTextView;
 	@BindView(R.id.tv_setting)
 	TextView tvSetting;
 	@BindView(R.id.rechargeTextView)
@@ -158,6 +178,43 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 
 	private void getAlarmClock() {
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ALARM_CLOCK_COUNT);
+	}
+
+	public void showDeviceSummarized(boolean isShow) {
+		if (isShow) {
+			deviceSummarizedRelativeLayout.setVisibility(View.VISIBLE);
+		} else {
+			deviceSummarizedRelativeLayout.setVisibility(GONE);
+		}
+	}
+
+	public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
+		deviceNameTextView.setText(deviceType);
+		powerTextView.setText(powerPercent + "%");
+		setRegisted(isRegisted);
+	}
+
+	public void setRegisted(boolean isRegisted) {
+		if (isRegisted) {
+			signalIconImageView.setBackgroundResource(R.drawable.registed);
+			String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
+			if (operater != null) {
+				switch (operater) {
+					case Constant.CHINA_TELECOM:
+						operatorTextView.setText(getString(R.string.china_telecom));
+						break;
+					case Constant.CHINA_MOBILE:
+						operatorTextView.setText(getString(R.string.china_mobile));
+						break;
+					case Constant.CHINA_UNICOM:
+						operatorTextView.setText(getString(R.string.china_unicom));
+						break;
+				}
+			}
+		} else {
+			signalIconImageView.setBackgroundResource(R.drawable.unregist);
+			operatorTextView.setText("----");
+		}
 	}
 
 	private void getData() {
@@ -248,6 +305,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				} else if (getString(R.string.index_aixiaoqicard).equals(getBleStatus())) {
 					status = R.string.index_aixiaoqicard;
 				}
+				//手环的名字
+				String braceleName = SharedUtils.getInstance().readString(BRACELETNAME, "");
+				intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceleName);
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
 				break;
 			case R.id.permission_set:
@@ -314,8 +374,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				break;
 			case R.id.unBindTextView:
 				//断开连接
-				ICSOpenVPNApplication.getInstance().uartService.disconnect();
-				break;
+				CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
+
+				return;
 
 		}
 
@@ -337,6 +398,25 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				else {
 					tvAlarmClockTip.setText(String.format(getResources().getString(R.string.opened_num_alarm_clock), "0"));
 				}
+			}
+		} else if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
+			if (object.getStatus() == 1) {
+				SharedUtils.getInstance().delete(BRACELETPOWER);
+				SharedUtils.getInstance().delete(Constant.IMEI);
+				SharedUtils.getInstance().delete(BRACELETNAME);
+				SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
+				BluetoothConstant.IS_BIND = false;
+				//判断是否再次重连的标记
+				ICSOpenVPNApplication.isConnect = false;
+				ReceiveBLEMoveReceiver.isConnect = false;
+				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_INITIATIVE);
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
+				CommonTools.showShortToast(getActivity(), "已解绑设备");
+				ICSOpenVPNApplication.uartService.disconnect();
+				showDeviceSummarized(false);
+			} else {
+				CommonTools.showShortToast(getActivity(), object.getMsg());
+				Log.i(TAG, object.getMsg());
 			}
 		}
 	}
@@ -362,5 +442,36 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 
 	public void setBleStatus(String bleStatus) {
 		this.bleStatus = bleStatus;
+	}
+
+	/**
+	 * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
+	 */
+	private void sendEventBusChangeBluetoothStatus(String status) {
+		int statusDrawable = R.drawable.index_connecting;
+		if (status.equals(getString(R.string.index_connecting))) {
+		} else if (status.equals(getString(R.string.index_aixiaoqicard))) {
+			statusDrawable = R.drawable.index_no_signal;
+		} else if (status.equals(getString(R.string.index_no_signal))) {
+			statusDrawable = R.drawable.index_no_signal;
+		} else if (status.equals(getString(R.string.index_regist_fail))) {
+			statusDrawable = R.drawable.index_no_signal;
+		} else if (status.equals(getString(R.string.index_registing))) {
+			statusDrawable = R.drawable.index_no_signal;
+		} else if (status.equals(getString(R.string.index_unbind))) {
+			statusDrawable = R.drawable.index_unbind;
+		} else if (status.equals(getString(R.string.index_no_packet))) {
+			statusDrawable = R.drawable.index_no_packet;
+		} else if (status.equals(getString(R.string.index_un_insert_card))) {
+			statusDrawable = R.drawable.index_no_signal;
+		} else if (status.equals(getString(R.string.index_high_signal))) {
+			statusDrawable = R.drawable.index_high_signal;
+		} else if (status.equals(getString(R.string.index_blue_un_opne))) {
+			statusDrawable = R.drawable.index_blue_unpen;
+		}
+		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
+		entity.setStatus(status);
+		entity.setStatusDrawableInt(statusDrawable);
+		EventBus.getDefault().post(entity);
 	}
 }

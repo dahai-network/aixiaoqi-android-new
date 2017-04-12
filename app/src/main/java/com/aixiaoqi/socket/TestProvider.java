@@ -56,9 +56,9 @@ public class TestProvider {
 			}
 		}
 		String imsi;
-		if(!TextUtils.isEmpty(iccidEntity.getImmsi()))
+		if (!TextUtils.isEmpty(iccidEntity.getImmsi()))
 			imsi = iccidEntity.getImmsi().trim();
-		else{
+		else {
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 			return;
 		}
@@ -71,20 +71,20 @@ public class TestProvider {
 			if (validSim(imsi)) {//因为移动网络编号46000下的IMSI已经用完，所以虚拟了一个46002编号，134/159号段使用了此编号
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
 				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
-				String token= SharedUtils.getInstance().readString(Constant.TOKEN);
-				if(TextUtils.isEmpty(token)){
+				String token = SharedUtils.getInstance().readString(Constant.TOKEN);
+				if (TextUtils.isEmpty(token)) {
 					EventBusUtil.simRegisterStatue(SocketConstant.TOKEN_IS_NULL);
-				}else{
-					SocketConstant.CONNENCT_VALUE[3] =RadixAsciiChange.convertStringToHex(token);
+				} else {
+					SocketConstant.CONNENCT_VALUE[3] = RadixAsciiChange.convertStringToHex(token);
 					REGISTER_STATUE_CODE = 2;
 					isIccid = true;
 					savePreData();
-					if(SocketConnection.mReceiveSocketService!=null&&SocketConnection.mReceiveSocketService.CONNECT_STATUE==SocketConnection.mReceiveSocketService.CONNECT_SUCCEED){
+					if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {
 						ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-					}else if(SocketConnection.mReceiveSocketService!=null&&SocketConnection.mReceiveSocketService.CONNECT_STATUE==SocketConnection.mReceiveSocketService.CONNECT_FAIL){
+					} else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {
 						SocketConnection.mReceiveSocketService.disconnect();
 						connectTcp();
-					}else{
+					} else {
 						connectTcp();
 					}
 
@@ -100,13 +100,13 @@ public class TestProvider {
 	private static void connectTcp() {
 		ProMainActivity.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
 		if (isCreate && isIccid) {
-            ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-        }
+			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+		}
 	}
 
 	private static void savePreData() {
-		DBHelp db=new DBHelp(ICSOpenVPNApplication.getContext());
-		PreReadEntity preReadEntity=new PreReadEntity();
+		DBHelp db = new DBHelp(ICSOpenVPNApplication.getContext());
+		PreReadEntity preReadEntity = new PreReadEntity();
 		preReadEntity.setIccid(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
 		preReadEntity.setImsi(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
 		preReadEntity.setPreReadData(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1]);
@@ -115,16 +115,25 @@ public class TestProvider {
 	}
 
 	private static boolean validSim(String imsi) {
-		return imsi.startsWith("46000")
-                || imsi.startsWith("46001")
-                || imsi.startsWith("46002")
-                || imsi.startsWith("46006")
-                || imsi.startsWith("46007")
-                || imsi.startsWith("46009")
-                || imsi.startsWith("46020")
-                ||imsi.startsWith("46003")
-                || imsi.startsWith("46005")
-                || imsi.startsWith("460011");
+		if (imsi.startsWith("46000") || imsi.startsWith("46002")
+				|| imsi.startsWith("46007")
+				|| imsi.startsWith("46020")) {
+			SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_MOBILE);//中国移动
+			return true;
+		} else if (imsi.startsWith("46001")
+				|| imsi.startsWith("46006")) {
+			SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_UNICOM);//中国联通
+			return true;
+		} else if (imsi.startsWith("46009")
+				|| imsi.startsWith("46003")
+				|| imsi.startsWith("46005")
+				|| imsi.startsWith("460011")) {
+			SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_TELECOM);//中国电信
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 
@@ -136,7 +145,7 @@ public class TestProvider {
 		preDataEntity.setLenString(item.substring(4, 8));
 		preDataEntity.setPreDataString(item.substring(8, item.length()));
 		String hex = preDataEntity.getPreDataString();
-		Log.e("preDataSplit", "evt:" + preDataEntity.getEvtIndex() + "\nchn:" + preDataEntity.getChnString()+"\nlen:" + preDataEntity.getLenString() + "\npreData:" + preDataEntity.getPreDataString());
+		Log.e("preDataSplit", "evt:" + preDataEntity.getEvtIndex() + "\nchn:" + preDataEntity.getChnString() + "\nlen:" + preDataEntity.getLenString() + "\npreData:" + preDataEntity.getPreDataString());
 		if (SocketConstant.EN_APPEVT_PRDATA.equals(preDataEntity.getEvtIndex())) {
 			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = hex;
 			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preDataEntity.getLenString();
@@ -160,10 +169,10 @@ public class TestProvider {
 		});
 	}
 
-	public static  void  clearData(){
-		ProMainActivity.sendYiZhengService=null;
-		isCreate=false;
-		isIccid=false;
+	public static void clearData() {
+		ProMainActivity.sendYiZhengService = null;
+		isCreate = false;
+		isIccid = false;
 	}
 
 }
