@@ -2,20 +2,24 @@ package de.blinkt.openvpn.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -34,14 +38,14 @@ import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.fragments.PackageDetailActivityItemFragment;
+import de.blinkt.openvpn.factory.FragmentFactory;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.PacketDtailHttp;
 import de.blinkt.openvpn.model.PacketDtailEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
-import de.blinkt.openvpn.views.PagerSlidingTabStrip;
+import de.blinkt.openvpn.views.PagerSlidingTabStripExtends;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKPACKAGEDETAILPURCHASE;
@@ -60,23 +64,17 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
     @BindView(R.id.flowTextView)
     TextView flowTextView;
     @BindView(R.id.buyPackageButton)
-    Button buyPackageButton;
-    /*  @BindView(R.id.featuresTextView)
-      TextView featuresTextView;*/
-  /*  @BindView(R.id.detailTextView)
-    TextView detailTextView;*/
-   /* @BindView(R.id.retryTextView)*/
- /*   TextView retryTextView;
-    @BindView(R.id.how_to_use_tv)
-    TextView howToUseTv;*/
-  /*  @BindView(R.id.payment_term_text)
-            TextView paymentTermText;*/
+    TextView buyPackageButton;
     @BindView(R.id.NoNetRelativeLayout)
     RelativeLayout NoNetRelativeLayout;
     @BindView(R.id.detailScrollView)
     ScrollView detailScrollView;
     private PacketDtailEntity.ListBean bean;
-
+    String[] detail_titles;
+    PagerSlidingTabStripExtends mTabs;
+    DisplayMetrics dm;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
     public static void launch(Context context, String id, String countryPic) {
         Intent intent = new Intent(context, PackageDetailActivity.class);
@@ -92,9 +90,18 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
         setContentView(R.layout.activity_package_detail);
         ButterKnife.bind(this);
         initSet();
+        dm = getResources().getDisplayMetrics();
+        setTabsValue();
+
     }
 
     private void initSet() {
+
+        pref = getSharedPreferences("detail_data", MODE_PRIVATE);
+        editor = pref.edit();
+        //获取标题
+        detail_titles = getResources().getStringArray(R.array.detail_titles);
+
         activity = this;
         initViews();
         addData();
@@ -118,14 +125,15 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
     private void initViews() {
         hasLeftViewTitle(R.string.package_detail, 0);
         String paymentOfTerms = SharedUtils.getInstance().readString(IntentPutKeyConstant.PAYMENT_OF_TERMS);
-        // if (!TextUtils.isEmpty(paymentOfTerms))
-        //paymentTermText.setText(SharedUtils.getInstance().readString(IntentPutKeyConstant.PAYMENT_OF_TERMS));
+        if (!TextUtils.isEmpty(paymentOfTerms))
+            editor.putString("payterms", paymentOfTerms);
+        editor.commit();
 
-        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        mTabs = (PagerSlidingTabStripExtends) findViewById(R.id.jbp_tabs);
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        MyPagerDetailAdapter adapter = new MyPagerDetailAdapter(getSupportFragmentManager());
+        DtailFragmentStatePagerAdapter adapter = new DtailFragmentStatePagerAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
-        tabs.setViewPager(pager);
+        mTabs.setViewPager(pager);
     }
 
 
@@ -142,16 +150,23 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
                 NoNetRelativeLayout.setVisibility(View.GONE);
                 detailScrollView.setVisibility(View.VISIBLE);
                 bean = http.getPacketDtailEntity().getList();
-                Log.d("aixiaoqi__", "rightComplete: " + bean.getDetails());
+                Log.d("aixiaoqi__", "getDetails: " + bean.getDetails());
                 //detailTextView.setText(bean.getDetails());
                 //featuresTextView.setText(bean.getFeatures());
-                Log.d("aixiaoqi__", "rightComplete: " + bean.getPackageName());
-
                 packageNameTextView.setText(bean.getPackageName());
-
-                Log.d("aixiaoqi__", "rightComplete: " + bean.getFlow());
-                flowTextView.setText(bean.getFlow());
+                // flowTextView.setText(bean.getFlow());
                 //  howToUseTv.setText(bean.getUseDescr());
+                editor.putString("detail", bean.getDetails());
+                editor.putString("features", bean.getFeatures());
+
+                editor.commit();
+
+                Intent intent = new Intent("net_data");
+                intent.putExtra("detail", bean.getDetails());
+                intent.putExtra("features", bean.getFeatures());
+                LocalBroadcastManager.getInstance(PackageDetailActivity.this).sendBroadcast(intent);
+
+
                 priceTextView.setText("￥" + bean.getPrice());
                 setSpan(priceTextView);
                 String countryPic = getIntent().getStringExtra("countryPic");
@@ -202,7 +217,7 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
                 if (bean != null) {
                     //友盟方法统计
                     MobclickAgent.onEvent(context, CLICKPACKAGEDETAILPURCHASE);
-                    CommitOrderActivity.launch(PackageDetailActivity.this, bean,1);
+                    CommitOrderActivity.launch(PackageDetailActivity.this, bean, 1);
                 }
                 break;
             case R.id.retryTextView:
@@ -211,30 +226,68 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
         }
     }
 
-    class MyPagerDetailAdapter extends FragmentPagerAdapter {
+    class DtailFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
-        private final String[] TITLES = {"套餐详情", "产品特色", "支付条款"
-        };
-
-        public MyPagerDetailAdapter(FragmentManager fm) {
+        public DtailFragmentStatePagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
-            return TITLES[position];
+        public Fragment getItem(int position) {
+            Fragment fragment = FragmentFactory.getDetailFragment(position);
+            return fragment;
         }
 
         @Override
         public int getCount() {
-            return TITLES.length;
+            if (detail_titles != null) {
+                return detail_titles.length;
+            }
+            return 0;
         }
 
         @Override
-        public Fragment getItem(int position) {
-            return PackageDetailActivityItemFragment.newInstance(position);
+        public CharSequence getPageTitle(int position) {
+            // TODO
+            return detail_titles[position];
         }
 
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            // container.addView(jbpTitles.get(position));
+            return super.instantiateItem(container, position);
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            // TODO Auto-generated method stub
+            super.destroyItem(container, position, object);
+        }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //editor.clear();
+        editor.remove("detail");
+        editor.remove("features");
+        editor.remove("payterms");
+        editor.commit();
+    }
+
+    /**
+     * 设置该PagerSlidingTabStrip的样式
+     */
+    private void setTabsValue() {
+        // 设置Tab是自动填充满屏幕的
+        mTabs.setShouldExpand(false);
+        // 设置Tab的分割线是透明的
+        mTabs.setDividerColor(Color.TRANSPARENT);
+        // 设置Tab底部线的高度
+
+        // 设置Tab Indicator的高度
+        mTabs.setIndicatorHeight((int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 2, dm));
+
+    }
 }

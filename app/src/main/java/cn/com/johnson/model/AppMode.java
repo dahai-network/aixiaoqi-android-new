@@ -26,4 +26,6 @@ public class AppMode implements Serializable {
     public String curCharacter="";
 
 
+
+
 }
