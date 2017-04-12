@@ -75,9 +75,17 @@ public class OrderEntity implements Serializable {
 		private String PackageFeatures;
 		private String PackageDetails;
 		private String Pic;
-
+		private String PackageCategory;
 		private boolean PackageIsSupport4G;
 		private boolean PackageIsApn;
+
+		public String getPackageCategory() {
+			return PackageCategory;
+		}
+
+		public void setPackageCategory(String packageCategory) {
+			PackageCategory = packageCategory;
+		}
 
 		public boolean isPackageIsSupport4G() {
 			return PackageIsSupport4G;

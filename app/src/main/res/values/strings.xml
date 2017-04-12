@@ -150,7 +150,7 @@
     <string name="setting">设置</string>
     <string name="step_all">总共步行</string>
     <string name="order_detail">订单详情</string>
-    <string name="activate_now">立即激活</string>
+    <string name="activate_now">马上激活</string>
     <string name="find_bracelet">查找手环</string>
     <string name="firmware_version">固件版本</string>
     <string name="sim_indevice">设备内电话卡</string>
@@ -168,7 +168,7 @@
     <string name="agreement">用户许可及服务协议</string>
     <string name="app_version">APP版本号</string>
     <string name="conn_bluetooth">蓝牙未连接，点击开启</string>
-
+    <string name="wait_activite">稍后激活</string>
 <string name="message_history">短信记录</string>
     <string name="message">短信</string>
     <string name="message_record">短信记录</string>

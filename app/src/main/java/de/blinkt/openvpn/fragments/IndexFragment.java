@@ -313,6 +313,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
                 //友盟方法统计
                 MobclickAgent.onEvent(getActivity(), CLICKHOTPACKAGEMORE);
                 Intent marketIntent = new Intent(getActivity(), PackageMarketActivity.class);
+                marketIntent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE,Constant.HIDDEN);
                 startActivity(marketIntent);
                 break;
             case R.id.boughtMessageMoreTextView:

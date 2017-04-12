@@ -149,8 +149,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 	private void addData() {
 		LocalBroadcastManager.getInstance(this).registerReceiver(isWriteReceiver, setFilter());
 		showDefaultProgress();
-		GetOrderByIdHttp http = new GetOrderByIdHttp(this, HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID, getIntent().getStringExtra("id"));
-		new Thread(http).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID, getIntent().getStringExtra("id"));
 	}
 
 	@Override
@@ -196,6 +195,12 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 						cancelOrderButton.setVisibility(GONE);
 						expiryDateTextView.setText(bean.getExpireDays());
 						activateTextView.setText("再次激活");
+					}
+
+
+					if("1".equals(bean.getPackageCategory())){
+						expiryDateTextView.setVisibility(GONE);
+						activateTextView.setVisibility(GONE);
 					}
 					priceTextView.setText("￥" + bean.getUnitPrice());
 					setSpan(priceTextView);
@@ -346,11 +351,14 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 		switch (view.getId()) {
 			case R.id.cancelOrderButton:
 				if (bean != null) {
-					if (!CommonTools.isFastDoubleClick(1000)) {
-						//友盟方法统计
-						MobclickAgent.onEvent(context, CLICKCANCELORDER);
-						CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CANCEL_ORDER, bean.getOrderID());
-					}
+//					if (!CommonTools.isFastDoubleClick(1000)) {
+//						//友盟方法统计
+//						MobclickAgent.onEvent(context, CLICKCANCELORDER);
+//						CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CANCEL_ORDER, bean.getOrderID());
+//					}
+					ICSOpenVPNApplication.getInstance().finishOtherActivity();
+
+
 				}
 				break;
 			case R.id.activateTextView:
@@ -385,32 +393,34 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 //						}else{
 
 
-							IS_TEXT_SIM = false;
-							orderStatus = 4;
-							showProgress("正在激活", false);
-							new Thread(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
-										Thread.sleep(20000);
-									} catch (InterruptedException e) {
-										dismissProgress();
-										e.printStackTrace();
-									}
-									if (!isActivateSuccess) {
-										runOnUiThread(new Runnable() {
-											@Override
-											public void run() {
-												dismissProgress();
-												CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
-											}
-										});
-									}
+						IS_TEXT_SIM = false;
+						orderStatus = 4;
+						showProgress("正在激活", false);
+						new Thread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
+									Thread.sleep(20000);
+								} catch (InterruptedException e) {
+									dismissProgress();
+									e.printStackTrace();
 								}
-							}).start();
-							orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
-						}
+								if (!isActivateSuccess) {
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											dismissProgress();
+											CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
+										}
+									});
+								}else{
+									ICSOpenVPNApplication.getInstance().finishOtherActivity();
+								}
+							}
+						}).start();
+						orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
+					}
 //					}
 				}
 				break;
@@ -429,6 +439,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 		if (nullcardNumber != null) {
 			createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_DATA, bean.getOrderID(), nullcardNumber);
 		} else {
+			dismissProgress();
 			CommonTools.showShortToast(this, getString(R.string.no_nullcard_id));
 		}
 	}

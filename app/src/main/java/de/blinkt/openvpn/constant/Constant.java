@@ -310,5 +310,6 @@ public class Constant {
 	public static final String REGISTER_SIM_NOT_PRE_DATA = "not_pre_data";
 	public static final String REGISTER_SIM_PRE_DATA = "pre_data";
 
-
+	public static final String HIDDEN="hidden";
+	public static final String SHOW="show";
 }
