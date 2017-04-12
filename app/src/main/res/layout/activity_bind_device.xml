@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/login_back"
+    android:background="@color/blue_title"
     >
 
 
@@ -24,38 +24,55 @@
         android:layout_below="@id/search_bluetooth"
         android:layout_centerHorizontal="true"
         android:text="@string/please_close_to_the_phone"
-        android:textColor="@color/login_bottom_line"
+        android:textColor="@color/white"
         android:textSize="10sp"
         />
 
 
-    <ImageView
-        android:id="@+id/stopImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <TextView
+        android:id="@+id/stopTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/seeking_button"
+        android:background="@drawable/cancel_seek_selector"
+        android:gravity="center"
+        android:text="@string/stop_seek"
+        android:textColor="@color/blue_title"
         />
 
-    <de.blinkt.openvpn.views.PointProgressBar
-        android:id="@+id/pointProgressBar"
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tip_search"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="135dp"/>
+        android:layout_centerInParent="true"
+        android:background="@drawable/pic_bind_arround"
+        />
+
+    <ImageView
+        android:id="@+id/uniImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/pic_sdw"/>
+
+    <ImageView
+        android:id="@+id/seekImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/seeking_pic"
+        />
 
     <ImageView
         android:id="@+id/findedImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tip_search"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="100dp"
-        android:visibility="gone"
-        />
+        android:layout_alignEnd="@+id/search_bluetooth"
+        android:layout_below="@+id/uniImageView"
+        android:background="@drawable/hand_up"
+        android:visibility="gone"/>
 
     <!--<android.support.v7.widget.RecyclerView
         android:id="@+id/all_device_rv"
