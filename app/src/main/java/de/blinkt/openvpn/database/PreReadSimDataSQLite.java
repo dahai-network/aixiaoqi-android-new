@@ -9,8 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class PreReadSimDataSQLite extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME="aixiaoqi";
-    private static final int  DATABASE_VERSION=2;
+    private static final String DATABASE_NAME="aixiaoqi_predata";
+    private static final int  DATABASE_VERSION=3;
   public   static final String KEY_ICCID = "iccid";
     static final String KEY_IMSSI = "imssi";
     static final String KEY_PRE_READ_DATA = "prereaddata";

@@ -10,15 +10,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class BlackListSQLite extends SQLiteOpenHelper{
 
-    private static final String DATABASE_NAME="aixiaoqi";
-    private static final int  BLACK_LIST_DATA_VERSION=2;
+    private static final String DATABASE_NAME="aixiaoqi_blacklist";
+    private static final int  BLACK_LIST_DATA_VERSION=3;
     public   static final String UESR_PHONE = "user_phone";
     static final String BLACK_LIST_PHONE = "black_list_phone";
     static final String BLACK_LIST_DATA_TABLE = "blacklist";
     private  static final String BLACK_LIST_DATA_CREATE =
             "create table "+BLACK_LIST_DATA_TABLE+"( _id integer primary key autoincrement, " +
                     UESR_PHONE+"  text  not null , "+
-                    BLACK_LIST_PHONE+"  text UNIQUE not null);";
+                    BLACK_LIST_PHONE+"  text  not null);";
     public BlackListSQLite(Context context)
     {
         super(context, DATABASE_NAME, null, BLACK_LIST_DATA_VERSION);
