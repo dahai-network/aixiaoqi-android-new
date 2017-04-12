@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/call_phone_background"
-                android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/call_phone_background"
+    android:orientation="vertical"
     >
 
     <LinearLayout
@@ -59,15 +59,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="72dp"
+        android:layout_centerInParent="true"
         android:orientation="horizontal"
         >
 
         <TextView
             android:id="@+id/calmTextView"
             android:layout_width="0dp"
-android:layout_marginLeft="@dimen/padding_10dp"
+            android:layout_marginLeft="@dimen/padding_10dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/record_voice_selector"
@@ -77,17 +76,7 @@ android:layout_marginLeft="@dimen/padding_10dp"
             android:textColor="@android:color/white"
             android:textSize="12dp"
             />
-        <TextView
-            android:id="@+id/cancelcallbtn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:drawableTop="@drawable/hang_up"
-            android:text="@string/hang_down"
-            />
+
 
         <TextView
             android:id="@+id/mtview"
@@ -98,11 +87,25 @@ android:layout_marginLeft="@dimen/padding_10dp"
             android:drawableTop="@drawable/hand_free_selector"
             android:drawablePadding="10dp"
             android:gravity="center"
+
             android:text="@string/hang_free"
             android:textColor="@android:color/white"
             android:textSize="12dp"
             />
     </LinearLayout>
 
-
+    <TextView
+        android:id="@+id/cancelcallbtn"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="72dp"
+        android:textColor="@android:color/white"
+        android:drawableTop="@drawable/hang_up"
+        android:text="@string/hang_down"
+        />
 </RelativeLayout>

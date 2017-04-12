@@ -215,6 +215,9 @@ public class CreateHttpFactory {
             case  HttpConfigUrl.COMTYPE_BLACK_LIST_GET://获取选择号码
                 startHttp(new BlackListGetHttp(interfaceCallback,cmdType));
                 break;
+            case  HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING://获取选择号码
+                startHttp(new OrderUsageRemainHttp(interfaceCallback,cmdType));
+                break;
 
         }
     }
