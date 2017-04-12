@@ -191,7 +191,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
         totalDayTextView = (TextView) view.findViewById(R.id.totalDayTextView);
         totalKalTextView = (TextView) view.findViewById(R.id.totalKalTextView);
         guiderImageView = (ImageView) view.findViewById(R.id.guiderImageView);
-        orderAdapter = new OrderAdapter(getActivity(), null, false, R.layout.item_order_index);
+        orderAdapter = new OrderAdapter(getActivity(), null, R.layout.item_order_index);
         boughtPackgeRecyclerView.setNestedScrollingEnabled(false);
 //		FullyLinearLayoutManager linearManager = new FullyLinearLayoutManager(getActivity());
         boughtPackgeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

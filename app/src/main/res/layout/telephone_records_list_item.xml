@@ -57,7 +57,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/padding_15dp"
-        android:background="@drawable/image_enter_arrow_nor"
+        android:background="@drawable/tip_call_detail_selector"
         android:gravity="right"
         android:textColor="@color/country_packet_gray"
         android:textSize="@dimen/little_12" />
