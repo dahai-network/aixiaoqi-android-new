@@ -426,7 +426,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="7.5dp"
                     android:paddingTop="15dp"
-                    android:text="@string/overseas_package"
+                    android:text="@string/hardware_product"
                     android:textSize="16sp"
                     />
 

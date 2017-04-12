@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/gray_back_2"
-                android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_back_2"
+    android:orientation="vertical">
 
 
     <de.blinkt.openvpn.views.TitleBar
@@ -204,7 +204,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/padding_5dp"
                         android:background="@drawable/has_package"
-
+                        android:visibility="visible"
                         >
 
                         <TextView
@@ -243,7 +243,6 @@
 
                             <RelativeLayout
                                 android:layout_width="0dp"
-                                android:gravity="center"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1">
 
@@ -252,9 +251,10 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="15dp"
-                                    android:paddingLeft="@dimen/padding_15dp"
+                                    android:layout_centerHorizontal="true"
                                     android:text="@string/call_time"
                                     android:textColor="@color/white"
+
                                     />
 
                                 <TextView
@@ -262,6 +262,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/call"
+                                    android:layout_centerHorizontal="true"
                                     android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
@@ -272,7 +273,7 @@
 
                             <RelativeLayout
                                 android:layout_width="0dp"
-                                android:gravity="center"
+
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1">
 
@@ -282,7 +283,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="15dp"
-
+                                    android:layout_centerHorizontal="true"
                                     android:text="@string/flow_count"
                                     android:textColor="@color/white"
                                     />
@@ -294,6 +295,7 @@
                                     android:layout_below="@id/flow"
                                     android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_centerHorizontal="true"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
                                     android:textStyle="bold"
@@ -313,6 +315,7 @@
                                     android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="15dp"
                                     android:text="@string/all_package_count"
+                                    android:layout_centerHorizontal="true"
                                     android:textColor="@color/white"
                                     />
 
@@ -322,6 +325,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/all_package"
                                     android:layout_marginLeft="@dimen/padding_15dp"
+                                    android:layout_centerHorizontal="true"
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
@@ -339,7 +343,31 @@
                     android:layout_height="120dp"
                     >
 
+
                     <RelativeLayout
+                        android:id="@+id/noDeviceRelativeLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="@dimen/padding_5dp"
+                        android:background="@color/white"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:drawableLeft="@drawable/add_device"
+                            android:drawablePadding="@dimen/padding_10dp"
+                            android:text="@string/add_device"
+                            android:textColor="@color/gray_text"/>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/deviceSummarizedRelativeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/padding_5dp"
@@ -348,7 +376,7 @@
                         >
 
                         <TextView
-                            android:id="@+id/deviceTypeTextView"
+                            android:id="@+id/deviceNameTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="12dp"
@@ -372,7 +400,7 @@
                         <View
                             android:id="@+id/addDeviceLine"
                             style="@style/horizontal_line_view"
-                            android:layout_below="@id/deviceTypeTextView"
+                            android:layout_below="@id/deviceNameTextView"
                             />
 
                         <LinearLayout
@@ -420,8 +448,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/padding_15dp"
-                                    android:layout_marginTop="15dp"
-                                    android:background="@drawable/index_high_signal"
+                                    android:layout_marginTop="20dp"
+                                    android:background="@drawable/unregist"
                                     />
 
                                 <TextView
@@ -438,57 +466,8 @@
                                     />
                             </RelativeLayout>
 
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1">
 
-                                <TextView
-                                    android:id="@+id/switchTitleTextView"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="15dp"
-                                    android:paddingLeft="@dimen/padding_15dp"
-                                    android:text="@string/OnOrOff"
-                                    android:textColor="@color/white"
-                                    />
-
-                                <de.blinkt.openvpn.views.SwitchView
-                                    android:id="@+id/switchTextView"
-                                    android:layout_width="40dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@id/switchTitleTextView"
-                                    android:layout_marginLeft="@dimen/padding_15dp"
-                                    android:layout_marginTop="5dp"
-                                    android:text="----"
-                                    android:textColor="@color/white"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    />
-                            </RelativeLayout>
                         </LinearLayout>
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/noDeviceRelativeLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginTop="@dimen/padding_5dp"
-                        android:background="@color/white"
-                        >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:drawableLeft="@drawable/add_device"
-                            android:drawablePadding="@dimen/padding_10dp"
-                            android:text="@string/add_device"
-                            android:textColor="@color/gray_text"/>
-
-
                     </RelativeLayout>
                 </RelativeLayout>
 

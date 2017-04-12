@@ -258,8 +258,7 @@
     <de.blinkt.openvpn.views.TopProgressView
         android:id="@+id/topProgressView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/padding_20dp"
+        android:layout_height="@dimen/padding_25dp"
         android:layout_marginTop="50dp"
-        android:visibility="gone"
         />
 </RelativeLayout>

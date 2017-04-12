@@ -7,10 +7,12 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,7 +45,6 @@ import de.blinkt.openvpn.model.BluetoothModel;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
-import de.blinkt.openvpn.views.PointProgressBar;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
@@ -54,18 +55,20 @@ import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 public class BindDeviceActivity extends BaseNetActivity implements DialogInterfaceTypeBase {
 
-	@BindView(R.id.stopImageView)
-	ImageView stopImageView;
+	@BindView(R.id.stopTextView)
+	TextView stopTextView;
 	@BindView(R.id.connectedRelativeLayout)
 	RelativeLayout connectedRelativeLayout;
 	@BindView(R.id.tip_search)
 	TextView tip_search;
 	@BindView(R.id.search_bluetooth)
 	TextView search_bluetooth;
-	@BindView(R.id.pointProgressBar)
-	PointProgressBar pointProgressBar;
 	@BindView(R.id.findedImageView)
 	ImageView findedImageView;
+	@BindView(R.id.seekImageView)
+	ImageView seekImageView;
+	@BindView(R.id.uniImageView)
+	ImageView uniImageView;
 
 	private Handler mHandler;
 	private Handler findDeviceHandler;
@@ -117,6 +120,18 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		mHandler = new Handler();
 		findDeviceHandler = new Handler();
 		scanLeDevice(true);
+		setAnimation();
+	}
+
+	private void setAnimation() {
+		Animation anim = AnimationUtils.loadAnimation(this, R.anim.anim_rotate_seek);
+		anim.setInterpolator(new LinearInterpolator());//代码设置插补器
+		seekImageView.startAnimation(anim);
+	}
+
+	@Override
+	public void onBackPressed() {
+		stopTextView.performClick();
 	}
 
 	//查看选择设备类型
@@ -248,7 +263,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			};
 
 
-	@OnClick(R.id.stopImageView)
+	@OnClick(R.id.stopTextView)
 	public void onClick() {
 		scanLeDevice(false);
 		mService.disconnect();
@@ -296,7 +311,11 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 				if (bluetoothName.contains(Constant.UNITOYS)) {
 					mService.connect(deviceAddress);
 				} else {
-					connectedRelativeLayout.setVisibility(View.VISIBLE);
+//					connectedRelativeLayout.setVisibility(View.VISIBLE);
+					findedImageView.clearAnimation();
+					findedImageView.setVisibility(View.GONE);
+					uniImageView.setBackgroundResource(R.drawable.bind_finish);
+
 					new Handler().postDelayed(new Runnable() {
 						@Override
 						public void run() {
@@ -320,7 +339,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			utils = SharedUtils.getInstance();
 
 		createHttpRequest(HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, utils.readString(Constant.BRACELETVERSION),
-				utils.readInt(Constant.BRACELETPOWER) + "", utils.readInt(Constant.BRACELETTYPE) + "");
+				utils.readInt(Constant.BRACELETPOWER) + "", utils.readInt(Constant.BRACELETTYPEINT) + "");
 	}
 
 	private void restartUartService() {
@@ -350,7 +369,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 				}
 			}).start();
 		} else {
-			stopImageView.performClick();
+			stopTextView.performClick();
 		}
 	}
 
@@ -398,14 +417,18 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	private void showIsBindLayout() {
 		tip_search.setText(getString(R.string.finded_bracelet));
 		search_bluetooth.setText(getString(R.string.click_bracelet_sure_bind));
-		pointProgressBar.stop();
+		seekImageView.clearAnimation();
 		if (bracelettype != null) {
-			pointProgressBar.setVisibility(View.GONE);
-			findedImageView.setVisibility(View.VISIBLE);
+//			pointProgressBar.setVisibility(View.GONE);
+//			findedImageView.setVisibility(View.VISIBLE);
 			if (bracelettype.equals(MyDeviceActivity.UNITOYS)) {
-				findedImageView.setBackground(ContextCompat.getDrawable(this, R.drawable.unitoy_finded));
+//				findedImageView.setBackground(ContextCompat.getDrawable(this, R.drawable.unitoy_finded));
 			} else {
-				findedImageView.setBackground(ContextCompat.getDrawable(this, R.drawable.unibox_finded));
+//				findedImageView.setBackground(ContextCompat.getDrawable(this, R.drawable.unibox_finded));
+				seekImageView.setBackgroundResource(R.drawable.seek_finish_pic);
+				findedImageView.setVisibility(View.VISIBLE);
+				Animation anim = AnimationUtils.loadAnimation(this, R.anim.anim_trans_seek_over);
+				findedImageView.startAnimation(anim);
 			}
 		}
 	}

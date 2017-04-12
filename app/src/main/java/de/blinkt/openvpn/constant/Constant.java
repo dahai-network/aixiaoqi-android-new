@@ -12,46 +12,51 @@ public class Constant {
     public static final String UNITOYS = "unitoys";
     public static final String UNIBOX = "unibox";
 
-    //购买套餐数量限制
-    public static final int LIMIT_COUNT = 30;
-    //保存登录信息
-    public static final String ISFIRSTIN = "isfirstin";
-    public static final String USER_NAME = "userName";
-    public static final String PASSWORD = "password";
-    public static final String TOKEN = "token";
-    public static final String TEL = "tel";
-    public static final String LOGIN_DATA = "loginDate";
-    public static final String CONFIG_TIME = "config_time";
-    public static final String USER_HEAD = "UserHead";
-    public static final String GENDER = "gender";
-    public static final String HEIGHT = "height";
-    public static final String WEIGHT = "weight";
-    public static final String SOPRT_TARGET = "sport_target";
-    public static final String NICK_NAME = "nickname";
-    public static final String BRITHDAY = "brithday";
-    public static final String ASTERISK_IP_IN = "AsteriskIp";
-    public static final String ASTERISK_PORT_IN = "AsteriskPort";
-    public static final String ASTERISK_IP_OUT = "AsteriskIpOut";
-    public static final String ASTERISK_PORT_OUT = "AsteriskPortOut";
-    public static final String PUBLIC_PASSWORD = "publicpassword";
-    public static final String IMEI = "BraceletIMEI";
-    public static final String BRACELETVERSION = "BraceletVersion";
-    public static final String BRACELETNAME = "braceletname";
-    public static final String BRACELETTYPE = "bracelettype";
-    public static final String BRACELETPOWER = "braceletpower";
-    public static final String NULLCARD_SERIALNUMBER = "NULLCARD_SERIALNUMBER";
-    public static final String VERSION_HEADER = "Version";
-    public static final String TERMINAL_HEADER = "Terminal";
-    public static final String PHONE_NUMBER_LIST = "phone_number_list";
-    //更新请求的时间间隔（一小时提示一次升级）
-    public static final String UPGRADE_INTERVAL = "upgrade_interval";
-    //极光推送标签
-    public static final String JPUSH_ALIAS = "jpush_alias";
-    public static final String JPUSH_ALIAS_SUCCESS = "success";
-    //页码
-    public static final int PAGESIZE = 20;
-    //统计错误信息
-    public static final String APPID = "0cd55873f3";
+	//购买套餐数量限制
+	public static final int LIMIT_COUNT = 30;
+	//保存登录信息
+	public static final String ISFIRSTIN = "isfirstin";
+	public static final String USER_NAME = "userName";
+	public static final String PASSWORD = "password";
+	public static final String TOKEN = "token";
+	public static final String TEL = "tel";
+	public static final String LOGIN_DATA = "loginDate";
+	public static final String CONFIG_TIME = "config_time";
+	public static final String USER_HEAD = "UserHead";
+	public static final String GENDER = "gender";
+	public static final String HEIGHT = "height";
+	public static final String WEIGHT = "weight";
+	public static final String SOPRT_TARGET = "sport_target";
+	public static final String NICK_NAME = "nickname";
+	public static final String BRITHDAY = "brithday";
+	public static final String ASTERISK_IP_IN = "AsteriskIp";
+	public static final String ASTERISK_PORT_IN = "AsteriskPort";
+	public static final String ASTERISK_IP_OUT = "AsteriskIpOut";
+	public static final String ASTERISK_PORT_OUT = "AsteriskPortOut";
+	public static final String PUBLIC_PASSWORD = "publicpassword";
+	public static final String IMEI = "BraceletIMEI";
+	public static final String BRACELETVERSION = "BraceletVersion";
+	public static final String BRACELETNAME = "braceletname";
+	public static final String BRACELETTYPEINT = "bracelettypeint";
+	public static final String BRACELETPOWER = "braceletpower";
+	public static final String NULLCARD_SERIALNUMBER = "NULLCARD_SERIALNUMBER";
+	public static final String VERSION_HEADER = "Version";
+	public static final String TERMINAL_HEADER = "Terminal";
+	public static final String PHONE_NUMBER_LIST = "phone_number_list";
+	//运营商
+	public static final String OPERATER = "operater";
+	public static final String CHINA_TELECOM = "China_Telecom";
+	public static final String CHINA_MOBILE = "China_Mobile";
+	public static final String CHINA_UNICOM = "China_Unicom";
+	//更新请求的时间间隔（一小时提示一次升级）
+	public static final String UPGRADE_INTERVAL = "upgrade_interval";
+	//极光推送标签
+	public static final String JPUSH_ALIAS = "jpush_alias";
+	public static final String JPUSH_ALIAS_SUCCESS = "success";
+	//页码
+	public static final int PAGESIZE = 20;
+	//统计错误信息
+	public static final String APPID = "0cd55873f3";
 
     //增加http头部信息
 
@@ -81,18 +86,18 @@ public class Constant {
     public static final String WEIXIN_PUSH = "888003040003";//微信推送到设备
     public static final String QQ_PUSH = "888003040004";//QQ推送到设备
 
-    public static final String APP_CONNECT = "8880021400";//绑定命令
-    public static final String BIND_DEVICE = "8880020700";//绑定命令
-    public static final String BIND_SUCCESS = "888003080001";//绑定成功命令
-    public static final String BIND_FAIL = "888003080000";//绑定失败命令
-    //ICCID标记
-    public static final String ICCID = "ICCID";
-    //来电，短信，微信，QQ通知开关标记
-    public static final String LIFT_WRIST = "LiftWristLight";
-    public static final String COMING_TEL_REMIND = "NotificaCall";
-    public static final String MESSAGE_REMIND = "NotificaSMS";
-    public static final String WEIXIN_REMIND = "NotificaWeChat";
-    public static final String QQ_REMIND = "NotificaQQ";
+	public static final String APP_CONNECT = "8880021400";//APP专属命令
+	public static final String BIND_DEVICE = "8880020700";//绑定命令
+	public static final String BIND_SUCCESS = "888003080001";//绑定成功命令
+	public static final String BIND_FAIL = "888003080000";//绑定失败命令
+	//ICCID标记
+	public static final String ICCID = "ICCID";
+	//来电，短信，微信，QQ通知开关标记
+	public static final String LIFT_WRIST = "LiftWristLight";
+	public static final String COMING_TEL_REMIND = "NotificaCall";
+	public static final String MESSAGE_REMIND = "NotificaSMS";
+	public static final String WEIXIN_REMIND = "NotificaWeChat";
+	public static final String QQ_REMIND = "NotificaQQ";
 
     //是否打开写卡流程，如果没有打开则是测试SIM卡是否连接上，如果否则为写卡流程，可以连接到GOIP
     public static boolean IS_TEXT_SIM = false;

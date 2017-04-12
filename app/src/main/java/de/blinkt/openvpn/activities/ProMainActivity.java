@@ -420,33 +420,31 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private int clickCount = 0;
 	private int scrollCount = 0;
 
-    @Override
-    public void onClick(View v) {
-        removeAllStatus();
-        int id = v.getId();
-        switch (id) {
-            case R.id.phoneLinearLayout:
-                isClick = true;
-                clickCount++;
-                viewPagerCurrentPageIndex = 1;
-                Log.d("aixiaoqi__", "onClick: " + viewPagerCurrentPageIndex);
+	@Override
+	public void onClick(View v) {
+		removeAllStatus();
+		int id = v.getId();
+		switch (id) {
+			case R.id.phoneLinearLayout:
+				isClick = true;
+				clickCount++;
+				viewPagerCurrentPageIndex = 1;
+				Log.d("aixiaoqi__", "onClick: " + viewPagerCurrentPageIndex);
 
 				//ViewUtil.hideView(phoneFragment.t9dialpadview);
 
-                if (CellPhoneFragment.floatingActionButton.getVisibility() != View.VISIBLE && phoneFragment.t9dialpadview.getVisibility() != View.VISIBLE ) {
-                    Log.d("aixiaoqi__", "getPosition(): "+getPosition());
-                    if(SmsFragment.editSmsImageView!=null)
-                    {
-                        Log.d("aixiaoqi__", "editSmsImageView: "+SmsFragment.editSmsImageView);
-                        if(SmsFragment.editSmsImageView.getVisibility()!=View.VISIBLE)
-                        {
-                            ViewUtil.hideView(phoneFragment.t9dialpadview);
-                            CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
-                        }
-                    }
+				if (CellPhoneFragment.floatingActionButton.getVisibility() != View.VISIBLE && phoneFragment.t9dialpadview.getVisibility() != View.VISIBLE) {
+					Log.d("aixiaoqi__", "getPosition(): " + getPosition());
+					if (SmsFragment.editSmsImageView != null) {
+						Log.d("aixiaoqi__", "editSmsImageView: " + SmsFragment.editSmsImageView);
+						if (SmsFragment.editSmsImageView.getVisibility() != View.VISIBLE) {
+							ViewUtil.hideView(phoneFragment.t9dialpadview);
+							CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
+						}
+					}
 
 
-                }
+				}
 
 
 				//ivArray[viewPagerCurrentPageIndex].setBackgroundResource(R.drawable.phone_icon_check_open);
@@ -466,7 +464,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				//友盟方法统计
 				MobclickAgent.onEvent(this, CLICKHOMECONTACT);
 				viewPagerCurrentPageIndex = 3;
-				accountFragment.setBleStatus(indexFragment.getBlutoothStatus());
 				break;
 //			case R.id.sportLinearLayout:
 //				viewPagerCurrentPageIndex = 3;
@@ -483,33 +480,33 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			case R.id.callImageView:
 
 
-                if (phoneFragment != null) {
-                    //友盟方法统计
-                    MobclickAgent.onEvent(this, CLICKCALLPHONE);
-                    phoneFragment.phonecallClicked();
-                }
-                break;
-            case R.id.iv_putaway:
-            /*	if (phoneFragment != null) {
-                    phoneFragment.dial_delete_btn.performClick();
+				if (phoneFragment != null) {
+					//友盟方法统计
+					MobclickAgent.onEvent(this, CLICKCALLPHONE);
+					phoneFragment.phonecallClicked();
+				}
+				break;
+			case R.id.iv_putaway:
+			/*	if (phoneFragment != null) {
+					phoneFragment.dial_delete_btn.performClick();
 				}*/
-                // CellPhoneFragment.dial_input_edit_text.setVisibility(View.GONE);
-                CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
-                ViewUtil.hideView(phoneFragment.t9dialpadview);
-                phone_fl.setVisibility(View.GONE);
-                hidePhoneBottomBar();
-                ivArray[1].setBackgroundResource(R.drawable.image_phone_icon_check);
-                break;
-        }
-        //设置当前对应的界面
-        if (!(/*id == R.id.phoneNumberImageView ||*/ id == R.id.callImageView/* || id == R.id.deleteImageView*/)) {
-            mViewPager.setCurrentItem(viewPagerCurrentPageIndex, false);
-            tvArray[viewPagerCurrentPageIndex].setTextColor(getResources().getColor(R.color.bottom_bar_text_enable));
-            if (viewPagerCurrentPageIndex != 1) {
-                ivArray[viewPagerCurrentPageIndex].setEnabled(true);
-            }
-        }
-    }
+				// CellPhoneFragment.dial_input_edit_text.setVisibility(View.GONE);
+				CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
+				ViewUtil.hideView(phoneFragment.t9dialpadview);
+				phone_fl.setVisibility(View.GONE);
+				hidePhoneBottomBar();
+				ivArray[1].setBackgroundResource(R.drawable.image_phone_icon_check);
+				break;
+		}
+		//设置当前对应的界面
+		if (!(/*id == R.id.phoneNumberImageView ||*/ id == R.id.callImageView/* || id == R.id.deleteImageView*/)) {
+			mViewPager.setCurrentItem(viewPagerCurrentPageIndex, false);
+			tvArray[viewPagerCurrentPageIndex].setTextColor(getResources().getColor(R.color.bottom_bar_text_enable));
+			if (viewPagerCurrentPageIndex != 1) {
+				ivArray[viewPagerCurrentPageIndex].setEnabled(true);
+			}
+		}
+	}
 
 	private void removeAllStatus() {
 		ivArray[1].setBackgroundResource(R.drawable.image_phone_icon_uncheck);
@@ -532,43 +529,43 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	}
 
-    public void hidePhoneBottomBar() {
-        ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
-        ProMainActivity.phone_fl.setVisibility(View.GONE);
+	public void hidePhoneBottomBar() {
+		ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
+		ProMainActivity.phone_fl.setVisibility(View.GONE);
 
-    }
+	}
 
-    public int position;
+	public int position;
 
-    public int getPosition() {
-        return position;
-    }
+	public int getPosition() {
+		return position;
+	}
 
-    public void setPosition(int position) {
-        this.position = position;
+	public void setPosition(int position) {
+		this.position = position;
 
-    }
+	}
 
-    private void setListener() {
-
-
-        mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
+	private void setListener() {
 
 
-            @Override
-            public void onPageSelected(int position) {
-                //对切换的状态进行保存
-                setPosition(position);
-                if (position != 1) {
-                    isClick = false;
-                    // e("isClick2" + isClick + ",position=" + position);
-                    Log.d("aixiaoqi__", "onPageSelected--: ");
-                    if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-                        phoneFragment.t9dialpadview.clearT9Input();
+		mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
 
-                    }
-                    hidePhoneBottomBar();
-                    llArray[position].performClick();
+
+			@Override
+			public void onPageSelected(int position) {
+				//对切换的状态进行保存
+				setPosition(position);
+				if (position != 1) {
+					isClick = false;
+					// e("isClick2" + isClick + ",position=" + position);
+					Log.d("aixiaoqi__", "onPageSelected--: ");
+					if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
+						phoneFragment.t9dialpadview.clearT9Input();
+
+					}
+					hidePhoneBottomBar();
+					llArray[position].performClick();
 					if (position == 3) {
 						topProgressView.setWhiteBack(true);
 						topProgressView.invalidate();
@@ -576,40 +573,40 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						topProgressView.setWhiteBack(false);
 						topProgressView.invalidate();
 					}
-                } else {
-                    if (!isClick) {
-                        removeAllStatus();
-                        if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-                            e("isClick" + isClick);
-                            //隐藏键盘，清理数据
-                            ivArray[1].setBackgroundResource(R.drawable.phone_icon_check);
-                        } else {
-                            e("isClick1" + isClick);
-                            if (phoneFragment == null) {
-                                phoneFragment = Fragment_Phone.newInstance();
-                            }
-                            // ivArray[1].setBackgroundResource(R.drawable.phone_icon_check_open);
-                        }
-                        if (clickCount == 0 && scrollCount == 0) {
-                            scrollCount++;
+				} else {
+					if (!isClick) {
+						removeAllStatus();
+						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
+							e("isClick" + isClick);
+							//隐藏键盘，清理数据
+							ivArray[1].setBackgroundResource(R.drawable.phone_icon_check);
+						} else {
+							e("isClick1" + isClick);
+							if (phoneFragment == null) {
+								phoneFragment = Fragment_Phone.newInstance();
+							}
+							// ivArray[1].setBackgroundResource(R.drawable.phone_icon_check_open);
+						}
+						if (clickCount == 0 && scrollCount == 0) {
+							scrollCount++;
 
-                        }
-                        if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-                            e("isClick" + isClick);
+						}
+						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
+							e("isClick" + isClick);
 
-                            //隐藏键盘，清理数据
-                            ViewUtil.hideView(phoneFragment.t9dialpadview);
+							//隐藏键盘，清理数据
+							ViewUtil.hideView(phoneFragment.t9dialpadview);
 
-                        }
+						}
 
-                        //设置选择点击的状态
-                        tvArray[1].setTextColor(getResources().getColor(R.color.bottom_bar_text_enable));
-                        ivArray[1].setBackgroundResource(R.drawable.image_phone_icon_check);
-                        mViewPager.setCurrentItem(1);
+						//设置选择点击的状态
+						tvArray[1].setTextColor(getResources().getColor(R.color.bottom_bar_text_enable));
+						ivArray[1].setBackgroundResource(R.drawable.image_phone_icon_check);
+						mViewPager.setCurrentItem(1);
 
 
-                    }
-                }
+					}
+				}
 
 
 			}
@@ -838,6 +835,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			case SocketConstant.REGISTER_SUCCESS:
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 				topProgressView.setVisibility(View.GONE);
+				accountFragment.setRegisted(true);
 				break;
 			case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 				CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
@@ -887,7 +885,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				break;
 			case SocketConstant.REGISTER_CHANGING:
 				double percent = entity.getProgressCount();
-
+				if (topProgressView.getVisibility() != View.VISIBLE) {
+					topProgressView.setVisibility(View.VISIBLE);
+				}
 				int percentInt = (int) (percent / 1.6);
 				if (percentInt >= 100) {
 					percentInt = 98;
@@ -904,27 +904,27 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	}
 
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onIsSuccessEntity(SimRegisterType simRegisterType) {
-        if (Constant.REGISTER_SIM_NOT_PRE_DATA.equals(simRegisterType.getSimRegisterType())) {
-            isGetIccid = false;
-            isStartSdk = true;
-            startDataframService();
-            startSocketService();
-            CommonTools.delayTime(5000);
-            e("main.start()");
-            JNIUtil.getInstance().startSDK(1);
-        } else if (Constant.REGISTER_SIM_PRE_DATA.equals(simRegisterType.getSimRegisterType())) {
-            if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {
-                ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-            } else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {
-                SocketConnection.mReceiveSocketService.disconnect();
-                startTcp();
-            } else {
-                startTcp();
-            }
-        }
-    }
+	@Subscribe(threadMode = ThreadMode.ASYNC)
+	public void onIsSuccessEntity(SimRegisterType simRegisterType) {
+		if (Constant.REGISTER_SIM_NOT_PRE_DATA.equals(simRegisterType.getSimRegisterType())) {
+			isGetIccid = false;
+			isStartSdk = true;
+			startDataframService();
+			startSocketService();
+			CommonTools.delayTime(5000);
+			e("main.start()");
+			JNIUtil.getInstance().startSDK(1);
+		} else if (Constant.REGISTER_SIM_PRE_DATA.equals(simRegisterType.getSimRegisterType())) {
+			if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {
+				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			} else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {
+				SocketConnection.mReceiveSocketService.disconnect();
+				startTcp();
+			} else {
+				startTcp();
+			}
+		}
+	}
 
 
 	private void startTcp() {
@@ -976,6 +976,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	@Subscribe(threadMode = ThreadMode.MAIN)
 	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
 		indexFragment.changeBluetoothStatus(entity.getStatus(), entity.getStatusDrawableInt());
+		accountFragment.setBleStatus(entity.getStatus());
 	}
 
 	@Subscribe(threadMode = ThreadMode.BACKGROUND)//非UI线程
@@ -1005,7 +1006,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			final String action = intent.getAction();
 			if (action.equals(UartService.FINDED_SERVICE)) {
 				MyDeviceActivity.isConnectOnce = true;
+				accountFragment.showDeviceSummarized(true);
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+				if (!ICSOpenVPNApplication.isConnect) {
+					accountFragment.showDeviceSummarized(false);
+					accountFragment.setRegisted(false);
+					topProgressView.setVisibility(View.GONE);
+				}
 				i("被主动断掉连接！");
 				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
 				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
@@ -1036,6 +1043,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							} else if (message.get(0).substring(10, 12).equals("11")) {
 								sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 							}
+							break;
+						case Constant.SYSTEM_BASICE_INFO:
+							//返回基本信息就更新account的仪表盘栏
+							String typeText;
+							String powerText;
+							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16) + "";
+							String bracelettype = SharedUtils.getInstance().readString(MyDeviceActivity.BRACELETTYPE);
+							if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
+								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
+							} else {
+								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
+							}
+							accountFragment.setSummarized(typeText, powerText, false);
 							break;
 					}
 				} catch (Exception e) {

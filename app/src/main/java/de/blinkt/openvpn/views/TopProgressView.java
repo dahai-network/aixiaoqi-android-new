@@ -65,7 +65,7 @@ public class TopProgressView extends View {
 			backColor = R.color.transparent_60;
 			textColor = R.color.gray_text;
 			arrowDrawable = R.drawable.arrow;
-			progressColor = R.color.white;
+			progressColor = R.color.transparent_60;
 		}
 		//画一个长方形背景
 		mPaint.setColor(getResources().getColor(backColor));
@@ -80,7 +80,7 @@ public class TopProgressView extends View {
 		float textHeight = mBounds.height();
 		mPaint.setColor(getResources().getColor(textColor));
 		canvas.drawText(text, getDp(35), getHeight() / 2
-				+ textHeight / 2, mPaint);
+				+ textHeight / 2 - 5, mPaint);
 		//画一个图片}
 		Bitmap topBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.top_progress_icon);
 		canvas.drawBitmap(topBitmap, getDp(15), getHeight() / 2 - topBitmap.getHeight() / 2, mPaint);
