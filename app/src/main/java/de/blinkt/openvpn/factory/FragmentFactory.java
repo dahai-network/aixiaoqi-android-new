@@ -12,7 +12,7 @@ import de.blinkt.openvpn.fragments.ProductFeatureFragment;
  */
 public class FragmentFactory {
 
-	//进行优化
+	//SparseArray 数组进行优化
 	static SparseArrayCompat<BaseFragment> PackageDetailFragments = new SparseArrayCompat<BaseFragment>();
 	private static final int PACKAGEDETAILS = 0;
 	private static final int  PRODUCTFEATURE = 1;

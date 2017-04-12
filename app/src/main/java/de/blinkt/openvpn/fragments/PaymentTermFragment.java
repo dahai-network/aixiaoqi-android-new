@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseFragment;
+import de.blinkt.openvpn.constant.Constant;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -36,14 +37,14 @@ public class PaymentTermFragment extends BaseFragment {
 
         tvContext = (TextView) view.findViewById(R.id.tv_context);
         initData();
-        String detail = pref.getString("payterms", null);
+        String detail = pref.getString(Constant.PAYTERMS_SIGN, null);
         if (null != detail)
             tvContext.setText(detail);
         return view;
     }
 
     private void initData() {
-        pref = getActivity().getSharedPreferences("detail_data", MODE_PRIVATE);
+        pref = getActivity().getSharedPreferences(Constant.SHAREDPREFERENCES_SIGN, MODE_PRIVATE);
     }
 
     @Override

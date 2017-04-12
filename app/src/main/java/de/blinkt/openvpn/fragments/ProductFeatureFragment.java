@@ -16,18 +16,19 @@ import android.widget.TextView;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseFragment;
+import de.blinkt.openvpn.constant.Constant;
 
 /**
  * Created by Administrator on 2017/4/11.
  */
 public class ProductFeatureFragment extends BaseFragment {
     TextView tvContext;
-    String detail;
+    String features;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            tvContext.setText(detail);
+            tvContext.setText(features);
         }
     };
 
@@ -44,12 +45,12 @@ public class ProductFeatureFragment extends BaseFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
 
-                detail = intent.getStringExtra("features");
-                if (detail != null) {
+                features = intent.getStringExtra(Constant.FEATURES_SIGN);
+                if (features != null) {
                     mHandler.sendEmptyMessage(0);
                 }
             }
-        }, new IntentFilter("net_data"));
+        }, new IntentFilter(Constant.LOCALBROADCAST_INTENT_DATA));
 
         return view;
     }

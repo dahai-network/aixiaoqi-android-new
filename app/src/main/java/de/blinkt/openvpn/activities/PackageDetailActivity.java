@@ -35,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -96,9 +97,10 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
     }
 
     private void initSet() {
-
-        pref = getSharedPreferences("detail_data", MODE_PRIVATE);
+        //创建sp的对象
+        pref = getSharedPreferences(Constant.SHAREDPREFERENCES_SIGN, MODE_PRIVATE);
         editor = pref.edit();
+
         //获取标题
         detail_titles = getResources().getStringArray(R.array.detail_titles);
 
@@ -126,7 +128,7 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
         hasLeftViewTitle(R.string.package_detail, 0);
         String paymentOfTerms = SharedUtils.getInstance().readString(IntentPutKeyConstant.PAYMENT_OF_TERMS);
         if (!TextUtils.isEmpty(paymentOfTerms))
-            editor.putString("payterms", paymentOfTerms);
+            editor.putString(Constant.PAYTERMS_SIGN, paymentOfTerms);
         editor.commit();
 
         mTabs = (PagerSlidingTabStripExtends) findViewById(R.id.jbp_tabs);
@@ -150,22 +152,16 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
                 NoNetRelativeLayout.setVisibility(View.GONE);
                 detailScrollView.setVisibility(View.VISIBLE);
                 bean = http.getPacketDtailEntity().getList();
-                Log.d("aixiaoqi__", "getDetails: " + bean.getDetails());
-                //detailTextView.setText(bean.getDetails());
-                //featuresTextView.setText(bean.getFeatures());
                 packageNameTextView.setText(bean.getPackageName());
-                // flowTextView.setText(bean.getFlow());
-                //  howToUseTv.setText(bean.getUseDescr());
-                editor.putString("detail", bean.getDetails());
-                editor.putString("features", bean.getFeatures());
-
+                //进行本地缓存
+                editor.putString(Constant.DETAIL_SIGN, bean.getDetails());
+                editor.putString(Constant.FEATURES_SIGN, bean.getFeatures());
                 editor.commit();
-
-                Intent intent = new Intent("net_data");
-                intent.putExtra("detail", bean.getDetails());
-                intent.putExtra("features", bean.getFeatures());
+                //使用广播进行数据交互
+                Intent intent = new Intent(Constant.LOCALBROADCAST_INTENT_DATA);
+                intent.putExtra(Constant.DETAIL_SIGN, bean.getDetails());
+                intent.putExtra(Constant.FEATURES_SIGN, bean.getFeatures());
                 LocalBroadcastManager.getInstance(PackageDetailActivity.this).sendBroadcast(intent);
-
 
                 priceTextView.setText("￥" + bean.getPrice());
                 setSpan(priceTextView);
@@ -226,6 +222,9 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
         }
     }
 
+    /**
+     * 创建适配器
+     */
     class DtailFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
         public DtailFragmentStatePagerAdapter(FragmentManager fm) {
@@ -269,9 +268,16 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
     protected void onDestroy() {
         super.onDestroy();
         //editor.clear();
-        editor.remove("detail");
-        editor.remove("features");
-        editor.remove("payterms");
+        clearSPData();
+    }
+
+    /**
+     * 清除sp里面的数据
+     */
+    public void clearSPData() {
+        editor.remove(Constant.DETAIL_SIGN);
+        editor.remove(Constant.FEATURES_SIGN);
+        editor.remove(Constant.PAYTERMS_SIGN);
         editor.commit();
     }
 

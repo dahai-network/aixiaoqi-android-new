@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseFragment;
+import de.blinkt.openvpn.constant.Constant;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -57,7 +58,7 @@ public class PackageDetailsFragment extends BaseFragment {
      * 设置界面
      */
     private void setView() {
-        detail = pref.getString("detail", null);
+        detail = pref.getString(Constant.DETAIL_SIGN, null);
         if (null != detail) {
             tvContext.setText(detail);
         } else {
@@ -65,16 +66,16 @@ public class PackageDetailsFragment extends BaseFragment {
                 @Override
                 public void onReceive(Context context, Intent intent) {
 
-                    PackageDetailsFragment.this.detail = intent.getStringExtra("detail");
+                    PackageDetailsFragment.this.detail = intent.getStringExtra(Constant.DETAIL_SIGN);
                     if (PackageDetailsFragment.this.detail != null) {
                         mHandler.sendEmptyMessage(0);
                     }
                 }
-            }, new IntentFilter("net_data"));
+            }, new IntentFilter(Constant.LOCALBROADCAST_INTENT_DATA));
         }
     }
     private void initData() {
-        pref = getActivity().getSharedPreferences("detail_data", MODE_PRIVATE);
+        pref = getActivity().getSharedPreferences(Constant.SHAREDPREFERENCES_SIGN, MODE_PRIVATE);
 
 
     }
