@@ -14,6 +14,9 @@ public class BalanceHttp extends BaseHttp {
 	private BalanceEntity balanceEntity;
 
 	public BalanceEntity getBalanceEntity() {
+		if(balanceEntity==null){
+			balanceEntity=new BalanceEntity();
+		}
 		return balanceEntity;
 	}
 

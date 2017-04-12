@@ -218,7 +218,6 @@ public class Fragment_Phone extends Fragment implements View.OnClickListener, In
 	public void hidePhoneBottomBar() {
 
 		ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
-
 		ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
 	}
 

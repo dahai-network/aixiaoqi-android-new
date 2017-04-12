@@ -149,7 +149,7 @@
     <string name="setting">设置</string>
     <string name="step_all">总共步行</string>
     <string name="order_detail">订单详情</string>
-    <string name="activate_now">立即激活</string>
+    <string name="activate_now">马上激活</string>
     <string name="find_bracelet">查找手环</string>
     <string name="firmware_version">固件版本</string>
     <string name="sim_indevice">设备内电话卡</string>
@@ -167,8 +167,8 @@
     <string name="agreement">用户许可及服务协议</string>
     <string name="app_version">APP版本号</string>
     <string name="conn_bluetooth">蓝牙未连接，点击开启</string>
-
-    <string name="message_history">短信记录</string>
+    <string name="wait_activite">稍后激活</string>
+<string name="message_history">短信记录</string>
     <string name="message">短信</string>
     <string name="message_record">短信记录</string>
     <string name="active">活动</string>
@@ -513,6 +513,7 @@
     <string name="pay_date">支付时间</string>
     <string name="expiry_date">有效期</string>
     <string name="click_buy">购买</string>
+    <string name="click_action">激活</string>
     <!--大王卡订单详情-->
     <string name="used_introduce">使用介绍：</string>
     <string name="used_notice">注意事项：</string>
@@ -613,4 +614,11 @@
     <string name="china_telecom">中国电信</string>
     <string name="china_mobile">中国移动</string>
     <string name="china_unicom">中国联通</string>
+
+    <!--详细界面的标题-->
+    <string-array name="detail_titles">
+        <item>套餐详情</item>
+        <item>产品特色</item>
+        <item>支付条款</item>
+    </string-array>
 </resources>

@@ -372,7 +372,22 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 
 		}
 	}
+public  void finishOtherActivity(){
+	try {
+		if (stack.size() != 0) {
+			for (int i = 0, size = stack.size(); i < size; i++) {
+				if (null != stack.get(i)&&!(stack.get(i) instanceof ProMainActivity)) {
+					stack.get(i).finish();
+				}
+			}
+		}
+		stack.clear();
+	}
+	catch (Exception e){
 
+	}
+
+}
 
 	/**
 	 * 退出应用程序

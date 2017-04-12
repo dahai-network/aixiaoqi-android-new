@@ -49,4 +49,8 @@ public class IntentPutKeyConstant {
 
 
     public static final String IS_START_UP="isstartup";
+
+
+    public static final String CONTROL_CALL_PACKAGE="control_call_package";
+
 }

@@ -322,7 +322,7 @@
                 android:layout_marginLeft="@dimen/padding_20dp"
                 android:layout_marginRight="@dimen/padding_20dp"
                 android:layout_marginTop="@dimen/padding_15dp"
-                android:background="@drawable/green_btn_click"
+                android:background="@drawable/circle_light_blue_ret"
                 android:text="@string/activate_now"
                 android:textColor="@android:color/white"
                 android:textSize="16dp"/>
@@ -334,8 +334,10 @@
                 android:layout_marginLeft="@dimen/padding_20dp"
                 android:layout_marginRight="@dimen/padding_20dp"
                 android:layout_marginTop="@dimen/padding_10dp"
+                android:textColor="@color/blue_title"
                 android:background="@drawable/circle_light_gray_ret"
-                android:text="@string/cancel_order"
+                android:text="@string/wait_activite"
+                android:layout_marginBottom="@dimen/padding_20dp"
                 android:textSize="16dp"/>
         </LinearLayout>
     </de.blinkt.openvpn.util.UserDefineScrollView>

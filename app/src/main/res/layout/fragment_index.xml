@@ -434,13 +434,13 @@
                     android:id="@+id/hotMessageMoreTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:paddingRight="7.5dp"
                     android:paddingTop="15dp"
                     android:text="@string/more"
                     android:textColor="@color/index_gray_text"
                     android:textSize="14sp"
-                    />
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true" />
 
                 <View
                     style="@style/horizontal_line_view"

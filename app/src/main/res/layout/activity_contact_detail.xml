@@ -61,54 +61,5 @@
 
     </RelativeLayout>
 </ScrollView>
-    <LinearLayout
-        android:id="@+id/show_cell_phone_dialog_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/cell_phone_background"
-        android:gravity="bottom"
-        android:visibility="gone"
-        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:id="@+id/cell_phone_linearlayout"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/padding_15dp"
-            android:paddingRight="@dimen/padding_15dp"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/network_phone_tv"
-                android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/padding_15dp"
-                android:layout_marginBottom="@dimen/padding_15dp"
-                android:textSize="@dimen/little_18"
-                android:text="@string/network_phone"
-                android:textColor="@color/white"
-                android:background="@drawable/circle_network_phone_ret"
-                android:gravity="center"
-                android:layout_height="@dimen/padding_50dp" />
-            <TextView
-                android:layout_width="match_parent"
-                android:text="@string/sim_register_phone"
-                android:id="@+id/sim_register_phone_tv"
-                android:gravity="center"
-                android:textSize="@dimen/little_18"
-                android:textColor="@color/white"
-                android:background="@drawable/circle_sim_phone_ret"
-                android:layout_marginBottom="@dimen/padding_15dp"
-                android:layout_height="@dimen/padding_50dp" />
-            <TextView
-                android:id="@+id/cancel_phone"
-                android:layout_width="match_parent"
-                android:layout_marginBottom="@dimen/padding_15dp"
-                android:text="@string/cancel"
-                android:textSize="@dimen/little_18"
-                android:textColor="@color/black"
-                android:background="@drawable/circle_phone_cancel_ret"
-                android:gravity="center"
-                android:layout_height="@dimen/padding_50dp" />
-        </LinearLayout>
-    </LinearLayout>
 </RelativeLayout>

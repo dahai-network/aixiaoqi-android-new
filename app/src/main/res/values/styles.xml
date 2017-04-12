@@ -202,13 +202,4 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-
-    <!-- PagerSlidingTabStrip的自定义样式 -->
-    <style name="pagerTabStype">
-        <item name="pstsShouldExpand">true</item>
-        <item name="pstsDividerColor">#00000000</item>
-        <item name="pstsUnderlineHeight">1dp</item>
-        <item name="pstsIndicatorHeight">3dp</item>
-        <item name="pstsIndicatorColor">#1570A6</item>
-    </style>
 </resources>

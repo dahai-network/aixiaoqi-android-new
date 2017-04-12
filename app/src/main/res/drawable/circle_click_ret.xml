@@ -4,6 +4,6 @@
     <!-- 填充颜色 -->
     <solid android:color="@color/bottom_bar_text_enable_click"></solid>
     <!-- 矩形的圆角半径 -->
-    <corners android:radius="5dp" />
+    <corners android:radius="20dp" />
 
 </shape>

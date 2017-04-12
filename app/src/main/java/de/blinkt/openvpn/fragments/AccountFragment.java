@@ -34,6 +34,7 @@ import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.ImportantAuthorityActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.PackageCategoryActivity;
+import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
 import de.blinkt.openvpn.activities.SettingActivity;
@@ -278,6 +279,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKMYPACKAGE);
 				intent = new Intent(getActivity(), PackageCategoryActivity.class);
+				intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE,Constant.SHOW);
 				break;
 			case R.id.addDeviceRelativeLayout:
 				//友盟方法统计

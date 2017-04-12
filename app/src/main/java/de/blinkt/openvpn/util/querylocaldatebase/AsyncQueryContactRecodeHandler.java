@@ -100,8 +100,10 @@ public class AsyncQueryContactRecodeHandler extends AsyncQueryHandler {
             ContactRecodeEntity contactRecodeEntity=new ContactRecodeEntity();
             contactRecodeEntity.setData(date);
             if(!TextUtils.isEmpty(name))
-                contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(name));
-
+                contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(name));//保存首拼，和全拼
+            else{
+                contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(number));
+            }
             contactRecodeEntity.setDuration(duration);
             contactRecodeEntity.setName(name);
             contactRecodeEntity.setPhoneNumber(number);

@@ -431,16 +431,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				viewPagerCurrentPageIndex = 1;
 				Log.d("aixiaoqi__", "onClick: " + viewPagerCurrentPageIndex);
 
-             /*  if (isDeploy) {
-					//如果展开则收回
-                    e("isDeploy" + isDeploy);
-                    //	ViewUtil.showView(phoneFragment.t9dialpadview);
-                    //ivArray[viewPagerCurrentPageIndex].setBackgroundResource(R.drawable.phone_icon_check);
-                    isDeploy = false;
-                } else if (!isDeploy) {*/
-				//如果展开则收回
-				//  e("isDeploy1" + isDeploy);
-				ViewUtil.hideView(phoneFragment.t9dialpadview);
+				//ViewUtil.hideView(phoneFragment.t9dialpadview);
 
 				if (CellPhoneFragment.floatingActionButton.getVisibility() != View.VISIBLE && phoneFragment.t9dialpadview.getVisibility() != View.VISIBLE) {
 					Log.d("aixiaoqi__", "getPosition(): " + getPosition());

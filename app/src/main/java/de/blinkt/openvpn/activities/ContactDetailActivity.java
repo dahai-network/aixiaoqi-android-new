@@ -56,11 +56,6 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKDETELECONTACT;
  */
 public class ContactDetailActivity extends BaseNetActivity implements View.OnClickListener, DialogInterfaceTypeBase {
 	ImageView contactHeader;
-	public  LinearLayout showCellPhoneDialogBackground;
-	public  LinearLayout cellPhoneLinearlayout;
-	public  TextView networkPhoneTv;
-	public  TextView cancelPhone;
-	public  TextView simRegisterPhoneTv;
 	TextView contactName;
 	LinearLayout llPhoneInfo;
 	TextView deletePhone;
@@ -113,18 +108,7 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 
 	}
 
-	@Override
-	protected void hasOnlyLeftViewOption() {
-		titleBar.getLeftText().setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finishActivity();
-			}
-		});
-	}
-
 	public boolean isExist;
-
 
 	@Override
 	protected void onDestroy() {
@@ -138,11 +122,6 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 		contactName = (TextView) findViewById(R.id.contact_name);
 		llPhoneInfo = (LinearLayout) findViewById(R.id.ll_phone_info);
 		deletePhone = (TextView) findViewById(R.id.delete_phone);
-		showCellPhoneDialogBackground = (LinearLayout) findViewById(R.id.show_cell_phone_dialog_background);
-		cellPhoneLinearlayout = (LinearLayout) findViewById(R.id.cell_phone_linearlayout);
-		networkPhoneTv = (TextView) findViewById(R.id.network_phone_tv);
-		simRegisterPhoneTv = (TextView) findViewById(R.id.sim_register_phone_tv);
-		cancelPhone = (TextView) findViewById(R.id.cancel_phone);
 		setData(contactBean);
 		if (!TextUtils.isEmpty(selectContactPeople) || !TextUtils.isEmpty(selectContactPeopleDetail) || !TextUtils.isEmpty(getIntent().getStringExtra(IntentPutKeyConstant.SMS_DETAIL_INFO))) {
 			deletePhone.setVisibility(View.GONE);
@@ -192,8 +171,12 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 					contactRecodeEntity = new ContactRecodeEntity();
 					contactRecodeEntity.setPhoneNumber(deleteprefix("-",phonenum));
 					contactRecodeEntity.setName(contactName.getText().toString());
-//					requestTimeHttp();
-					showCellPhoneDialog();
+
+					if(SocketConstant.REGISTER_STATUE_CODE==3){
+						simCellPhone();
+					}else{
+						CommonTools.showShortToast(ContactDetailActivity.this,getString(R.string.sim_register_phone_tip));
+					}
 				}
 			});
 			sendMessage.setOnClickListener(new View.OnClickListener() {
@@ -230,17 +213,6 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 		}
 	}
 
-	private void showCellPhoneDialog(){
-		showCellPhoneDialogBackground.setVisibility(View.VISIBLE);
-		showCellPhoneDialogBackground.setOnClickListener(this);
-		cellPhoneLinearlayout.setOnClickListener(this);
-		networkPhoneTv.setOnClickListener(this);
-		cancelPhone.setOnClickListener(this);
-		simRegisterPhoneTv.setOnClickListener(this);
-	}
-	private  void hideCellPhoneDialog(){
-		showCellPhoneDialogBackground.setVisibility(View.GONE);
-	}
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()){
@@ -248,24 +220,10 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 				break;
 			case R.id.cell_phone_linearlayout:
 				break;
-			case R.id.network_phone_tv:
-				hideCellPhoneDialog();
-				if(CommonTools.isFastDoubleClick(500)){
-					return;
-				}
-				requestTimeHttp();
-				break;
 			case R.id.cancel_phone:
-				hideCellPhoneDialog();
+//				hideCellPhoneDialog();
 				break;
-			case R.id.sim_register_phone_tv:
-				hideCellPhoneDialog();
-				if(SocketConstant.REGISTER_STATUE_CODE==3){
-					simCellPhone();
-				}else{
-					CommonTools.showShortToast(this,getString(R.string.sim_register_phone_tip));
-				}
-				break;
+
 			case R.id.delete_phone:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKDETELECONTACT);
@@ -386,22 +344,6 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 		}
 	}
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			finishActivity();
-
-		}
-		return true;
-	}
-
-	private void finishActivity() {
-		if(showCellPhoneDialogBackground.getVisibility()!= View.VISIBLE){
-			finish();
-		}else{
-			showCellPhoneDialogBackground.setVisibility(View.GONE);
-		}
-	}
 
 	@Override
 	public void dialogText(int type, String text) {

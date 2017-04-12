@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -43,18 +44,10 @@ public class CellPhoneFragment extends Fragment {
     public static RadioGroup operation_rg;
     RadioButton cell_phone_rb;
     RadioButton message_rb;
-    // public static EditTextWithDel dial_input_edit_text;
-    /**
-     * 输入框的外部布局
-     */
-    // public static LinearLayout dial_input_edit_ll;
     /**
      * 拨打电话标题
      */
     public static FrameLayout dial_tittle_fl;
-
-    // ImageView dial_delete_btn_iv;
-
     TextView editTv;
     private ArrayList<Fragment> fragments = new ArrayList<>();
     Activity activity;
@@ -74,9 +67,7 @@ public class CellPhoneFragment extends Fragment {
         return view;
     }
 
-
     @Override
-
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         isForeground = isVisibleToUser;
@@ -84,11 +75,7 @@ public class CellPhoneFragment extends Fragment {
 
             operation_rg.check(cell_phone_rb.getId());
             ClickPhone();
-       /* if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
-                showPhoneBottomBar();
-            } else {
 
-            }*/
             hidePhoneBottomBar();
         }
 
@@ -97,10 +84,8 @@ public class CellPhoneFragment extends Fragment {
     @Override
     public void onDestroy() {
         operation_rg = null;
-        // dial_input_edit_text = null;
         phoneFragment = null;
         dial_tittle_fl = null;
-        //dial_input_edit_ll=null;
         floatingActionButton = null;
         super.onDestroy();
     }
@@ -116,15 +101,6 @@ public class CellPhoneFragment extends Fragment {
     }
 
     private void addListener() {
-     /* dial_input_edit_text
-                .setCursorVisible(false);*/
-    /*   dial_input_edit_text.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });*/
         editTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,17 +122,12 @@ public class CellPhoneFragment extends Fragment {
                 ViewUtil.showView(phoneFragment.t9dialpadview);
                 hidePhoneBottomBar();
                 if (ProMainActivity.phone_fl.getVisibility() == View.GONE || ProMainActivity.phone_fl.getVisibility() == View.INVISIBLE)
-
                     ProMainActivity.phone_fl.setVisibility(View.VISIBLE);
                 ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
-
-
                 if (null != AppMode.getInstance().curCharacter) {
                     if (AppMode.getInstance().curCharacter.length() > 0) {
                         showPhoneBottomBar();
                     }
-
-
                 }
             }
         });
@@ -165,17 +136,10 @@ public class CellPhoneFragment extends Fragment {
     }
 
     private void initView(View view) {
-
-
         operation_rg = ((RadioGroup) view.findViewById(R.id.operation_rg));
         cell_phone_rb = ((RadioButton) view.findViewById(R.id.cell_phone_rb));
-        //  dial_input_edit_text = ((EditTextWithDel) view.findViewById(R.id.dial_input_edit_text));
-
-
         //拨打电话标题
         dial_tittle_fl = (FrameLayout) view.findViewById(R.id.dial_tittle_fl);
-
-
         message_rb = ((RadioButton) view.findViewById(R.id.message_rb));
         editTv = ((TextView) view.findViewById(R.id.edit_tv));
         mViewPager = (ViewPager) view.findViewById(R.id.mViewPager);
@@ -199,18 +163,14 @@ public class CellPhoneFragment extends Fragment {
                     ClickMessage();
 
                 }
-
-
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
         //初始化标题下标的小三角
-
         drawable = getActivity().getResources().getDrawable(R.drawable.image_slidethetriangle);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
     }
@@ -263,11 +223,6 @@ public class CellPhoneFragment extends Fragment {
     }
 
     private void ClickMessage() {
-        // cell_phone_rb.setBackgroundResource(R.drawable.default_top_cell);
-        // message_rb.setBackgroundResource(R.drawable.select_top_cell_sms);
-        //  cell_phone_rb.setTextColor(Color.BLACK);
-        //  message_rb.setTextColor(Color.WHITE);
-
         if (dial_tittle_fl.getVisibility() == View.VISIBLE) {
             dial_tittle_fl.setVisibility(View.GONE);
             operation_rg.setVisibility(View.VISIBLE);
@@ -278,17 +233,10 @@ public class CellPhoneFragment extends Fragment {
         cell_phone_rb.setCompoundDrawables(null, null, null, null);
         mViewPager.setCurrentItem(1);
         editTv.setVisibility(View.VISIBLE);
-
-        // ViewUtil.hideView(phoneFragment.t9dialpadview);
         floatingActionButton.setVisibility(View.GONE);
     }
 
     private void ClickPhone() {
-        //  cell_phone_rb.setBackgroundResource(R.drawable.select_top_cell);
-        //   message_rb.setBackgroundResource(R.drawable.default_top_cell_sms);
-        //   cell_phone_rb.setTextColor(Color.WHITE);
-        //  message_rb.setTextColor(Color.BLACK);
-
         if (Fragment_Phone.t9dialpadview != null) {
             if (Fragment_Phone.t9dialpadview.getT9Input() != null && Fragment_Phone.t9dialpadview.getT9Input().length() > 0) {
 
@@ -299,9 +247,31 @@ public class CellPhoneFragment extends Fragment {
             }
 
         }
+/**
+ * 监听ViewPage的状态变化，控制是否滑动
+ */
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        mViewPager.requestDisallowInterceptTouchEvent(false);
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        mViewPager.requestDisallowInterceptTouchEvent(false);
+                    default:
+                        break;
+                }
+                if (dial_tittle_fl.getVisibility() == View.VISIBLE) {
 
+                    return true;
+                } else {
+                    return false;
+                }
 
-        //ViewUtil.hideView(phoneFragment.t9dialpadview);
+            }
+        });
+
         /**
          * \根据键盘的显示来实现控件的显示或则隐藏
          */
@@ -309,19 +279,15 @@ public class CellPhoneFragment extends Fragment {
             floatingActionButton.setVisibility(View.GONE);
             ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
             ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
-
         } else {
 
             floatingActionButton.setVisibility(View.VISIBLE);
         }
-
-
         message_rb.setCompoundDrawables(null, null, null, null);
         cell_phone_rb.setCompoundDrawables(null, null, null, drawable);
         editTv.setVisibility(View.GONE);
         mViewPager.setCurrentItem(0);
     }
-
 
     @Override
     public void onDetach() {

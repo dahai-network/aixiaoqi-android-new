@@ -295,44 +295,45 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_INDEX_BANNER);
 	}
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.foreignTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKABROADFEE);
-				Intent fastSetIntent = new Intent(getActivity(), OrderedOutsidePurchaseActivity.class);
-				startActivity(fastSetIntent);
-				break;
-			case R.id.callPacketTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKDEVICE);
-				Intent callPacketIntent = new Intent(getActivity(), CallPackageLlistActivity.class);
-				startActivity(callPacketIntent);
-				break;
-			case R.id.hotMessageMoreTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKHOTPACKAGEMORE);
-				Intent marketIntent = new Intent(getActivity(), PackageMarketActivity.class);
-				startActivity(marketIntent);
-				break;
-			case R.id.boughtMessageMoreTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICORDERMORE);
-				Intent boughtIntent = new Intent(getActivity(), MyPackageActivity.class);
-				startActivity(boughtIntent);
-				break;
-			case R.id.sportTabLienarLayout:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKSPORTTOTALDATA);
-				((ProMainActivity) getActivity()).getLlArrayToSport().performClick();
-				break;
-			case R.id.dualSimTextView:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKINLANDFEE);
-				WebViewActivity.launch(getActivity(), SharedUtils.getInstance().readString(IntentPutKeyConstant.DUALSIM_STANDBYTUTORIAL_URL), getString(R.string.dual_sim_standby_tutorial));
-				break;
-			case R.id.guiderImageView:
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.foreignTextView:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICKABROADFEE);
+                Intent fastSetIntent = new Intent(getActivity(), OrderedOutsidePurchaseActivity.class);
+                startActivity(fastSetIntent);
+                break;
+            case R.id.callPacketTextView:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICKDEVICE);
+                Intent callPacketIntent = new Intent(getActivity(), CallPackageLlistActivity.class);
+                startActivity(callPacketIntent);
+                break;
+            case R.id.hotMessageMoreTextView:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICKHOTPACKAGEMORE);
+                Intent marketIntent = new Intent(getActivity(), PackageMarketActivity.class);
+                marketIntent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE,Constant.HIDDEN);
+                startActivity(marketIntent);
+                break;
+            case R.id.boughtMessageMoreTextView:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICORDERMORE);
+                Intent boughtIntent = new Intent(getActivity(), MyPackageActivity.class);
+                startActivity(boughtIntent);
+                break;
+            case R.id.sportTabLienarLayout:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICKSPORTTOTALDATA);
+                ((ProMainActivity) getActivity()).getLlArrayToSport().performClick();
+                break;
+            case R.id.dualSimTextView:
+                //友盟方法统计
+                MobclickAgent.onEvent(getActivity(), CLICKINLANDFEE);
+                WebViewActivity.launch(getActivity(), SharedUtils.getInstance().readString(IntentPutKeyConstant.DUALSIM_STANDBYTUTORIAL_URL), getString(R.string.dual_sim_standby_tutorial));
+                break;
+            case R.id.guiderImageView:
 
 				break;
 		}
