@@ -630,4 +630,7 @@
         <item>产品特色</item>
         <item>支付条款</item>
     </string-array>
+
+
+    <string name="tip_activate">将国际卡插到智能硬件后，请保持APP与智能硬件连接，然后选择套餐生效时间，再确定激活。</string>
 </resources>

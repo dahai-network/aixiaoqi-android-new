@@ -90,25 +90,18 @@ import static de.blinkt.openvpn.fragments.SportFragment.REFRESHSTEP;
 public class IndexFragment extends Fragment implements View.OnClickListener, InterfaceCallback {
 
 	private String TAG = "IndexFragment";
-	private TextView dualSimTextView;
-
-	private TextView foreignTextView;
 
 	private List<ImageView> pageViews;
-
-	private TextView callPacketTextView;
-
 	private FullyRecylerView hotPackageRecyclerView;
-	private RecyclerView boughtPackgeRecyclerView;
+
 	private TextView hotMessageMoreTextView;
-	private TextView boughtMessageMoreTextView;
+
 	private CycleViewPager scrollViewPagerLayout;
 	private List<IndexBannerEntity> bannerData;
 	//图片加载类
-	private RequestManager manager;
+
 	public ScrollView indexScrollView;
-	private RelativeLayout boughtPacketLinearLayout;
-	private LinearLayout sportTabLienarLayout;
+
 	private RelativeLayout hotPacketLinearLayout;
 	private RelativeLayout communicationRelativeLayout;
 	private RelativeLayout leftPacketRelativeLayout;
@@ -121,19 +114,9 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	private TextView rightContentTextView;
 	private TextView rightExpiryDateTextView;
 	private RecyclerView hardWareRecyclerView;
-	private OrderAdapter orderAdapter;
-	private TextView totalStepTextView;
-	private TextView totalKmTextView;
-	private TextView totalDayTextView;
-	private TextView totalKalTextView;
 	private ImageView guiderImageView;
 	private View view;
 	private TitleBar title;
-
-	public IndexFragment() {
-		// Required empty public constructor
-	}
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -158,45 +141,20 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 
 	private void init() {
 		addData();
-		callPacketTextView.setOnClickListener(this);
-		foreignTextView.setOnClickListener(this);
 		hotMessageMoreTextView.setOnClickListener(this);
-		boughtMessageMoreTextView.setOnClickListener(this);
-		sportTabLienarLayout.setOnClickListener(this);
-		dualSimTextView.setOnClickListener(this);
 		guiderImageView.setOnClickListener(this);
-		manager = Glide.with(ICSOpenVPNApplication.getContext());
-		ICSOpenVPNApplication.getInstance().registerReceiver(realStepReceiver, getFilter());
-		changeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 	}
 
 	private void findById(View view) {
 		indexScrollView = (ScrollView) view.findViewById(R.id.indexScrollView);
 		title = (TitleBar) view.findViewById(R.id.title);
 		title.setTextTitle(getString(R.string.shop));
-		foreignTextView = (TextView) view.findViewById(R.id.foreignTextView);
-		callPacketTextView = (TextView) view.findViewById(R.id.callPacketTextView);
 
-		dualSimTextView = (TextView) view.findViewById(R.id.dualSimTextView);
-		boughtPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.boughtPacketLinearLayout);
 		scrollViewPagerLayout = (CycleViewPager) view.findViewById(R.id.scrollViewPagerLayout);
 		hotMessageMoreTextView = (TextView) view.findViewById(R.id.hotMessageMoreTextView);
-		boughtMessageMoreTextView = (TextView) view.findViewById(R.id.boughtMessageMoreTextView);
-		sportTabLienarLayout = (LinearLayout) view.findViewById(R.id.sportTabLienarLayout);
-		boughtPackgeRecyclerView = (RecyclerView) view.findViewById(R.id.boughtPackgeRecyclerView);
 		hardWareRecyclerView = (RecyclerView) view.findViewById(R.id.hardWareRecyclerView);
 		hotPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.hotPacketLinearLayout);
-		totalStepTextView = (TextView) view.findViewById(R.id.totalStepTextView);
-		totalKmTextView = (TextView) view.findViewById(R.id.totalKmTextView);
-		totalDayTextView = (TextView) view.findViewById(R.id.totalDayTextView);
-		totalKalTextView = (TextView) view.findViewById(R.id.totalKalTextView);
 		guiderImageView = (ImageView) view.findViewById(R.id.guiderImageView);
-		orderAdapter = new OrderAdapter(getActivity(), null, R.layout.item_order_index);
-		boughtPackgeRecyclerView.setNestedScrollingEnabled(false);
-//		FullyLinearLayoutManager linearManager = new FullyLinearLayoutManager(getActivity());
-		boughtPackgeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-		boughtPackgeRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
-		boughtPackgeRecyclerView.setAdapter(orderAdapter);
 		communicationRelativeLayout = (RelativeLayout) view.findViewById(R.id.communicationRelativeLayout);
 		leftPacketRelativeLayout = (RelativeLayout) view.findViewById(R.id.leftPacketRelativeLayout);
 		rightPacketRelativeLayout = (RelativeLayout) view.findViewById(R.id.rightPacketRelativeLayout);
@@ -207,51 +165,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		rightPriceTextView = (TextView) view.findViewById(R.id.rightPriceTextView);
 		rightContentTextView = (TextView) view.findViewById(R.id.rightContentTextView);
 		rightExpiryDateTextView = (TextView) view.findViewById(R.id.rightExpiryDateTextView);
-		title.getLeftText().setVisibility(View.INVISIBLE);
-		title.getLeftText().setOnClickListener(new View.OnClickListener() {
-			public Intent intent;
 
-			@Override
-			public void onClick(View v) {
-				//判断是否绑定过设备
-				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-
-					intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);// 选择设备界面
-
-				} else {
-
-					intent = new Intent(getActivity(), MyDeviceActivity.class);
-					//手环的名字
-					String braceleName = SharedUtils.getInstance().readString(BRACELETNAME, "");
-
-					intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceleName);
-
-					SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE, braceleName);
-				}
-				int status = R.string.index_connecting;
-				if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBlutoothStatus())) {
-					status = R.string.index_no_signal;
-				} else if (getActivity().getResources().getString(R.string.index_connecting).equals(getBlutoothStatus())) {
-					status = R.string.index_connecting;
-				} else if (getActivity().getResources().getString(R.string.index_high_signal).equals(getBlutoothStatus())) {
-					status = R.string.index_high_signal;
-				} else if (getActivity().getResources().getString(R.string.index_no_packet).equals(getBlutoothStatus())) {
-					status = R.string.index_no_packet;
-				} else if (getString(R.string.index_un_insert_card).equals(getBlutoothStatus())) {
-					status = R.string.index_un_insert_card;
-				} else if (getString(R.string.index_high_signal).equals(getBlutoothStatus())) {
-					status = R.string.index_high_signal;
-				} else if (getString(R.string.index_registing).equals(getBlutoothStatus())) {
-					status = R.string.index_registing;
-				} else if (getString(R.string.index_aixiaoqicard).equals(getBlutoothStatus())) {
-					status = R.string.index_aixiaoqicard;
-				} else if (getString(R.string.index_regist_fail).equals(getBlutoothStatus())) {
-					status = R.string.index_regist_fail;
-				}
-				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
-				startActivity(intent);
-			}
-		});
 	}
 
 
@@ -271,9 +185,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_HOT, 3 + "");
 	}
 
-	private void getBoughtPackage() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, "1", "3", "-1");
-	}
+
 
 	private void getCallPackage() {
 		CreateHttpFactory.instanceHttp(this, COMTYPE_PACKET_GET, 1 + "", 2 + "", 1 + "");
@@ -286,10 +198,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		CreateHttpFactory.instanceHttp(this, COMTYPE_GET_PRODUCTS);
 	}
 
-	private void getSportTotal() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL);
-	}
-
 	//获取banner图
 	private void getIndexBanner() {
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_INDEX_BANNER);
@@ -298,18 +206,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.foreignTextView:
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKABROADFEE);
-                Intent fastSetIntent = new Intent(getActivity(), OrderedOutsidePurchaseActivity.class);
-                startActivity(fastSetIntent);
-                break;
-            case R.id.callPacketTextView:
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKDEVICE);
-                Intent callPacketIntent = new Intent(getActivity(), CallPackageLlistActivity.class);
-                startActivity(callPacketIntent);
-                break;
             case R.id.hotMessageMoreTextView:
                 //友盟方法统计
                 MobclickAgent.onEvent(getActivity(), CLICKHOTPACKAGEMORE);
@@ -317,25 +213,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
                 marketIntent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE,Constant.HIDDEN);
                 startActivity(marketIntent);
                 break;
-            case R.id.boughtMessageMoreTextView:
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICORDERMORE);
-                Intent boughtIntent = new Intent(getActivity(), MyPackageActivity.class);
-                startActivity(boughtIntent);
-                break;
-            case R.id.sportTabLienarLayout:
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKSPORTTOTALDATA);
-                ((ProMainActivity) getActivity()).getLlArrayToSport().performClick();
-                break;
-            case R.id.dualSimTextView:
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKINLANDFEE);
-                WebViewActivity.launch(getActivity(), SharedUtils.getInstance().readString(IntentPutKeyConstant.DUALSIM_STANDBYTUTORIAL_URL), getString(R.string.dual_sim_standby_tutorial));
-                break;
-            case R.id.guiderImageView:
-
-				break;
 		}
 
 	}
@@ -343,11 +220,9 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	@Override
 	public void onResume() {
 		super.onResume();
-		getBoughtPackage();
 		getCallPackage();
 		getHardWare();
 		controlWheel(true);
-//		getSportTotal();
 	}
 
 
@@ -372,7 +247,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		scrollViewPagerLayout.setIndicatorCenter();
 	}
 
-	public static ImageView getImageView(Context context, String url) {
+	public  ImageView getImageView(Context context, String url) {
 		ImageView imageView = (ImageView) LayoutInflater.from(context).inflate(
 				R.layout.view_banner, null);
 		Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
@@ -403,53 +278,20 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 			if (bannerData != null && bannerData.size() != 0) {
 				initialize(bannerData);
 			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_ORDER) {
-			BoughtPacketHttp http = (BoughtPacketHttp) object;
-			BoughtPackageEntity boughtPackageEntity = http.getBoughtPackageEntity();
-			if (boughtPackageEntity != null) {
-				if (boughtPackageEntity.getList().size() == 0) {
-					boughtPacketLinearLayout.setVisibility(GONE);
-					orderAdapter.clear();
-					return;
-				} else {
-//					boughtPacketLinearLayout.setVisibility(View.VISIBLE);
-					List<BoughtPackageEntity.ListBean> getDataList = http.getBoughtPackageEntity().getList();
-					orderAdapter.addAll(getDataList);
-				}
-			} else {
-				boughtPacketLinearLayout.setVisibility(GONE);
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_HOT) {
+		}  else if (cmdType == HttpConfigUrl.COMTYPE_GET_HOT) {
 			GetHotHttp http = (GetHotHttp) object;
 			List<HotPackageEntity> hotList = http.getHotPackageEntityList();
 			if (hotList.size() != 0) {
 				hotPackageRecyclerView = new FullyRecylerView(getActivity());
-//				hotPackageRecyclerView.setBackgroundResource(R.color.white);
 				hotPackageRecyclerView.setNestedScrollingEnabled(false);
-//				FullyGridLayoutManager GridManager = new FullyGridLayoutManager(getActivity(), 4);
 				hotPackageRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-//				hotPackageRecyclerView.addItemDecoration(new DividerGridItemDecoration(getActivity()));
 				hotPackageRecyclerView.setAdapter(new HotPackageAdapter(hotList, getActivity(), true));
 				flowPackageLinearLayout.addView(hotPackageRecyclerView);
 			} else {
 				hotPacketLinearLayout.setVisibility(GONE);
 			}
-		} else if (cmdType == COMTYPE_GET_SPORT_TOTAL) {
-			GetSportTotalHttp http = (GetSportTotalHttp) object;
-			SportTotalEntity sportTotalEntity = http.getSportTotalEntity();
-			//如果获取总步数为空，那么其他数据也是空。
-			if (sportTotalEntity != null && !TextUtils.isEmpty(sportTotalEntity.getStepNum())) {
-				totalStepTextView.setText(sportTotalEntity.getStepNum());
-				totalKmTextView.setText(sportTotalEntity.getKM());
-				totalDayTextView.setText(sportTotalEntity.getDate());
-				totalKalTextView.setText(sportTotalEntity.getKcal());
-			} else {
-				totalStepTextView.setText("0");
-				totalKmTextView.setText("0");
-				totalDayTextView.setText("0");
-				totalKalTextView.setText("--");
-			}
-		} else if (cmdType == COMTYPE_PACKET_GET) {
+		}
+		else if (cmdType == COMTYPE_PACKET_GET) {
 			GetPakcetHttp http = (GetPakcetHttp) object;
 			PacketEntity bean = http.getPacketEntity();
 			if (bean != null) {
@@ -502,27 +344,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 
 	}
 
-	BroadcastReceiver realStepReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if (REFRESHSTEP.equals(intent.getAction())) {
-//				getSportTotal();
-			}
-		}
-	};
-
-	public IntentFilter getFilter() {
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(REFRESHSTEP);
-		return filter;
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		ICSOpenVPNApplication.getInstance().unregisterReceiver(realStepReceiver);
-	}
-
 
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -551,18 +372,5 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		scrollViewPagerLayout.setWheel(isWheel);
 	}
 
-	//修改蓝牙状态
-	public void changeBluetoothStatus(String leftText, int leftIconId) {
-		if (title == null)
-			title = (TitleBar) view.findViewById(R.id.title);
-		if (leftText != null && leftIconId != 0 && title != null) {
-			Log.i("changeBluetoothStatus", "title=" + (title == null) + "\nleftText=" + leftText + "\nleftIconId=" + leftIconId);
-			title.setLeftIvIconAndText(leftIconId, leftText);
-		}
-	}
 
-	//获取蓝牙状态
-	public String getBlutoothStatus() {
-		return title != null ? title.getLeftText().getText().toString() : "";
-	}
 }

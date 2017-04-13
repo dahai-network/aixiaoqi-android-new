@@ -7,6 +7,13 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     >
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/connect_us_red"
+    android:padding="@dimen/padding_10dp"
+    android:textColor="@color/white"
+    android:text="@string/tip_activate"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +23,6 @@
         android:paddingRight="15dp"
         android:background="@color/white"
         android:gravity="center_vertical"
-        android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
         android:paddingTop="10dp">
 

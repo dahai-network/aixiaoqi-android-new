@@ -356,6 +356,7 @@ public class CommitOrderActivity extends BaseNetActivity {
 //				PaySuccessActivity.launch(CommitOrderActivity.this, PaySuccessActivity.BUY, PaySuccessActivity.BALANCE,
 //						orderEntity.getOrder().getTotalPrice() + "", orderEntity.getOrder().getOrderID());
                 MyOrderDetailActivity.launch(this, orderEntity.getOrder().getOrderID());
+                ICSOpenVPNApplication.getInstance().finishOtherActivity();
 //				finish();
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {

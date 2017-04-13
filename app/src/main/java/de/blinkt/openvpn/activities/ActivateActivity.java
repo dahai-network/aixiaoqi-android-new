@@ -52,12 +52,6 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	private UartService mService = ICSOpenVPNApplication.uartService;
 	private boolean isActivateSuccess = false;
 
-	public static void launch(Context context) {
-		Intent intent = new Intent(context, ActivateActivity.class);
-		context.startActivity(intent);
-
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -126,12 +120,14 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				showDialog();
 			} else if (TextUtils.equals(intent.getAction(), MyOrderDetailActivity.FINISH_PROCESS)) {
 				if (ReceiveBLEMoveReceiver.orderStatus == 4) {
+
 					HashMap<String, String> map = new HashMap<>();
 					map.put("statue", 0 + "");
 					//友盟方法统计
 					MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
 					CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活失败，请重试!");
 				} else {
+					toActivity(new Intent(ActivateActivity.this,OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.OUTSIDE).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,getIntent().getBooleanExtra(IntentPutKeyConstant.IS_SUPPORT_4G,false)));
 					isActivateSuccess = true;
 				}
 				dismissProgress();
