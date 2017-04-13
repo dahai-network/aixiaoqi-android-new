@@ -2,6 +2,7 @@ package de.blinkt.openvpn.fragments;
 
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -49,6 +50,8 @@ import de.blinkt.openvpn.http.BalanceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
+import de.blinkt.openvpn.http.OrderUsageRemainHttp;
+import de.blinkt.openvpn.model.UsageRemainEntity;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -99,6 +102,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	RelativeLayout deviceSummarizedRelativeLayout;
 	@BindView(R.id.permission_set)
 	TextView tvPermissionSet;
+	@BindView(R.id.tv_setting)
+	TextView tvSetting;
 	@BindView(R.id.deviceNameTextView)
 	TextView deviceNameTextView;
 	@BindView(R.id.powerTextView)
@@ -107,8 +112,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	ImageView signalIconImageView;
 	@BindView(R.id.operatorTextView)
 	TextView operatorTextView;
-	@BindView(R.id.tv_setting)
-	TextView tvSetting;
 	@BindView(R.id.rechargeTextView)
 	TextView rechargeTextView;
 	@BindView(R.id.ll_coming_tel_tip)
@@ -138,10 +141,24 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	@BindView(R.id.unBindTextView)
 	TextView unBindTextView;
 	SharedUtils utils = SharedUtils.getInstance();
+	@BindView(R.id.noPacketRelativeLayout)
+	RelativeLayout noPacketRelativeLayout;
+	@BindView(R.id.PacketRelativeLayout)
+	RelativeLayout PacketRelativeLayout;
+	@BindView(R.id.add_or_activate_package)
+	TextView addOrActivatePackage;
+	@BindView(R.id.call_time)
+	TextView callTime;
+	@BindView(R.id.flow)
+	TextView flow;
+	@BindView(R.id.flow_count)
+	TextView flowCount;
+	@BindView(R.id.package_all_count)
+	TextView packageAllCount;
 	//bluetooth status蓝牙状态
 	private String bleStatus;
 	private String TAG = "AccountFragment";
-
+	boolean hasPackage=false;
 	public AccountFragment() {
 		// Required empty public constructor
 	}
@@ -174,13 +191,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 		super.onResume();
 		//获取数据，每次都重新获取一次以保持正确性。
 		getData();
+		getPackage();
 //		getAlarmClock();
 	}
 
 	private void getAlarmClock() {
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ALARM_CLOCK_COUNT);
 	}
-
+	private void getPackage() {
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
+	}
 	public void showDeviceSummarized(boolean isShow) {
 		if (isShow) {
 			deviceSummarizedRelativeLayout.setVisibility(View.VISIBLE);
@@ -217,7 +237,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 			operatorTextView.setText("----");
 		}
 	}
-
 	private void getData() {
 		title.setTextTitle(getString(R.string.personal_center));
 		if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.NICK_NAME)))
@@ -278,8 +297,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 			case R.id.activateRelativeLayout:
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKMYPACKAGE);
-				intent = new Intent(getActivity(), PackageCategoryActivity.class);
-				intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE,Constant.SHOW);
+				if(!hasPackage){
+					intent = new Intent(getActivity(), PackageMarketActivity.class);
+					intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
+				}else{
+					intent = new Intent(getActivity(), PackageCategoryActivity.class);
+				}
 				break;
 			case R.id.addDeviceRelativeLayout:
 				//友盟方法统计
@@ -307,9 +330,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				} else if (getString(R.string.index_aixiaoqicard).equals(getBleStatus())) {
 					status = R.string.index_aixiaoqicard;
 				}
-				//手环的名字
-				String braceleName = SharedUtils.getInstance().readString(BRACELETNAME, "");
-				intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceleName);
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
 				break;
 			case R.id.permission_set:
@@ -419,6 +439,43 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 			} else {
 				CommonTools.showShortToast(getActivity(), object.getMsg());
 				Log.i(TAG, object.getMsg());
+			}
+		}else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
+			if (object.getStatus() == 1) {
+				OrderUsageRemainHttp orderUsageRemainHttp = (OrderUsageRemainHttp) object;
+				UsageRemainEntity.Unactivated unactivated = orderUsageRemainHttp.getUsageRemainEntity().getUnactivated();
+				UsageRemainEntity.Used used = orderUsageRemainHttp.getUsageRemainEntity().getUsed();
+				if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
+					hasPackage=false;
+					PacketRelativeLayout.setVisibility(View.GONE);
+					noPacketRelativeLayout.setVisibility(View.VISIBLE);
+					Drawable drawable = getResources().getDrawable(R.drawable.image_slidethetriangle);
+					drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
+					addOrActivatePackage.setText(getString(R.string.add_package));
+				} else if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
+					hasPackage=true;
+					PacketRelativeLayout.setVisibility(View.GONE);
+					noPacketRelativeLayout.setVisibility(View.VISIBLE);
+					Drawable drawable = getResources().getDrawable(R.drawable.add_device);
+					drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
+					addOrActivatePackage.setText(getString(R.string.activate_packet));
+				} else {//有套餐且激活了。
+					hasPackage=true;
+					PacketRelativeLayout.setVisibility(View.VISIBLE);
+					noPacketRelativeLayout.setVisibility(View.GONE);
+					callTime.setText(used.getTotalRemainingCallMinutes()+"分");
+					if("0".equals(used.getTotalNumFlow())){
+						flow.setText(getString(R.string.no_flow_count));
+						flowCount.setText(unactivated.getTotalNumFlow());
+					}else{
+						flow.setText(getString(R.string.flow_count));
+						flowCount.setText(used.getTotalNumFlow());
+					}
+
+					packageAllCount.setText(used.getTotalNum());
+				}
 			}
 		}
 	}

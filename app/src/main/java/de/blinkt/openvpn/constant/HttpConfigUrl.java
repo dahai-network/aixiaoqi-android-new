@@ -101,6 +101,7 @@ public class HttpConfigUrl {
 	public static final String SMS_DELETE_SMSs ="SMS/Deletes";
 	public static final String SMS_DELETE ="SMS/Delete";
 	public static final String GET_PRODUCTS ="config/GetProductList";
+	public static final String GET_USER_ORDER_USAGE_REMAINING ="Order/GetUserOrderUsageRemaining";
 	public static final int COMTYPE_LOGIN = 0x0001;
 	public static final int COMTYPE_SECURITY_CONFIG = 0x0002;
 	public static final int COMTYPE_SEND_SMS = 0x0003;
@@ -143,6 +144,7 @@ public class HttpConfigUrl {
 	public static final int  COMTYPE_BLACK_LIST_ADD =0x0055;
 	public static final int  COMTYPE_BLACK_LIST_DELETE =0x0056;
 	public static final int  COMTYPE_BLACK_LIST_GET =0x0057;
+	public static final int	COMTYPE_GET_USER_ORDER_USAGE_REMAINING=0x0058;
 	public static final int  COMTYPE_GET_DEVICE_SIM_REG_STATUES =0x0052;
 	public static final int  COMTYPE_SMS_DELETE_BY_TEL =0x0053;
 	public static final int  COMTYPE_SMS_DELETE =0x0054;
