@@ -74,9 +74,6 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
     String[] detail_titles;
     PagerSlidingTabStripExtends mTabs;
     DisplayMetrics dm;
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-
     public static void launch(Context context, String id, String countryPic) {
         Intent intent = new Intent(context, PackageDetailActivity.class);
         intent.putExtra("id", id);
@@ -95,15 +92,9 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
         setTabsValue();
 
     }
-
     private void initSet() {
-        //创建sp的对象
-        pref = getSharedPreferences(Constant.SHAREDPREFERENCES_SIGN, MODE_PRIVATE);
-        editor = pref.edit();
-
         //获取标题
         detail_titles = getResources().getStringArray(R.array.detail_titles);
-
         activity = this;
         initViews();
         addData();
@@ -128,8 +119,7 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
         hasLeftViewTitle(R.string.package_detail, 0);
         String paymentOfTerms = SharedUtils.getInstance().readString(IntentPutKeyConstant.PAYMENT_OF_TERMS);
         if (!TextUtils.isEmpty(paymentOfTerms))
-            editor.putString(Constant.PAYTERMS_SIGN, paymentOfTerms);
-        editor.commit();
+            SharedUtils.getInstance().writeString(Constant.PAYTERMS_SIGN, paymentOfTerms);
 
         mTabs = (PagerSlidingTabStripExtends) findViewById(R.id.jbp_tabs);
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
@@ -138,11 +128,9 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
         mTabs.setViewPager(pager);
     }
 
-
     private void addData() {
         createHttpRequest(HttpConfigUrl.COMTYPE_PACKET_DETAIL, getIntent().getStringExtra("id"));
     }
-
 
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
@@ -154,9 +142,8 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
                 bean = http.getPacketDtailEntity().getList();
                 packageNameTextView.setText(bean.getPackageName());
                 //进行本地缓存
-                editor.putString(Constant.DETAIL_SIGN, bean.getDetails());
-                editor.putString(Constant.FEATURES_SIGN, bean.getFeatures());
-                editor.commit();
+                SharedUtils.getInstance().writeString(Constant.DETAIL_SIGN, bean.getDetails());
+                SharedUtils.getInstance().writeString(Constant.FEATURES_SIGN, bean.getFeatures());
                 //使用广播进行数据交互
                 Intent intent = new Intent(Constant.LOCALBROADCAST_INTENT_DATA);
                 intent.putExtra(Constant.DETAIL_SIGN, bean.getDetails());
@@ -267,7 +254,6 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //editor.clear();
         clearSPData();
     }
 
@@ -275,10 +261,9 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
      * 清除sp里面的数据
      */
     public void clearSPData() {
-        editor.remove(Constant.DETAIL_SIGN);
-        editor.remove(Constant.FEATURES_SIGN);
-        editor.remove(Constant.PAYTERMS_SIGN);
-        editor.commit();
+       SharedUtils.getInstance().delete(Constant.DETAIL_SIGN);
+       SharedUtils.getInstance().delete(Constant.FEATURES_SIGN);
+       SharedUtils.getInstance().delete(Constant.PAYTERMS_SIGN);
     }
 
     /**

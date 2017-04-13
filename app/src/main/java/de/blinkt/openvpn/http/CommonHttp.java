@@ -337,6 +337,9 @@ public abstract class CommonHttp implements Callback, Runnable {
 		sendRequest();
 	}
 
+	/**
+	 * 发送请求
+	 */
 	private void sendRequest() {
 		String expires = System.currentTimeMillis() / 1000L + "";
 		String md5 = PublicEncoderTools.MD5Encode(PARTNER + expires + HttpConfigUrl.PRIVATE_KEY);
@@ -364,6 +367,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			}
 			Request request;
 
+			//获取request对象
 			request = getRequest(expires, md5, sharedUtils);
 			call = client.newCall(request);
 			try {
@@ -444,6 +448,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 
 	private Request getRequest(String expires, String md5, SharedUtils sharedUtils) {
 		Request request;
+		//判断token是否为空
 		if (TextUtils.isEmpty(sharedUtils.readString(Constant.TOKEN)))
 			request = new Request.Builder().url(hostUrl_).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.TERMINAL_HEADER, "Android").addHeader(Constant.VERSION_HEADER, CommonTools.getVersion(ICSOpenVPNApplication.getContext())).addHeader(Constant.SIGN, md5).build();
 		else

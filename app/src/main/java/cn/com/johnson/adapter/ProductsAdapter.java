@@ -1,8 +1,6 @@
 package cn.com.johnson.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +13,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.WebViewActivity;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ProductEntity;
 
@@ -43,14 +42,16 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 		final ProductEntity bean = data.get(position);
 		Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getImage()).into(holder.productImageView);
 		holder.productNameTextView.setText(bean.getTitle());
-		holder.productPriceTextView.setText("￥ " + bean.getPrice());
+		if (bean.getPrice() != 0) {
+			holder.productPriceTextView.setText("￥ " + bean.getPrice());
+		}
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Uri u = Uri.parse(bean.getUrl());
-				Intent it = new Intent(Intent.ACTION_VIEW, u);
-				context.startActivity(it);
-//				WebViewActivity.launch(context, bean.getUrl(), bean.getTitle());
+//				Uri u = Uri.parse(bean.getUrl());
+//				Intent it = new Intent(Intent.ACTION_VIEW, u);
+//				context.startActivity(it);
+				WebViewActivity.launch(context, bean.getUrl(), bean.getTitle());
 			}
 		});
 	}

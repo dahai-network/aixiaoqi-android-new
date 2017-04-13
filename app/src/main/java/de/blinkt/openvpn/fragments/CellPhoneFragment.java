@@ -121,14 +121,16 @@ public class CellPhoneFragment extends Fragment {
                 //展示电话键
                 ViewUtil.showView(phoneFragment.t9dialpadview);
                 hidePhoneBottomBar();
-                if (ProMainActivity.phone_fl.getVisibility() == View.GONE || ProMainActivity.phone_fl.getVisibility() == View.INVISIBLE)
-                    ProMainActivity.phone_fl.setVisibility(View.VISIBLE);
-                ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
-                if (null != AppMode.getInstance().curCharacter) {
+                if (ProMainActivity.phone_linearLayout.getVisibility() == View.GONE || ProMainActivity.phone_linearLayout.getVisibility() == View.INVISIBLE) {
+                    ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
+                    ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
+                }
+
+             /*   if (null != AppMode.getInstance().curCharacter) {
                     if (AppMode.getInstance().curCharacter.length() > 0) {
                         showPhoneBottomBar();
                     }
-                }
+                }*/
             }
         });
 
