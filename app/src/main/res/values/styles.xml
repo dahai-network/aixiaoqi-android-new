@@ -148,6 +148,11 @@
         <item name="android:layout_height">1px</item>
         <item name="android:background">@color/light_gray</item>
     </style>
+    <style name="vertical_dotted_line">
+        <item name="android:layout_width">2px</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/vertical_dotted_line</item>
+    </style>
 
     <style name="horizontal_line_view_margin_15dp" parent="horizontal_line_view">
         <item name="android:layout_marginLeft">@dimen/padding_15dp</item>

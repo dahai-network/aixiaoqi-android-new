@@ -3,6 +3,7 @@ package de.blinkt.openvpn.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
 import cn.com.aixiaoqi.R;
@@ -41,6 +42,18 @@ public class WebViewActivity extends BaseActivity {
 		if (url == null) return;
 		layout.setUrl(this, url, url);
 	}
+
+	@Override
+	//设置回退
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_BACK) && layout.mWebView.canGoBack()) {
+			layout.mWebView.goBack();
+			return true;
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
+	}
+
 
 	@Override
 	protected void onDestroy() {

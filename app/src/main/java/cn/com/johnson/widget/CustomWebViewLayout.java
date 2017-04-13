@@ -395,43 +395,6 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 
 			private Boolean isLoadPage = false;
 
-
-			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				Log.e(TAG, "shouldOverrideUrlLoading url:" + url + "|mainurl:" + mainPage);
-//				/**
-//		    	 * 截取URL的前四个字符，判断是否是要调用拨打电话
-//		    	 */
-//		    	if(url.substring(0, 4).equals("tel:"))
-//				{
-//					//System.out.println("come!");
-//					mContext.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(url)));  //符合则调用拨打
-//					return true;
-//				}
-
-
-//				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-//					//兼容android2.0的webview.reload的处理;
-//					//android2.0的reload事件会触发该函数（3.0以上则不会），某些带单首页的url每次刷新地址后缀有的会不断改变。
-//					//此处理是为了避免程序误认为不断变化的首页为子链接而做的处理
-//					int index = url.indexOf("?");
-//
-//					if (index != -1) {
-//						if (url.substring(0, index).trim().equals(mainPage.trim())) {
-//							loadUrl(view, url);
-//							return true;
-//						}
-//
-//					}
-//				}
-
-
-				loadUrl(view, url);
-
-
-				return true;
-
-			}
-
 			/**
 			 * 页面加载完成回调的函数
 			 */
@@ -566,6 +529,9 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 			webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		}
 		webSettings.setAllowFileAccess(false);
+		webSettings.setSupportZoom(false);
+		//支持android4.0
+		webSettings.setBuiltInZoomControls(true);
 		webSettings.setNeedInitialFocus(false);
 		webSettings.setLoadsImagesAutomatically(true);
 		webSettings.setDomStorageEnabled(true);

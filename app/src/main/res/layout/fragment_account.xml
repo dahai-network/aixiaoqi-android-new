@@ -241,6 +241,14 @@
                                     />
                             </RelativeLayout>
 
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/padding_15dp"
+                                android:layout_marginTop="15dp"
+                                android:background="@drawable/vertical_dotted_line"
+                                />
+
                             <RelativeLayout
                                 android:layout_width="0dp"
 
@@ -271,6 +279,14 @@
                                     android:textStyle="bold"
                                     />
                             </RelativeLayout>
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/padding_15dp"
+                                android:layout_marginTop="15dp"
+                                android:background="@drawable/vertical_dotted_line"
+                                />
 
                             <RelativeLayout
                                 android:layout_width="0dp"
@@ -342,7 +358,6 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/padding_5dp"
                         android:background="@drawable/has_device"
-                        android:visibility="gone"
                         >
 
                         <TextView
@@ -408,6 +423,14 @@
                                     />
                             </RelativeLayout>
 
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/padding_15dp"
+                                android:layout_marginTop="15dp"
+                                android:background="@drawable/vertical_dotted_line"
+                                />
+
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -434,6 +457,13 @@
                                     android:textSize="18sp"
                                     android:textStyle="bold"
                                     />
+                            </RelativeLayout>
+
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
                             </RelativeLayout>
 
 
