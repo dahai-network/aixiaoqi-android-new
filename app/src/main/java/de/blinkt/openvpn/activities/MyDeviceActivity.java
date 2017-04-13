@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,8 +86,8 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
 
 public class MyDeviceActivity extends BaseNetActivity implements DialogInterfaceTypeBase, View.OnClickListener {
-	@BindView(R.id.noConnectImageView)
-	ImageView noConnectImageView;
+//	@BindView(R.id.noConnectImageView)
+//	ImageView noConnectImageView;
 	@BindView(R.id.statueTextView)
 	TextView statueTextView;
 	@BindView(R.id.firmwareTextView)
@@ -212,9 +211,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		hasLeftViewTitle(device, 0);
 		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 			int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
-			noConnectImageView.setVisibility(GONE);
+//			noConnectImageView.setVisibility(GONE);
 			unBindButton.setVisibility(View.VISIBLE);
-			sinking.setVisibility(View.VISIBLE);
+//			sinking.setVisibility(View.VISIBLE);
 			if (electricityInt != 0) {
 				sinking.setPercent(((float) electricityInt) / 100);
 			} else {
@@ -431,8 +430,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				if (mService != null) {
 					if (retryTime >= 20 || !ICSOpenVPNApplication.isConnect) {
-						sinking.setVisibility(GONE);
-						noConnectImageView.setVisibility(View.VISIBLE);
+//						sinking.setVisibility(GONE);
+//						noConnectImageView.setVisibility(View.VISIBLE);
 						statueTextView.setVisibility(View.VISIBLE);
 						unBindButton.setVisibility(GONE);
 						SharedUtils.getInstance().delete(Constant.IMEI);
@@ -474,8 +473,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					macTextView.setText("");
 					firmwareTextView.setText("");
 					statueTextView.setText(getString(R.string.conn_bluetooth));
-					sinking.setVisibility(GONE);
-					noConnectImageView.setVisibility(View.VISIBLE);
+//					sinking.setVisibility(GONE);
+//					noConnectImageView.setVisibility(View.VISIBLE);
 					statueTextView.setVisibility(View.VISIBLE);
 					CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 				}
@@ -534,8 +533,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void setView() {
 		dismissProgress();
 		int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
-		noConnectImageView.setVisibility(GONE);
-		sinking.setVisibility(View.VISIBLE);
+//		noConnectImageView.setVisibility(GONE);
+//		sinking.setVisibility(View.VISIBLE);
 //		resetDeviceTextView.setVisibility(View.VISIBLE);
 		macAddressStr = SharedUtils.getInstance().readString(Constant.IMEI);
 		if (macAddressStr != null)
@@ -594,9 +593,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
 			if (object.getStatus() == 1) {
 				stopAnim();
-				sinking.setVisibility(GONE);
+//				sinking.setVisibility(GONE);
 				unBindButton.setVisibility(GONE);
-				noConnectImageView.setVisibility(View.VISIBLE);
+//				noConnectImageView.setVisibility(View.VISIBLE);
 				statueTextView.setVisibility(View.VISIBLE);
 				registerSimStatu.setVisibility(GONE);
 				statueTextView.setText(getString(R.string.conn_bluetooth));

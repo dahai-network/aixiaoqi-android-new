@@ -108,6 +108,8 @@ public class MySinkingView extends FrameLayout {
 			}
 			for (int idx = 0; idx < mRepeatCount; idx++) {
 				canvas.drawBitmap(mScaledBitmap, mLeft + (idx - 1) * mScaledBitmap.getWidth(), (1 - mPercent) * getHeight(), null);
+				canvas.drawBitmap(mScaledBitmap, mLeft + (idx - 1) * mScaledBitmap.getWidth(), (1 - mPercent) * getHeight(), null);
+				canvas.drawBitmap(mScaledBitmap, mLeft + (idx - 1) * mScaledBitmap.getWidth(), (1 - mPercent) * getHeight(), null);
 			}
 			String str = (int) (mPercent * 100) + "%";
 			TextPaint textPaint = new TextPaint();
