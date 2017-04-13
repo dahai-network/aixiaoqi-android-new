@@ -75,8 +75,6 @@ public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapt
 		return holder;
 	}
 
-	private List<String> tempList = new ArrayList<>();
-
 	@Override
 	public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
 		TextView textView = (TextView) headView.findViewById(R.id.headNameTextView);
