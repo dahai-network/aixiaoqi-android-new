@@ -51,7 +51,6 @@ public class FastSetActivity extends BaseActivity implements View.OnClickListene
 	@Override
 	public void onClick(View v) {
 		boolean isSupport4G=getIntent().getBooleanExtra(IntentPutKeyConstant.IS_SUPPORT_4G,false);
-		Log.e("initdata","isSupport4G="+isSupport4G);
 		switch (v.getId()){
 
 			case R.id.before_going_abroad_tv:

@@ -368,7 +368,8 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 					OrderID = bean.getOrderID();
 					//如果订单未激活跳转到激活界面
 					if (bean.getOrderStatus() == 0)
-						toActivity(new Intent(this, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt()));
+						toActivity(new Intent(this, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt())
+								.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,bean.isPackageIsSupport4G()));
 					else {
 						//是否测试卡位置：否，这是写卡！
 //						TelephonyManager telephonyManager=((TelephonyManager) getSystemService(TELEPHONY_SERVICE));

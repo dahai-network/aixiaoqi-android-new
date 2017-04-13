@@ -403,13 +403,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					@Override
 					public void run() {
 						scanLeDevice(false);
-						runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								if (indexFragment != null && indexFragment.getBlutoothStatus().equals(getResources().getString(R.string.index_unconnect)))
-									sendEventBusChangeBluetoothStatus(getResources().getString(R.string.index_unconnect), R.drawable.index_unconnect);
-							}
-						});
+
 					}
 				}, 10000);
 			}
@@ -976,7 +970,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	@Subscribe(threadMode = ThreadMode.MAIN)
 	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
-		indexFragment.changeBluetoothStatus(entity.getStatus(), entity.getStatusDrawableInt());
 		accountFragment.setBleStatus(entity.getStatus());
 	}
 

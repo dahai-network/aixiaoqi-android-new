@@ -93,31 +93,31 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 		if (data == null) return;
-			final NormalViewHolder normalHolder = (NormalViewHolder) holder;
-			BoughtPackageEntity.ListBean bean = data.get(position);
-			normalHolder.packageNameTextView.setText(bean.getPackageName());
-			normalHolder.priceTextView.setText("￥" + bean.getTotalPrice());
-			Glide.with(context).load(bean.getLogoPic()).into(normalHolder.countryImageView);
-			normalHolder.dateTextView.setText(bean.getExpireDays());
-			//如果订单状态是正在使用，那么就计算时间
-			if (bean.getOrderStatus() == 0) {
-				normalHolder.stateTextView.setText("未激活");
-				normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.activite_color_selector));
-			} else if (bean.getOrderStatus() == 2) {
-				normalHolder.stateTextView.setText("已过期");
-			} else if (bean.getOrderStatus() == 3) {
-				normalHolder.stateTextView.setText("已取消");
+		final NormalViewHolder normalHolder = (NormalViewHolder) holder;
+		BoughtPackageEntity.ListBean bean = data.get(position);
+		normalHolder.packageNameTextView.setText(bean.getPackageName());
+		normalHolder.priceTextView.setText("￥" + bean.getTotalPrice());
+		Glide.with(context).load(bean.getLogoPic()).into(normalHolder.countryImageView);
+		normalHolder.dateTextView.setText(bean.getExpireDays());
+		//如果订单状态是正在使用，那么就计算时间
+		normalHolder.stateTextView.setVisibility(View.GONE);
+		if (bean.getOrderStatus() == 0) {
+			normalHolder.stateTextView.setText("未激活");
+			normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.activite_color_selector));
+		} else if (bean.getOrderStatus() == 2) {
+			normalHolder.stateTextView.setText("已过期");
+		} else if (bean.getOrderStatus() == 3) {
+			normalHolder.stateTextView.setText("已取消");
+		} else if (bean.getOrderStatus() == 4) {
+			normalHolder.stateTextView.setText("激活失败");
+			normalHolder.stateTextView.setTextColor(ContextCompat.getColor(context, R.color.order_item));
+		} else {
+			normalHolder.stateTextView.setText("已激活");
+			normalHolder.stateTextView.setTextColor(ContextCompat.getColor(context, R.color.select_contacct));
 
-			} else if (bean.getOrderStatus() == 4) {
-				normalHolder.stateTextView.setText("激活失败");
-				normalHolder.stateTextView.setTextColor(ContextCompat.getColor(context, R.color.order_item));
-			} else {
-				normalHolder.stateTextView.setText("已激活");
-				normalHolder.stateTextView.setTextColor(ContextCompat.getColor(context, R.color.select_contacct));
-
-			}
-			//判断layout，如果是订单列表layout则需要
-				setSpan(normalHolder.priceTextView, position);
+		}
+		//判断layout，如果是订单列表layout则需要
+		setSpan(normalHolder.priceTextView, position);
 	}
 
 
@@ -164,8 +164,8 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		public void onClick(View view) {
 			//友盟方法统计
 			MobclickAgent.onEvent(context, CLICKINDEXORDER);
-				clickPosition = getPosition() - 1;
-				MyOrderDetailActivity.launch(context, data.get(clickPosition).getOrderID(),data.get(clickPosition).getPackageCategory());
+			clickPosition = getPosition() - 1;
+			MyOrderDetailActivity.launch(context, data.get(clickPosition).getOrderID(),data.get(clickPosition).getPackageCategory());
 
 		}
 	}
