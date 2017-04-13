@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/blue_title"
-        android:gravity="center"
+        android:background="@drawable/my_device_back"
         android:orientation="vertical"
         android:padding="15dp"
         >
@@ -19,16 +19,24 @@
             android:id="@+id/sinking"
             android:layout_width="130dp"
             android:layout_height="130dp"
-            android:layout_centerInParent="true"/>
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/padding_10dp"
+            />
 
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/my_device_round"
+            />
 
         <ImageView
             android:id="@+id/noConnectImageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:visibility="gone"
             android:layout_centerInParent="true"
             android:background="@drawable/un_connect_blue"
+            android:visibility="gone"
             />
 
         <TextView
@@ -38,237 +46,277 @@
             android:layout_marginTop="12.5dp"
             android:text="@string/conn_bluetooth"
             android:textColor="@color/login_bottom_line"
+            android:visibility="gone"
             />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         style="@style/horizontal_line_view"
         android:layout_marginTop="@dimen/padding_15dp"
         />
 
-
-    <LinearLayout
-        android:id="@+id/simStatusLinearLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:id="@+id/simStatusLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
 
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:text="@string/sim_indevice"
-            android:textColor="@color/black"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/sim_indevice"
+                    android:textColor="@color/black"/>
 
-        <TextView
-            android:id="@+id/conStatusTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/index_connecting"
-            android:textColor="@color/gray_text"
-            />
+                <TextView
+                    android:id="@+id/conStatusTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/index_connecting"
+                    android:textColor="@color/gray_text"
+                    />
 
-        <TextView
-            android:id="@+id/percentTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/padding_5dp"
-            android:gravity="center"
-            android:textColor="@color/gray_text"
-            />
+                <TextView
+                    android:id="@+id/percentTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_5dp"
+                    android:gravity="center"
+                    android:textColor="@color/gray_text"
+                    />
 
-        <Button
-            android:id="@+id/register_sim_statue"
-            android:layout_width="24dp"
-            android:layout_height="@dimen/padding_20dp"
-            android:layout_marginLeft="@dimen/padding_5dp"
-            android:background="@drawable/registering"
-            android:gravity="center_vertical"
-            />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/register_sim_statue"
+                    android:layout_width="24dp"
+                    android:layout_height="@dimen/padding_20dp"
+                    android:layout_marginLeft="@dimen/padding_5dp"
+                    android:background="@drawable/registering"
+                    android:gravity="center_vertical"
+                    />
+            </LinearLayout>
 
-    <View
-        style="@style/horizontal_line_view"
-        />
+            <View
+                style="@style/horizontal_line_view"
+                />
 
+            <LinearLayout
+                android:id="@+id/deviceNameLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/call_phone_selector"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
 
-    <View
-        style="@style/horizontal_line_view"
-        android:layout_marginTop="@dimen/padding_15dp"
-        />
+                <TextView
 
-    <LinearLayout
-        android:id="@+id/alarmClockLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/call_phone_selector"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/device_name"
+                    android:textColor="@color/black"/>
 
+                <TextView
+                    android:id="@+id/deviceNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_text"
+                    />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:text="@string/alarm_clock_tip"
-            android:textColor="@color/black"/>
+            <View
+                android:id="@+id/alarmClockView"
+                style="@style/horizontal_line_view"
+                />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/arrow"
-            />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/alarmClockLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/call_phone_selector"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/alarm_clock_tip"
+                    android:textColor="@color/black"/>
 
-    <View
-        style="@style/horizontal_line_view"
-        />
-
-    <LinearLayout
-        android:id="@+id/messageRemindLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/call_phone_selector"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:text="@string/message_remind"
-            android:textColor="@color/black"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/arrow"
-            />
-    </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/arrow"
+                    />
+            </LinearLayout>
 
 
-    <View
-        style="@style/horizontal_line_view"
-        />
+            <View
+                android:id="@+id/messageRemindView"
+                style="@style/horizontal_line_view"
+                />
 
-    <LinearLayout
-        android:id="@+id/findStatusLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/call_phone_selector"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:text="@string/find_bracelet"
-            android:textColor="@color/black"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/arrow"
-            />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/messageRemindLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/call_phone_selector"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
 
 
-    <View
-        style="@style/horizontal_line_view"
-        />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/message_remind"
+                    android:textColor="@color/black"/>
 
-    <LinearLayout
-        android:id="@+id/callPayLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/call_phone_selector"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:text="@string/firmware_version"
-            android:textColor="@color/black"/>
-
-        <TextView
-            android:id="@+id/firmwareTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/gray_text"
-            />
-    </LinearLayout>
-
-    <View
-        style="@style/horizontal_line_view"/>
-
-    <LinearLayout
-        android:id="@+id/flowPayLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/arrow"
+                    />
+            </LinearLayout>
 
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:text="@string/bracelet_mac"
-            android:textColor="@color/black"/>
+            <View
+                android:id="@+id/findStatusView"
+                style="@style/horizontal_line_view"
+                />
 
-        <TextView
-            android:id="@+id/macTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_data_show"
-            android:textColor="@color/gray_text"/>
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/findStatusLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/call_phone_selector"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
 
-    <View
-        style="@style/horizontal_line_view"/>
 
-    <Button
-        android:id="@+id/unBindButton"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/padding_40dp"
-        android:layout_marginLeft="@dimen/padding_20dp"
-        android:layout_marginRight="@dimen/padding_20dp"
-        android:layout_marginTop="@dimen/padding_15dp"
-        android:background="@drawable/green_btn_click"
-        android:text="@string/remove_bind"
-        android:textColor="@android:color/white"
-        android:textSize="16dp"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/find_bracelet"
+                    android:textColor="@color/black"/>
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/arrow"
+                    />
+            </LinearLayout>
+
+
+            <View
+                style="@style/horizontal_line_view"
+                />
+
+            <LinearLayout
+                android:id="@+id/callPayLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/call_phone_selector"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/firmware_version"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/firmwareTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_text"
+                    />
+            </LinearLayout>
+
+            <View
+                style="@style/horizontal_line_view"/>
+
+            <LinearLayout
+                android:id="@+id/flowPayLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/bracelet_mac"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/macTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_data_show"
+                    android:textColor="@color/gray_text"/>
+            </LinearLayout>
+
+
+            <View
+                style="@style/horizontal_line_view"/>
+
+            <Button
+                android:id="@+id/unBindButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_40dp"
+                android:layout_marginLeft="@dimen/padding_20dp"
+                android:layout_marginRight="@dimen/padding_20dp"
+                android:layout_marginTop="@dimen/padding_15dp"
+                android:text="@string/remove_bind"
+                android:textColor="@drawable/gray_background_text_selector"
+                android:background="@drawable/circle_light_gray_selector"
+                android:textSize="16dp"/>
+        </LinearLayout>
+
+    </ScrollView>
 </LinearLayout>
 
 

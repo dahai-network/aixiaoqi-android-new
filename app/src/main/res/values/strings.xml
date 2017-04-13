@@ -155,7 +155,7 @@
     <string name="sim_indevice">设备内电话卡</string>
     <string name="remove_bind">解除绑定</string>
     <string name="remove_bind_under_line"><u>解除绑定</u></string>
-    <string name="bracelet_mac">手环mac地址</string>
+    <string name="bracelet_mac">Mac地址</string>
     <string name="order_num">订单编号：</string>
     <string name="order_num_nocolon">订单编号</string>
     <string name="order_time">支付时间：</string>
@@ -622,6 +622,7 @@
     <string name="china_telecom">中国电信</string>
     <string name="china_mobile">中国移动</string>
     <string name="china_unicom">中国联通</string>
+    <string name="device_name">设备名称</string>
 
     <!--详细界面的标题-->
     <string-array name="detail_titles">

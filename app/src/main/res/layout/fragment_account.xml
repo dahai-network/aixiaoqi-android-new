@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
     <de.blinkt.openvpn.views.TitleBar
@@ -22,8 +22,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:background="@color/gray_back_2"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/gray_back_2">
 
             <ImageView
                 android:id="@+id/blueImageView"
@@ -93,15 +93,13 @@
                         android:paddingTop="@dimen/padding_10dp">
 
 
-
-
                         <TextView
                             android:id="@+id/balanceTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:drawablePadding="@dimen/padding_10dp"
                             android:drawableLeft="@drawable/balance_icon"
+                            android:drawablePadding="@dimen/padding_10dp"
                             android:text="@string/balance"
                             android:textSize="15sp"/>
 
@@ -124,18 +122,18 @@
                         />
 
                     <TextView
-                        android:drawableLeft="@drawable/bill_icon"
+                        android:id="@+id/billtv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:id="@+id/billtv"
+                        android:background="@drawable/call_phone_selector"
+                        android:drawableLeft="@drawable/bill_icon"
                         android:drawablePadding="@dimen/padding_10dp"
-                        android:text="@string/bill"
                         android:paddingBottom="@dimen/padding_10dp"
                         android:paddingLeft="@dimen/padding_15dp"
                         android:paddingRight="@dimen/padding_15dp"
                         android:paddingTop="@dimen/padding_10dp"
-                        android:background="@drawable/call_phone_selector"
+                        android:text="@string/bill"
                         android:textSize="15sp"/>
 
                 </LinearLayout>
@@ -170,6 +168,7 @@
                             android:textColor="@color/gray_text"/>
 
                     </RelativeLayout>
+
                     <RelativeLayout
                         android:id="@+id/PacketRelativeLayout"
                         android:layout_width="match_parent"
@@ -221,8 +220,8 @@
                                     android:id="@+id/call"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="15dp"
                                     android:layout_centerHorizontal="true"
+                                    android:layout_marginTop="15dp"
                                     android:text="@string/call_time"
                                     android:textColor="@color/white"
 
@@ -252,9 +251,9 @@
                                     android:id="@+id/flow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
                                     android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="15dp"
-                                    android:layout_centerHorizontal="true"
                                     android:text="@string/flow_count"
                                     android:textColor="@color/white"
                                     />
@@ -264,9 +263,9 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/flow"
+                                    android:layout_centerHorizontal="true"
                                     android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="5dp"
-                                    android:layout_centerHorizontal="true"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
                                     android:textStyle="bold"
@@ -275,18 +274,18 @@
 
                             <RelativeLayout
                                 android:layout_width="0dp"
-                                android:gravity="center"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:gravity="center">
 
                                 <TextView
                                     android:id="@+id/all_package"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
                                     android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="15dp"
                                     android:text="@string/all_package_count"
-                                    android:layout_centerHorizontal="true"
                                     android:textColor="@color/white"
                                     />
 
@@ -295,8 +294,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/all_package"
-                                    android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_centerHorizontal="true"
+                                    android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"

@@ -8,8 +8,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
-import android.graphics.Path.Direction;
-import android.graphics.Region.Op;
+import android.graphics.Region;
+import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
@@ -95,8 +95,12 @@ public class MySinkingView extends FrameLayout {
 		canvas.save();
 		path.reset();
 		canvas.clipPath(path);
-		path.addCircle(halfWidth, halfHeight, halfWidth, Direction.CCW);
-		canvas.clipPath(path, Op.REPLACE);
+		path.addCircle(halfWidth, halfHeight, halfWidth, Path.Direction.CCW);
+		canvas.clipPath(path, Region.Op.REPLACE);
+
+		mPaint.setColor(ContextCompat.getColor(ICSOpenVPNApplication.getContext(), R.color.color_a4d9ff));
+		mPaint.setStyle(Style.FILL);
+		canvas.drawCircle(width / 2, height / 2, width / 2, mPaint);
 
 		if (mFlag == Status.RUNNING) {
 			if (mScaledBitmap == null) {
@@ -108,8 +112,8 @@ public class MySinkingView extends FrameLayout {
 			}
 			for (int idx = 0; idx < mRepeatCount; idx++) {
 				canvas.drawBitmap(mScaledBitmap, mLeft + (idx - 1) * mScaledBitmap.getWidth(), (1 - mPercent) * getHeight(), null);
-				canvas.drawBitmap(mScaledBitmap, mLeft + (idx - 1) * mScaledBitmap.getWidth(), (1 - mPercent) * getHeight(), null);
-				canvas.drawBitmap(mScaledBitmap, mLeft + (idx - 1) * mScaledBitmap.getWidth(), (1 - mPercent) * getHeight(), null);
+				canvas.drawBitmap(mScaledBitmap, mLeft + (idx - 1.16f) * mScaledBitmap.getWidth(), (1 - mPercent) * getHeight(), null);
+				canvas.drawBitmap(mScaledBitmap, mLeft + (idx - 1.32f) * mScaledBitmap.getWidth(), (1 - mPercent) * getHeight(), null);
 			}
 			String str = (int) (mPercent * 100) + "%";
 			TextPaint textPaint = new TextPaint();
@@ -132,12 +136,11 @@ public class MySinkingView extends FrameLayout {
 			mPaint.setStyle(Paint.Style.STROKE);
 			mPaint.setStrokeWidth(25);
 			mPaint.setAntiAlias(true);
-			mPaint.setColor(Color.rgb(94, 94, 94));
+			mPaint.setColor(Color.WHITE);
 			canvas.drawCircle(halfWidth, halfHeight, halfWidth - 2, mPaint);
 			postInvalidateDelayed(20);
 		}
 		canvas.restore();
-
 	}
 
 	public enum Status {
