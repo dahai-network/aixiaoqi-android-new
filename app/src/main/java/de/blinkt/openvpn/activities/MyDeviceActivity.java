@@ -86,7 +86,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
 
 public class MyDeviceActivity extends BaseNetActivity implements DialogInterfaceTypeBase, View.OnClickListener {
-//	@BindView(R.id.noConnectImageView)
+	//	@BindView(R.id.noConnectImageView)
 //	ImageView noConnectImageView;
 	@BindView(R.id.statueTextView)
 	TextView statueTextView;
@@ -116,6 +116,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	LinearLayout alarmClockLinearLayout;
 	@BindView(R.id.messageRemindLinearLayout)
 	LinearLayout messageRemindLinearLayout;
+	@BindView(R.id.deviceNameTextView)
+	TextView deviceNameTextView;
+	@BindView(R.id.findStatusView)
+	TextView findStatusView;
+	@BindView(R.id.alarmClockView)
+	TextView alarmClockView;
+	@BindView(R.id.messageRemindView)
+	TextView messageRemindView;
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_ENABLE_BT = 2;
@@ -203,6 +211,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			alarmClockLinearLayout.setVisibility(GONE);
 			messageRemindLinearLayout.setVisibility(GONE);
 			findStatusLinearLayout.setVisibility(GONE);
+			findStatusView.setVisibility(GONE);
+			alarmClockView.setVisibility(GONE);
+			messageRemindView .setVisibility(GONE);
+			deviceNameTextView.setText(getString(R.string.unibox_key));
+		} else {
+			deviceNameTextView.setText(getString(R.string.unitoy));
 		}
 
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
@@ -308,7 +322,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
 					startAnim();
-					if (!conStatusTextView.getText().toString().equals(getString(R.string.index_high_signal))||SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
+					if (!conStatusTextView.getText().toString().equals(getString(R.string.index_high_signal)) || SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
 						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
 						if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
@@ -1084,8 +1098,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					}
 					double percent = entity.getProgressCount();
 					conStatusTextView.setText(getString(R.string.index_registing));
-					if(percent>percentInt)
-					percentInt = (int) (percent / 1.6);
+					if (percent > percentInt)
+						percentInt = (int) (percent / 1.6);
 					Log.i(TAG, "写卡进度：" + percentInt + "%");
 					if (percentInt >= 100) {
 						percentInt = 98;

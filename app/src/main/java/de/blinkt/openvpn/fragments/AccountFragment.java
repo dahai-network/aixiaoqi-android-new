@@ -58,6 +58,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
 
 import static android.view.View.GONE;
+import static de.blinkt.openvpn.activities.MyDeviceActivity.BRACELETTYPE;
 import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
 import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKALARMTIP;
@@ -158,7 +159,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	//bluetooth status蓝牙状态
 	private String bleStatus;
 	private String TAG = "AccountFragment";
-	boolean hasPackage=false;
+	boolean hasPackage = false;
+
 	public AccountFragment() {
 		// Required empty public constructor
 	}
@@ -198,9 +200,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	private void getAlarmClock() {
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ALARM_CLOCK_COUNT);
 	}
+
 	private void getPackage() {
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
 	}
+
 	public void showDeviceSummarized(boolean isShow) {
 		if (isShow) {
 			deviceSummarizedRelativeLayout.setVisibility(View.VISIBLE);
@@ -237,6 +241,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 			operatorTextView.setText("----");
 		}
 	}
+
 	private void getData() {
 		title.setTextTitle(getString(R.string.personal_center));
 		if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.NICK_NAME)))
@@ -297,10 +302,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 			case R.id.activateRelativeLayout:
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKMYPACKAGE);
-				if(!hasPackage){
+				if (!hasPackage) {
 					intent = new Intent(getActivity(), PackageMarketActivity.class);
 					intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
-				}else{
+				} else {
 					intent = new Intent(getActivity(), PackageCategoryActivity.class);
 				}
 				break;
@@ -330,6 +335,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				} else if (getString(R.string.index_aixiaoqicard).equals(getBleStatus())) {
 					status = R.string.index_aixiaoqicard;
 				}
+				intent.putExtra(BRACELETTYPE, SharedUtils.getInstance().readString(Constant.BRACELETNAME));
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
 				break;
 			case R.id.permission_set:
@@ -440,13 +446,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				CommonTools.showShortToast(getActivity(), object.getMsg());
 				Log.i(TAG, object.getMsg());
 			}
-		}else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
+		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
 			if (object.getStatus() == 1) {
 				OrderUsageRemainHttp orderUsageRemainHttp = (OrderUsageRemainHttp) object;
 				UsageRemainEntity.Unactivated unactivated = orderUsageRemainHttp.getUsageRemainEntity().getUnactivated();
 				UsageRemainEntity.Used used = orderUsageRemainHttp.getUsageRemainEntity().getUsed();
 				if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
-					hasPackage=false;
+					hasPackage = false;
 					PacketRelativeLayout.setVisibility(View.GONE);
 					noPacketRelativeLayout.setVisibility(View.VISIBLE);
 					Drawable drawable = getResources().getDrawable(R.drawable.image_slidethetriangle);
@@ -454,7 +460,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
 					addOrActivatePackage.setText(getString(R.string.add_package));
 				} else if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
-					hasPackage=true;
+					hasPackage = true;
 					PacketRelativeLayout.setVisibility(View.GONE);
 					noPacketRelativeLayout.setVisibility(View.VISIBLE);
 					Drawable drawable = getResources().getDrawable(R.drawable.add_device);
@@ -462,18 +468,17 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
 					addOrActivatePackage.setText(getString(R.string.activate_packet));
 				} else {//有套餐且激活了。
-					hasPackage=true;
+					hasPackage = true;
 					PacketRelativeLayout.setVisibility(View.VISIBLE);
 					noPacketRelativeLayout.setVisibility(View.GONE);
-					callTime.setText(used.getTotalRemainingCallMinutes()+"分");
-					if("0".equals(used.getTotalNumFlow())){
+					callTime.setText(used.getTotalRemainingCallMinutes() + "分");
+					if ("0".equals(used.getTotalNumFlow())) {
 						flow.setText(getString(R.string.no_flow_count));
 						flowCount.setText(unactivated.getTotalNumFlow());
-					}else{
+					} else {
 						flow.setText(getString(R.string.flow_count));
 						flowCount.setText(used.getTotalNumFlow());
 					}
-
 					packageAllCount.setText(used.getTotalNum());
 				}
 			}
