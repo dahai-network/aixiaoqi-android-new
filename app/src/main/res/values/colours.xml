@@ -83,14 +83,15 @@
     <color name="color_dddddd">#dddddd</color>
     <color name="color_1892df">#1892df</color>
     <color name="color_00a0e9">#00a0e9</color>
+    <color name="color_e5e5e5">#e5e5e5</color>
     <color name="colorf_01d0c0">#01d0c0</color>
     <color name="colorf_F5F5F5">#F5F5F5</color>
     <color name="colorf_FF5252">#FF5252</color>
     <color name="colorf_00A0EA">#00A0EA</color>
-
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="color_ffbfbf">#ffbfbf</color>
     <color name="color_ffa0a0">#ffa0a0</color>
+    <color name="color_007eb8">#007eb8</color>
     <color name="color_a4d9ff">#a4d9ff</color>
 
 </resources>

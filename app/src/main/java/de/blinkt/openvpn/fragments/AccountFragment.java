@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,7 +28,6 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
-import de.blinkt.openvpn.activities.AlarmClockActivity;
 import de.blinkt.openvpn.activities.BalanceParticularsActivity;
 import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.ImportantAuthorityActivity;
@@ -39,20 +37,18 @@ import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
 import de.blinkt.openvpn.activities.SettingActivity;
-import de.blinkt.openvpn.activities.TipUserOptionActivity;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.http.AlarmClockCountHttp;
 import de.blinkt.openvpn.http.BalanceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.OrderUsageRemainHttp;
-import de.blinkt.openvpn.model.UsageRemainEntity;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
+import de.blinkt.openvpn.model.UsageRemainEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
@@ -61,18 +57,12 @@ import static android.view.View.GONE;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.BRACELETTYPE;
 import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
 import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKALARMTIP;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBALANCE;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKCOMINGTELTIP;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKENTERPERSONCENTER;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKLIFTWRIST;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKMYDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKMYPACKAGE;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKQQTIP;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKRECHARGE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKSET;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKSMSTIP;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKWEIXINTIP;
 
 
 /**
@@ -93,8 +83,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	RelativeLayout rlPeopleCenter;
 	@BindView(R.id.balanceTextView)
 	TextView balanceTextView;
-	@BindView(R.id.billRelativeLayout)
-	RelativeLayout billRelativeLayout;
 	@BindView(R.id.activateRelativeLayout)
 	RelativeLayout activateRelativeLayout;
 	@BindView(R.id.addDeviceRelativeLayout)
@@ -103,6 +91,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	RelativeLayout deviceSummarizedRelativeLayout;
 	@BindView(R.id.permission_set)
 	TextView tvPermissionSet;
+	@BindView(R.id.billtv)
+	TextView billTv;
 	@BindView(R.id.tv_setting)
 	TextView tvSetting;
 	@BindView(R.id.deviceNameTextView)
@@ -115,30 +105,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	TextView operatorTextView;
 	@BindView(R.id.rechargeTextView)
 	TextView rechargeTextView;
-	@BindView(R.id.ll_coming_tel_tip)
-	LinearLayout llComingTelTip;
-	@BindView(R.id.tv_alarm_clock_tip)
-	TextView tvAlarmClockTip;
-	@BindView(R.id.ll_alarm_clock_tip)
-	LinearLayout llAlarmClockTip;
-	@BindView(R.id.tv_sms_tip)
-	TextView tvSmsTip;
-	@BindView(R.id.ll_sms_tip)
-	LinearLayout llSmsTip;
-	@BindView(R.id.tv_weixin_tip)
-	TextView tvWeixinTip;
-	@BindView(R.id.ll_weixin_tip)
-	LinearLayout llWeixinTip;
-	@BindView(R.id.tv_qq_tip)
-	TextView tvQqTip;
-	@BindView(R.id.ll_qq_tip)
-	LinearLayout llQqTip;
-	@BindView(R.id.liftWristTextView)
-	TextView liftWristTextView;
-	@BindView(R.id.liftWristLinearLayout)
-	LinearLayout liftWristLinearLayout;
-	@BindView(R.id.tv_coming_tel_tip)
-	TextView tvComingTelTip;
 	@BindView(R.id.unBindTextView)
 	TextView unBindTextView;
 	SharedUtils utils = SharedUtils.getInstance();
@@ -182,8 +148,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	}
 
 	private void initSet() {
-		tvAlarmClockTip.setText(String.format(getResources().getString(R.string.opened_num_alarm_clock), "0"));
-
 		Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).placeholder(R.drawable.default_head).error(R.drawable.default_head).
 				transform(new GlideCircleTransform(getActivity())).into(headImageView);
 	}
@@ -194,12 +158,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 		//获取数据，每次都重新获取一次以保持正确性。
 		getData();
 		getPackage();
-//		getAlarmClock();
 	}
 
-	private void getAlarmClock() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ALARM_CLOCK_COUNT);
-	}
 
 	private void getPackage() {
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
@@ -251,50 +211,19 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 		accountPhoneTextView.setText(SharedUtils.getInstance().readString(Constant.USER_NAME));
 		BalanceHttp http = new BalanceHttp(this, HttpConfigUrl.COMTYPE_GET_BALANCE);
 		new Thread(http).start();
-		if (utils.readInt(Constant.LIFT_WRIST) == 1) {
-			liftWristTextView.setText(getResources().getString(R.string.opened));
-//			SendCommandToBluetooth.sendMessageToBlueTooth("AA0C0401A3");
-		} else {
-			liftWristTextView.setText(getResources().getString(R.string.unopened));
-//			SendCommandToBluetooth.sendMessageToBlueTooth("AA0C0400A2");
-		}
-		if (utils.readInt(Constant.COMING_TEL_REMIND) == 1) {
-			tvComingTelTip.setText(getResources().getString(R.string.opened));
-		} else {
-			tvComingTelTip.setText(getResources().getString(R.string.unopened));
-		}
-		if (utils.readInt(Constant.MESSAGE_REMIND) == 1) {
-			tvSmsTip.setText(getResources().getString(R.string.opened));
-		} else {
-			tvSmsTip.setText(getResources().getString(R.string.unopened));
-		}
-		if (utils.readInt(Constant.WEIXIN_REMIND) == 1) {
-			tvWeixinTip.setText(getResources().getString(R.string.opened));
-		} else {
-			tvWeixinTip.setText(getResources().getString(R.string.unopened));
-		}
-		if (utils.readInt(Constant.QQ_REMIND) == 1) {
-			tvQqTip.setText(getResources().getString(R.string.opened));
-		} else {
-			tvQqTip.setText(getResources().getString(R.string.unopened));
-		}
+
 	}
 
 
 	@OnClick({R.id.rechargeTextView,
 			R.id.activateRelativeLayout,
-			R.id.billRelativeLayout,
+			R.id.billtv,
 			R.id.addDeviceRelativeLayout,
 			R.id.tv_setting,
 			R.id.rl_people_center,
-			R.id.ll_qq_tip,
-			R.id.ll_weixin_tip,
-			R.id.ll_sms_tip,
 			R.id.permission_set,
-			R.id.ll_alarm_clock_tip,
-			R.id.ll_coming_tel_tip,
-			R.id.liftWristLinearLayout,
-			R.id.unBindTextView
+			R.id.unBindTextView,
+			R.id.going_buy
 	})
 	public void onClick(View v) {
 		Intent intent = null;
@@ -354,7 +283,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				MobclickAgent.onEvent(getActivity(), CLICKENTERPERSONCENTER);
 				intent = new Intent(getActivity(), PersonalCenterActivity.class);
 				break;
-			case R.id.billRelativeLayout:
+			case R.id.billtv:
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKBALANCE);
 				intent = new Intent(getActivity(), BalanceParticularsActivity.class);
@@ -364,47 +293,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				MobclickAgent.onEvent(getActivity(), CLICKRECHARGE);
 				intent = new Intent(getActivity(), RechargeActivity.class);
 				break;
-			case R.id.ll_coming_tel_tip:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKCOMINGTELTIP);
-				intent = new Intent(getActivity(), TipUserOptionActivity.class);
-				intent.putExtra(IntentPutKeyConstant.TIP_TYPE, Constant.COMING_TEL_REMIND);
-				break;
-			case R.id.ll_qq_tip:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKQQTIP);
-				intent = new Intent(getActivity(), TipUserOptionActivity.class);
-				intent.putExtra(IntentPutKeyConstant.TIP_TYPE, Constant.QQ_REMIND);
-				break;
-			case R.id.ll_weixin_tip:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKWEIXINTIP);
-				intent = new Intent(getActivity(), TipUserOptionActivity.class);
-				intent.putExtra(IntentPutKeyConstant.TIP_TYPE, Constant.WEIXIN_REMIND);
-				break;
-			case R.id.ll_sms_tip:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKSMSTIP);
-				intent = new Intent(getActivity(), TipUserOptionActivity.class);
-				intent.putExtra(IntentPutKeyConstant.TIP_TYPE, Constant.MESSAGE_REMIND);
-				break;
-			case R.id.liftWristLinearLayout:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKLIFTWRIST);
-				intent = new Intent(getActivity(), TipUserOptionActivity.class);
-				intent.putExtra(IntentPutKeyConstant.TIP_TYPE, Constant.LIFT_WRIST);
-				break;
-			case R.id.ll_alarm_clock_tip:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKALARMTIP);
-				intent = new Intent(getActivity(), AlarmClockActivity.class);
-//                intent = new Intent(getActivity(), SetAlarmActivity.class);
-				break;
 			case R.id.unBindTextView:
 				//断开连接
 				CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 
 				return;
+			case R.id.going_buy:
+				intent = new Intent(getActivity(), PackageMarketActivity.class);
+				intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
+				break;
 
 		}
 
@@ -418,16 +315,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 			BalanceHttp http = (BalanceHttp) object;
 			if (http.getBalanceEntity() != null)
 				balanceTextView.setText(getString(R.string.balance) + ": " + http.getBalanceEntity().getAmount() + getString(R.string.yuan));
-		} else if (cmdType == HttpConfigUrl.COMTYPE_ALARM_CLOCK_COUNT) {
-			AlarmClockCountHttp alarmClockCountHttp = (AlarmClockCountHttp) object;
-			if (alarmClockCountHttp.getStatus() == 1) {
-				if (alarmClockCountHttp.getAlarmClockCount() != null)
-					tvAlarmClockTip.setText(String.format(getResources().getString(R.string.opened_num_alarm_clock), alarmClockCountHttp.getAlarmClockCount().getTotalRows()));
-				else {
-					tvAlarmClockTip.setText(String.format(getResources().getString(R.string.opened_num_alarm_clock), "0"));
-				}
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
+		} else  if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
 			if (object.getStatus() == 1) {
 				SharedUtils.getInstance().delete(BRACELETPOWER);
 				SharedUtils.getInstance().delete(Constant.IMEI);
@@ -495,9 +383,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 		CommonTools.showShortToast(getActivity(), getResources().getString(R.string.no_wifi));
 	}
 
-	@OnClick(R.id.liftWristLinearLayout)
-	public void onClick() {
-	}
 
 
 	public String getBleStatus() {

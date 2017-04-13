@@ -119,11 +119,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@BindView(R.id.deviceNameTextView)
 	TextView deviceNameTextView;
 	@BindView(R.id.findStatusView)
-	TextView findStatusView;
+	View findStatusView;
 	@BindView(R.id.alarmClockView)
-	TextView alarmClockView;
+	View alarmClockView;
 	@BindView(R.id.messageRemindView)
-	TextView messageRemindView;
+	View messageRemindView;
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_ENABLE_BT = 2;
@@ -213,7 +213,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			findStatusLinearLayout.setVisibility(GONE);
 			findStatusView.setVisibility(GONE);
 			alarmClockView.setVisibility(GONE);
-			messageRemindView .setVisibility(GONE);
+			messageRemindView.setVisibility(GONE);
 			deviceNameTextView.setText(getString(R.string.unibox_key));
 		} else {
 			deviceNameTextView.setText(getString(R.string.unitoy));

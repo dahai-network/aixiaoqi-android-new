@@ -310,9 +310,9 @@
                 android:layout_marginLeft="@dimen/padding_20dp"
                 android:layout_marginRight="@dimen/padding_20dp"
                 android:layout_marginTop="@dimen/padding_15dp"
-                android:background="@drawable/green_btn_click"
                 android:text="@string/remove_bind"
-                android:textColor="@android:color/white"
+                android:textColor="@drawable/gray_background_text_selector"
+                android:background="@drawable/circle_light_gray_selector"
                 android:textSize="16dp"/>
         </LinearLayout>
 
