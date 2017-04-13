@@ -2,7 +2,12 @@ package de.blinkt.openvpn.util.querylocaldatebase;
 
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 
 
@@ -115,5 +120,33 @@ public class AsyncQueryContactHandler extends AsyncQueryHandler{
             R.drawable.head_icon_1
     };
 
+    public static Bitmap getContactPhoto(Context context, long photoId, BitmapFactory.Options options) {
+        if (photoId < 0) {
+            return null;
+        }
 
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(
+                    ContentUris.withAppendedId(ContactsContract.Data.CONTENT_URI, photoId),
+                    new String[] { ContactsContract.CommonDataKinds.Photo.PHOTO }, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst() && !cursor.isNull(0)) {
+                byte[] photoData = cursor.getBlob(0);
+                // Workaround for Android Issue 8488 http://code.google.com/p/android/issues/detail?id=8488
+                if (options == null) {
+                    options = new BitmapFactory.Options();
+                }
+                options.inTempStorage = new byte[16 * 1024];
+                options.inSampleSize = 2;
+                return BitmapFactory.decodeByteArray(photoData, 0, photoData.length, options);
+            }
+        } catch (java.lang.Throwable error) {
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
 }

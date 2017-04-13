@@ -225,10 +225,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="de.blinkt.openvpn.activities.FastSetActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name="de.blinkt.openvpn.activities.PackageDetailActivity"
             android:screenOrientation="portrait">
         </activity>
