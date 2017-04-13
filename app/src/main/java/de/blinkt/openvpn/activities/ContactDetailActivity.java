@@ -216,13 +216,13 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()){
-			case R.id.show_cell_phone_dialog_background:
+		/*	case R.id.show_cell_phone_dialog_background:
 				break;
 			case R.id.cell_phone_linearlayout:
 				break;
 			case R.id.cancel_phone:
 //				hideCellPhoneDialog();
-				break;
+				break;*/
 
 			case R.id.delete_phone:
 				//友盟方法统计

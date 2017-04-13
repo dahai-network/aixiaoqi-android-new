@@ -90,4 +90,12 @@
         <attr name="pstsSelectedTabTextSize" format="dimension" />
         <attr name="pstsSelectedTabTextColor" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="MyRadioButton">
+        <attr name="drawableSize" format="dimension"/>
+        <attr name="drawableTop" format="reference"/>
+        <attr name="drawableLeft" format="reference"/>
+        <attr name="drawableRight" format="reference"/>
+        <attr name="drawableBottom" format="reference"/>
+    </declare-styleable>
 </resources>

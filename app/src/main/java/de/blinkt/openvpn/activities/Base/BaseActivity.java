@@ -61,7 +61,6 @@ public class BaseActivity extends CommenActivity {
 			}
 		});
 	}
-
 	/**
 	 * @param titleId       标题id
 	 * @param rightTextId   右边文字或者图片的id

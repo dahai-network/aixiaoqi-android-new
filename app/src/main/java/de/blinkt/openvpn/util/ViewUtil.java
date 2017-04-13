@@ -79,7 +79,11 @@ public class ViewUtil {
 		return;
 	}
 
-public static void hideView(View view) {
+	/**
+	 *
+	 * @param view 隐藏View
+	 */
+	public static void hideView(View view) {
 		if (null == view) {
 			return;
 		}
