@@ -100,6 +100,8 @@ public class DialogUpgrade extends DialogBase {
 		@Override
 		public void onDfuCompleted(String deviceAddress) {
 			mTextPercentage.setText(R.string.dfu_status_completed);
+			//保存状态
+			SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE,true);
 			UIOperatorEntity entity = new UIOperatorEntity();
 			entity.setType(UIOperatorEntity.onCompelete);
 			EventBus.getDefault().post(entity);
