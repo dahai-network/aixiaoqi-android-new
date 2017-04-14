@@ -168,7 +168,9 @@
     <string name="app_version">APP版本号</string>
     <string name="conn_bluetooth">蓝牙未连接，点击开启</string>
     <string name="wait_activite">稍后激活</string>
-    <string name="message_history">短信记录</string>
+    <string name="aboard_how_to_use">出国后如何使用</string>
+    <string name="inland_reset">回国后恢复设置</string>
+<string name="message_history">短信记录</string>
     <string name="message">短信</string>
     <string name="message_record">短信记录</string>
     <string name="active">活动</string>

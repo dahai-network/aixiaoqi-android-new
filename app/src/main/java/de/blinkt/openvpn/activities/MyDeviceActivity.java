@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
@@ -207,6 +208,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void initSet() {
 		Log.e(TAG, "initSet");
 		bracelettype = getIntent().getStringExtra(BRACELETTYPE);
+		if (SharedUtils.getInstance().readBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE)) {
+			setPoint();
+		}
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			alarmClockLinearLayout.setVisibility(GONE);
 			messageRemindLinearLayout.setVisibility(GONE);
@@ -670,9 +674,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
 						url = skyUpgradeHttp.getUpgradeEntity().getUrl();
 						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
+						setPoint();
 					} else {
 						CommonTools.showShortToast(this, getString(R.string.last_version));
+						SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, false);
 						stopAnim();
+						firmwareTextView.setCompoundDrawables(null, null, null, null);
 					}
 				}
 			}
@@ -704,6 +711,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 		}
+	}
+
+	private void setPoint() {
+		Drawable rightDrawable = getResources().getDrawable(R.drawable.unread_message);
+		rightDrawable.setBounds(0, 0, rightDrawable.getMinimumWidth(), rightDrawable.getMinimumHeight());
+		SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, true);
+		firmwareTextView.setCompoundDrawables(null, null, rightDrawable, null);
 	}
 
 

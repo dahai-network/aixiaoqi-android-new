@@ -30,7 +30,6 @@ public class FastSetActivity extends BaseActivity implements View.OnClickListene
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fast_set);
-		hasLeftViewTitle(R.string.outside_package_course,0);
 		initView();
 		addListener();
 	}

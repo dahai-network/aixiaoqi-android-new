@@ -43,6 +43,7 @@ public class Constant {
 	public static final String VERSION_HEADER = "Version";
 	public static final String TERMINAL_HEADER = "Terminal";
 	public static final String PHONE_NUMBER_LIST = "phone_number_list";
+	public static final String IS_NEED_UPGRADE_IN_HARDWARE = "is_need_upgrade_in_hardware";
 	//运营商
 	public static final String OPERATER = "operater";
 	public static final String CHINA_TELECOM = "China_Telecom";
