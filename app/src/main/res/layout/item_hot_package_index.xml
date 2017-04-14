@@ -3,24 +3,32 @@
               android:id="@+id/packageLinearLayout"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:gravity="center"
-              android:paddingTop="15dp"
-              android:paddingBottom="15dp"
               android:background="@drawable/call_phone_selector"
-              android:orientation="vertical">
+              android:gravity="center"
+              android:orientation="vertical"
+              android:paddingBottom="15dp"
+              android:paddingTop="15dp">
 
     <ImageView
         android:id="@+id/hotPackageImageView"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@null"
         android:layout_centerInParent="true"
+        android:background="@null"
         />
 
     <TextView
         android:id="@+id/countryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:id="@+id/descrTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_text"
+        android:textSize="12sp"
         />
 </LinearLayout>

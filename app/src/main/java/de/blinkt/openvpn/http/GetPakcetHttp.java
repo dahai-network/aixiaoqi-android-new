@@ -13,6 +13,7 @@ import de.blinkt.openvpn.model.PacketEntity;
 
 public class GetPakcetHttp extends BaseHttp {
 	private PacketEntity packetEntity;
+
 	/**
 	 * IsCategoryFlow（是否流量类型）
 	 * <p>
@@ -26,14 +27,12 @@ public class GetPakcetHttp extends BaseHttp {
 //	private String IsCategoryCall;
 //	private String IsCategoryDualSimStandby;
 //	private String IsCategoryKingCard;
-
-
 	public PacketEntity getPacketEntity() {
 		return packetEntity;
 	}
 
-	public GetPakcetHttp(InterfaceCallback call, int cmdType_, String...params) {
-		super(call, cmdType_,GET_MODE,HttpConfigUrl.PACKET_GET,params);
+	public GetPakcetHttp(InterfaceCallback call, int cmdType_, String... params) {
+		super(call, cmdType_, GET_MODE, HttpConfigUrl.PACKET_GET, params);
 
 	}
 
@@ -59,7 +58,11 @@ public class GetPakcetHttp extends BaseHttp {
 
 	@Override
 	protected void parseObject(String response) {
-		packetEntity = new Gson().fromJson(response, PacketEntity.class);
+		try {
+			packetEntity = new Gson().fromJson(response, PacketEntity.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

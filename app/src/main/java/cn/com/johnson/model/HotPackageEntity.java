@@ -11,7 +11,16 @@ public class HotPackageEntity implements Serializable {
 	private String CountryCode;
 	private String Pic;
 	private String LogoPic;
+	private String Descr;
 	private int Rate;
+
+	public String getDescr() {
+		return Descr;
+	}
+
+	public void setDescr(String descr) {
+		Descr = descr;
+	}
 
 	public String getCountryID() {
 		return CountryID;

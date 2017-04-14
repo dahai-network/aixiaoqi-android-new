@@ -31,7 +31,11 @@ public class GetProductHttp extends BaseHttp {
 
 	@Override
 	protected void parseObject(String response) {
-		productList = new Gson().fromJson(response, new TypeToken<List<ProductEntity>>() {
-		}.getType());
+		try {
+			productList = new Gson().fromJson(response, new TypeToken<List<ProductEntity>>() {
+			}.getType());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

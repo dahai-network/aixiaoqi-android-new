@@ -1,15 +1,12 @@
 package de.blinkt.openvpn.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,7 +20,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.analytics.MobclickAgent;
 
@@ -33,55 +29,33 @@ import java.util.List;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.HotPackageAdapter;
-import cn.com.johnson.adapter.OrderAdapter;
 import cn.com.johnson.adapter.ProductsAdapter;
-import cn.com.johnson.model.BoughtPackageEntity;
 import cn.com.johnson.model.HotPackageEntity;
 import cn.com.johnson.model.IndexBannerEntity;
-import de.blinkt.openvpn.activities.CallPackageLlistActivity;
 import de.blinkt.openvpn.activities.CallTimePacketDetailActivity;
-import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
-import de.blinkt.openvpn.activities.MyDeviceActivity;
-import de.blinkt.openvpn.activities.MyPackageActivity;
-import de.blinkt.openvpn.activities.OrderedOutsidePurchaseActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.WebViewActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.BannerHttp;
-import de.blinkt.openvpn.http.BoughtPacketHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetHotHttp;
 import de.blinkt.openvpn.http.GetPakcetHttp;
 import de.blinkt.openvpn.http.GetProductHttp;
-import de.blinkt.openvpn.http.GetSportTotalHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.model.PacketEntity;
 import de.blinkt.openvpn.model.ProductEntity;
-import de.blinkt.openvpn.model.SportTotalEntity;
-import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.FullyRecylerView;
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.bannerview.CycleViewPager;
-import de.blinkt.openvpn.views.xrecycler.DividerItemDecoration;
 
 import static android.view.View.GONE;
-import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
 import static de.blinkt.openvpn.constant.HttpConfigUrl.COMTYPE_GET_PRODUCTS;
-import static de.blinkt.openvpn.constant.HttpConfigUrl.COMTYPE_GET_SPORT_TOTAL;
 import static de.blinkt.openvpn.constant.HttpConfigUrl.COMTYPE_PACKET_GET;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKABROADFEE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBANNER;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOTPACKAGEMORE;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKINLANDFEE;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKSPORTTOTALDATA;
-import static de.blinkt.openvpn.constant.UmengContant.CLICORDERMORE;
-import static de.blinkt.openvpn.fragments.SportFragment.REFRESHSTEP;
 
 /*
 *   商城
@@ -107,6 +81,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	private RelativeLayout leftPacketRelativeLayout;
 	private RelativeLayout rightPacketRelativeLayout;
 	private LinearLayout flowPackageLinearLayout;
+	private RelativeLayout hardWareRelativeLayout;
 	private TextView leftPriceTextView;
 	private TextView leftContentTextView;
 	private TextView leftExpiryDateTextView;
@@ -159,6 +134,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		leftPacketRelativeLayout = (RelativeLayout) view.findViewById(R.id.leftPacketRelativeLayout);
 		rightPacketRelativeLayout = (RelativeLayout) view.findViewById(R.id.rightPacketRelativeLayout);
 		flowPackageLinearLayout = (LinearLayout) view.findViewById(R.id.flowPackageLinearLayout);
+		hardWareRelativeLayout = (RelativeLayout) view.findViewById(R.id.hardWareRelativeLayout);
 		leftPriceTextView = (TextView) view.findViewById(R.id.leftPriceTextView);
 		leftContentTextView = (TextView) view.findViewById(R.id.leftContentTextView);
 		leftExpiryDateTextView = (TextView) view.findViewById(R.id.leftExpiryDateTextView);
@@ -186,7 +162,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	}
 
 
-
 	private void getCallPackage() {
 		CreateHttpFactory.instanceHttp(this, COMTYPE_PACKET_GET, 1 + "", 2 + "", 1 + "");
 	}
@@ -203,16 +178,16 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_INDEX_BANNER);
 	}
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.hotMessageMoreTextView:
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKHOTPACKAGEMORE);
-                Intent marketIntent = new Intent(getActivity(), PackageMarketActivity.class);
-                marketIntent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE,Constant.HIDDEN);
-                startActivity(marketIntent);
-                break;
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+			case R.id.hotMessageMoreTextView:
+				//友盟方法统计
+				MobclickAgent.onEvent(getActivity(), CLICKHOTPACKAGEMORE);
+				Intent marketIntent = new Intent(getActivity(), PackageMarketActivity.class);
+				marketIntent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.HIDDEN);
+				startActivity(marketIntent);
+				break;
 		}
 
 	}
@@ -247,7 +222,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		scrollViewPagerLayout.setIndicatorCenter();
 	}
 
-	public  ImageView getImageView(Context context, String url) {
+	public ImageView getImageView(Context context, String url) {
 		ImageView imageView = (ImageView) LayoutInflater.from(context).inflate(
 				R.layout.view_banner, null);
 		Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
@@ -278,7 +253,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 			if (bannerData != null && bannerData.size() != 0) {
 				initialize(bannerData);
 			}
-		}  else if (cmdType == HttpConfigUrl.COMTYPE_GET_HOT) {
+		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_HOT) {
 			GetHotHttp http = (GetHotHttp) object;
 			List<HotPackageEntity> hotList = http.getHotPackageEntityList();
 			if (hotList.size() != 0) {
@@ -290,8 +265,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 			} else {
 				hotPacketLinearLayout.setVisibility(GONE);
 			}
-		}
-		else if (cmdType == COMTYPE_PACKET_GET) {
+		} else if (cmdType == COMTYPE_PACKET_GET) {
 			GetPakcetHttp http = (GetPakcetHttp) object;
 			PacketEntity bean = http.getPacketEntity();
 			if (bean != null) {
@@ -325,11 +299,13 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		} else if (cmdType == COMTYPE_GET_PRODUCTS) {
 			GetProductHttp http = (GetProductHttp) object;
 			List<ProductEntity> bean = http.getProductEntity();
-			if (bean != null) {
+			if (bean != null || bean.size() != 0) {
 				Log.i(TAG, "产品信息：" + bean.toString());
 				hardWareRecyclerView.setNestedScrollingEnabled(false);
 				hardWareRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 				hardWareRecyclerView.setAdapter(new ProductsAdapter(bean, getActivity()));
+			} else {
+				hardWareRelativeLayout.setVisibility(GONE);
 			}
 		}
 	}
