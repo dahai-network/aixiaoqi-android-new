@@ -74,6 +74,7 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
     String[] detail_titles;
     PagerSlidingTabStripExtends mTabs;
     DisplayMetrics dm;
+
     public static void launch(Context context, String id, String countryPic) {
         Intent intent = new Intent(context, PackageDetailActivity.class);
         intent.putExtra("id", id);
@@ -92,6 +93,7 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
         setTabsValue();
 
     }
+
     private void initSet() {
         //获取标题
         detail_titles = getResources().getStringArray(R.array.detail_titles);
@@ -247,6 +249,8 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             // TODO Auto-generated method stub
+
+            Log.d("aixiaoqi___", "destroyItem: "+position);
             super.destroyItem(container, position, object);
         }
     }
@@ -261,9 +265,9 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
      * 清除sp里面的数据
      */
     public void clearSPData() {
-       SharedUtils.getInstance().delete(Constant.DETAIL_SIGN);
-       SharedUtils.getInstance().delete(Constant.FEATURES_SIGN);
-       SharedUtils.getInstance().delete(Constant.PAYTERMS_SIGN);
+        SharedUtils.getInstance().delete(Constant.DETAIL_SIGN);
+        SharedUtils.getInstance().delete(Constant.FEATURES_SIGN);
+        SharedUtils.getInstance().delete(Constant.PAYTERMS_SIGN);
     }
 
     /**

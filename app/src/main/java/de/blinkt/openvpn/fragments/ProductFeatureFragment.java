@@ -19,7 +19,9 @@ import de.blinkt.openvpn.activities.Base.BaseFragment;
 import de.blinkt.openvpn.constant.Constant;
 
 /**
- * Created by Administrator on 2017/4/11.
+ * Created by kim
+ * on 2017/4/11.
+ * 产品特色
  */
 public class ProductFeatureFragment extends BaseFragment {
     TextView tvContext;
