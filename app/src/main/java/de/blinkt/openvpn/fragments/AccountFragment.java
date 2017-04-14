@@ -150,6 +150,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	private void initSet() {
 		Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).placeholder(R.drawable.default_head).error(R.drawable.default_head).
 				transform(new GlideCircleTransform(getActivity())).into(headImageView);
+
 	}
 
 	@Override
@@ -339,23 +340,24 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				OrderUsageRemainHttp orderUsageRemainHttp = (OrderUsageRemainHttp) object;
 				UsageRemainEntity.Unactivated unactivated = orderUsageRemainHttp.getUsageRemainEntity().getUnactivated();
 				UsageRemainEntity.Used used = orderUsageRemainHttp.getUsageRemainEntity().getUsed();
-				if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
-					hasPackage = false;
+				if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
+					hasPackage = true;
 					PacketRelativeLayout.setVisibility(View.GONE);
 					noPacketRelativeLayout.setVisibility(View.VISIBLE);
-					Drawable drawable = getResources().getDrawable(R.drawable.image_slidethetriangle);
+					Drawable drawable = getResources().getDrawable(R.drawable.activate_device_account);
 					drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
 					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
-					addOrActivatePackage.setText(getString(R.string.add_package));
-				} else if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
-					hasPackage = true;
+					addOrActivatePackage.setText(getString(R.string.activate_packet));
+				}
+				else	if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
+					hasPackage = false;
 					PacketRelativeLayout.setVisibility(View.GONE);
 					noPacketRelativeLayout.setVisibility(View.VISIBLE);
 					Drawable drawable = getResources().getDrawable(R.drawable.add_device);
 					drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
 					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
-					addOrActivatePackage.setText(getString(R.string.activate_packet));
-				} else {//有套餐且激活了。
+					addOrActivatePackage.setText(getString(R.string.add_package));
+				}   else {//有套餐且激活了。
 					hasPackage = true;
 					PacketRelativeLayout.setVisibility(View.VISIBLE);
 					noPacketRelativeLayout.setVisibility(View.GONE);

@@ -32,8 +32,8 @@ public class ParticularHttp extends BaseHttp {
 		super.BuildParams();
 
 
-		params.put("pageSize", URLEncoder.encode(valueParams[0] + "", "utf-8"));
-		params.put("pageNumber", URLEncoder.encode(valueParams[1] + "", "utf-8"));
+		params.put("pageSize", URLEncoder.encode(valueParams[1] + "", "utf-8"));
+		params.put("pageNumber", URLEncoder.encode(valueParams[0] + "", "utf-8"));
 	}
 
 	@Override

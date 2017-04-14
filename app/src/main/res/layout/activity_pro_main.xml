@@ -1,259 +1,108 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    xmlns:aixiaoaqi="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
+        android:orientation="vertical"
         android:layout_alignParentTop="true"
-        android:orientation="vertical">
+        android:layout_alignParentStart="true">
 
 
         <de.blinkt.openvpn.views.CustomViewPager
             android:id="@+id/mViewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
-        <TextView style="@style/horizontal_line_view"/>
+        <TextView style="@style/horizontal_line_view" />
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="51dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/bottom_bar_linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/padding_50dp"
+                android:layout_alignParentBottom="true"
                 android:background="@color/bottom_bar"
+                android:visibility="visible"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/indexLinearLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                <RadioGroup
+                    android:id="@+id/radiogroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical">
+                   android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/indexImageView"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginTop="3dp"
-                        android:background="@drawable/index_icon"/>
-
-                    <TextView
-                        android:id="@+id/indexTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <de.blinkt.openvpn.views.MyRadioButton
+                        android:id="@+id/rb_index"
+                        style="@style/chart_radiobutton"
                         android:text="@string/index"
-                        android:textColor="@android:color/white"
-                        android:textSize="11sp"/>
-                </LinearLayout>
+                        android:textColor="@drawable/main_color_selector"
+                        aixiaoaqi:drawableSize="24dp"
+                        aixiaoaqi:drawableTop="@drawable/index_icon" />
 
-                <LinearLayout
-                    android:id="@+id/phoneLinearLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/phoneImageView"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginTop="3dp"/>
-
-                    <TextView
-                        android:id="@+id/phoneTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                    <de.blinkt.openvpn.views.MyRadioButton
+                        android:id="@+id/rb_phone"
+                        style="@style/chart_radiobutton"
                         android:text="@string/phone"
-                        android:textColor="@android:color/white"
-                        android:textSize="11sp"/>
-                </LinearLayout>
+                        android:textColor="@drawable/main_color_selector"
+                        aixiaoaqi:drawableSize="24dp"
+                        aixiaoaqi:drawableTop="@drawable/phone_icon" />
 
-
-                <LinearLayout
-                    android:id="@+id/addressListLienarLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/addressListImageView"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginTop="3dp"
-                        android:background="@drawable/address_list_icon"/>
-
-                    <TextView
-                        android:id="@+id/addressListTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <de.blinkt.openvpn.views.MyRadioButton
+                        android:id="@+id/rb_address"
+                        style="@style/chart_radiobutton"
                         android:text="@string/address_list"
-                        android:textColor="@android:color/white"
-                        android:textSize="11sp"/>
-                </LinearLayout>
+                        android:textColor="@drawable/main_color_selector"
+                        aixiaoaqi:drawableSize="24dp"
+                        aixiaoaqi:drawableTop="@drawable/address_list_icon" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginTop="3dp"
-                        android:background="@drawable/sport_selector"/>
-
-                    <TextView
-                        android:id="@+id/sportTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sport"
-                        android:textColor="@android:color/white"
-                        android:textSize="11sp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/accountLinearLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/accountImageView"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginTop="3dp"
-                        android:background="@drawable/account_icon"/>
-
-                    <TextView
-                        android:id="@+id/accountTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <de.blinkt.openvpn.views.MyRadioButton
+                        android:id="@+id/rb_personal"
+                        style="@style/chart_radiobutton"
                         android:text="@string/personal_center"
-                        android:textColor="@android:color/white"
-                        android:textSize="11sp"/>
-                </LinearLayout>
-
+                        android:textColor="@drawable/main_color_selector"
+                        aixiaoaqi:drawableSize="24dp"
+                        aixiaoaqi:drawableTop="@drawable/account_icon" />
+                </RadioGroup>
 
             </LinearLayout>
 
-
-            <FrameLayout
-                android:id="@+id/phone_fl"
+            <RelativeLayout
+                android:id="@+id/phone_linearLayout"
                 android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="match_parent">
+                android:layout_height="@dimen/height_90"
+                android:background="@color/bottom_bar"
+                android:orientation="horizontal"
+                android:visibility="visible">
 
-
-                <RelativeLayout
-                    android:id="@+id/phone_linearLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/bottom_bar"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/local_phone_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:src="@drawable/image_local_phone_nor"
-                        android:visibility="gone"/>
-
-                    <ImageView
-                        android:id="@+id/callImageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|left"
-                        android:layout_marginLeft="18dp"
-                        android:scaleType="center"
-                        android:src="@drawable/dial_doubleking_seletor"
-                        android:visibility="visible"/>
-
-                </RelativeLayout>
+                <ImageView
+                    android:id="@+id/callImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="18dp"
+                    android:scaleType="center"
+                    android:src="@drawable/image_dail_phonebtn_seletor" />
 
                 <ImageView
                     android:id="@+id/iv_putaway"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/padding_100dp"
+                    android:paddingLeft="@dimen/padding_50dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical|right"
-                    android:layout_marginRight="@dimen/padding_15dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/image_putaway_seletor"/>
-            </FrameLayout>
-        </RelativeLayout>
+                    android:src="@drawable/image_putaway_seletor"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+        </FrameLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/show_cell_phone_dialog_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/cell_phone_background"
-        android:gravity="bottom"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:id="@+id/cell_phone_linearlayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/padding_15dp"
-            android:paddingRight="@dimen/padding_15dp">
-
-            <TextView
-                android:id="@+id/network_phone_tv"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/padding_50dp"
-                android:layout_marginBottom="@dimen/padding_15dp"
-                android:layout_marginTop="@dimen/padding_15dp"
-                android:background="@drawable/circle_network_phone_ret"
-                android:gravity="center"
-                android:text="@string/network_phone"
-                android:textColor="@color/white"
-                android:textSize="@dimen/little_18"/>
-
-            <TextView
-                android:id="@+id/sim_register_phone_tv"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/padding_50dp"
-                android:layout_marginBottom="@dimen/padding_15dp"
-                android:background="@drawable/circle_sim_phone_ret"
-                android:gravity="center"
-                android:text="@string/sim_register_phone"
-                android:textColor="@color/white"
-                android:textSize="@dimen/little_18"/>
-
-            <TextView
-                android:id="@+id/cancel_phone"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/padding_50dp"
-                android:layout_marginBottom="@dimen/padding_15dp"
-                android:background="@drawable/circle_phone_cancel_ret"
-                android:gravity="center"
-                android:text="@string/cancel"
-                android:textColor="@color/black"
-                android:textSize="@dimen/little_18"/>
-        </LinearLayout>
     </LinearLayout>
 
     <de.blinkt.openvpn.views.TopProgressView
@@ -261,6 +110,5 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_25dp"
         android:visibility="gone"
-        android:layout_marginTop="50dp"
-        />
+        android:layout_marginTop="50dp" />
 </RelativeLayout>

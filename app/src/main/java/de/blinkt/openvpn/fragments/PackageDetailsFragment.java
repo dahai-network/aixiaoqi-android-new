@@ -66,8 +66,8 @@ public class PackageDetailsFragment extends BaseFragment {
                 @Override
                 public void onReceive(Context context, Intent intent) {
 
-                    PackageDetailsFragment.this.detail = intent.getStringExtra(Constant.DETAIL_SIGN);
-                    if (PackageDetailsFragment.this.detail != null) {
+                   detail = intent.getStringExtra(Constant.DETAIL_SIGN);
+                    if (detail != null) {
                         mHandler.sendEmptyMessage(0);
                     }
                 }

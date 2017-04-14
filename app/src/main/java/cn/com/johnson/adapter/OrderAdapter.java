@@ -165,7 +165,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 			//友盟方法统计
 			MobclickAgent.onEvent(context, CLICKINDEXORDER);
 			clickPosition = getPosition() - 1;
-			MyOrderDetailActivity.launch(context, data.get(clickPosition).getOrderID(),data.get(clickPosition).getPackageCategory());
+			MyOrderDetailActivity.launch(context, data.get(clickPosition).getOrderID(),0);
 
 		}
 	}

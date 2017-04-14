@@ -52,7 +52,7 @@ public class BalanceParticularsActivity extends BaseNetActivity implements Inter
 	}
 
 	private void initSet() {
-		hasLeftViewTitle(R.string.particulars,0);
+		hasLeftViewTitle(R.string.bill,0);
 		particularsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 		particularsRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 		particularsRecyclerView.setLoadingListener(this);
@@ -82,14 +82,6 @@ public class BalanceParticularsActivity extends BaseNetActivity implements Inter
 					particularAdapter.add(http.getParticularEntity().getList());
 					particularsRecyclerView.canMoreLoading();
 				}
-//				} else {
-//					if (http.getParticularEntity().getList().get(0).getCreateDate() != particularAdapter.getData().get(0).getCreateDate()) {
-//						Set<ParticularEntity.ListBean> set = new HashSet<>();
-//						set.addAll(particularAdapter.getData());
-//						set.addAll(http.getParticularEntity().getList());
-//						particularAdapter.add(new ArrayList<>(set));
-//					}
-//				}
 			} else {
 				particularAdapter.addAll(http.getParticularEntity().getList());
 			}
