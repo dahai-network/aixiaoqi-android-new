@@ -50,7 +50,7 @@ public class PacketDtailEntity implements Serializable {
 		private String Pic;
 		private String UseDescr;
 		private String LogoPic;
-		private int ExpireDays;
+		private int ExpireDays;  //有效期
 		private String Features;
 		private String Details;
 		private String ApnName;

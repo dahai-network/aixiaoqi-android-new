@@ -147,6 +147,12 @@ public abstract class CommonHttp implements Callback, Runnable {
 		return msg;
 	}
 
+	/**
+	 * 响应
+	 * @param arg0
+	 * @param response
+	 * @throws IOException
+	 */
 	@Override
 	public void onResponse(Call arg0, Response response) throws IOException {
 		if (response.isSuccessful()) {
@@ -166,13 +172,17 @@ public abstract class CommonHttp implements Callback, Runnable {
 //				ICSOpenVPNApplication.getInstance().finishAllActivity();
 				//token过期
 				if (!CommonTools.isFastDoubleClick(1000)) {
+
 					Intent intent1 = new Intent();
 					intent1.setAction(SportFragment.CLEARSPORTDATA);
 					intent1.setAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
+
 					if (ICSOpenVPNApplication.uartService != null)
 						ICSOpenVPNApplication.uartService.disconnect();
+
 					if (ICSOpenVPNApplication.getInstance() != null)
 						ICSOpenVPNApplication.getInstance().sendBroadcast(intent1);
+
 					Intent intent = new Intent(context_, LoginMainActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.putExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN, context_.getResources().getString(R.string.token_interrupt));
@@ -344,6 +354,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 		String expires = System.currentTimeMillis() / 1000L + "";
 		String md5 = PublicEncoderTools.MD5Encode(PARTNER + expires + HttpConfigUrl.PRIVATE_KEY);
 		SharedUtils sharedUtils = SharedUtils.getInstance();
+
 		if (isDownload) {
 			hostUrl_ = slaverDomain_;
 		}

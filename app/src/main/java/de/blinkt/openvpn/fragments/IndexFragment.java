@@ -287,6 +287,8 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 				rightPriceTextView.setText(list2Bean.getPrice() + getString(R.string.yuan));
 				rightContentTextView.setText(list2Bean.getPackageName());
 				rightExpiryDateTextView.setText(getString(R.string.expiry_date) + list2Bean.getExpireDays() + getString(R.string.day));
+
+				// 进行跳转
 				rightPacketRelativeLayout.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
