@@ -1,6 +1,14 @@
 package de.blinkt.openvpn.model;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Parcelable;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,7 +26,9 @@ public class ContactBean implements Serializable, Indexable {
 	private int selected = 0;
 	private String[] formattedNumber=new String[2];
 	private String sortLetters;
-
+	private int header;
+	private String pinyin; // 姓名拼音
+	 private  Bitmap bitmapHeader;
 	public String getSortLetters() {
 		return sortLetters;
 	}
@@ -50,8 +60,38 @@ public class ContactBean implements Serializable, Indexable {
 		this.header = header;
 	}
 
-	private int header;
-	private String pinyin; // 姓名拼音
+//	private void writeObject(ObjectOutputStream oos) throws IOException {
+//		// This will serialize all fields that you did not mark with 'transient'
+//		// (Java's default behaviour)
+//		oos.defaultWriteObject();
+//		// Now, manually serialize all transient fields that you want to be serialized
+//		if(bitmapHeader!=null){
+//			ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+//			boolean success = bitmapHeader.compress(Bitmap.CompressFormat.PNG, 20, byteStream);
+//			if(success){
+//				oos.writeObject(byteStream.toByteArray());
+//			}
+//		}
+//	}
+//
+//	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+//		// Now, all again, deserializing - in the SAME ORDER!
+//		// All non-transient fields
+//		ois.defaultReadObject();
+//		// All other fields that you serialized
+//		byte[] image = (byte[]) ois.readObject();
+//		if(image != null && image.length > 0){
+//			bitmapHeader = BitmapFactory.decodeByteArray(image, 0, image.length);
+//		}
+//	}
+
+	public Bitmap getBitmapHeader() {
+		return bitmapHeader;
+	}
+
+	public void setBitmapHeader(Bitmap bitmapHeader) {
+		this.bitmapHeader = bitmapHeader;
+	}
 
 	public int getContactId() {
 		return contactId;
@@ -139,4 +179,7 @@ public class ContactBean implements Serializable, Indexable {
 				", pinyin='" + pinyin + '\'' +
 				'}';
 	}
+
+
+
 }

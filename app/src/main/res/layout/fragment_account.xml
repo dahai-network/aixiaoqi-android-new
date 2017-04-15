@@ -213,6 +213,7 @@
 
                             <RelativeLayout
                                 android:layout_width="0dp"
+                                android:layout_marginLeft="@dimen/padding_15dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1">
 
@@ -220,7 +221,7 @@
                                     android:id="@+id/call"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_centerHorizontal="true"
+
                                     android:layout_marginTop="15dp"
                                     android:text="@string/call_time"
                                     android:textColor="@color/white"
@@ -232,8 +233,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/call"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginLeft="@dimen/padding_15dp"
+
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
@@ -251,16 +251,14 @@
 
                             <RelativeLayout
                                 android:layout_width="0dp"
-
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/padding_15dp"
                                 android:layout_weight="1">
 
                                 <TextView
                                     android:id="@+id/flow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="15dp"
                                     android:text="@string/flow_count"
                                     android:textColor="@color/white"
@@ -271,8 +269,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/flow"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginLeft="@dimen/padding_15dp"
+
+
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
@@ -292,14 +290,13 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="center">
+                                android:layout_marginLeft="@dimen/padding_15dp"
+                                >
 
                                 <TextView
                                     android:id="@+id/all_package"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="15dp"
                                     android:text="@string/all_package_count"
                                     android:textColor="@color/white"
@@ -310,8 +307,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/all_package"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"

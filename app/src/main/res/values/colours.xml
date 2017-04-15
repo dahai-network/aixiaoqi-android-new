@@ -50,7 +50,7 @@
     <color name="order_detail_orange">#eb8500</color>
     <color name="order_detail_line">#dbdbdb</color>
     <color name="order_detail_background">#eaecf0</color>
-    <color name="light_gray">#dbdbdb</color>
+    <color name="light_gray">#e5e5e5</color>
     <color name="transparent_bg">#00000000</color>
     <color name="transparent_gray">#806c7586</color>
     <color name="regist_send_sms_unenable">#ababab</color>
@@ -61,12 +61,14 @@
     <color name="colordc730c">#dc730c</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="contact_letter_gray_line">#A0A0A0</color>
-    <color name="darker_gray">#9b9b9b</color>
+    <color name="darker_gray">#999999</color>
     <color name="side_bar_text">#a4a4a4</color>
     <color name="white">#ffffffff</color>
     <color name="dark_orange">#FF8C00</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="transparent_60">#3CFFFFFF</color>
+    <color name="color_A2A2A2">#A2A2A2</color>
+    <color name="color_F62C2A">#F62C2A</color>
 
     <color name="colorf7f7f8">#f7f7f8</color>
     <color name="color_2cabe0">#2CABE0</color>

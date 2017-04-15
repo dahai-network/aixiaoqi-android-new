@@ -196,8 +196,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
             });
 
         }
-
-
     }
 
     public void clearInputEdit() {
@@ -211,12 +209,12 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     }
 
     public void hidePhoneBottomBar() {
-        ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
+        ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
         ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
     }
 
     public void showPhoneBottomBar() {
-        ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
+        ProMainActivity.radiogroup.setVisibility(View.GONE);
         ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
     }
 
@@ -248,10 +246,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     @Override
     public void onItemClick(View view, Object data, boolean b) {
 
-//		if (isWifi()) {
-//			contactRecodeEntity = (ContactRecodeEntity) data;
-//			showCellPhoneDialog();
-//		}
+
         contactRecodeEntity = (ContactRecodeEntity) data;
         switch (view.getId()) {
             case R.id.iv_arrow:
@@ -260,11 +255,11 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
                 startActivity(intent);
                 break;
             default:
-                if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+//                if (SocketConstant.REGISTER_STATUE_CODE == 3) {
                     simCellPhone();
-                } else {
-                    CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
-                }
+//                } else {
+//                    CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
+//                }
                 break;
         }
 

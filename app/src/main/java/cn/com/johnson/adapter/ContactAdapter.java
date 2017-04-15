@@ -74,8 +74,14 @@ public class ContactAdapter extends RecyclerBaseAdapter<ContactAdapter.ContactVi
 
 	@Override
 	public void onBindViewHolder(ContactAdapter.ContactViewHolder holder, final int position) {
-		holder.mName.setText(getItem(position).getDesplayName());
-		holder.headImage.setImageResource(getItem(position).getHeader());
+		ContactBean contactBean=	getItem(position);
+		holder.mName.setText(contactBean.getDesplayName());
+//		holder.headImage.setImageResource(getItem(position).getHeader());
+		if(contactBean.getBitmapHeader()!=null){
+			holder.headImage.setImageBitmap(contactBean.getBitmapHeader());
+		}else{
+			holder.headImage.setImageResource(R.drawable.contact_default_header);
+		}
 	}
 
 	@Override

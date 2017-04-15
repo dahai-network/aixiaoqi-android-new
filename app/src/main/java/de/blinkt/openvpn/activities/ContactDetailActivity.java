@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -131,7 +132,14 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 
 	private void setData(final ContactBean contactBean) {
 		Map<String, String> map;
-		contactHeader.setBackgroundResource(contactBean.getHeader());
+//		contactHeader.setBackgroundResource(contactBean.getHeader());
+		Bundle b=getIntent().getExtras();
+		Bitmap bmp=(Bitmap) b.getParcelable("bitmap");
+		if(bmp!=null){
+			contactHeader.setImageBitmap(bmp);
+		}else{
+			contactHeader.setImageResource(R.drawable.contact_default_header);
+		}
 		if (!TextUtils.isEmpty(contactBean.getDesplayName()))
 			contactName.setText(contactBean.getDesplayName());
 		else {

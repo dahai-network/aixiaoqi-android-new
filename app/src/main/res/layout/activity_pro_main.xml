@@ -7,9 +7,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:orientation="vertical">
 
 
         <de.blinkt.openvpn.views.CustomViewPager
@@ -24,21 +24,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/bottom_bar_linearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/padding_50dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/bottom_bar"
-                android:visibility="visible"
-                android:orientation="horizontal">
-
                 <RadioGroup
                     android:id="@+id/radiogroup"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/padding_50dp"
                     android:gravity="center"
-                   android:orientation="horizontal">
+                    android:orientation="horizontal">
 
                     <de.blinkt.openvpn.views.MyRadioButton
                         android:id="@+id/rb_index"
@@ -73,7 +64,6 @@
                         aixiaoaqi:drawableTop="@drawable/account_icon" />
                 </RadioGroup>
 
-            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/phone_linearLayout"
@@ -95,11 +85,11 @@
                 <ImageView
                     android:id="@+id/iv_putaway"
                     android:layout_width="@dimen/padding_100dp"
-                    android:paddingLeft="@dimen/padding_50dp"
                     android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:paddingLeft="@dimen/padding_50dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/image_putaway_seletor"
-                    android:layout_alignParentEnd="true" />
+                    android:src="@drawable/image_putaway_seletor" />
             </RelativeLayout>
         </FrameLayout>
 
@@ -109,6 +99,6 @@
         android:id="@+id/topProgressView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_25dp"
-        android:visibility="gone"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="50dp"
+        android:visibility="gone" />
 </RelativeLayout>

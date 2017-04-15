@@ -91,6 +91,7 @@ public class JNIUtil {
 			else if (matchesPhoneNumber(phonenumber) == 3) {
 				jniUtil.main((byte) 2);
 			}
+			Log.e("phoneAddress", "phoneAddress=="+matchesPhoneNumber(phonenumber));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

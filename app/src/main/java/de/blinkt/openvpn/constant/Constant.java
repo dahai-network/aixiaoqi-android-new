@@ -8,7 +8,7 @@ import android.os.Environment;
 public class Constant {
 
     public static final boolean IS_DEBUG = false;
-    public static final boolean PRINT_LOGS = false;
+    public static final boolean PRINT_LOGS = true;
     public static final String UNITOYS = "unitoys";
     public static final String UNIBOX = "unibox";
 
@@ -322,6 +322,7 @@ public class Constant {
     public static final String LOCALBROADCAST_INTENT_DATA = "net_data";
     public static final String DETAIL_SIGN = "detail";
     public static final String FEATURES_SIGN = "features";
+    public static final String CALLTIME_FEATURES_SIGN = "calltime_features";
     public static final String PAYTERMS_SIGN = "payterms";
     public static final String SHAREDPREFERENCES_SIGN = "detail_data";
 

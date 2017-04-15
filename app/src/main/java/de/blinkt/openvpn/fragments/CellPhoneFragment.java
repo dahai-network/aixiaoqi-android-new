@@ -91,12 +91,12 @@ public class CellPhoneFragment extends Fragment {
     }
 
     public void hidePhoneBottomBar() {
-        ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
+        ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
         ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
     }
 
     public void showPhoneBottomBar() {
-        ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
+        ProMainActivity.radiogroup.setVisibility(View.GONE);
         ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
     }
 
@@ -123,7 +123,7 @@ public class CellPhoneFragment extends Fragment {
                 hidePhoneBottomBar();
                 if (ProMainActivity.phone_linearLayout.getVisibility() == View.GONE || ProMainActivity.phone_linearLayout.getVisibility() == View.INVISIBLE) {
                     ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
-                    ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
+                    ProMainActivity.radiogroup.setVisibility(View.GONE);
                 }
 
              /*   if (null != AppMode.getInstance().curCharacter) {
@@ -279,7 +279,7 @@ public class CellPhoneFragment extends Fragment {
          */
         if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
             floatingActionButton.setVisibility(View.GONE);
-            ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
+            ProMainActivity.radiogroup.setVisibility(View.GONE);
             ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
         } else {
 

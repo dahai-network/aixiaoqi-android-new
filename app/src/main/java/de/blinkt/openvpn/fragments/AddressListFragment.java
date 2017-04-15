@@ -1,6 +1,7 @@
 package de.blinkt.openvpn.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -91,7 +92,7 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 		mRecyclerView.setAdapter(mAdapter);
 		headersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
 		mRecyclerView.addItemDecoration(headersDecor);
-		mRecyclerView.addItemDecoration(new SpaceItemDecoration(28));
+//		mRecyclerView.addItemDecoration(new SpaceItemDecoration(28));
 		mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 			@Override
 			public void onChanged() {
@@ -129,9 +130,9 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 
 			@Override
 			public void onTouchingLetterChanged(String s) {
-				if (mAdapter != null) {
-					mAdapter.closeOpenedSwipeItemLayoutWithAnim();
-				}
+//				if (mAdapter != null) {
+//					mAdapter.closeOpenedSwipeItemLayoutWithAnim();
+//				}
 				int position = mAdapter.getPositionForSection(s.charAt(0));
 				if (position != -1) {
 					mRecyclerView.scrollToPosition(position);
@@ -173,17 +174,48 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 	@Override
 	public void gotoActivity(ContactBean contactBean,int position) {
 		String[] arrayNum = contactBean.getPhoneNum().split(",");
+		Intent intent;
 		if(arrayNum.length>1){
-		Intent intent=new Intent(getActivity(),ContactDetailActivity.class);
-		ContactDetailActivity.setNotifyFragmentDataListener(this);
-		intent.putExtra("contactBean",contactBean);
-		intent.putExtra("position",position);
-		startActivity(intent);
+			 intent=new Intent(getActivity(),ContactDetailActivity.class);
+			ContactDetailActivity.setNotifyFragmentDataListener(this);
+			if(contactBean.getBitmapHeader()!=null) {
+				tempObject(contactBean, intent);
+				Bundle b = new Bundle();
+				b.putParcelable("bitmap", contactBean.getBitmapHeader());
+				intent.putExtras(b);
+			}else{
+				intent.putExtra("contactBean",contactBean);
+			}
+
+			intent.putExtra("position",position);
+
 		}else{
-			Intent intent=new Intent(getActivity(),CallDetailActivity.class);
-			intent.putExtra("contactBean",contactBean);
-			startActivity(intent);
+			 intent=new Intent(getActivity(),CallDetailActivity.class);
+			if(contactBean.getBitmapHeader()!=null) {
+				tempObject(contactBean, intent);
+			}else{
+				intent.putExtra("contactBean",contactBean);
+			}
+
 		}
+		startActivity(intent);
+	}
+
+	private void tempObject(ContactBean contactBean, Intent intent) {
+		ContactBean contactBean1;
+		contactBean1 = new ContactBean();
+		contactBean1.setBitmapHeader(null);
+		contactBean1.setContactId(contactBean.getContactId());
+		contactBean1.setDesplayName(contactBean.getDesplayName());
+		contactBean1.setPhoneNum(contactBean.getPhoneNum());
+		contactBean1.setSortKey(contactBean.getSortKey());
+		contactBean1.setPhotoId(contactBean.getPhotoId());
+		contactBean1.setLookUpKey(contactBean.getLookUpKey());
+		contactBean1.setFormattedNumber(contactBean.getFormattedNumber());
+		contactBean1.setSelected(contactBean.getSelected());
+		contactBean1.setPinyin(contactBean.getPinyin());
+		contactBean1.setSortLetters(contactBean.getSortLetters());
+		intent.putExtra("contactBean",contactBean1);
 	}
 
 

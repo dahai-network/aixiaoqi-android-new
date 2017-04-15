@@ -175,18 +175,44 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
         String[] arrayPhoneNum= contactBean.getPhoneNum().split(",");
         if(arrayPhoneNum.length>1){
             Intent intent=new Intent(this,ContactDetailActivity.class);
-            intent.putExtra("contactBean",contactBean);
+            if(contactBean.getBitmapHeader()!=null){
+            intent.putExtra("contactBean",tempObject(contactBean));
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("bitmap", contactBean.getBitmapHeader());
+                intent.putExtras(bundle);
+            }else{
+                intent.putExtra("contactBean",contactBean);
+            }
             intent.putExtra(IntentPutKeyConstant.SELECFT_CONTACT_PEOPLE,IntentPutKeyConstant.SELECFT_CONTACT_PEOPLE);
             startActivityForResult(intent,0);
         }else{
             Intent intent =new Intent();
-            intent.putExtra(IntentPutKeyConstant.SELECFT_CONTACT_PEOPLE,contactBean);
+            if(contactBean.getBitmapHeader()!=null){
+                intent.putExtra(IntentPutKeyConstant.SELECFT_CONTACT_PEOPLE,tempObject(contactBean));
+            }else{
+                intent.putExtra(IntentPutKeyConstant.SELECFT_CONTACT_PEOPLE,contactBean);
+            }
             setResult(IntentPutKeyConstant.ADD_CONTACT,intent);
-           finish();
+            finish();
         }
     }
 
-
+    private ContactBean tempObject(ContactBean contactBean) {
+        ContactBean contactBean1;
+        contactBean1 = new ContactBean();
+        contactBean1.setBitmapHeader(null);
+        contactBean1.setContactId(contactBean.getContactId());
+        contactBean1.setDesplayName(contactBean.getDesplayName());
+        contactBean1.setPhoneNum(contactBean.getPhoneNum());
+        contactBean1.setSortKey(contactBean.getSortKey());
+        contactBean1.setPhotoId(contactBean.getPhotoId());
+        contactBean1.setLookUpKey(contactBean.getLookUpKey());
+        contactBean1.setFormattedNumber(contactBean.getFormattedNumber());
+        contactBean1.setSelected(contactBean.getSelected());
+        contactBean1.setPinyin(contactBean.getPinyin());
+        contactBean1.setSortLetters(contactBean.getSortLetters());
+        return  contactBean1;
+    }
 
     public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 
