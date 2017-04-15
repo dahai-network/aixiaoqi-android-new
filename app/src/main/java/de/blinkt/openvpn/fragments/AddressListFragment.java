@@ -92,7 +92,7 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 		mRecyclerView.setAdapter(mAdapter);
 		headersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
 		mRecyclerView.addItemDecoration(headersDecor);
-		mRecyclerView.addItemDecoration(new SpaceItemDecoration(28));
+//		mRecyclerView.addItemDecoration(new SpaceItemDecoration(28));
 		mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 			@Override
 			public void onChanged() {
@@ -130,9 +130,9 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 
 			@Override
 			public void onTouchingLetterChanged(String s) {
-				if (mAdapter != null) {
-					mAdapter.closeOpenedSwipeItemLayoutWithAnim();
-				}
+//				if (mAdapter != null) {
+//					mAdapter.closeOpenedSwipeItemLayoutWithAnim();
+//				}
 				int position = mAdapter.getPositionForSection(s.charAt(0));
 				if (position != -1) {
 					mRecyclerView.scrollToPosition(position);

@@ -85,11 +85,11 @@ public class TouchableRecyclerView extends RecyclerView {
 //                dy = (int) e.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-//                int tempX = (int) e.getX();
-//                int tempY = (int) e.getY();
-//                if (Math.abs(dx - tempX) > Slop && Math.abs(tempY - dy) > Slop) {
-//                    closeAllOpenedItem();
-//                }
+                int tempX = (int) e.getX();
+                int tempY = (int) e.getY();
+                if (Math.abs(dx - tempX) > Slop && Math.abs(tempY - dy) > Slop) {
+                    closeAllOpenedItem();
+                }
                 break;
 
         }
