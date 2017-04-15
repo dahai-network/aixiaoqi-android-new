@@ -2,6 +2,7 @@ package de.blinkt.openvpn.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -99,6 +101,17 @@ public class T9TelephoneDialpadView extends LinearLayout implements
         searchEt.setBackgroundResource(R.color.transparent);
     }
 
+    public void searchEtHidden(){
+        searchEt.setVisibility(GONE);
+    }
+
+    public void setBtnColor(int textColor){
+        for(int i=0;i<12;i++){
+            Button v =(Button) mDialpadView.findViewById(R.id.dialNum1 + i);
+           v.setBackground(null);
+            v.setTextColor(textColor);
+        }
+    }
     private void initListener() {
         /**
          * set click listener for button("0-9",'*','#')

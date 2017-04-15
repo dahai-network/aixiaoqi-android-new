@@ -411,7 +411,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 				SharedUtils sharedUtils = SharedUtils.getInstance();
 				SmsDetailEntity smsDetailEntity = new SmsDetailEntity();
 				smsDetailEntity.setFm(sharedUtils.readString(Constant.USER_NAME));
-
+				smsDetailEntity.setSend(true);
 				smsDetailEntity.setSMSTime(sendTime + "");
 				smsDetailEntity.setSMSContent(content);
 				smsDetailEntity.setStatus(SEND_PROGRESSING);

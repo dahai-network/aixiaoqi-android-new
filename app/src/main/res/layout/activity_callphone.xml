@@ -14,7 +14,14 @@
         android:paddingBottom="100dp"
         android:orientation="vertical"
         >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="@string/call_type"
+            android:textSize="@dimen/little_38"
 
+            />
         <TextView
             android:id="@+id/nametxt"
             android:layout_width="wrap_content"
@@ -30,7 +37,7 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:text="@string/no_data_show"
-            android:textSize="28sp"
+            android:textSize="@dimen/little_28"
             />
 
         <TextView
@@ -56,10 +63,12 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_control_voide"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/padding_150dp"
         android:orientation="horizontal"
         >
 
@@ -70,13 +79,25 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/record_voice_selector"
-            android:drawablePadding="10dp"
+            android:drawablePadding="@dimen/padding_10dp"
             android:gravity="center"
             android:text="@string/quiet"
             android:textColor="@android:color/white"
             android:textSize="12dp"
             />
-
+        <TextView
+            android:id="@+id/keyboard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/padding_10dp"
+            android:drawableTop="@drawable/key_board_selector"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="@string/key_board"
+            android:textColor="@android:color/white"
+            android:textSize="12dp"
+            />
 
         <TextView
             android:id="@+id/mtview"
@@ -87,25 +108,45 @@
             android:drawableTop="@drawable/hand_free_selector"
             android:drawablePadding="10dp"
             android:gravity="center"
-
             android:text="@string/hang_free"
             android:textColor="@android:color/white"
             android:textSize="12dp"
             />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/cancelcallbtn"
-        android:layout_width="wrap_content"
-        android:layout_weight="1"
+    <de.blinkt.openvpn.views.T9TelephoneDialpadView
+        android:id="@+id/t9dialpadview"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/padding_120dp"
         android:layout_height="wrap_content"
-        android:drawablePadding="10dp"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="72dp"
-        android:textColor="@android:color/white"
-        android:drawableTop="@drawable/hang_up"
-        android:text="@string/hang_down"
         />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/padding_35dp">
+        <TextView
+            android:id="@+id/cancelcallbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/hang_up"
+            />
+        <ImageView
+            android:id="@+id/hide_keyboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/padding_20dp"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/padding_20dp"
+            android:layout_marginBottom="@dimen/padding_35dp"
+            android:src="@drawable/image_putaway_pre"
+            />
+    </RelativeLayout>
+
+
+
 </RelativeLayout>

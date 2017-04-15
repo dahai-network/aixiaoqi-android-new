@@ -112,13 +112,15 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 
 	@Override
 	public void OnNewCall(int CallDir, final String peer_caller, boolean is_video_call) {
-		Log.e(TAG, "新来电 CAllDir=" + CallDir);
+		Log.e(TAG, "新来电 CAllDir=" + CallDir+",peer_caller="+peer_caller);
 		muteAudioFocus(this, true);
 		if (CallDir != 0) {
-			if(!User.isBlackList(peer_caller)) {
+			if(!User.isBlackList(peer_caller.substring(2,peer_caller.length()))) {
 				CALL_DIR = 0;
 				ReceiveCallActivity.launch(CallPhoneService.this, peer_caller);
 				SendCommandToBluetooth.sendMessageToBlueTooth(Constant.COMING_TEL_PUSH);//发送给手环电话设备通知
+			}else{
+				ICSOpenVPNApplication.the_sipengineReceive.Hangup();
 			}
 		} else {
 			CALL_DIR = 1;

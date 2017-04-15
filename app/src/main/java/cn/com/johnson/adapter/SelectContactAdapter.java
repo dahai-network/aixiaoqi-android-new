@@ -54,7 +54,11 @@ public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapt
 
 		ContactBean contactBean = mList.get(position);
 		holder.mName.setText(contactBean.getDesplayName());
-		holder.headImage.setImageResource(contactBean.getHeader());
+		if(contactBean.getBitmapHeader()!=null){
+			holder.headImage.setImageBitmap(contactBean.getBitmapHeader());
+		}else{
+			holder.headImage.setImageResource(R.drawable.contact_default_header);
+		}
 		holder.itemView.setTag(contactBean);
 		holder.itemView.setOnClickListener(this);
 

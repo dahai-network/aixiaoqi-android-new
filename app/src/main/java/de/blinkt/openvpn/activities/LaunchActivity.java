@@ -12,16 +12,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Base.CommenActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.util.SharedUtils;
 
-public class LaunchActivity extends BaseActivity   {
+public class LaunchActivity extends BaseActivity {
 
-	@BindView(R.id.rootRelativeLayout)
-	RelativeLayout rootRelativeLayout;
+
 	private SharedUtils sharedUtils;
-	private String TAG = "LaunchActivity";
+
 
 
 	@Override
@@ -29,7 +29,6 @@ public class LaunchActivity extends BaseActivity   {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launch);
-		ButterKnife.bind(this);
 		initSet();
 	}
 

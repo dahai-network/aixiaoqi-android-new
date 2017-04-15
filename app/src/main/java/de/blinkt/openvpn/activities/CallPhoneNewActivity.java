@@ -7,6 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.hardware.Sensor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -20,6 +22,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aixiaoqi.socket.SocketConstant;
@@ -37,6 +41,7 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
+import de.blinkt.openvpn.views.T9TelephoneDialpadView;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLCONTROLVOIDE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLHANGUP;
@@ -45,7 +50,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONEQUIET;
 /**
  * Created by Administrator on 2016/9/19 0019.
  */
-public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnClickListener {
+public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnClickListener,T9TelephoneDialpadView.OnT9TelephoneDialpadView {
 	TextView phonenumtxt;
 	TextView callStatustxt;
 	TextView mtview;
@@ -58,7 +63,8 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	NotificationManager mNotificationManager;
 	NotificationCompat.Builder mBuilder;
 	public static boolean isForeground = false;
-
+	TextView keyboard;
+	T9TelephoneDialpadView t9dialpadview;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -74,6 +80,28 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		registerReceiver(connectedReceive, filter);
 		callPhone();
 	}
+
+	@Override
+	public void onAddDialCharacter(String addCharacter) {
+		if(!TextUtils.isEmpty(addCharacter))
+			ICSOpenVPNApplication.the_sipengineReceive.SendDtmf(0,addCharacter);
+	}
+
+	@Override
+	public void onDialInputTextChanged(String curCharacter) {
+
+	}
+
+	@Override
+	public void onDialInputTextChanging(String curCharacter) {
+
+	}
+
+	@Override
+	public void onDeleteDialCharacter(String deleteCharacter) {
+
+	}
+
 
 
 	@Override
@@ -101,6 +129,8 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 //		}
 		return true;
 	}
+	LinearLayout llControlVoide;
+	ImageView hideKeyboard;
 
 	private void initView() {
 		phonenumtxt = (TextView) findViewById(R.id.phonenumtxt);
@@ -109,13 +139,17 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		timer = (Chronometer) findViewById(R.id.chronometer);
 		calmTextView = (TextView) findViewById(R.id.calmTextView);
 		cancelcallbtn = (TextView) findViewById(R.id.cancelcallbtn);
+		keyboard = (TextView) findViewById(R.id.keyboard);
+		t9dialpadview = (T9TelephoneDialpadView) findViewById(R.id.t9dialpadview);
+		llControlVoide = (LinearLayout) findViewById(R.id.ll_control_voide);
+		hideKeyboard = (ImageView) findViewById(R.id.hide_keyboard);
+
+		t9dialpadview.setOnT9TelephoneDialpadView(this);
+		t9dialpadview.searchEtHidden();
+
+		t9dialpadview.setBtnColor( Color.WHITE);
 		displayStatus(R.string.calling);
-//		phonenumtxt.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				ICSOpenVPNApplication.the_sipengineReceive.SendDtmf(0,"1");
-//			}
-//		});
+
 	}
 
 	ContactRecodeEntity contactRecodeEntity;
@@ -144,6 +178,8 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		calmTextView.setOnClickListener(this);
 		cancelcallbtn.setOnClickListener(this);
 		mtview.setOnClickListener(this);
+		keyboard.setOnClickListener(this);
+		hideKeyboard.setOnClickListener(this);
 	}
 
 	private void callPhone() {
@@ -250,6 +286,16 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 					}
 				}).start();
 				break;
+			case  R.id.keyboard:
+				t9dialpadview.setVisibility(View.VISIBLE);
+				llControlVoide.setVisibility(View.GONE);
+				hideKeyboard.setVisibility(View.VISIBLE);
+				break;
+			case R.id.hide_keyboard:
+				t9dialpadview.setVisibility(View.GONE);
+				llControlVoide.setVisibility(View.VISIBLE);
+				hideKeyboard.setVisibility(View.GONE);
+				break;
 		}
 	}
 
@@ -285,7 +331,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.e("CallPhoneNewActivity", "onPause()");
+
 	}
 
 	@Override
@@ -293,7 +339,6 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		super.onStop();
 		isForeground = false;
 		initNotify();
-		Log.e("CallPhoneNewActivity", "onStop()");
 	}
 
 	private void startTimer() {
