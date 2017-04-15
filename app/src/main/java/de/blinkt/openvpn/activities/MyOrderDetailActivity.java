@@ -377,7 +377,6 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
                         toActivity(new Intent(this, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt())
                                 .putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G()));
                     else {
-
                         IS_TEXT_SIM = false;
                         orderStatus = 4;
                         showProgress("正在激活", false);

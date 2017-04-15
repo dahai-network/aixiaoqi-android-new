@@ -127,7 +127,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 					MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
 					CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活失败，请重试!");
 				} else {
-					toActivity(new Intent(ActivateActivity.this,OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.OUTSIDE).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,getIntent().getBooleanExtra(IntentPutKeyConstant.IS_SUPPORT_4G,false)));
+					toActivity(new Intent(ActivateActivity.this, OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.OUTSIDE).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, getIntent().getBooleanExtra(IntentPutKeyConstant.IS_SUPPORT_4G, false)));
 					isActivateSuccess = true;
 				}
 				dismissProgress();
@@ -156,7 +156,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 					//友盟方法统计
 					MobclickAgent.onEvent(context, CLICKACTIVEPACKAGE);
 					orderActivationHttp();
-		}
+				}
 				break;
 			case R.id.payWayTextView:
 				new DialogYearMonthDayPicker(this, this, R.layout.picker_year_month_day_layout, 0);
@@ -174,7 +174,6 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 			CommonTools.showShortToast(this, getString(R.string.effective_date_is_null));
 			return;
 		}
-		showProgress("正在激活", false);
 		createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_ACTIVATION, orderId, effectTime);
 	}
 
@@ -212,6 +211,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				//是否测试卡位置：否，这是写卡！
 				IS_TEXT_SIM = false;
 				ReceiveBLEMoveReceiver.orderStatus = 4;
+				showProgress("正在激活", false);
 				new Thread(new Runnable() {
 					@Override
 					public void run() {

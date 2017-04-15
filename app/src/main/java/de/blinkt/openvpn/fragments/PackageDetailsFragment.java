@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,14 @@ import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseFragment;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.util.SharedUtils;
 
 import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by kim
  * on 2017/4/11.
+ * 套餐详情
  */
 public class PackageDetailsFragment extends BaseFragment {
 
@@ -34,7 +37,6 @@ public class PackageDetailsFragment extends BaseFragment {
     TextView tvContext;
     Unbinder unbinder;
     String detail;
-    SharedPreferences pref;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -48,7 +50,6 @@ public class PackageDetailsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.packagedetail_layout, null);
-        initData();
         tvContext = (TextView) view.findViewById(R.id.tv_context);
         unbinder = ButterKnife.bind(this, view);
         setView();
@@ -58,7 +59,7 @@ public class PackageDetailsFragment extends BaseFragment {
      * 设置界面
      */
     private void setView() {
-        detail = pref.getString(Constant.DETAIL_SIGN, null);
+        detail= SharedUtils.getInstance().readString(Constant.DETAIL_SIGN);
         if (null != detail) {
             tvContext.setText(detail);
         } else {
@@ -74,11 +75,7 @@ public class PackageDetailsFragment extends BaseFragment {
             }, new IntentFilter(Constant.LOCALBROADCAST_INTENT_DATA));
         }
     }
-    private void initData() {
-        pref = getActivity().getSharedPreferences(Constant.SHAREDPREFERENCES_SIGN, MODE_PRIVATE);
 
-
-    }
     @Override
     protected void lazyLoad() {
         // TODO Auto-generated method stub

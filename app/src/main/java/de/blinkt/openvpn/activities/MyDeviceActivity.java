@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
@@ -88,8 +89,8 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
 public class MyDeviceActivity extends BaseNetActivity implements DialogInterfaceTypeBase, View.OnClickListener {
 	//	@BindView(R.id.noConnectImageView)
 //	ImageView noConnectImageView;
-	@BindView(R.id.statueTextView)
-	TextView statueTextView;
+//	@BindView(R.id.statueTextView)
+//	TextView statueTextView;
 	@BindView(R.id.firmwareTextView)
 	TextView firmwareTextView;
 	@BindView(R.id.callPayLinearLayout)
@@ -207,6 +208,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void initSet() {
 		Log.e(TAG, "initSet");
 		bracelettype = getIntent().getStringExtra(BRACELETTYPE);
+		if (SharedUtils.getInstance().readBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE)) {
+			setPoint();
+		}
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			alarmClockLinearLayout.setVisibility(GONE);
 			messageRemindLinearLayout.setVisibility(GONE);
@@ -233,7 +237,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			} else {
 				sinking.setPercent(0f);
 			}
-			statueTextView.setVisibility(GONE);
+//			statueTextView.setVisibility(GONE);
 			if (blueStatus != null) {
 				setConStatus(blueStatus);
 			}
@@ -277,7 +281,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 
-	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, register_sim_statue, R.id.findStatusLinearLayout, R.id.statueTextView, R.id.alarmClockLinearLayout, R.id.messageRemindLinearLayout})
+	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, register_sim_statue, R.id.findStatusLinearLayout, R.id.alarmClockLinearLayout, R.id.messageRemindLinearLayout})
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.unBindButton:
@@ -339,12 +343,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				}
 				break;
 
-			case R.id.statueTextView:
-				//当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
-				registerSimStatu.setVisibility(View.VISIBLE);
-				Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-				startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-				break;
+//			case statueTextView:
+//				//当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
+//				registerSimStatu.setVisibility(View.VISIBLE);
+//				Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//				startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+//				break;
 
 			case R.id.alarmClockLinearLayout:
 				//当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
@@ -433,6 +437,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				//测试代码
 				unBindButton.setVisibility(View.VISIBLE);
 				dismissProgress();
+				skyUpgradeHttp();
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
 //				if(isUpgrade&&startDfuCount==0){
 //					startDfuCount++;
@@ -446,13 +451,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					if (retryTime >= 20 || !ICSOpenVPNApplication.isConnect) {
 //						sinking.setVisibility(GONE);
 //						noConnectImageView.setVisibility(View.VISIBLE);
-						statueTextView.setVisibility(View.VISIBLE);
+//						statueTextView.setVisibility(View.VISIBLE);
 						unBindButton.setVisibility(GONE);
 						SharedUtils.getInstance().delete(Constant.IMEI);
 						SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 						macTextView.setText("");
 						firmwareTextView.setText("");
-						statueTextView.setText(getString(R.string.conn_bluetooth));
+//						statueTextView.setText(getString(R.string.conn_bluetooth));
 						CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 						return;
 					}
@@ -486,10 +491,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					SharedUtils.getInstance().delete(Constant.IMEI);
 					macTextView.setText("");
 					firmwareTextView.setText("");
-					statueTextView.setText(getString(R.string.conn_bluetooth));
+//					statueTextView.setText(getString(R.string.conn_bluetooth));
 //					sinking.setVisibility(GONE);
 //					noConnectImageView.setVisibility(View.VISIBLE);
-					statueTextView.setVisibility(View.VISIBLE);
+//					statueTextView.setVisibility(View.VISIBLE);
 					CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 				}
 			}
@@ -560,7 +565,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else {
 			sinking.setPercent(0f);
 		}
-		statueTextView.setVisibility(GONE);
+//		statueTextView.setVisibility(GONE);
 	}
 
 
@@ -610,10 +615,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //				sinking.setVisibility(GONE);
 				unBindButton.setVisibility(GONE);
 //				noConnectImageView.setVisibility(View.VISIBLE);
-				statueTextView.setVisibility(View.VISIBLE);
+//				statueTextView.setVisibility(View.VISIBLE);
 				registerSimStatu.setVisibility(GONE);
-				statueTextView.setText(getString(R.string.conn_bluetooth));
-				statueTextView.setEnabled(true);
+				//statueTextView.setText(getString(R.string.conn_bluetooth));
+				//statueTextView.setEnabled(true);
 				firmwareTextView.setText("");
 				percentTextView.setText("");
 				macTextView.setText("");
@@ -651,8 +656,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					} else {
 						Log.i(TAG, "mBluetoothDevice.getIMEI()为空");
 					}
-					statueTextView.setText(getString(R.string.blue_connecting));
-					statueTextView.setEnabled(false);
+					//statueTextView.setText(getString(R.string.blue_connecting));
+					//statueTextView.setEnabled(false);
 					unBindButton.setVisibility(View.VISIBLE);
 					//当接口调用完毕后，扫描设备，打开状态栏
 //				scanLeDevice(true);
@@ -670,9 +675,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
 						url = skyUpgradeHttp.getUpgradeEntity().getUrl();
 						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
+						setPoint();
 					} else {
 						CommonTools.showShortToast(this, getString(R.string.last_version));
+						SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, false);
 						stopAnim();
+						firmwareTextView.setCompoundDrawables(null, null, null, null);
 					}
 				}
 			}
@@ -704,6 +712,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 		}
+	}
+
+	private void setPoint() {
+		Drawable rightDrawable = getResources().getDrawable(R.drawable.unread_message);
+		rightDrawable.setBounds(0, 0, rightDrawable.getMinimumWidth(), rightDrawable.getMinimumHeight());
+		SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, true);
+		firmwareTextView.setCompoundDrawables(null, null, rightDrawable, null);
 	}
 
 

@@ -625,6 +625,7 @@
     <string name="china_mobile">中国移动</string>
     <string name="china_unicom">中国联通</string>
     <string name="device_name">设备名称</string>
+    <string name="unbind_device_tips">请先绑定爱小器智能通讯硬件</string>
 
     <!--详细界面的标题-->
     <string-array name="detail_titles">
@@ -635,4 +636,6 @@
 
 
     <string name="tip_activate">将国际卡插到智能硬件后，请保持APP与智能硬件连接，然后选择套餐生效时间，再确定激活。</string>
+    <string name="un_connect_tip">未连上设备，请检查周围是否有设备</string>
+    <string name="device_no_insert_tips">设备未插入电话卡或者插入的卡无效</string>
 </resources>

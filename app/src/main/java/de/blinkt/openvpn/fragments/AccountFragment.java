@@ -167,10 +167,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	}
 
 	public void showDeviceSummarized(boolean isShow) {
-		if (isShow) {
-			deviceSummarizedRelativeLayout.setVisibility(View.VISIBLE);
-		} else {
-			deviceSummarizedRelativeLayout.setVisibility(GONE);
+		if (deviceSummarizedRelativeLayout != null) {
+			if (isShow) {
+				deviceSummarizedRelativeLayout.setVisibility(View.VISIBLE);
+			} else {
+				deviceSummarizedRelativeLayout.setVisibility(GONE);
+			}
 		}
 	}
 
@@ -316,7 +318,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 			BalanceHttp http = (BalanceHttp) object;
 			if (http.getBalanceEntity() != null)
 				balanceTextView.setText(getString(R.string.balance) + ": " + http.getBalanceEntity().getAmount() + getString(R.string.yuan));
-		} else  if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
+		} else if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
 			if (object.getStatus() == 1) {
 				SharedUtils.getInstance().delete(BRACELETPOWER);
 				SharedUtils.getInstance().delete(Constant.IMEI);
@@ -340,6 +342,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				OrderUsageRemainHttp orderUsageRemainHttp = (OrderUsageRemainHttp) object;
 				UsageRemainEntity.Unactivated unactivated = orderUsageRemainHttp.getUsageRemainEntity().getUnactivated();
 				UsageRemainEntity.Used used = orderUsageRemainHttp.getUsageRemainEntity().getUsed();
+				if (used == null) {
+					return;
+				}
 				if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
 					hasPackage = true;
 					PacketRelativeLayout.setVisibility(View.GONE);
@@ -348,8 +353,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 					drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
 					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
 					addOrActivatePackage.setText(getString(R.string.activate_packet));
-				}
-				else	if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
+				} else if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
 					hasPackage = false;
 					PacketRelativeLayout.setVisibility(View.GONE);
 					noPacketRelativeLayout.setVisibility(View.VISIBLE);
@@ -357,7 +361,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 					drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
 					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
 					addOrActivatePackage.setText(getString(R.string.add_package));
-				}   else {//有套餐且激活了。
+				} else {//有套餐且激活了。
 					hasPackage = true;
 					PacketRelativeLayout.setVisibility(View.VISIBLE);
 					noPacketRelativeLayout.setVisibility(View.GONE);
@@ -386,13 +390,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	}
 
 
-
 	public String getBleStatus() {
 		return bleStatus;
 	}
 
 	public void setBleStatus(String bleStatus) {
 		this.bleStatus = bleStatus;
+		if (getString(R.string.index_un_insert_card).equals(bleStatus)) {
+			signalIconImageView.setBackgroundResource(R.drawable.unregist);
+			operatorTextView.setText("----");
+		}
 	}
 
 	/**
