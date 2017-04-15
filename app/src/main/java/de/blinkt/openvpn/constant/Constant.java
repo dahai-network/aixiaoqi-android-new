@@ -7,7 +7,7 @@ import android.os.Environment;
  */
 public class Constant {
 
-    public static final boolean IS_DEBUG = false;
+    public static final boolean IS_DEBUG = true;
     public static final boolean PRINT_LOGS = true;
     public static final String UNITOYS = "unitoys";
     public static final String UNIBOX = "unibox";
@@ -192,6 +192,7 @@ public class Constant {
     public static final String RECEIVE_CARD_MSG = "0a00";//爱小器卡
     public static final String REQUEST_POWER = "0b00";//请求电量
     public static final String IS_INSERT_CARD = "0c00";//检测是否插卡
+    public static final String ICCID_BLUE_VALUE= "0d00";//检测是否插卡
     public static final String THE_HAND_FUNCTION = "0d00";//是否使用抬手功能
     public static final String HISTORY_STEP = "0e00";//历史步数
     public static final String SETTING_ALARM = "0f00";//设置闹钟

@@ -49,7 +49,7 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 
 	List<ContactBean> mAllLists=new ArrayList<>();
 	private EditText searchEditText;
-	private StickyRecyclerHeadersDecoration headersDecor;
+//	private StickyRecyclerHeadersDecoration headersDecor;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,15 +90,15 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 		final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), orientation, false);
 		mRecyclerView.setLayoutManager(layoutManager);
 		mRecyclerView.setAdapter(mAdapter);
-		headersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
-		mRecyclerView.addItemDecoration(headersDecor);
-//		mRecyclerView.addItemDecoration(new SpaceItemDecoration(28));
-		mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-			@Override
-			public void onChanged() {
-				headersDecor.invalidateHeaders();
-			}
-		});
+//		headersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
+//		mRecyclerView.addItemDecoration(headersDecor);
+////		mRecyclerView.addItemDecoration(new SpaceItemDecoration(28));
+//		mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//			@Override
+//			public void onChanged() {
+//				headersDecor.invalidateHeaders();
+//			}
+//		});
 		setSearchLinstener();
 	}
 
@@ -113,11 +113,11 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (!TextUtils.isEmpty(s.toString().trim())) {
 					mAdapter.addAll(search(s.toString().trim()));
-					mRecyclerView.removeItemDecoration(headersDecor);
+//					mRecyclerView.removeItemDecoration(headersDecor);
 				} else {
 
 					mAdapter.addAll(mAllLists);
-					mRecyclerView.addItemDecoration(headersDecor);
+//					mRecyclerView.addItemDecoration(headersDecor);
 				}
 			}
 

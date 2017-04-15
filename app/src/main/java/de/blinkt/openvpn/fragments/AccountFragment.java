@@ -2,6 +2,7 @@ package de.blinkt.openvpn.fragments;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -144,14 +145,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		initSet();
+//		initSet();
 	}
 
-	private void initSet() {
-		Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).placeholder(R.drawable.default_head).error(R.drawable.default_head).
-				transform(new GlideCircleTransform(getActivity())).into(headImageView);
-
-	}
+//	private void initSet() {
+//		Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).placeholder(R.drawable.default_head).error(R.drawable.default_head).
+//				transform(new GlideCircleTransform(getActivity(),2, Color.WHITE)).into(headImageView);
+//
+//	}
 
 	@Override
 	public void onResume() {

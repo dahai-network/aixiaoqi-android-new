@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.aixiaoqi.socket.EventBusUtil;
+import com.aixiaoqi.socket.RadixAsciiChange;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
@@ -126,7 +127,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				public void run() {
 					try {
 						Thread.sleep(100);
-                        //8880021400
+						//8880021400
 						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
 						Log.i(TAG, "发送了专属命令");
 						Thread.sleep(400);
@@ -214,8 +215,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				public void run() {
 					try {
 
-                        Log.d(TAG, "run: 接受数据");
-                        String firstPackage = messages.get(0).substring(0, 2);
+						Log.d(TAG, "run: 接受数据");
+						String firstPackage = messages.get(0).substring(0, 2);
 						String dataType = messages.get(0).substring(6, 10);
 
 						if (messages.size() == 1) {
@@ -255,7 +256,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									case Constant.SYSTEM_BASICE_INFO:
 										String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
 										Log.i(TAG, "版本号:" + deviceVesion);
-
 										int DeviceType = 0;
 										String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 										if (!TextUtils.isEmpty(braceletname)) {
@@ -313,7 +313,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										}
 										break;
 									case Constant.IS_INSERT_CARD:
-										Log.i(TAG, "接收数据：是否插卡：" + messages);
+										Log.i(TAG, "接收数据：是否插卡：" + messages.toString());
 										if (messages.get(0).substring(10, 12).equals("00")) {
 											Log.i(TAG, "未插卡");
 											sendEventBusChangeBluetoothStatus(context
@@ -324,9 +324,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											sendMessageToBlueTooth(OFF_TO_POWER);
 											//恢复测试写卡流程
 											IS_TEXT_SIM = false;
-										} else if (messages.get(0).substring(10, 12).equals("01")) {
+										} else if(messages.get(0).substring(10, 12).equals("04")){
+
+										}else {
 											Log.i(TAG, "已插卡");
 											//如果激活卡成功后，刷新按钮点击需要将标记激活
+											SocketConstant.SIM_TYPE=Integer.parseInt(messages.get(0).substring(10, 12));
 											isGetnullCardid = true;
 											nullCardId = null;
 											//TODO 处理异常
@@ -335,7 +338,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
 											if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
-												SendCommandToBluetooth.sendMessageToBlueTooth(BASIC_MESSAGE);
+
 												Thread.sleep(500);
 												SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 											} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
@@ -351,6 +354,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 												handler.sendEmptyMessage(CHECK_SIGNAL);
 											}
 										}
+										break;
+									case Constant.ICCID_BLUE_VALUE:
+										String	Iccid	=PacketeUtil.Combination(messages);
+										SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(Iccid);
 										break;
 									default:
 										break;

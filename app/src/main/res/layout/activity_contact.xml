@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_back"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/searchEditText"
@@ -21,36 +22,35 @@
         android:gravity="center_vertical"
         />
 
-        <FrameLayout
-            android:layout_below="@id/searchEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_below="@id/searchEditText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-            <de.blinkt.openvpn.views.contact.TouchableRecyclerView
-                android:id="@+id/contact_member"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center"
-                android:layout_marginRight="15dp"/>
+        <de.blinkt.openvpn.views.contact.TouchableRecyclerView
+            android:id="@+id/contact_member"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center" />
 
-            <TextView
-                android:id="@+id/contact_dialog"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center"
-                android:background="@color/colorPrimaryDark"
-                android:gravity="center"
-                android:textColor="#ffffffff"
-                android:textSize="30dp"
-                android:visibility="invisible"/>
+        <TextView
+            android:id="@+id/contact_dialog"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:textColor="#ffffffff"
+            android:textSize="30dp"
+            android:visibility="invisible"/>
 
-            <de.blinkt.openvpn.views.contact.SideBar
-                android:id="@+id/contact_sidebar"
-                android:layout_width="15dp"
-                android:layout_height="fill_parent"
-                android:layout_gravity="right|center"
-                android:layout_marginRight="3dp"/>
-        </FrameLayout>
+        <de.blinkt.openvpn.views.contact.SideBar
+            android:id="@+id/contact_sidebar"
+            android:layout_width="15dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right|center"
+            android:layout_marginRight="3dp"/>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tv_no_permission"

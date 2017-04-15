@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/light_gray"
+    android:background="@color/gray_back"
     android:layout_height="match_parent">
 
     <de.blinkt.openvpn.views.TitleBar
@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_marginLeft="@dimen/padding_10"
         android:layout_marginRight="@dimen/padding_10"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/padding_8dp"
+        android:layout_marginBottom="@dimen/padding_8dp"
         android:layout_height="@dimen/padding_30dp"
         android:background="@drawable/search_et"
         android:drawableLeft="@drawable/connecter_search"
