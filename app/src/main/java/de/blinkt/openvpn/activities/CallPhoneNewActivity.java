@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
@@ -165,7 +164,8 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		} else if (cellPhoneType == Constant.SIM_CELL_PHONE) {
 			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986" + SocketConstant.REGISTER_REMOTE_ADDRESS + SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-", contactRecodeEntity.getPhoneNumber()));
 		}
-
+		mtview.performClick();
+		mtview.performClick();
 	}
 
 	int notifyId = 100;
@@ -348,7 +348,11 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				if (CallPhoneService.CALL_DIR == 1) {
 					cancelNotify();
 					stopTimer();
-					onBackPressed();
+					try {
+						onBackPressed();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			} else if (CallPhoneService.connectedFlag.equals(action)) {
 				displayStatus("");

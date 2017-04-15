@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -24,6 +26,10 @@ public class TopProgressView extends View {
 
 	private final Paint mPaint;
 	private final Rect mBounds;
+	//进入动画
+	private final Animation mShowAction;
+	//退出动画
+	private final Animation mHiddenAction;
 	private boolean isWhiteBack;
 	private final Context context;
 
@@ -39,6 +45,8 @@ public class TopProgressView extends View {
 	public TopProgressView(Context context, @Nullable AttributeSet attrs) {
 		super(context, attrs);
 		this.context = context;
+		mShowAction = AnimationUtils.loadAnimation(context, R.anim.translucent_in);
+		mHiddenAction = AnimationUtils.loadAnimation(context, R.anim.translucent_out);
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mBounds = new Rect();
 		TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.TopProgressView, 0, 0);
@@ -68,6 +76,12 @@ public class TopProgressView extends View {
 				setVisibility(GONE);
 			}
 		}, time);
+	}
+
+	@Override
+	public void setVisibility(int visibility) {
+		startAnimation(visibility == View.VISIBLE ? mShowAction : mHiddenAction);
+		super.setVisibility(visibility);
 	}
 
 	public void setWhiteBack(boolean whiteBack) {

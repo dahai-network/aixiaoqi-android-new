@@ -352,7 +352,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					@Override
 					public void run() {
 						scanLeDevice(false);
-						if (mService!=null && !mService.isConnecttingBlueTooth()) {
+						if (mService != null && !mService.isConnecttingBlueTooth()) {
 							topProgressView.showTopProgressView(getString(R.string.un_connect_tip), -1, new View.OnClickListener() {
 								@Override
 								public void onClick(View v) {
@@ -788,6 +788,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				double percent = entity.getProgressCount();
 				if (topProgressView.getVisibility() != View.VISIBLE) {
 					topProgressView.setVisibility(View.VISIBLE);
+					topProgressView.setContent(getString(R.string.registing));
 				}
 				int percentInt = (int) (percent / 1.6);
 				if (percentInt >= 100) {
@@ -796,7 +797,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				topProgressView.setProgress(percentInt);
 				break;
 			default:
-//						if (entity.getRigsterSimStatue() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
+//						if (entity .getRigsterSimStatue() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
 //							sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
 //							CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
 //						}
