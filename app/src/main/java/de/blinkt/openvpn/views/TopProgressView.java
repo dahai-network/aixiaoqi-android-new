@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -25,11 +26,15 @@ public class TopProgressView extends View {
 	private final Rect mBounds;
 	private boolean isWhiteBack;
 	private final Context context;
+
 	private static final int DEFAULT_TEXTSIZE = CommonTools.dip2px(ICSOpenVPNApplication.getContext(), 13);
 
 
 	//进度
 	private int progress;
+	//内容
+	private String content;
+
 
 	public TopProgressView(Context context, @Nullable AttributeSet attrs) {
 		super(context, attrs);
@@ -43,6 +48,26 @@ public class TopProgressView extends View {
 	public void setProgress(int progress) {
 		this.progress = progress;
 		invalidate();
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+		invalidate();
+	}
+
+	public void showTopProgressView(String content, int time, OnClickListener listener) {
+		setContent(content);
+		setVisibility(VISIBLE);
+		if (time < 0) {
+			time = 5000;
+		}
+		setOnClickListener(listener);
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				setVisibility(GONE);
+			}
+		}, time);
 	}
 
 	public void setWhiteBack(boolean whiteBack) {
@@ -75,7 +100,12 @@ public class TopProgressView extends View {
 		canvas.drawRect(0, 0, getWidth() * progress / 100f, getHeight(), mPaint);
 		//画文字
 		mPaint.setTextSize(DEFAULT_TEXTSIZE);
-		String text = context.getString(R.string.registing);
+		String text;
+		if (content == null) {
+			text = context.getString(R.string.registing);
+		} else {
+			text = content;
+		}
 		mPaint.getTextBounds(text, 0, text.length(), mBounds);
 		float textHeight = mBounds.height();
 		mPaint.setColor(getResources().getColor(textColor));
@@ -96,4 +126,6 @@ public class TopProgressView extends View {
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
+
+
 }

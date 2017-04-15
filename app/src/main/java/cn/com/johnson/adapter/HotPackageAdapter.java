@@ -26,7 +26,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKHOTPACKAGE;
 /**
  * Created by Administrator on 2016/9/1.
  */
-public class HotPackageAdapter extends RecyclerView.Adapter<HotPackageAdapter.ViewHolder> {
+public class HotPackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	private List<HotPackageEntity> data;
 	private Context context = null;
@@ -39,14 +39,15 @@ public class HotPackageAdapter extends RecyclerView.Adapter<HotPackageAdapter.Vi
 	}
 
 	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		ViewHolder viewHolder;
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		RecyclerView.ViewHolder viewHolder;
 		if (!isFromIndex) {
 			viewHolder = new ViewHolder(LayoutInflater.from(
 					context).inflate(R.layout.item_hot_package, parent,
 					false));
+
 		} else {
-			viewHolder = new ViewHolder(LayoutInflater.from(
+			viewHolder = new IndexViewHolder(LayoutInflater.from(
 					context).inflate(R.layout.item_hot_package_index, parent,
 					false));
 		}
@@ -54,25 +55,51 @@ public class HotPackageAdapter extends RecyclerView.Adapter<HotPackageAdapter.Vi
 	}
 
 	@Override
-	public void onBindViewHolder(ViewHolder holder, final int position) {
-		holder.countryTextView.setText(data.get(position).getCountryName());
-		if (!isFromIndex)
-			Glide.with(context).load(data.get(position).getLogoPic()).transform(new GlideRoundTransform(context)).into(holder.hotPackageImageView);
-		else
-			Glide.with(context).load(data.get(position).getLogoPic()).transform(new GlideCircleTransform(context)).into(holder.hotPackageImageView);
-		holder.packageLinearLayout.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//友盟方法统计
-				HashMap<String, String> map = new HashMap<>();
-				map.put("zone", data.get(position).getCountryName());
-				MobclickAgent.onEvent(context, CLICKHOTPACKAGE, map);
-				CountryPackageActivity.launch(context, data.get(position).getPic(),
-						data.get(position).getCountryName(),
-						data.get(position).getCountryID());
-			}
-		});
+	public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+		if (holder instanceof ViewHolder) {
+			ViewHolder hotHolder = (ViewHolder) holder;
+			hotHolder.countryTextView.setText(data.get(position).getCountryName());
+			if (!isFromIndex)
+				Glide.with(context).load(data.get(position).getLogoPic()).transform(new GlideRoundTransform(context)).into(hotHolder.hotPackageImageView);
+			else
+				Glide.with(context).load(data.get(position).getLogoPic()).transform(new GlideCircleTransform(context)).into(hotHolder.hotPackageImageView);
+			hotHolder.packageLinearLayout.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					//友盟方法统计
+					HashMap<String, String> map = new HashMap<>();
+					map.put("zone", data.get(position).getCountryName());
+					MobclickAgent.onEvent(context, CLICKHOTPACKAGE, map);
+					CountryPackageActivity.launch(context, data.get(position).getPic(),
+							data.get(position).getCountryName(),
+							data.get(position).getCountryID());
+				}
+			});
+		} else {
+			IndexViewHolder indexHotHolder = (IndexViewHolder) holder;
+			indexHotHolder.countryTextView.setText(data.get(position).getCountryName());
+			indexHotHolder.descrTextView.setText(data.get(position).getDescr());
+			if (!isFromIndex)
+				Glide.with(context).load(data.get(position).getLogoPic()).transform(new GlideRoundTransform(context)).into(indexHotHolder.hotPackageImageView);
+			else
+				Glide.with(context).load(data.get(position).getLogoPic()).transform(new GlideCircleTransform(context)).into(indexHotHolder.hotPackageImageView);
+			indexHotHolder.packageLinearLayout.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					//友盟方法统计
+					HashMap<String, String> map = new HashMap<>();
+					map.put("zone", data.get(position).getCountryName());
+					MobclickAgent.onEvent(context, CLICKHOTPACKAGE, map);
+					CountryPackageActivity.launch(context, data.get(position).getPic(),
+							data.get(position).getCountryName(),
+							data.get(position).getCountryID());
+				}
+			});
+		}
+
+
 	}
+
 
 	@Override
 	public int getItemCount() {
@@ -88,6 +115,21 @@ public class HotPackageAdapter extends RecyclerView.Adapter<HotPackageAdapter.Vi
 			super(itemView);
 			hotPackageImageView = (ImageView) itemView.findViewById(R.id.hotPackageImageView);
 			countryTextView = (TextView) itemView.findViewById(R.id.countryTextView);
+			packageLinearLayout = (LinearLayout) itemView.findViewById(R.id.packageLinearLayout);
+		}
+	}
+
+	public class IndexViewHolder extends RecyclerView.ViewHolder {
+		ImageView hotPackageImageView;
+		TextView countryTextView;
+		TextView descrTextView;
+		LinearLayout packageLinearLayout;
+
+		public IndexViewHolder(View itemView) {
+			super(itemView);
+			hotPackageImageView = (ImageView) itemView.findViewById(R.id.hotPackageImageView);
+			countryTextView = (TextView) itemView.findViewById(R.id.countryTextView);
+			descrTextView = (TextView) itemView.findViewById(R.id.descrTextView);
 			packageLinearLayout = (LinearLayout) itemView.findViewById(R.id.packageLinearLayout);
 		}
 	}

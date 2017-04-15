@@ -384,15 +384,16 @@
             android:screenOrientation="portrait">
         </activity>
         <!--de.blinkt.openvpn.activities.LaunchActivity-->
+        <!---->
         <activity
             android:name="de.blinkt.openvpn.activities.LaunchActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent">
+            android:theme="@android:style/Theme.Translucent"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <!--<category android:name="android.intent.category.LEANBACK_LAUNCHER"/>-->
+                <!--<category android:name="android.intent.category.BROWSABLE"/>-->
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>

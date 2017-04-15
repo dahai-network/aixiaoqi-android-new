@@ -10,7 +10,7 @@
     <string name="cancel">取消</string>
     <string name="balance_rechange">账户余额不足</string>
     <string name="rechange">去充值</string>
-
+    <string name="call_type">爱小器通话</string>
     <string name="search">搜索</string>
     <string name="no_data_show">---</string>
     <string name="null_verification">请输入验证码</string>
@@ -461,10 +461,10 @@
     <string name="t9_7">7\n<font size='10'>PQRS</font></string>
     <string name="t9_8">8\n<font size='10'>TUV</font></string>
     <string name="t9_9">9\n<font size='10'>WXYZ</font></string>
-    <string name="t9_10">*\n<font size='10'>全键盘</font></string>
+    <string name="t9_10">*</string>
     <string name="t9_11">0\n<font size='10'>+</font></string>
-    <string name="t9_12">#\n<font size='10'>粘贴</font></string>
-
+    <string name="t9_12">#</string>
+<string name="key_board">键盘</string>
     <!--绑定充值卡-->
     <string name="bind_recharge_card">绑定充值卡</string>
     <string name="bind_gift_card">绑定礼包卡</string>
@@ -625,6 +625,7 @@
     <string name="china_mobile">中国移动</string>
     <string name="china_unicom">中国联通</string>
     <string name="device_name">设备名称</string>
+    <string name="unbind_device_tips">请先绑定爱小器智能通讯硬件</string>
 
     <!--详细界面的标题-->
     <string-array name="detail_titles">
@@ -636,4 +637,6 @@
 
 
     <string name="tip_activate">将国际卡插到智能硬件后，请保持APP与智能硬件连接，然后选择套餐生效时间，再确定激活。</string>
+    <string name="un_connect_tip">未连上设备，请检查周围是否有设备</string>
+    <string name="device_no_insert_tips">设备未插入电话卡或者插入的卡无效</string>
 </resources>
