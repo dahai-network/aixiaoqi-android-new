@@ -4,7 +4,6 @@ package de.blinkt.openvpn.fragments;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -142,18 +142,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	}
 
 	@Override
-	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		initSet();
-	}
-
-	private void initSet() {
-		Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).placeholder(R.drawable.default_head).error(R.drawable.default_head).
-				transform(new GlideCircleTransform(getActivity())).into(headImageView);
-
-	}
-
-	@Override
 	public void onResume() {
 		super.onResume();
 		//获取数据，每次都重新获取一次以保持正确性。
@@ -209,8 +197,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 		title.setTextTitle(getString(R.string.personal_center));
 		if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.NICK_NAME)))
 			accountNameTextView.setText(SharedUtils.getInstance().readString(Constant.NICK_NAME));
-		Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).
-				transform(new GlideCircleTransform(getActivity())).into(headImageView);
+		Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).centerCrop().placeholder(R.drawable.default_head)
+				.transform(new GlideCircleTransform(ICSOpenVPNApplication.getContext(), 2, ICSOpenVPNApplication.getContext().getResources().getColor(R.color.white)))
+				.diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headImageView);
 		accountPhoneTextView.setText(SharedUtils.getInstance().readString(Constant.USER_NAME));
 		BalanceHttp http = new BalanceHttp(this, HttpConfigUrl.COMTYPE_GET_BALANCE);
 		new Thread(http).start();

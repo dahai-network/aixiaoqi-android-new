@@ -20,8 +20,6 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <item name="android:listDivider">@drawable/index_divider</item>
     </style>
 
     <style name="top_category_scroll_view_item_text">
@@ -89,9 +87,9 @@
         <item name="android:gravity">center_vertical|center_horizontal</item>
     </style>
 
-    <style name="blinkt.dialog" parent="android:Theme.DeviceDefault.Light.Dialog" />
+    <style name="blinkt.dialog" parent="android:Theme.DeviceDefault.Light.Dialog"/>
 
-    <style name="Theme.CreateShortCut" parent="android:Theme.Holo.DialogWhenLarge" />
+    <style name="Theme.CreateShortCut" parent="android:Theme.Holo.DialogWhenLarge"/>
 
 
     <style name="blinkt.translucent" parent="blinkt.dialog">
@@ -149,6 +147,13 @@
         <item name="android:layout_height">1px</item>
         <item name="android:background">@color/colorf_F5F5F5</item>
     </style>
+
+    <style name="vertical_line_view_F5F5F5">
+        <item name="android:layout_width">1px</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/black</item>
+    </style>
+
     <style name="vertical_dotted_line">
         <item name="android:layout_width">2px</item>
         <item name="android:layout_height">wrap_content</item>
@@ -206,9 +211,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="chart_radiobutton">
         <item name="android:layout_width">0dp</item>

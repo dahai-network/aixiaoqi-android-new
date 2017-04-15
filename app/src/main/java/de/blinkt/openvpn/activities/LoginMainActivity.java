@@ -1,6 +1,5 @@
 package de.blinkt.openvpn.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +14,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -38,7 +36,6 @@ import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.CheckUtil;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.database.BlackListDBHelp;
-import de.blinkt.openvpn.http.BlackListAddHttp;
 import de.blinkt.openvpn.http.BlackListGetHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.GetBasicConfigHttp;
@@ -102,7 +99,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		createViewInit();
 		setLoginData();
 		String otherDeviceLogin = getIntent().getStringExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN);
-		if (!TextUtils.isEmpty(otherDeviceLogin)&&!sharedUtils.readBoolean(Constant.ISFIRSTIN,true)) {
+		if (!TextUtils.isEmpty(otherDeviceLogin) && !sharedUtils.readBoolean(Constant.ISFIRSTIN, true)) {
 			CommonTools.showShortToast(this, otherDeviceLogin);
 		}
 	}
@@ -168,8 +165,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 						login_btn.setEnabled(true);
 						login_btn.setBackgroundResource(R.drawable.green_btn_click);
 						login_btn.setTextColor(getResources().getColor(R.color.white));
-					}
-					else {
+					} else {
 						login_btn.setEnabled(false);
 						login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
 						login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
@@ -216,8 +212,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 						login_btn.setEnabled(true);
 						login_btn.setBackgroundResource(R.drawable.green_btn_click);
 						login_btn.setTextColor(getResources().getColor(R.color.white));
-					}
-					else {
+					} else {
 						login_btn.setEnabled(false);
 						login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
 						login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
@@ -257,7 +252,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				startActivity(toRegistIntent);
 				break;
 			case R.id.login_btn:
-				if(pwdEdit!=null) {
+				if (pwdEdit != null) {
 					if (CheckUtil.isPassWordNo(pwdEdit.getText().toString(), LoginMainActivity.this)) {
 						showProgress(R.string.login_loading);
 						createHttpRequest(HttpConfigUrl.COMTYPE_LOGIN, usernameEdit.getText().toString(), pwdEdit.getText().toString());
@@ -357,9 +352,10 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			if (loginHttp.getStatus() == 1) {
 				LoginEntity entity = loginHttp.getLoginModel();
 
-				if(entity!=null) {
+				if (entity != null) {
 					sharedUtils.writeString(Constant.USER_NAME, entity.getTel());
-					sharedUtils.writeString(Constant.PASSWORD, pwdEdit.getText().toString());
+					if (pwdEdit != null)
+						sharedUtils.writeString(Constant.PASSWORD, pwdEdit.getText().toString());
 					sharedUtils.writeString(Constant.TOKEN, entity.getToken());
 					sharedUtils.writeString(Constant.USER_HEAD, entity.getUserHead());
 					sharedUtils.writeString(Constant.NICK_NAME, entity.getNickName());
@@ -374,7 +370,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 					sharedUtils.writeInt(Constant.QQ_REMIND, entity.getNotificaQQ());
 					sharedUtils.writeInt(Constant.LIFT_WRIST, entity.getNotificaQQ());
 					sharedUtils.writeBoolean(Constant.ISFIRSTIN, false);
-					Log.e("token","token="+entity.getToken());
+					Log.e("token", "token=" + entity.getToken());
 					if (!TextUtils.isEmpty(entity.getBirthday())) {
 						sharedUtils.writeString(Constant.BRITHDAY, DateUtils.getDateToString(Long.parseLong(entity.getBirthday()) * 1000).substring(0, 7).replace("-", "年"));
 					}
@@ -419,11 +415,11 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				sharedUtils.writeString(IntentPutKeyConstant.BEFORE_GOING_ABROAD_TUTORIAL_URL, basicConfigEntity.getBeforeGoingAbroadTutorialUrl());
 				sharedUtils.writeString(IntentPutKeyConstant.PAYMENT_OF_TERMS, basicConfigEntity.getPaymentOfTerms());
 			}
-		}else if(cmdType == HttpConfigUrl.COMTYPE_BLACK_LIST_GET){
-			if(object.getStatus()==1){
-				BlackListGetHttp blackListGetHttp=(BlackListGetHttp)object;
-				if(blackListGetHttp.getBlackListEntities().size()!=0){
-					BlackListDBHelp blackListDBHelp=new BlackListDBHelp(this);
+		} else if (cmdType == HttpConfigUrl.COMTYPE_BLACK_LIST_GET) {
+			if (object.getStatus() == 1) {
+				BlackListGetHttp blackListGetHttp = (BlackListGetHttp) object;
+				if (blackListGetHttp.getBlackListEntities().size() != 0) {
+					BlackListDBHelp blackListDBHelp = new BlackListDBHelp(this);
 					blackListDBHelp.deleteAllDefriend();
 					blackListDBHelp.insertDefriendList(blackListGetHttp.getBlackListEntities());
 				}

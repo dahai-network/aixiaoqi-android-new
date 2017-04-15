@@ -20,9 +20,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
@@ -34,10 +34,13 @@ import com.aixiaoqi.socket.SocketConstant;
 import com.aixiaoqi.socket.TestProvider;
 import com.aixiaoqi.socket.TlvAnalyticalUtils;
 import com.umeng.analytics.MobclickAgent;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
@@ -83,69 +86,69 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 
 public class ProMainActivity extends BaseNetActivity implements View.OnClickListener, View.OnLongClickListener {
 
-    public static ProMainActivity instance = null;
-    @BindView(R.id.mViewPager)
-    CustomViewPager mViewPager;
-    @BindView(R.id.callImageView)
-    ImageView callImageView;
-    @BindView(R.id.rb_index)
-    MyRadioButton rbIndex;
-    @BindView(R.id.rb_phone)
-    MyRadioButton rbPhone;
-    @BindView(R.id.rb_address)
-    MyRadioButton rbAddress;
-    @BindView(R.id.rb_personal)
-    MyRadioButton rbPersonal;
-    /**
-     * 拨打电话按钮
-     */
-    public static RelativeLayout phone_linearLayout;
-    public static TopProgressView topProgressView;
-    public ImageView iv_putaway;
-    //判断是否展开了键盘
-    public static boolean isDeploy = true;
-    private ReceiveBLEMoveReceiver bleMoveReceiver;
-    private UartService mService = null;
-    //进入主页后打开蓝牙设备搜索绑定过的设备
-    private BluetoothAdapter mBluetoothAdapter;
-    private int REQUEST_ENABLE_BT = 2;
-    private String deviceAddress = "";
-    ArrayList<Fragment> list = new ArrayList<>();
-    CellPhoneFragment cellPhoneFragment;
-    AccountFragment accountFragment;
-    AddressListFragment addressListFragment;
-    SportFragment sportFragment;
-    IndexFragment indexFragment;
-    // public static LinearLayout bottom_bar_linearLayout;
+	public static ProMainActivity instance = null;
+	@BindView(R.id.mViewPager)
+	CustomViewPager mViewPager;
+	@BindView(R.id.callImageView)
+	ImageView callImageView;
+	@BindView(R.id.rb_index)
+	MyRadioButton rbIndex;
+	@BindView(R.id.rb_phone)
+	MyRadioButton rbPhone;
+	@BindView(R.id.rb_address)
+	MyRadioButton rbAddress;
+	@BindView(R.id.rb_personal)
+	MyRadioButton rbPersonal;
+	/**
+	 * 拨打电话按钮
+	 */
+	public static RelativeLayout phone_linearLayout;
+	public static TopProgressView topProgressView;
+	public ImageView iv_putaway;
+	//判断是否展开了键盘
+	public static boolean isDeploy = true;
+	private ReceiveBLEMoveReceiver bleMoveReceiver;
+	private UartService mService = null;
+	//进入主页后打开蓝牙设备搜索绑定过的设备
+	private BluetoothAdapter mBluetoothAdapter;
+	private int REQUEST_ENABLE_BT = 2;
+	private String deviceAddress = "";
+	ArrayList<Fragment> list = new ArrayList<>();
+	CellPhoneFragment cellPhoneFragment;
+	AccountFragment accountFragment;
+	AddressListFragment addressListFragment;
+	SportFragment sportFragment;
+	IndexFragment indexFragment;
+	// public static LinearLayout bottom_bar_linearLayout;
 
-    public static RadioGroup radiogroup;
-    //重连时间
-    private int RECONNECT_TIME = 180000;
-    SocketConnection socketUdpConnection;
-    SocketConnection socketTcpConnection;
-    public static String STOP_CELL_PHONE_SERVICE = "stopservice";
+	public static RadioGroup radiogroup;
+	//重连时间
+	private int RECONNECT_TIME = 180000;
+	SocketConnection socketUdpConnection;
+	SocketConnection socketTcpConnection;
+	public static String STOP_CELL_PHONE_SERVICE = "stopservice";
 
-    @Override
-    public Object getLastCustomNonConfigurationInstance() {
-        return super.getLastCustomNonConfigurationInstance();
-    }
+	@Override
+	public Object getLastCustomNonConfigurationInstance() {
+		return super.getLastCustomNonConfigurationInstance();
+	}
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder rawBinder) {
-            mService = ((UartService.LocalBinder) rawBinder).getService();
-            //存在Application供全局使用
-            ICSOpenVPNApplication.uartService = mService;
-            d("onServiceConnected mService= " + mService);
-            if (!mService.initialize()) {
-                d("Unable to initialize Bluetooth");
-                finish();
-            }
-        }
+	private ServiceConnection mServiceConnection = new ServiceConnection() {
+		public void onServiceConnected(ComponentName className, IBinder rawBinder) {
+			mService = ((UartService.LocalBinder) rawBinder).getService();
+			//存在Application供全局使用
+			ICSOpenVPNApplication.uartService = mService;
+			d("onServiceConnected mService= " + mService);
+			if (!mService.initialize()) {
+				d("Unable to initialize Bluetooth");
+				finish();
+			}
+		}
 
-        public void onServiceDisconnected(ComponentName classname) {
-            mService = null;
-        }
-    };
+		public void onServiceDisconnected(ComponentName classname) {
+			mService = null;
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -191,144 +194,147 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 
-    private void searchBLE() {
-        /**
-         * 搜索蓝牙步骤：
-         * 1.通过接口询问是否绑定过蓝牙设备
-         * 2.如果有绑定过蓝牙设备，则询问打开蓝牙
-         * 3.打开后，则通过线程做扫描操作。
-         * 4.扫描到设备则连接上，没扫描到十秒后自动断开。关闭所有与之相关的东西
-         */
-        GetBindDeviceHttp http = new GetBindDeviceHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
-        new Thread(http).start();
-    }
+	private void searchBLE() {
+		/**
+		 * 搜索蓝牙步骤：
+		 * 1.通过接口询问是否绑定过蓝牙设备
+		 * 2.如果有绑定过蓝牙设备，则询问打开蓝牙
+		 * 3.打开后，则通过线程做扫描操作。
+		 * 4.扫描到设备则连接上，没扫描到十秒后自动断开。关闭所有与之相关的东西
+		 */
+		GetBindDeviceHttp http = new GetBindDeviceHttp(ProMainActivity.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
+		new Thread(http).start();
+	}
 
-    public void initServices() {
-        if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
-            i("开启UartService");
-            Intent bindIntent = new Intent(this, UartService.class);
-            bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-        }
-        //启动常驻服务
-        if (!ICSOpenVPNApplication.getInstance().isServiceRunning(GrayService.class.getName())) {
-            startService(new Intent(this, GrayService.class));
-        }
-    }
+	public void initServices() {
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
+			i("开启UartService");
+			try {
+				Intent bindIntent = new Intent(this, UartService.class);
+				bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		//启动常驻服务
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(GrayService.class.getName())) {
+			startService(new Intent(this, GrayService.class));
+		}
+	}
 
-    private void startSocketService() {
-        if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
-            Intent receiveSdkIntent = new Intent(this, ReceiveSocketService.class);
-            bindService(receiveSdkIntent, socketTcpConnection, Context.BIND_AUTO_CREATE);
-        }
-    }
+	private void startSocketService() {
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+			Intent receiveSdkIntent = new Intent(this, ReceiveSocketService.class);
+			bindService(receiveSdkIntent, socketTcpConnection, Context.BIND_AUTO_CREATE);
+		}
+	}
 
-    private void startDataframService() {
-        if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
-            Intent receiveSdkIntent = new Intent(this, ReceiveDataframSocketService.class);
-            bindService(receiveSdkIntent, socketUdpConnection, Context.BIND_AUTO_CREATE);
-        }
+	private void startDataframService() {
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
+			Intent receiveSdkIntent = new Intent(this, ReceiveDataframSocketService.class);
+			bindService(receiveSdkIntent, socketUdpConnection, Context.BIND_AUTO_CREATE);
+		}
 
 	}
 
 
-
-    private void findViewById() {
-        //主界面下栏
-        // bottom_bar_linearLayout = (LinearLayout) findViewById(R.id.bottom_bar_linearLayout);
-        radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
-        //拨打电话下栏
-        phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
-        //隐藏拨号界面控件
-        iv_putaway = (ImageView) findViewById(R.id.iv_putaway);
-        topProgressView = (TopProgressView) findViewById(R.id.topProgressView);
-    }
-
-
-    private static IntentFilter makeGattUpdateIntentFilter() {
-        final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
-        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
-        intentFilter.addAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
-        intentFilter.addAction(UartService.FINDED_SERVICE);
-        return intentFilter;
-    }
-
-    private static IntentFilter screenoffIntentFilter() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-        return intentFilter;
-    }
-
-    private void addListener() {
-        callImageView.setOnClickListener(this);
-        iv_putaway.setOnClickListener(this);
-    }
+	private void findViewById() {
+		//主界面下栏
+		// bottom_bar_linearLayout = (LinearLayout) findViewById(R.id.bottom_bar_linearLayout);
+		radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
+		//拨打电话下栏
+		phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
+		//隐藏拨号界面控件
+		iv_putaway = (ImageView) findViewById(R.id.iv_putaway);
+		topProgressView = (TopProgressView) findViewById(R.id.topProgressView);
+	}
 
 
-    private void initFragment() {
-        if (phoneFragment == null) {
-            phoneFragment = Fragment_Phone.newInstance();
-        }
-        if (indexFragment == null) {
-            indexFragment = new IndexFragment();
-        }
-        if (cellPhoneFragment == null) {
-            cellPhoneFragment = new CellPhoneFragment();
-            cellPhoneFragment.setFragment_Phone(phoneFragment);
-        }
-        if (addressListFragment == null) {
-            addressListFragment = new AddressListFragment();
-        }
-        if (accountFragment == null) {
-            accountFragment = new AccountFragment();
-        }
-        if (list.size() < 5) {
-            list.clear();
-            list.add(indexFragment);
-            list.add(cellPhoneFragment);
-            list.add(addressListFragment);
-            list.add(accountFragment);
-            FragmentAdapter adapter = new FragmentAdapter(
-                    getSupportFragmentManager(), list);
-            mViewPager.setAdapter(adapter);
-            mViewPager.setOffscreenPageLimit(4);
-        }
+	private static IntentFilter makeGattUpdateIntentFilter() {
+		final IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
+		intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
+		intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
+		intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
+		intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+		intentFilter.addAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
+		intentFilter.addAction(UartService.FINDED_SERVICE);
+		return intentFilter;
+	}
 
-    }
+	private static IntentFilter screenoffIntentFilter() {
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+		return intentFilter;
+	}
 
-    Fragment_Phone phoneFragment;
+	private void addListener() {
+		callImageView.setOnClickListener(this);
+		iv_putaway.setOnClickListener(this);
+	}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ENABLE_BT) {
-            if (resultCode == Activity.RESULT_OK) {
-                CommonTools.showShortToast(this, "蓝牙已启动");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final BluetoothManager bluetoothManager =
-                                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-                        mBluetoothAdapter = bluetoothManager.getAdapter();
-                        if (mBluetoothAdapter == null) {
-                            return;
-                        }
-                        while (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED) {
-                            connDeviceFiveSecond();
-                            CommonTools.delayTime(RECONNECT_TIME);
-                        }
 
-                    }
-                }).start();
-            } else {
-                CommonTools.showShortToast(this, "蓝牙未打开");
-                sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
-            }
-        }
-    }
+	private void initFragment() {
+		if (phoneFragment == null) {
+			phoneFragment = Fragment_Phone.newInstance();
+		}
+		if (indexFragment == null) {
+			indexFragment = new IndexFragment();
+		}
+		if (cellPhoneFragment == null) {
+			cellPhoneFragment = new CellPhoneFragment();
+			cellPhoneFragment.setFragment_Phone(phoneFragment);
+		}
+		if (addressListFragment == null) {
+			addressListFragment = new AddressListFragment();
+		}
+		if (accountFragment == null) {
+			accountFragment = new AccountFragment();
+		}
+		if (list.size() < 5) {
+			list.clear();
+			list.add(indexFragment);
+			list.add(cellPhoneFragment);
+			list.add(addressListFragment);
+			list.add(accountFragment);
+			FragmentAdapter adapter = new FragmentAdapter(
+					getSupportFragmentManager(), list);
+			mViewPager.setAdapter(adapter);
+			mViewPager.setOffscreenPageLimit(4);
+		}
+
+	}
+
+	Fragment_Phone phoneFragment;
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_ENABLE_BT) {
+			if (resultCode == Activity.RESULT_OK) {
+				CommonTools.showShortToast(this, "蓝牙已启动");
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						final BluetoothManager bluetoothManager =
+								(BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+						mBluetoothAdapter = bluetoothManager.getAdapter();
+						if (mBluetoothAdapter == null) {
+							return;
+						}
+						while (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED) {
+							connDeviceFiveSecond();
+							CommonTools.delayTime(RECONNECT_TIME);
+						}
+
+					}
+				}).start();
+			} else {
+				CommonTools.showShortToast(this, "蓝牙未打开");
+				sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
+			}
+		}
+	}
 
 	private Handler stopHandler = null;
 
@@ -367,167 +373,167 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		});
 	}
 
-    private int clickCount = 0;
-    private int scrollCount = 0;
+	private int clickCount = 0;
+	private int scrollCount = 0;
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.phoneLinearLayout:
-                if (CellPhoneFragment.floatingActionButton.getVisibility() != View.VISIBLE && phoneFragment.t9dialpadview.getVisibility() != View.VISIBLE) {
-                    if (SmsFragment.editSmsImageView != null) {
-                        if (SmsFragment.editSmsImageView.getVisibility() != View.VISIBLE) {
-                            ViewUtil.hideView(phoneFragment.t9dialpadview);
-                            CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-                break;
-            //拨打电话
-            case R.id.callImageView:
-                CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
-                ViewUtil.hideView(phoneFragment.t9dialpadview);
-                hidePhoneBottomBar();
-                if (phoneFragment != null) {
-                    //友盟方法统计
-                    MobclickAgent.onEvent(this, CLICKCALLPHONE);
-                    phoneFragment.phonecallClicked();
-                }
-                break;
-            case R.id.iv_putaway:
-                CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
-                ViewUtil.hideView(phoneFragment.t9dialpadview);
-                hidePhoneBottomBar();
-                break;
-        }
+	@Override
+	public void onClick(View v) {
+		int id = v.getId();
+		switch (id) {
+			case R.id.phoneLinearLayout:
+				if (CellPhoneFragment.floatingActionButton.getVisibility() != View.VISIBLE && phoneFragment.t9dialpadview.getVisibility() != View.VISIBLE) {
+					if (SmsFragment.editSmsImageView != null) {
+						if (SmsFragment.editSmsImageView.getVisibility() != View.VISIBLE) {
+							ViewUtil.hideView(phoneFragment.t9dialpadview);
+							CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
+						}
+					}
+				}
+				break;
+			//拨打电话
+			case R.id.callImageView:
+				CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
+				ViewUtil.hideView(phoneFragment.t9dialpadview);
+				hidePhoneBottomBar();
+				if (phoneFragment != null) {
+					//友盟方法统计
+					MobclickAgent.onEvent(this, CLICKCALLPHONE);
+					phoneFragment.phonecallClicked();
+				}
+				break;
+			case R.id.iv_putaway:
+				CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
+				ViewUtil.hideView(phoneFragment.t9dialpadview);
+				hidePhoneBottomBar();
+				break;
+		}
 
-    }
+	}
 
-    Intent intentCallPhone;
+	Intent intentCallPhone;
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!ICSOpenVPNApplication.getInstance().isServiceRunning(CallPhoneService.class.getName())) {
-            intentCallPhone = new Intent(this, CallPhoneService.class);
-            startService(intentCallPhone);
-        }
-    }
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(CallPhoneService.class.getName())) {
+			intentCallPhone = new Intent(this, CallPhoneService.class);
+			startService(intentCallPhone);
+		}
+	}
 
-    public void hidePhoneBottomBar() {
-        ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
-        ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
+	public void hidePhoneBottomBar() {
+		ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
+		ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
 
-    }
+	}
 
-    public int position;
+	public int position;
 
-    public int getPosition() {
-        return position;
-    }
+	public int getPosition() {
+		return position;
+	}
 
-    public void setPosition(int position) {
-        this.position = position;
-    }
+	public void setPosition(int position) {
+		this.position = position;
+	}
 
-    private void setListener() {
+	private void setListener() {
 
-        mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                //对切换的状态进行保存
-                setPosition(position);
-                topProgressView.setWhiteBack(false);
-                topProgressView.invalidate();
-                if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-                    phoneFragment.t9dialpadview.clearT9Input();
-                }
+		mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				//对切换的状态进行保存
+				setPosition(position);
+				topProgressView.setWhiteBack(false);
+				topProgressView.invalidate();
+				if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
+					phoneFragment.t9dialpadview.clearT9Input();
+				}
 
-                hidePhoneBottomBar();
-                switch (position) {
-                    case 0:
-                        radiogroup.check(R.id.rb_index);
-                        break;
-                    case 1:
-                        radiogroup.check(R.id.rb_phone);
+				hidePhoneBottomBar();
+				switch (position) {
+					case 0:
+						radiogroup.check(R.id.rb_index);
+						break;
+					case 1:
+						radiogroup.check(R.id.rb_phone);
 
-                        if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-                            //隐藏键盘，清理数据
+						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
+							//隐藏键盘，清理数据
 
-                        } else {
-                            if (phoneFragment == null) {
-                                phoneFragment = Fragment_Phone.newInstance();
-                            }
-                        }
-                        if (clickCount == 0 && scrollCount == 0) {
-                            scrollCount++;
-                        }
-                        if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-                            //隐藏键盘
-                            ViewUtil.hideView(phoneFragment.t9dialpadview);
-                        }
-                        break;
-                    case 2:
-                        radiogroup.check(R.id.rb_address);
-                        // MobclickAgent.onEvent(this, CLICKHOMECONTACT);
-                        break;
-                    case 3:
-                        topProgressView.setWhiteBack(true);
-                        topProgressView.invalidate();
-                        radiogroup.check(R.id.rb_personal);
-                        //  MobclickAgent.onEvent(this, CLICKHOMECONTACT);
-                        break;
-
-
-                }
-            }
-
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
-        });
-
-    }
-
-    private class MyRadioGroupListener implements RadioGroup.OnCheckedChangeListener {
-        @Override
-        public void onCheckedChanged(RadioGroup group, int checkedId) {
-            switch (checkedId) {
-                case R.id.rb_index:
-                    mViewPager.setCurrentItem(0);
-                    break;
-                case R.id.rb_phone:
-                    mViewPager.setCurrentItem(1);
-                    break;
-                case R.id.rb_address:
-                    mViewPager.setCurrentItem(2);
-                    break;
-                case R.id.rb_personal:
-                    mViewPager.setCurrentItem(3);
-                    break;
-            }
-        }
-    }
+						} else {
+							if (phoneFragment == null) {
+								phoneFragment = Fragment_Phone.newInstance();
+							}
+						}
+						if (clickCount == 0 && scrollCount == 0) {
+							scrollCount++;
+						}
+						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
+							//隐藏键盘
+							ViewUtil.hideView(phoneFragment.t9dialpadview);
+						}
+						break;
+					case 2:
+						radiogroup.check(R.id.rb_address);
+						// MobclickAgent.onEvent(this, CLICKHOMECONTACT);
+						break;
+					case 3:
+						topProgressView.setWhiteBack(true);
+						topProgressView.invalidate();
+						radiogroup.check(R.id.rb_personal);
+						//  MobclickAgent.onEvent(this, CLICKHOMECONTACT);
+						break;
 
 
-    @Override
-    protected void onDestroy() {
-        LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
-        LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
-        unregisterReceiver(screenoffReceive);
-        bleMoveReceiver = null;
-        //bottom_bar_linearLayout = null;
-        radiogroup = null;
-        screenoffReceive = null;
-        if (intentCallPhone != null)
-            stopService(intentCallPhone);
-        //关闭服务并设置为null
+				}
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+			}
+		});
+
+	}
+
+	private class MyRadioGroupListener implements RadioGroup.OnCheckedChangeListener {
+		@Override
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			switch (checkedId) {
+				case R.id.rb_index:
+					mViewPager.setCurrentItem(0);
+					break;
+				case R.id.rb_phone:
+					mViewPager.setCurrentItem(1);
+					break;
+				case R.id.rb_address:
+					mViewPager.setCurrentItem(2);
+					break;
+				case R.id.rb_personal:
+					mViewPager.setCurrentItem(3);
+					break;
+			}
+		}
+	}
+
+
+	@Override
+	protected void onDestroy() {
+		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
+		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
+		unregisterReceiver(screenoffReceive);
+		bleMoveReceiver = null;
+		//bottom_bar_linearLayout = null;
+		radiogroup = null;
+		screenoffReceive = null;
+		if (intentCallPhone != null)
+			stopService(intentCallPhone);
+		//关闭服务并设置为null
 //		if (isDfuServiceRunning()) {
 //			stopService(new Intent(this, DfuService.class));
 //		}
@@ -792,7 +798,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				topProgressView.setProgress(percentInt);
 				break;
 			default:
-//						if (entity .getRigsterSimStatue() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
+//						if (entity 355.getRigsterSimStatue() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
 //							sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
 //							CommonTools.showShortToast(this, getString(R.string.regist_fail_tips));
 //						}

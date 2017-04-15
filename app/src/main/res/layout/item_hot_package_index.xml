@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/packageLinearLayout"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@drawable/call_phone_selector"
-              android:gravity="center"
-              android:orientation="vertical"
-              android:paddingBottom="15dp"
-              android:paddingTop="15dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/packageRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/call_phone_selector"
+                android:orientation="vertical">
+
 
     <ImageView
         android:id="@+id/hotPackageImageView"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/padding_15dp"
         android:background="@null"
         />
 
@@ -21,6 +20,8 @@
         android:id="@+id/countryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/hotPackageImageView"
+        android:layout_centerHorizontal="true"
         android:textSize="16sp"
         />
 
@@ -28,7 +29,18 @@
         android:id="@+id/descrTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/countryTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/padding_15dp"
         android:textColor="@color/gray_text"
         android:textSize="12sp"
         />
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/leftLineView"
+        android:layout_width="1px"
+        android:layout_alignParentTop="true"
+        android:layout_height="130dp"
+        android:background="@color/colorf_F5F5F5"
+        />
+</RelativeLayout>

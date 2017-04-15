@@ -50,6 +50,7 @@ import de.blinkt.openvpn.model.ProductEntity;
 import de.blinkt.openvpn.views.FullyRecylerView;
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.bannerview.CycleViewPager;
+import de.blinkt.openvpn.views.contact.DividerDecoration;
 
 import static android.view.View.GONE;
 import static de.blinkt.openvpn.constant.HttpConfigUrl.COMTYPE_GET_PRODUCTS;

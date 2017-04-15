@@ -529,7 +529,14 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 			webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		}
 		webSettings.setAllowFileAccess(false);
-		webSettings.setSupportZoom(false);
+		webSettings.setSupportZoom(true);
+		// 设置出现缩放工具
+		webSettings.setBuiltInZoomControls(true);
+		//扩大比例的缩放
+		webSettings.setUseWideViewPort(true);
+		//自适应屏幕
+		webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+		webSettings.setLoadWithOverviewMode(true);
 		//支持android4.0
 		webSettings.setBuiltInZoomControls(true);
 		webSettings.setNeedInitialFocus(false);

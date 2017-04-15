@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +29,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKHOTPACKAGE;
  */
 public class HotPackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+	private int height;
 	private List<HotPackageEntity> data;
 	private Context context = null;
 	private boolean isFromIndex = false;
@@ -83,7 +85,7 @@ public class HotPackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 				Glide.with(context).load(data.get(position).getLogoPic()).transform(new GlideRoundTransform(context)).into(indexHotHolder.hotPackageImageView);
 			else
 				Glide.with(context).load(data.get(position).getLogoPic()).transform(new GlideCircleTransform(context)).into(indexHotHolder.hotPackageImageView);
-			indexHotHolder.packageLinearLayout.setOnClickListener(new View.OnClickListener() {
+			indexHotHolder.packageRelativeLayout.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					//友盟方法统计
@@ -123,14 +125,17 @@ public class HotPackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 		ImageView hotPackageImageView;
 		TextView countryTextView;
 		TextView descrTextView;
-		LinearLayout packageLinearLayout;
+		TextView leftLineView;
+		RelativeLayout packageRelativeLayout;
 
 		public IndexViewHolder(View itemView) {
 			super(itemView);
+			height = itemView.getHeight();
 			hotPackageImageView = (ImageView) itemView.findViewById(R.id.hotPackageImageView);
 			countryTextView = (TextView) itemView.findViewById(R.id.countryTextView);
 			descrTextView = (TextView) itemView.findViewById(R.id.descrTextView);
-			packageLinearLayout = (LinearLayout) itemView.findViewById(R.id.packageLinearLayout);
+			packageRelativeLayout = (RelativeLayout) itemView.findViewById(R.id.packageRelativeLayout);
+			leftLineView = (TextView) itemView.findViewById(R.id.leftLineView);
 		}
 	}
 }
