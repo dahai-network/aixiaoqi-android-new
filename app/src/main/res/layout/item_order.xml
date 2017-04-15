@@ -40,7 +40,9 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:text="已激活"
-        android:textColor="@color/order_item"
+        android:padding="@dimen/padding_5dp"
+        android:background="@drawable/circle_light_gray_blue_bord_selector"
+        android:textColor="@drawable/blue_btn_click_color_selecor"
         android:textSize="14sp"
         />
 

@@ -86,6 +86,24 @@ public class BoughtPackageEntity implements Serializable {
 		private boolean PackageIsCategoryFlow;
 		private boolean PackageIsCategoryCall;
 		private boolean PackageIsCategoryDualSimStandby;
+		private int ExpireDaysInt;
+		private boolean PackageIsSupport4G;
+
+		public boolean isPackageIsSupport4G() {
+			return PackageIsSupport4G;
+		}
+
+		public void setPackageIsSupport4G(boolean packageIsSupport4G) {
+			PackageIsSupport4G = packageIsSupport4G;
+		}
+
+		public int getExpireDaysInt() {
+			return ExpireDaysInt;
+		}
+
+		public void setExpireDaysInt(int expireDaysInt) {
+			ExpireDaysInt = expireDaysInt;
+		}
 
 		public boolean isPackageIsCategoryKingCard() {
 			return PackageIsCategoryKingCard;
