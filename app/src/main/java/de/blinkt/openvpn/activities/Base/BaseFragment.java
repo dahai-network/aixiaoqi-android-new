@@ -22,7 +22,6 @@ import static android.content.Context.MODE_PRIVATE;
 public abstract class BaseFragment extends Fragment {
 
     protected boolean isVisible;
-    SharedPreferences pref;
 
 
     /**
@@ -48,7 +47,6 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void lazyLoad();
 
-    private String detail1;
 
     protected void onInvisible() {
     }

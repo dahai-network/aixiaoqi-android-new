@@ -196,8 +196,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
             });
 
         }
-
-
     }
 
     public void clearInputEdit() {
@@ -211,12 +209,12 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     }
 
     public void hidePhoneBottomBar() {
-        ProMainActivity.bottom_bar_linearLayout.setVisibility(View.VISIBLE);
+        ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
         ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
     }
 
     public void showPhoneBottomBar() {
-        ProMainActivity.bottom_bar_linearLayout.setVisibility(View.GONE);
+        ProMainActivity.radiogroup.setVisibility(View.GONE);
         ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
     }
 

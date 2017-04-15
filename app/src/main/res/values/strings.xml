@@ -170,7 +170,7 @@
     <string name="wait_activite">稍后激活</string>
     <string name="aboard_how_to_use">出国后如何使用</string>
     <string name="inland_reset">回国后恢复设置</string>
-<string name="message_history">短信记录</string>
+    <string name="message_history">短信记录</string>
     <string name="message">短信</string>
     <string name="message_record">短信记录</string>
     <string name="active">活动</string>
@@ -195,7 +195,7 @@
     <string name="upgrade">升级</string>
     <string name="expireday">有效天数：</string>
     <string name="product_characteristics">产品特色</string>
-    <string name="package_detail">套餐详情</string>
+    <string name="package_detail">通话套餐详情</string>
     <string name="payment_term">支付条款</string>
     <string name="unset_name">未设置名字</string>
     <string name="how_to_use">使用简介</string>
@@ -632,6 +632,7 @@
         <item>产品特色</item>
         <item>支付条款</item>
     </string-array>
+
 
 
     <string name="tip_activate">将国际卡插到智能硬件后，请保持APP与智能硬件连接，然后选择套餐生效时间，再确定激活。</string>

@@ -31,6 +31,7 @@ public class MyRadioButton extends android.support.v7.widget.AppCompatRadioButto
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MyRadioButton);
 
         int n = a.getIndexCount();
+
         for (int i = 0; i < n; i++) {
             int attr = a.getIndex(i);
             switch (attr) {
