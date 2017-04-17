@@ -1,6 +1,7 @@
 package cn.com.johnson.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -28,9 +29,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.BoughtPackageEntity;
+import de.blinkt.openvpn.activities.ActivateActivity;
 import de.blinkt.openvpn.activities.CallTimeOrderDetailActitivy;
 import de.blinkt.openvpn.activities.KingCardDetailActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
+import de.blinkt.openvpn.activities.OutsideActivity;
+import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKINDEXORDER;
 
@@ -100,21 +104,30 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		Glide.with(context).load(bean.getLogoPic()).into(normalHolder.countryImageView);
 		normalHolder.dateTextView.setText(bean.getExpireDays());
 		//如果订单状态是正在使用，那么就计算时间
-		normalHolder.stateTextView.setVisibility(View.GONE);
+
 		if (bean.getOrderStatus() == 0) {
 			normalHolder.stateTextView.setText("未激活");
-			normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.activite_color_selector));
+//			normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.activite_color_selector));
 		} else if (bean.getOrderStatus() == 2) {
 			normalHolder.stateTextView.setText("已过期");
+			normalHolder.stateTextView.setVisibility(View.GONE);
 		} else if (bean.getOrderStatus() == 3) {
 			normalHolder.stateTextView.setText("已取消");
+			normalHolder.stateTextView.setVisibility(View.GONE);
 		} else if (bean.getOrderStatus() == 4) {
 			normalHolder.stateTextView.setText("激活失败");
+			normalHolder.stateTextView.setVisibility(View.GONE);
 			normalHolder.stateTextView.setTextColor(ContextCompat.getColor(context, R.color.order_item));
 		} else {
 			normalHolder.stateTextView.setText("已激活");
-			normalHolder.stateTextView.setTextColor(ContextCompat.getColor(context, R.color.select_contacct));
+			normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.gray_background_text_selector));
+			normalHolder.stateTextView.setBackgroundResource(R.drawable.circle_light_gray_selector);
+			if(1==bean.getPackageCategory()){
+				normalHolder.stateTextView.setVisibility(View.GONE);
 
+			}else{
+				normalHolder.stateTextView.setVisibility(View.VISIBLE);
+			}
 		}
 		//判断layout，如果是订单列表layout则需要
 		setSpan(normalHolder.priceTextView, position);
@@ -160,12 +173,25 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		}
 
 		//item点击事件
-		@OnClick(R.id.rootLinearLayout)
+		@OnClick({R.id.rootLinearLayout,R.id.stateTextView})
 		public void onClick(View view) {
 			//友盟方法统计
-			MobclickAgent.onEvent(context, CLICKINDEXORDER);
-			clickPosition = getPosition() - 1;
-			MyOrderDetailActivity.launch(context, data.get(clickPosition).getOrderID(),0);
+			switch (view.getId()) {
+				case R.id.rootLinearLayout:
+					MobclickAgent.onEvent(context, CLICKINDEXORDER);
+					clickPosition = getPosition() - 1;
+					MyOrderDetailActivity.launch(context, data.get(clickPosition).getOrderID(), 0);
+					break;
+				case R.id.stateTextView:
+					clickPosition = getPosition() - 1;
+					 if(data.get(clickPosition).getOrderStatus()==0){
+						 context.startActivity(new Intent(context, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, data.get(clickPosition).getOrderID()).putExtra("ExpireDaysInt", data.get(clickPosition).getExpireDaysInt())
+								 .putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, data.get(clickPosition).isPackageIsSupport4G()));
+					 }else{
+						 context.startActivity(new Intent(context,OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.AFTER_GOING_ABROAD).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,data.get(clickPosition).isPackageIsSupport4G()));
+					 }
+					break;
+			}
 
 		}
 	}

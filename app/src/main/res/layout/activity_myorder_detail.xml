@@ -345,7 +345,7 @@
                 android:layout_marginLeft="@dimen/padding_20dp"
                 android:layout_marginRight="@dimen/padding_20dp"
                 android:layout_marginTop="@dimen/padding_10dp"
-                android:textColor="@drawable/gray_background_text_selector"
+                android:textColor="@color/gray_background_text_selector"
                 android:background="@drawable/circle_light_gray_selector"
                 android:text="@string/aboard_how_to_use"
                 android:textSize="16dp"/>
@@ -356,7 +356,7 @@
                 android:layout_marginLeft="@dimen/padding_20dp"
                 android:layout_marginRight="@dimen/padding_20dp"
                 android:layout_marginTop="@dimen/padding_10dp"
-                android:textColor="@drawable/gray_background_text_selector"
+                android:textColor="@color/gray_background_text_selector"
                 android:background="@drawable/circle_light_gray_selector"
                 android:text="@string/inland_reset"
                 android:layout_marginBottom="@dimen/padding_20dp"
