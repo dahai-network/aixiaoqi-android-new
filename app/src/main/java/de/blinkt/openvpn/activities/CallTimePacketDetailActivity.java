@@ -33,7 +33,6 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.PagerSlidingTabStripExtends;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.orderStatus;
-
 public class CallTimePacketDetailActivity extends BaseNetActivity implements InterfaceCallback {
     public static CallTimePacketDetailActivity activity;
     @BindView(R.id.retryTextView)
@@ -50,7 +49,6 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
     ImageView iv_purchase;
     @BindView(R.id.tv_expirydate)
     TextView tv_expirydate;
-
     PagerSlidingTabStripExtends myTabs;
     ViewPager vpPager;
     private boolean isCreateView;
@@ -91,14 +89,11 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
                 break;
         }
     }
-
-
     //获取数据
     private void addData() {
         showDefaultProgress();
         createHttpRequest(HttpConfigUrl.COMTYPE_PACKET_DETAIL, getIntent().getStringExtra("id"));
     }
-
     //设置大小字体
     public void setSpan(TextView textview) {
         Spannable WordtoSpan = new SpannableString(textview.getText().toString());
@@ -108,15 +103,12 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
         WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), intLength + 2, textview.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         textview.setText(WordtoSpan, TextView.BufferType.SPANNABLE);
     }
-
     private void createViews() {
         setContentView(R.layout.activity_call_time_packet_detail);
         initView();
         ButterKnife.bind(this);
         initSet();
         isCreateView = true;
-
-
     }
 
     private void initSet() {
@@ -135,13 +127,10 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
             bean = http.getPacketDtailEntity().getList();
             Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getLogoPic()).into(countryImageView);
             packageNameTextView.setText(bean.getPackageName());
-
             priceTextView.setText("￥" + bean.getPrice());
             setSpan(priceTextView);
             Log.d("aixiaoqi__", "rightComplete: " + bean.getFeatures());
             SharedUtils.getInstance().writeString(Constant.CALLTIME_FEATURES_SIGN, bean.getFeatures());
-
-
             tv_expirydate.setText("有效期：" + bean.getExpireDays() + "天");
         } else if (cmdType == HttpConfigUrl.COMTYPE_ACTIVATE_KINGCARD) {
             if (object.getStatus() == 1) {

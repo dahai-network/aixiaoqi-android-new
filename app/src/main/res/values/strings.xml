@@ -7,6 +7,9 @@
     <string name="app">爱小器</string>
 
     <string name="login_loading">登陆中…</string>
+    <string name="login_count">登录账号</string>
+    <string name="login_psw">登录密码</string>
+    <string name="login_check">登录验证码</string>
     <string name="cancel">取消</string>
     <string name="balance_rechange">账户余额不足</string>
     <string name="rechange">去充值</string>

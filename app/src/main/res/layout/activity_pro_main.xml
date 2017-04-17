@@ -24,45 +24,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-                <RadioGroup
-                    android:id="@+id/radiogroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/padding_50dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+            <RadioGroup
+                android:id="@+id/radiogroup"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_50dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                    <de.blinkt.openvpn.views.MyRadioButton
-                        android:id="@+id/rb_index"
-                        style="@style/chart_radiobutton"
-                        android:text="@string/index"
-                        android:textColor="@drawable/main_color_selector"
-                        aixiaoaqi:drawableSize="24dp"
-                        aixiaoaqi:drawableTop="@drawable/index_icon" />
+                <de.blinkt.openvpn.views.MyRadioButton
+                    android:id="@+id/rb_index"
+                    style="@style/chart_radiobutton"
+                    android:text="@string/index"
+                    android:textColor="@drawable/main_color_selector"
+                    aixiaoaqi:drawableSize="22dp"
+                    aixiaoaqi:drawableTop="@drawable/index_icon" />
 
-                    <de.blinkt.openvpn.views.MyRadioButton
-                        android:id="@+id/rb_phone"
-                        style="@style/chart_radiobutton"
-                        android:text="@string/phone"
-                        android:textColor="@drawable/main_color_selector"
-                        aixiaoaqi:drawableSize="24dp"
-                        aixiaoaqi:drawableTop="@drawable/phone_icon" />
+                <de.blinkt.openvpn.views.MyRadioButton
+                    android:id="@+id/rb_phone"
+                    style="@style/chart_radiobutton"
+                    android:text="@string/phone"
+                    android:textColor="@drawable/main_color_selector"
+                    aixiaoaqi:drawableSize="22dp"
+                    aixiaoaqi:drawableTop="@drawable/phone_icon" />
 
-                    <de.blinkt.openvpn.views.MyRadioButton
-                        android:id="@+id/rb_address"
-                        style="@style/chart_radiobutton"
-                        android:text="@string/address_list"
-                        android:textColor="@drawable/main_color_selector"
-                        aixiaoaqi:drawableSize="24dp"
-                        aixiaoaqi:drawableTop="@drawable/address_list_icon" />
+                <de.blinkt.openvpn.views.MyRadioButton
+                    android:id="@+id/rb_address"
+                    style="@style/chart_radiobutton"
+                    android:text="@string/address_list"
+                    android:textColor="@drawable/main_color_selector"
+                    aixiaoaqi:drawableSize="22dp"
+                    aixiaoaqi:drawableTop="@drawable/address_list_icon" />
 
-                    <de.blinkt.openvpn.views.MyRadioButton
-                        android:id="@+id/rb_personal"
-                        style="@style/chart_radiobutton"
-                        android:text="@string/personal_center"
-                        android:textColor="@drawable/main_color_selector"
-                        aixiaoaqi:drawableSize="24dp"
-                        aixiaoaqi:drawableTop="@drawable/account_icon" />
-                </RadioGroup>
+                <de.blinkt.openvpn.views.MyRadioButton
+                    android:id="@+id/rb_personal"
+                    style="@style/chart_radiobutton"
+                    android:text="@string/personal_center"
+                    android:textColor="@drawable/main_color_selector"
+                    aixiaoaqi:drawableSize="22dp"
+                    aixiaoaqi:drawableTop="@drawable/account_icon" />
+            </RadioGroup>
 
 
             <RelativeLayout

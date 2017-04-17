@@ -61,14 +61,12 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 	private Button login_btn;
 	private EditText usernameEdit;
 	private EditText pwdEdit;
-
 	private TextView registTextView;
 	private CheckBox hindPswCheckBox;
 	//是否打开密码隐藏
 	private boolean isOpenHind = true;
 	private TextView forgetPswTextView;
 	private LinearLayout loginLinearLayout;
-
 	private static final int MSG_SET_ALIAS = 1001;
 
 

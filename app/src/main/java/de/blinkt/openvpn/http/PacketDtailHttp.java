@@ -2,7 +2,6 @@ package de.blinkt.openvpn.http;
 
 import com.google.gson.Gson;
 import java.net.URLEncoder;
-
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.model.PacketDtailEntity;
 

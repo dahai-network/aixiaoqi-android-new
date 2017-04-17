@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,11 +20,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.umeng.analytics.MobclickAgent;
-
 import java.util.Set;
-
 import cn.com.aixiaoqi.R;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
@@ -45,7 +43,6 @@ import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
-
 import static de.blinkt.openvpn.constant.UmengContant.CLICKREGISTERBUTTON;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKREGISTERSENDCODE;
 import static de.blinkt.openvpn.constant.UmengContant.REGISTERSHOWPASSWORD;
@@ -66,13 +63,17 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
 	private CountDownTimer timer;
 	private InputMethodManager manager = null;
 	private static final int MSG_SET_ALIAS = 1001;
+	private TextView text_boottom_login;
 
+	private TextView textview_1;
+	private TextView textview_2;
+	private TextView textview_3;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_regist);
 		init();
-		hasLeftViewTitle(R.string.regist, 0);
 	}
 
 	private void init() {
@@ -86,19 +87,27 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
 				findViewById(R.id.phoneNumberEdit);
 		verification_edit = (EditText)
 				findViewById(R.id.verification_edit);
+        passwordEdit = (EditText)
+                findViewById(R.id.passwordEdit);
+
 		setPhoneNumberEditChangeLisener();
-		passwordEdit = (EditText)
-				findViewById(R.id.passwordEdit);
+
 		hindPswCheckBox = (CheckBox) findViewById(R.id.hindPswCheckBox);
 		hindPswCheckBox.setOnClickListener(this);
 		allowCheckBox = (CheckBox) findViewById(R.id.allowCheckBox);
 		agreementTextView = (TextView) findViewById(R.id.agreementTextView);
 		registRelativeLayout = (RelativeLayout) findViewById(R.id.registRelativeLayout);
+		text_boottom_login = (TextView) findViewById(R.id.text_boottom_login);
+
+		textview_1 = (TextView) findViewById(R.id.textview_1);
+		textview_2 = (TextView) findViewById(R.id.textview_2);
+		textview_3 = (TextView) findViewById(R.id.textview_3);
 
 		agreementTextView.setOnClickListener(this);
 		allowCheckBox.setOnCheckedChangeListener(this);
 		sendBtn = (Button) findViewById(R.id.sendBtn);
 		sendBtn.setOnClickListener(this);
+		text_boottom_login.setOnClickListener(this);
 		regist_btn = (Button) findViewById(R.id.regist_btn);
 		regist_btn.setOnClickListener(this);
 		registRelativeLayout.setOnClickListener(this);
@@ -125,9 +134,55 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (s.length() != 0) sendBtn.setEnabled(true);
+				if (s.length() != 0) {
+					sendBtn.setEnabled(true);
+					textview_1.setVisibility(View.VISIBLE);
+				}
 				else {
+					textview_1.setVisibility(View.GONE);
 					sendBtn.setEnabled(false);
+				}
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+		});
+		verification_edit.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (s.length() != 0) {
+					textview_2.setVisibility(View.VISIBLE);
+				}
+				else {
+					textview_2.setVisibility(View.GONE);
+				}
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+
+		});
+		passwordEdit.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (s.length() != 0) {
+					textview_3.setVisibility(View.VISIBLE);
+				}
+				else {
+					textview_3.setVisibility(View.GONE);
 				}
 			}
 
@@ -190,6 +245,12 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
 				break;
 			case R.id.registRelativeLayout:
 				ViewUtil.hideSoftKeyboard(this);
+				break;
+			case R.id.text_boottom_login:
+				Intent intent=new Intent();
+				intent.setClass(RegistActivity.this,LoginMainActivity.class);
+				startActivity(intent);
+
 				break;
 
 		}
