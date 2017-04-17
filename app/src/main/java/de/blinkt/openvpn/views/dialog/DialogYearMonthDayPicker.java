@@ -36,6 +36,7 @@ public class DialogYearMonthDayPicker extends DialogBase implements View.OnClick
     int month;
     int day;
     public String value;
+    private TextView title;
     public DialogYearMonthDayPicker(DialogInterfaceTypeBase dialogInterfaceTypeBase, Context context, int layoutId, int type ){
         super(dialogInterfaceTypeBase,context,layoutId,type);
         addListener();
@@ -43,6 +44,7 @@ public class DialogYearMonthDayPicker extends DialogBase implements View.OnClick
     @Override
     protected void setDialogContentView(View view) {
         tvSure=(TextView)view.findViewById(R.id.tv_sure);
+        title=(TextView)view.findViewById(R.id.title);
         pickerscrlllviewyear = (PickerScrollView)view.findViewById(R.id.pickerscrlllviewyear);
         pickerscrlllviewyear.setColor(0x007aff);
         pickerscrlllviewmonth = (PickerScrollView)view.findViewById(R.id.pickerscrlllviewmonth);
@@ -56,6 +58,10 @@ public class DialogYearMonthDayPicker extends DialogBase implements View.OnClick
         pickerscrlllviewmonth.setOnSelectListener(this,monthType);
         pickerscrlllviewyear.setOnSelectListener(this,yearType);
         pickerscrlllviewday.setOnSelectListener(this,dayType);
+
+    }
+    public void changeText(String titleText){
+        title.setText(titleText);
     }
     private  void initData(){
         String[] months_big = { "1", "3", "5", "7", "8", "10", "12" };

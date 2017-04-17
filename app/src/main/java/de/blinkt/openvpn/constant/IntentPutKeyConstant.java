@@ -47,7 +47,7 @@ public class IntentPutKeyConstant {
     public static final String ORDERED_OUTSIDE="ordered_outside";
     public static final String IS_SUPPORT_4G="IsSupport4G";
 
-
+    public static final String COUNTRY_NAME="CountryName";
     public static final String IS_START_UP="isstartup";
 
 

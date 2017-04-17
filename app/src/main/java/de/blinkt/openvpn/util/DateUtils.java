@@ -102,7 +102,7 @@ public class DateUtils {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd",
 				Locale.getDefault());
-		Date date = null;
+		Date date = new Date();
 		try {
 			date = sdf.parse(dateString);
 		} catch (android.net.ParseException e) {

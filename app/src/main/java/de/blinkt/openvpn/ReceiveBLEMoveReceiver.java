@@ -136,7 +136,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						String braceletname = utils.readString(Constant.BRACELETNAME);
 						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
 							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
-						} else {
+						}
+						else {
 							Log.i("toBLue", "连接成功");
 							//更新时间操作
 							sendMessageToBlueTooth(getBLETime());
@@ -338,7 +339,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
 											if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
-
 												Thread.sleep(500);
 												SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 											} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
@@ -357,7 +357,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										break;
 									case Constant.ICCID_BLUE_VALUE:
 										String	Iccid	=PacketeUtil.Combination(messages);
+										Log.e("ICCID_BLUE_VALUE",Iccid);
 										SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(Iccid);
+										Log.e("ICCID_BLUE_VALUE111111",SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
 										break;
 									default:
 										break;

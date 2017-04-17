@@ -88,6 +88,16 @@ public class BoughtPackageEntity implements Serializable {
 		private boolean PackageIsCategoryDualSimStandby;
 		private int ExpireDaysInt;
 		private boolean PackageIsSupport4G;
+		private String CountryName;
+
+
+		public String getCountryName() {
+			return CountryName;
+		}
+
+		public void setCountryName(String countryName) {
+			CountryName = countryName;
+		}
 
 		public boolean isPackageIsSupport4G() {
 			return PackageIsSupport4G;
