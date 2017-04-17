@@ -330,6 +330,7 @@
             <Button
                 android:id="@+id/cancelOrderButton"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="@dimen/padding_40dp"
                 android:layout_marginLeft="@dimen/padding_20dp"
                 android:layout_marginRight="@dimen/padding_20dp"

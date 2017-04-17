@@ -186,7 +186,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 					clickPosition = getPosition() - 1;
 					 if(data.get(clickPosition).getOrderStatus()==0){
 						 context.startActivity(new Intent(context, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, data.get(clickPosition).getOrderID()).putExtra("ExpireDaysInt", data.get(clickPosition).getExpireDaysInt())
-								 .putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, data.get(clickPosition).isPackageIsSupport4G()));
+								 .putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, data.get(clickPosition).isPackageIsSupport4G()) .putExtra(IntentPutKeyConstant.COUNTRY_NAME, data.get(clickPosition).getCountryName()));
 					 }else{
 						 context.startActivity(new Intent(context,OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.AFTER_GOING_ABROAD).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,data.get(clickPosition).isPackageIsSupport4G()));
 					 }

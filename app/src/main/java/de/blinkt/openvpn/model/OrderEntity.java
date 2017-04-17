@@ -78,6 +78,15 @@ public class OrderEntity implements Serializable {
 		private String PackageCategory;
 		private boolean PackageIsSupport4G;
 		private boolean PackageIsApn;
+		private String CountryName;
+
+		public String getCountryName() {
+			return CountryName;
+		}
+
+		public void setCountryName(String countryName) {
+			CountryName = countryName;
+		}
 
 		public String getPackageCategory() {
 			return PackageCategory;
