@@ -34,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -43,6 +44,7 @@ import java.util.regex.Pattern;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.model.ContactBean;
+import de.blinkt.openvpn.views.RoundImageView;
 import de.blinkt.openvpn.views.SwipeItemLayout;
 import de.blinkt.openvpn.views.contact.IndexAdapter;
 import de.blinkt.openvpn.views.contact.expand.StickyRecyclerHeadersAdapter;
@@ -51,8 +53,7 @@ import de.blinkt.openvpn.views.contact.expand.StickyRecyclerHeadersAdapter;
  * Created by jiang on 12/3/15.
  * 根据当前权限进行判断相关的滑动逻辑
  */
-public class ContactAdapter extends RecyclerBaseAdapter<ContactAdapter.ContactViewHolder, ContactBean>
-		implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder>, IndexAdapter {
+public class ContactAdapter extends RecyclerBaseAdapter<ContactAdapter.ContactViewHolder, ContactBean> {
 	/**
 	 * 当前处于打开状态的item
 	 */
@@ -82,28 +83,40 @@ public class ContactAdapter extends RecyclerBaseAdapter<ContactAdapter.ContactVi
 		}else{
 			holder.headImage.setImageResource(R.drawable.contact_default_header);
 		}
+		holder.headImage.setBorderRadius(3);
+		// 获取首字母的assii值
+		char selection = contactBean.getSortLetters().charAt(0);
+		// 通过首字母的assii值来判断是否显示字母
+		int positionForSelection = getPositionForSection(selection);
+		if (position == positionForSelection) {// 相等说明需要显示字母
+			holder.tag.setVisibility(View.VISIBLE);
+			holder.tag.setText(String.valueOf(selection));
+		} else {
+			holder.tag.setVisibility(View.GONE);
+
+		}
 	}
 
-	@Override
-	public long getHeaderId(int position) {
-
-		return getItem(position).getSortLetters().charAt(0);
-	}
-
-	@Override
+//	@Override
+//	public long getHeaderId(int position) {
+//
+//		return getItem(position).getSortLetters().charAt(0);
+//	}
+//
+//	@Override
 	public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
 		headView = LayoutInflater.from(parent.getContext())
 				.inflate(R.layout.contact_header, parent, false);
 		return new RecyclerView.ViewHolder(headView) {
 		};
 	}
-
-	@Override
-	public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-		TextView textView = (TextView) headView.findViewById(R.id.headNameTextView);
-		String showValue = String.valueOf(getAlpha(getItem(position).getSortLetters()));
-		textView.setText(showValue);
-	}
+//
+//	@Override
+//	public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+//		TextView textView = (TextView) headView.findViewById(R.id.headNameTextView);
+//		String showValue = String.valueOf(getAlpha(getItem(position).getSortLetters()));
+//		textView.setText(showValue);
+//	}
 
 
 	public int getPositionForSection(char section) {
@@ -132,18 +145,22 @@ public class ContactAdapter extends RecyclerBaseAdapter<ContactAdapter.ContactVi
 
 		public TextView mName;
 		//        public SwipeItemLayout mRoot;
-		public ImageView headImage;
-
+		public RoundImageView headImage;
+		public TextView tag;
+		RelativeLayout clickRl;
 		public ContactViewHolder(View itemView) {
 			super(itemView);
-			itemView.setOnClickListener(new View.OnClickListener() {
+
+			mName = (TextView) itemView.findViewById(R.id.nameTextView);
+			headImage = (RoundImageView) itemView.findViewById(R.id.headImageView);
+			tag = (TextView) itemView.findViewById(R.id.tag);
+			clickRl = (RelativeLayout) itemView.findViewById(R.id.click_rl);
+			clickRl.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					callLisener.gotoActivity(getItem(getAdapterPosition()), getAdapterPosition());
 				}
 			});
-			mName = (TextView) itemView.findViewById(R.id.nameTextView);
-			headImage = (ImageView) itemView.findViewById(R.id.headImageView);
 		}
 
 

@@ -24,9 +24,9 @@ import cn.com.aixiaoqi.R;
 
 /**
  * http://blog.csdn.net/lmj623565791/article/details/41967509
- * 
+ *
  * @author zhy
- * 
+ *
  */
 public class RoundImageView extends AppCompatImageView
 {
@@ -185,7 +185,7 @@ public class RoundImageView extends AppCompatImageView
 
 	/**
 	 * drawable转bitmap
-	 * 
+	 *
 	 * @param drawable
 	 * @return
 	 */

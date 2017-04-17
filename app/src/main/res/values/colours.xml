@@ -22,7 +22,7 @@
     <color name="bottom_bar_text_enable">#00a0e9</color>
     <color name="bottom_bar_text_enable_click">#8001d0c0</color>
     <color name="bottom_bar_text_normal">#73777c</color>
-    <color name="gray_back">#E7E7E7</color>
+    <color name="gray_back">#f5f5f5</color>
     <color name="index_gray_text">#CCCCCC</color>
     <color name="gray_back_2">#EDEDED</color>
     <color name="regist_back">#EAECF0</color>

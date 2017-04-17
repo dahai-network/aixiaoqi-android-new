@@ -40,6 +40,7 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DatabaseDAO;
 import de.blinkt.openvpn.util.PhoneNumberZero;
 import de.blinkt.openvpn.util.SharedUtils;
+import de.blinkt.openvpn.views.RoundImageView;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
@@ -119,7 +120,7 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 
 	private void initView() {
 
-		contactHeader = (ImageView) findViewById(R.id.contact_header);
+		contactHeader = (RoundImageView) findViewById(R.id.contact_header);
 		contactName = (TextView) findViewById(R.id.contact_name);
 		llPhoneInfo = (LinearLayout) findViewById(R.id.ll_phone_info);
 		deletePhone = (TextView) findViewById(R.id.delete_phone);

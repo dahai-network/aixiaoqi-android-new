@@ -84,7 +84,7 @@ public class SocketConstant {
 
 	public static int REGISTER_STATUE_CODE = 0;//0，表示还没有开始注册。1，表示获取预读取数据没有完成（已经写卡但未完成）。2，表示注册中，3表示注册成功
 	public static final String TRAN_DATA_TO_SDK = "88888888";
-
+	public static int SIM_TYPE=0;
 	public static String REGISTER_REMOTE_ADDRESS;
 	public static String REGISTER_ROMOTE_PORT;
 	public static final String HEARTBEAT_PACKET_TIMER = "heartbeat_packet_timer";

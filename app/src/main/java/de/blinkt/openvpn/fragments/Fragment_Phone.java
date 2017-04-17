@@ -255,11 +255,11 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
                 startActivity(intent);
                 break;
             default:
-//                if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+                if (SocketConstant.REGISTER_STATUE_CODE == 3) {
                     simCellPhone();
-//                } else {
-//                    CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
-//                }
+                } else {
+                    CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
+                }
                 break;
         }
 

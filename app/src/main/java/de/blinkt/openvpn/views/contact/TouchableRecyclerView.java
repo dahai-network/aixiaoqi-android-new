@@ -85,11 +85,11 @@ public class TouchableRecyclerView extends RecyclerView {
 //                dy = (int) e.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                int tempX = (int) e.getX();
-                int tempY = (int) e.getY();
-                if (Math.abs(dx - tempX) > Slop && Math.abs(tempY - dy) > Slop) {
-                    closeAllOpenedItem();
-                }
+//                int tempX = (int) e.getX();
+//                int tempY = (int) e.getY();
+//                if (Math.abs(dx - tempX) > Slop && Math.abs(tempY - dy) > Slop) {
+//                    closeAllOpenedItem();
+//                }
                 break;
 
         }
@@ -99,11 +99,11 @@ public class TouchableRecyclerView extends RecyclerView {
 
     }
 
-    public void closeAllOpenedItem() {
-        if (getAdapter() != null)
-            if(getAdapter() instanceof ContactAdapter)
-            ((ContactAdapter) getAdapter()).closeOpenedSwipeItemLayoutWithAnim();
-        else if(getAdapter() instanceof SelectContactAdapter)
-                ((SelectContactAdapter) getAdapter()).closeOpenedSwipeItemLayoutWithAnim();
-    }
+//    public void closeAllOpenedItem() {
+//        if (getAdapter() != null)
+//            if(getAdapter() instanceof ContactAdapter)
+//            ((ContactAdapter) getAdapter()).closeOpenedSwipeItemLayoutWithAnim();
+//        else if(getAdapter() instanceof SelectContactAdapter)
+//                ((SelectContactAdapter) getAdapter()).closeOpenedSwipeItemLayoutWithAnim();
+//    }
 }

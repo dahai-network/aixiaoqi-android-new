@@ -114,10 +114,11 @@ public class PackageCategoryActivity extends BaseActivity {
             columnTextView.setTextAppearance(this, R.style.top_category_scroll_view_item_text);
             if (drawable == null) {
                 drawable = getResources().getDrawable(R.drawable.image_slidethetriangle);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                drawable.setBounds(0, 0, drawable.getMinimumWidth()/2, drawable.getMinimumHeight()/2);
             }
-            columnTextView.setGravity(Gravity.CENTER);
-            columnTextView.setPadding(5, 5, 5, 0);
+//            columnTextView.setGravity(Gravity.CENTER);
+            columnTextView.setPadding(105, 45, 15, 0);
+            columnTextView.setLayoutParams(params);
             columnTextView.setId(i);
             columnTextView.setText(userChannelList.get(i));
             if (columnSelectIndex == i) {

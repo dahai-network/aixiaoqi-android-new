@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import de.blinkt.openvpn.views.contact.expand.StickyRecyclerHeadersAdapter;
  */
 
 public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapter.ContactViewHolder, ContactBean>
-		implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder>, View.OnClickListener, IndexAdapter {
+		implements View.OnClickListener, IndexAdapter {
 	/**
 	 * 当前处于打开状态的item
 	 */
@@ -61,30 +62,40 @@ public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapt
 		}
 		holder.itemView.setTag(contactBean);
 		holder.itemView.setOnClickListener(this);
+		// 获取首字母的assii值
+		char selection = contactBean.getSortLetters().charAt(0);
+		// 通过首字母的assii值来判断是否显示字母
+		int positionForSelection = getPositionForSection(selection);
+		if (position == positionForSelection) {// 相等说明需要显示字母
+			holder.tag.setVisibility(View.VISIBLE);
+			holder.tag.setText(String.valueOf(selection));
+		} else {
+			holder.tag.setVisibility(View.GONE);
 
+		}
 	}
 
-	@Override
-	public long getHeaderId(int position) {
-		return getItem(position).getSortLetters().charAt(0);
-
-	}
-
-	@Override
-	public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-		headView = LayoutInflater.from(mContext)
-				.inflate(R.layout.contact_header, parent, false);
-		RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(headView) {
-		};
-		return holder;
-	}
-
-	@Override
-	public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-		TextView textView = (TextView) headView.findViewById(R.id.headNameTextView);
-		String showValue = String.valueOf(getAlpha(getItem(position).getSortKey()));
-		textView.setText(showValue);
-	}
+//	@Override
+//	public long getHeaderId(int position) {
+//		return getItem(position).getSortLetters().charAt(0);
+//
+//	}
+//
+//	@Override
+//	public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+//		headView = LayoutInflater.from(mContext)
+//				.inflate(R.layout.contact_header, parent, false);
+//		RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(headView) {
+//		};
+//		return holder;
+//	}
+//
+//	@Override
+//	public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+//		TextView textView = (TextView) headView.findViewById(R.id.headNameTextView);
+//		String showValue = String.valueOf(getAlpha(getItem(position).getSortKey()));
+//		textView.setText(showValue);
+//	}
 
 	@Override
 	public void onClick(View v) {
@@ -107,22 +118,24 @@ public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapt
 
 	}
 
-	public void closeOpenedSwipeItemLayoutWithAnim() {
-		List<SwipeItemLayout> localOpenedSil = mOpenedSil;
-		for (SwipeItemLayout sil : localOpenedSil) {
-			sil.closeWithAnim();
-		}
-		mOpenedSil.clear();
-	}
+//	public void closeOpenedSwipeItemLayoutWithAnim() {
+//		List<SwipeItemLayout> localOpenedSil = mOpenedSil;
+//		for (SwipeItemLayout sil : localOpenedSil) {
+//			sil.closeWithAnim();
+//		}
+//		mOpenedSil.clear();
+//	}
 
 	public class ContactViewHolder extends RecyclerView.ViewHolder {
 		public TextView mName;
 		public ImageView headImage;
-
+		public TextView tag;
 		public ContactViewHolder(View itemView) {
 			super(itemView);
 			mName = (TextView) itemView.findViewById(R.id.nameTextView);
 			headImage = (ImageView) itemView.findViewById(R.id.headImageView);
+			tag = (TextView) itemView.findViewById(R.id.tag);
+
 		}
 
 

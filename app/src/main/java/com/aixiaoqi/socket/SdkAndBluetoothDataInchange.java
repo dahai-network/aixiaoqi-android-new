@@ -32,7 +32,6 @@ public class SdkAndBluetoothDataInchange {
 	private String finalTemp;//保存上一次发给蓝牙的数据，以免出错，需要重发
 	private boolean isReceiveBluetoothData = true;//判断5s内是否接收完成，没有完成则重新发送
 	public int count =0;
-	private String[] IccidCommand={"a0a40000022fe2","a0c000000f","a0b000000a"};
 	public void initReceiveDataframSocketService(ReceiveDataframSocketService receiveDataframSocketService, UartService mService) {
 		receiveDataframSocketService.setListener(new ReceiveDataframSocketService.MessageOutLisener() {
 													 @Override
@@ -66,10 +65,7 @@ public class SdkAndBluetoothDataInchange {
 
 		synchronized (this){
 
-			if(ProMainActivity.isGetIccid){
-				simRegisterStatue=null;
-				getIccid(messages);
-			}else if(isHasPreData){
+	 if(isHasPreData){
 				if (simRegisterStatue == null) {
 					simRegisterStatue = new SimRegisterStatue();
 				}
@@ -228,55 +224,11 @@ public class SdkAndBluetoothDataInchange {
 
 
 
-	private void getIccid(ArrayList<String> messages) {
 
-		count=count+1;
-		Log.e(TAG,"count="+count);
-		if(count<4){
-			TlvAnalyticalUtils.sendToBlue(IccidCommand[count-1]);
-		}else if(count==4){
-			ProMainActivity.isGetIccid=false;
-			String value= PacketeUtil.Combination(messages);
-			StringBuilder stringBuilder=new StringBuilder();
-			for(int i=0;i<value.length()-4;i=i+2){
-				stringBuilder.append(value.charAt(i+1));
-				stringBuilder.append(value.charAt(i+0));
-			}
 
-			PreReadEntity preReadEntity = getPreReadEntity(stringBuilder);
-			if(preReadEntity!=null){
-				//发送直接从预读取数据开始注册
-				count=0;
-				isHasPreData=true;
-				String token= SharedUtils.getInstance().readString(Constant.TOKEN);
-				if(TextUtils.isEmpty(token)){
-					EventBusUtil.simRegisterStatue(SocketConstant.TOKEN_IS_NULL);
-				}else{
-					EventBusUtil.simRegisterType(Constant.REGISTER_SIM_PRE_DATA);
-					initPre(preReadEntity, token);
-				}
-			}else{
-				//发送启动SDK
-				isHasPreData=false;
-				EventBusUtil.simRegisterType(Constant.REGISTER_SIM_NOT_PRE_DATA);
-			}
-		}
-	}
 
-	private PreReadEntity getPreReadEntity(StringBuilder stringBuilder) {
-		DBHelp dbHelp=new DBHelp(ProMainActivity.instance);
-		PreReadEntity preReadEntity= dbHelp.getPreReadEntity(RadixAsciiChange.convertStringToHex(stringBuilder.toString()));
-		return preReadEntity;
-	}
 
-	private void initPre(PreReadEntity preReadEntity, String token) {
-		SocketConstant.REGISTER_STATUE_CODE = 2;
-		SocketConstant.CONNENCT_VALUE[3] = RadixAsciiChange.convertStringToHex(token);
-		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = preReadEntity.getPreReadData();
-		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preReadEntity.getDataLength();
-		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = preReadEntity.getImsi();
-		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = preReadEntity.getIccid();
-	}
+
 
 
 	public String formatByte(String number ,int type){

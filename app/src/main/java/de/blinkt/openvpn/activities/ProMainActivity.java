@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -25,6 +26,7 @@ import android.widget.RelativeLayout;
 
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.JNIUtil;
+import com.aixiaoqi.socket.RadixAsciiChange;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SdkAndBluetoothDataInchange;
@@ -32,7 +34,6 @@ import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 import com.aixiaoqi.socket.TestProvider;
-import com.aixiaoqi.socket.TlvAnalyticalUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -52,6 +53,7 @@ import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.database.DBHelp;
 import de.blinkt.openvpn.fragments.AccountFragment;
 import de.blinkt.openvpn.fragments.AddressListFragment;
 import de.blinkt.openvpn.fragments.CellPhoneFragment;
@@ -66,9 +68,9 @@ import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
+import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
-import de.blinkt.openvpn.model.SimRegisterType;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
@@ -206,15 +208,18 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		new Thread(http).start();
 	}
 
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			moveTaskToBack(false);
+		}
+		return true;
+	}
+
 	public void initServices() {
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
 			i("开启UartService");
-			try {
-				Intent bindIntent = new Intent(this, UartService.class);
-				bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			Intent bindIntent = new Intent(this, UartService.class);
+			bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
 		}
 		//启动常驻服务
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(GrayService.class.getName())) {
@@ -645,16 +650,47 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
 					if (SocketConstant.REGISTER_STATUE_CODE == 2) {
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+						return;
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+						return;
 					}
-					getIccid();
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							if (sdkAndBluetoothDataInchange == null) {
+								sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
+							}
+							if (sendYiZhengService == null) {
+								sendYiZhengService = new SendYiZhengService();
+							}
+							if (!TextUtils.isEmpty(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6])) {
+								DBHelp dbHelp = new DBHelp(ProMainActivity.instance);
+								PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
+								if (preReadEntity != null) {
+									initPre(preReadEntity);
+									registerSimPreData();
+								} else {
+									noPreDataStartSDK();
+								}
+							}
+						}
+					}).start();
 				}
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 		}
 
+	}
+
+	private void initPre(PreReadEntity preReadEntity) {
+		SocketConstant.REGISTER_STATUE_CODE = 2;
+		SocketConstant.CONNENCT_VALUE[3] = RadixAsciiChange.convertStringToHex(SharedUtils.getInstance().readString(Constant.TOKEN));
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = preReadEntity.getPreReadData();
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preReadEntity.getDataLength();
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = preReadEntity.getImsi();
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = preReadEntity.getIccid();
 	}
 
 	//没有绑定提示
@@ -812,25 +848,23 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		topProgressView.setProgress(0);
 	}
 
-	@Subscribe(threadMode = ThreadMode.ASYNC)
-	public void onIsSuccessEntity(SimRegisterType simRegisterType) {
-		if (Constant.REGISTER_SIM_NOT_PRE_DATA.equals(simRegisterType.getSimRegisterType())) {
-			isGetIccid = false;
-			isStartSdk = true;
-			startDataframService();
-			startSocketService();
-			CommonTools.delayTime(5000);
-			e("main.start()");
-			JNIUtil.getInstance().startSDK(1);
-		} else if (Constant.REGISTER_SIM_PRE_DATA.equals(simRegisterType.getSimRegisterType())) {
-			if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {
-				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-			} else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {
-				SocketConnection.mReceiveSocketService.disconnect();
-				startTcp();
-			} else {
-				startTcp();
-			}
+	private void noPreDataStartSDK() {
+		isStartSdk = true;
+		startDataframService();
+		startSocketService();
+		CommonTools.delayTime(5000);
+		e("main.start()");
+		JNIUtil.getInstance().startSDK(1);
+	}
+
+	private void registerSimPreData() {
+		if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {
+			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+		} else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {
+			SocketConnection.mReceiveSocketService.disconnect();
+			startTcp();
+		} else {
+			startTcp();
 		}
 	}
 
@@ -903,7 +937,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	}
 
-	private int count;
+
 	//用于改变indexFragment状态的Receiver
 	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {
 
@@ -982,23 +1016,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	};
 
-	public static boolean isGetIccid = false;
 	public static boolean isStartSdk = false;
 	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
 	public static SendYiZhengService sendYiZhengService = null;
 
-	private void getIccid() {
-		e("getIccid:");
-		if (sdkAndBluetoothDataInchange == null) {
-			sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
-		}
-		if (sendYiZhengService == null) {
-			sendYiZhengService = new SendYiZhengService();
-		}
-		sdkAndBluetoothDataInchange.count = 0;
-		isGetIccid = true;
-		TlvAnalyticalUtils.sendToBlue("a0a40000023f00");
-	}
 
 	private void requestPacket() {
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
@@ -1053,7 +1074,5 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		return false;
 	}
 
-//	private boolean isDfuServiceRunning() {
-//		return ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName());
-//	}
+
 }
