@@ -43,6 +43,7 @@ import de.blinkt.openvpn.http.SecurityConfigHttp;
 import de.blinkt.openvpn.http.SendMsgHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
+import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
@@ -166,13 +167,14 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
-
-
+        
 
     }
+
+
+
 
     public void setViewVisibleOrGone(TextView textview, CharSequence s) {
 
