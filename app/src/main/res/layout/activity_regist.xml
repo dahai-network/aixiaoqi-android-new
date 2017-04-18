@@ -16,13 +16,12 @@
         <include
             android:id="@+id/include"
             layout="@layout/regist_and_password_commen"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            />
 
         <Button
             android:id="@+id/regist_btn"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/padding_40dp"
             android:layout_below="@+id/allowCheckBox"
             android:layout_gravity="center"
             android:layout_marginLeft="15dp"
@@ -54,7 +53,7 @@
             android:layout_marginTop="25dp"
             android:layout_toRightOf="@id/allowCheckBox"
             android:text="@string/agreement_mark"
-            android:textColor="@color/aggreement" />
+            android:textColor="@color/blue_title" />
 
         <TextView
             android:id="@+id/text_boottom_login"
