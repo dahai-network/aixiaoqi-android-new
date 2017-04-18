@@ -45,6 +45,7 @@ import de.blinkt.openvpn.model.BasicConfigEntity;
 import de.blinkt.openvpn.model.LoginEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
+import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
@@ -152,39 +153,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 	private String pswString;
 
 	private void setTextChangeLisener() {
-		usernameEdit.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (s.length() != 0) {
-					if (pwdEdit.getText().toString().length() != 0) {
-						login_btn.setEnabled(true);
-						login_btn.setBackgroundResource(R.drawable.green_btn_click);
-						login_btn.setTextColor(getResources().getColor(R.color.white));
-					} else {
-						login_btn.setEnabled(false);
-						login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
-						login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
-					}
-					loginUserTextView.setVisibility(View.VISIBLE);
-				} else {
-					loginUserTextView.setVisibility(View.GONE);
-					login_btn.setEnabled(false);
-					login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
-					login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
-				}
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-
-			}
-		});
-
 		pwdEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
 			@Override
@@ -197,43 +165,55 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				return false;
 			}
 		});
+		setEditTextListener(pwdEdit,R.id.pwdEdit);
+		setEditTextListener(usernameEdit,R.id.usernameEdit);
+	}
 
-		pwdEdit.addTextChangedListener(new TextWatcher() {
-
-
+	private void setEditTextListener(EditText editText,int id){
+		new ExditTextWatcher(editText,id){
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			public void textChanged(CharSequence s, int id) {
+				switch (id){
+					case R.id.pwdEdit:
+						pswString = s.toString();
+						if (s.length() != 0) {
+							if (usernameEdit.getText().toString().length() != 0) {
+                                setLoginBtnAttr(true,R.drawable.green_btn_click,R.color.white);
+							} else {
+                                setLoginBtnAttr(false,R.drawable.circle_gray_ret,R.color.color_6d798f);
+							}
+							loginPasswordTextView.setVisibility(View.VISIBLE);
+						} else {
+							loginPasswordTextView.setVisibility(View.GONE);
+                            setLoginBtnAttr(false,R.drawable.circle_gray_ret,R.color.color_6d798f);
+						}
 
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				pswString = s.toString();
-				if (s.length() != 0) {
-					if (usernameEdit.getText().toString().length() != 0) {
-						login_btn.setEnabled(true);
-						login_btn.setBackgroundResource(R.drawable.green_btn_click);
-						login_btn.setTextColor(getResources().getColor(R.color.white));
-					} else {
-						login_btn.setEnabled(false);
-						login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
-						login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
-					}
-					loginPasswordTextView.setVisibility(View.VISIBLE);
-				} else {
-					loginPasswordTextView.setVisibility(View.GONE);
-					login_btn.setEnabled(false);
-					login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
-					login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
+						break;
+					case R.id.usernameEdit:
+						if (s.length() != 0) {
+							if (pwdEdit.getText().toString().length() != 0) {
+                                setLoginBtnAttr(true,R.drawable.green_btn_click,R.color.white);
+							} else {
+                                setLoginBtnAttr(false,R.drawable.circle_gray_ret,R.color.color_6d798f);
+							}
+							loginUserTextView.setVisibility(View.VISIBLE);
+						} else {
+							loginUserTextView.setVisibility(View.GONE);
+                            setLoginBtnAttr(false,R.drawable.circle_gray_ret,R.color.color_6d798f);
+						}
+						break;
 				}
 			}
+		};
 
-			@Override
-			public void afterTextChanged(Editable s) {
-
-			}
-		});
 	}
+
+	private void setLoginBtnAttr(boolean isClick,int backgroundColor,int textColor){
+        login_btn.setEnabled(isClick);
+        login_btn.setBackgroundResource(backgroundColor);
+        login_btn.setTextColor(getResources().getColor(textColor));
+    }
+
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
