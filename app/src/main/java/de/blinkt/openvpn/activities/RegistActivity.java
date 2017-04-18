@@ -136,53 +136,37 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
      * 初始化事件
      */
     private void initEvent() {
-        setEditChangeLisener(phoneNumberEdit, 1);
-        setEditChangeLisener(verification_edit, 2);
-        setEditChangeLisener(passwordEdit, 3);
+        setEditChangeLisener(phoneNumberEdit, Constant.PHONENUMBER_EDITTAG);
+        setEditChangeLisener(verification_edit, Constant.VERIFICATION_EDITTAG);
+        setEditChangeLisener(passwordEdit, Constant.PASSWORD_EDITTAG);
     }
 
     private void setEditChangeLisener(EditText editText, final int type) {
-        editText.addTextChangedListener(new TextWatcher() {
+
+        new ExditTextWatcher(editText,type)
+        {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+            public void textChanged(CharSequence s, int id) {
                 switch (type) {
-                    case 1:
+                    case Constant.PHONENUMBER_EDITTAG:
                         setViewVisibleOrGone(textview_1, s);
                         break;
-                    case 2:
+                    case Constant.VERIFICATION_EDITTAG:
                         setViewVisibleOrGone(textview_2, s);
                         break;
-                    case 3:
+                    case Constant.PASSWORD_EDITTAG:
                         setViewVisibleOrGone(textview_3, s);
                         break;
                 }
-
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
+        };
 
     }
 
-
-
-
     public void setViewVisibleOrGone(TextView textview, CharSequence s) {
 
-        if (s.length() != 0) {
-            textview.setVisibility(View.VISIBLE);
-        } else {
-            textview.setVisibility(View.GONE);
-        }
+        int view_state=s.length()==0?View.GONE:View.VISIBLE;
+        textview.setVisibility(view_state);
     }
 
     @Override
