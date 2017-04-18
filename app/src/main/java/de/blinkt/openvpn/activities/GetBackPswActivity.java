@@ -4,9 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -17,14 +15,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.umeng.analytics.MobclickAgent;
-
-import java.util.ArrayList;
-
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
-import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.CheckUtil;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -34,11 +27,9 @@ import de.blinkt.openvpn.http.SendMsgHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.ViewUtil;
-
 import static de.blinkt.openvpn.constant.UmengContant.CLICKFINDBACKBUTTON;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKFINDBACKSENDCODE;
 import static de.blinkt.openvpn.constant.UmengContant.FINDBACKSHOWPASSWORD;
-
 public class GetBackPswActivity extends BaseNetActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private String TAG = "GetBackPswActivity";
@@ -113,25 +104,24 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
      * 初始化事件
      */
     private void initEvent() {
-        setEditChangeLisener(phoneNumberEdit, Constant.PHONENUMBER_EDITTAG);
-        setEditChangeLisener(verification_edit, Constant.VERIFICATION_EDITTAG);
-        setEditChangeLisener(passwordEdit, Constant.PASSWORD_EDITTAG);
+        setEditChangeLisener(phoneNumberEdit, R.id.phoneNumberEdit);
+        setEditChangeLisener(verification_edit, R.id.verification_edit);
+        setEditChangeLisener(passwordEdit, R.id.passwordEdit);
     }
 
-    private void setEditChangeLisener(EditText editText, final int type) {
+    private void setEditChangeLisener(EditText editText, final int id) {
 
-        new ExditTextWatcher(editText,type)
-        {
+        new ExditTextWatcher(editText, id) {
             @Override
             public void textChanged(CharSequence s, int id) {
-                switch (type) {
-                    case Constant.PHONENUMBER_EDITTAG:
+                switch (id) {
+                    case R.id.phoneNumberEdit:
                         setViewVisibleOrGone(textview_1, s);
                         break;
-                    case Constant.VERIFICATION_EDITTAG:
+                    case R.id.verification_edit:
                         setViewVisibleOrGone(textview_2, s);
                         break;
-                    case Constant.PASSWORD_EDITTAG:
+                    case R.id.passwordEdit:
                         setViewVisibleOrGone(textview_3, s);
                         break;
                 }
