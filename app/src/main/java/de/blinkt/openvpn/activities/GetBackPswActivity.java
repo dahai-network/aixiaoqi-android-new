@@ -75,7 +75,6 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
-
     //初始化控件
     private void initView() {
         textview_1 = (TextView) findViewById(R.id.textview_1);
