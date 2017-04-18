@@ -161,8 +161,6 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
             }
         };
 
-
-
     }
 
     public void setViewVisibleOrGone(TextView textview, CharSequence s) {

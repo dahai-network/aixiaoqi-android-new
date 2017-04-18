@@ -31,13 +31,6 @@ public abstract class ExditTextWatcher implements TextWatcher {
 
     }
 
-    //    public void setTextChangingListener(TextChangingListener  textChangingListener){
-//        this.textChangingListener=textChangingListener;
-//    }
-//
-//    interface  TextChangingListener{
-//       void  textChanging(String s, int id);
-//    }
     public abstract void textChanged(CharSequence s, int id);
 
 }
