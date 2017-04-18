@@ -169,7 +169,7 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
             public void afterTextChanged(Editable s) {
             }
         });
-        
+
 
     }
 
