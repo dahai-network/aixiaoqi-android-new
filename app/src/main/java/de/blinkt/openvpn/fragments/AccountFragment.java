@@ -2,7 +2,6 @@ package de.blinkt.openvpn.fragments;
 
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -189,8 +188,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				}
 			}
 		} else {
-			signalIconImageView.setBackgroundResource(R.drawable.unregist);
-			operatorTextView.setText("----");
+			if (signalIconImageView != null)
+				signalIconImageView.setBackgroundResource(R.drawable.unregist);
+			if (operatorTextView != null)
+				operatorTextView.setText("----");
 		}
 	}
 

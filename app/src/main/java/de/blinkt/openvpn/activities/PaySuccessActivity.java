@@ -11,7 +11,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
@@ -23,7 +22,7 @@ import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.util.SharedUtils;
 
-import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
+import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER_NO_RESPONSE;
 
 public class PaySuccessActivity extends BaseNetActivity implements InterfaceCallback {
 
@@ -146,7 +145,7 @@ public class PaySuccessActivity extends BaseNetActivity implements InterfaceCall
 			if (entity.getUsed() == 1) {
 				//如果之前无套餐的状态，就上电
 				if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER, false)) {
-					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER_NO_RESPONSE);
 				}
 				//标记新状态
 				SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);

@@ -66,7 +66,7 @@
     <string name="order_list">订单列表</string>
     <string name="my_pakages">我的套餐</string>
     <string name="my_device">我的设备</string>
-    <string name="permission_set">权限设置</string>
+    <string name="permission_set">权限</string>
     <string name="blue_connecting">蓝牙连接中…</string>
     <string name="international_flow_packet">国际流量套餐</string>
     <string name="bind_packet_giftcard">绑定套餐礼包卡</string>
@@ -469,9 +469,9 @@
     <string name="t9_10">*</string>
     <string name="t9_11">0\n<font size='10'>+</font></string>
     <string name="t9_12">#</string>
-<string name="key_board">键盘</string>
+    <string name="key_board">键盘</string>
     <!--绑定充值卡-->
-    <string name="bind_recharge_card">绑定充值卡</string>
+    <string name="bind_recharge_card">使用充值卡</string>
     <string name="bind_gift_card">绑定礼包卡</string>
     <string name="input_recharge_card_psw">输入充值卡密码</string>
     <string name="input_gift_card_psw">输入礼物卡密码</string>
@@ -612,7 +612,7 @@
     <string name="rechargeing">正在充电</string>
     <string name="recharge_over">已充满</string>
     <string name="dual_standby_king">双待王</string>
-    <string name="defriend">拉黑</string>
+    <string name="defriend">屏蔽</string>
     <string name="call_record">拨打记录</string>
     <string name="yuan">元</string>
     <string name="shop">商城</string>
@@ -638,7 +638,6 @@
         <item>产品特色</item>
         <item>支付条款</item>
     </string-array>
-
 
 
     <string name="tip_activate">将国际卡插到智能硬件后，请保持APP与智能硬件连接，然后选择套餐生效时间，再确定激活。</string>

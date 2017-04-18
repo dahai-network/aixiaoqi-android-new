@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.umeng.analytics.MobclickAgent;
 
 import org.androidannotations.annotations.App;
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -47,8 +48,8 @@ public class CellPhoneFragment extends Fragment {
     /**
      * 拨打电话标题
      */
-    public static FrameLayout dial_tittle_fl;
-    TextView editTv;
+    public static TextView dial_tittle_fl;
+
     private ArrayList<Fragment> fragments = new ArrayList<>();
     Activity activity;
     ViewPager mViewPager;
@@ -94,21 +95,9 @@ public class CellPhoneFragment extends Fragment {
         ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
     }
 
-    public void showPhoneBottomBar() {
-        ProMainActivity.radiogroup.setVisibility(View.GONE);
-        ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
-    }
 
     private void addListener() {
-        editTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKEDITSMS);
-                Intent intent = new Intent(getActivity(), SMSAcivity.class);
-                startActivity(intent);
-            }
-        });
+
 
         /**
          * 悬浮按钮事件
@@ -134,9 +123,8 @@ public class CellPhoneFragment extends Fragment {
         operation_rg = ((RadioGroup) view.findViewById(R.id.operation_rg));
         cell_phone_rb = ((RadioButton) view.findViewById(R.id.cell_phone_rb));
         //拨打电话标题
-        dial_tittle_fl = (FrameLayout) view.findViewById(R.id.dial_tittle_fl);
+        dial_tittle_fl = (TextView) view.findViewById(R.id.dial_tittle_tv);
         message_rb = ((RadioButton) view.findViewById(R.id.message_rb));
-        editTv = ((TextView) view.findViewById(R.id.edit_tv));
         mViewPager = (ViewPager) view.findViewById(R.id.mViewPager);
 
         //悬浮按钮
@@ -153,7 +141,6 @@ public class CellPhoneFragment extends Fragment {
             public void onPageSelected(int position) {
                 if (position == 0) {
                     ClickPhone();
-
                 } else {
                     ClickMessage();
 
@@ -227,7 +214,6 @@ public class CellPhoneFragment extends Fragment {
         message_rb.setCompoundDrawables(null, null, null, drawable);
         cell_phone_rb.setCompoundDrawables(null, null, null, null);
         mViewPager.setCurrentItem(1);
-        editTv.setVisibility(View.VISIBLE);
         floatingActionButton.setVisibility(View.GONE);
     }
 
@@ -280,7 +266,6 @@ public class CellPhoneFragment extends Fragment {
         }
         message_rb.setCompoundDrawables(null, null, null, null);
         cell_phone_rb.setCompoundDrawables(null, null, null, drawable);
-        editTv.setVisibility(View.GONE);
         mViewPager.setCurrentItem(0);
     }
 

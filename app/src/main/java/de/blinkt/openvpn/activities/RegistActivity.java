@@ -165,7 +165,7 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
 
     public void setViewVisibleOrGone(TextView textview, CharSequence s) {
 
-        int view_state = s.length() == 0 ? View.GONE : View.VISIBLE;
+        int view_state=s.length()==0?View.GONE:View.VISIBLE;
         textview.setVisibility(view_state);
     }
 

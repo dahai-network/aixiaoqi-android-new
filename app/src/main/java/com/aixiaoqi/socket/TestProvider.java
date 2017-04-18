@@ -115,25 +115,15 @@ public class TestProvider {
 	}
 
 	private static boolean validSim(String imsi) {
-		if (imsi.startsWith("46000") || imsi.startsWith("46002")
+		return imsi.startsWith("46000") || imsi.startsWith("46002")
 				|| imsi.startsWith("46007")
-				|| imsi.startsWith("46020")) {
-			SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_MOBILE);//中国移动
-			return true;
-		} else if (imsi.startsWith("46001")
-				|| imsi.startsWith("46006")) {
-			SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_UNICOM);//中国联通
-			return true;
-		} else if (imsi.startsWith("46009")
+				|| imsi.startsWith("46020")
+				|| imsi.startsWith("46001")
+				|| imsi.startsWith("46006")
+				|| imsi.startsWith("46009")
 				|| imsi.startsWith("46003")
 				|| imsi.startsWith("46005")
-				|| imsi.startsWith("460011")) {
-			SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_TELECOM);//中国电信
-			return true;
-		} else {
-			return false;
-		}
-
+				|| imsi.startsWith("46011");
 	}
 
 
