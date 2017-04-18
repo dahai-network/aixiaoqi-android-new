@@ -239,6 +239,7 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
                 Intent intent = new Intent();
                 intent.setClass(RegistActivity.this, LoginMainActivity.class);
                 startActivity(intent);
+                finish();
 
                 break;
 
