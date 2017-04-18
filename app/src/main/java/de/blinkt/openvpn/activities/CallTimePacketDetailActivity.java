@@ -2,6 +2,7 @@ package de.blinkt.openvpn.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +11,9 @@ import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -54,11 +57,13 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
     private boolean isCreateView;
     private PacketDtailEntity.ListBean bean;
     Fragment callTimePDDetailFragment;
+    DisplayMetrics dm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = this;
+        dm = getResources().getDisplayMetrics();
         addData();
     }
 
@@ -69,6 +74,7 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
         //创建适配器
         vpPager.setAdapter(callTimePacketDetailAdapter);
         myTabs.setViewPager(vpPager);
+        setTabsValue();
 
     }
 
@@ -191,5 +197,21 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
             String s = "套餐详情";
             return s;
         }
+    }
+
+    /**
+     * 设置该PagerSlidingTabStrip的样式
+     */
+    private void setTabsValue() {
+        // 设置Tab是自动填充满屏幕的
+        myTabs.setShouldExpand(false);
+        // 设置Tab的分割线是透明的
+        myTabs.setDividerColor(Color.TRANSPARENT);
+        // 设置Tab底部线的高度
+
+        // 设置Tab Indicator的高度
+        myTabs.setIndicatorHeight((int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 2, dm));
+
     }
 }

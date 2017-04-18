@@ -3,12 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <include layout="@layout/view_no_net" />
 
     <ScrollView
         android:id="@+id/detailScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -87,8 +90,7 @@
                 android:layout_below="@+id/fl"
                 android:background="@color/gray_back" />
 
-            <de.blinkt.openvpn.views.PagerSlidingTabStripExtends
-                xmlns:aixiaoqi="http://schemas.android.com/apk/res-auto"
+            <de.blinkt.openvpn.views.PagerSlidingTabStripExtends xmlns:aixiaoqi="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/jbp_tabs"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
@@ -96,9 +98,10 @@
                 android:background="@color/white"
                 aixiaoqi:pstsIndicatorColor="#02A0E9"
                 aixiaoqi:pstsIndicatorHeight="8dp"
-                aixiaoqi:pstsSelectedTabTextColor="#02A0E9"
+                aixiaoqi:pstsSelectedTabTextColor="#00A1E6"
                 aixiaoqi:pstsSelectedTabTextSize="18sp"
                 aixiaoqi:pstsShouldExpand="false"
+                aixiaoqi:pstsTabPaddingLeftRight="@dimen/padding_15dp"
                 aixiaoqi:pstsTabTextSize="16sp">
             </de.blinkt.openvpn.views.PagerSlidingTabStripExtends>
 
@@ -107,6 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/jbp_tabs"
+                android:background="@color/white"
                 android:visibility="visible" />
         </RelativeLayout>
     </ScrollView>

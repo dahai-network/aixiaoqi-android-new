@@ -2,14 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/order_detail_background"
     android:orientation="vertical">
 
     <include layout="@layout/view_no_net" />
 
     <View
         style="@style/horizontal_line_view"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="10dp" />
 
     <RelativeLayout
         android:id="@+id/packetDetailRelativeLayout"
@@ -17,7 +16,9 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingLeft="@dimen/padding_15dp"
+        android:paddingTop="@dimen/padding_10dp"
+       >
 
         <ImageView
             android:id="@+id/countryImageView"
@@ -77,16 +78,20 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/white"
-        aixiaoqi:pstsIndicatorColor="#02A0E9"
-        aixiaoqi:pstsIndicatorHeight="3dp"
-        aixiaoqi:pstsSelectedTabTextColor="#02A0E9"
+        aixiaoqi:pstsIndicatorColor="#00A0E9"
+        aixiaoqi:pstsIndicatorHeight="2dp"
+        aixiaoqi:pstsSelectedTabTextColor="#00A0E9"
         aixiaoqi:pstsSelectedTabTextSize="18sp"
         aixiaoqi:pstsShouldExpand="false"
-        aixiaoqi:pstsTabTextSize="16sp">
+        aixiaoqi:pstsTabTextSize="@dimen/little_16"
+        aixiaoqi:pstsTabPaddingLeftRight="@dimen/padding_15dp"
+        >
+
     </de.blinkt.openvpn.views.PagerSlidingTabStripExtends>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_pager"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible" />

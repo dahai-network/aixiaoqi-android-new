@@ -145,7 +145,7 @@
     <style name="horizontal_line_view">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
-        <item name="android:background">@color/light_gray</item>
+        <item name="android:background">@color/colorf_F5F5F5</item>
     </style>
 
     <style name="vertical_line_view_F5F5F5">
