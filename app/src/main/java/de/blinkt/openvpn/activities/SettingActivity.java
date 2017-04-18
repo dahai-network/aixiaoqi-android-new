@@ -224,7 +224,6 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 		sharedUtils.delete(Constant.TEL);
 		sharedUtils.delete(Constant.IMEI);
 		sharedUtils.delete(Constant.BRACELETNAME);
-		sharedUtils.delete(Constant.NULLCARD_SERIALNUMBER);
 		//友盟账号统计
 		MobclickAgent.onProfileSignOff();
 		Intent intent = new Intent();

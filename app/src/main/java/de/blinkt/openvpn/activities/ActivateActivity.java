@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
@@ -27,9 +30,9 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.OrderActivationHttp;
 import de.blinkt.openvpn.http.OrderDataHttp;
+import de.blinkt.openvpn.model.WriteCardEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
-import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.dialog.DialogYearMonthDayPicker;
@@ -232,7 +235,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 						}
 					}
 				}).start();
-				orderDataHttp(SharedUtils.getInstance().readString(Constant.NULLCARD_SERIALNUMBER));
+
 			} else {
 				CommonTools.showShortToast(this, orderActivationHttp.getMsg());
 				sureTextView.setEnabled(true);
@@ -245,6 +248,12 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				CommonTools.showShortToast(ActivateActivity.this, orderDataHttp.getMsg());
 			}
 		}
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveWriteCardIdEntity(WriteCardEntity entity) {
+		String nullcardId = entity.getNullCardId();
+		orderDataHttp(nullcardId);
 	}
 
 	private void sendMessageSeparate(final String message) {
@@ -285,7 +294,6 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 
 	@Override
 	protected void onDestroy() {
-
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(isWriteReceiver);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(finishActivityReceiver);
 		super.onDestroy();

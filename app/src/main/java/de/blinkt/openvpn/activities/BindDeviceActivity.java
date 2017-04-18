@@ -49,7 +49,7 @@ import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
-import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
+import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
 import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 
@@ -124,6 +124,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	}
 
 	private void setAnimation() {
+		if (seekImageView.getAnimation() != null) seekImageView.clearAnimation();
 		Animation anim = AnimationUtils.loadAnimation(this, R.anim.anim_rotate_seek);
 		anim.setInterpolator(new LinearInterpolator());//代码设置插补器
 		seekImageView.startAnimation(anim);
@@ -391,9 +392,9 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 						BluetoothConstant.IS_BIND = true;
 						//更新时间操作
 						sendMessageToBlueTooth(getBLETime());
-						CommonTools.delayTime(500);
-						//上电指令
-						sendMessageToBlueTooth(UP_TO_POWER);
+//						CommonTools.delayTime(500);
+						//获取基本信息
+						sendMessageToBlueTooth(BASIC_MESSAGE);
 						if (!bluetoothName.contains(Constant.UNIBOX)) {
 							runOnUiThread(new Runnable() {
 								@Override

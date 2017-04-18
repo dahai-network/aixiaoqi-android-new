@@ -71,6 +71,7 @@ import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
+import de.blinkt.openvpn.model.StartRegistEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
@@ -81,8 +82,8 @@ import de.blinkt.openvpn.views.CustomViewPager;
 import de.blinkt.openvpn.views.MyRadioButton;
 import de.blinkt.openvpn.views.TopProgressView;
 
+import static cn.com.aixiaoqi.R.string.index_registing;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
-import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 
@@ -649,7 +650,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
 					if (SocketConstant.REGISTER_STATUE_CODE == 2) {
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+						sendEventBusChangeBluetoothStatus(getString(index_registing), R.drawable.index_no_signal);
 						return;
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
@@ -801,7 +802,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				break;
 			case SocketConstant.TCP_DISCONNECT:
 				//更改为注册中
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+				sendEventBusChangeBluetoothStatus(getString(index_registing), R.drawable.index_no_signal);
 
 				break;
 			case SocketConstant.REGISTER_FAIL_INITIATIVE:
@@ -811,7 +812,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
 				break;
 			case SocketConstant.RESTART_TCP:
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+				sendEventBusChangeBluetoothStatus(getString(index_registing), R.drawable.index_no_signal);
 				startSocketService();
 				if (ProMainActivity.sendYiZhengService == null) {
 					ProMainActivity.sendYiZhengService = new SendYiZhengService();
@@ -819,7 +820,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				startTcpSocket();
 				break;
 			case SocketConstant.REG_STATUE_CHANGE:
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+				sendEventBusChangeBluetoothStatus(getString(index_registing), R.drawable.index_no_signal);
 				break;
 			case SocketConstant.REGISTER_CHANGING:
 				double percent = entity.getProgressCount();
@@ -920,6 +921,15 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		accountFragment.setBleStatus(entity.getStatus());
 	}
 
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveConnectStatus(StartRegistEntity entity) {
+		if (entity.isRegist()) {
+			//当有通话套餐的时候才允许注册操作
+			requestPacket();
+		}
+
+	}
+
 	@Subscribe(threadMode = ThreadMode.BACKGROUND)//非UI线程
 	public void onServiceOperation(ServiceOperationEntity entity) {
 		switch (entity.getOperationType()) {
@@ -974,16 +984,16 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					String dataType = message.get(0).substring(6, 10);
 					switch (dataType) {
 						case RETURN_POWER:
-							e("进入0700 ProMainActivity");
-							if (message.get(0).substring(10, 12).equals("01")) {
-
-								if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
-									//当有通话套餐的时候才允许注册操作
-									requestPacket();
-								}
-							} else if (message.get(0).substring(10, 12).equals("11")) {
-								sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
-							}
+//							e("进入0700 ProMainActivity");
+//							if (message.get(0).substring(10, 12).equals("01")) {
+//
+//								if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
+//									//当有通话套餐的时候才允许注册操作
+//									requestPacket();
+//								}
+//							} else if (message.get(0).substring(10, 12).equals("11")) {
+//								sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
+//							}
 							break;
 						case Constant.SYSTEM_BASICE_INFO:
 							//返回基本信息就更新account的仪表盘栏
@@ -1060,7 +1070,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	//是否注册成功，如果是则信号强，反之则信号弱
 	private void checkRegisterStatuGoIp() {
 		if (REGISTER_STATUE_CODE == 1) {
-			sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+			sendEventBusChangeBluetoothStatus(getString(index_registing), R.drawable.index_no_signal);
 		} else if (REGISTER_STATUE_CODE != 3) {
 			sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
 		} else {
