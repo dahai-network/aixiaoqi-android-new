@@ -75,6 +75,7 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
 
     private void init() {
         initView();
+        initEvent();
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
@@ -91,7 +92,7 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
                 findViewById(R.id.verification_edit);
         passwordEdit = (EditText)
                 findViewById(R.id.passwordEdit);
-        setPhoneNumberEditChangeLisener();
+       // setPhoneNumberEditChangeLisener();
 
         hindPswCheckBox = (CheckBox) findViewById(R.id.hindPswCheckBox);
         hindPswCheckBox.setOnClickListener(this);
@@ -103,9 +104,17 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
         getPswLinearLayout.setOnClickListener(this);
 
     }
+    /**
+     * 初始化事件
+     */
+    private void initEvent() {
+        setEditChangeLisener(phoneNumberEdit, 1);
+        setEditChangeLisener(verification_edit, 2);
+        setEditChangeLisener(passwordEdit, 3);
+    }
 
-    private void setPhoneNumberEditChangeLisener() {
-        phoneNumberEdit.addTextChangedListener(new TextWatcher() {
+    private void setEditChangeLisener(EditText editText, final int type) {
+        editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -113,53 +122,19 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    textview_1.setVisibility(View.VISIBLE);
-                } else {
-                    textview_1.setVisibility(View.GONE);
+
+                switch (type) {
+                    case 1:
+                        setViewVisibleOrGone(textview_1, s);
+                        break;
+                    case 2:
+                        setViewVisibleOrGone(textview_2, s);
+                        break;
+                    case 3:
+                        setViewVisibleOrGone(textview_3, s);
+                        break;
                 }
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        verification_edit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    textview_2.setVisibility(View.VISIBLE);
-                } else {
-                    textview_2.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-
-        });
-        passwordEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    textview_3.setVisibility(View.VISIBLE);
-                } else {
-                    textview_3.setVisibility(View.GONE);
-                }
             }
 
             @Override
@@ -169,6 +144,14 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
         });
     }
 
+    public void setViewVisibleOrGone(TextView textview, CharSequence s) {
+
+        if (s.length() != 0) {
+            textview.setVisibility(View.VISIBLE);
+        } else {
+            textview.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onClick(View v) {
