@@ -16,13 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Filter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aixiaoqi.socket.SocketConstant;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +104,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 
     public void phonecallClicked() {
 
+        //Log.d("aixiaoqi____", "phonecallClicked: ");
         if (t9dialpadview.getT9Input() != null && t9dialpadview.getT9Input().length() > 0) {
             contactRecodeEntity = new ContactRecodeEntity();
             contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());

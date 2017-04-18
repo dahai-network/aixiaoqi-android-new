@@ -17,7 +17,7 @@ public class OrderActivationHttp extends BaseHttp {
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
 		params.put("OrderID", valueParams[0]);
-		params.put("BeginTime", valueParams[1]);
+		params.put("BeginDateTime", valueParams[1]);
 	}
 
 

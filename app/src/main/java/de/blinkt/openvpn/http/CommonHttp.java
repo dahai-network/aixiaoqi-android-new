@@ -172,14 +172,11 @@ public abstract class CommonHttp implements Callback, Runnable {
 //				ICSOpenVPNApplication.getInstance().finishAllActivity();
 				//token过期
 				if (!CommonTools.isFastDoubleClick(1000)) {
-
 					Intent intent1 = new Intent();
 					intent1.setAction(SportFragment.CLEARSPORTDATA);
 					intent1.setAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
-
 					if (ICSOpenVPNApplication.uartService != null)
 						ICSOpenVPNApplication.uartService.disconnect();
-
 					if (ICSOpenVPNApplication.getInstance() != null)
 						ICSOpenVPNApplication.getInstance().sendBroadcast(intent1);
 
@@ -205,7 +202,6 @@ public abstract class CommonHttp implements Callback, Runnable {
 			error(response.message());
 		}
 	}
-
 
 	private void Download(Response response) {
 		File fileDir = new File(Constant.DOWNLOAD_PATH);

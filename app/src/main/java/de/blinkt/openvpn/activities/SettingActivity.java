@@ -168,7 +168,7 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 
 				case 6002:
 
-					if (NetworkUtils.isNetworkAvailable(ICSOpenVPNApplication.getContext())&&!TextUtils.isEmpty(alias)) {
+					if (NetworkUtils.isNetworkAvailable(ICSOpenVPNApplication.getContext()) && !TextUtils.isEmpty(alias)) {
 						handler.sendMessageDelayed(handler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
 					}
 					break;
@@ -252,7 +252,7 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if (handler != null && handler.getLooper() == Looper.getMainLooper()){
+		if (handler != null && handler.getLooper() == Looper.getMainLooper()) {
 			handler.removeCallbacksAndMessages(null);
 		}
 	}

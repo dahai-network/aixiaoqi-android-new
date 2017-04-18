@@ -628,6 +628,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				IsHavePacketHttp isHavePacketHttp = (IsHavePacketHttp) object;
 				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
 				if (entity.getUsed() == 1) {
+					e("有套餐");
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
 					if (SocketConstant.REGISTER_STATUE_CODE != 3) {
 						getConfigInfo();
@@ -645,20 +646,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
 			GetHostAndPortHttp http = (GetHostAndPortHttp) object;
 			if (http.getStatus() == 1) {
+				e("端口号");
 				requestCount = 0;
 				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
 					if (SocketConstant.REGISTER_STATUE_CODE == 2) {
-						sendEventBusChangeBluetoothStatus(getString(index_registing), R.drawable.index_no_signal);
-						return;
+						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+//						return;
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
-						return;
+//						return;
 					}
 					new Thread(new Runnable() {
 						@Override
 						public void run() {
+							e("开启线程=");
 							if (sdkAndBluetoothDataInchange == null) {
 								sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
 							}
@@ -985,13 +988,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					switch (dataType) {
 						case RETURN_POWER:
 //							e("进入0700 ProMainActivity");
-//							if (message.get(0).substring(10, 12).equals("01")) {
+//							if (message.get(0).substring(10, 12).equals("03")) {
 //
 //								if (IS_TEXT_SIM && !CommonTools.isFastDoubleClick(300)) {
 //									//当有通话套餐的时候才允许注册操作
 //									requestPacket();
 //								}
-//							} else if (message.get(0).substring(10, 12).equals("11")) {
+//							} else if (message.get(0).substring(10, 12).equals("13")) {
 //								sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 //							}
 							break;

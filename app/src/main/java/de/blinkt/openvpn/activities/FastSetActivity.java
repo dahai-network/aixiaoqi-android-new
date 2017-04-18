@@ -42,7 +42,6 @@ public class FastSetActivity extends BaseActivity implements View.OnClickListene
 
 	private void addListener(){
 		beforeGoingAbroadTv.setOnClickListener(this);
-
 		outsideTv.setOnClickListener(this);
 		afterGoingAbroadTv.setOnClickListener(this);
 

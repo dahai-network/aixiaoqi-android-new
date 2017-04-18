@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -61,6 +62,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 		setContentView(R.layout.activity_activate);
 		initView();
 		initData();
+		EventBus.getDefault().register(this);
 		hasLeftViewTitle(R.string.activate_packet, -1);
 		addListener();
 		LocalBroadcastManager.getInstance(this).registerReceiver(isWriteReceiver, setFilter());
@@ -86,6 +88,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 		orderId = getIntent().getStringExtra(IntentPutKeyConstant.ORDER_ID);
 		payWayTextView.setText(DateUtils.getCurrentDate());
 		effectTime = (System.currentTimeMillis() / 1000) + "";
+		dataTime = DateUtils.getDateToString(System.currentTimeMillis()).substring(0, 10);
 		expireDaysTextView.setText(getIntent().getIntExtra("ExpireDaysInt", 0) + "天");
 	}
 
@@ -162,7 +165,8 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				}
 				break;
 			case R.id.payWayTextView:
-				new DialogYearMonthDayPicker(this, this, R.layout.picker_year_month_day_layout, 0);
+				DialogYearMonthDayPicker dialogYearMonthDayPicker = new DialogYearMonthDayPicker(this, this, R.layout.picker_year_month_day_layout, 0);
+				dialogYearMonthDayPicker.changeText(getResources().getString(R.string.select_time) + "(" + getIntent().getStringExtra(IntentPutKeyConstant.COUNTRY_NAME) + ")");
 				break;
 			case R.id.payForWhatTextView:
 				break;
@@ -177,29 +181,32 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 			CommonTools.showShortToast(this, getString(R.string.effective_date_is_null));
 			return;
 		}
-		createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_ACTIVATION, orderId, effectTime);
+		createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_ACTIVATION, orderId, dataTime);
 	}
 
 	//获取写卡数据，然后发给蓝牙写卡
 	private void orderDataHttp(String nullcardNumber) {
 		if (nullcardNumber != null) {
-			createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_DATA, orderId, nullcardNumber);
+			if (!CommonTools.isFastDoubleClick(100))
+				createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_DATA, orderId, nullcardNumber);
 		} else {
 			CommonTools.showShortToast(this, getString(R.string.no_nullcard_id));
 		}
 	}
 
 	private String effectTime;
+	private String dataTime;
 
 	@Override
 	public void dialogText(int type, String text) {
 		if (type == 2) {
-			SendCommandToBluetooth.sendMessageToBlueTooth("AA112233AA");
+			SendCommandToBluetooth.sendMessageToBlueTooth(Constant.RESTORATION);
 		} else if (type == 0) {
-			if (System.currentTimeMillis() > DateUtils.getStringToDate(text + " 00:00:00")) {
+			if (System.currentTimeMillis() > DateUtils.getStringToDate(text + " 00:00:00") - 24 * 60 * 60 * 1000) {
 				CommonTools.showShortToast(this, getString(R.string.less_current_time));
 				return;
 			}
+			dataTime = text;
 			effectTime = DateUtils.getStringToDate(text + " 00:00:00") / 1000 + "";
 			String[] time = text.split("-");
 			payWayTextView.setText(time[0] + getString(R.string.year) + time[1] + getString(R.string.month) + time[2] + getString(R.string.daliy));
@@ -219,7 +226,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 					@Override
 					public void run() {
 						try {
-							SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
+							SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_NO_RESPONSE);
 							Thread.sleep(20000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
@@ -296,6 +303,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	protected void onDestroy() {
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(isWriteReceiver);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(finishActivityReceiver);
+		EventBus.getDefault().unregister(this);
 		super.onDestroy();
 	}
 }

@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -36,174 +37,225 @@ import static de.blinkt.openvpn.constant.UmengContant.FINDBACKSHOWPASSWORD;
 
 public class GetBackPswActivity extends BaseNetActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-	private String TAG = "GetBackPswActivity";
-	private EditText phoneNumberEdit;
-	private EditText verification_edit;
-	private EditText passwordEdit;
-	private Button sendBtn;
-	private Button sure_btn;
-	private CheckBox hindPswCheckBox;
-	private LinearLayout getPswLinearLayout;
+    private String TAG = "GetBackPswActivity";
+    private EditText phoneNumberEdit;
+    private EditText verification_edit;
+    private EditText passwordEdit;
+    private Button sendBtn;
+    private Button sure_btn;
+    private CheckBox hindPswCheckBox;
+    private LinearLayout getPswLinearLayout;
+    private TextView textview_1;
+    private TextView textview_2;
+    private TextView textview_3;
 
-	private boolean isOpenHind = true;
-	private CountDownTimer timer = new CountDownTimer(111000, 1000) {
-		@Override
-		public void onTick(long millisUntilFinished) {
-			sendBtn.setText(millisUntilFinished / 1000 + "秒后可重发");
-		}
+    private boolean isOpenHind = true;
+    private CountDownTimer timer = new CountDownTimer(111000, 1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+            sendBtn.setText(millisUntilFinished / 1000 + "秒后可重发");
+        }
 
-		@Override
-		public void onFinish() {
-			sendBtn.setEnabled(true);
-			sendBtn.setText("发送验证码");
-		}
-	};
-	private InputMethodManager manager;
-
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_get_back_psw);
-		init();
-		hasLeftViewTitle(R.string.find_password, 0);
-	}
-
-	private void init() {
-		initView();
-		manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-	}
+        @Override
+        public void onFinish() {
+            sendBtn.setEnabled(true);
+            sendBtn.setText("发送验证码");
+        }
+    };
+    private InputMethodManager manager;
 
 
-	//初始化控件
-	private void initView() {
-		phoneNumberEdit = (EditText)
-				findViewById(R.id.phoneNumberEdit);
-		verification_edit = (EditText)
-				findViewById(R.id.verification_edit);
-		setPhoneNumberEditChangeLisener();
-		passwordEdit = (EditText)
-				findViewById(R.id.passwordEdit);
-		hindPswCheckBox = (CheckBox) findViewById(R.id.hindPswCheckBox);
-		hindPswCheckBox.setOnClickListener(this);
-		sendBtn = (Button) findViewById(R.id.sendBtn);
-		sendBtn.setOnClickListener(this);
-		sure_btn = (Button) findViewById(R.id.sure_btn);
-		sure_btn.setOnClickListener(this);
-		getPswLinearLayout = (LinearLayout) findViewById(R.id.getPswLinearLayout);
-		getPswLinearLayout.setOnClickListener(this);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_get_back_psw);
+        init();
+        hasLeftViewTitle(R.string.find_password, 0);
+    }
 
-	}
-
-	private void setPhoneNumberEditChangeLisener() {
-		phoneNumberEdit.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (s.length() != 0) sendBtn.setEnabled(true);
-				else {
-					sendBtn.setEnabled(false);
-				}
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-
-			}
-		});
-	}
+    private void init() {
+        initView();
+        manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    }
 
 
-	@Override
-	public void onClick(View v) {
+    //初始化控件
+    private void initView() {
+        textview_1 = (TextView) findViewById(R.id.textview_1);
+        textview_2 = (TextView) findViewById(R.id.textview_2);
+        textview_3 = (TextView) findViewById(R.id.textview_3);
 
-		switch (v.getId()) {
+        phoneNumberEdit = (EditText)
+                findViewById(R.id.phoneNumberEdit);
+        verification_edit = (EditText)
+                findViewById(R.id.verification_edit);
+        passwordEdit = (EditText)
+                findViewById(R.id.passwordEdit);
+        setPhoneNumberEditChangeLisener();
 
-			case R.id.sendBtn:
+        hindPswCheckBox = (CheckBox) findViewById(R.id.hindPswCheckBox);
+        hindPswCheckBox.setOnClickListener(this);
+        sendBtn = (Button) findViewById(R.id.sendBtn);
+        sendBtn.setOnClickListener(this);
+        sure_btn = (Button) findViewById(R.id.sure_btn);
+        sure_btn.setOnClickListener(this);
+        getPswLinearLayout = (LinearLayout) findViewById(R.id.getPswLinearLayout);
+        getPswLinearLayout.setOnClickListener(this);
 
-				if (CheckUtil.isMobileNO(phoneNumberEdit.getText().toString().trim(), GetBackPswActivity.this)) {
-					//友盟方法统计
-					MobclickAgent.onEvent(this, CLICKFINDBACKSENDCODE);
-					sendBtn.setEnabled(false);
-					sendBtn.setTextColor(ContextCompat.getColor(this, R.color.regist_send_sms_unenable));
+    }
 
-					createHttpRequest( HttpConfigUrl.COMTYPE_SEND_SMS, phoneNumberEdit.getText().toString(), 2+"");
-				}
-				break;
-			case R.id.sure_btn:
-				String vertificationStr = verification_edit.getText().toString();
-				if (!TextUtils.isEmpty(vertificationStr)) {
-					String phoneStr = phoneNumberEdit.getText().toString();
-					String pswStr = passwordEdit.getText().toString();
-					if (CheckUtil.isMobileNO(phoneStr, GetBackPswActivity.this)) {
-						if (CheckUtil.isPassWordNo(pswStr, GetBackPswActivity.this)) {
-							//友盟方法统计
-							MobclickAgent.onEvent(this, CLICKFINDBACKBUTTON);
-							createHttpRequest(HttpConfigUrl.COMTYPE_FORGET_PSW,
-									phoneStr,
-									pswStr,
-									vertificationStr);
-						}
-					}
-				} else {
-					CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), getResources().getString(R.string.null_verification));
-				}
-				break;
-			case R.id.hindPswCheckBox:
-				//友盟方法统计
-				MobclickAgent.onEvent(this, FINDBACKSHOWPASSWORD);
-				if (isOpenHind) {
-					isOpenHind = false;
-					//如果选中，显示密码
-					passwordEdit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-				} else {
-					isOpenHind = true;
-					//否则隐藏密码
-					passwordEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
-				}
-				break;
-			case R.id.getPswLinearLayout:
-				ViewUtil.hideSoftKeyboard(this);
-				break;
-		}
-	}
+    private void setPhoneNumberEditChangeLisener() {
+        phoneNumberEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if (isChecked) {
-			sure_btn.setEnabled(true);
-		} else {
-			sure_btn.setEnabled(false);
-		}
-	}
+            }
 
-	@Override
-	public void rightComplete(int cmdType, CommonHttp object) {
-		if (cmdType == HttpConfigUrl.COMTYPE_SEND_SMS) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 0) {
+                    textview_1.setVisibility(View.VISIBLE);
+                } else {
+                    textview_1.setVisibility(View.GONE);
+                }
+            }
 
-			SendMsgHttp entity = (SendMsgHttp) object;
-			if (entity.getStatus() == 1) {
-				sendBtn.setEnabled(false);
-				timer.start();
-			} else {
-				sendBtn.setEnabled(true);
-				sendBtn.setTextColor(ContextCompat.getColor(this, R.color.black));
-				CommonTools.showShortToast(GetBackPswActivity.this, entity.getMsg());
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_FORGET_PSW) {
-			ForgetPswHttp entity = (ForgetPswHttp) object;
-			if (entity.getStatus() == 1) {
-				CommonTools.showShortToast(GetBackPswActivity.this, entity.getMsg());
-				finish();
-			} else {
-				CommonTools.showShortToast(GetBackPswActivity.this, entity.getMsg());
-			}
-		}
-	}
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        verification_edit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 0) {
+                    textview_2.setVisibility(View.VISIBLE);
+                } else {
+                    textview_2.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+        });
+        passwordEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 0) {
+                    textview_3.setVisibility(View.VISIBLE);
+                } else {
+                    textview_3.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+
+            case R.id.sendBtn:
+
+                if (CheckUtil.isMobileNO(phoneNumberEdit.getText().toString().trim(), GetBackPswActivity.this)) {
+                    //友盟方法统计
+                    MobclickAgent.onEvent(this, CLICKFINDBACKSENDCODE);
+                    sendBtn.setEnabled(false);
+                    sendBtn.setTextColor(ContextCompat.getColor(this, R.color.regist_send_sms_unenable));
+
+                    createHttpRequest(HttpConfigUrl.COMTYPE_SEND_SMS, phoneNumberEdit.getText().toString(), 2 + "");
+                }
+                break;
+            case R.id.sure_btn:
+                String vertificationStr = verification_edit.getText().toString();
+                if (!TextUtils.isEmpty(vertificationStr)) {
+                    String phoneStr = phoneNumberEdit.getText().toString();
+                    String pswStr = passwordEdit.getText().toString();
+                    if (CheckUtil.isMobileNO(phoneStr, GetBackPswActivity.this)) {
+                        if (CheckUtil.isPassWordNo(pswStr, GetBackPswActivity.this)) {
+                            //友盟方法统计
+                            MobclickAgent.onEvent(this, CLICKFINDBACKBUTTON);
+                            createHttpRequest(HttpConfigUrl.COMTYPE_FORGET_PSW,
+                                    phoneStr,
+                                    pswStr,
+                                    vertificationStr);
+                        }
+                    }
+                } else {
+                    CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), getResources().getString(R.string.null_verification));
+                }
+                break;
+            case R.id.hindPswCheckBox:
+                //友盟方法统计
+                MobclickAgent.onEvent(this, FINDBACKSHOWPASSWORD);
+                if (isOpenHind) {
+                    isOpenHind = false;
+                    //如果选中，显示密码
+                    passwordEdit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    isOpenHind = true;
+                    //否则隐藏密码
+                    passwordEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                break;
+            case R.id.getPswLinearLayout:
+                ViewUtil.hideSoftKeyboard(this);
+                break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            sure_btn.setEnabled(true);
+        } else {
+            sure_btn.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void rightComplete(int cmdType, CommonHttp object) {
+        if (cmdType == HttpConfigUrl.COMTYPE_SEND_SMS) {
+
+            SendMsgHttp entity = (SendMsgHttp) object;
+            if (entity.getStatus() == 1) {
+                sendBtn.setEnabled(false);
+                timer.start();
+            } else {
+                sendBtn.setEnabled(true);
+                sendBtn.setTextColor(ContextCompat.getColor(this, R.color.black));
+                CommonTools.showShortToast(GetBackPswActivity.this, entity.getMsg());
+            }
+        } else if (cmdType == HttpConfigUrl.COMTYPE_FORGET_PSW) {
+            ForgetPswHttp entity = (ForgetPswHttp) object;
+            if (entity.getStatus() == 1) {
+                CommonTools.showShortToast(GetBackPswActivity.this, entity.getMsg());
+                finish();
+            } else {
+                CommonTools.showShortToast(GetBackPswActivity.this, entity.getMsg());
+            }
+        }
+    }
 
 
 }

@@ -6,8 +6,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -51,7 +49,6 @@ import de.blinkt.openvpn.util.ViewUtil;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKFINDBACKPASSWORD;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKLOGINREGISTER;
-import static de.blinkt.openvpn.constant.UmengContant.LOGINSHOWPASSWORD;
 
 
 /**
@@ -68,6 +65,8 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 	private boolean isOpenHind = true;
 	private TextView forgetPswTextView;
 	private LinearLayout loginLinearLayout;
+	private TextView loginPasswordTextView;
+	private TextView loginUserTextView;
 
 	private static final int MSG_SET_ALIAS = 1001;
 
@@ -124,13 +123,12 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		usernameEdit = (EditText) findViewById(R.id.usernameEdit);
 		pwdEdit = (EditText) findViewById(R.id.pwdEdit);
 		login_btn = (Button) findViewById(R.id.login_btn);
-		hindPswCheckBox = (CheckBox) findViewById(R.id.hindPswCheckBox);
 		registTextView = (TextView) findViewById(R.id.registTextView);
 		forgetPswTextView = (TextView) findViewById(R.id.forgetPswTextView);
 		loginLinearLayout = (LinearLayout) findViewById(R.id.loginLinearLayout);
-
+		loginPasswordTextView = (TextView) findViewById(R.id.tip_login_password);
+		loginUserTextView = (TextView) findViewById(R.id.tip_login_user);
 		registTextView.setOnClickListener(this);
-		hindPswCheckBox.setOnClickListener(this);
 		forgetPswTextView.setOnClickListener(this);
 		loginLinearLayout.setOnClickListener(this);
 		login_btn.setOnClickListener(this);
@@ -143,7 +141,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		usernameEdit = null;
 		pwdEdit = null;
 		login_btn = null;
-		hindPswCheckBox = null;
 		registTextView = null;
 		forgetPswTextView = null;
 
@@ -170,7 +167,9 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 						login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
 						login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
 					}
+					loginUserTextView.setVisibility(View.VISIBLE);
 				} else {
+					loginUserTextView.setVisibility(View.GONE);
 					login_btn.setEnabled(false);
 					login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
 					login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
@@ -217,7 +216,9 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 						login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
 						login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
 					}
+					loginPasswordTextView.setVisibility(View.VISIBLE);
 				} else {
+					loginPasswordTextView.setVisibility(View.GONE);
 					login_btn.setEnabled(false);
 					login_btn.setBackgroundResource(R.drawable.circle_gray_ret);
 					login_btn.setTextColor(getResources().getColor(R.color.color_6d798f));
@@ -257,19 +258,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 						showProgress(R.string.login_loading);
 						createHttpRequest(HttpConfigUrl.COMTYPE_LOGIN, usernameEdit.getText().toString(), pwdEdit.getText().toString());
 					}
-				}
-				break;
-			case R.id.hindPswCheckBox:
-				//友盟方法统计
-				MobclickAgent.onEvent(this, LOGINSHOWPASSWORD);
-				if (isOpenHind) {
-					isOpenHind = false;
-					//如果选中，显示密码
-					pwdEdit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-				} else {
-					isOpenHind = true;
-					//否则隐藏密码
-					pwdEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
 				}
 				break;
 			case R.id.forgetPswTextView:

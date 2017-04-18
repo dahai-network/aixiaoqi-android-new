@@ -277,20 +277,34 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										break;
 
 									case Constant.RETURN_POWER:
-										if (messages.get(0).substring(10, 12).equals("01")) {
+										if (messages.get(0).substring(10, 12).equals("03")) {
 											//当上电完成则需要发送写卡命令
 											Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
 											if (!IS_TEXT_SIM && isGetnullCardid) {
 												//空卡ID是否不为空，若不为空则
 												if (nullCardId != null) {
 													Log.i(TAG, "nullcardid上电返回");
+													//如果在激活流程的页面就直接激活
+													utils.writeBoolean(Constant.IS_NEW_SIM_CARD, false);
+													//发送旧卡空卡序列号
+													WriteCardEntity writeCardEntity = new WriteCardEntity();
+													writeCardEntity.setNullCardId(nullCardId);
+													EventBus.getDefault().post(writeCardEntity);
 												} else {
 													Log.i(TAG, "发送" + Constant.WRITE_SIM_FIRST);
 													sendMessageSeparate(Constant.WRITE_SIM_FIRST, Constant.WRITE_SIM_DATA);
 												}
+											} else {
+												if (nullCardId != null) {
+													utils.writeBoolean(Constant.IS_NEW_SIM_CARD, false);
+													//发送旧卡空卡序列号
+													WriteCardEntity writeCardEntity = new WriteCardEntity();
+													writeCardEntity.setNullCardId(nullCardId);
+													EventBus.getDefault().post(writeCardEntity);
+												}
 											}
 
-										} else if (messages.get(0).substring(10, 12).equals("11")) {
+										} else if (messages.get(0).substring(10, 12).equals("13")) {
 											if (!IS_TEXT_SIM) {
 												Intent cardBreakIntent = new Intent();
 												cardBreakIntent.setAction(MyOrderDetailActivity.CARD_RULE_BREAK);
@@ -370,7 +384,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
 
 											if (SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
-
 												Thread.sleep(500);
 //												SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
 											} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
@@ -389,7 +402,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										break;
 									case Constant.ICCID_BLUE_VALUE:
 										String Iccid = PacketeUtil.Combination(messages);
+										Log.e("ICCID_BLUE_VALUE", Iccid);
 										SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(Iccid);
+										Log.e("ICCID_BLUE_VALUE111111", SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
 										break;
 									default:
 										break;
@@ -501,7 +516,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
 						sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 						isGetnullCardid = false;
-						nullCardId = null;
 						return;
 					}
 //					registFlowPath();
@@ -515,7 +529,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
 					sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 					isGetnullCardid = false;
-					nullCardId = null;
 					return;
 				}
 				break;
@@ -608,7 +621,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				intent.setAction(FINISH_ACTIVITY);
 				intent.setAction(MyOrderDetailActivity.FINISH_PROCESS);
 				LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-				sendMessageToBlueTooth(OFF_TO_POWER);
 			} else {
 				CommonTools.showShortToast(ICSOpenVPNApplication.getContext()
 						, object.getMsg());

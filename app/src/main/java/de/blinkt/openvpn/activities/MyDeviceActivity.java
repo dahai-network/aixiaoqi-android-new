@@ -81,7 +81,7 @@ import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.Constant.SKY_UPGRADE_ORDER;
-import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER;
+import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER_NO_RESPONSE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
@@ -327,7 +327,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 					startAnim();
 					if (!conStatusTextView.getText().toString().equals(getString(R.string.index_high_signal)) || SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
-						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER);
+						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER_NO_RESPONSE);
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
 						if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
 							//从预读取数据那里重新注册
@@ -525,12 +525,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
 							break;
 						case Constant.RETURN_POWER:
-							if (messages.get(0).substring(10, 12).equals("01")) {
+							if (messages.get(0).substring(10, 12).equals("03")) {
 								if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
 									conStatusTextView.setText(getString(R.string.index_registing));
 									sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 								}
-							} else if (messages.get(0).substring(10, 12).equals("11")) {
+							} else if (messages.get(0).substring(10, 12).equals("13")) {
 								//百分比TextView设置为0
 //							percentTextView.setText("");
 								showNoCardDialog();
@@ -626,6 +626,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				SharedUtils.getInstance().delete(Constant.IMEI);
 				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 				SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
+				ReceiveBLEMoveReceiver.nullCardId = null;
 				BluetoothConstant.IS_BIND = false;
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;

@@ -13,9 +13,9 @@ import de.blinkt.openvpn.util.DialogUtils;
  * Created by Administrator on 2016/9/28 0028.
  */
 public class DialogBalance extends DialogBase implements View.OnClickListener {
-	private TextView tvRechange;
-	private TextView tvCancel;
-	private TextView titleTextView;
+	protected TextView tvRechange;
+	protected TextView tvCancel;
+	protected TextView titleTextView;
 
 	public DialogBalance(DialogInterfaceTypeBase dialogInterfaceTypeBase, Context context, int layoutId, int type) {
 		super(dialogInterfaceTypeBase, context, layoutId, type);

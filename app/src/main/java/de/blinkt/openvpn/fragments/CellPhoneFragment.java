@@ -75,7 +75,6 @@ public class CellPhoneFragment extends Fragment {
 
             operation_rg.check(cell_phone_rb.getId());
             ClickPhone();
-
             hidePhoneBottomBar();
         }
 
@@ -125,12 +124,6 @@ public class CellPhoneFragment extends Fragment {
                     ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
                     ProMainActivity.radiogroup.setVisibility(View.GONE);
                 }
-
-             /*   if (null != AppMode.getInstance().curCharacter) {
-                    if (AppMode.getInstance().curCharacter.length() > 0) {
-                        showPhoneBottomBar();
-                    }
-                }*/
             }
         });
 

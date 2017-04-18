@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -46,6 +47,7 @@ import de.blinkt.openvpn.model.OrderEntity;
 import de.blinkt.openvpn.model.WriteCardEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
+import de.blinkt.openvpn.views.dialog.BuySucceedDialog;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
@@ -122,6 +124,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		EventBus.getDefault().register(this);
 		addData();
 	}
 
@@ -143,6 +146,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 		if (getIntent().getIntExtra("PackageCategory", -1) != 0) {
 			aboardHowToUse.setVisibility(GONE);
 			inlandReset.setVisibility(GONE);
+			showBuySucceedDialog();
 		} else {
 			cancelOrderButton.setVisibility(GONE);
 		}
@@ -288,6 +292,21 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_aixiaoqi_or_rule_break), getResources().getString(R.string.reset));
 	}
 
+
+	private void showBuySucceedDialog() {
+		//不能按返回键，只能二选其一
+		BuySucceedDialog buySucceedDialog = new BuySucceedDialog(this, MyOrderDetailActivity.this, R.layout.dialog_balance, 3);
+//        cardRuleBreakDialog.setCanClickBack(false);
+		buySucceedDialog.changeText(getResources().getString(R.string.tip_buy_succeed), getResources().getString(R.string.activating), getResources().getString(R.string.wait_activate));
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveWriteCardIdEntity(WriteCardEntity entity) {
+		String nullcardId = entity.getNullCardId();
+		orderDataHttp(nullcardId);
+	}
+
+
 	private void sendMessageSeparate(final String message) {
 		String[] messages = PacketeUtil.Separate(message, "1300");
 		int length = messages.length;
@@ -370,44 +389,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 				}
 				break;
 			case R.id.activateTextView:
-				if (!CommonTools.isFastDoubleClick(3000)) {
-					//友盟方法统计
-					MobclickAgent.onEvent(context, CLICKACTIVECARD);
-					OrderID = bean.getOrderID();
-					//如果订单未激活跳转到激活界面
-					if (bean.getOrderStatus() == 0)
-						toActivity(new Intent(this, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt())
-								.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G()));
-					else {
-						IS_TEXT_SIM = false;
-						orderStatus = 4;
-						showProgress("正在激活", false);
-						new Thread(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER);
-									Thread.sleep(20000);
-								} catch (InterruptedException e) {
-									dismissProgress();
-									e.printStackTrace();
-								}
-								if (!isActivateSuccess) {
-									runOnUiThread(new Runnable() {
-										@Override
-										public void run() {
-											dismissProgress();
-											CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
-										}
-									});
-								} else {
-									ICSOpenVPNApplication.getInstance().finishOtherActivity();
-								}
-							}
-						}).start();
-					}
-//					}
-				}
+				activatePackage();
 				break;
 			case R.id.retryTextView:
 				addData();
@@ -425,17 +407,53 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 		}
 	}
 
-	public static String OrderID;
-
-	@Subscribe(threadMode = ThreadMode.MAIN)
-	public void receiveWriteCardIdEntity(WriteCardEntity entity) {
-		String nullcardId = entity.getNullCardId();
-		orderDataHttp(nullcardId);
+	private void activatePackage() {
+		if (!CommonTools.isFastDoubleClick(3000)) {
+			//友盟方法统计
+			MobclickAgent.onEvent(context, CLICKACTIVECARD);
+			OrderID = bean.getOrderID();
+			//如果订单未激活跳转到激活界面
+			if (bean.getOrderStatus() == 0)
+				toActivity(new Intent(this, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt())
+						.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G()).putExtra(IntentPutKeyConstant.COUNTRY_NAME, bean.getCountryName()));
+			else {
+				IS_TEXT_SIM = false;
+				orderStatus = 4;
+				showProgress("正在激活", false);
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_NO_RESPONSE);
+							Thread.sleep(20000);
+						} catch (InterruptedException e) {
+							dismissProgress();
+							e.printStackTrace();
+						}
+						if (!isActivateSuccess) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									dismissProgress();
+									CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
+								}
+							});
+						} else {
+							ICSOpenVPNApplication.getInstance().finishOtherActivity();
+						}
+					}
+				}).start();
+			}
+//					}
+		}
 	}
+
+	public static String OrderID;
 
 	private void orderDataHttp(String nullcardNumber) {
 		if (nullcardNumber != null) {
-			createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_DATA, bean.getOrderID(), nullcardNumber);
+			if (!CommonTools.isFastDoubleClick(100))
+				createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_DATA, bean.getOrderID(), nullcardNumber);
 		} else {
 			dismissProgress();
 			CommonTools.showShortToast(this, getString(R.string.no_nullcard_id));
@@ -446,13 +464,22 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 	protected void onDestroy() {
 		if (isWriteReceiver != null)
 			LocalBroadcastManager.getInstance(this).unregisterReceiver(isWriteReceiver);
+		EventBus.getDefault().unregister(this);
 		super.onDestroy();
 	}
 
 	@Override
 	public void dialogText(int type, String text) {
 		if (type == 2) {
-			SendCommandToBluetooth.sendMessageToBlueTooth("AA112233AA");
+			SendCommandToBluetooth.sendMessageToBlueTooth(Constant.RESTORATION);
+		} else if (type == 3) {
+			if (TextUtils.isEmpty(text)) {
+				activatePackage();
+			} else {
+				ICSOpenVPNApplication.getInstance().finishOtherActivity();
+			}
+
+
 		}
 	}
 }

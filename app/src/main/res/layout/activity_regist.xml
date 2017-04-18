@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/regist_back"
+    android:background="@color/white"
 
     >
 
@@ -12,53 +11,71 @@
         android:id="@+id/registRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <include
             android:id="@+id/include"
-            layout="@layout/regist_and_password_commen"/>
+            layout="@layout/regist_and_password_commen"
+            />
 
         <Button
             android:id="@+id/regist_btn"
             android:layout_width="match_parent"
-            android:layout_below="@id/include"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/padding_40dp"
+            android:layout_below="@+id/allowCheckBox"
             android:layout_gravity="center"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="78dp"
             android:background="@drawable/green_btn_click"
             android:text="注册"
             android:textColor="@android:color/white"
-            android:textSize="18sp"/>
-
-
+            android:textSize="18sp" />
 
 
         <CheckBox
+            android:layout_below="@id/include"
             android:id="@+id/allowCheckBox"
-            android:layout_below="@id/regist_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:button="@drawable/regist_checkbox"
-            android:checked="true"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="@dimen/padding_72dp"
+            android:layout_marginTop="25dp"
+            android:button="@drawable/regist_check_seletor"
+            android:checked="true"
             android:text="@string/readed"
-            android:textColor="@color/readed"
-            />
+            android:textColor="@color/readed" />
 
         <TextView
+            android:layout_below="@id/include"
             android:id="@+id/agreementTextView"
             android:layout_width="wrap_content"
-            android:layout_toRightOf="@id/allowCheckBox"
-            android:layout_marginTop="12dp"
-            android:layout_below="@id/regist_btn"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_toRightOf="@id/allowCheckBox"
             android:text="@string/agreement_mark"
-            android:textColor="@color/aggreement"
-            />
+            android:textColor="@color/blue_title" />
 
+        <TextView
+            android:id="@+id/text_boottom_login"
+            android:layout_below="@+id/regist_btn"
+            android:layout_width="@dimen/padding_100dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/padding_20dp"
+            android:textSize="@dimen/little_12"
+            android:textColor="@color/color_00A0EA"
+            android:text="有账号，直接登录"/>
+        <View
+            android:layout_below="@+id/text_boottom_login"
+            android:layout_width="@dimen/padding_100dp"
+            android:layout_centerHorizontal="true"
+            android:background="@color/color_00A0EA"
+            android:layout_height="1dp"/>
+        <View
+            android:layout_below="@+id/text_boottom_login"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_centerHorizontal="true"
+          />
     </RelativeLayout>
 </ScrollView>

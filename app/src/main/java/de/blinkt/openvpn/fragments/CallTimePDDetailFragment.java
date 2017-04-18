@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
@@ -33,7 +34,8 @@ public class CallTimePDDetailFragment extends BaseFragment {
         tvContext = (TextView) view.findViewById(R.id.tv_context);
         unbinder = ButterKnife.bind(this, view);
         String features = SharedUtils.getInstance().readString(Constant.CALLTIME_FEATURES_SIGN);
-        tvContext.setText(features);
+        if (features != null)
+            tvContext.setText(features);
 
         return view;
     }
@@ -52,13 +54,5 @@ public class CallTimePDDetailFragment extends BaseFragment {
 
     }
 
-/*    @Subscribe
-    public void getData(EvenBusSign s) {
-
-        String features = SharedUtils.getInstance().readString(Constant.CALLTIME_FEATURES_SIGN);
-        if (tvContext.getVisibility() == View.VISIBLE)
-            tvContext.setText(s.getFeatures());
-
-    }*/
 
 }

@@ -18,6 +18,7 @@
     <color name="cell_phone_background">#a0404040</color>
     <color name="black">#000000</color>
     <color name="blue_title">#00a0e9</color>
+    <color name="color_02a0e9">#02A0E9</color>
     <color name="bottom_bar">#f7f7f8</color>
     <color name="bottom_bar_text_enable">#00a0e9</color>
     <color name="bottom_bar_text_enable_click">#8001d0c0</color>
@@ -72,6 +73,7 @@
 
     <color name="colorf7f7f8">#f7f7f8</color>
     <color name="color_2cabe0">#2CABE0</color>
+    <color name="color_03a1ea">#03A1EA</color>
 
     <!--进度条颜色-->
     <color name="color06c6b8">#06c6b8</color>
@@ -98,5 +100,9 @@
     <color name="color_A9A9A9">#A9A9A9</color>
     <color name="color_007eb8">#007eb8</color>
     <color name="color_a4d9ff">#a4d9ff</color>
+    <color name="color_ececec">#ECECEC</color>
+    <color name="color_323232">#323232</color>
+    <color name="color_00A0EA">#00A0EA</color>
 
+    <color name="color_333333">#333333</color>
 </resources>
