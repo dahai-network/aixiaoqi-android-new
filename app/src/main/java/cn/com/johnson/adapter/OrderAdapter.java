@@ -31,6 +31,7 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.BoughtPackageEntity;
 import de.blinkt.openvpn.activities.ActivateActivity;
 import de.blinkt.openvpn.activities.CallTimeOrderDetailActitivy;
+import de.blinkt.openvpn.activities.CallTimePacketDetailActivity;
 import de.blinkt.openvpn.activities.KingCardDetailActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.OutsideActivity;
@@ -176,19 +177,22 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		@OnClick({R.id.rootLinearLayout,R.id.stateTextView})
 		public void onClick(View view) {
 			//友盟方法统计
+			clickPosition = getPosition() - 1;
+			BoughtPackageEntity.ListBean bean	=	data.get(clickPosition);
 			switch (view.getId()) {
+
 				case R.id.rootLinearLayout:
 					MobclickAgent.onEvent(context, CLICKINDEXORDER);
-					clickPosition = getPosition() - 1;
-					MyOrderDetailActivity.launch(context, data.get(clickPosition).getOrderID(), 0);
+
+						MyOrderDetailActivity.launch(context, bean.getOrderID(), 0);
+
 					break;
 				case R.id.stateTextView:
-					clickPosition = getPosition() - 1;
-					 if(data.get(clickPosition).getOrderStatus()==0){
-						 context.startActivity(new Intent(context, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, data.get(clickPosition).getOrderID()).putExtra("ExpireDaysInt", data.get(clickPosition).getExpireDaysInt())
-								 .putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, data.get(clickPosition).isPackageIsSupport4G()) .putExtra(IntentPutKeyConstant.COUNTRY_NAME, data.get(clickPosition).getCountryName()));
+					 if(bean.getOrderStatus()==0){
+						 context.startActivity(new Intent(context, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt())
+								 .putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G()) .putExtra(IntentPutKeyConstant.COUNTRY_NAME, bean.getCountryName()));
 					 }else{
-						 context.startActivity(new Intent(context,OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.AFTER_GOING_ABROAD).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,data.get(clickPosition).isPackageIsSupport4G()));
+						 context.startActivity(new Intent(context,OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.AFTER_GOING_ABROAD).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,bean.isPackageIsSupport4G()));
 					 }
 					break;
 			}

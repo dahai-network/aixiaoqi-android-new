@@ -141,7 +141,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
         if (getIntent().getIntExtra("PackageCategory", -1) != 0) {
             aboardHowToUse.setVisibility(GONE);
             inlandReset.setVisibility(GONE);
-            showBuySucceedDialog();
+
         }else{
             cancelOrderButton.setVisibility(GONE);
         }
@@ -209,6 +209,10 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
                         activateTextView.setVisibility(GONE);
                         aboardHowToUse.setVisibility(GONE);
                         inlandReset.setVisibility(GONE);
+                    }else{
+                        if (getIntent().getIntExtra("PackageCategory", -1) != 0) {
+                        showBuySucceedDialog();
+                        }
                     }
                     priceTextView.setText("￥" + bean.getUnitPrice());
                     setSpan(priceTextView);
@@ -288,10 +292,10 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
         cardRuleBreakDialog.changeText(getResources().getString(R.string.no_aixiaoqi_or_rule_break), getResources().getString(R.string.reset));
     }
 
-
+    BuySucceedDialog  buySucceedDialog;
     private void showBuySucceedDialog() {
         //不能按返回键，只能二选其一
-        BuySucceedDialog  buySucceedDialog = new BuySucceedDialog(this, MyOrderDetailActivity.this, R.layout.dialog_balance, 3);
+        buySucceedDialog = new BuySucceedDialog(this, MyOrderDetailActivity.this, R.layout.dialog_balance, 3);
 //        cardRuleBreakDialog.setCanClickBack(false);
         buySucceedDialog.changeText(getResources().getString(R.string.tip_buy_succeed), getResources().getString(R.string.activating),getResources().getString(R.string.wait_activate));
     }
@@ -384,7 +388,11 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
                 addData();
                 break;
             case R.id.orderDetailTitleRelativeLayout:
-                PackageDetailActivity.launch(this, bean.getPackageId(), bean.getPic());
+                if("1".equals(bean.getPackageCategory())){
+                    CallTimePacketDetailActivity.launch(this, bean.getPackageId());}
+                else{
+                    PackageDetailActivity.launch(this, bean.getPackageId(), bean.getPic());
+                }
                 break;
             case R.id.inland_reset:
                 toActivity(new Intent(this,OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.AFTER_GOING_ABROAD).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,bean.isPackageIsSupport4G()));
