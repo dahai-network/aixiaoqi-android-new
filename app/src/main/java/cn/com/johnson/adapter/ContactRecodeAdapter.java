@@ -51,14 +51,12 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 			holder.mNameTv.setVisibility(View.VISIBLE);
 			holder.mNameTv.setText(contactRecodeEntity.getName());
 			//holder.mPhoneNumber.setText(phoneNumber + "  " + address);
-			holder.mPhoneNumber.setText(address);
-
 		} else if (!TextUtils.isEmpty(phoneNumber)) {
 			holder.mNameTv.setText(phoneNumber);
-			holder.mPhoneNumber.setText(address);
+
 		}
 
-
+		holder.mPhoneNumber.setText(address);
 
 		holder.mCallStatusImg.setImageResource(R.drawable.icon_bd);
 		//来电

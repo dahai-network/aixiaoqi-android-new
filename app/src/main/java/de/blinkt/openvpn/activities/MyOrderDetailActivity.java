@@ -292,10 +292,10 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
         cardRuleBreakDialog.changeText(getResources().getString(R.string.no_aixiaoqi_or_rule_break), getResources().getString(R.string.reset));
     }
 
-    BuySucceedDialog  buySucceedDialog;
+
     private void showBuySucceedDialog() {
         //不能按返回键，只能二选其一
-        buySucceedDialog = new BuySucceedDialog(this, MyOrderDetailActivity.this, R.layout.dialog_balance, 3);
+        BuySucceedDialog  buySucceedDialog = new BuySucceedDialog(this, MyOrderDetailActivity.this, R.layout.dialog_balance, 3);
 //        cardRuleBreakDialog.setCanClickBack(false);
         buySucceedDialog.changeText(getResources().getString(R.string.tip_buy_succeed), getResources().getString(R.string.activating),getResources().getString(R.string.wait_activate));
     }
@@ -371,14 +371,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
         switch (view.getId()) {
             case R.id.cancelOrderButton:
                 if (bean != null) {
-//					if (!CommonTools.isFastDoubleClick(1000)) {
-//						//友盟方法统计
-//						MobclickAgent.onEvent(context, CLICKCANCELORDER);
-//						CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CANCEL_ORDER, bean.getOrderID());
-//					}
                     ICSOpenVPNApplication.getInstance().finishOtherActivity();
-
-
                 }
                 break;
             case R.id.activateTextView:
