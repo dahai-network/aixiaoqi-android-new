@@ -141,16 +141,16 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 		context.startActivity(intent);
 	}
 
-	private void initSet() {
-		hasLeftViewTitle(R.string.order_detail, 0);
-		if (getIntent().getIntExtra("PackageCategory", -1) != 0) {
-			aboardHowToUse.setVisibility(GONE);
-			inlandReset.setVisibility(GONE);
-			showBuySucceedDialog();
-		} else {
-			cancelOrderButton.setVisibility(GONE);
-		}
-	}
+    private void initSet() {
+        hasLeftViewTitle(R.string.order_detail, 0);
+        if (getIntent().getIntExtra("PackageCategory", -1) != 0) {
+            aboardHowToUse.setVisibility(GONE);
+            inlandReset.setVisibility(GONE);
+
+        }else{
+            cancelOrderButton.setVisibility(GONE);
+        }
+    }
 
 
 	//获取数据
@@ -208,40 +208,44 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 					}
 
 
-					if ("1".equals(bean.getPackageCategory())) {
-						expiryDateTextView.setVisibility(GONE);
-						activateTextView.setVisibility(GONE);
-						aboardHowToUse.setVisibility(GONE);
-						inlandReset.setVisibility(GONE);
-					}
-					priceTextView.setText("￥" + bean.getUnitPrice());
-					setSpan(priceTextView);
-					packetCountTextView.setText("x" + bean.getQuantity());
-					orderNumberTextView.setText(bean.getOrderNum());
-					orderTimeTextView.setText(DateUtils.getDateToString(bean.getOrderDate() * 1000));
-					allPriceTextView.setText("￥" + bean.getTotalPrice());
-					payWayTextView.setText(getPaymentMethod(bean.getPaymentMethod()));
-					dateTextView.setText(DateUtils.getDateToString(bean.getLastCanActivationDate() * 1000));
-				}
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_CANCEL_ORDER) {
-			CancelOrderHttp http = (CancelOrderHttp) object;
-			if (http.getStatus() == 1) {
-				CommonTools.showShortToast(MyOrderDetailActivity.this, "取消订单成功！");
-				onBackPressed();
-			} else {
-				CommonTools.showShortToast(MyOrderDetailActivity.this, http.getMsg());
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_ORDER_DATA) {
-			OrderDataHttp orderDataHttp = (OrderDataHttp) object;
-			if (orderDataHttp.getStatus() == 1) {
-				Log.i("cardNumber", "写卡ID:" + orderDataHttp.getOrderDataEntity().getData());
-				sendMessageSeparate(orderDataHttp.getOrderDataEntity().getData());
-			} else {
-				CommonTools.showShortToast(MyOrderDetailActivity.this, orderDataHttp.getMsg());
-			}
-		}
-	}
+                    if ("1".equals(bean.getPackageCategory())) {
+                        expiryDateTextView.setVisibility(GONE);
+                        activateTextView.setVisibility(GONE);
+                        aboardHowToUse.setVisibility(GONE);
+                        inlandReset.setVisibility(GONE);
+                    }else{
+                        if (getIntent().getIntExtra("PackageCategory", -1) != 0) {
+                        showBuySucceedDialog();
+                        }
+                    }
+                    priceTextView.setText("￥" + bean.getUnitPrice());
+                    setSpan(priceTextView);
+                    packetCountTextView.setText("x" + bean.getQuantity());
+                    orderNumberTextView.setText(bean.getOrderNum());
+                    orderTimeTextView.setText(DateUtils.getDateToString(bean.getOrderDate() * 1000));
+                    allPriceTextView.setText("￥" + bean.getTotalPrice());
+                    payWayTextView.setText(getPaymentMethod(bean.getPaymentMethod()));
+                    dateTextView.setText(DateUtils.getDateToString(bean.getLastCanActivationDate() * 1000));
+                }
+            }
+        } else if (cmdType == HttpConfigUrl.COMTYPE_CANCEL_ORDER) {
+            CancelOrderHttp http = (CancelOrderHttp) object;
+            if (http.getStatus() == 1) {
+                CommonTools.showShortToast(MyOrderDetailActivity.this, "取消订单成功！");
+                onBackPressed();
+            } else {
+                CommonTools.showShortToast(MyOrderDetailActivity.this, http.getMsg());
+            }
+        } else if (cmdType == HttpConfigUrl.COMTYPE_ORDER_DATA) {
+            OrderDataHttp orderDataHttp = (OrderDataHttp) object;
+            if (orderDataHttp.getStatus() == 1) {
+                Log.i("cardNumber", "写卡ID:" + orderDataHttp.getOrderDataEntity().getData());
+                sendMessageSeparate(orderDataHttp.getOrderDataEntity().getData());
+            } else {
+                CommonTools.showShortToast(MyOrderDetailActivity.this, orderDataHttp.getMsg());
+            }
+        }
+    }
 
 	@Override
 	protected void onRestart() {
@@ -373,35 +377,32 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 		NoNetRelativeLayout.setVisibility(View.VISIBLE);
 	}
 
-	@OnClick({R.id.cancelOrderButton, R.id.activateTextView, R.id.retryTextView, R.id.orderDetailTitleRelativeLayout, R.id.aboard_how_to_use, R.id.inland_reset})
-	public void onClick(View view) {
-		switch (view.getId()) {
-			case R.id.cancelOrderButton:
-				if (bean != null) {
-//					if (!CommonTools.isFastDoubleClick(1000)) {
-//						//友盟方法统计
-//						MobclickAgent.onEvent(context, CLICKCANCELORDER);
-//						CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CANCEL_ORDER, bean.getOrderID());
-//					}
-					ICSOpenVPNApplication.getInstance().finishOtherActivity();
-
-
-				}
-				break;
-			case R.id.activateTextView:
-				activatePackage();
-				break;
-			case R.id.retryTextView:
-				addData();
-				break;
-			case R.id.orderDetailTitleRelativeLayout:
-				PackageDetailActivity.launch(this, bean.getPackageId(), bean.getPic());
-				break;
-			case R.id.inland_reset:
-				toActivity(new Intent(this, OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.AFTER_GOING_ABROAD).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G()));
-				break;
-			case R.id.aboard_how_to_use:
-				toActivity(new Intent(this, OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.OUTSIDE).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G()));
+    @OnClick({R.id.cancelOrderButton, R.id.activateTextView, R.id.retryTextView, R.id.orderDetailTitleRelativeLayout,R.id.aboard_how_to_use,R.id.inland_reset})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.cancelOrderButton:
+                if (bean != null) {
+                    ICSOpenVPNApplication.getInstance().finishOtherActivity();
+                }
+                break;
+            case R.id.activateTextView:
+                activatePackage();
+                break;
+            case R.id.retryTextView:
+                addData();
+                break;
+            case R.id.orderDetailTitleRelativeLayout:
+                if("1".equals(bean.getPackageCategory())){
+                    CallTimePacketDetailActivity.launch(this, bean.getPackageId());}
+                else{
+                    PackageDetailActivity.launch(this, bean.getPackageId(), bean.getPic());
+                }
+                break;
+            case R.id.inland_reset:
+                toActivity(new Intent(this,OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.AFTER_GOING_ABROAD).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,bean.isPackageIsSupport4G()));
+                break;
+            case R.id.aboard_how_to_use:
+                toActivity(new Intent(this,OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.OUTSIDE).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,bean.isPackageIsSupport4G()));
 
 				break;
 		}

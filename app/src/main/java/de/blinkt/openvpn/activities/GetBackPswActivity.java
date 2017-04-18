@@ -20,8 +20,11 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.ArrayList;
+
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.CheckUtil;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -29,6 +32,7 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.ForgetPswHttp;
 import de.blinkt.openvpn.http.SendMsgHttp;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.ViewUtil;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKFINDBACKBUTTON;
@@ -48,6 +52,7 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
     private TextView textview_1;
     private TextView textview_2;
     private TextView textview_3;
+
 
     private boolean isOpenHind = true;
     private CountDownTimer timer = new CountDownTimer(111000, 1000) {
@@ -75,6 +80,7 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
 
     private void init() {
         initView();
+        initEvent();
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
@@ -91,8 +97,7 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
                 findViewById(R.id.verification_edit);
         passwordEdit = (EditText)
                 findViewById(R.id.passwordEdit);
-        setPhoneNumberEditChangeLisener();
-
+        // setPhoneNumberEditChangeLisener();
         hindPswCheckBox = (CheckBox) findViewById(R.id.hindPswCheckBox);
         hindPswCheckBox.setOnClickListener(this);
         sendBtn = (Button) findViewById(R.id.sendBtn);
@@ -104,71 +109,41 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
 
     }
 
-    private void setPhoneNumberEditChangeLisener() {
-        phoneNumberEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    textview_1.setVisibility(View.VISIBLE);
-                } else {
-                    textview_1.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        verification_edit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    textview_2.setVisibility(View.VISIBLE);
-                } else {
-                    textview_2.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-
-        });
-        passwordEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    textview_3.setVisibility(View.VISIBLE);
-                } else {
-                    textview_3.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+    /**
+     * 初始化事件
+     */
+    private void initEvent() {
+        setEditChangeLisener(phoneNumberEdit, Constant.PHONENUMBER_EDITTAG);
+        setEditChangeLisener(verification_edit, Constant.VERIFICATION_EDITTAG);
+        setEditChangeLisener(passwordEdit, Constant.PASSWORD_EDITTAG);
     }
 
+    private void setEditChangeLisener(EditText editText, final int type) {
+
+        new ExditTextWatcher(editText,type)
+        {
+            @Override
+            public void textChanged(CharSequence s, int id) {
+                switch (type) {
+                    case Constant.PHONENUMBER_EDITTAG:
+                        setViewVisibleOrGone(textview_1, s);
+                        break;
+                    case Constant.VERIFICATION_EDITTAG:
+                        setViewVisibleOrGone(textview_2, s);
+                        break;
+                    case Constant.PASSWORD_EDITTAG:
+                        setViewVisibleOrGone(textview_3, s);
+                        break;
+                }
+            }
+        };
+
+    }
+
+    public void setViewVisibleOrGone(TextView textview, CharSequence s) {
+        int view_state = s.length() == 0 ? View.GONE : View.VISIBLE;
+        textview.setVisibility(view_state);
+    }
 
     @Override
     public void onClick(View v) {
@@ -182,7 +157,6 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
                     MobclickAgent.onEvent(this, CLICKFINDBACKSENDCODE);
                     sendBtn.setEnabled(false);
                     sendBtn.setTextColor(ContextCompat.getColor(this, R.color.regist_send_sms_unenable));
-
                     createHttpRequest(HttpConfigUrl.COMTYPE_SEND_SMS, phoneNumberEdit.getText().toString(), 2 + "");
                 }
                 break;

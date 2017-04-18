@@ -336,4 +336,10 @@ public class Constant {
 
 	public static final String HIDDEN = "hidden";
 	public static final String SHOW = "show";
+	/**
+	 * 注册界面和忘记密码
+	 */
+	public static final int PHONENUMBER_EDITTAG = 1;
+	public static final int VERIFICATION_EDITTAG = 2;
+	public static final int PASSWORD_EDITTAG = 3;
 }

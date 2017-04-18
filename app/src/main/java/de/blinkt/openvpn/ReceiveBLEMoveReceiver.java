@@ -62,6 +62,7 @@ import static de.blinkt.openvpn.constant.Constant.RECEIVE_CARD_MSG;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_ELECTRICITY;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR2;
+import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER_NO_RESPONSE;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP1;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP5;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
@@ -510,6 +511,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //							EventBus.getDefault().post(entity);
 						}
 					}
+				} else if (mStrSimCmdPacket.contains("6e00")) {
+					sendMessageToBlueTooth(UP_TO_POWER_NO_RESPONSE);
 				} else {
 					if (mStrSimCmdPacket.startsWith("9000")) {
 						//新型写卡完成

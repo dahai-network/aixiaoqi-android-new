@@ -25,6 +25,7 @@ import java.util.Map;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.OnlyCallModel;
+import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -56,7 +57,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKDETELECONTACT;
 /**
  * Created by Administrator on 2016/9/3 0003.
  */
-public class ContactDetailActivity extends BaseNetActivity implements View.OnClickListener, DialogInterfaceTypeBase {
+public class ContactDetailActivity extends BaseActivity implements View.OnClickListener, DialogInterfaceTypeBase {
 	ImageView contactHeader;
 	TextView contactName;
 	LinearLayout llPhoneInfo;
@@ -106,7 +107,7 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 
 	private void initTitle() {
 
-		hasAllViewTitle(R.string.contact_personal_center, R.string.edit, 0, false);
+		hasAllViewTitle(R.string.contact_personal_center,  R.drawable.edit_info_selector, -1, true);
 
 	}
 
@@ -132,10 +133,10 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 
 
 	private void setData(final ContactBean contactBean) {
-		Map<String, String> map;
+
 //		contactHeader.setBackgroundResource(contactBean.getHeader());
 		Bundle b=getIntent().getExtras();
-		Bitmap bmp=(Bitmap) b.getParcelable("bitmap");
+		Bitmap bmp=b.getParcelable("bitmap");
 		if(bmp!=null){
 			contactHeader.setImageBitmap(bmp);
 		}else{
@@ -152,54 +153,15 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 			View view = LayoutInflater.from(this).inflate(R.layout.item_phone_numer, null);
 			TextView contactPhone = (TextView) view.findViewById(R.id.contact_phone);
 			TextView contactAddress = (TextView) view.findViewById(R.id.contact_address);
-			ImageView cellPhone = (ImageView) view.findViewById(R.id.cell_phone);
-			ImageView sendMessage = (ImageView) view.findViewById(R.id.send_message);
-			if (!TextUtils.isEmpty(selectContactPeople) || !TextUtils.isEmpty(selectContactPeopleDetail) || !TextUtils.isEmpty(getIntent().getStringExtra(IntentPutKeyConstant.SMS_DETAIL_INFO))) {
-				sendMessage.setVisibility(View.GONE);
-			}
-			String address;
+
 			String phoneNumber;
 			phoneNumber = deleteprefix(" ",arrayNum[i]);
-			map = PhoneNumberZero.getPhoneZero(dao, phoneNumber);
-			String province = map.get("province");
-			String city = map.get("city");
-			if (province == null || city == null || province.isEmpty() || city.isEmpty())
-				address = getString(R.string.title_search_result_not_found);
-			else if (province.equals(city))
-				address = province;
-			else
-				address = province + "  " + city;
+			String address= PhoneNumberZero.getAddress(dao,deleteprefix(" ",phoneNumber));
 			final String phonenum = arrayNum[i];
 			String phonetemp = PhoneNumberZero.getPhoneNumberFormat(phonenum);
 			contactPhone.setText(phonetemp);
 			if (!TextUtils.isEmpty(address))
 				contactAddress.setText(address);
-			cellPhone.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					contactRecodeEntity = new ContactRecodeEntity();
-					contactRecodeEntity.setPhoneNumber(deleteprefix("-",phonenum));
-					contactRecodeEntity.setName(contactName.getText().toString());
-
-					if(SocketConstant.REGISTER_STATUE_CODE==3){
-						simCellPhone();
-					}else{
-						CommonTools.showShortToast(ContactDetailActivity.this,getString(R.string.sim_register_phone_tip));
-					}
-				}
-			});
-			sendMessage.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					//友盟方法统计
-					MobclickAgent.onEvent(context, CLICKCONTACTDETAILSMS);
-					SmsEntity smsEntity = new SmsEntity();
-					smsEntity.setFm(SharedUtils.getInstance().readString(Constant.USER_NAME));
-					smsEntity.setTo(phonenum);
-					smsEntity.setRealName(contactName.getText().toString());
-					toActivity(new Intent(ContactDetailActivity.this, SMSAcivity.class).putExtra(IntentPutKeyConstant.SMS_LIST_KEY, smsEntity));
-				}
-			});
 			view.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -225,13 +187,6 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()){
-		/*	case R.id.show_cell_phone_dialog_background:
-				break;
-			case R.id.cell_phone_linearlayout:
-				break;
-			case R.id.cancel_phone:
-//				hideCellPhoneDialog();
-				break;*/
 
 			case R.id.delete_phone:
 				//友盟方法统计
@@ -239,12 +194,6 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 				deleteDialog();
 				break;
 		}
-	}
-	private void simCellPhone(){
-		Intent intent=new Intent(this,CallPhoneNewActivity.class);
-		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO,contactRecodeEntity);
-		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,SIM_CELL_PHONE);
-		startActivity(intent);
 	}
 	private String deleteprefix(String type,String s) {
 		if(TextUtils.isEmpty(s)){
@@ -263,11 +212,9 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 		return phoneNumber;
 	}
 
-	ContactRecodeEntity contactRecodeEntity;
 
-	private void requestTimeHttp() {
-		createHttpRequest(HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME);
-	}
+
+
 
 	private void setListener() {
 		deletePhone.setOnClickListener(this);
@@ -330,28 +277,7 @@ public class ContactDetailActivity extends BaseNetActivity implements View.OnCli
 		}).show();
 	}
 
-	@Override
-	public void rightComplete(int cmdType, CommonHttp object) {
-		if (cmdType == HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME) {
-			//友盟方法统计
-			MobclickAgent.onEvent(context, CLICKCONTACTDETAILCALL);
-			OnlyCallHttp onlyCallHttp = (OnlyCallHttp) object;
-			if (1 == onlyCallHttp.getStatus()) {
-				OnlyCallModel onlyCallModel = onlyCallHttp.getOnlyCallModel();
-				if (!onlyCallModel.getMaximumPhoneCallTime().equals("0")) {
-					Intent intent = new Intent(ContactDetailActivity.this, CallPhoneNewActivity.class);
-					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO, contactRecodeEntity);
-					intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE,NETWORK_CELL_PHONE);
-					intent.putExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME, onlyCallModel.getMaximumPhoneCallTime());
-					startActivity(intent);
-				} else {
-					new DialogBalance(this, this, R.layout.dialog_balance, 0);
 
-				}
-			}
-		}
-	}
 
 
 	@Override
