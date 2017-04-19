@@ -172,6 +172,7 @@
     <string name="agreement">用户许可及服务协议</string>
     <string name="app_version">APP版本号</string>
     <string name="conn_bluetooth">蓝牙未连接，点击开启</string>
+    <string name="bluetooth_unopen">蓝牙未打开</string>
     <string name="wait_activite">稍后激活</string>
     <string name="aboard_how_to_use">出国后如何使用</string>
     <string name="inland_reset">回国后恢复设置</string>

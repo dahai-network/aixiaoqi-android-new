@@ -72,6 +72,7 @@ import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StartRegistEntity;
+import de.blinkt.openvpn.model.StateChangeEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
@@ -336,7 +337,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					}
 				}).start();
 			} else {
-				CommonTools.showShortToast(this, "蓝牙未打开");
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
 			}
 		}
@@ -358,7 +358,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					@Override
 					public void run() {
 						scanLeDevice(false);
-						if (mService != null && !mService.isConnecttingBlueTooth()) {
+						if (mService != null && !mService.isConnectedBlueTooth()) {
 							topProgressView.showTopProgressView(getString(R.string.un_connect_tip), -1, new View.OnClickListener() {
 								@Override
 								public void onClick(View v) {
@@ -613,11 +613,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 					} else {
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
-						setTipsOnNoNet();
+						setTipsOnNoBind();
 					}
 				} else {
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
-					setTipsOnNoNet();
+					setTipsOnNoBind();
 				}
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
@@ -696,8 +696,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	//没有绑定提示
-	private void setTipsOnNoNet() {
-		topProgressView.showTopProgressView(getString(R.string.unbind_device_tips), -1, new View.OnClickListener() {
+	private void setTipsOnNoBind() {
+		topProgressView.showTopProgressView(getString(R.string.unbind_device_tips), TopProgressView.NORMAL_TIME, new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(ProMainActivity.this, ChoiceDeviceTypeActivity.class);
@@ -942,6 +942,41 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	}
 
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveStateChangeEntity(StateChangeEntity entity) {
+		switch (entity.getStateType()) {
+			case StateChangeEntity.BLUETOOTH_STATE:
+				if (entity.isopen() && getString(R.string.bluetooth_unopen).equals(topProgressView.getContent())) {
+					if (checkNetWorkAndBlueIsOpen())
+						topProgressView.setVisibility(View.GONE);
+				} else {
+					topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
+				}
+				break;
+			case StateChangeEntity.NET_STATE:
+				if (entity.isopen() && getString(R.string.no_wifi).equals(topProgressView.getContent())) {
+					if (checkNetWorkAndBlueIsOpen())
+						topProgressView.setVisibility(View.GONE);
+				} else {
+					topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
+				}
+				break;
+		}
+
+	}
+
+	//打开一个开关的同时，检查是否有别的开关是否关闭
+	private boolean checkNetWorkAndBlueIsOpen() {
+		if (!NetworkUtils.isNetworkAvailable(this)) {
+			topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
+			return false;
+		} else if (!mService.isOpenBlueTooth()) {
+			topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
+			return false;
+		}
+		return true;
+	}
+
 	@Subscribe(threadMode = ThreadMode.BACKGROUND)//非UI线程
 	public void onServiceOperation(ServiceOperationEntity entity) {
 		switch (entity.getOperationType()) {
@@ -1012,15 +1047,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						case Constant.SYSTEM_BASICE_INFO:
 							//返回基本信息就更新account的仪表盘栏
 							String typeText;
-							String powerText;
-							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16) + "";
+							int powerText;
+							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16);
 							String bracelettype = SharedUtils.getInstance().readString(MyDeviceActivity.BRACELETTYPE);
 							if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
 								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
 							} else {
 								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
 							}
-							accountFragment.setSummarized(typeText, powerText, false);
+							accountFragment.setSummarized(typeText, powerText + "", false);
+							break;
+						case Constant.RECEIVE_ELECTRICITY:
+							powerText = Integer.parseInt(message.get(0).substring(10, 12), 16);
+							accountFragment.setPowerPercent(powerText + "");
 							break;
 					}
 				} catch (Exception e) {

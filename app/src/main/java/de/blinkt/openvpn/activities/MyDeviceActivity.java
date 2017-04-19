@@ -21,7 +21,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.ReceiveSocketService;
@@ -230,7 +229,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 			int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
 //			noConnectImageView.setVisibility(GONE);
-			unBindButton.setVisibility(View.VISIBLE);
+//			unBindButton.setVisibility(View.VISIBLE);
 //			sinking.setVisibility(View.VISIBLE);
 			if (electricityInt != 0) {
 				sinking.setPercent(((float) electricityInt) / 100);
@@ -269,8 +268,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						clickFindBracelet();
 					}
 				} else {
-					Log.d(TAG, "BT not enabled");
-					Toast.makeText(this, "蓝牙未打开", Toast.LENGTH_SHORT).show();
+					Log.d(TAG, "蓝牙未打开");
 					finish();
 				}
 				break;
@@ -435,7 +433,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (action.equals(UartService.STATE_CONNECTED)) {
 				//TODO 连接成功，操作问题
 				//测试代码
-				unBindButton.setVisibility(View.VISIBLE);
+//				unBindButton.setVisibility(View.VISIBLE);
 				dismissProgress();
 				skyUpgradeHttp();
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
@@ -452,7 +450,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //						sinking.setVisibility(GONE);
 //						noConnectImageView.setVisibility(View.VISIBLE);
 //						statueTextView.setVisibility(View.VISIBLE);
-						unBindButton.setVisibility(GONE);
+//						unBindButton.setVisibility(GONE);
 						SharedUtils.getInstance().delete(Constant.IMEI);
 						SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 						macTextView.setText("");
@@ -487,7 +485,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 					}
 				} else {
-					unBindButton.setVisibility(GONE);
+//					unBindButton.setVisibility(GONE);
 					SharedUtils.getInstance().delete(Constant.IMEI);
 					macTextView.setText("");
 					firmwareTextView.setText("");
@@ -613,7 +611,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (object.getStatus() == 1) {
 				stopAnim();
 //				sinking.setVisibility(GONE);
-				unBindButton.setVisibility(GONE);
+//				unBindButton.setVisibility(GONE);
 //				noConnectImageView.setVisibility(View.VISIBLE);
 //				statueTextView.setVisibility(View.VISIBLE);
 				registerSimStatu.setVisibility(GONE);
@@ -659,7 +657,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					}
 					//statueTextView.setText(getString(R.string.blue_connecting));
 					//statueTextView.setEnabled(false);
-					unBindButton.setVisibility(View.VISIBLE);
+//					unBindButton.setVisibility(View.VISIBLE);
 					//当接口调用完毕后，扫描设备，打开状态栏
 //				scanLeDevice(true);
 				}

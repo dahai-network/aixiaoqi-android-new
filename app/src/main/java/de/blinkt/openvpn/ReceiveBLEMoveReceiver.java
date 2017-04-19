@@ -374,8 +374,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 													break;
 											}
 
-											if(SocketConstant.REGISTER_STATUE_CODE != 0){
-												SocketConstant.REGISTER_STATUE_CODE=1;
+											if (SocketConstant.REGISTER_STATUE_CODE != 0) {
+												SocketConstant.REGISTER_STATUE_CODE = 1;
 											}
 
 											//TODO 处理异常

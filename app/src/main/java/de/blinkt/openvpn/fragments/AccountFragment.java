@@ -165,9 +165,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	}
 
 	public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
-		deviceNameTextView.setText(deviceType);
-		powerTextView.setText(powerPercent + "%");
+		if (deviceType != null)
+			deviceNameTextView.setText(deviceType);
+		if (powerPercent != null)
+			setPowerPercent(powerPercent);
 		setRegisted(isRegisted);
+	}
+
+	public void setPowerPercent(String powerPercent) {
+		powerTextView.setText(powerPercent + "%");
 	}
 
 	public void setRegisted(boolean isRegisted) {
@@ -388,7 +394,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	public void setBleStatus(String bleStatus) {
 		this.bleStatus = bleStatus;
 		if (getString(R.string.index_un_insert_card).equals(bleStatus)) {
-			if(isAdded()){
+			if (isAdded()) {
 				signalIconImageView.setBackgroundResource(R.drawable.unregist);
 				operatorTextView.setText("----");
 			}

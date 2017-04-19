@@ -32,9 +32,9 @@ public class TopProgressView extends View {
 	private final Animation mHiddenAction;
 	private boolean isWhiteBack;
 	private final Context context;
+	public static final int NORMAL_TIME = 5000;
 
 	private static final int DEFAULT_TEXTSIZE = CommonTools.dip2px(ICSOpenVPNApplication.getContext(), 13);
-
 
 	//进度
 	private int progress;
@@ -63,19 +63,23 @@ public class TopProgressView extends View {
 		invalidate();
 	}
 
+	public String getContent() {
+		return content;
+	}
+
 	public void showTopProgressView(String content, int time, OnClickListener listener) {
 		setContent(content);
 		setVisibility(VISIBLE);
-		if (time < 0) {
-			time = 5000;
-		}
 		setOnClickListener(listener);
-		new Handler().postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				setVisibility(GONE);
-			}
-		}, time);
+		if (time > 0) {
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					setVisibility(GONE);
+				}
+			}, time);
+		}
+
 	}
 
 	@Override
