@@ -28,7 +28,8 @@ import de.blinkt.openvpn.util.CommonTools;
 public class MySinkingView extends FrameLayout {
 	private static final int DEFAULT_TEXTCOLOT = 0xFFFFFFFF;
 
-	private static final int DEFAULT_TEXTSIZE = CommonTools.dip2px(ICSOpenVPNApplication.getContext(), 14);
+	private static final int DEFAULT_TEXTSIZE = CommonTools.dip2px(ICSOpenVPNApplication.getContext(), 16);
+	private static final int DEFAULT_PERCENTSIZE = CommonTools.dip2px(ICSOpenVPNApplication.getContext(), 25);
 
 	private float mPercent;
 
@@ -118,16 +119,16 @@ public class MySinkingView extends FrameLayout {
 			String str = (int) (mPercent * 100) + "%";
 			TextPaint textPaint = new TextPaint();
 			textPaint.setColor(mTextColor);
-			textPaint.setTextSize(mTextSize);
+			textPaint.setTextSize(DEFAULT_PERCENTSIZE);
 			textPaint.setStyle(Style.FILL);
-			canvas.drawText(str, (width - textPaint.measureText(str)) / 2, halfHeight, textPaint);
+			canvas.drawText(str, (width - textPaint.measureText(str)) / 2, (height + textPaint.measureText(str)) / 2, textPaint);
 			if (stronly == null)
 				stronly = ICSOpenVPNApplication.getContext().getString(R.string.only_power);
 			TextPaint onlyPaint = new TextPaint();
 			onlyPaint.setColor(mTextColor);
 			onlyPaint.setTextSize(mTextSize);
 			onlyPaint.setStyle(Style.FILL);
-			canvas.drawText(stronly, (width - onlyPaint.measureText(stronly)) / 2, (height + textPaint.measureText(str) + 20) / 2, onlyPaint);
+			canvas.drawText(stronly, (width - onlyPaint.measureText(stronly)) / 2, halfHeight - 20, onlyPaint);
 
 			mLeft += mSpeed;
 			if (mLeft >= mScaledBitmap.getWidth())

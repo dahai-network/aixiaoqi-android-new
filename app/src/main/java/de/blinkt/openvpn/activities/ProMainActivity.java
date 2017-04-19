@@ -350,8 +350,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				//防止连接后却显示不出来的问题
-				mService.disconnect();
 				sendEventBusChangeBluetoothStatus(getResources().getString(R.string.index_connecting), R.drawable.index_connecting);
 				if (stopHandler == null) {
 					stopHandler = new Handler();
@@ -830,6 +828,17 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				if (topProgressView.getVisibility() != View.VISIBLE) {
 					topProgressView.setVisibility(View.VISIBLE);
 					topProgressView.setContent(getString(R.string.registing));
+					topProgressView.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+							if (braceletName != null) {
+								Intent intent = new Intent(ProMainActivity.this, MyDeviceActivity.class);
+								intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
+								startActivity(intent);
+							}
+						}
+					});
 				}
 				int percentInt = (int) (percent / 1.6);
 				if (percentInt >= 100) {
@@ -966,6 +975,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					accountFragment.showDeviceSummarized(false);
 					accountFragment.setRegisted(false);
 					topProgressGone();
+				} else {
+					mService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
 				}
 				i("被主动断掉连接！");
 				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
@@ -1003,10 +1014,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							String typeText;
 							String powerText;
 							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16) + "";
-							int isInsertCardInt = Integer.parseInt(message.get(0).substring(16, 18), 16);
-							if (isInsertCardInt == 0) {
-								topProgressView.showTopProgressView(getString(R.string.device_no_insert_tips), -1, null);
-							}
 							String bracelettype = SharedUtils.getInstance().readString(MyDeviceActivity.BRACELETTYPE);
 							if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
 								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);

@@ -226,11 +226,10 @@ public class UartService extends Service implements Serializable {
 			ArrayList<String> messagesList = new ArrayList<>();
 			int z = 0;
 			for (int i = 0; i < messages.size(); i++) {
-				Log.e("messages", "messages===========" + messages.get(i));
 				for (int j = 0; j < messages.size(); j++) {
 					if ((Integer.parseInt(messages.get(j).substring(2, 4), 16) & 127) == i) {
 						z = j;
-						Log.e("messages", "messagesz" + z);
+
 						break;
 					}
 				}
@@ -238,10 +237,6 @@ public class UartService extends Service implements Serializable {
 			}
 			messages.clear();
 			messages = messagesList;
-			for (int i = 0; i < messages.size(); i++) {
-				Log.e("messages", "messages=" + messages.get(i));
-			}
-			Log.e("messages", "===========================");
 		}
 	}
 

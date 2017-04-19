@@ -2,21 +2,21 @@ package com.aixiaoqi.socket;
 
 import android.text.TextUtils;
 import android.util.Log;
+
 import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.database.DBHelp;
-import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.SharedUtils;
 
 /**
  * Created by Administrator on 2017/1/5 0005.
@@ -31,7 +31,8 @@ public class SdkAndBluetoothDataInchange {
 	private int notCanReceiveBluetoothDataCount = 0;
 	private String finalTemp;//保存上一次发给蓝牙的数据，以免出错，需要重发
 	private boolean isReceiveBluetoothData = true;//判断5s内是否接收完成，没有完成则重新发送
-	public int count =0;
+	public int count = 0;
+
 	public void initReceiveDataframSocketService(ReceiveDataframSocketService receiveDataframSocketService, UartService mService) {
 		receiveDataframSocketService.setListener(new ReceiveDataframSocketService.MessageOutLisener() {
 													 @Override
@@ -54,8 +55,8 @@ public class SdkAndBluetoothDataInchange {
 
 	private String socketTag = "0";
 	private String mStrSimPowerOnPacket = "";
-	Timer timerMessage ;
-	TimerTask timerTaskMessage ;
+	Timer timerMessage;
+	TimerTask timerTaskMessage;
 
 	private void notifyRegisterFail() {
 		EventBusUtil.simRegisterStatue(SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
@@ -63,16 +64,16 @@ public class SdkAndBluetoothDataInchange {
 
 	public void sendToSDKAboutBluetoothInfo(ArrayList<String> messages) {
 
-		synchronized (this){
+		synchronized (this) {
 
-	 if(isHasPreData){
+			if (isHasPreData) {
 				if (simRegisterStatue == null) {
 					simRegisterStatue = new SimRegisterStatue();
 				}
-				int percent=simRegisterStatue.getProgressCount()+1;
+				int percent = simRegisterStatue.getProgressCount() + 1;
 				eventPercent(percent);
 				registerGoip(messages);
-			}else if(ProMainActivity.isStartSdk) {
+			} else if (ProMainActivity.isStartSdk) {
 //				startTimer();
 				if (simRegisterStatue == null) {
 					simRegisterStatue = new SimRegisterStatue();
@@ -93,35 +94,35 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 	private void startTimer() {
-		if (countMessage ==0) {
-            Log.e("timer", "开启定时器");
-            countMessage++;
-            if(timerMessage==null){
-                timerMessage= new Timer();
-            }
-            if(timerTaskMessage==null){
-                timerTaskMessage= new TimerTask() {
-                    @Override
-                    public void run() {
+		if (countMessage == 0) {
+			Log.e("timer", "开启定时器");
+			countMessage++;
+			if (timerMessage == null) {
+				timerMessage = new Timer();
+			}
+			if (timerTaskMessage == null) {
+				timerTaskMessage = new TimerTask() {
+					@Override
+					public void run() {
 
-                        if (SocketConstant.REGISTER_STATUE_CODE != 3) {
-                            if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
-                                Log.e("timer", "接收不到蓝牙数据");
-                                sendToBluetoothAboutCardInfo(finalTemp);
-                                notCanReceiveBluetoothDataCount++;
-                            }else if(notCanReceiveBluetoothDataCount>=3){
-                                Log.e("timer", "注册失败");
-                                notifyRegisterFail();
-                                clearTimer();
-                                notCanReceiveBluetoothDataCount=0;
-                            }
-                        }
-                    }
-                };
-            }
-            timerMessage.schedule(timerTaskMessage, 5000, 5000);
+						if (SocketConstant.REGISTER_STATUE_CODE != 3) {
+							if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData && notCanReceiveBluetoothDataCount < 3) {
+								Log.e("timer", "接收不到蓝牙数据");
+								sendToBluetoothAboutCardInfo(finalTemp);
+								notCanReceiveBluetoothDataCount++;
+							} else if (notCanReceiveBluetoothDataCount >= 3) {
+								Log.e("timer", "注册失败");
+								notifyRegisterFail();
+								clearTimer();
+								notCanReceiveBluetoothDataCount = 0;
+							}
+						}
+					}
+				};
+			}
+			timerMessage.schedule(timerTaskMessage, 5000, 5000);
 
-        }
+		}
 	}
 
 	private void eventPercent(int percent) {
@@ -131,58 +132,58 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 	private void registerGoip(ArrayList<String> messages) {
-		count=count+1;
-		if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
+		count = count + 1;
+		if (count + 1 == Integer.parseInt(TlvAnalyticalUtils.preData[7]) && TlvAnalyticalUtils.preData[6].startsWith("a088")) {
 
 			//判断是否是电信还是联通的卡
-			saveBluetoothData= PacketeUtil.Combination(messages);
-			String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
-			if (telType(imsi)==CUCC_OR_CMCC){//移动和联通
+			saveBluetoothData = PacketeUtil.Combination(messages);
+			String imsi = RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
+			if (telType(imsi) == CUCC_OR_CMCC) {//移动和联通
 				TlvAnalyticalUtils.sendToBlue("a0c000000c");
-			}else if( telType(imsi)==TELECOM){//电信
+			} else if (telType(imsi) == TELECOM) {//电信
 				TlvAnalyticalUtils.sendToBlue("a0c0000003");
 			}
 
-		}else if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&!TlvAnalyticalUtils.preData[6].startsWith("a088")){
+		} else if (count + 1 == Integer.parseInt(TlvAnalyticalUtils.preData[7]) && !TlvAnalyticalUtils.preData[6].startsWith("a088")) {
 			TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[6]);
-		}else if(count+1<Integer.parseInt(TlvAnalyticalUtils.preData[7])){
-			if(count+2==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
+		} else if (count + 1 < Integer.parseInt(TlvAnalyticalUtils.preData[7])) {
+			if (count + 2 == Integer.parseInt(TlvAnalyticalUtils.preData[7]) && TlvAnalyticalUtils.preData[6].startsWith("a088")) {
 				TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[6]);
 				return;
 			}
-			TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[count+2]);
+			TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[count + 2]);
 
-		}else{
+		} else {
 			// 组数据
 			SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);
-			count=0;
-			String  toServerMessage="";
-			String value=PacketeUtil.Combination(messages);
-			if(TlvAnalyticalUtils.preData[6].startsWith("a088")){
-				String number=formatByte(Integer.toHexString(value.length()/2+1+saveBluetoothData.length()/2),1);
-				String subNumber=formatByte(Integer.toHexString(value.length()/2+1),2);
-				String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
-				Log.e("TlvAnalyticalUtils","imsi="+imsi);
-				if (telType(imsi)==CUCC_OR_CMCC){
-					toServerMessage=TlvAnalyticalUtils.preData[0]+number+subNumber+"a0c000000c"+saveBluetoothData+"c0"+value;
-				}else if(telType(imsi)==TELECOM){
-					toServerMessage=TlvAnalyticalUtils.preData[0]+number+subNumber+"a0c0000003"+saveBluetoothData+"c0"+value;
+			count = 0;
+			String toServerMessage = "";
+			String value = PacketeUtil.Combination(messages);
+			if (TlvAnalyticalUtils.preData[6].startsWith("a088")) {
+				String number = formatByte(Integer.toHexString(value.length() / 2 + 1 + saveBluetoothData.length() / 2), 1);
+				String subNumber = formatByte(Integer.toHexString(value.length() / 2 + 1), 2);
+				String imsi = RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
+				Log.e("TlvAnalyticalUtils", "imsi=" + imsi);
+				if (telType(imsi) == CUCC_OR_CMCC) {
+					toServerMessage = TlvAnalyticalUtils.preData[0] + number + subNumber + "a0c000000c" + saveBluetoothData + "c0" + value;
+				} else if (telType(imsi) == TELECOM) {
+					toServerMessage = TlvAnalyticalUtils.preData[0] + number + subNumber + "a0c0000003" + saveBluetoothData + "c0" + value;
 				}
-			}else if(speData(TlvAnalyticalUtils.preData[6])){
-				String number=formatByte(Integer.toHexString(value.length()/2+1),1);
-				toServerMessage=TlvAnalyticalUtils.preData[0]+number+"000000000000"+TlvAnalyticalUtils.preData[6].substring(2,4)+value;
-			}else{
-				String number=formatByte(Integer.toHexString(value.length()/2),1);
-				toServerMessage=TlvAnalyticalUtils.preData[0]+number+"000000000000"+value;
+			} else if (speData(TlvAnalyticalUtils.preData[6])) {
+				String number = formatByte(Integer.toHexString(value.length() / 2 + 1), 1);
+				toServerMessage = TlvAnalyticalUtils.preData[0] + number + "000000000000" + TlvAnalyticalUtils.preData[6].substring(2, 4) + value;
+			} else {
+				String number = formatByte(Integer.toHexString(value.length() / 2), 1);
+				toServerMessage = TlvAnalyticalUtils.preData[0] + number + "000000000000" + value;
 			}
 
-			TlvEntity tlvEntity=new TlvEntity();
-			String vString=tlvEntity.getValueLength(toServerMessage.length()/2)+toServerMessage;
-			int vLength=vString.length();
-			toServerMessage=TlvAnalyticalUtils.preData[8]+
-					formatByte(Integer.toHexString(vLength/2+4),1)+
-					"010100"+"c7"
-					+vString;
+			TlvEntity tlvEntity = new TlvEntity();
+			String vString = tlvEntity.getValueLength(toServerMessage.length() / 2) + toServerMessage;
+			int vLength = vString.length();
+			toServerMessage = TlvAnalyticalUtils.preData[8] +
+					formatByte(Integer.toHexString(vLength / 2 + 4), 1) +
+					"010100" + "c7"
+					+ vString;
 			TlvAnalyticalUtils.sendToSdkLisener.sendServer(toServerMessage);
 
 		}
@@ -190,67 +191,58 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 
-	private  boolean speData(String message){
-		if(message.startsWith("a0c0")
-				||message.startsWith("a0b0")
-				||message.startsWith("a0b2")
-				||message.startsWith("a0f2")
-				||message.startsWith("a012")){
+	private boolean speData(String message) {
+		if (message.startsWith("a0c0")
+				|| message.startsWith("a0b0")
+				|| message.startsWith("a0b2")
+				|| message.startsWith("a0f2")
+				|| message.startsWith("a012")) {
 			return true;
 		}
 		return false;
 	}
 
 
-	private static final int TELECOM=0;
-	private static final int CUCC_OR_CMCC=1;
-	private static final int NOT_TELECOM=-1;
-	private int telType(String imsi){
-		if(imsi.startsWith("46000")
+	private static final int TELECOM = 0;
+	private static final int CUCC_OR_CMCC = 1;
+	private static final int NOT_TELECOM = -1;
+
+	private int telType(String imsi) {
+		if (imsi.startsWith("46000")
 				|| imsi.startsWith("46001")
 				|| imsi.startsWith("46002")
 				|| imsi.startsWith("46006")
 				|| imsi.startsWith("46007")
 				|| imsi.startsWith("46009")
-				|| imsi.startsWith("46020")){
+				|| imsi.startsWith("46020")) {
 			return CUCC_OR_CMCC;
-		}else if(imsi.startsWith("46003") || imsi.startsWith("46005")|| imsi.startsWith("460011")){
+		} else if (imsi.startsWith("46003") || imsi.startsWith("46005") || imsi.startsWith("460011")) {
 			return TELECOM;
-		}else{
+		} else {
 			return NOT_TELECOM;
 		}
 	}
 
 
-
-
-
-
-
-
-
-
-
-	public String formatByte(String number ,int type){
-		if(type==1){
-			if(number.length()%4==1){
-				number="000"+number;
-			}else if(number.length()%4==2){
-				number="00"+number;
-			}else if(number.length()%4==3){
-				number="0"+number;
+	public String formatByte(String number, int type) {
+		if (type == 1) {
+			if (number.length() % 4 == 1) {
+				number = "000" + number;
+			} else if (number.length() % 4 == 2) {
+				number = "00" + number;
+			} else if (number.length() % 4 == 3) {
+				number = "0" + number;
 			}
-		}else if(type==2){
-			if(number.length()%2==1){
-				number="0"+number;
+		} else if (type == 2) {
+			if (number.length() % 2 == 1) {
+				number = "0" + number;
 			}
 		}
 		return number;
 	}
 
 
-
-	public static boolean isHasPreData=false;
+	public static boolean isHasPreData = false;
 	SimRegisterStatue simRegisterStatue;
 
 	private void sendToSDKAboutBluetoothInfo(final String finalMessage) {
@@ -260,9 +252,8 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 
-
 	private void sendToBluetoothAboutCardInfo(String msg) {
-		if(TextUtils.isEmpty(msg)){
+		if (TextUtils.isEmpty(msg)) {
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
 			return;
 		}
@@ -281,7 +272,7 @@ public class SdkAndBluetoothDataInchange {
 			sendMessage(temp);
 		} else {
 			Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + temp);
-			String[] messages = PacketeUtil.Separate(temp,Constant.READED_SIM_DATA);
+			String[] messages = PacketeUtil.Separate(temp, Constant.READED_SIM_DATA);
 			for (int i = 0; i < messages.length; i++) {
 				Log.e(TAG, "&&& server  message: " + messages[i]);
 				sendMessage(messages[i]);
@@ -302,19 +293,19 @@ public class SdkAndBluetoothDataInchange {
 		}
 	}
 
-	public  void closeReceviceBlueData(){
+	public void closeReceviceBlueData() {
 		clearTimer();
 	}
 
 	private void clearTimer() {
-		if(timerMessage!=null){
+		if (timerMessage != null) {
 			timerMessage.cancel();
-			timerMessage=null;
+			timerMessage = null;
 		}
-		if(timerTaskMessage!=null){
+		if (timerTaskMessage != null) {
 			timerTaskMessage.cancel();
-			timerTaskMessage=null;
+			timerTaskMessage = null;
 		}
-		countMessage=0;
+		countMessage = 0;
 	}
 }
