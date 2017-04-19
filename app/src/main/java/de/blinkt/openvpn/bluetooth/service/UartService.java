@@ -190,9 +190,6 @@ public class UartService extends Service implements Serializable {
 				if (messages == null) {
 					messages = new ArrayList<>();
 				}
-//				if (lengthData - 1 == 0) {
-//					dataType = messageFromBlueTooth.substring(6, 10);
-//				}
 
 				messages.add(messageFromBlueTooth);
 				if (messages.size() < lengthData) {

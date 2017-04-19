@@ -52,7 +52,7 @@
     <string name="hot_package">热门境外套餐</string>
     <string name="overseas_package">海外流量套餐</string>
     <string name="residue">剩余</string>
-    <string name="more">更多∨</string>
+    <string name="more">更多</string>
     <string name="distace">距离</string>
     <string name="add_up">累计</string>
     <string name="deplete">消耗</string>
@@ -290,7 +290,7 @@
     <string name="select_rechart_amount">选择充值余额</string>
     <string name="amount_money">金额</string>
     <string name="recharge_way">充值方式</string>
-    <string name="next">下一步</string>
+    <string name="next">立即支付</string>
     <string name="input_money_null">输入金额为空,请重新输入</string>
     <string name="input_money_0">输入金额为0,请重新输入</string>
     <string name="custom_money">自定义金额</string>

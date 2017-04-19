@@ -51,6 +51,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:background="@drawable/rechange_selector_icon"
+                    android:textColor="@color/red_background_text_selector"
                     android:layout_height="33dp"
                     android:layout_marginRight="@dimen/padding_10dp"
                     android:layout_weight="1"
@@ -64,6 +65,7 @@
                     android:gravity="center"
                     android:layout_marginRight="@dimen/padding_10dp"
                     android:background="@drawable/rechange_selector_icon"
+                    android:textColor="@color/red_background_text_selector"
                     android:layout_height="33dp"
                     android:layout_weight="1"
                     android:text="50"
@@ -74,6 +76,7 @@
                     android:layout_width="0dp"
                     android:layout_height="33dp"
                     android:layout_marginRight="@dimen/padding_10dp"
+                    android:textColor="@color/red_background_text_selector"
                     android:button="@null"
                     android:checked="true"
                     android:background="@drawable/rechange_selector_icon"
@@ -96,6 +99,7 @@
                     android:gravity="center"
                     android:layout_marginRight="@dimen/padding_10dp"
                     android:background="@drawable/rechange_selector_icon"
+                    android:textColor="@color/red_background_text_selector"
                     android:layout_height="33dp"
                     android:layout_weight="1"
                     android:text="300"
@@ -108,6 +112,7 @@
                     android:button="@null"
                     android:layout_marginRight="@dimen/padding_10dp"
                     android:background="@drawable/rechange_selector_icon"
+                    android:textColor="@color/red_background_text_selector"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:text="500"
@@ -120,6 +125,7 @@
                     android:visibility="visible"
                     android:layout_marginRight="@dimen/padding_10dp"
                     android:background="@drawable/rechange_selector_icon"
+                    android:textColor="@color/red_background_text_selector"
                     android:gravity="center"
                     android:hint="@string/custom_money"
                     android:layout_weight="1"
@@ -156,8 +162,10 @@
                 android:visibility="invisible"
                 android:layout_marginRight="@dimen/padding_10dp"
                 android:layout_alignBottom="@id/moneyRadioGroup"
-                android:background="@drawable/rechange_balance"
+                android:background="@color/color_F62C2A"
+                android:textColorHint="@color/white"
                 android:gravity="center"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:hint="@string/custom_money"
                 android:inputType="numberDecimal"
@@ -297,7 +305,6 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/nextBtn"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_gravity="center"
@@ -306,6 +313,31 @@
         android:layout_marginTop="15dp"
         android:background="@drawable/regist_btn"
         android:text="@string/next"
+        android:visibility="gone"
         android:textColor="@android:color/white"
         android:textSize="18sp"/>
+
+    <Button
+        android:id="@+id/nextBtn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginLeft="@dimen/padding_20dp"
+        android:layout_marginRight="@dimen/padding_20dp"
+        android:layout_marginTop="@dimen/padding_15dp"
+        android:background="@drawable/green_btn_click"
+        android:text="@string/next"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/little_18"/>
+
+    <Button
+        android:id="@+id/recharge_card"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginLeft="@dimen/padding_20dp"
+        android:layout_marginRight="@dimen/padding_20dp"
+        android:layout_marginTop="@dimen/padding_10dp"
+        android:textColor="@drawable/gray_background_text_selector"
+        android:background="@drawable/circle_light_gray_selector"
+        android:text="@string/bind_recharge_card"
+        android:textSize="@dimen/little_18"/>
 </LinearLayout>

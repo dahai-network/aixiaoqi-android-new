@@ -154,6 +154,7 @@
                 android:id="@+id/hotPacketLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
+                android:layout_marginTop="4.5dp"
                 android:background="@color/white"
                 >
 
@@ -175,6 +176,8 @@
                     android:layout_centerVertical="true"
                     android:paddingRight="7.5dp"
                     android:text="@string/more"
+                    android:drawablePadding="@dimen/padding_5dp"
+                    android:drawableRight="@drawable/more"
                     android:textColor="@color/index_gray_text"
                     android:textSize="14sp"/>
 
@@ -195,6 +198,7 @@
             <ImageView
                 android:id="@+id/guiderImageView"
                 android:layout_width="match_parent"
+                android:layout_marginTop="4.5dp"
                 android:layout_height="105dp"
                 android:background="@drawable/guider_index"></ImageView>
 
@@ -224,6 +228,8 @@
                     android:layout_centerVertical="true"
                     android:paddingRight="7.5dp"
                     android:text="@string/more"
+                    android:drawablePadding="@dimen/padding_5dp"
+                    android:drawableRight="@drawable/more"
                     android:textColor="@color/index_gray_text"
                     android:textSize="14sp"
                     />
@@ -237,6 +243,7 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/hardWareRecyclerView"
+                android:paddingTop="@dimen/padding_10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/hardWareLine"
