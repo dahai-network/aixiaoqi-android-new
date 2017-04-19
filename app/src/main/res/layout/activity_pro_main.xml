@@ -12,24 +12,27 @@
         android:orientation="vertical">
 
 
+        <TextView style="@style/horizontal_line_view" />
+
+
         <de.blinkt.openvpn.views.CustomViewPager
             android:id="@+id/mViewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <TextView style="@style/horizontal_line_view" />
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
 
             <RadioGroup
                 android:id="@+id/radiogroup"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/padding_50dp"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <de.blinkt.openvpn.views.MyRadioButton
                     android:id="@+id/rb_index"
@@ -55,6 +58,7 @@
                     aixiaoaqi:drawableSize="22dp"
                     aixiaoaqi:drawableTop="@drawable/address_list_icon" />
 
+
                 <de.blinkt.openvpn.views.MyRadioButton
                     android:id="@+id/rb_personal"
                     style="@style/chart_radiobutton"
@@ -62,7 +66,38 @@
                     android:textColor="@drawable/main_color_selector"
                     aixiaoaqi:drawableSize="22dp"
                     aixiaoaqi:drawableTop="@drawable/account_icon" />
+
             </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_50dp"
+                android:layout_marginLeft="1dp">
+
+                <TextView
+                    android:id="@+id/tv_red_dot_01"
+                    style="@style/chart_red_hot"
+                    android:drawableRight="@drawable/red_dot" />
+
+                <TextView
+                    android:id="@+id/tv_red_dot_02"
+                    style="@style/chart_red_hot"
+                    android:drawableRight="@drawable/red_dot"
+                    android:src="@drawable/red_dot" />
+
+                <TextView
+                    android:id="@+id/tv_red_dot_03"
+                    style="@style/chart_red_hot"
+                    android:drawableRight="@drawable/red_dot"
+                    android:src="@drawable/red_dot" />
+
+                <TextView
+                    android:id="@+id/tv_red_dot_04"
+                    style="@style/chart_red_hot"
+                    android:drawableRight="@drawable/red_dot"
+                    android:src="@drawable/red_dot" />
+
+            </LinearLayout>
 
 
             <RelativeLayout
@@ -71,7 +106,7 @@
                 android:layout_height="@dimen/height_90"
                 android:background="@color/bottom_bar"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/callImageView"
@@ -91,6 +126,8 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/image_putaway_seletor" />
             </RelativeLayout>
+
+
         </FrameLayout>
 
     </LinearLayout>
