@@ -25,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
@@ -37,13 +36,10 @@ import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 import com.aixiaoqi.socket.TestProvider;
 import com.umeng.analytics.MobclickAgent;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
@@ -84,7 +80,6 @@ import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.CustomViewPager;
 import de.blinkt.openvpn.views.MyRadioButton;
 import de.blinkt.openvpn.views.TopProgressView;
-
 import static cn.com.aixiaoqi.R.string.index_registing;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
@@ -811,10 +806,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                             i("deviceName:" + device.getName());
                             if (deviceAddress.equalsIgnoreCase(device.getAddress())) {
                                 scanLeDevice(false);
-                                boolean connect = mService.connect(deviceAddress);
-                                if (connect) {
-                                    skyUpgradeHttp();
-                                }
+                               mService.connect(deviceAddress);
+
                             }
                         }
                     });
@@ -1161,24 +1154,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         return false;
     }
 
-    //空中升级
-    private void skyUpgradeHttp() {
-        Log.e(TAG, "skyUpgradeHttp");
-        long beforeRequestTime = SharedUtils.getInstance().readLong(Constant.UPGRADE_INTERVAL);
-        if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
-        {
-            int DeviceType = 0;
-            String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-            if (!TextUtils.isEmpty(braceletname)) {
-                if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
-                    DeviceType = 0;
-                } else {
-                    DeviceType = 1;
-                }
-            }
-            createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
-        }
-    }
 
 
 }
