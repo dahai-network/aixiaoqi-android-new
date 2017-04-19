@@ -129,15 +129,10 @@ public class RechargeActivity extends BaseNetActivity implements InterfaceCallba
 		initSet();
 	}
 
-	@Override
-	protected void onClickRightView() {
-		//友盟方法统计
-		MobclickAgent.onEvent(this, CLICKBINDCHARGECARD);
-		BindRechargeCardActivity.launch(RechargeActivity.this, BindRechargeCardActivity.RECHARGE);
-	}
+
 
 	private void initSet() {
-		hasAllViewTitle(R.string.recharge, R.string.bind_recharge_card, 0, false);
+		hasLeftViewTitle(R.string.recharge, 0);
 
 		amountEditText.addTextChangedListener(new TextWatcher() {
 
@@ -203,7 +198,7 @@ public class RechargeActivity extends BaseNetActivity implements InterfaceCallba
 
 	}
 
-	@OnClick({R.id.nextBtn, R.id.weixinPayLienarLayout, R.id.aliPayLienarLayout})
+	@OnClick({R.id.nextBtn, R.id.weixinPayLienarLayout, R.id.aliPayLienarLayout,R.id.recharge_card})
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.nextBtn:
@@ -240,6 +235,10 @@ public class RechargeActivity extends BaseNetActivity implements InterfaceCallba
 			case R.id.aliPayLienarLayout:
 				weixinPayCheckBox.setChecked(false);
 				aliPayCheckBox.setChecked(true);
+				break;
+			case R.id.recharge_card:
+				MobclickAgent.onEvent(this, CLICKBINDCHARGECARD);
+				BindRechargeCardActivity.launch(RechargeActivity.this, BindRechargeCardActivity.RECHARGE);
 				break;
 		}
 	}

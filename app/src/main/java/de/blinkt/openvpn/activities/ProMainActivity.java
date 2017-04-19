@@ -52,6 +52,7 @@ import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
+import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.database.DBHelp;
 import de.blinkt.openvpn.fragments.AccountFragment;
@@ -123,14 +124,18 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	SportFragment sportFragment;
 	IndexFragment indexFragment;
 	// public static LinearLayout bottom_bar_linearLayout;
-
+	Intent intentCallPhone;
+	public static boolean isForeground=false;
+	public static final String MALL_SHOW_RED_DOT="mall_show_red_dot";
 	public static RadioGroup radiogroup;
 	//重连时间
 	private int RECONNECT_TIME = 180000;
 	SocketConnection socketUdpConnection;
 	SocketConnection socketTcpConnection;
 	public static String STOP_CELL_PHONE_SERVICE = "stopservice";
-
+	public static boolean isStartSdk = false;
+	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
+	public static SendYiZhengService sendYiZhengService = null;
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
 		return super.getLastCustomNonConfigurationInstance();
@@ -186,6 +191,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	private void initBrocast() {
+		LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(showRedDotReceiver, showRedDotIntentFilter());
 		if (bleMoveReceiver == null) {
 			bleMoveReceiver = new ReceiveBLEMoveReceiver();
 			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(bleMoveReceiver, makeGattUpdateIntentFilter());
@@ -273,7 +279,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 		return intentFilter;
 	}
-
+	private static IntentFilter showRedDotIntentFilter() {
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(MALL_SHOW_RED_DOT);
+		return intentFilter;
+	}
 	private void addListener() {
 		callImageView.setOnClickListener(this);
 		iv_putaway.setOnClickListener(this);
@@ -414,14 +424,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	}
 
-	Intent intentCallPhone;
 
 	@Override
 	protected void onResume() {
+		isForeground=true;
 		super.onResume();
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(CallPhoneService.class.getName())) {
 			intentCallPhone = new Intent(this, CallPhoneService.class);
 			startService(intentCallPhone);
+		}
+
+
+		if(!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL,true)){
+
 		}
 	}
 
@@ -429,6 +444,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
 		ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
 
+	}
+
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		isForeground=false;
 	}
 
 	public int position;
@@ -961,6 +983,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
 	//用于改变indexFragment状态的Receiver
+	private BroadcastReceiver showRedDotReceiver = new BroadcastReceiver() {
+
+
+		@Override
+		public void onReceive(final Context context, Intent intent) {
+			final String action = intent.getAction();
+			if (action.equals(MALL_SHOW_RED_DOT)) {
+
+			}
+
+		}
+	};
+
+
+
 	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {
 
 
@@ -1036,9 +1073,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	};
 
-	public static boolean isStartSdk = false;
-	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
-	public static SendYiZhengService sendYiZhengService = null;
 
 
 	private void requestPacket() {

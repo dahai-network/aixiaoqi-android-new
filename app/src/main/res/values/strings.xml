@@ -289,7 +289,7 @@
     <string name="select_rechart_amount">选择充值余额</string>
     <string name="amount_money">金额</string>
     <string name="recharge_way">充值方式</string>
-    <string name="next">下一步</string>
+    <string name="next">立即支付</string>
     <string name="input_money_null">输入金额为空,请重新输入</string>
     <string name="input_money_0">输入金额为0,请重新输入</string>
     <string name="custom_money">自定义金额</string>

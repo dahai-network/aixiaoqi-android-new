@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -51,7 +52,7 @@ public class MyReceiver extends BroadcastReceiver {
 		if (ProMainActivity.sendYiZhengService != null){
 			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "push service :\n" );
 			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-	}
+		}
 	}
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -72,7 +73,7 @@ public class MyReceiver extends BroadcastReceiver {
 				SendCommandToBluetooth.sendMessageToBlueTooth(Constant.MESSAGE_PUSH);//发送给手环短信通知
 			}else if("SMSSendResult".equals(type)){
 				processCustomMessage(context, bundle);
-			}	if("EjoDVCloseLontTime" .equals(type)){
+			}else	if("EjoDVCloseLontTime" .equals(type)){
 				if (SocketConstant.REGISTER_STATUE_CODE == 3||SocketConstant.REGISTER_STATUE_CODE == 2) {
 					SocketConstant.REGISTER_STATUE_CODE = 2;
 					if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
@@ -84,27 +85,41 @@ public class MyReceiver extends BroadcastReceiver {
 					}
 
 				}
+			}else if("ProductNew" .equals(type)){
+				String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
+				if(!TextUtils.isEmpty(extra)){
+					JsonObject jsonObject = new JsonParser().parse(extra).getAsJsonObject();
+					String   Title = jsonObject.get("Title").getAsString();
+					String   Url = jsonObject.get("Url").getAsString();
+					String   ID = jsonObject.get("ID").getAsString();
+					if(!ID.equals(SharedUtils.getInstance().readString(IntentPutKeyConstant.PRODUCT_ID))){
+						SharedUtils.getInstance().writeString(IntentPutKeyConstant.PRODUCT_ID,ID);
+						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL,false);
+						if(ProMainActivity.isForeground){
+							Intent showIntent = new Intent(ProMainActivity.MALL_SHOW_RED_DOT);
+							context.sendBroadcast(showIntent);
+						}
+					}
+				}
 			}
 
 		} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
 			Log.e(TAG, "[MyReceiver] 接收到推送下来的通知");
-//			int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-//			processCustomNotify(context);
 
 			//TODO 注册成功后与一正服务器断开连接
 			String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
 			Log.e(TAG, "[MyReceiver] 用户点击打开了通知"+extra);
 
-//			Log.e(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+
 
 		} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 			Log.e(TAG, "[MyReceiver] 用户点击打开了通知");
 			String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
 			Log.e(TAG, "[MyReceiver] 用户点击打开了通知"+extra);
 			if(!TextUtils.isEmpty(extra)){
-			JsonObject jsonObject = new JsonParser().parse(extra).getAsJsonObject();
-			String   tipActivityType = jsonObject.get("alertType").getAsString();
-			String   tel = jsonObject.get("Tel").getAsString();
+				JsonObject jsonObject = new JsonParser().parse(extra).getAsJsonObject();
+				String   tipActivityType = jsonObject.get("alertType").getAsString();
+				String   tel = jsonObject.get("Tel").getAsString();
 
 
 				Intent i;

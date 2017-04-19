@@ -215,4 +215,5 @@
     </LinearLayout>
 
     <View style="@style/horizontal_line_view" />
+
 </LinearLayout>

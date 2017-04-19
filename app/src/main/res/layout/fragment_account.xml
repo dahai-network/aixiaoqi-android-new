@@ -52,6 +52,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
+                        android:drawablePadding="@dimen/padding"
+                        android:drawableRight="@drawable/edit_info"
                         android:layout_marginTop="@dimen/padding_40dp"
                         android:text="@string/unset_name"
                         android:textSize="@dimen/little_14"/>
@@ -130,6 +132,7 @@
                         android:drawableLeft="@drawable/bill_icon"
                         android:drawablePadding="@dimen/padding_10dp"
                         android:paddingBottom="@dimen/padding_10dp"
+                        android:drawableRight="@drawable/arrow"
                         android:paddingLeft="@dimen/padding_15dp"
                         android:paddingRight="@dimen/padding_15dp"
                         android:paddingTop="@dimen/padding_10dp"
