@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/productImageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/padding_10dp"
         android:textSize="14sp"
         />
 
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/productNameTextView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/padding_5dp"
         android:textColor="@color/connect_us_red"
         android:textSize="14sp"
         />
