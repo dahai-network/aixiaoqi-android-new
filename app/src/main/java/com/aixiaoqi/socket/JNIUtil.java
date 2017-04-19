@@ -85,7 +85,7 @@ public class JNIUtil {
 	private static void phoneAddressAndStartSDK() {
 
 		try {
-
+			Log.e("SocketConstant.SIM_TYPE","SocketConstant.SIM_TYPE="+SocketConstant.SIM_TYPE);
 			if(SocketConstant.SIM_TYPE==1||SocketConstant.SIM_TYPE==2){
 				jniUtil.main((byte) 1);
 			}else if(SocketConstant.SIM_TYPE==3){

@@ -106,7 +106,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		normalHolder.dateTextView.setText(bean.getExpireDays());
 		//如果订单状态是正在使用，那么就计算时间
 
-		if (bean.getOrderStatus() == 0) {
+		if (bean.getOrderStatus() == 0||bean.getOrderStatus() == 4) {
 			normalHolder.stateTextView.setText("未激活");
 //			normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.activite_color_selector));
 		} else if (bean.getOrderStatus() == 2) {
@@ -115,11 +115,13 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		} else if (bean.getOrderStatus() == 3) {
 			normalHolder.stateTextView.setText("已取消");
 			normalHolder.stateTextView.setVisibility(View.GONE);
-		} else if (bean.getOrderStatus() == 4) {
-			normalHolder.stateTextView.setText("激活失败");
-			normalHolder.stateTextView.setVisibility(View.GONE);
-			normalHolder.stateTextView.setTextColor(ContextCompat.getColor(context, R.color.order_item));
-		} else {
+		}
+//		else if () {
+//			normalHolder.stateTextView.setText("激活失败");
+//			normalHolder.stateTextView.setVisibility(View.GONE);
+//			normalHolder.stateTextView.setTextColor(ContextCompat.getColor(context, R.color.order_item));
+//		}
+		else {
 			normalHolder.stateTextView.setText("已激活");
 			normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.gray_background_text_selector));
 			normalHolder.stateTextView.setBackgroundResource(R.drawable.circle_light_gray_selector);

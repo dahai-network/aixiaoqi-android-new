@@ -344,7 +344,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										} else {
 											Log.i(TAG, "已插卡");
 											//如果激活卡成功后，刷新按钮点击需要将标记激活
-											SocketConstant.SIM_TYPE = Integer.parseInt(messages.get(0).substring(10, 12));
+											SocketConstant.SIM_TYPE = Integer.parseInt(messages.get(0).substring(12, 14));
+											Log.e("SocketConstant.SIM_TYPE","SocketConstant.SIM_TYPE="+SocketConstant.SIM_TYPE);
 											isGetnullCardid = true;
 											nullCardId = null;
 

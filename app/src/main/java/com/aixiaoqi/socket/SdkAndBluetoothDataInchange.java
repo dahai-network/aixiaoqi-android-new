@@ -120,7 +120,6 @@ public class SdkAndBluetoothDataInchange {
                 };
             }
             timerMessage.schedule(timerTaskMessage, 5000, 5000);
-
         }
 	}
 
