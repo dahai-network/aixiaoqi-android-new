@@ -374,6 +374,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 													break;
 											}
 
+											if(SocketConstant.REGISTER_STATUE_CODE != 0){
+												SocketConstant.REGISTER_STATUE_CODE=1;
+											}
+
 											//TODO 处理异常
 											//如没有没插卡检测插卡并且提示用户重启手环。
 											//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。

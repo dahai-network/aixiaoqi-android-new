@@ -28,7 +28,6 @@ import java.util.Set;
 import cn.com.aixiaoqi.R;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -136,30 +135,30 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
      * 初始化事件
      */
     private void initEvent() {
-        setEditChangeLisener(phoneNumberEdit, Constant.PHONENUMBER_EDITTAG);
-        setEditChangeLisener(verification_edit, Constant.VERIFICATION_EDITTAG);
-        setEditChangeLisener(passwordEdit, Constant.PASSWORD_EDITTAG);
+        setEditChangeLisener(phoneNumberEdit, R.id.phoneNumberEdit);
+        setEditChangeLisener(verification_edit, R.id.verification_edit);
+        setEditChangeLisener(passwordEdit, R.id.passwordEdit);
     }
 
-    private void setEditChangeLisener(EditText editText, final int type) {
+    private void setEditChangeLisener(EditText editText, final int id) {
 
-        new ExditTextWatcher(editText,type)
-        {
+        new ExditTextWatcher(editText, id) {
             @Override
             public void textChanged(CharSequence s, int id) {
-                switch (type) {
-                    case Constant.PHONENUMBER_EDITTAG:
+                switch (id) {
+                    case R.id.phoneNumberEdit:
                         setViewVisibleOrGone(textview_1, s);
                         break;
-                    case Constant.VERIFICATION_EDITTAG:
+                    case R.id.verification_edit:
                         setViewVisibleOrGone(textview_2, s);
                         break;
-                    case Constant.PASSWORD_EDITTAG:
+                    case R.id.passwordEdit:
                         setViewVisibleOrGone(textview_3, s);
                         break;
                 }
             }
         };
+
 
     }
 
