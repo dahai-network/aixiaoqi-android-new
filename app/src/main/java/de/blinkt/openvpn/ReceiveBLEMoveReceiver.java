@@ -120,7 +120,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			Log.d(TAG, "UART_CONNECT_MSG");
 			ICSOpenVPNApplication.isConnect = true;
 			IS_TEXT_SIM = false;
-			isGetnullCardid = true;
 			BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 			entity.setBlueType(BluetoothConstant.BLUE_BIND);
 			EventBus.getDefault().post(entity);
@@ -285,8 +284,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 												//空卡ID是否不为空，若不为空则
 												if (nullCardId != null) {
 													Log.i(TAG, "nullcardid上电返回");
-													//如果在激活流程的页面就直接激活
-													utils.writeBoolean(Constant.IS_NEW_SIM_CARD, false);
 													//发送旧卡空卡序列号
 													WriteCardEntity writeCardEntity = new WriteCardEntity();
 													writeCardEntity.setNullCardId(nullCardId);
@@ -297,7 +294,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 												}
 											} else {
 												if (nullCardId != null) {
-													utils.writeBoolean(Constant.IS_NEW_SIM_CARD, false);
 													//发送旧卡空卡序列号
 													WriteCardEntity writeCardEntity = new WriteCardEntity();
 													writeCardEntity.setNullCardId(nullCardId);
@@ -320,12 +316,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										}
 										break;
 									case RECEIVE_CARD_MSG:
-										if ((Integer.parseInt(messages.get(0).substring(2, 4), 16) & 0x80) == 0x80) {
-											mStrSimCmdPacket = PacketeUtil.Combination(messages);
-											// 接收到一个完整的数据包,处理信息
-											ReceiveDBOperate(mStrSimCmdPacket);
-											messages.clear();
-										}
+//										if ((Integer.parseInt(messages.get(0).substring(2, 4), 16) & 0x80) == 0x80) {
+										mStrSimCmdPacket = PacketeUtil.Combination(messages);
+										// 接收到一个完整的数据包,处理信息
+										ReceiveDBOperate(mStrSimCmdPacket);
+										messages.clear();
+//										}
 										break;
 									case Constant.IS_INSERT_CARD:
 										Log.i(TAG, "接收数据：是否插卡：" + messages.toString());
@@ -344,9 +340,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										} else {
 											Log.i(TAG, "已插卡");
 											//如果激活卡成功后，刷新按钮点击需要将标记激活
-											SocketConstant.SIM_TYPE = Integer.parseInt(messages.get(0).substring(12, 14));
-											Log.e("SocketConstant.SIM_TYPE","SocketConstant.SIM_TYPE="+SocketConstant.SIM_TYPE);
-											isGetnullCardid = true;
+											SocketConstant.SIM_TYPE = Integer.parseInt(messages.get(0).substring(10, 12));
 											nullCardId = null;
 
 											switch (messages.get(0).substring(12, 14)) {
@@ -450,27 +444,29 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	SharedUtils utils = SharedUtils.getInstance();
 	public static boolean isGetnullCardid = false;//是否获取空卡数据
 	// 上一条发送命令
-	private String lastSendMessageStr = "";
+	public static String lastSendMessageStr = "";
 
 
 	//写卡流程
 	private void ReceiveDBOperate(String mStrSimCmdPacket) {
 		Log.i("test", "写卡收回：" + mStrSimCmdPacket);
 
+		if (lastSendMessageStr.contains(Constant.WRITE_NEW_SIM_STEP_A012)) {
+			lastSendMessageStr = Constant.WRITE_NEW_SIM_STEP_A012;
+		} else if (lastSendMessageStr.contains(Constant.WRITE_NEW_SIM_STEP_7)) {
+			lastSendMessageStr = Constant.WRITE_NEW_SIM_STEP_7;
+		}
 		switch (lastSendMessageStr) {
-			case "":
-				sendMessageSeparate(Constant.WRITE_SIM_FIRST, Constant.WRITE_SIM_DATA);
-				break;
-			//获取空卡序列号第一步
+			//获取空卡序列号第一步/新卡写卡第一步
 			case Constant.WRITE_SIM_FIRST:
 				Log.i("Bluetooth", "进入获取空卡序列号第一步:" + mStrSimCmdPacket);
 				if (mStrSimCmdPacket.contains(WRITE_CARD_STEP1)) {
 					if (isGetnullCardid) {
 						sendMessageSeparate(Constant.WRITE_SIM_STEP_TWO, Constant.WRITE_SIM_DATA);
+					} else {
+						//新卡写卡第一步
+						sendMessageSeparate(Constant.WRITE_NEW_SIM_STEP_2, Constant.WRITE_SIM_DATA);
 					}
-//					else {
-//						registFlowPath();
-//					}
 				}
 				break;
 			//获取空卡序列号第二步
@@ -503,11 +499,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							} else {
 								Log.i(TAG, "这是旧卡");
 								utils.writeBoolean(Constant.IS_NEW_SIM_CARD, false);
-								//发送旧卡空卡序列号
-								WriteCardEntity entity = new WriteCardEntity();
-								entity.setNullCardId(nullCardId);
-								EventBus.getDefault().post(entity);
 							}
+							isGetnullCardid = false;
+							lastSendMessageStr = "";
+							//发送空卡序列号
+							WriteCardEntity entity = new WriteCardEntity();
+							entity.setNullCardId(nullCardId);
+							EventBus.getDefault().post(entity);
 							//获取完空卡序列号后获取步数
 							sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
 //							ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
@@ -516,6 +514,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //							EventBus.getDefault().post(entity);
 						}
 					}
+					//异常情况重新走一遍流程
 				} else if (mStrSimCmdPacket.contains("6e00")) {
 					sendMessageToBlueTooth(UP_TO_POWER_NO_RESPONSE);
 				} else {
@@ -531,6 +530,32 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //				//最后发送信息复位
 //				lastSendMessageStr = "";
 				break;
+			case Constant.WRITE_NEW_SIM_STEP_2:
+				checkIs91toSend(mStrSimCmdPacket);
+				break;
+			case Constant.WRITE_NEW_SIM_STEP_A012:
+				if (mStrSimCmdPacket.contains(Constant.WRITE_NEW_CARD_STEP3)) {
+					sendMessageSeparate(Constant.WRITE_NEW_SIM_STEP_4, Constant.WRITE_SIM_DATA);
+				} else if (mStrSimCmdPacket.contains(Constant.WRITE_NEW_CARD_STEP6)) {
+					sendMessageSeparate(Constant.WRITE_NEW_SIM_STEP_7 + ICSOpenVPNApplication.cardData, Constant.WRITE_SIM_DATA);
+				} else if (mStrSimCmdPacket.contains(Constant.WRITE_NEW_CARD_STEP8)) {
+					//新卡写卡完成
+					handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
+					sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
+				}
+				break;
+			case Constant.WRITE_NEW_SIM_STEP_4:
+				if (mStrSimCmdPacket.contains(Constant.WRITE_NEW_CARD_STEP4)) {
+					sendMessageSeparate(Constant.WRITE_NEW_SIM_STEP_5, Constant.WRITE_SIM_DATA);
+				}
+				break;
+			case Constant.WRITE_NEW_SIM_STEP_5:
+				checkIs91toSend(mStrSimCmdPacket);
+				break;
+			case Constant.WRITE_NEW_SIM_STEP_7:
+				checkIs91toSend(mStrSimCmdPacket);
+				break;
+
 			default:
 				if (mStrSimCmdPacket.startsWith("9000") && !CommonTools.isFastDoubleClick(1000)) {
 					//新型写卡完成
@@ -538,10 +563,21 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 					isGetnullCardid = false;
 					return;
+					//异常情况重新走一遍流程
+				} else if (mStrSimCmdPacket.contains("6e00")) {
+					sendMessageToBlueTooth(UP_TO_POWER_NO_RESPONSE);
 				}
 				break;
 		}
 	}
+
+	private void checkIs91toSend(String mStrSimCmdPacket) {
+		if (mStrSimCmdPacket.contains(Constant.WRITE_CARD_91)) {
+			sendMessageSeparate(Constant.WRITE_NEW_SIM_STEP_A012 +
+					mStrSimCmdPacket.substring(mStrSimCmdPacket.length() - 2), Constant.WRITE_SIM_DATA);
+		}
+	}
+
 
 	private void registFlowPath() {
 		Log.i("Bluetooth", "进入注册流程");

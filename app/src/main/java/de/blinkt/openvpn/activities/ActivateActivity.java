@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,11 +35,14 @@ import de.blinkt.openvpn.http.OrderDataHttp;
 import de.blinkt.openvpn.model.WriteCardEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
+import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.dialog.DialogYearMonthDayPicker;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
+import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
+import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.lastSendMessageStr;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVEPACKAGE;
@@ -187,6 +191,8 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 	//获取写卡数据，然后发给蓝牙写卡
 	private void orderDataHttp(String nullcardNumber) {
 		if (nullcardNumber != null) {
+			if (SharedUtils.getInstance().readBoolean(Constant.IS_NEW_SIM_CARD))
+				nullcardNumber = null;
 			if (!CommonTools.isFastDoubleClick(100))
 				createHttpRequest(HttpConfigUrl.COMTYPE_ORDER_DATA, orderId, nullcardNumber);
 		} else {
@@ -226,6 +232,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 					@Override
 					public void run() {
 						try {
+							isGetnullCardid = true;
 							SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_NO_RESPONSE);
 							Thread.sleep(20000);
 						} catch (InterruptedException e) {
@@ -250,7 +257,14 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 		} else if (cmdType == HttpConfigUrl.COMTYPE_ORDER_DATA) {
 			OrderDataHttp orderDataHttp = (OrderDataHttp) object;
 			if (orderDataHttp.getStatus() == 1) {
-				sendMessageSeparate(orderDataHttp.getOrderDataEntity().getData());
+				if (!SharedUtils.getInstance().readBoolean(Constant.IS_NEW_SIM_CARD)) {
+					sendMessageSeparate(orderDataHttp.getOrderDataEntity().getData());
+				} else {
+					ICSOpenVPNApplication.cardData = orderDataHttp.getOrderDataEntity().getData();
+					Log.i(TAG, "卡数据：" + ICSOpenVPNApplication.cardData);
+					isGetnullCardid = false;
+					sendMessageSeparate(Constant.WRITE_SIM_FIRST);
+				}
 			} else {
 				CommonTools.showShortToast(ActivateActivity.this, orderDataHttp.getMsg());
 			}
@@ -265,6 +279,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 
 	private void sendMessageSeparate(final String message) {
 		String[] messages = PacketeUtil.Separate(message, "1300");
+		lastSendMessageStr = message;
 		int length = messages.length;
 		for (int i = 0; i < length; i++) {
 			if (!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])) {

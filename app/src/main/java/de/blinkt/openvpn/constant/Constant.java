@@ -149,11 +149,11 @@ public class Constant {
 	public static final String RECEIVE_NULL_CARD_CHAR2 = "0345";
 	public static final String WRITE_CARD_STEP1 = "9f1";
 	public static final String WRITE_CARD_91 = "91";
-	public static final String WRITE_CARD_STEP4 = "d03281030125";
 	public static final String WRITE_CARD_STEP5 = "9000";
-	public static final String WRITE_CARD_STEP7 = "d04381030113";
-	public static final String WRITE_CARD_STEP9 = "d02081030123";
-	public static final String WRITE_CARD_STEP11 = "d03c8103012";
+	public static final String WRITE_NEW_CARD_STEP3 = "c06d3b9000";
+	public static final String WRITE_NEW_CARD_STEP4 = "9000";
+	public static final String WRITE_NEW_CARD_STEP6 = "0201e69000";
+	public static final String WRITE_NEW_CARD_STEP8 = "6500649000";
 
 	//获取空卡流程
 	public static final String GET_NULLCARDID = "9f0f";
@@ -202,14 +202,14 @@ public class Constant {
 	public static final String SIM_DOWN_POWER = "1100";//对卡断电
 	public static final String READED_SIM_DATA = "1200";//读卡数据
 	public static final String WRITE_SIM_DATA = "1300";//写卡数据
-	public static final String WRITE_SIM_FIRST = "A0A40000023F00";//写卡第一步
-	public static final String WRITE_SIM_STEP_TWO = "A0A40000022F02";//写卡第二步
-	public static final String WRITE_SIM_STEP_THREE = "A0B000000A";//写卡第三步
-	public static final String WRITE_NEW_SIM_STEP_2 = "A01000001DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";//写新卡第2步
-	public static final String WRITE_NEW_SIM_STEP_A012 = "A0120000";//写新卡第3步
-	public static final String WRITE_NEW_SIM_STEP_4 = "A01400000C810301250082028281830100";//写新卡第4步
-	public static final String WRITE_NEW_SIM_STEP_5 = "A0C2000009D30782020181900101";//写新卡第5步
-	public static final String WRITE_NEW_SIM_STEP_7 = "A0140000738103012301820282818301008D6504";//写新卡第7步
+	public static final String WRITE_SIM_FIRST = "a0a40000023f00";//写卡第一步
+	public static final String WRITE_SIM_STEP_TWO = "a0a40000022f02";//写卡第二步
+	public static final String WRITE_SIM_STEP_THREE = "a0b000000a";//写卡第三步
+	public static final String WRITE_NEW_SIM_STEP_2 = "a01000001dffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";//写新卡第2步
+	public static final String WRITE_NEW_SIM_STEP_A012 = "a0120000";//写新卡第3步
+	public static final String WRITE_NEW_SIM_STEP_4 = "a01400000c810301250082028281830100";//写新卡第4步
+	public static final String WRITE_NEW_SIM_STEP_5 = "a0c2000009d30782020181900101";//写新卡第5步
+	public static final String WRITE_NEW_SIM_STEP_7 = "a0140000738103012301820282818301008d6504";//写新卡第7步
 
 	//网络访问返回状态码
 	/**

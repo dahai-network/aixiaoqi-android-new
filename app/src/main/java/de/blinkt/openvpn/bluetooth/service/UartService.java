@@ -234,7 +234,6 @@ public class UartService extends Service implements Serializable {
 			}
 			messages.clear();
 			messages = messagesList;
-
 		}
 	}
 

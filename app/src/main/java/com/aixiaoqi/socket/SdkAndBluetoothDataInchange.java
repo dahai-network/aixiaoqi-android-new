@@ -2,21 +2,21 @@ package com.aixiaoqi.socket;
 
 import android.text.TextUtils;
 import android.util.Log;
+
 import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.database.DBHelp;
-import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.SharedUtils;
 
 /**
  * Created by Administrator on 2017/1/5 0005.
@@ -31,7 +31,8 @@ public class SdkAndBluetoothDataInchange {
 	private int notCanReceiveBluetoothDataCount = 0;
 	private String finalTemp;//保存上一次发给蓝牙的数据，以免出错，需要重发
 	private boolean isReceiveBluetoothData = true;//判断5s内是否接收完成，没有完成则重新发送
-	public int count =0;
+	public int count = 0;
+
 	public void initReceiveDataframSocketService(ReceiveDataframSocketService receiveDataframSocketService, UartService mService) {
 		receiveDataframSocketService.setListener(new ReceiveDataframSocketService.MessageOutLisener() {
 													 @Override
@@ -120,6 +121,7 @@ public class SdkAndBluetoothDataInchange {
                 };
             }
             timerMessage.schedule(timerTaskMessage, 5000, 5000);
+
         }
 	}
 

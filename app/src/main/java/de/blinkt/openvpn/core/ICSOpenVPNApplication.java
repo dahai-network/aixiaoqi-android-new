@@ -41,6 +41,8 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 	private static ICSOpenVPNApplication instance;
 	private static final String TAG = "OnUILifecycleListener";
 	List<ContactBean> mAllList;
+	//接口通过空卡序列号返回的订单特定写卡数据
+	public static String cardData = null;
 
 	public static ICSOpenVPNApplication getInstance() {
 		return instance;
