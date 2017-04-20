@@ -379,6 +379,11 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				sharedUtils.writeString(Constant.ASTERISK_IP_OUT, out.getAsteriskIp());
 				sharedUtils.writeString(Constant.ASTERISK_PORT_OUT, out.getAsteriskPort());
 				sharedUtils.writeString(Constant.PUBLIC_PASSWORD, out.getPublicPassword());
+				e(in.getAsteriskIp());
+				e(in.getAsteriskPort());
+				e(out.getAsteriskIp());
+				e(out.getAsteriskPort());
+				e(out.getPublicPassword());
 
 				startActivity(new Intent(this, ProMainActivity.class));
 

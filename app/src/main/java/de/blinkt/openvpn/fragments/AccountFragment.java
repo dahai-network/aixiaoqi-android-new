@@ -1,12 +1,16 @@
 package de.blinkt.openvpn.fragments;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -147,10 +151,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    tvNewPackagetAction.setVisibility(View.VISIBLE);
+                    if (tvNewPackagetAction != null)
+                        tvNewPackagetAction.setVisibility(View.VISIBLE);
                     break;
                 case 2:
-                    tvNewPackagetAction.setVisibility(View.GONE);
+                    if (tvNewPackagetAction != null) {
+                        tvNewPackagetAction.setVisibility(View.GONE);
+                    }
                     break;
                 case 3:
 
@@ -159,6 +166,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 
                     break;
                 case 4:
+                    if (tvNewVersion != null)
                         tvNewVersion.setVisibility(View.GONE);
 
                     break;
@@ -181,7 +189,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
         //初始化状态
         tvNewPackagetAction.setVisibility(View.GONE);
         tvNewVersion.setVisibility(View.GONE);
-        EventBus.getDefault().register(this);
+       // EventBus.getDefault().register(this);
+
+        //注册广播
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver,new IntentFilter("Notic"));
         return rootView;
     }
 
@@ -504,19 +515,22 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
         EventBus.getDefault().post(entity);
     }
 
-    /**
-     * 修改tvNewPackagetAction控件是否显示或者隐藏
-     *
-     * @param evnt
-     */
-    @Subscribe
-    public void changeViewState(ChangeViewStateEvent evnt) {
-        if (tvNewPackagetAction != null) {
-            mHandler.sendEmptyMessage(evnt.getVersionState());
+    public final String NoticSign = "flg";
+
+    public BroadcastReceiver mNoticBroadCastReciver =new  BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            boolean flg = intent.getBooleanExtra(NoticSign, false);
+            if (flg)
+                mHandler.sendEmptyMessage(3);
+            else
+                mHandler.sendEmptyMessage(4);
+
+            Log.d(TAG, "onReceive: " + flg);
         }
 
-
-    }
+    };
 
 
     @Override

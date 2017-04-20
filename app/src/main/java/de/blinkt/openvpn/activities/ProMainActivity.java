@@ -153,7 +153,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     public static boolean isStartSdk = false;
     public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
     public static SendYiZhengService sendYiZhengService = null;
-
+    Intent intent = new Intent("Notic");
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -161,16 +161,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
             switch (msg.what) {
                 case 1:
+
                     tvRedDot04.setVisibility(View.VISIBLE);
-                    noticeNewVersion(3);
+                    intent.putExtra("flg", true);
+
+                    // noticeNewVersion(3);
                     break;
                 case 2:
                     tvRedDot04.setVisibility(View.GONE);
-                    noticeNewVersion(4);
+                    intent.putExtra("flg", false);
+                    //  noticeNewVersion(4);
                     break;
 
 
             }
+            LocalBroadcastManager.getInstance(ProMainActivity.this).sendBroadcast(intent);
 
         }
     };
@@ -211,7 +216,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         setListener();
         initBrocast();
         initServices();
-       // initData();
+        // initData();
         socketUdpConnection = new SocketConnection();
         socketTcpConnection = new SocketConnection();
         //注册eventbus，观察goip注册问题
@@ -243,14 +248,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
 
-    /**
+   /* *//**
      * 通知我的界面是否有新的固件包
-     */
+     *//*
     public void noticeNewVersion(int state) {
 
         Log.d("__aixiaoqi", "noticeNewVersion: ");
         EventBus.getDefault().post(new ChangeViewStateEvent(state));
-    }
+    }*/
 
     /**
      * 判断是否显示红点
@@ -791,7 +796,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
 
             Log.d("__aixiaoqi", "rightComplete: "+skyUpgradeHttp);
-
 
             if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
                 Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");

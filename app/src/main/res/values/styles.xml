@@ -238,7 +238,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:button">@null</item>
-        <item name="android:layout_marginTop">@dimen/padding_5dp</item>
+        <item name="android:layout_marginTop">@dimen/padding_2dp</item>
         <item name="android:paddingRight">@dimen/padding_30dp</item>
     </style>
 
@@ -251,7 +251,7 @@
         <item name="android:textColor">@color/color_323232</item>
         <item name="android:background">@color/white</item>
         <item name="android:paddingLeft">@dimen/padding_25dp</item>
-        <item name="android:paddingBottom">@dimen/padding_15dp</item>
+        <item name="android:paddingBottom">@dimen/padding_10dp</item>
         <item name="android:gravity">bottom</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">70dp</item>
