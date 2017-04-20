@@ -25,6 +25,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <LinearLayout
+                android:layout_gravity="top"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_cccccc">
+            </LinearLayout>
 
             <RadioGroup
                 android:id="@+id/radiogroup"
@@ -75,31 +81,31 @@
                 android:layout_marginLeft="1dp">
 
                 <TextView
-                    android:visibility="invisible"
                     android:id="@+id/tv_red_dot_01"
                     style="@style/chart_red_hot"
-                    android:drawableRight="@drawable/red_dot" />
+                    android:drawableRight="@drawable/red_dot"
+                    android:visibility="invisible" />
 
                 <TextView
-                    android:visibility="invisible"
                     android:id="@+id/tv_red_dot_02"
                     style="@style/chart_red_hot"
                     android:drawableRight="@drawable/red_dot"
-                    android:src="@drawable/red_dot" />
+                    android:src="@drawable/red_dot"
+                    android:visibility="invisible" />
 
                 <TextView
-                    android:visibility="invisible"
                     android:id="@+id/tv_red_dot_03"
                     style="@style/chart_red_hot"
                     android:drawableRight="@drawable/red_dot"
-                    android:src="@drawable/red_dot" />
+                    android:src="@drawable/red_dot"
+                    android:visibility="invisible" />
 
                 <TextView
-                    android:visibility="invisible"
                     android:id="@+id/tv_red_dot_04"
                     style="@style/chart_red_hot"
                     android:drawableRight="@drawable/red_dot"
-                    android:src="@drawable/red_dot" />
+                    android:src="@drawable/red_dot"
+                    android:visibility="visible" />
 
             </LinearLayout>
 

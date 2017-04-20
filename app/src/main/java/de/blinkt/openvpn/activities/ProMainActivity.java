@@ -121,7 +121,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     public static boolean isDeploy = true;
     @BindView(R.id.tv_red_dot_01)
     TextView tvRedDot01;
-//    @BindView(R.id.tv_red_dot_02)
+    //    @BindView(R.id.tv_red_dot_02)
 //    TextView tvRedDot02;
 //    @BindView(R.id.tv_red_dot_03)
 //    TextView tvRedDot03;
@@ -153,7 +153,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     public static boolean isStartSdk = false;
     public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
     public static SendYiZhengService sendYiZhengService = null;
-
+    Intent intent = new Intent("Notic");
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -161,16 +161,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
             switch (msg.what) {
                 case 1:
+
                     tvRedDot04.setVisibility(View.VISIBLE);
-                    noticeNewVersion(3);
+                    intent.putExtra("flg", true);
+
+                    // noticeNewVersion(3);
                     break;
                 case 2:
                     tvRedDot04.setVisibility(View.GONE);
-                    noticeNewVersion(4);
+                    intent.putExtra("flg", false);
+                    //  noticeNewVersion(4);
                     break;
 
 
             }
+            LocalBroadcastManager.getInstance(ProMainActivity.this).sendBroadcast(intent);
 
         }
     };
@@ -211,7 +216,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         setListener();
         initBrocast();
         initServices();
-       // initData();
+        // initData();
         socketUdpConnection = new SocketConnection();
         socketTcpConnection = new SocketConnection();
         //注册eventbus，观察goip注册问题
@@ -251,14 +256,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         tvRedDot04.setVisibility(View.GONE);
     }
 
-    /**
+   /* *//**
      * 通知我的界面是否有新的固件包
-     */
+     *//*
     public void noticeNewVersion(int state) {
 
         Log.d("__aixiaoqi", "noticeNewVersion: ");
         EventBus.getDefault().post(new ChangeViewStateEvent(state));
-    }
+    }*/
 
     /**
      * 判断是否显示红点
@@ -520,10 +525,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
         if (!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL, true)) {
-			tvRedDot01.setVisibility(View.VISIBLE);
-        }else{
-			tvRedDot01.setVisibility(View.GONE);
-		}
+            tvRedDot01.setVisibility(View.VISIBLE);
+        } else {
+            tvRedDot01.setVisibility(View.GONE);
+        }
     }
 
     public void hidePhoneBottomBar() {
@@ -566,8 +571,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 switch (position) {
                     case 0:
                         radiogroup.check(R.id.rb_index);
-						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL,true);
-						tvRedDot01.setVisibility(View.GONE);
+                        SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL, true);
+                        tvRedDot01.setVisibility(View.GONE);
                         break;
                     case 1:
                         radiogroup.check(R.id.rb_phone);
@@ -797,13 +802,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
             SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
-
-            Log.d("__aixiaoqi", "rightComplete: "+skyUpgradeHttp);
-
+            Log.d("__aixiaoqi", "rightComplete: " + skyUpgradeHttp);
 
             if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
                 Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
                 mHandler.sendEmptyMessage(1);
+
 
             } else {
                 Log.d("__aixiaoqi", "rightComplete: " + "已经是最新的");
@@ -1132,7 +1136,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         public void onReceive(final Context context, Intent intent) {
             final String action = intent.getAction();
             if (action.equals(MALL_SHOW_RED_DOT)) {
-				tvRedDot01.setVisibility(View.VISIBLE);
+                tvRedDot01.setVisibility(View.VISIBLE);
             }
 
         }
