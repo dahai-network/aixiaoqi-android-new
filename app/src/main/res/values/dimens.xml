@@ -36,6 +36,7 @@
     <dimen name="padding_40dp">40dp</dimen>
     <dimen name="padding_60dp">60dp</dimen>
     <dimen name="little_12">12sp</dimen>
+    <dimen name="little_10">10sp</dimen>
     <dimen name="little_16">16sp</dimen>
     <dimen name="little_14">14sp</dimen>
     <dimen name="little_18">18sp</dimen>

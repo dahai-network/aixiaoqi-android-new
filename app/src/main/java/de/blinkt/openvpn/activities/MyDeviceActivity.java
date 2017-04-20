@@ -297,7 +297,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				}
 				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETVERSION)) && !isUpgrade) {
 					SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, 0);
+
 					skyUpgradeHttp();
+
 				} else if (isUpgrade) {
 					showSkyUpgrade();
 				}
@@ -677,8 +679,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
 						Log.d(TAG, "rightComplete: "+"有新的版本");
 						setPoint();
-
-
 
 					} else {
 						CommonTools.showShortToast(this, getString(R.string.last_version));
