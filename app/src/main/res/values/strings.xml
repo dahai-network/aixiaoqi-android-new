@@ -218,6 +218,10 @@
     <string name="delete_contact_hide">确定删除联系人</string>
     <string name="title_search_result_not_found">未知</string>
 
+
+    <string name="find_new_package">(有套餐可激活)</string>
+    <string name="find_new_version">(有新版本)</string>
+
     <!--拨号-->
     <string name="quiet">静音</string>
 

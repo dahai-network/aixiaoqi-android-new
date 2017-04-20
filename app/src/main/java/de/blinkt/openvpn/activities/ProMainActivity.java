@@ -13,6 +13,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
@@ -36,10 +38,13 @@ import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 import com.aixiaoqi.socket.TestProvider;
 import com.umeng.analytics.MobclickAgent;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
@@ -65,6 +70,7 @@ import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
+import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
@@ -80,6 +86,7 @@ import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.CustomViewPager;
 import de.blinkt.openvpn.views.MyRadioButton;
 import de.blinkt.openvpn.views.TopProgressView;
+
 import static cn.com.aixiaoqi.R.string.index_registing;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
@@ -142,6 +149,26 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
     public static SendYiZhengService sendYiZhengService = null;
 
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case 1:
+                    tvRedDot04.setVisibility(View.VISIBLE);
+
+
+                    break;
+                case 2:
+
+                    break;
+
+
+            }
+        }
+    };
+
     @Override
     public Object getLastCustomNonConfigurationInstance() {
         return super.getLastCustomNonConfigurationInstance();
@@ -178,10 +205,15 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         setListener();
         initBrocast();
         initServices();
+        initData();
         socketUdpConnection = new SocketConnection();
         socketTcpConnection = new SocketConnection();
         //注册eventbus，观察goip注册问题
         EventBus.getDefault().register(this);
+    }
+
+    private void initData() {
+        skyUpgradeHttp();
     }
 
     /**
@@ -551,6 +583,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
     }
 
+
     private class MyRadioGroupListener implements RadioGroup.OnCheckedChangeListener {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -730,9 +763,25 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
 
-            Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
-        }
+            SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
+            SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
+            if (skyUpgradeHttp.getStatus() == 1) {
+                if (skyUpgradeHttp.getUpgradeEntity() != null) {
+                    if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
+                        Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
+                        mHandler.sendEmptyMessage(1);
 
+
+
+                    } else {
+
+                        Log.d("__aixiaoqi", "rightComplete: " + "已经是最新的");
+                    }
+
+                }
+
+            }
+        }
     }
 
     private void initPre(PreReadEntity preReadEntity) {
@@ -806,7 +855,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                             i("deviceName:" + device.getName());
                             if (deviceAddress.equalsIgnoreCase(device.getAddress())) {
                                 scanLeDevice(false);
-                               mService.connect(deviceAddress);
+                                mService.connect(deviceAddress);
 
                             }
                         }
@@ -1154,6 +1203,20 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         return false;
     }
 
+    //空中升级
+    private void skyUpgradeHttp() {
+        Log.e(TAG, "skyUpgradeHttp");
+        int DeviceType = 0;
+        String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+        if (!TextUtils.isEmpty(braceletname)) {
+            if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
+                DeviceType = 0;
+            } else {
+                DeviceType = 1;
+            }
+        }
+        createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
+    }
 
 
 }

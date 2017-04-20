@@ -16,15 +16,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.analytics.MobclickAgent;
-
 import org.greenrobot.eventbus.EventBus;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,6 +29,7 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.BalanceParticularsActivity;
+import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.ImportantAuthorityActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
@@ -73,8 +71,6 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKSET;
  * A simple {@link Fragment} subclass.
  */
 public class AccountFragment extends Fragment implements View.OnClickListener, InterfaceCallback {
-
-
     @BindView(R.id.title)
     TitleBar title;
     @BindView(R.id.headImageView)
@@ -126,12 +122,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
     TextView flowCount;
     @BindView(R.id.package_all_count)
     TextView packageAllCount;
-    @BindView(R.id.tv_flow_state_dot)
-    TextView tvFlowStateDot;
-    @BindView(R.id.tv_red_device_state)
-    TextView tvRedDeviceState;
     @BindView(R.id.accountScrollView)
     ScrollView accountScrollView;
+    @BindView(R.id.tv_new_packaget_action)
+    TextView tvNewPackagetAction;
+    @BindView(R.id.tv_new_version)
+    TextView tvNewVersion;
     //bluetooth status蓝牙状态
     private String bleStatus;
     private String TAG = "AccountFragment";
@@ -147,11 +143,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    //红点显示
-                    tvFlowStateDot.setVisibility(View.VISIBLE);
+                    tvNewPackagetAction.setVisibility(View.VISIBLE);
                     break;
                 case 2:
-                    tvFlowStateDot.setVisibility(View.GONE);
+                    tvNewPackagetAction.setVisibility(View.GONE);
                     break;
 
             }
@@ -166,9 +161,19 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                 container, false);
         ButterKnife.bind(this, rootView);
         //初始化状态
-        tvFlowStateDot.setVisibility(View.GONE);
-        tvRedDeviceState.setVisibility(View.GONE);
+        tvNewPackagetAction.setVisibility(View.GONE);
+        tvNewVersion.setVisibility(View.GONE);
+        getDeviceVersion();
         return rootView;
+    }
+
+    /**
+     * 获取设备版本号
+     */
+    private void getDeviceVersion() {
+
+        //skyUpgradeHttp();
+
     }
 
     @Override
@@ -336,6 +341,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
+
+       //Log.d("__aixiaoq————i", "rightComplete: " + cmdType);
+
         if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
             BalanceHttp http = (BalanceHttp) object;
             if (http.getBalanceEntity() != null)
@@ -360,6 +368,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                 Log.i(TAG, object.getMsg());
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
+
             if (object.getStatus() == 1) {
                 OrderUsageRemainHttp orderUsageRemainHttp = (OrderUsageRemainHttp) object;
                 UsageRemainEntity.Unactivated unactivated = orderUsageRemainHttp.getUsageRemainEntity().getUnactivated();
@@ -368,8 +377,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                     return;
                 }
                 if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
-                    //红点显示
+
                     mHandler.sendEmptyMessage(1);
+
                     hasPackage = true;
                     PacketRelativeLayout.setVisibility(View.GONE);
                     noPacketRelativeLayout.setVisibility(View.VISIBLE);
@@ -379,7 +389,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                     addOrActivatePackage.setText(getString(R.string.activate_packet));
                 } else if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
 
-                    //红点隐藏
+
                     mHandler.sendEmptyMessage(2);
                     hasPackage = false;
                     PacketRelativeLayout.setVisibility(View.GONE);
@@ -389,12 +399,17 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                     addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
                     addOrActivatePackage.setText(getString(R.string.add_package));
                 } else {//有套餐且激活了。
-                    //红点隐藏
-                    mHandler.sendEmptyMessage(2);
                     hasPackage = true;
                     PacketRelativeLayout.setVisibility(View.VISIBLE);
                     noPacketRelativeLayout.setVisibility(View.GONE);
                     callTime.setText(used.getTotalRemainingCallMinutes() + "分");
+
+                    //显示出有未激活套餐的提示
+                    if (!"0".equals(unactivated.getTotalNumFlow())) {
+                        mHandler.sendEmptyMessage(1);
+                    } else {
+                        mHandler.sendEmptyMessage(2);
+                    }
                     if ("0".equals(used.getTotalNumFlow())) {
                         flow.setText(getString(R.string.no_flow_count));
                         flowCount.setText(unactivated.getTotalNumFlow());
@@ -464,8 +479,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
         EventBus.getDefault().post(entity);
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        //null.unbind();
     }
 }
