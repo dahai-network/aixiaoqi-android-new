@@ -61,9 +61,8 @@ public class BaseHttp extends CommonHttp {
 	protected void parseResult(String response) {
 		if (!TextUtils.isEmpty(response)) {
 			parseObject(response);
-			interfaceCallback.rightComplete(cmdType_, this);
 		}
-
+		interfaceCallback.rightComplete(cmdType_, this);
 	}
 
 	@Override

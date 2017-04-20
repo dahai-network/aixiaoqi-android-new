@@ -1,55 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:id="@+id/number_rl"
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:orientation="vertical">
         <TextView
             android:id="@+id/number_1"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/step_tip"
+            android:layout_width="@dimen/padding_20dp"
+            android:background="@drawable/circle_light_blue_ret"
             android:layout_marginLeft="15dp"
             android:gravity="center"
             android:text="1"
+            android:layout_centerVertical="true"
             android:textColor="@color/white"
-            android:layout_height="wrap_content"/>
+            android:layout_height="@dimen/padding_20dp"/>
 
 
 
-            <TextView
-                android:layout_toRightOf="@id/number_1"
-                android:id="@+id/outside_step_second_tv"
-                android:layout_marginTop="@dimen/padding_20dp"
-                android:paddingLeft="@dimen/padding"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/outside_step_one"
-                />
-
-            <TextView
-                android:id="@+id/outside_step_second_content_tv"
-                android:layout_width="wrap_content"
-                android:layout_below="@id/outside_step_second_tv"
-                android:layout_toRightOf="@id/number_1"
-                android:paddingLeft="@dimen/padding"
-                android:paddingTop="@dimen/padding"
-                android:paddingRight="@dimen/padding_15dp"
-                android:layout_height="wrap_content"
-                android:text="@string/outside_step_one_content"
-                />
+        <TextView
+            android:layout_toRightOf="@id/number_1"
+            android:id="@+id/outside_step_second_tv"
+            android:paddingLeft="@dimen/padding"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/little_18"
+            android:textColor="@color/color_333333"
+            android:text="@string/outside_step_one"
+            />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/outside_step_second_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/number_rl"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:paddingTop="@dimen/padding"
+        android:paddingRight="@dimen/padding_15dp"
+        android:textColor="@color/color_333333"
+        android:layout_height="wrap_content"
+        android:text="@string/outside_step_one_content"
+        />
 
 
     <ImageView
+        android:id="@+id/outside_item01_up"
         android:layout_below="@id/outside_step_second_content_tv"
+        android:layout_marginTop="@dimen/padding_50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="fitXY"
+        android:src="@drawable/outside_item01_up"/>
+    <ImageView
+        android:id="@+id/outside_item01_down"
         android:layout_marginTop="@dimen/padding_10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-      android:layout_centerHorizontal="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
+        android:layout_below="@id/outside_item01_up"
         android:scaleType="fitXY"
-        android:src="@drawable/item01"/>
-
+        android:src="@drawable/outside_item01_down"/>
+    <Button
+        android:id="@+id/activateTextView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginLeft="@dimen/padding_20dp"
+        android:layout_marginRight="@dimen/padding_20dp"
+        android:layout_below="@id/outside_item01_down"
+        android:layout_marginTop="@dimen/padding_15dp"
+        android:background="@drawable/green_btn_click"
+        android:text="@string/complete_next"
+        android:textColor="@android:color/white"
+        android:textSize="16dp"/>
 </RelativeLayout>

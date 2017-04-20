@@ -1,45 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
 
 
-        <TextView
-            android:id="@+id/step"
-            android:layout_marginLeft="@dimen/padding_15dp"
-            android:layout_marginTop="18dp"
-            android:layout_width="wrap_content"
-            android:background="@drawable/step_tip"
-            android:gravity="center"
-            android:text="4"
-            android:textColor="@color/white"
-            android:layout_height="wrap_content"/>
-
-
-            <TextView
-                android:id="@+id/outside_step_four_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-               android:layout_toRightOf="@id/step"
-                android:paddingLeft="@dimen/padding"
-android:layout_marginTop="@dimen/padding_20dp"
-                android:text="@string/outside_step_four"
-                />
-
-            <TextView
-                android:id="@+id/outside_step_four_content_tv"
-                android:layout_below="@id/outside_step_four_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/step"
-                android:paddingLeft="@dimen/padding"
-                android:layout_marginRight="@dimen/padding_15dp"
-                android:paddingTop="@dimen/padding"
-                android:text="@string/outside_step_four_content"
-                />
+    <ImageView
+        android:id="@+id/outside_set_complete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/padding_72dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/outside_set_complete"/>
+    <TextView
+        android:id="@+id/outside_step_four_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/outside_set_complete"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:layout_marginRight="@dimen/padding_15dp"
+        android:paddingTop="@dimen/padding_50dp"
+        android:text="@string/outside_step_four"
+        />
 
 
 
@@ -48,23 +34,16 @@ android:layout_marginTop="@dimen/padding_20dp"
         android:id="@+id/outside_step_four_bt"
         android:layout_width="match_parent"
         android:layout_below="@id/outside_step_four_content_tv"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_10dp"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginTop="@dimen/padding_100dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@drawable/login_btn"
-        android:text="@string/outside_step_four_click"
+        android:background="@drawable/green_btn_click"
+        android:text="@string/i_know"
         android:textColor="@android:color/white"
         android:layout_marginBottom="@dimen/padding_20dp"
-        android:textSize="16dp"/>
+        android:textSize="@dimen/little_16"/>
 
-    <ImageView
-        android:layout_below="@id/outside_step_four_bt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:scaleType="fitXY"
-        android:src="@drawable/item04"/>
+
 
 </RelativeLayout>

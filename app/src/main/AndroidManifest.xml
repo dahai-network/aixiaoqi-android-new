@@ -427,11 +427,6 @@
             android:persistent="true"/>
 
         <activity
-            android:name="de.blinkt.openvpn.activities.OutsideActivity"
-            android:label="@string/title_activity_outside"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name="de.blinkt.openvpn.activities.BeforeGoingAbroadActivity"
             android:screenOrientation="portrait">
         </activity>
@@ -439,7 +434,23 @@
             android:name="de.blinkt.openvpn.activities.OrderedOutsidePurchaseActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name="de.blinkt.openvpn.activities.OutsideFirstStepActivity"
+            android:screenOrientation="portrait">
+        </activity>
 
+        <activity
+            android:name="de.blinkt.openvpn.activities.OutsideSecondStepActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="de.blinkt.openvpn.activities.OutsideThirdStepActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="de.blinkt.openvpn.activities.OutsideFourStepActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <service
             android:name="de.blinkt.openvpn.service.NotificationMonitor"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">

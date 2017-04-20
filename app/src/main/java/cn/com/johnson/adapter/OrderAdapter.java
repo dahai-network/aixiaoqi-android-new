@@ -2,15 +2,11 @@ package cn.com.johnson.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +26,11 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.BoughtPackageEntity;
 import de.blinkt.openvpn.activities.ActivateActivity;
-import de.blinkt.openvpn.activities.CallTimeOrderDetailActitivy;
-import de.blinkt.openvpn.activities.CallTimePacketDetailActivity;
-import de.blinkt.openvpn.activities.KingCardDetailActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
-import de.blinkt.openvpn.activities.OutsideActivity;
+import de.blinkt.openvpn.activities.OutsideFirstStepActivity;
+import de.blinkt.openvpn.activities.OutsideSecondStepActivity;
+import de.blinkt.openvpn.activities.OutsideThirdStepActivity;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKINDEXORDER;
@@ -186,16 +182,22 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 				case R.id.rootLinearLayout:
 					MobclickAgent.onEvent(context, CLICKINDEXORDER);
 
-						MyOrderDetailActivity.launch(context, bean.getOrderID(), 0);
+					MyOrderDetailActivity.launch(context, bean.getOrderID(), 0);
 
 					break;
 				case R.id.stateTextView:
-					 if(bean.getOrderStatus()==0){
-						 context.startActivity(new Intent(context, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt())
-								 .putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G()) .putExtra(IntentPutKeyConstant.COUNTRY_NAME, bean.getCountryName()));
-					 }else{
-						 context.startActivity(new Intent(context,OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.AFTER_GOING_ABROAD).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,bean.isPackageIsSupport4G()));
-					 }
+					if(bean.getOrderStatus()==0||bean.getOrderStatus() == 4){
+						context.startActivity(new Intent(context, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt())
+								.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G())
+								.putExtra(IntentPutKeyConstant.COUNTRY_NAME, bean.getCountryName())
+								.putExtra(IntentPutKeyConstant.APN_NAME,bean.getPackageApnName()));
+					}else{
+						Constant.isOutsideSecondStepClick=false;
+						Constant.isOutsideThirdStepClick=false;
+						context.startActivity(new Intent(context,OutsideFirstStepActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.AFTER_GOING_ABROAD)
+								.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,bean.isPackageIsSupport4G())
+								.putExtra(IntentPutKeyConstant.APN_NAME,bean.getPackageApnName()));
+					}
 					break;
 			}
 

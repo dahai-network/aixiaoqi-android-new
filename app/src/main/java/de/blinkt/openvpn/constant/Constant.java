@@ -65,8 +65,6 @@ public class Constant {
 	public static final String PARTNER = "partner";
 	public static final String EXPIRES = "expires";
 	public static final String SIGN = "sign";
-	public static final int INPUT_TEXT = 1;
-	public static final int DELETE_TEXT = 2;
 	public static final String CALL_INCOMING = "来电";
 	public static final String CALL_OUTGOING = "拨出";
 	public static final String CALL_MISSED = "未接";
@@ -103,10 +101,7 @@ public class Constant {
 
 	//是否打开写卡流程，如果没有打开则是测试SIM卡是否连接上，如果否则为写卡流程，可以连接到GOIP
 	public static boolean IS_TEXT_SIM = false;
-	//注册卡回调类型
-	public static final int REGIST_CALLBACK_TYPE = 0;
-	//蓝牙连接状态int
-	public static final int BLUE_CONNECTED_INT = 2;
+
 
 	/**
 	 * 支付宝支付业务：入参app_id
@@ -175,8 +170,7 @@ public class Constant {
 	public static final int NETWORK_CELL_PHONE = 1;
 	public static final int SIM_CELL_PHONE = 2;
 
-	//蓝牙操作时间限制（5秒内不可重复操作）
-	public static final int REPEAT_OPERATE = 2500;
+
 
 
 	//蓝牙发送类型
@@ -192,14 +186,8 @@ public class Constant {
 	public static final String BIND_STATUE = "0800";//是否绑定成功
 	public static final String READ_SIM_DATA = "0900";//读卡返回数据
 	public static final String RECEIVE_CARD_MSG = "0a00";//爱小器卡
-	public static final String REQUEST_POWER = "0b00";//请求电量
 	public static final String IS_INSERT_CARD = "0c00";//检测是否插卡
 	public static final String ICCID_BLUE_VALUE = "0d00";//检测是否插卡
-	public static final String THE_HAND_FUNCTION = "0d00";//是否使用抬手功能
-	public static final String HISTORY_STEP = "0e00";//历史步数
-	public static final String SETTING_ALARM = "0f00";//设置闹钟
-	public static final String SIM_UP_POWER = "1000";//对卡上电
-	public static final String SIM_DOWN_POWER = "1100";//对卡断电
 	public static final String READED_SIM_DATA = "1200";//读卡数据
 	public static final String WRITE_SIM_DATA = "1300";//写卡数据
 	public static final String WRITE_SIM_FIRST = "a0a40000023f00";//写卡第一步
@@ -211,82 +199,8 @@ public class Constant {
 	public static final String WRITE_NEW_SIM_STEP_5 = "a0c2000009d30782020181900101";//写新卡第5步
 	public static final String WRITE_NEW_SIM_STEP_7 = "a0140000738103012301820282818301008d6504";//写新卡第7步
 
-	//网络访问返回状态码
-	/**
-	 * 一般通用接口返回值：
-	 * <p>
-	 * 失败 = 0,
-	 * 成功 = 1,
-	 * 找不到该用户 = 9900,
-	 * 手机号码格式不正确 = 9901,
-	 * 密码长度必须在6到20位之间 = 9902,
-	 * 验证码无效 = 9903,
-	 * 验证码错误 = 9904,
-	 * 此验证码已经过期_请重新发送验证码 = 9905,
-	 * 系统繁忙_请重试 = 9906,
-	 * 参数错误 = 9940,
-	 * 必填参数为空 = 9944,
-	 * 用户不能为空 = 9945,
-	 * 内部错误 = 9950,
-	 */
-	public static final int HTTP_SUCCESS = 1;
-	public static final int HTTP_FAIL = 0;
-	public static final int CANT_FIND_USER = 9900;
-	public static final int PHONE_NUMBER_ERROR = 9901;
-	public static final int PASSWORD_LENGTH_ERROR = 9902;
-	public static final int VERTIFICATION_CODE_VALID = 9903;
-	public static final int VERTIFICATION_CODE_ERROR = 9904;
-	public static final int VERTIFICATION_CODE_OVERDUE = 9905;
-	public static final int SYSTEM_BUSY = 9906;
-	public static final int PARAMETER_ERROR = 9940;
-	public static final int PARAMETER_NULL = 9944;
-	public static final int USER_NULL = 9945;
-	public static final int INSIDE_ERROR = 9945;
 
-	/**
-	 * 注册
-	 * 您输入的手机号码已注册 = 1001,
-	 * 注册失败_请重试 = 1002,
-	 */
-	public static final int ALLREADY_REGIST = 1001;
-	public static final int REGIST_FAIL = 1002;
 
-	/**
-	 * 登录
-	 * 帐号不存在_请先注册 = 1003,
-	 * 您的帐号已被锁定 = 1004,
-	 * 密码不正确 = 1005
-	 */
-	public static final int ACCOUNT_UNEXIST = 1003;
-	public static final int ACCOUNT_LOCK = 1004;
-	public static final int PSW_ERROR = 1005;
-
-	/**
-	 * 退出登录
-	 * 退出失败 = 1006
-	 */
-
-	public static final int EXIT_ERROR = 1006;
-
-	/**
-	 * 忘记密码
-	 * 手机号未注册 = 1008
-	 */
-
-	public static final int PHONE_UNREGIST = 1008;
-
-	/**
-	 * 发送验证短信
-	 * 验证类型错误 = 1009,
-	 * 您输入的手机号码已注册2 = 1010,
-	 * 您输入的手机号码未注册 = 1011,
-	 * 短信服务器异常_请联系客服人员 = 1012,
-	 * 您发送的太频繁了 = 1013,
-	 * 阿里云短信调用失败 = 1014,
-	 * 一分钟内不能再次发送_RemainingSeconds秒以后可以再次发送 = 1015,
-	 */
-
-	public static final int VERTIFICATION_ERROR = 1009;
 
 
 	/**
@@ -321,8 +235,7 @@ public class Constant {
 	public static final String SPIRIT_AWAY_MODE = "关闭“神隐模式”";
 
 	public static final String SHUT_DOWN_BACKGROUND = "关闭“后台冻结”";
-	public static final String REGISTER_SIM_NOT_PRE_DATA = "not_pre_data";
-	public static final String REGISTER_SIM_PRE_DATA = "pre_data";
+
 
 	/**
 	 * 套餐详情界面的一些参数
@@ -332,14 +245,10 @@ public class Constant {
 	public static final String FEATURES_SIGN = "features";
 	public static final String CALLTIME_FEATURES_SIGN = "calltime_features";
 	public static final String PAYTERMS_SIGN = "payterms";
-	public static final String SHAREDPREFERENCES_SIGN = "detail_data";
+
 
 	public static final String HIDDEN = "hidden";
 	public static final String SHOW = "show";
-	/**
-	 * 注册界面和忘记密码
-	 */
-	public static final int PHONENUMBER_EDITTAG = 1;
-	public static final int VERIFICATION_EDITTAG = 2;
-	public static final int PASSWORD_EDITTAG = 3;
+	public static boolean isOutsideSecondStepClick=false;
+	public static boolean isOutsideThirdStepClick=false;
 }

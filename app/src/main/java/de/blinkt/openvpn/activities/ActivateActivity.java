@@ -137,7 +137,13 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 					MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
 					CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活失败，请重试!");
 				} else {
-					toActivity(new Intent(ActivateActivity.this, OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.OUTSIDE).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, getIntent().getBooleanExtra(IntentPutKeyConstant.IS_SUPPORT_4G, false)));
+					Constant.isOutsideSecondStepClick=false;
+					Constant.isOutsideThirdStepClick=false;
+					toActivity(new Intent(ActivateActivity.this, OutsideFirstStepActivity.class)
+							.putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.OUTSIDE)
+							.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, getIntent().getBooleanExtra(IntentPutKeyConstant.IS_SUPPORT_4G, false))
+
+					);
 					isActivateSuccess = true;
 				}
 				dismissProgress();

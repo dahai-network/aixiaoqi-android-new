@@ -89,7 +89,15 @@ public class BoughtPackageEntity implements Serializable {
 		private int ExpireDaysInt;
 		private boolean PackageIsSupport4G;
 		private String CountryName;
+		private String PackageApnName;
 
+		public String getPackageApnName() {
+			return PackageApnName;
+		}
+
+		public void setPackageApnName(String packageApnName) {
+			PackageApnName = packageApnName;
+		}
 
 		public String getCountryName() {
 			return CountryName;
