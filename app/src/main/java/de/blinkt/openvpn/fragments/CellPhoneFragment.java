@@ -20,27 +20,24 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import com.umeng.analytics.MobclickAgent;
-
 import org.androidannotations.annotations.App;
 import org.w3c.dom.Text;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
 import cn.com.johnson.model.AppMode;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.SMSAcivity;
 import de.blinkt.openvpn.util.ViewUtil;
-
 import static de.blinkt.openvpn.constant.UmengContant.CLICKEDITSMS;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLEPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLESMS;
 
-
+/**
+ * 拨打电话界面
+ */
 public class CellPhoneFragment extends Fragment {
     public static RadioGroup operation_rg;
     RadioButton cell_phone_rb;

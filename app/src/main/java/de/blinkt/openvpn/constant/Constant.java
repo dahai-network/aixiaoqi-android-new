@@ -65,6 +65,8 @@ public class Constant {
 	public static final String PARTNER = "partner";
 	public static final String EXPIRES = "expires";
 	public static final String SIGN = "sign";
+	public static final int INPUT_TEXT = 1;
+	public static final int DELETE_TEXT = 2;
 	public static final String CALL_INCOMING = "来电";
 	public static final String CALL_OUTGOING = "拨出";
 	public static final String CALL_MISSED = "未接";
