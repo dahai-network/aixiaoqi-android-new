@@ -7,7 +7,7 @@ import android.os.Environment;
  */
 public class Constant {
 
-	public static final boolean IS_DEBUG = false;
+	public static final boolean IS_DEBUG = true;
 	public static final boolean PRINT_LOGS = true;
 	public static final String UNITOYS = "unitoys";
 	public static final String UNIBOX = "unibox";
@@ -173,8 +173,6 @@ public class Constant {
 	public static final int SIM_CELL_PHONE = 2;
 
 
-
-
 	//蓝牙发送类型
 
 	public static final String SYSTEM_BASICE_INFO = "0100";//系统基本信息
@@ -200,9 +198,6 @@ public class Constant {
 	public static final String WRITE_NEW_SIM_STEP_4 = "a01400000c810301250082028281830100";//写新卡第4步
 	public static final String WRITE_NEW_SIM_STEP_5 = "a0c2000009d30782020181900101";//写新卡第5步
 	public static final String WRITE_NEW_SIM_STEP_7 = "a0140000738103012301820282818301008d6504";//写新卡第7步
-
-
-
 
 
 	/**
@@ -251,6 +246,6 @@ public class Constant {
 
 	public static final String HIDDEN = "hidden";
 	public static final String SHOW = "show";
-	public static boolean isOutsideSecondStepClick=false;
-	public static boolean isOutsideThirdStepClick=false;
+	public static boolean isOutsideSecondStepClick = false;
+	public static boolean isOutsideThirdStepClick = false;
 }
