@@ -46,7 +46,7 @@ public class IntentPutKeyConstant {
     public static final String E_BUIZ_ORDER_ID="order_id";
     public static final String ORDERED_OUTSIDE="ordered_outside";
     public static final String IS_SUPPORT_4G="IsSupport4G";
-
+    public static final String APN_NAME="apn_name";
     public static final String COUNTRY_NAME="CountryName";
     public static final String IS_START_UP="isstartup";
     public static final String CONTROL_CALL_PACKAGE="control_call_package";
