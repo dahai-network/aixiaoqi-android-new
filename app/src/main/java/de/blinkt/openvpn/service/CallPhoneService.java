@@ -79,6 +79,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 		 * 设置rc4加密 并使用 65061 登陆
 		 * 取消加密  并使用65060 登陆
 		 * */
+		Log.d(TAG, "registSipForReceive: "+sharedUtils.readString(Constant.ASTERISK_PORT_OUT));
 		int port = Integer.parseInt(sharedUtils.readString(Constant.ASTERISK_PORT_OUT));
 		int expire = 60;
 		the_sipengineReceive = SipEngineFactory.instance().createPhoneCore(this, this);
@@ -235,6 +236,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 		if (ICSOpenVPNApplication.the_sipengineReceive != null)
 			ICSOpenVPNApplication.the_sipengineReceive.DeRegisterSipAccount();
 		ICSOpenVPNApplication.the_sipengineReceive = null;
+		Log.d(TAG, "onDestroy: ");
 		super.onDestroy();
 	}
 
@@ -312,4 +314,6 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 		Log.d("ANDROID_LAB", "pauseMusic bMute=" + bMute + " result=" + bool);
 		return bool;
 	}
+	
+	
 }

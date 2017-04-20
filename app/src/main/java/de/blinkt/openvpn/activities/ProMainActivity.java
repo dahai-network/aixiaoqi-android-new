@@ -96,82 +96,86 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 
 public class ProMainActivity extends BaseNetActivity implements View.OnClickListener, View.OnLongClickListener {
 
-	public static ProMainActivity instance = null;
-	@BindView(R.id.mViewPager)
-	CustomViewPager mViewPager;
-	@BindView(R.id.callImageView)
-	ImageView callImageView;
-	@BindView(R.id.rb_index)
-	MyRadioButton rbIndex;
-	@BindView(R.id.rb_phone)
-	MyRadioButton rbPhone;
-	@BindView(R.id.rb_address)
-	MyRadioButton rbAddress;
-	@BindView(R.id.rb_personal)
-	MyRadioButton rbPersonal;
-	/**
-	 * 拨打电话按钮
-	 */
-	public static RelativeLayout phone_linearLayout;
-	@BindView(R.id.iv_putaway)
-	public ImageView iv_putaway;
-	@BindView(R.id.topProgressView)
-	public TopProgressView topProgressView;
-	//判断是否展开了键盘
-	public static boolean isDeploy = true;
-	@BindView(R.id.tv_red_dot_01)
-	TextView tvRedDot01;
-	@BindView(R.id.tv_red_dot_02)
-	TextView tvRedDot02;
-	@BindView(R.id.tv_red_dot_03)
-	TextView tvRedDot03;
-	@BindView(R.id.tv_red_dot_04)
-	TextView tvRedDot04;
-	public static RadioGroup radiogroup;
-	private ReceiveBLEMoveReceiver bleMoveReceiver;
-	private UartService mService = null;
-	//进入主页后打开蓝牙设备搜索绑定过的设备
-	private BluetoothAdapter mBluetoothAdapter;
-	private int REQUEST_ENABLE_BT = 2;
-	private String deviceAddress = "";
-	ArrayList<Fragment> list = new ArrayList<>();
-	CellPhoneFragment cellPhoneFragment;
-	AccountFragment accountFragment;
-	AddressListFragment addressListFragment;
-	SportFragment sportFragment;
-	IndexFragment indexFragment;
-	// public static LinearLayout bottom_bar_linearLayout;
-	Intent intentCallPhone;
-	public static boolean isForeground = false;
-	public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
+    public static ProMainActivity instance = null;
+    @BindView(R.id.mViewPager)
+    CustomViewPager mViewPager;
+    @BindView(R.id.callImageView)
+    ImageView callImageView;
+    @BindView(R.id.rb_index)
+    MyRadioButton rbIndex;
+    @BindView(R.id.rb_phone)
+    MyRadioButton rbPhone;
+    @BindView(R.id.rb_address)
+    MyRadioButton rbAddress;
+    @BindView(R.id.rb_personal)
+    MyRadioButton rbPersonal;
+    /**
+     * 拨打电话按钮
+     */
+    public static RelativeLayout phone_linearLayout;
+    @BindView(R.id.iv_putaway)
+    public ImageView iv_putaway;
+    @BindView(R.id.topProgressView)
+    public TopProgressView topProgressView;
+    //判断是否展开了键盘
+    public static boolean isDeploy = true;
+    @BindView(R.id.tv_red_dot_01)
+    TextView tvRedDot01;
+    //    @BindView(R.id.tv_red_dot_02)
+//    TextView tvRedDot02;
+//    @BindView(R.id.tv_red_dot_03)
+//    TextView tvRedDot03;
+    @BindView(R.id.tv_red_dot_04)
+    TextView tvRedDot04;
+    public static RadioGroup radiogroup;
+    private ReceiveBLEMoveReceiver bleMoveReceiver;
+    private UartService mService = null;
+    //进入主页后打开蓝牙设备搜索绑定过的设备
+    private BluetoothAdapter mBluetoothAdapter;
+    private int REQUEST_ENABLE_BT = 2;
+    private String deviceAddress = "";
+    ArrayList<Fragment> list = new ArrayList<>();
+    CellPhoneFragment cellPhoneFragment;
+    AccountFragment accountFragment;
+    AddressListFragment addressListFragment;
+    SportFragment sportFragment;
+    IndexFragment indexFragment;
+    // public static LinearLayout bottom_bar_linearLayout;
+    Intent intentCallPhone;
+    public static boolean isForeground = false;
+    public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
 
-	//重连时间
-	private int RECONNECT_TIME = 180000;
-	SocketConnection socketUdpConnection;
-	SocketConnection socketTcpConnection;
-	public static String STOP_CELL_PHONE_SERVICE = "stopservice";
-	public static boolean isStartSdk = false;
-	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
-	public static SendYiZhengService sendYiZhengService = null;
+    //重连时间
+    private int RECONNECT_TIME = 180000;
+    SocketConnection socketUdpConnection;
+    SocketConnection socketTcpConnection;
+    public static String STOP_CELL_PHONE_SERVICE = "stopservice";
+    public static boolean isStartSdk = false;
+    public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
+    public static SendYiZhengService sendYiZhengService = null;
+    Intent intent = new Intent("Notic");
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
 
-	private Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
 
-			switch (msg.what) {
-				case 1:
-					tvRedDot04.setVisibility(View.VISIBLE);
-					noticeNewVersion(msg.what);
-					break;
-				case 2:
-					tvRedDot04.setVisibility(View.GONE);
-					noticeNewVersion(msg.what);
+                    tvRedDot04.setVisibility(View.VISIBLE);
+                    intent.putExtra("flg", true);
 
-					break;
+                    // noticeNewVersion(3);
+                    break;
+                case 2:
+                    tvRedDot04.setVisibility(View.GONE);
+                    intent.putExtra("flg", false);
+                    //  noticeNewVersion(4);
+                    break;
 
 
             }
+            LocalBroadcastManager.getInstance(ProMainActivity.this).sendBroadcast(intent);
 
         }
     };
@@ -212,7 +216,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         setListener();
         initBrocast();
         initServices();
-       // initData();
+        // initData();
         socketUdpConnection = new SocketConnection();
         socketTcpConnection = new SocketConnection();
         //注册eventbus，观察goip注册问题
@@ -249,14 +253,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         tvRedDot04.setVisibility(View.GONE);
     }
 
-    /**
+   /* *//**
      * 通知我的界面是否有新的固件包
-     */
+     *//*
     public void noticeNewVersion(int state) {
 
         Log.d("__aixiaoqi", "noticeNewVersion: ");
         EventBus.getDefault().post(new ChangeViewStateEvent(state));
-    }
+    }*/
 
 	/**
 	 * 判断是否显示红点
@@ -517,10 +521,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
         if (!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL, true)) {
-			tvRedDot01.setVisibility(View.VISIBLE);
-        }else{
-			tvRedDot01.setVisibility(View.GONE);
-		}
+            tvRedDot01.setVisibility(View.VISIBLE);
+        } else {
+            tvRedDot01.setVisibility(View.GONE);
+        }
     }
 
 	public void hidePhoneBottomBar() {
@@ -563,8 +567,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 switch (position) {
                     case 0:
                         radiogroup.check(R.id.rb_index);
-						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL,true);
-						tvRedDot01.setVisibility(View.GONE);
+                        SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL, true);
+                        tvRedDot01.setVisibility(View.GONE);
                         break;
                     case 1:
                         radiogroup.check(R.id.rb_phone);
@@ -794,19 +798,18 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
             SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
-
-            Log.d("__aixiaoqi", "rightComplete: "+skyUpgradeHttp);
-
+            Log.d("__aixiaoqi", "rightComplete: " + skyUpgradeHttp);
 
             if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
                 Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
                 mHandler.sendEmptyMessage(1);
 
-				} else {
-					Log.d("__aixiaoqi", "rightComplete: " + "已经是最新的");
-				}
-			}
-		}
+
+            } else {
+                Log.d("__aixiaoqi", "rightComplete: " + "已经是最新的");
+            }
+
+        }
 
 	}
 
@@ -1129,7 +1132,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         public void onReceive(final Context context, Intent intent) {
             final String action = intent.getAction();
             if (action.equals(MALL_SHOW_RED_DOT)) {
-				tvRedDot01.setVisibility(View.VISIBLE);
+                tvRedDot01.setVisibility(View.VISIBLE);
             }
 
 		}
