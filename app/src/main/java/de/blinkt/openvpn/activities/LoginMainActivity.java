@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -59,7 +60,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 	private Button login_btn;
 	private EditText usernameEdit;
 	private EditText pwdEdit;
-
+	private EditText pwdEditHint;
 	private TextView registTextView;
 	private CheckBox hindPswCheckBox;
 	//是否打开密码隐藏
@@ -115,6 +116,8 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		//登录天数距离小于15天的时候可以复制帐号密码
 		if (currentDate - loginDate < DATEOF15) {
 			usernameEdit.setText(sharedUtils.readString("userName"));
+            if(!TextUtils.isEmpty(usernameEdit.getText().toString()))
+            usernameEdit.setSelection(usernameEdit.getText().length());
 			pwdEdit.setText(sharedUtils.readString("password"));
 		}
 	}
@@ -123,6 +126,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 	private void createViewInit() {
 		usernameEdit = (EditText) findViewById(R.id.usernameEdit);
 		pwdEdit = (EditText) findViewById(R.id.pwdEdit);
+		pwdEditHint = (EditText) findViewById(R.id.pwdEditHint);
 		login_btn = (Button) findViewById(R.id.login_btn);
 		registTextView = (TextView) findViewById(R.id.registTextView);
 		forgetPswTextView = (TextView) findViewById(R.id.forgetPswTextView);
@@ -163,6 +167,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			}
 		});
 		setEditTextListener(pwdEdit,R.id.pwdEdit);
+		setEditTextListener(pwdEditHint,R.id.pwdEditHint);
 		setEditTextListener(usernameEdit,R.id.usernameEdit);
 	}
 
@@ -171,32 +176,52 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			@Override
 			public void textChanged(CharSequence s, int id) {
 				switch (id){
+
+					case  R.id.pwdEditHint:{
+						pswString = s.toString();
+						if (s.length() != 0) {
+							pwdEditHint.setVisibility(View.GONE);
+							pwdEdit.setVisibility(View.VISIBLE);
+							pwdEdit.setText(pswString);
+							pwdEdit.setSelection(pwdEdit.getText().length());
+							pwdEdit.requestFocus();
+						}else{
+							pwdEdit.setVisibility(View.GONE);
+							pwdEditHint.setVisibility(View.VISIBLE);
+						}
+					}break;
 					case R.id.pwdEdit:
 						pswString = s.toString();
 						if (s.length() != 0) {
+							pwdEditHint.setVisibility(View.GONE);
+							pwdEdit.setVisibility(View.VISIBLE);
 							if (usernameEdit.getText().toString().length() != 0) {
-                                setLoginBtnAttr(true,R.drawable.green_btn_click,R.color.white);
+                                setLoginBtnAttr(true,R.drawable.green_btn_click);
 							} else {
-                                setLoginBtnAttr(false,R.drawable.circle_gray_ret,R.color.color_6d798f);
+                                setLoginBtnAttr(false,R.drawable.circle_gray_ret);
 							}
 							loginPasswordTextView.setVisibility(View.VISIBLE);
 						} else {
+							pwdEditHint.setText("");
+							pwdEditHint.setVisibility(View.VISIBLE);
+							pwdEdit.setVisibility(View.GONE);
+							pwdEditHint.requestFocus();
 							loginPasswordTextView.setVisibility(View.GONE);
-                            setLoginBtnAttr(false,R.drawable.circle_gray_ret,R.color.color_6d798f);
+                            setLoginBtnAttr(false,R.drawable.circle_gray_ret);
 						}
 
 						break;
 					case R.id.usernameEdit:
 						if (s.length() != 0) {
 							if (pwdEdit.getText().toString().length() != 0) {
-                                setLoginBtnAttr(true,R.drawable.green_btn_click,R.color.white);
+                                setLoginBtnAttr(true,R.drawable.green_btn_click);
 							} else {
-                                setLoginBtnAttr(false,R.drawable.circle_gray_ret,R.color.color_6d798f);
+                                setLoginBtnAttr(false,R.drawable.circle_gray_ret);
 							}
 							loginUserTextView.setVisibility(View.VISIBLE);
 						} else {
 							loginUserTextView.setVisibility(View.GONE);
-                            setLoginBtnAttr(false,R.drawable.circle_gray_ret,R.color.color_6d798f);
+                            setLoginBtnAttr(false,R.drawable.circle_gray_ret);
 						}
 						break;
 				}
@@ -205,10 +230,10 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 	}
 
-	private void setLoginBtnAttr(boolean isClick,int backgroundColor,int textColor){
+	private void setLoginBtnAttr(boolean isClick,int backgroundColor){
         login_btn.setEnabled(isClick);
         login_btn.setBackgroundResource(backgroundColor);
-        login_btn.setTextColor(getResources().getColor(textColor));
+
     }
 
 

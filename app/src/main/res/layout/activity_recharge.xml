@@ -3,14 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/order_detail_background"
+    android:background="@color/white"
     android:orientation="vertical"
    >
 
-    <View
-        style="@style/horizontal_line_view"
-        android:layout_marginTop="15dp"
-        />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,13 +22,18 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="@dimen/padding_15dp"
-            android:gravity="center"
+            android:textColor="@color/color_333333"
             android:text="@string/select_rechart_amount"
             android:textSize="15sp"
             />
-
+        <View
+            style="@style/horizontal_line_margin_15dp"
+            android:layout_below="@+id/amountTextView"
+            android:layout_marginTop="15dp"
+            />
         <de.blinkt.openvpn.views.RadioGroup
             android:id="@+id/moneyRadioGroup"
+            android:layout_marginTop="@dimen/padding_10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/amountTextView"
@@ -49,11 +51,12 @@
                     android:id="@+id/recharge20Button"
                     android:layout_width="0dp"
                     android:button="@null"
+                    android:layout_marginLeft="@dimen/padding_5dp"
                     android:gravity="center"
                     android:background="@drawable/rechange_selector_icon"
                     android:textColor="@color/red_background_text_selector"
-                    android:layout_height="33dp"
-                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:layout_height="@dimen/padding_50dp"
+                    android:layout_marginRight="@dimen/padding_5dp"
                     android:layout_weight="1"
                     android:text="20"
                     />
@@ -63,10 +66,10 @@
                     android:layout_width="0dp"
                     android:button="@null"
                     android:gravity="center"
-                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:layout_marginRight="@dimen/padding_5dp"
                     android:background="@drawable/rechange_selector_icon"
                     android:textColor="@color/red_background_text_selector"
-                    android:layout_height="33dp"
+                    android:layout_height="@dimen/padding_50dp"
                     android:layout_weight="1"
                     android:text="50"
                     />
@@ -74,8 +77,8 @@
                 <RadioButton
                     android:id="@+id/recharge100Button"
                     android:layout_width="0dp"
-                    android:layout_height="33dp"
-                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:layout_height="@dimen/padding_50dp"
+                    android:layout_marginRight="@dimen/padding_5dp"
                     android:textColor="@color/red_background_text_selector"
                     android:button="@null"
                     android:checked="true"
@@ -90,17 +93,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_15dp">
+                android:paddingLeft="@dimen/padding_15dp"
+                android:paddingRight="@dimen/padding_15dp"
+                android:layout_marginTop="@dimen/padding_5dp">
 
                 <RadioButton
                     android:id="@+id/recharge300Button"
                     android:layout_width="0dp"
                     android:button="@null"
                     android:gravity="center"
-                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:layout_marginLeft="@dimen/padding_5dp"
+                    android:layout_marginRight="@dimen/padding_5dp"
                     android:background="@drawable/rechange_selector_icon"
                     android:textColor="@color/red_background_text_selector"
-                    android:layout_height="33dp"
+                    android:layout_height="@dimen/padding_50dp"
                     android:layout_weight="1"
                     android:text="300"
                     />
@@ -108,9 +114,9 @@
                 <RadioButton
                     android:id="@+id/recharge500Button"
                     android:layout_width="0dp"
-                    android:layout_height="33dp"
+                    android:layout_height="@dimen/padding_50dp"
                     android:button="@null"
-                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:layout_marginRight="@dimen/padding_5dp"
                     android:background="@drawable/rechange_selector_icon"
                     android:textColor="@color/red_background_text_selector"
                     android:gravity="center"
@@ -120,10 +126,10 @@
                 <RadioButton
                     android:id="@+id/recharge1000Button"
                     android:layout_width="0dp"
-                    android:layout_height="33dp"
+                    android:layout_height="@dimen/padding_50dp"
                     android:button="@null"
                     android:visibility="visible"
-                    android:layout_marginRight="@dimen/padding_10dp"
+                    android:layout_marginRight="@dimen/padding_5dp"
                     android:background="@drawable/rechange_selector_icon"
                     android:textColor="@color/red_background_text_selector"
                     android:gravity="center"
@@ -138,18 +144,20 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/moneyRadioGroup"
             android:orientation="horizontal"
-            android:padding="@dimen/padding_15dp">
+            android:paddingLeft="@dimen/padding_15dp"
+            android:paddingRight="@dimen/padding_15dp"
+           android:layout_marginTop="@dimen/padding_5dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_marginRight="@dimen/padding_10dp"
-                android:layout_height="33dp"
+                android:layout_height="@dimen/padding_50dp"
                 android:layout_weight="1"
                 />
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="33dp"
+                android:layout_height="@dimen/padding_50dp"
                 android:layout_marginRight="@dimen/padding_10dp"
                 android:layout_weight="1"
 
@@ -158,9 +166,9 @@
                 android:id="@+id/amountEditText"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="33dp"
+                android:layout_height="@dimen/padding_50dp"
                 android:visibility="invisible"
-                android:layout_marginRight="@dimen/padding_10dp"
+                android:layout_marginRight="@dimen/padding_5dp"
                 android:layout_alignBottom="@id/moneyRadioGroup"
                 android:background="@color/color_F62C2A"
                 android:textColorHint="@color/white"
@@ -174,10 +182,6 @@
 
     </RelativeLayout>
 
-    <View
-        style="@style/horizontal_line_view"
-        android:layout_marginBottom="15dp"
-        />
 
     <LinearLayout
         android:layout_below="@id/pricell"
@@ -187,19 +191,15 @@
         android:orientation="vertical"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:paddingTop="10dp">
+        android:paddingTop="@dimen/padding_50dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/recharge_way"
             android:textSize="15sp"
+            android:textColor="@color/color_333333"
             />
-
-
-
-
-
 
 
         <RelativeLayout
@@ -207,8 +207,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:paddingBottom="7.5dp"
-            android:paddingTop="7.5dp">
+            android:paddingBottom="@dimen/padding_10dp"
+            android:paddingTop="@dimen/padding_10dp">
 
 
 
@@ -237,6 +237,7 @@
                 android:layout_marginLeft="@dimen/padding"
                 android:text="@string/weixin_pay_detail"
                 android:textColor="@color/order_gray"
+
                 android:textSize="12sp"/>
 
             <CheckBox
@@ -259,8 +260,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:paddingBottom="7.5dp"
-            android:paddingTop="7.5dp">
+            android:paddingBottom="@dimen/padding_10dp"
+            android:paddingTop="@dimen/padding_10dp">
 
 
 
@@ -301,21 +302,10 @@
                 android:clickable="false"
                 />
         </RelativeLayout>
-
+        <View
+            style="@style/horizontal_line_view"
+            />
     </LinearLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/regist_btn"
-        android:text="@string/next"
-        android:visibility="gone"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"/>
 
     <Button
         android:id="@+id/nextBtn"
@@ -323,7 +313,7 @@
         android:layout_height="@dimen/padding_40dp"
         android:layout_marginLeft="@dimen/padding_20dp"
         android:layout_marginRight="@dimen/padding_20dp"
-        android:layout_marginTop="@dimen/padding_15dp"
+        android:layout_marginTop="@dimen/padding_50dp"
         android:text="@string/next"
         android:background="@drawable/green_btn_click"
         android:textColor="@android:color/white"

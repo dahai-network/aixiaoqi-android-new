@@ -521,8 +521,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
         if (!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL, true)) {
-
-        }
+			tvRedDot01.setVisibility(View.VISIBLE);
+        }else{
+			tvRedDot01.setVisibility(View.GONE);
+		}
     }
 
     public void hidePhoneBottomBar() {
@@ -565,6 +567,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 switch (position) {
                     case 0:
                         radiogroup.check(R.id.rb_index);
+						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL,true);
+						tvRedDot01.setVisibility(View.GONE);
                         break;
                     case 1:
                         radiogroup.check(R.id.rb_phone);
@@ -1124,7 +1128,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         public void onReceive(final Context context, Intent intent) {
             final String action = intent.getAction();
             if (action.equals(MALL_SHOW_RED_DOT)) {
-
+				tvRedDot01.setVisibility(View.VISIBLE);
             }
 
         }
