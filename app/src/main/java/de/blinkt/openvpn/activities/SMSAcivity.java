@@ -467,18 +467,21 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 				smsDetailHttp();
 				break;
 			case R.id.deleteSmsImageView:
-				Iterator<SmsDetailEntity> iter = ids.iterator();
-				ArrayList<String> fms = new ArrayList<>();
-				while (iter.hasNext()) {
-					SmsDetailEntity entity = iter.next();
-					if (entity.isCheck()) {
-						fms.add(entity.getSMSID());
+				if (!CommonTools.isFastDoubleClick(3000)) {
+					Iterator<SmsDetailEntity> iter = ids.iterator();
+					ArrayList<String> fms = new ArrayList<>();
+					while (iter.hasNext()) {
+						SmsDetailEntity entity = iter.next();
+						if (entity.isCheck()) {
+							fms.add(entity.getSMSID());
+						}
 					}
+					if (fms.size() > 0)
+						CommonTools.showShortToast(this, "删除这些短信：" + new Gson().toJson(new SmsIdsEntity(null, fms)));
+					CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS, new Gson().toJson(new SmsIdsEntity(null, fms)));
 				}
-				if (fms.size() > 0)
-					CommonTools.showShortToast(this, "删除这些短信：" + new Gson().toJson(new SmsIdsEntity(null, fms)));
-				CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS, new Gson().toJson(new SmsIdsEntity(null, fms)));
 				break;
+
 		}
 	}
 
@@ -628,7 +631,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 
 	@Override
 	public void onRefresh() {
-		pageNumber = pageNumber + 1;
+		pageNumber = 1;
 		smsDetailHttp();
 	}
 
@@ -751,11 +754,13 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS) {
 			if (object.getStatus() == 1) {
-				Iterator<SmsDetailEntity> iter
+			/*	Iterator<SmsDetailEntity> iter
 						= ids.iterator();
 				while (iter.hasNext()) {
 					smsDetailAdapter.remove(iter.next().getPosition());
 				}
+				smsDetailAdapter.notifyDataSetChanged();*/
+				onRefresh();
 			}
 		}
 	}

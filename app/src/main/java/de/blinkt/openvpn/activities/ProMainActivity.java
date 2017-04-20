@@ -121,7 +121,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     public static boolean isDeploy = true;
     @BindView(R.id.tv_red_dot_01)
     TextView tvRedDot01;
-//    @BindView(R.id.tv_red_dot_02)
+    //    @BindView(R.id.tv_red_dot_02)
 //    TextView tvRedDot02;
 //    @BindView(R.id.tv_red_dot_03)
 //    TextView tvRedDot03;
@@ -237,7 +237,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         if (!NetworkUtils.isNetworkAvailable(this)) {
             topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
         }
-//        initRedDotView();
+
     }
 
     private void findViewsById() {
@@ -794,12 +794,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
             SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
-
-            Log.d("__aixiaoqi", "rightComplete: "+skyUpgradeHttp);
+            Log.d("__aixiaoqi", "rightComplete: " + skyUpgradeHttp);
 
             if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
                 Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
                 mHandler.sendEmptyMessage(1);
+
 
             } else {
                 Log.d("__aixiaoqi", "rightComplete: " + "已经是最新的");

@@ -185,6 +185,7 @@
     <string name="minute">分钟</string>
     <string name="hour_single">时</string>
     <string name="edit_head">修改头像</string>
+    <string name="head">头像</string>
     <string name="name">姓名</string>
     <string name="sex">性别</string>
     <string name="birthday">出生年月</string>
@@ -641,6 +642,7 @@
     <string name="china_unicom">中国联通</string>
     <string name="device_name">设备名称</string>
     <string name="unbind_device_tips">请先绑定设备</string>
+    <string name="edit_data">修改资料</string>
 
     <!--详细界面的标题-->
     <string-array name="detail_titles">
@@ -656,8 +658,8 @@
     <string name="tip_buy_succeed">套餐购买成功，您必须激活套餐才能使用！</string>
     <string name="activating">马上激活</string>
     <string name="wait_activate">稍后激活</string>
-    
-    
+
+
     <string name="complete_next">已完成，下一步</string>
 
     <string name="outside_use_guide">出境后使用引导</string>

@@ -6,10 +6,10 @@
               android:layout_height="match_parent">
 
     <View
-        android:layout_marginTop="@dimen/padding_15dp"
+        android:layout_marginTop="@dimen/padding_10dp"
         style="@style/horizontal_line_view"/>
 
-    <EditText
+     <EditText
         android:id="@+id/et_nick_name"
         android:paddingLeft="@dimen/padding_15dp"
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
         android:focusableInTouchMode="true"
         android:hint="@string/nick_name"
         android:textSize="@dimen/little_14"
-        android:layout_height="@dimen/padding_40dp"
+        android:layout_height="@dimen/padding_60dp"
         android:background="@color/white"/>
 
     <View

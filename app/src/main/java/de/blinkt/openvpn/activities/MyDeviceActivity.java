@@ -669,14 +669,19 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 		} else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
+
 			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
 			SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
 			if (skyUpgradeHttp.getStatus() == 1) {
 				if (skyUpgradeHttp.getUpgradeEntity() != null) {
-					if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
-						url = skyUpgradeHttp.getUpgradeEntity().getUrl();
-						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
-						setPoint();
+					String versionStr = SharedUtils.getInstance().readString(Constant.BRACELETVERSION);
+					if (versionStr != null) {
+						if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(versionStr)) {
+							url = skyUpgradeHttp.getUpgradeEntity().getUrl();
+							showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
+							Log.d(TAG, "rightComplete: " + "有新的版本");
+							setPoint();
+						}
 					} else {
 						CommonTools.showShortToast(this, getString(R.string.last_version));
 						SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, false);
