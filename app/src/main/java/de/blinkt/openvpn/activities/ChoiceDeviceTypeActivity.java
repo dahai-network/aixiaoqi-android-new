@@ -49,6 +49,7 @@ public class ChoiceDeviceTypeActivity extends BaseActivity {
 	private void toMyDevice(String type) {
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
 		Intent intent = new Intent(this, MyDeviceActivity.class);
+
 		intent.putExtra(MyDeviceActivity.BRACELETTYPE, type);
 		SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE,type);
 		intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, blueStatus);

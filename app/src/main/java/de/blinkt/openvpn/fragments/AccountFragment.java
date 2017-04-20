@@ -16,16 +16,22 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.cache.MemorySizeCalculator;
 import com.umeng.analytics.MobclickAgent;
+
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
+import cn.com.johnson.model.ChangeViewStateEvent;
 import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.BalanceParticularsActivity;
@@ -124,14 +130,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
     TextView packageAllCount;
     @BindView(R.id.accountScrollView)
     ScrollView accountScrollView;
-    @BindView(R.id.tv_new_packaget_action)
-    TextView tvNewPackagetAction;
-    @BindView(R.id.tv_new_version)
-    TextView tvNewVersion;
+
     //bluetooth status蓝牙状态
     private String bleStatus;
     private String TAG = "AccountFragment";
     boolean hasPackage = false;
+
+    public static  TextView tvNewPackagetAction;
+    public static  TextView tvNewVersion;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -148,8 +154,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                 case 2:
                     tvNewPackagetAction.setVisibility(View.GONE);
                     break;
+                case 3:
+                    tvNewPackagetAction.setVisibility(View.GONE);
+                    break;
 
             }
+            EventBus.getDefault().post(new ChangeViewStateEvent(msg.what));
         }
     };
 
@@ -160,21 +170,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
         View rootView = inflater.inflate(R.layout.fragment_account,
                 container, false);
         ButterKnife.bind(this, rootView);
+
+        tvNewPackagetAction= (TextView) rootView.findViewById(R.id.tv_new_packaget_action);
+        tvNewVersion= (TextView) rootView.findViewById(R.id.tv_new_version);
         //初始化状态
         tvNewPackagetAction.setVisibility(View.GONE);
         tvNewVersion.setVisibility(View.GONE);
-        getDeviceVersion();
+        EventBus.getDefault().register(this);
         return rootView;
     }
 
-    /**
-     * 获取设备版本号
-     */
-    private void getDeviceVersion() {
-
-        //skyUpgradeHttp();
-
-    }
 
     @Override
     public void onResume() {
@@ -275,6 +280,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                 } else {
 
                     intent = new Intent(getActivity(), MyDeviceActivity.class);
+                    mHandler.sendEmptyMessage(2);
                 }
                 int status = R.string.index_connecting;
                 if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBleStatus())) {
@@ -341,8 +347,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
-
-       //Log.d("__aixiaoq————i", "rightComplete: " + cmdType);
 
         if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
             BalanceHttp http = (BalanceHttp) object;
@@ -479,10 +483,23 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
         EventBus.getDefault().post(entity);
     }
 
+    /**
+     * 修改tvNewPackagetAction控件是否显示或者隐藏
+     * @param evnt
+     */
+    @Subscribe
+    public void changeViewState(ChangeViewStateEvent evnt) {
+
+        mHandler.sendEmptyMessage(evnt.getVersionState());
+
+    }
+
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        tvNewVersion=null;
+        tvNewPackagetAction=null;
         //null.unbind();
     }
 }

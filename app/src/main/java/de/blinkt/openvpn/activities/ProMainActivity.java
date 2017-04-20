@@ -49,6 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.FragmentAdapter;
+import cn.com.johnson.model.ChangeViewStateEvent;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
@@ -157,10 +158,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             switch (msg.what) {
                 case 1:
                     tvRedDot04.setVisibility(View.VISIBLE);
-
-
+                    noticeNewVersion(msg.what);
                     break;
                 case 2:
+                    tvRedDot04.setVisibility(View.GONE);
+                    noticeNewVersion(msg.what);
 
                     break;
 
@@ -240,6 +242,28 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         tvRedDot03.setVisibility(View.GONE);
         tvRedDot04.setVisibility(View.GONE);
     }
+
+    /**
+     * 通知我的界面是否有新的固件包
+     */
+    public void noticeNewVersion(int state) {
+        EventBus.getDefault().post(new ChangeViewStateEvent(state));
+    }
+
+    /**
+     * 判断是否显示红点
+     */
+    @Subscribe
+    public void checkRedIsShow(ChangeViewStateEvent event) {
+
+        if (AccountFragment.tvNewPackagetAction.getVisibility() == View.VISIBLE || AccountFragment.tvNewVersion.getVisibility() == View.VISIBLE)
+            tvRedDot04.setVisibility(View.VISIBLE);
+         else
+            tvRedDot04.setVisibility(View.GONE);
+
+
+        }
+
 
     private void initBrocast() {
         LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(showRedDotReceiver, showRedDotIntentFilter());
@@ -762,7 +786,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 CommonTools.showShortToast(this, object.getMsg());
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
-
+            //获取固件版本
             SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
             SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
             if (skyUpgradeHttp.getStatus() == 1) {
@@ -770,8 +794,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
                         Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
                         mHandler.sendEmptyMessage(1);
-
-
 
                     } else {
 
@@ -1214,8 +1236,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             } else {
                 DeviceType = 1;
             }
+            createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
         }
-        createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
+
     }
 
 
