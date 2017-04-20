@@ -702,6 +702,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						@Override
 						public void run() {
 							e("开启线程=");
+							SdkAndBluetoothDataInchange.isHasPreData=false;
 							if (sdkAndBluetoothDataInchange == null) {
 								sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
 							}
@@ -712,6 +713,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 								DBHelp dbHelp = new DBHelp(ProMainActivity.instance);
 								PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
 								if (preReadEntity != null) {
+									SdkAndBluetoothDataInchange.isHasPreData=true;
 									initPre(preReadEntity);
 									registerSimPreData();
 								} else {
