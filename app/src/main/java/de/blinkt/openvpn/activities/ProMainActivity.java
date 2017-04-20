@@ -121,10 +121,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     public static boolean isDeploy = true;
     @BindView(R.id.tv_red_dot_01)
     TextView tvRedDot01;
-    @BindView(R.id.tv_red_dot_02)
-    TextView tvRedDot02;
-    @BindView(R.id.tv_red_dot_03)
-    TextView tvRedDot03;
+//    @BindView(R.id.tv_red_dot_02)
+//    TextView tvRedDot02;
+//    @BindView(R.id.tv_red_dot_03)
+//    TextView tvRedDot03;
     @BindView(R.id.tv_red_dot_04)
     TextView tvRedDot04;
     public static RadioGroup radiogroup;
@@ -246,8 +246,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
      */
     private void initRedDotView() {
         tvRedDot01.setVisibility(View.GONE);
-        tvRedDot02.setVisibility(View.GONE);
-        tvRedDot03.setVisibility(View.GONE);
+//        tvRedDot02.setVisibility(View.GONE);
+//        tvRedDot03.setVisibility(View.GONE);
         tvRedDot04.setVisibility(View.GONE);
     }
 
