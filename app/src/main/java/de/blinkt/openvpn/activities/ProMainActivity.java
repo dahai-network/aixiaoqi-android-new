@@ -126,8 +126,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	IndexFragment indexFragment;
 	// public static LinearLayout bottom_bar_linearLayout;
 	Intent intentCallPhone;
-	public static boolean isForeground=false;
-	public static final String MALL_SHOW_RED_DOT="mall_show_red_dot";
+	public static boolean isForeground = false;
+	public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
 	public static RadioGroup radiogroup;
 	//重连时间
 	private int RECONNECT_TIME = 180000;
@@ -137,6 +137,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public static boolean isStartSdk = false;
 	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
 	public static SendYiZhengService sendYiZhengService = null;
+
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
 		return super.getLastCustomNonConfigurationInstance();
@@ -280,11 +281,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 		return intentFilter;
 	}
+
 	private static IntentFilter showRedDotIntentFilter() {
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(MALL_SHOW_RED_DOT);
 		return intentFilter;
 	}
+
 	private void addListener() {
 		callImageView.setOnClickListener(this);
 		iv_putaway.setOnClickListener(this);
@@ -427,7 +430,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	@Override
 	protected void onResume() {
-		isForeground=true;
+		isForeground = true;
 		super.onResume();
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(CallPhoneService.class.getName())) {
 			intentCallPhone = new Intent(this, CallPhoneService.class);
@@ -435,7 +438,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 
 
-		if(!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL,true)){
+		if (!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL, true)) {
 
 		}
 	}
@@ -450,7 +453,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	@Override
 	protected void onStop() {
 		super.onStop();
-		isForeground=false;
+		isForeground = false;
 	}
 
 	public int position;
@@ -635,11 +638,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 					} else {
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
-						setTipsOnNoBind();
+//						setTipsOnNoBind();
 					}
 				} else {
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
-					setTipsOnNoBind();
+//					setTipsOnNoBind();
 				}
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
@@ -719,7 +722,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	//没有绑定提示
 	private void setTipsOnNoBind() {
-		topProgressView.showTopProgressView(getString(R.string.unbind_device_tips), TopProgressView.NORMAL_TIME, new View.OnClickListener() {
+		topProgressView.showTopProgressView(getString(R.string.unbind_device_tips), -1, new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(ProMainActivity.this, ChoiceDeviceTypeActivity.class);
@@ -1032,7 +1035,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	};
 
 
-
 	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {
 
 
@@ -1111,7 +1113,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		}
 	};
-
 
 
 	private void requestPacket() {

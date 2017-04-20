@@ -393,8 +393,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 
 	public void setBleStatus(String bleStatus) {
 		this.bleStatus = bleStatus;
-		if (getString(R.string.index_un_insert_card).equals(bleStatus)) {
-			if (isAdded()) {
+		if (isAdded()) {
+			if (getString(R.string.index_un_insert_card).equals(bleStatus)) {
 				signalIconImageView.setBackgroundResource(R.drawable.unregist);
 				operatorTextView.setText("----");
 			}

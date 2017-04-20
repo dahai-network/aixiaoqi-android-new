@@ -241,7 +241,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 													}
 													//排序后连接操作
 													scanLeDevice(false);
-													if (infos.size() == 0 || mService == null || mService.isConnecttingBlueTooth()) {
+													if (infos.size() == 0) {
 														CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.no_device_around));
 														finish();
 														return;
@@ -316,7 +316,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 					findedImageView.clearAnimation();
 					findedImageView.setVisibility(View.GONE);
 					uniImageView.setBackgroundResource(R.drawable.bind_finish);
-
 					new Handler().postDelayed(new Runnable() {
 						@Override
 						public void run() {

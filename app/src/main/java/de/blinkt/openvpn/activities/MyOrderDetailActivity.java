@@ -417,6 +417,10 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 	}
 
 	private void activatePackage() {
+		if (SharedUtils.getInstance().readString(Constant.OPERATER) != null) {
+			showDialog();
+			return;
+		}
 		if (!CommonTools.isFastDoubleClick(3000)) {
 			//友盟方法统计
 			MobclickAgent.onEvent(context, CLICKACTIVECARD);

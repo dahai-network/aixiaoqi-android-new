@@ -371,6 +371,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 													aixiaoqiEntity.setStatus(context.getString(R.string.index_aixiaoqicard));
 													aixiaoqiEntity.setStatusDrawableInt(R.drawable.index_no_signal);
 													EventBus.getDefault().post(aixiaoqiEntity);
+													SharedUtils.getInstance().writeString(Constant.OPERATER, null);
 													break;
 											}
 
@@ -493,7 +494,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							nullCardId = mStrSimCmdPacket;
 							//重新上电清空
 //							sendMessageToBlueTooth(UP_TO_POWER);
-							if (nullCardId.contains("005") || Integer.valueOf(nullCardId.substring(12, 16)) > 301) {
+							if (nullCardId.contains("005") || Integer.valueOf(nullCardId.substring(12, 16)) >= 301) {
 								Log.i(TAG, "这是新卡");
 								utils.writeBoolean(Constant.IS_NEW_SIM_CARD, true);
 							} else {

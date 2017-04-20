@@ -631,7 +631,7 @@
     <string name="china_mobile">中国移动</string>
     <string name="china_unicom">中国联通</string>
     <string name="device_name">设备名称</string>
-    <string name="unbind_device_tips">请先绑定爱小器智能通讯硬件</string>
+    <string name="unbind_device_tips">请先绑定设备</string>
 
     <!--详细界面的标题-->
     <string-array name="detail_titles">

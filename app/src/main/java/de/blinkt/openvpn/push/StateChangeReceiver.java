@@ -102,7 +102,7 @@ public class StateChangeReceiver extends BroadcastReceiver {
 				}
 				break;
 			case BLUETOOTH_CHANGE:
-				if (ICSOpenVPNApplication.uartService.isOpenBlueTooth()) {
+				if (ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.isOpenBlueTooth()) {
 					StateChangeEntity entity = new StateChangeEntity();
 					entity.setStateType(StateChangeEntity.BLUETOOTH_STATE);
 					entity.setIsopen(true);

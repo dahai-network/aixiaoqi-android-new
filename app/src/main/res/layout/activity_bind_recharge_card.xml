@@ -27,11 +27,9 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="@dimen/padding_100dp"
-        android:background="@drawable/login_btn"
+        android:background="@drawable/green_btn_click"
         android:text="@string/sure_and_use"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/little_18"
         />
-
 </LinearLayout>
