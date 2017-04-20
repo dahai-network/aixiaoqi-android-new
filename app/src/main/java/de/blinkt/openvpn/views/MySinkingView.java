@@ -128,7 +128,8 @@ public class MySinkingView extends FrameLayout {
 			onlyPaint.setColor(mTextColor);
 			onlyPaint.setTextSize(mTextSize);
 			onlyPaint.setStyle(Style.FILL);
-			canvas.drawText(stronly, (width - onlyPaint.measureText(stronly)) / 2, halfHeight - 20, onlyPaint);
+			canvas.drawText(stronly, (width - onlyPaint.measureText(stronly)) / 2,
+					halfHeight - CommonTools.dip2px(ICSOpenVPNApplication.getContext(), 5), onlyPaint);
 
 			mLeft += mSpeed;
 			if (mLeft >= mScaledBitmap.getWidth())

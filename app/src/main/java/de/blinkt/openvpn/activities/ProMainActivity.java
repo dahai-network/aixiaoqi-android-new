@@ -873,7 +873,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				break;
 			case SocketConstant.REGISTER_CHANGING:
 				double percent = entity.getProgressCount();
-				if (topProgressView.getVisibility() != View.VISIBLE) {
+				if (topProgressView.getVisibility() != View.VISIBLE&&SocketConstant.REGISTER_STATUE_CODE != 3) {
 					topProgressView.setVisibility(View.VISIBLE);
 					topProgressView.setContent(getString(R.string.registing));
 					topProgressView.setOnClickListener(new View.OnClickListener() {
