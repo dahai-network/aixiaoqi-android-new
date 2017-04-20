@@ -171,9 +171,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					break;
 
 
-			}
-		}
-	};
+            }
+
+        }
+    };
 
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
@@ -197,30 +198,27 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	};
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		instance = this;
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_pro_main);
-		ButterKnife.bind(this);
-		findViewById();
-		initFragment();
-		initView();
-		addListener();
-		setListener();
-		initBrocast();
-		initServices();
-		initData();
-		socketUdpConnection = new SocketConnection();
-		socketTcpConnection = new SocketConnection();
-		//注册eventbus，观察goip注册问题
-		EventBus.getDefault().register(this);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        instance = this;
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pro_main);
+        ButterKnife.bind(this);
+        findViewById();
+        initFragment();
+        initView();
+        addListener();
+        setListener();
+        initBrocast();
+        initServices();
+       // initData();
+        socketUdpConnection = new SocketConnection();
+        socketTcpConnection = new SocketConnection();
+        //注册eventbus，观察goip注册问题
+        EventBus.getDefault().register(this);
+    }
 
-	private void initData() {
-		skyUpgradeHttp();
-	}
 
 	/**
 	 * \初始化界面
@@ -241,23 +239,24 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 
-	/**
-	 * 初始化红点的状态
-	 */
-	private void initRedDotView() {
+    /**
+     * 初始化红点的状态
+     */
+    private void initRedDotView() {
+        tvRedDot01.setVisibility(View.GONE);
+//        tvRedDot02.setVisibility(View.GONE);
+//        tvRedDot03.setVisibility(View.GONE);
+        tvRedDot04.setVisibility(View.GONE);
+    }
 
-		tvRedDot01.setVisibility(View.GONE);
-		tvRedDot02.setVisibility(View.GONE);
-		tvRedDot03.setVisibility(View.GONE);
-		tvRedDot04.setVisibility(View.GONE);
-	}
+    /**
+     * 通知我的界面是否有新的固件包
+     */
+    public void noticeNewVersion(int state) {
 
-	/**
-	 * 通知我的界面是否有新的固件包
-	 */
-	public void noticeNewVersion(int state) {
-		EventBus.getDefault().post(new ChangeViewStateEvent(state));
-	}
+        Log.d("__aixiaoqi", "noticeNewVersion: ");
+        EventBus.getDefault().post(new ChangeViewStateEvent(state));
+    }
 
 	/**
 	 * 判断是否显示红点
@@ -265,13 +264,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	@Subscribe
 	public void checkRedIsShow(ChangeViewStateEvent event) {
 
-		if (AccountFragment.tvNewPackagetAction.getVisibility() == View.VISIBLE || AccountFragment.tvNewVersion.getVisibility() == View.VISIBLE)
-			tvRedDot04.setVisibility(View.VISIBLE);
-		else
-			tvRedDot04.setVisibility(View.GONE);
-
-
-	}
+        if (AccountFragment.tvNewPackagetAction.getVisibility() == View.VISIBLE || AccountFragment.tvNewVersion.getVisibility() == View.VISIBLE)
+            tvRedDot04.setVisibility(View.VISIBLE);
+        else
+            tvRedDot04.setVisibility(View.GONE);
+    }
 
 
 	private void initBrocast() {
@@ -519,13 +516,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 
 
-		if (!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL, true)) {
+        if (!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL, true)) {
 			tvRedDot01.setVisibility(View.VISIBLE);
-		} else {
+        }else{
 			tvRedDot01.setVisibility(View.GONE);
 		}
-
-	}
+    }
 
 	public void hidePhoneBottomBar() {
 		ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
@@ -563,14 +559,15 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					phoneFragment.t9dialpadview.clearT9Input();
 				}
 
-				hidePhoneBottomBar();
-				switch (position) {
-					case 0:
-						radiogroup.check(R.id.rb_index);
-						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL, true);
-						break;
-					case 1:
-						radiogroup.check(R.id.rb_phone);
+                hidePhoneBottomBar();
+                switch (position) {
+                    case 0:
+                        radiogroup.check(R.id.rb_index);
+						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL,true);
+						tvRedDot01.setVisibility(View.GONE);
+                        break;
+                    case 1:
+                        radiogroup.check(R.id.rb_phone);
 
 						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
 							//隐藏键盘，清理数据
@@ -692,20 +689,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	}
 
-	@Override
-	public void rightComplete(int cmdType, final CommonHttp object) {
-		if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
-			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
-			if (object.getStatus() == 1) {
-				if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
-					if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
-						deviceAddress = getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI();
-						if (deviceAddress != null) {
-							deviceAddress = deviceAddress.toUpperCase();
-							BluetoothConstant.IS_BIND = true;
-							accountFragment.showDeviceSummarized(true);
-						}
-						SharedUtils utils = SharedUtils.getInstance();
+    @Override
+    public void rightComplete(int cmdType, final CommonHttp object) {
+        if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
+            GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
+            if (object.getStatus() == 1) {
+                if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
+                    if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
+                        deviceAddress = getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI();
+                        if (deviceAddress != null) {
+                            deviceAddress = deviceAddress.toUpperCase();
+                            BluetoothConstant.IS_BIND = true;
+                            accountFragment.showDeviceSummarized(true);
+                            skyUpgradeHttp();
+                        }
+                        SharedUtils utils = SharedUtils.getInstance();
 
 						utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
 						utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
@@ -765,42 +763,44 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 //						return;
-					}
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							e("开启线程=");
-							SdkAndBluetoothDataInchange.isHasPreData = false;
-							if (sdkAndBluetoothDataInchange == null) {
-								sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
-							}
-							if (sendYiZhengService == null) {
-								sendYiZhengService = new SendYiZhengService();
-							}
-							if (!TextUtils.isEmpty(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6])) {
-								DBHelp dbHelp = new DBHelp(ProMainActivity.instance);
-								PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
-								if (preReadEntity != null) {
-									SdkAndBluetoothDataInchange.isHasPreData = true;
-									initPre(preReadEntity);
-									registerSimPreData();
-								} else {
-									noPreDataStartSDK();
-								}
-							}
-						}
-					}).start();
-				}
-			} else {
-				CommonTools.showShortToast(this, object.getMsg());
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
-			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
-			String versionStr = SharedUtils.getInstance().readString(Constant.BRACELETVERSION);
-			if (versionStr != null) {
-				if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(versionStr)) {
-					Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
-					mHandler.sendEmptyMessage(1);
+                    }
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            e("开启线程=");
+                            SdkAndBluetoothDataInchange.isHasPreData = false;
+                            if (sdkAndBluetoothDataInchange == null) {
+                                sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
+                            }
+                            if (sendYiZhengService == null) {
+                                sendYiZhengService = new SendYiZhengService();
+                            }
+                            if (!TextUtils.isEmpty(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6])) {
+                                DBHelp dbHelp = new DBHelp(ProMainActivity.instance);
+                                PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
+                                if (preReadEntity != null) {
+                                    SdkAndBluetoothDataInchange.isHasPreData = true;
+                                    initPre(preReadEntity);
+                                    registerSimPreData();
+                                } else {
+                                    noPreDataStartSDK();
+                                }
+                            }
+                        }
+                    }).start();
+                }
+            } else {
+                CommonTools.showShortToast(this, object.getMsg());
+            }
+        } else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
+            SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
+
+            Log.d("__aixiaoqi", "rightComplete: "+skyUpgradeHttp);
+
+
+            if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
+                Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
+                mHandler.sendEmptyMessage(1);
 
 				} else {
 					Log.d("__aixiaoqi", "rightComplete: " + "已经是最新的");
@@ -1125,12 +1125,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private BroadcastReceiver showRedDotReceiver = new BroadcastReceiver() {
 
 
-		@Override
-		public void onReceive(final Context context, Intent intent) {
-			final String action = intent.getAction();
-			if (action.equals(MALL_SHOW_RED_DOT)) {
-
-			}
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (action.equals(MALL_SHOW_RED_DOT)) {
+				tvRedDot01.setVisibility(View.VISIBLE);
+            }
 
 		}
 	};

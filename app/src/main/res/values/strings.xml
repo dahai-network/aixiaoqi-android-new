@@ -292,9 +292,9 @@
     <string name="not_suppert_open_way">手机不支持直接打开方式，请前往设置里边去打开操作</string>
     <!--充值-->
     <string name="recharge">充值</string>
-    <string name="select_rechart_amount">选择充值余额</string>
+    <string name="select_rechart_amount">选择充值余额(元)</string>
     <string name="amount_money">金额</string>
-    <string name="recharge_way">充值方式</string>
+    <string name="recharge_way">选择充值方式</string>
     <string name="next">立即支付</string>
     <string name="input_money_null">输入金额为空,请重新输入</string>
     <string name="input_money_0">输入金额为0,请重新输入</string>
@@ -662,6 +662,6 @@
 
     <string name="complete_next">已完成，下一步</string>
 
-    <string name="outside_use_guide">出竟后使用引导</string>
-
+    <string name="outside_use_guide">出境后使用引导</string>
+    
 </resources>

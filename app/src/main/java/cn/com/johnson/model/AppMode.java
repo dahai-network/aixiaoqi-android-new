@@ -24,6 +24,8 @@ public class AppMode implements Serializable {
     }
 
     public String curCharacter="";
+    public boolean isClickAddDevice=false;
+    public boolean isClickPackage=false;
 
 
 

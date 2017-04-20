@@ -32,6 +32,7 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:inputType="phone"
+            android:textSize="@dimen/little_22"
             android:padding="@dimen/padding" />
 
 

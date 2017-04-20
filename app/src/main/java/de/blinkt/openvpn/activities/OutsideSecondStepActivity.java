@@ -49,10 +49,9 @@ public class OutsideSecondStepActivity extends BaseActivity {
         initData();
         hasLeftViewTitle(R.string.outside_use_guide,0);
         if(!isOutsideSecondStepClick){
-        activateTextView.setBackgroundResource(R.drawable.circle_gray_ret);
-        activateTextView.setEnabled(false);
-
-    }
+            activateTextView.setBackgroundResource(R.drawable.circle_gray_ret);
+            activateTextView.setEnabled(false);
+        }
     }
 
     @OnClick({R.id.outside_step_second_bt, R.id.activateTextView})
@@ -80,7 +79,9 @@ public class OutsideSecondStepActivity extends BaseActivity {
         outsideStepSecondContentTv.setText(String.format(getString(R.string.outside_step_second_content),apnName));
         if("263".equals(apnName)){
             outsideItem02Iv.setBackgroundResource(R.drawable.outside_item02);
-        }else{
+        }else if("263.cs101".equals(apnName)){
+            outsideItem02Iv.setBackgroundResource(R.drawable.outside_item02);
+        }else if("3gnet".equals(apnName)){
             outsideItem02Iv.setBackgroundResource(R.drawable.outside_second_apn_3gnet);
         }
     }
@@ -89,8 +90,8 @@ public class OutsideSecondStepActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         if(isOutsideSecondStepClick){
-        activateTextView.setEnabled(true);
-        activateTextView.setBackgroundResource(R.drawable.green_btn_click);
+            activateTextView.setEnabled(true);
+            activateTextView.setBackgroundResource(R.drawable.green_btn_click);
         }
     }
 }
