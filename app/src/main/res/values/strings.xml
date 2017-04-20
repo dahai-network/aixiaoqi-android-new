@@ -172,6 +172,7 @@
     <string name="agreement">用户许可及服务协议</string>
     <string name="app_version">APP版本号</string>
     <string name="conn_bluetooth">蓝牙未连接，点击开启</string>
+    <string name="bluetooth_unopen">蓝牙未打开</string>
     <string name="wait_activite">稍后激活</string>
     <string name="aboard_how_to_use">出国后如何使用</string>
     <string name="inland_reset">回国后恢复设置</string>
@@ -371,17 +372,19 @@
     <string name="purchase_packet">购买套餐</string>
     <string name="outside_step_one">插电话卡。</string>
     <string name="outside_step_one_content">将爱小器国际卡插入手机中，然后将您的国内电话卡插入到手环中。</string>
-    <string name="outside_step_second">设置APN</string>
-    <string name="outside_step_second_content">打开系统的APN设置器,点击新建APN,然后在"名称"和"APN"行输入263,点击保存,最后启用该APN。</string>
-    <string name="outside_step_second_click">打开手机APN设置</string>
-    <string name="outside_step_third">关闭4G网络</string>
-    <string name="outside_step_third_content">在手机的系统设置的网络连接方式中,关闭4G网络,选择2G或3G上网</string>
-    <string name="outside_step_third_click">打开系统设置</string>
-    <string name="outside_step_four">开启数据漫游</string>
+    <string name="outside_step_second">增加APN</string>
+    <string name="outside_step_second_content">打开系统的APN设置器,点击新建APN,然后在"名称"和"APN"行输入%1$s,点击保存,最后启用该APN。</string>
+    <string name="outside_step_second_click">增加APN</string>
+    <string name="outside_step_third">修改移动网络设置</string>
+    <string name="set_move_net">设置移动网络</string>
+    <string name="outside_step_third_content">点击按钮会跳转到系统设置，点击“数据漫游设置”，勾选开启数据漫游</string>
+    <string name="outside_step_third_two_content">然后点击“首选网络设置”，勾选2/3G</string>
+    <string name="outside_step_third_click">设置移动网络</string>
+    <string name="outside_step_four">激活套餐后，在境外按以上步骤操作完成后，重启APP，即可免国际漫游在境外上网，接打电话，收发短信</string>
+    <string name="i_know">我知道了</string>
     <string name="outside_step_four_content">在手机的系统设置的数据漫游管理界面,开启数据漫游</string>
     <string name="outside_step_four_click">打开系统设置</string>
-    <string name="outside_step_five">接打电话，收发短信</string>
-    <string name="outside_step_five_content">确保手机能够上网后，重启APP，点击主页左上角按钮，查看手环内电话卡的状态，如果信号良好，即可接打电话，收发短信。</string>
+
     <string name="outside_step_second_1">删除APN</string>
     <string name="outside_step_second_content_1">删除系统的APN设置器。</string>
     <string name="outside_step_third_1">打开4G网络</string>
@@ -603,6 +606,9 @@
     <string name="finded_bracelet">已搜索到设备，请点击设备确认绑定</string>
     <string name="click_bracelet_sure_bind">点击设备按钮确认绑定</string>
     <string name="no_device_around">未能搜索到设备请重新搜索</string>
+    <string name="finded_unitoy">爱小器已绑定成功</string>
+    <string name="finded_unibox">双待王已绑定成功</string>
+    <string name="can_use">可以开始使用</string>
     <string name="message_remind">消息提醒</string>
     <string name="update_fail_retry">升级失败，请重试！</string>
     <string name="choice_type_unitoys_tip">请点击搜索爱小器手环进行绑定</string>
@@ -634,7 +640,7 @@
     <string name="china_mobile">中国移动</string>
     <string name="china_unicom">中国联通</string>
     <string name="device_name">设备名称</string>
-    <string name="unbind_device_tips">请先绑定爱小器智能通讯硬件</string>
+    <string name="unbind_device_tips">请先绑定设备</string>
 
     <!--详细界面的标题-->
     <string-array name="detail_titles">
@@ -650,4 +656,10 @@
     <string name="tip_buy_succeed">套餐购买成功，您必须激活套餐才能使用！</string>
     <string name="activating">马上激活</string>
     <string name="wait_activate">稍后激活</string>
+    
+    
+    <string name="complete_next">已完成，下一步</string>
+
+    <string name="outside_use_guide">出竟后使用引导</string>
+    
 </resources>

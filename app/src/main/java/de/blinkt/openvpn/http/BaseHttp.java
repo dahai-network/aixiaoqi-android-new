@@ -12,6 +12,7 @@ public class BaseHttp extends CommonHttp {
 	protected int cmdType_;
 	protected boolean isCreateHashMap = true;
 	protected String[] valueParams;
+	private String TAG = "JSON";
 
 	public BaseHttp(InterfaceCallback interfaceCallback, int cmdType_) {
 		this.interfaceCallback = interfaceCallback;
@@ -60,6 +61,7 @@ public class BaseHttp extends CommonHttp {
 	@Override
 	protected void parseResult(String response) {
 		if (!TextUtils.isEmpty(response)) {
+//			Log.e(TAG, "JSON 日志：" + response);
 			parseObject(response);
 		}
 		interfaceCallback.rightComplete(cmdType_, this);

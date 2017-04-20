@@ -241,7 +241,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 													}
 													//排序后连接操作
 													scanLeDevice(false);
-													if (infos.size() == 0 || mService == null || mService.isConnecttingBlueTooth()) {
+													if (infos.size() == 0) {
 														CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.no_device_around));
 														finish();
 														return;
@@ -299,7 +299,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			} else {
 				CommonTools.showShortToast(this, "该设备已经绑定过了！");
 				scanLeDevice(false);
-				mService.disconnect();
+				if (mService != null)
+					mService.disconnect();
 				BluetoothConstant.IS_BIND = false;
 				SharedUtils.getInstance().delete(Constant.IMEI);
 				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
@@ -315,8 +316,13 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 //					connectedRelativeLayout.setVisibility(View.VISIBLE);
 					findedImageView.clearAnimation();
 					findedImageView.setVisibility(View.GONE);
+					if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+						search_bluetooth.setText(getString(R.string.finded_unibox));
+					} else {
+						search_bluetooth.setText(getString(R.string.finded_unitoy));
+					}
+					tip_search.setText(getString(R.string.can_use));
 					uniImageView.setBackgroundResource(R.drawable.bind_finish);
-
 					new Handler().postDelayed(new Runnable() {
 						@Override
 						public void run() {

@@ -269,7 +269,7 @@ public class UartService extends Service implements Serializable {
 
 	/***
 	 * 初始化蓝牙
-	 * @return  是否初始化成功
+	 * @return 是否初始化成功
 	 */
 	public boolean initialize() {
 		// For API level 18 and above, get a reference to BluetoothAdapter through
@@ -521,7 +521,7 @@ public class UartService extends Service implements Serializable {
 			}
 			//向特征值设置数据
 			RxChar.setValue(value);
-			Log.d(TAG, "writeRXCharacteristic: "+value);
+			Log.d(TAG, "writeRXCharacteristic: " + value);
 
 			//返回的状态
 			boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
@@ -569,6 +569,10 @@ public class UartService extends Service implements Serializable {
 
 	public boolean isConnecttingBlueTooth() {
 		return mConnectionState == STATE_CONNECTING;
+	}
+
+	public boolean isConnectedBlueTooth() {
+		return mConnectionState == STATE_CONNECTED;
 	}
 
 	/**

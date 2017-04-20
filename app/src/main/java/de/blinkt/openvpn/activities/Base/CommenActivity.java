@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Window;
+
 import com.umeng.analytics.MobclickAgent;
+
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -97,9 +99,13 @@ public class CommenActivity extends FragmentActivity {
 	 * @param message
 	 */
 	public void showProgress(String message, boolean isCanTouchOutside) {
-		myProgressDialog.setMyMessage(message);
-		myProgressDialog.setCancelable(isCanTouchOutside);
-		myProgressDialog.myShow();
+		try {
+			myProgressDialog.setMyMessage(message);
+			myProgressDialog.setCancelable(isCanTouchOutside);
+			myProgressDialog.myShow();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void showProgress(int id) {

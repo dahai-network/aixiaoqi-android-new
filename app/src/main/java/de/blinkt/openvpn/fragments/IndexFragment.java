@@ -50,7 +50,6 @@ import de.blinkt.openvpn.model.ProductEntity;
 import de.blinkt.openvpn.views.FullyRecylerView;
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.bannerview.CycleViewPager;
-import de.blinkt.openvpn.views.contact.DividerDecoration;
 
 import static android.view.View.GONE;
 import static de.blinkt.openvpn.constant.HttpConfigUrl.COMTYPE_GET_PRODUCTS;
@@ -204,6 +203,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 
 	@SuppressLint("NewApi")
 	private void initialize(List<IndexBannerEntity> infos) {
+		if (getActivity() == null) return;
 		// 将最后一个ImageView添加进来
 		pageViews.add(getImageView(getActivity(), infos.get(infos.size() - 1).getImage()));
 		for (int i = 0; i < infos.size(); i++) {
@@ -224,10 +224,13 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	}
 
 	public ImageView getImageView(Context context, String url) {
-		ImageView imageView = (ImageView) LayoutInflater.from(context).inflate(
-				R.layout.view_banner, null);
-		Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
-		return imageView;
+		if (context != null) {
+			ImageView imageView = (ImageView) LayoutInflater.from(context).inflate(
+					R.layout.view_banner, null);
+			Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+			return imageView;
+		}
+		return null;
 	}
 
 	private CycleViewPager.ImageCycleViewListener mAdCycleViewListener = new CycleViewPager.ImageCycleViewListener() {

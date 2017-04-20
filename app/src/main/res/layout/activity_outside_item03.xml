@@ -1,67 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
 
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="@dimen/padding_15dp"
-            android:background="@drawable/step_tip"
-            android:layout_marginTop="18dp"
-            android:gravity="center"
             android:id="@+id/number_3"
+            android:layout_width="@dimen/padding_20dp"
+            android:layout_marginTop="@dimen/padding_22dp"
+            android:background="@drawable/circle_light_blue_ret"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
             android:text="3"
             android:textColor="@color/white"
-            android:layout_height="wrap_content"/>
+            android:layout_height="@dimen/padding_20dp"/>
 
 
 
-            <TextView
-                android:id="@+id/outside_step_third_tv"
-                android:layout_toRightOf="@id/number_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/padding"
-                android:layout_marginTop="@dimen/padding_20dp"
-                android:text="@string/outside_step_third"
-                />
+        <TextView
+            android:id="@+id/outside_step_third_tv"
+            android:layout_toRightOf="@id/number_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/padding"
+            android:layout_marginTop="@dimen/padding_20dp"
+            android:textSize="@dimen/little_18"
+            android:textColor="@color/color_333333"
+            android:text="@string/outside_step_third"
+            />
 
-            <TextView
-                android:id="@+id/outside_step_third_content_tv"
-                android:layout_width="wrap_content"
-                android:layout_toRightOf="@id/number_3"
-                android:layout_below="@id/outside_step_third_tv"
-                android:paddingTop="@dimen/padding"
-                android:paddingLeft="@dimen/padding"
-                android:layout_marginRight="@dimen/padding_15dp"
-                android:layout_height="wrap_content"
-                android:text="@string/outside_step_third_content"
-                />
+        <TextView
+            android:id="@+id/outside_step_third_content_tv"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/outside_step_third_tv"
+            android:paddingTop="@dimen/padding"
+            android:paddingLeft="@dimen/padding_15dp"
+            android:layout_marginRight="@dimen/padding_15dp"
+            android:textColor="@color/color_333333"
+            android:layout_height="wrap_content"
+            android:text="@string/outside_step_third_content"
+            />
+        <ImageView
+            android:id="@+id/outside_item03_up"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/padding_50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/outside_step_third_content_tv"
+            android:scaleType="fitXY"
+            android:src="@drawable/move_net_set"/>
+        <TextView
+            android:id="@+id/outside_step_third_two_content_tv"
+            android:layout_marginTop="@dimen/padding_10dp"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/outside_item03_up"
+            android:paddingTop="@dimen/padding"
+            android:paddingLeft="@dimen/padding_15dp"
+            android:layout_marginRight="@dimen/padding_15dp"
+            android:textColor="@color/color_333333"
+            android:layout_height="wrap_content"
+            android:text="@string/outside_step_third_two_content"
+            />
+        <ImageView
+            android:id="@+id/outside_item03_down"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/padding_50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/outside_step_third_two_content_tv"
+            android:scaleType="fitXY"
+            android:src="@drawable/outside_item03"/>
+
+        <Button
+            android:id="@+id/outside_step_third_bt"
+            android:layout_below="@id/outside_item03_down"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+            android:layout_marginTop="@dimen/padding_50dp"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:layout_marginRight="@dimen/padding_20dp"
+            android:background="@drawable/green_btn_click"
+            android:text="@string/set_move_net"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/little_16"/>
+
+        <Button
+            android:id="@+id/activateTextView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/padding_40dp"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:layout_marginRight="@dimen/padding_20dp"
+            android:layout_below="@id/outside_step_third_bt"
+            android:layout_marginTop="@dimen/padding_15dp"
+            android:background="@drawable/green_btn_click"
+            android:text="@string/complete_next"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/little_16"/>
 
 
-
-    <Button
-        android:id="@+id/outside_step_third_bt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/outside_step_third_content_tv"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="@dimen/padding_10dp"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/login_btn"
-        android:text="@string/outside_step_third_click"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="@dimen/padding_20dp"
-        android:textSize="16dp"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-       android:layout_centerHorizontal="true"
-        android:layout_below="@id/outside_step_third_bt"
-        android:scaleType="fitXY"
-        android:src="@drawable/item03"/>
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

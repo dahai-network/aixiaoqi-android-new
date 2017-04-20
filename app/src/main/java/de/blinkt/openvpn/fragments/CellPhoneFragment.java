@@ -5,33 +5,29 @@ package de.blinkt.openvpn.fragments;
  */
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import com.umeng.analytics.MobclickAgent;
-import org.androidannotations.annotations.App;
-import org.w3c.dom.Text;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
-import cn.com.johnson.model.AppMode;
 import de.blinkt.openvpn.activities.ProMainActivity;
-import de.blinkt.openvpn.activities.SMSAcivity;
 import de.blinkt.openvpn.util.ViewUtil;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKEDITSMS;
+
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLEPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLESMS;
 

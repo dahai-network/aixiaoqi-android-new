@@ -21,21 +21,17 @@ import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.cache.MemorySizeCalculator;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
-import cn.com.johnson.model.ChangeViewStateEvent;
 import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.BalanceParticularsActivity;
-import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.ImportantAuthorityActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
@@ -130,7 +126,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
     TextView packageAllCount;
     @BindView(R.id.accountScrollView)
     ScrollView accountScrollView;
-
     //bluetooth status蓝牙状态
     private String bleStatus;
     private String TAG = "AccountFragment";
@@ -180,7 +175,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
         return rootView;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -190,9 +184,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
     }
 
 
-    private void getPackage() {
-        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
-    }
+	private void getPackage() {
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
+	}
 
     public void showDeviceSummarized(boolean isShow) {
         if (deviceSummarizedRelativeLayout != null) {
@@ -204,11 +198,21 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
         }
     }
 
-    public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
-        deviceNameTextView.setText(deviceType);
-        powerTextView.setText(powerPercent + "%");
-        setRegisted(isRegisted);
-    }
+	public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
+		try {
+			if (deviceType != null)
+				deviceNameTextView.setText(deviceType);
+			if (powerPercent != null)
+				setPowerPercent(powerPercent);
+			setRegisted(isRegisted);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setPowerPercent(String powerPercent) {
+		powerTextView.setText(powerPercent + "%");
+	}
 
     public void setRegisted(boolean isRegisted) {
         if (isRegisted) {
@@ -442,46 +446,46 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
         return bleStatus;
     }
 
-    public void setBleStatus(String bleStatus) {
-        this.bleStatus = bleStatus;
-        if (getString(R.string.index_un_insert_card).equals(bleStatus)) {
-            if (isAdded()) {
-                signalIconImageView.setBackgroundResource(R.drawable.unregist);
-                operatorTextView.setText("----");
-            }
-        }
-    }
+	public void setBleStatus(String bleStatus) {
+		this.bleStatus = bleStatus;
+		if (isAdded()) {
+			if (getString(R.string.index_un_insert_card).equals(bleStatus)) {
+				signalIconImageView.setBackgroundResource(R.drawable.unregist);
+				operatorTextView.setText("----");
+			}
+		}
+	}
 
-    /**
-     * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
-     */
-    private void sendEventBusChangeBluetoothStatus(String status) {
-        int statusDrawable = R.drawable.index_connecting;
-        if (status.equals(getString(R.string.index_connecting))) {
-        } else if (status.equals(getString(R.string.index_aixiaoqicard))) {
-            statusDrawable = R.drawable.index_no_signal;
-        } else if (status.equals(getString(R.string.index_no_signal))) {
-            statusDrawable = R.drawable.index_no_signal;
-        } else if (status.equals(getString(R.string.index_regist_fail))) {
-            statusDrawable = R.drawable.index_no_signal;
-        } else if (status.equals(getString(R.string.index_registing))) {
-            statusDrawable = R.drawable.index_no_signal;
-        } else if (status.equals(getString(R.string.index_unbind))) {
-            statusDrawable = R.drawable.index_unbind;
-        } else if (status.equals(getString(R.string.index_no_packet))) {
-            statusDrawable = R.drawable.index_no_packet;
-        } else if (status.equals(getString(R.string.index_un_insert_card))) {
-            statusDrawable = R.drawable.index_no_signal;
-        } else if (status.equals(getString(R.string.index_high_signal))) {
-            statusDrawable = R.drawable.index_high_signal;
-        } else if (status.equals(getString(R.string.index_blue_un_opne))) {
-            statusDrawable = R.drawable.index_blue_unpen;
-        }
-        ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-        entity.setStatus(status);
-        entity.setStatusDrawableInt(statusDrawable);
-        EventBus.getDefault().post(entity);
-    }
+	/**
+	 * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
+	 */
+	private void sendEventBusChangeBluetoothStatus(String status) {
+		int statusDrawable = R.drawable.index_connecting;
+		if (status.equals(getString(R.string.index_connecting))) {
+		} else if (status.equals(getString(R.string.index_aixiaoqicard))) {
+			statusDrawable = R.drawable.index_no_signal;
+		} else if (status.equals(getString(R.string.index_no_signal))) {
+			statusDrawable = R.drawable.index_no_signal;
+		} else if (status.equals(getString(R.string.index_regist_fail))) {
+			statusDrawable = R.drawable.index_no_signal;
+		} else if (status.equals(getString(R.string.index_registing))) {
+			statusDrawable = R.drawable.index_no_signal;
+		} else if (status.equals(getString(R.string.index_unbind))) {
+			statusDrawable = R.drawable.index_unbind;
+		} else if (status.equals(getString(R.string.index_no_packet))) {
+			statusDrawable = R.drawable.index_no_packet;
+		} else if (status.equals(getString(R.string.index_un_insert_card))) {
+			statusDrawable = R.drawable.index_no_signal;
+		} else if (status.equals(getString(R.string.index_high_signal))) {
+			statusDrawable = R.drawable.index_high_signal;
+		} else if (status.equals(getString(R.string.index_blue_un_opne))) {
+			statusDrawable = R.drawable.index_blue_unpen;
+		}
+		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
+		entity.setStatus(status);
+		entity.setStatusDrawableInt(statusDrawable);
+		EventBus.getDefault().post(entity);
+	}
 
     /**
      * 修改tvNewPackagetAction控件是否显示或者隐藏

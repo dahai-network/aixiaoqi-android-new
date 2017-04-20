@@ -407,16 +407,31 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 				}
 				break;
 			case R.id.inland_reset:
-				toActivity(new Intent(this, OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.AFTER_GOING_ABROAD).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G()));
+				Constant.isOutsideSecondStepClick=false;
+				Constant.isOutsideThirdStepClick=false;
+				toActivity(new Intent(this, OutsideFirstStepActivity.class)
+						.putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.AFTER_GOING_ABROAD)
+						.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G())
+						.putExtra(IntentPutKeyConstant.APN_NAME, bean.getPackageApnName())
+				);
 				break;
 			case R.id.aboard_how_to_use:
-				toActivity(new Intent(this, OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.OUTSIDE).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G()));
+				Constant.isOutsideSecondStepClick=false;
+				Constant.isOutsideThirdStepClick=false;
+				toActivity(new Intent(this, OutsideFirstStepActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.OUTSIDE)
+						.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G())
+						.putExtra(IntentPutKeyConstant.APN_NAME, bean.getPackageApnName())
+				);
 
 				break;
 		}
 	}
 
 	private void activatePackage() {
+		if (SharedUtils.getInstance().readString(Constant.OPERATER) != null) {
+			showDialog();
+			return;
+		}
 		if (!CommonTools.isFastDoubleClick(3000)) {
 			//友盟方法统计
 			MobclickAgent.onEvent(context, CLICKACTIVECARD);
@@ -424,7 +439,10 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 			//如果订单未激活跳转到激活界面
 			if (bean.getOrderStatus() == 0)
 				toActivity(new Intent(this, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt())
-						.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G()).putExtra(IntentPutKeyConstant.COUNTRY_NAME, bean.getCountryName()));
+						.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G())
+						.putExtra(IntentPutKeyConstant.COUNTRY_NAME, bean.getCountryName())
+						.putExtra(IntentPutKeyConstant.APN_NAME,bean.getPackageApnName())
+				);
 			else {
 				IS_TEXT_SIM = false;
 				orderStatus = 4;

@@ -137,7 +137,13 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 					MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
 					CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活失败，请重试!");
 				} else {
-					toActivity(new Intent(ActivateActivity.this, OutsideActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.OUTSIDE).putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, getIntent().getBooleanExtra(IntentPutKeyConstant.IS_SUPPORT_4G, false)));
+					Constant.isOutsideSecondStepClick=false;
+					Constant.isOutsideThirdStepClick=false;
+					toActivity(new Intent(ActivateActivity.this, OutsideFirstStepActivity.class)
+							.putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.OUTSIDE)
+							.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, getIntent().getBooleanExtra(IntentPutKeyConstant.IS_SUPPORT_4G, false))
+
+					);
 					isActivateSuccess = true;
 				}
 				dismissProgress();
@@ -163,9 +169,13 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				break;
 			case R.id.sureTextView:
 				if (!CommonTools.isFastDoubleClick(3000)) {
-					//友盟方法统计
-					MobclickAgent.onEvent(context, CLICKACTIVEPACKAGE);
-					orderActivationHttp();
+					if (SharedUtils.getInstance().readString(Constant.OPERATER) == null) {
+						//友盟方法统计
+						MobclickAgent.onEvent(context, CLICKACTIVEPACKAGE);
+						orderActivationHttp();
+					} else {
+						showDialog();
+					}
 				}
 				break;
 			case R.id.payWayTextView:
