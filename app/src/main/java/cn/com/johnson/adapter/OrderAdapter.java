@@ -118,7 +118,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 //			normalHolder.stateTextView.setTextColor(ContextCompat.getColor(context, R.color.order_item));
 //		}
 		else {
-			normalHolder.stateTextView.setText("已激活");
+			normalHolder.stateTextView.setText("境外设置");
 			normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.gray_background_text_selector));
 			normalHolder.stateTextView.setBackgroundResource(R.drawable.circle_light_gray_selector);
 			if(1==bean.getPackageCategory()){
