@@ -17,12 +17,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.JNIUtil;
@@ -108,10 +110,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	 * 拨打电话按钮
 	 */
 	public static RelativeLayout phone_linearLayout;
-	public static TopProgressView topProgressView;
+	@BindView(R.id.iv_putaway)
 	public ImageView iv_putaway;
+	@BindView(R.id.topProgressView)
+	public TopProgressView topProgressView;
 	//判断是否展开了键盘
 	public static boolean isDeploy = true;
+	@BindView(R.id.tv_red_dot_01)
+	TextView tvRedDot01;
+	@BindView(R.id.tv_red_dot_02)
+	TextView tvRedDot02;
+	@BindView(R.id.tv_red_dot_03)
+	TextView tvRedDot03;
+	@BindView(R.id.tv_red_dot_04)
+	TextView tvRedDot04;
+	public static RadioGroup radiogroup;
 	private ReceiveBLEMoveReceiver bleMoveReceiver;
 	private UartService mService = null;
 	//进入主页后打开蓝牙设备搜索绑定过的设备
@@ -128,7 +141,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	Intent intentCallPhone;
 	public static boolean isForeground = false;
 	public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
-	public static RadioGroup radiogroup;
+
 	//重连时间
 	private int RECONNECT_TIME = 180000;
 	SocketConnection socketUdpConnection;
@@ -167,7 +180,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pro_main);
 		ButterKnife.bind(this);
-		findViewById();
+		findViewsById();
 		initFragment();
 		initView();
 		addListener();
@@ -180,6 +193,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		EventBus.getDefault().register(this);
 	}
 
+	private void findViewsById() {
+		phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
+		radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
+	}
+
 	/**
 	 * \初始化界面
 	 */
@@ -190,6 +208,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		if (!NetworkUtils.isNetworkAvailable(this)) {
 			topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
 		}
+		initRedDotView();
+
+	}
+
+	/**
+	 * 初始化红点的状态
+	 */
+	private void initRedDotView() {
+
+		tvRedDot01.setVisibility(View.GONE);
+		tvRedDot02.setVisibility(View.GONE);
+		tvRedDot03.setVisibility(View.GONE);
+		tvRedDot04.setVisibility(View.GONE);
 	}
 
 	private void initBrocast() {
@@ -250,19 +281,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 
 	}
-
-
-	private void findViewById() {
-		//主界面下栏
-		// bottom_bar_linearLayout = (LinearLayout) findViewById(R.id.bottom_bar_linearLayout);
-		radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
-		//拨打电话下栏
-		phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
-		//隐藏拨号界面控件
-		iv_putaway = (ImageView) findViewById(R.id.iv_putaway);
-		topProgressView = (TopProgressView) findViewById(R.id.topProgressView);
-	}
-
 
 	private static IntentFilter makeGattUpdateIntentFilter() {
 		final IntentFilter intentFilter = new IntentFilter();
@@ -444,9 +462,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	public void hidePhoneBottomBar() {
-		ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
-		ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
-
+		radiogroup.setVisibility(View.VISIBLE);
+		phone_linearLayout.setVisibility(View.GONE);
 	}
 
 
@@ -707,6 +724,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}
+		} else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
+
+			Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
 		}
 
 	}
@@ -783,6 +803,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							if (deviceAddress.equalsIgnoreCase(device.getAddress())) {
 								scanLeDevice(false);
 								mService.connect(deviceAddress);
+
 							}
 						}
 					});

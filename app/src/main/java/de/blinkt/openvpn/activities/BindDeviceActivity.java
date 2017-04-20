@@ -315,6 +315,12 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 //					connectedRelativeLayout.setVisibility(View.VISIBLE);
 					findedImageView.clearAnimation();
 					findedImageView.setVisibility(View.GONE);
+					if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+						search_bluetooth.setText(getString(R.string.finded_unibox));
+					} else {
+						search_bluetooth.setText(getString(R.string.finded_unitoy));
+					}
+					tip_search.setText(getString(R.string.can_use));
 					uniImageView.setBackgroundResource(R.drawable.bind_finish);
 					new Handler().postDelayed(new Runnable() {
 						@Override

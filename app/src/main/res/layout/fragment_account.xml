@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <de.blinkt.openvpn.views.TitleBar
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/padding_50dp"
-        />
+        android:layout_height="@dimen/padding_50dp" />
 
 
     <ScrollView
@@ -30,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_alignParentStart="true"
-                android:background="@color/blue_title"/>
+                android:background="@color/blue_title" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -52,11 +51,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/padding_40dp"
                         android:drawablePadding="@dimen/padding"
                         android:drawableRight="@drawable/edit_info"
-                        android:layout_marginTop="@dimen/padding_40dp"
                         android:text="@string/unset_name"
-                        android:textSize="@dimen/little_14"/>
+                        android:textSize="@dimen/little_14" />
 
                     <TextView
                         android:id="@+id/accountPhoneTextView"
@@ -67,14 +66,12 @@
                         android:layout_marginBottom="@dimen/padding_15dp"
                         android:text="@string/no_data_show"
                         android:textColor="@color/gray_text"
-                        android:textSize="@dimen/little_14"/>
+                        android:textSize="@dimen/little_14" />
 
 
                 </RelativeLayout>
 
-                <View
-                    style="@style/horizontal_line_view"
-                    />
+                <View style="@style/horizontal_line_view" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -103,7 +100,7 @@
                             android:drawableLeft="@drawable/balance_icon"
                             android:drawablePadding="@dimen/padding_10dp"
                             android:text="@string/balance"
-                            android:textSize="15sp"/>
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/rechargeTextView"
@@ -114,14 +111,11 @@
                             android:gravity="center"
                             android:text="@string/recharge"
                             android:textColor="@drawable/blue_btn_click_color_selecor"
-                            android:textSize="@dimen/little_12"
-                            />
+                            android:textSize="@dimen/little_12" />
 
                     </RelativeLayout>
 
-                    <View
-                        style="@style/horizontal_line_view"
-                        />
+                    <View style="@style/horizontal_line_view" />
 
                     <TextView
                         android:id="@+id/billtv"
@@ -131,27 +125,25 @@
                         android:background="@drawable/call_phone_selector"
                         android:drawableLeft="@drawable/bill_icon"
                         android:drawablePadding="@dimen/padding_10dp"
-                        android:paddingBottom="@dimen/padding_10dp"
                         android:drawableRight="@drawable/arrow"
+                        android:paddingBottom="@dimen/padding_10dp"
                         android:paddingLeft="@dimen/padding_15dp"
                         android:paddingRight="@dimen/padding_15dp"
                         android:paddingTop="@dimen/padding_10dp"
                         android:text="@string/bill"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
 
                 <View
                     style="@style/horizontal_line_view"
-                    android:layout_marginTop="@dimen/padding_5dp"
-                    />
+                    android:layout_marginTop="@dimen/padding_5dp" />
 
                 <RelativeLayout
                     android:id="@+id/activateRelativeLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    >
+                    android:layout_height="120dp">
 
                     <RelativeLayout
                         android:id="@+id/noPacketRelativeLayout"
@@ -168,7 +160,7 @@
                             android:drawableLeft="@drawable/activate_device_account"
                             android:drawablePadding="@dimen/padding_10dp"
                             android:text="@string/activate_packet"
-                            android:textColor="@color/gray_text"/>
+                            android:textColor="@color/gray_text" />
 
                     </RelativeLayout>
 
@@ -177,8 +169,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/has_package"
-                        android:visibility="visible"
-                        >
+                        android:visibility="visible">
 
                         <TextView
 
@@ -187,8 +178,7 @@
                             android:padding="12dp"
                             android:text="@string/package_surplus_detail"
                             android:textColor="@color/white"
-                            android:textSize="16sp"
-                            />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/going_buy"
@@ -199,25 +189,22 @@
                             android:paddingRight="12dp"
                             android:paddingTop="12dp"
                             android:text="@string/going_buy"
-                            android:textColor="@color/white"
-                            />
+                            android:textColor="@color/white" />
 
                         <View
                             android:id="@+id/line1"
                             style="@style/horizontal_line_view"
-                            android:layout_below="@id/going_buy"
-                            />
+                            android:layout_below="@id/going_buy" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/line1"
-                            >
+                            android:layout_below="@id/line1">
 
                             <RelativeLayout
                                 android:layout_width="0dp"
-                                android:layout_marginLeft="@dimen/padding_15dp"
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/padding_15dp"
                                 android:layout_weight="1">
 
                                 <TextView
@@ -228,7 +215,6 @@
                                     android:layout_marginTop="15dp"
                                     android:text="@string/call_time"
                                     android:textColor="@color/white"
-
                                     />
 
                                 <TextView
@@ -240,8 +226,7 @@
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    />
+                                    android:textStyle="bold" />
                             </RelativeLayout>
 
                             <View
@@ -249,23 +234,26 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/padding_15dp"
                                 android:layout_marginTop="15dp"
-                                android:background="@drawable/vertical_dotted_line"
-                                />
+                                android:background="@drawable/vertical_dotted_line" />
 
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding_15dp"
                                 android:layout_weight="1">
-
+                                <TextView
+                                    android:id="@+id/tv_flow_state_dot"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/padding_20dp"
+                                    android:drawableRight="@drawable/red_dot"/>
                                 <TextView
                                     android:id="@+id/flow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="15dp"
                                     android:text="@string/flow_count"
-                                    android:textColor="@color/white"
-                                    />
+                                    android:textColor="@color/white" />
 
                                 <TextView
                                     android:id="@+id/flow_count"
@@ -277,8 +265,7 @@
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    />
+                                    android:textStyle="bold" />
                             </RelativeLayout>
 
                             <View
@@ -286,15 +273,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/padding_15dp"
                                 android:layout_marginTop="15dp"
-                                android:background="@drawable/vertical_dotted_line"
-                                />
+                                android:background="@drawable/vertical_dotted_line" />
 
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:layout_marginLeft="@dimen/padding_15dp"
-                                >
+                                android:layout_weight="1">
 
                                 <TextView
                                     android:id="@+id/all_package"
@@ -302,8 +287,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="15dp"
                                     android:text="@string/all_package_count"
-                                    android:textColor="@color/white"
-                                    />
+                                    android:textColor="@color/white" />
 
                                 <TextView
                                     android:id="@+id/package_all_count"
@@ -313,8 +297,7 @@
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    />
+                                    android:textStyle="bold" />
                             </RelativeLayout>
                         </LinearLayout>
                     </RelativeLayout>
@@ -324,8 +307,7 @@
                 <RelativeLayout
                     android:id="@+id/addDeviceRelativeLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    >
+                    android:layout_height="120dp">
 
 
                     <RelativeLayout
@@ -334,8 +316,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
                         android:layout_marginTop="@dimen/padding_5dp"
-                        android:background="@color/white"
-                        >
+                        android:background="@color/white">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -345,7 +326,7 @@
                             android:drawableLeft="@drawable/add_device"
                             android:drawablePadding="@dimen/padding_10dp"
                             android:text="@string/add_device"
-                            android:textColor="@color/gray_text"/>
+                            android:textColor="@color/gray_text" />
 
 
                     </RelativeLayout>
@@ -355,9 +336,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/padding_5dp"
-                        android:visibility="gone"
                         android:background="@drawable/has_device"
-                        >
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/deviceNameTextView"
@@ -366,8 +346,7 @@
                             android:padding="12dp"
                             android:text="@string/unibox_key"
                             android:textColor="@color/white"
-                            android:textSize="16sp"
-                            />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/unBindTextView"
@@ -378,20 +357,17 @@
                             android:paddingRight="12dp"
                             android:paddingTop="12dp"
                             android:text="@string/remove_bind_under_line"
-                            android:textColor="@color/white"
-                            />
+                            android:textColor="@color/white" />
 
                         <View
                             android:id="@+id/addDeviceLine"
                             style="@style/horizontal_line_view"
-                            android:layout_below="@id/deviceNameTextView"
-                            />
+                            android:layout_below="@id/deviceNameTextView" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/addDeviceLine"
-                            >
+                            android:layout_below="@id/addDeviceLine">
 
                             <RelativeLayout
                                 android:layout_width="0dp"
@@ -405,8 +381,7 @@
                                     android:layout_marginTop="15dp"
                                     android:paddingLeft="@dimen/padding_15dp"
                                     android:text="@string/power"
-                                    android:textColor="@color/white"
-                                    />
+                                    android:textColor="@color/white" />
 
                                 <TextView
                                     android:id="@+id/powerTextView"
@@ -418,8 +393,7 @@
                                     android:text="----"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    />
+                                    android:textStyle="bold" />
                             </RelativeLayout>
 
                             <View
@@ -427,13 +401,20 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/padding_15dp"
                                 android:layout_marginTop="15dp"
-                                android:background="@drawable/vertical_dotted_line"
-                                />
+                                android:background="@drawable/vertical_dotted_line" />
 
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tv_red_device_state"
+                                    android:layout_marginTop="@dimen/padding_15dp"
+                                    android:layout_marginLeft="@dimen/padding_10dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:drawableLeft="@drawable/red_dot" />
 
                                 <ImageView
                                     android:id="@+id/signalIconImageView"
@@ -441,8 +422,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="20dp"
-                                    android:background="@drawable/unregist"
-                                    />
+                                    android:background="@drawable/unregist" />
 
                                 <TextView
                                     android:id="@+id/operatorTextView"
@@ -454,16 +434,14 @@
                                     android:text="----"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    />
+                                    android:textStyle="bold" />
                             </RelativeLayout>
 
 
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1">
-                            </RelativeLayout>
+                                android:layout_weight="1"></RelativeLayout>
 
 
                         </LinearLayout>
@@ -472,8 +450,7 @@
 
                 <View
                     style="@style/horizontal_line_view"
-                    android:layout_marginTop="@dimen/padding_5dp"
-                    />
+                    android:layout_marginTop="@dimen/padding_5dp" />
 
                 <TextView
                     android:id="@+id/permission_set"
@@ -487,12 +464,10 @@
                     android:paddingLeft="@dimen/padding_15dp"
                     android:paddingRight="@dimen/padding_15dp"
                     android:text="@string/permission_set"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
 
-                <View
-                    style="@style/horizontal_line_view"
-                    />
+                <View style="@style/horizontal_line_view" />
 
                 <TextView
                     android:id="@+id/tv_setting"
@@ -506,16 +481,13 @@
                     android:paddingLeft="@dimen/padding_15dp"
                     android:paddingRight="@dimen/padding_15dp"
                     android:text="@string/setting"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
+
+                <View style="@style/horizontal_line_view" />
 
                 <View
                     style="@style/horizontal_line_view"
-                    />
-
-                <View
-                    style="@style/horizontal_line_view"
-                    android:layout_marginTop="15dp"
-                    />
+                    android:layout_marginTop="15dp" />
             </LinearLayout>
 
 
@@ -525,7 +497,7 @@
                 android:layout_height="70dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/default_head"/>
+                android:background="@drawable/default_head" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

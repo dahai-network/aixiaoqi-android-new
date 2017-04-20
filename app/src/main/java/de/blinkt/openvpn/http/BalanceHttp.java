@@ -14,22 +14,24 @@ public class BalanceHttp extends BaseHttp {
 	private BalanceEntity balanceEntity;
 
 	public BalanceEntity getBalanceEntity() {
-		if(balanceEntity==null){
-			balanceEntity=new BalanceEntity();
+		if (balanceEntity == null) {
+			balanceEntity = new BalanceEntity();
 		}
 		return balanceEntity;
 	}
 
 	public BalanceHttp(InterfaceCallback call, int cmdType_) {
-		super(call,cmdType_,false,GET_MODE, HttpConfigUrl.GET_BALANCE);
+		super(call, cmdType_, false, GET_MODE, HttpConfigUrl.GET_BALANCE);
 	}
-
-
 
 
 	@Override
 	protected void parseObject(String response) {
-		balanceEntity = new Gson().fromJson(response, BalanceEntity.class);
+		try {
+			balanceEntity = new Gson().fromJson(response, BalanceEntity.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 

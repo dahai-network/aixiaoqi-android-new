@@ -6,11 +6,10 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -20,11 +19,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.umeng.analytics.MobclickAgent;
-
 import java.util.Set;
-
 import cn.com.aixiaoqi.R;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
@@ -46,7 +42,6 @@ import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
-
 import static de.blinkt.openvpn.constant.UmengContant.CLICKREGISTERBUTTON;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKREGISTERSENDCODE;
 import static de.blinkt.openvpn.constant.UmengContant.REGISTERSHOWPASSWORD;
@@ -96,8 +91,6 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
         passwordEdit = (EditText)
                 findViewById(R.id.passwordEdit);
 
-        //setPhoneNumberEditChangeLisener();
-
         hindPswCheckBox = (CheckBox) findViewById(R.id.hindPswCheckBox);
         hindPswCheckBox.setOnClickListener(this);
         allowCheckBox = (CheckBox) findViewById(R.id.allowCheckBox);
@@ -117,6 +110,8 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
         regist_btn = (Button) findViewById(R.id.regist_btn);
         regist_btn.setOnClickListener(this);
         registRelativeLayout.setOnClickListener(this);
+
+
         timer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -163,8 +158,7 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
     }
 
     public void setViewVisibleOrGone(TextView textview, CharSequence s) {
-
-        int view_state=s.length()==0?View.GONE:View.VISIBLE;
+        int view_state = s.length() == 0 ? View.GONE : View.VISIBLE;
         textview.setVisibility(view_state);
     }
 
@@ -178,8 +172,11 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
                 if (CheckUtil.isMobileNO(phoneNum, RegistActivity.this)) {
                     //友盟方法统计
                     MobclickAgent.onEvent(this, CLICKREGISTERSENDCODE);
+
+
                     sendBtn.setEnabled(false);
                     sendBtn.setTextColor(ContextCompat.getColor(this, R.color.regist_send_sms_unenable));
+
                     createHttpRequest(HttpConfigUrl.COMTYPE_SEND_SMS, phoneNum, 1 + "");
                 }
                 break;
@@ -239,8 +236,6 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
                 case MSG_SET_ALIAS:
                     JPushInterface.setAliasAndTags(getApplicationContext(), (String) msg.obj, null, mAliasCallback);
                     break;
-
-
                 default:
 
             }
@@ -264,13 +259,9 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
                         mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
                     }
                     break;
-
                 default:
 
-
             }
-
-
         }
 
     };
@@ -292,9 +283,15 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
 
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
+
+        Log.d("aixiaoqi___", "rightComplete: " +cmdType);
+
         if (cmdType == HttpConfigUrl.COMTYPE_SEND_SMS) {
 
             SendMsgHttp entity = (SendMsgHttp) object;
+
+            Log.d("aixiaoqi___", "rightComplete: " +entity.getData());
+
             if (entity.getStatus() == 1) {
                 sendBtn.setEnabled(false);
                 timer.start();
@@ -361,6 +358,7 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
     @Override
     public void errorComplete(int cmdType, String errorMessage) {
         CommonTools.showShortToast(this, errorMessage);
+        d("errorComplete: "+errorMessage);
         regist_btn.setEnabled(true);
     }
 

@@ -216,14 +216,7 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 		setAlias();
 		MobclickAgent.onEvent(context, CLICKEXITLOGIN);
 		SharedUtils sharedUtils = SharedUtils.getInstance();
-		sharedUtils.delete(Constant.TOKEN);
-		sharedUtils.delete(Constant.PHONE_NUMBER_LIST);
-		sharedUtils.delete(Constant.PASSWORD);
-		sharedUtils.writeBoolean(Constant.ISFIRSTIN, true);
-		sharedUtils.delete(Constant.JPUSH_ALIAS);
-		sharedUtils.delete(Constant.TEL);
-		sharedUtils.delete(Constant.IMEI);
-		sharedUtils.delete(Constant.BRACELETNAME);
+		sharedUtils.clear();
 		//友盟账号统计
 		MobclickAgent.onProfileSignOff();
 		Intent intent = new Intent();
