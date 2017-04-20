@@ -162,16 +162,16 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             switch (msg.what) {
                 case 1:
                     tvRedDot04.setVisibility(View.VISIBLE);
-                    noticeNewVersion(msg.what);
+                    noticeNewVersion(3);
                     break;
                 case 2:
                     tvRedDot04.setVisibility(View.GONE);
-                    noticeNewVersion(msg.what);
-
+                    noticeNewVersion(4);
                     break;
 
 
             }
+
         }
     };
 
@@ -211,7 +211,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         setListener();
         initBrocast();
         initServices();
-        initData();
+       // initData();
         socketUdpConnection = new SocketConnection();
         socketTcpConnection = new SocketConnection();
         //注册eventbus，观察goip注册问题
@@ -219,8 +219,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     }
 
     private void initData() {
-        skyUpgradeHttp();
     }
+
 
     /**
      * \初始化界面
@@ -245,7 +245,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
      * 初始化红点的状态
      */
     private void initRedDotView() {
-
         tvRedDot01.setVisibility(View.GONE);
         tvRedDot02.setVisibility(View.GONE);
         tvRedDot03.setVisibility(View.GONE);
@@ -256,6 +255,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
      * 通知我的界面是否有新的固件包
      */
     public void noticeNewVersion(int state) {
+
+        Log.d("__aixiaoqi", "noticeNewVersion: ");
         EventBus.getDefault().post(new ChangeViewStateEvent(state));
     }
 
@@ -269,8 +270,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             tvRedDot04.setVisibility(View.VISIBLE);
         else
             tvRedDot04.setVisibility(View.GONE);
-
-
     }
 
 
@@ -701,6 +700,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                             deviceAddress = deviceAddress.toUpperCase();
                             BluetoothConstant.IS_BIND = true;
                             accountFragment.showDeviceSummarized(true);
+                            skyUpgradeHttp();
                         }
                         SharedUtils utils = SharedUtils.getInstance();
 
@@ -793,6 +793,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
             SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
+
+            Log.d("__aixiaoqi", "rightComplete: "+skyUpgradeHttp);
+
+
             if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
                 Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
                 mHandler.sendEmptyMessage(1);

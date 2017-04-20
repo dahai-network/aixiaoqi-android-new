@@ -16,11 +16,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.analytics.MobclickAgent;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -28,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
+import cn.com.johnson.model.AppMode;
 import cn.com.johnson.model.ChangeViewStateEvent;
 import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
@@ -55,6 +58,7 @@ import de.blinkt.openvpn.model.UsageRemainEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
+
 import static android.view.View.GONE;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.BRACELETTYPE;
 import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
@@ -130,8 +134,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
     private String TAG = "AccountFragment";
     boolean hasPackage = false;
 
-    public static  TextView tvNewPackagetAction;
-    public static  TextView tvNewVersion;
+    public static TextView tvNewPackagetAction;
+    public static TextView tvNewVersion;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -149,7 +153,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                     tvNewPackagetAction.setVisibility(View.GONE);
                     break;
                 case 3:
-                    tvNewPackagetAction.setVisibility(View.GONE);
+
+                    if (tvNewVersion != null && !AppMode.getInstance().isClickAddDevice)
+                        tvNewVersion.setVisibility(View.VISIBLE);
+
+                    break;
+                case 4:
+                        tvNewVersion.setVisibility(View.GONE);
+
                     break;
 
             }
@@ -165,8 +176,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                 container, false);
         ButterKnife.bind(this, rootView);
 
-        tvNewPackagetAction= (TextView) rootView.findViewById(R.id.tv_new_packaget_action);
-        tvNewVersion= (TextView) rootView.findViewById(R.id.tv_new_version);
+        tvNewPackagetAction = (TextView) rootView.findViewById(R.id.tv_new_packaget_action);
+        tvNewVersion = (TextView) rootView.findViewById(R.id.tv_new_version);
         //初始化状态
         tvNewPackagetAction.setVisibility(View.GONE);
         tvNewVersion.setVisibility(View.GONE);
@@ -183,9 +194,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
     }
 
 
-	private void getPackage() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
-	}
+    private void getPackage() {
+        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
+    }
 
     public void showDeviceSummarized(boolean isShow) {
         if (deviceSummarizedRelativeLayout != null) {
@@ -197,21 +208,21 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
         }
     }
 
-	public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
-		try {
-			if (deviceType != null)
-				deviceNameTextView.setText(deviceType);
-			if (powerPercent != null)
-				setPowerPercent(powerPercent);
-			setRegisted(isRegisted);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
+        try {
+            if (deviceType != null)
+                deviceNameTextView.setText(deviceType);
+            if (powerPercent != null)
+                setPowerPercent(powerPercent);
+            setRegisted(isRegisted);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void setPowerPercent(String powerPercent) {
-		powerTextView.setText(powerPercent + "%");
-	}
+    public void setPowerPercent(String powerPercent) {
+        powerTextView.setText(powerPercent + "%");
+    }
 
     public void setRegisted(boolean isRegisted) {
         if (isRegisted) {
@@ -273,6 +284,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                     intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
                 } else {
                     intent = new Intent(getActivity(), PackageCategoryActivity.class);
+
+                    if (tvNewPackagetAction.getVisibility() == View.VISIBLE) {
+                        mHandler.sendEmptyMessage(2);
+                        AppMode.getInstance().isClickPackage = true;
+                    }
                 }
                 break;
             case R.id.addDeviceRelativeLayout:
@@ -281,9 +297,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                 if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
                     intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
                 } else {
-
                     intent = new Intent(getActivity(), MyDeviceActivity.class);
-                    mHandler.sendEmptyMessage(2);
+                    AppMode.getInstance().isClickAddDevice = true;
+                    mHandler.sendEmptyMessage(4);
                 }
                 int status = R.string.index_connecting;
                 if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBleStatus())) {
@@ -335,7 +351,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
             case R.id.unBindTextView:
                 //断开连接
                 CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
-
                 return;
             case R.id.going_buy:
                 intent = new Intent(getActivity(), PackageMarketActivity.class);
@@ -384,7 +399,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                     return;
                 }
                 if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
-
                     mHandler.sendEmptyMessage(1);
 
                     hasPackage = true;
@@ -411,9 +425,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                     noPacketRelativeLayout.setVisibility(View.GONE);
                     callTime.setText(used.getTotalRemainingCallMinutes() + "分");
 
+                    Log.d("__aixiaoqi", "rightComplete:有套餐且激活了 ");
+
                     //显示出有未激活套餐的提示
-                    if (!"0".equals(unactivated.getTotalNumFlow())) {
+                    if (!"0".equals(unactivated.getTotalNumFlow()) && !AppMode.getInstance().isClickPackage) {
+
                         mHandler.sendEmptyMessage(1);
+
                     } else {
                         mHandler.sendEmptyMessage(2);
                     }
@@ -445,55 +463,58 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
         return bleStatus;
     }
 
-	public void setBleStatus(String bleStatus) {
-		this.bleStatus = bleStatus;
-		if (isAdded()) {
-			if (getString(R.string.index_un_insert_card).equals(bleStatus)) {
-				signalIconImageView.setBackgroundResource(R.drawable.unregist);
-				operatorTextView.setText("----");
-			}
-		}
-	}
+    public void setBleStatus(String bleStatus) {
+        this.bleStatus = bleStatus;
+        if (isAdded()) {
+            if (getString(R.string.index_un_insert_card).equals(bleStatus)) {
+                signalIconImageView.setBackgroundResource(R.drawable.unregist);
+                operatorTextView.setText("----");
+            }
+        }
+    }
 
-	/**
-	 * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
-	 */
-	private void sendEventBusChangeBluetoothStatus(String status) {
-		int statusDrawable = R.drawable.index_connecting;
-		if (status.equals(getString(R.string.index_connecting))) {
-		} else if (status.equals(getString(R.string.index_aixiaoqicard))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_no_signal))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_regist_fail))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_registing))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_unbind))) {
-			statusDrawable = R.drawable.index_unbind;
-		} else if (status.equals(getString(R.string.index_no_packet))) {
-			statusDrawable = R.drawable.index_no_packet;
-		} else if (status.equals(getString(R.string.index_un_insert_card))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_high_signal))) {
-			statusDrawable = R.drawable.index_high_signal;
-		} else if (status.equals(getString(R.string.index_blue_un_opne))) {
-			statusDrawable = R.drawable.index_blue_unpen;
-		}
-		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-		entity.setStatus(status);
-		entity.setStatusDrawableInt(statusDrawable);
-		EventBus.getDefault().post(entity);
-	}
+    /**
+     * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
+     */
+    private void sendEventBusChangeBluetoothStatus(String status) {
+        int statusDrawable = R.drawable.index_connecting;
+        if (status.equals(getString(R.string.index_connecting))) {
+        } else if (status.equals(getString(R.string.index_aixiaoqicard))) {
+            statusDrawable = R.drawable.index_no_signal;
+        } else if (status.equals(getString(R.string.index_no_signal))) {
+            statusDrawable = R.drawable.index_no_signal;
+        } else if (status.equals(getString(R.string.index_regist_fail))) {
+            statusDrawable = R.drawable.index_no_signal;
+        } else if (status.equals(getString(R.string.index_registing))) {
+            statusDrawable = R.drawable.index_no_signal;
+        } else if (status.equals(getString(R.string.index_unbind))) {
+            statusDrawable = R.drawable.index_unbind;
+        } else if (status.equals(getString(R.string.index_no_packet))) {
+            statusDrawable = R.drawable.index_no_packet;
+        } else if (status.equals(getString(R.string.index_un_insert_card))) {
+            statusDrawable = R.drawable.index_no_signal;
+        } else if (status.equals(getString(R.string.index_high_signal))) {
+            statusDrawable = R.drawable.index_high_signal;
+        } else if (status.equals(getString(R.string.index_blue_un_opne))) {
+            statusDrawable = R.drawable.index_blue_unpen;
+        }
+        ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
+        entity.setStatus(status);
+        entity.setStatusDrawableInt(statusDrawable);
+        EventBus.getDefault().post(entity);
+    }
 
     /**
      * 修改tvNewPackagetAction控件是否显示或者隐藏
+     *
      * @param evnt
      */
     @Subscribe
     public void changeViewState(ChangeViewStateEvent evnt) {
+        if (tvNewPackagetAction != null) {
+            mHandler.sendEmptyMessage(evnt.getVersionState());
+        }
 
-        mHandler.sendEmptyMessage(evnt.getVersionState());
 
     }
 
@@ -501,8 +522,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        tvNewVersion=null;
-        tvNewPackagetAction=null;
+        tvNewVersion = null;
+        tvNewPackagetAction = null;
         //null.unbind();
     }
 }
