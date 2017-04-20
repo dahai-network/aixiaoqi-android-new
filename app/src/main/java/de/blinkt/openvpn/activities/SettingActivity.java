@@ -225,9 +225,6 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 		ICSOpenVPNApplication.uartService.disconnect();
 		ICSOpenVPNApplication.getInstance().sendBroadcast(intent);
 		finish();
-		ProMainActivity activity = ProMainActivity.instance;
-		if (activity != null)
-			activity.finish();
 		toActivity(LoginMainActivity.class);
 	}
 

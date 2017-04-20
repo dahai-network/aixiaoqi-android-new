@@ -71,7 +71,6 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 		SharedUtils sharedUtils = SharedUtils.getInstance();
 		String username = sharedUtils.readString(Constant.USER_NAME);
 		String password = PublicEncoderTools.MD5Encode(PublicEncoderTools.MD5Encode(sharedUtils.readString(Constant.PUBLIC_PASSWORD) + "voipcc2015"));
-
 		String server = sharedUtils.readString(Constant.ASTERISK_IP_OUT);
 		Log.e(TAG, "username=" + username + ",password=" + password);
 		System.out.println("pwd:" + sharedUtils.readString(Constant.PUBLIC_PASSWORD) + "|username:" + username + "|server:" + server + "|port:" + sharedUtils.readString(Constant.ASTERISK_IP_OUT));
@@ -79,6 +78,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 		 * 设置rc4加密 并使用 65061 登陆
 		 * 取消加密  并使用65060 登陆
 		 * */
+
 		int port = Integer.parseInt(sharedUtils.readString(Constant.ASTERISK_PORT_OUT));
 		int expire = 60;
 		the_sipengineReceive = SipEngineFactory.instance().createPhoneCore(this, this);

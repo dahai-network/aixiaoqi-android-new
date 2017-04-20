@@ -232,7 +232,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         if (!NetworkUtils.isNetworkAvailable(this)) {
             topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
         }
-        initRedDotView();
+//        initRedDotView();
     }
 
     private void findViewsById() {
@@ -241,15 +241,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     }
 
 
-    /**
-     * 初始化红点的状态
-     */
-    private void initRedDotView() {
-        tvRedDot01.setVisibility(View.GONE);
-//        tvRedDot02.setVisibility(View.GONE);
-//        tvRedDot03.setVisibility(View.GONE);
-        tvRedDot04.setVisibility(View.GONE);
-    }
+
 
     /**
      * 通知我的界面是否有新的固件包
@@ -522,7 +514,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         if (!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL, true)) {
 			tvRedDot01.setVisibility(View.VISIBLE);
         }else{
-			tvRedDot01.setVisibility(View.GONE);
+			tvRedDot01.setVisibility(View.INVISIBLE);
 		}
     }
 
@@ -567,7 +559,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     case 0:
                         radiogroup.check(R.id.rb_index);
 						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL,true);
-						tvRedDot01.setVisibility(View.GONE);
+						tvRedDot01.setVisibility(View.INVISIBLE);
                         break;
                     case 1:
                         radiogroup.check(R.id.rb_phone);
