@@ -299,7 +299,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			} else {
 				CommonTools.showShortToast(this, "该设备已经绑定过了！");
 				scanLeDevice(false);
-				mService.disconnect();
+				if (mService != null)
+					mService.disconnect();
 				BluetoothConstant.IS_BIND = false;
 				SharedUtils.getInstance().delete(Constant.IMEI);
 				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
