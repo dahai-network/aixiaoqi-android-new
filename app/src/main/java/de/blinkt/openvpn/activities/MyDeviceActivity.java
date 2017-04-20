@@ -297,7 +297,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				}
 				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETVERSION)) && !isUpgrade) {
 					SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, 0);
+
 					skyUpgradeHttp();
+
 				} else if (isUpgrade) {
 					showSkyUpgrade();
 				}
@@ -672,14 +674,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
 			if (skyUpgradeHttp.getStatus() == 1) {
 				if (skyUpgradeHttp.getUpgradeEntity() != null) {
-					if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
-						url = skyUpgradeHttp.getUpgradeEntity().getUrl();
-						showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
-						Log.d(TAG, "rightComplete: "+"有新的版本");
-						setPoint();
-
-
-
+					String versionStr = SharedUtils.getInstance().readString(Constant.BRACELETVERSION);
+					if (versionStr != null) {
+						if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(versionStr)) {
+							url = skyUpgradeHttp.getUpgradeEntity().getUrl();
+							showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
+							Log.d(TAG, "rightComplete: " + "有新的版本");
+							setPoint();
+						}
 					} else {
 						CommonTools.showShortToast(this, getString(R.string.last_version));
 						SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, false);

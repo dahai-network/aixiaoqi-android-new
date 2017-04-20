@@ -13,6 +13,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -48,6 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.FragmentAdapter;
+import cn.com.johnson.model.ChangeViewStateEvent;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
@@ -69,6 +71,7 @@ import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
+import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
@@ -151,6 +154,27 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
 	public static SendYiZhengService sendYiZhengService = null;
 
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+
+			switch (msg.what) {
+				case 1:
+					tvRedDot04.setVisibility(View.VISIBLE);
+					noticeNewVersion(msg.what);
+					break;
+				case 2:
+					tvRedDot04.setVisibility(View.GONE);
+					noticeNewVersion(msg.what);
+
+					break;
+
+
+			}
+		}
+	};
+
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
 		return super.getLastCustomNonConfigurationInstance();
@@ -180,22 +204,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pro_main);
 		ButterKnife.bind(this);
-		findViewsById();
+		findViewById();
 		initFragment();
 		initView();
 		addListener();
 		setListener();
 		initBrocast();
 		initServices();
+		initData();
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
 	}
 
-	private void findViewsById() {
-		phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
-		radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
+	private void initData() {
+		skyUpgradeHttp();
 	}
 
 	/**
@@ -209,8 +233,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
 		}
 		initRedDotView();
-
 	}
+
+	private void findViewsById() {
+		phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
+		radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
+	}
+
 
 	/**
 	 * 初始化红点的状态
@@ -222,6 +251,28 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		tvRedDot03.setVisibility(View.GONE);
 		tvRedDot04.setVisibility(View.GONE);
 	}
+
+	/**
+	 * 通知我的界面是否有新的固件包
+	 */
+	public void noticeNewVersion(int state) {
+		EventBus.getDefault().post(new ChangeViewStateEvent(state));
+	}
+
+	/**
+	 * 判断是否显示红点
+	 */
+	@Subscribe
+	public void checkRedIsShow(ChangeViewStateEvent event) {
+
+		if (AccountFragment.tvNewPackagetAction.getVisibility() == View.VISIBLE || AccountFragment.tvNewVersion.getVisibility() == View.VISIBLE)
+			tvRedDot04.setVisibility(View.VISIBLE);
+		else
+			tvRedDot04.setVisibility(View.GONE);
+
+
+	}
+
 
 	private void initBrocast() {
 		LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(showRedDotReceiver, showRedDotIntentFilter());
@@ -282,6 +333,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	}
 
+
+	private void findViewById() {
+		//主界面下栏
+		// bottom_bar_linearLayout = (LinearLayout) findViewById(R.id.bottom_bar_linearLayout);
+		radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
+		//拨打电话下栏
+		phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
+		//隐藏拨号界面控件
+		iv_putaway = (ImageView) findViewById(R.id.iv_putaway);
+		topProgressView = (TopProgressView) findViewById(R.id.topProgressView);
+	}
+
+
 	private static IntentFilter makeGattUpdateIntentFilter() {
 		final IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
@@ -340,7 +404,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			mViewPager.setAdapter(adapter);
 			mViewPager.setOffscreenPageLimit(4);
 		}
-
 	}
 
 	Fragment_Phone phoneFragment;
@@ -457,13 +520,17 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
 		if (!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL, true)) {
-
+			tvRedDot01.setVisibility(View.VISIBLE);
+		} else {
+			tvRedDot01.setVisibility(View.GONE);
 		}
+
 	}
 
 	public void hidePhoneBottomBar() {
-		radiogroup.setVisibility(View.VISIBLE);
-		phone_linearLayout.setVisibility(View.GONE);
+		ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
+		ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
+
 	}
 
 
@@ -500,6 +567,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				switch (position) {
 					case 0:
 						radiogroup.check(R.id.rb_index);
+						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL, true);
 						break;
 					case 1:
 						radiogroup.check(R.id.rb_phone);
@@ -702,7 +770,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						@Override
 						public void run() {
 							e("开启线程=");
-							SdkAndBluetoothDataInchange.isHasPreData=false;
+							SdkAndBluetoothDataInchange.isHasPreData = false;
 							if (sdkAndBluetoothDataInchange == null) {
 								sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
 							}
@@ -713,7 +781,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 								DBHelp dbHelp = new DBHelp(ProMainActivity.instance);
 								PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
 								if (preReadEntity != null) {
-									SdkAndBluetoothDataInchange.isHasPreData=true;
+									SdkAndBluetoothDataInchange.isHasPreData = true;
 									initPre(preReadEntity);
 									registerSimPreData();
 								} else {
@@ -727,11 +795,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
+			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
+			String versionStr = SharedUtils.getInstance().readString(Constant.BRACELETVERSION);
+			if (versionStr != null) {
+				if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(versionStr)) {
+					Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
+					mHandler.sendEmptyMessage(1);
 
-			Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
+				} else {
+					Log.d("__aixiaoqi", "rightComplete: " + "已经是最新的");
+				}
+			}
 		}
 
 	}
+
 
 	private void initPre(PreReadEntity preReadEntity) {
 		SocketConstant.REGISTER_STATUE_CODE = 2;
@@ -873,7 +951,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				break;
 			case SocketConstant.REGISTER_CHANGING:
 				double percent = entity.getProgressCount();
-				if (topProgressView.getVisibility() != View.VISIBLE&&SocketConstant.REGISTER_STATUE_CODE != 3) {
+				if (topProgressView.getVisibility() != View.VISIBLE && SocketConstant.REGISTER_STATUE_CODE == 3) {
 					topProgressView.setVisibility(View.VISIBLE);
 					topProgressView.setContent(getString(R.string.registing));
 					topProgressView.setOnClickListener(new View.OnClickListener() {
@@ -1189,6 +1267,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public boolean onLongClick(View view) {
 		phoneFragment.clearInputEdit();
 		return false;
+	}
+
+	//空中升级
+	private void skyUpgradeHttp() {
+		Log.e(TAG, "skyUpgradeHttp");
+		int DeviceType = 0;
+		String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+		if (!TextUtils.isEmpty(braceletname)) {
+			if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
+				DeviceType = 0;
+			} else {
+				DeviceType = 1;
+			}
+			createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
+		}
+
 	}
 
 

@@ -1,9 +1,11 @@
 package de.blinkt.openvpn.activities;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -83,6 +85,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	private String bracelettype;
 	//设备名称：类型不同名称不同，分别有【unitoys、unibox】
 	private String bluetoothName = Constant.UNITOYS;
+	private final int REQUEST_ENABLE_BT =2 ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +122,27 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		deviceSet = new HashSet<>();
 		mHandler = new Handler();
 		findDeviceHandler = new Handler();
-		scanLeDevice(true);
-		setAnimation();
+		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+		startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case REQUEST_ENABLE_BT:
+				if (resultCode == Activity.RESULT_OK) {
+					setAnimation();
+					scanLeDevice(true);
+				} else {
+					Log.d(TAG, "蓝牙未打开");
+					finish();
+				}
+				break;
+			default:
+				Log.e(TAG, "wrong request code");
+				break;
+		}
 	}
 
 	private void setAnimation() {
@@ -326,6 +348,13 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 					new Handler().postDelayed(new Runnable() {
 						@Override
 						public void run() {
+							Intent intent = new Intent(BindDeviceActivity.this, MyDeviceActivity.class);
+							String type = getIntent().getStringExtra(MyDeviceActivity.BRACELETTYPE);
+							String blueStatus = getIntent().getStringExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN);
+							intent.putExtra(MyDeviceActivity.BRACELETTYPE, type);
+							intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, blueStatus);
+							SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE, type);
+							startActivity(intent);
 							finish();
 						}
 					}, 2000);

@@ -150,7 +150,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		editSmsImageView=null;
+		editSmsImageView = null;
 		getActivity().unregisterReceiver(mNotifyReceiver);
 	}
 
@@ -212,31 +212,33 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 				smsListHttp();
 				break;
 			case R.id.editSmsImageView:
-				if (!smsListAdapter.isDeleteState()) {
-					//友盟方法统计
-					MobclickAgent.onEvent(getActivity(), CLICKEDITSMS);
-					Intent intent = new Intent(getActivity(), SMSAcivity.class);
-					startActivity(intent);
-				} else {
-					Iterator<SmsEntity> iter = ids.iterator();
-					ArrayList<String> fms = new ArrayList<>();
-					while (iter.hasNext()) {
-						SmsEntity entity = iter.next();
-						if (entity.isCheck()) {
-							if (TextUtils.isEmpty(entity.getRealName())) {
-								if (!User.isCurrentUser(entity.getFm())) {
-									fms.add(entity.getFm());
+				if(!CommonTools.isFastDoubleClick(3000)) {
+					if (!smsListAdapter.isDeleteState()) {
+						//友盟方法统计
+						MobclickAgent.onEvent(getActivity(), CLICKEDITSMS);
+						Intent intent = new Intent(getActivity(), SMSAcivity.class);
+						startActivity(intent);
+					} else {
+						Iterator<SmsEntity> iter = ids.iterator();
+						ArrayList<String> fms = new ArrayList<>();
+						while (iter.hasNext()) {
+							SmsEntity entity = iter.next();
+							if (entity.isCheck()) {
+								if (TextUtils.isEmpty(entity.getRealName())) {
+									if (!User.isCurrentUser(entity.getFm())) {
+										fms.add(entity.getFm());
+									} else {
+										fms.add(entity.getTo());
+									}
 								} else {
-									fms.add(entity.getTo());
+									fms.add(entity.getRealName());
 								}
-							} else {
-								fms.add(entity.getRealName());
 							}
 						}
+						if (fms.size() > 0)
+							CreateHttpFactory.instanceHttp(SmsFragment.this, HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TELS, new Gson().toJson(new SmsIdsEntity(fms, null)));
+						CommonTools.showShortToast(getActivity(), "删除这些短信：" + new Gson().toJson(new SmsIdsEntity(fms, null)));
 					}
-					if (fms.size() > 0)
-						CreateHttpFactory.instanceHttp(SmsFragment.this, HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TELS, new Gson().toJson(new SmsIdsEntity(fms, null)));
-					CommonTools.showShortToast(getActivity(), "删除这些短信：" + new Gson().toJson(new SmsIdsEntity(fms, null)));
 				}
 				break;
 		}
@@ -365,11 +367,13 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TELS) {
 
 			if (object.getStatus() == 1) {
-				Iterator<SmsEntity> iter
-						= ids.iterator();
-				while (iter.hasNext()) {
-					smsListAdapter.remove(iter.next().getPosition());
-				}
+//				Iterator<SmsEntity> iter
+//						= ids.iterator();
+//				while (iter.hasNext()) {
+//					smsListAdapter.remove(iter.next().getPosition());
+//				}
+//				smsListAdapter.notifyDataSetChanged();
+				onRefresh();
 			} else {
 				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), object.getMsg());
 			}
