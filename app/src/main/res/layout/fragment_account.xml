@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
     <de.blinkt.openvpn.views.TitleBar
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/padding_50dp" />
+        android:layout_height="@dimen/padding_50dp"/>
 
 
     <ScrollView
@@ -29,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_alignParentStart="true"
-                android:background="@color/blue_title" />
+                android:background="@color/blue_title"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,7 +56,7 @@
                         android:drawablePadding="@dimen/padding"
                         android:drawableRight="@drawable/edit_info"
                         android:text="@string/unset_name"
-                        android:textSize="@dimen/little_14" />
+                        android:textSize="@dimen/little_14"/>
 
                     <TextView
                         android:id="@+id/accountPhoneTextView"
@@ -66,12 +67,12 @@
                         android:layout_marginBottom="@dimen/padding_15dp"
                         android:text="@string/no_data_show"
                         android:textColor="@color/gray_text"
-                        android:textSize="@dimen/little_14" />
+                        android:textSize="@dimen/little_14"/>
 
 
                 </RelativeLayout>
 
-                <View style="@style/horizontal_line_view" />
+                <View style="@style/horizontal_line_view"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -100,7 +101,7 @@
                             android:drawableLeft="@drawable/balance_icon"
                             android:drawablePadding="@dimen/padding_10dp"
                             android:text="@string/balance"
-                            android:textSize="15sp" />
+                            android:textSize="15sp"/>
 
                         <TextView
                             android:id="@+id/rechargeTextView"
@@ -111,11 +112,11 @@
                             android:gravity="center"
                             android:text="@string/recharge"
                             android:textColor="@drawable/blue_btn_click_color_selecor"
-                            android:textSize="@dimen/little_12" />
+                            android:textSize="@dimen/little_12"/>
 
                     </RelativeLayout>
 
-                    <View style="@style/horizontal_line_view" />
+                    <View style="@style/horizontal_line_view"/>
 
                     <TextView
                         android:id="@+id/billtv"
@@ -131,14 +132,14 @@
                         android:paddingRight="@dimen/padding_15dp"
                         android:paddingTop="@dimen/padding_10dp"
                         android:text="@string/bill"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"/>
 
                 </LinearLayout>
 
 
                 <View
                     style="@style/horizontal_line_view"
-                    android:layout_marginTop="@dimen/padding_5dp" />
+                    android:layout_marginTop="@dimen/padding_5dp"/>
 
                 <RelativeLayout
                     android:id="@+id/activateRelativeLayout"
@@ -160,7 +161,7 @@
                             android:drawableLeft="@drawable/activate_device_account"
                             android:drawablePadding="@dimen/padding_10dp"
                             android:text="@string/activate_packet"
-                            android:textColor="@color/gray_text" />
+                            android:textColor="@color/gray_text"/>
 
                     </RelativeLayout>
 
@@ -178,16 +179,17 @@
                             android:padding="12dp"
                             android:text="@string/package_surplus_detail"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"/>
+
                         <TextView
                             android:id="@+id/tv_new_packaget_action"
-                            android:layout_toRightOf="@+id/tv_packaget_detail"
-                            android:layout_alignBaseline="@+id/tv_packaget_detail"
-                            android:textColor="@color/white"
                             android:layout_width="wrap_content"
-                            android:textSize="@dimen/little_10"
                             android:layout_height="wrap_content"
-                            android:text="@string/find_new_package"/>
+                            android:layout_alignBaseline="@+id/tv_packaget_detail"
+                            android:layout_toRightOf="@+id/tv_packaget_detail"
+                            android:text="@string/find_new_package"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/little_10"/>
 
                         <TextView
                             android:id="@+id/going_buy"
@@ -198,12 +200,12 @@
                             android:paddingRight="12dp"
                             android:paddingTop="12dp"
                             android:text="@string/going_buy"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"/>
 
                         <View
                             android:id="@+id/line1"
                             style="@style/horizontal_line_view"
-                            android:layout_below="@id/going_buy" />
+                            android:layout_below="@id/going_buy"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -235,7 +237,7 @@
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"/>
                             </RelativeLayout>
 
                             <View
@@ -243,27 +245,29 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/padding_15dp"
                                 android:layout_marginTop="15dp"
-                                android:background="@drawable/vertical_dotted_line" />
+                                android:background="@drawable/vertical_dotted_line"/>
 
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding_15dp"
                                 android:layout_weight="1">
+
                                 <TextView
                                     android:id="@+id/tv_flow_state_dot"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone"
                                     android:layout_marginLeft="@dimen/padding_20dp"
-                                    android:drawableRight="@drawable/red_dot"/>
+                                    android:drawableRight="@drawable/red_dot"
+                                    android:visibility="gone"/>
+
                                 <TextView
                                     android:id="@+id/flow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="15dp"
                                     android:text="@string/flow_count"
-                                    android:textColor="@color/white" />
+                                    android:textColor="@color/white"/>
 
                                 <TextView
                                     android:id="@+id/flow_count"
@@ -275,7 +279,7 @@
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"/>
                             </RelativeLayout>
 
                             <View
@@ -283,7 +287,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/padding_15dp"
                                 android:layout_marginTop="15dp"
-                                android:background="@drawable/vertical_dotted_line" />
+                                android:background="@drawable/vertical_dotted_line"/>
 
                             <RelativeLayout
                                 android:layout_width="0dp"
@@ -297,7 +301,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="15dp"
                                     android:text="@string/all_package_count"
-                                    android:textColor="@color/white" />
+                                    android:textColor="@color/white"/>
 
                                 <TextView
                                     android:id="@+id/package_all_count"
@@ -307,7 +311,7 @@
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"/>
                             </RelativeLayout>
                         </LinearLayout>
                     </RelativeLayout>
@@ -336,7 +340,7 @@
                             android:drawableLeft="@drawable/add_device"
                             android:drawablePadding="@dimen/padding_10dp"
                             android:text="@string/add_device"
-                            android:textColor="@color/gray_text" />
+                            android:textColor="@color/gray_text"/>
 
 
                     </RelativeLayout>
@@ -354,18 +358,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="12dp"
-                            android:text="@string/unibox_key"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            tools:text="@string/unibox_key"/>
+
                         <TextView
                             android:id="@+id/tv_new_version"
-                            android:layout_toRightOf="@+id/deviceNameTextView"
-                            android:layout_alignBaseline="@+id/deviceNameTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@+id/deviceNameTextView"
+                            android:layout_toRightOf="@+id/deviceNameTextView"
+                            android:text="@string/find_new_version"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/little_10"
-                            android:text="@string/find_new_version"/>
+                            android:textSize="@dimen/little_10"/>
 
                         <TextView
                             android:id="@+id/unBindTextView"
@@ -376,12 +381,12 @@
                             android:paddingRight="12dp"
                             android:paddingTop="12dp"
                             android:text="@string/remove_bind_under_line"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"/>
 
                         <View
                             android:id="@+id/addDeviceLine"
                             style="@style/horizontal_line_view"
-                            android:layout_below="@id/deviceNameTextView" />
+                            android:layout_below="@id/deviceNameTextView"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -400,7 +405,7 @@
                                     android:layout_marginTop="15dp"
                                     android:paddingLeft="@dimen/padding_15dp"
                                     android:text="@string/power"
-                                    android:textColor="@color/white" />
+                                    android:textColor="@color/white"/>
 
                                 <TextView
                                     android:id="@+id/powerTextView"
@@ -412,7 +417,7 @@
                                     android:text="----"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"/>
                             </RelativeLayout>
 
                             <View
@@ -420,7 +425,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/padding_15dp"
                                 android:layout_marginTop="15dp"
-                                android:background="@drawable/vertical_dotted_line" />
+                                android:background="@drawable/vertical_dotted_line"/>
 
                             <RelativeLayout
                                 android:layout_width="0dp"
@@ -429,12 +434,12 @@
 
                                 <TextView
                                     android:id="@+id/tv_red_device_state"
-                                    android:layout_marginTop="@dimen/padding_15dp"
-                                    android:layout_marginLeft="@dimen/padding_10dp"
                                     android:layout_width="wrap_content"
-                                    android:visibility="gone"
                                     android:layout_height="wrap_content"
-                                    android:drawableLeft="@drawable/red_dot" />
+                                    android:layout_marginLeft="@dimen/padding_10dp"
+                                    android:layout_marginTop="@dimen/padding_15dp"
+                                    android:drawableLeft="@drawable/red_dot"
+                                    android:visibility="gone"/>
 
                                 <ImageView
                                     android:id="@+id/signalIconImageView"
@@ -442,7 +447,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/padding_15dp"
                                     android:layout_marginTop="20dp"
-                                    android:background="@drawable/unregist" />
+                                    android:background="@drawable/unregist"/>
 
                                 <TextView
                                     android:id="@+id/operatorTextView"
@@ -454,7 +459,7 @@
                                     android:text="----"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"/>
                             </RelativeLayout>
 
 
@@ -470,7 +475,7 @@
 
                 <View
                     style="@style/horizontal_line_view"
-                    android:layout_marginTop="@dimen/padding_5dp" />
+                    android:layout_marginTop="@dimen/padding_5dp"/>
 
                 <TextView
                     android:id="@+id/permission_set"
@@ -484,10 +489,10 @@
                     android:paddingLeft="@dimen/padding_15dp"
                     android:paddingRight="@dimen/padding_15dp"
                     android:text="@string/permission_set"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
 
-                <View style="@style/horizontal_line_view" />
+                <View style="@style/horizontal_line_view"/>
 
                 <TextView
                     android:id="@+id/tv_setting"
@@ -501,13 +506,13 @@
                     android:paddingLeft="@dimen/padding_15dp"
                     android:paddingRight="@dimen/padding_15dp"
                     android:text="@string/setting"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
-                <View style="@style/horizontal_line_view" />
+                <View style="@style/horizontal_line_view"/>
 
                 <View
                     style="@style/horizontal_line_view"
-                    android:layout_marginTop="15dp" />
+                    android:layout_marginTop="15dp"/>
             </LinearLayout>
 
 
@@ -517,7 +522,7 @@
                 android:layout_height="70dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/default_head" />
+                android:background="@drawable/default_head"/>
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

@@ -624,6 +624,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				SharedUtils.getInstance().delete(Constant.IMEI);
 				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 				SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
+				percentInt = 0;
 				ReceiveBLEMoveReceiver.nullCardId = null;
 				BluetoothConstant.IS_BIND = false;
 				//判断是否再次重连的标记

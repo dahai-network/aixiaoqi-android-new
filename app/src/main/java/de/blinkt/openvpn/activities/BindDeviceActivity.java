@@ -351,9 +351,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 						public void run() {
 							Intent intent = new Intent(BindDeviceActivity.this, MyDeviceActivity.class);
 							String type = getIntent().getStringExtra(MyDeviceActivity.BRACELETTYPE);
-							String blueStatus = getIntent().getStringExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN);
 							intent.putExtra(MyDeviceActivity.BRACELETTYPE, type);
-							intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, blueStatus);
+							intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
 							SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE, type);
 							startActivity(intent);
 							finish();
@@ -469,5 +468,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			}
 		}
 	}
+
 
 }
