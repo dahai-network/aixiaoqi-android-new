@@ -5,9 +5,9 @@
     <solid android:color="@color/colorf_FF5252"></solid>
     <!-- 矩形的圆角半径 -->
     <size
-        android:width="46dp"
-        android:height="25dp" />
-    <corners android:radius="12.5dp" />
+        android:width="60dp"
+        android:height="32dp" />
+    <corners android:radius="16dp" />
 
 
 </shape>
