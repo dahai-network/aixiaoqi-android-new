@@ -115,6 +115,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			bluetoothName = Constant.UNIBOX;
 			search_bluetooth.setText(getString(R.string.searching_unibox_strap));
 			tip_search.setText(getString(R.string.please_makesure_bind));
+			uniImageView.setBackgroundResource(R.drawable.pic_sdw);
 		} else {
 			bluetoothName = Constant.UNITOYS;
 		}
