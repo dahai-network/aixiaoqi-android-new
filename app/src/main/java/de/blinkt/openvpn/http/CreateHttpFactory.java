@@ -119,9 +119,6 @@ public class CreateHttpFactory {
 			case  HttpConfigUrl.COMTYPE_GET_PRODUCTS://获取产品信息
                 startHttp(new GetProductHttp(interfaceCallback, cmdType,params));
                 break;
-            case  HttpConfigUrl.COMTYPE_GET_SELECT_NUMBER_URL://获取选择号码
-                startHttp(new GetSelectPhoneNumberUrl(interfaceCallback, cmdType));
-                break;
             case  HttpConfigUrl.COMTYPE_ISBIND_DEVICE://获取选择号码
                 startHttp(new IsBindHttp(interfaceCallback, cmdType,params));
                 break;

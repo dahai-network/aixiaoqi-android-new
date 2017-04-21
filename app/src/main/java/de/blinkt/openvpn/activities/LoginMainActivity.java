@@ -62,9 +62,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 	private EditText usernameEdit;
 	private EditText pwdEdit;
 	private TextView registTextView;
-	private CheckBox hindPswCheckBox;
-	//是否打开密码隐藏
-	private boolean isOpenHind = true;
 	private TextView forgetPswTextView;
 	private LinearLayout loginLinearLayout;
 	private TextView loginPasswordTextView;

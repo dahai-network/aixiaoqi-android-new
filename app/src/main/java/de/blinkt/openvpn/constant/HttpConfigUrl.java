@@ -87,7 +87,6 @@ public class HttpConfigUrl {
 	public static final String ADD_SELECT_NUMBER_INFO ="OrderByZCSelectionNumber/Add";
 	public static final String BIND_GIFT ="GiftCard/Bind";
 	public static final String ACTIVATE_KINGCARD ="Order/ActivationKindCard";
-	public static final String GET_SELECT_NUMBER_URL ="Config/getDWKUrl";
 	public static final String CHECK_IS_HAVE_PACKET ="Order/CheckUsedExistByPageCategory";
 	public static final String GET_SECURITY_CONFIG ="Config/GetSecurityConfig";
 	public static final String GET_DEVICE_SIM_REG_STATUES ="DeviceBracelet/GetRegStatus";
@@ -140,7 +139,7 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_GET_LOCATION_LIST=0x0048;
 	public static final int COMTYPE_GET_SELECT_NUMBER=0x0049;
 	public static final int COMTYPE_ADD_SELECT_NUMBER_INFO=0x0050;
-	public static final int  COMTYPE_GET_SELECT_NUMBER_URL =0x0051;
+
 	public static final int  COMTYPE_BLACK_LIST_ADD =0x0055;
 	public static final int  COMTYPE_BLACK_LIST_DELETE =0x0056;
 	public static final int  COMTYPE_BLACK_LIST_GET =0x0057;
