@@ -1,5 +1,8 @@
 package de.blinkt.openvpn.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -8,6 +11,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 
 /**
  * Created by Administrator on 2017/4/19 0019.
@@ -22,11 +26,28 @@ public class OutsideFourStepActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outside_item04);
         ButterKnife.bind(this);
-        hasLeftViewTitle(R.string.outside_use_guide,0);
+        hasAllViewTitle(R.string.outside_use_guide,R.string.close, R.string.last_step,false);
+    }
+
+    @Override
+    protected void onClickRightView() {
+        setResult(200);
+        onBackPressed();
     }
 
     @OnClick(R.id.outside_step_four_bt)
     public void onClick() {
+			Intent intent = new Intent(application.getApplicationContext(), LaunchActivity.class);
+
+
+			PendingIntent restartIntent = PendingIntent.getActivity(
+					application.getApplicationContext(), 0, intent,
+					Intent.FLAG_ACTIVITY_NEW_TASK);
+			//退出程序
+			AlarmManager mgr = (AlarmManager)application.getSystemService(ALARM_SERVICE);
+			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
+					restartIntent); // 1秒钟后重启应用
+        application.AppExit();
 
     }
 }

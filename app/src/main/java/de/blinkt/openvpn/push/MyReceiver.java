@@ -94,7 +94,7 @@ public class MyReceiver extends BroadcastReceiver {
 					String   ID = jsonObject.get("ID").getAsString();
 					if(!ID.equals(SharedUtils.getInstance().readString(IntentPutKeyConstant.PRODUCT_ID))){
 						SharedUtils.getInstance().writeString(IntentPutKeyConstant.PRODUCT_ID,ID);
-						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL,false);
+						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL,true);
 						if(ProMainActivity.isForeground){
 							Intent showIntent = new Intent(ProMainActivity.MALL_SHOW_RED_DOT);
 							context.sendBroadcast(showIntent);
