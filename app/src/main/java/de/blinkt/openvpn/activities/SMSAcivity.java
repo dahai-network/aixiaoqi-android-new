@@ -761,6 +761,8 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 				}
 				smsDetailAdapter.notifyDataSetChanged();*/
 				onRefresh();
+				smsDetailAdapter.setDeleteState(false);
+				smsDetailAdapter.notifyDataSetChanged();
 			}
 		}
 	}
