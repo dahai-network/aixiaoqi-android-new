@@ -39,7 +39,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:background="@drawable/green_btn_click"
-        android:text="@string/i_know"
+        android:text="@string/reset"
         android:textColor="@android:color/white"
         android:layout_marginBottom="@dimen/padding_20dp"
         android:textSize="@dimen/little_16"/>

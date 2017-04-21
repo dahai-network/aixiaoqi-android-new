@@ -212,7 +212,7 @@ public class CreateHttpFactory {
             case  HttpConfigUrl.COMTYPE_BLACK_LIST_DELETE://获取选择号码
                 startHttp(new BlackListDeleteHttp(interfaceCallback,cmdType,params));
                 break;
-            case  HttpConfigUrl.COMTYPE_BLACK_LIST_GET://获取选择号码
+            case  HttpConfigUrl.COMTYPE_BLACK_LIST_GET://获取黑名单
                 startHttp(new BlackListGetHttp(interfaceCallback,cmdType));
                 break;
             case  HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING://获取选择号码
