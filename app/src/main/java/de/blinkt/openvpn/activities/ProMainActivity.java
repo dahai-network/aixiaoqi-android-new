@@ -50,6 +50,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.FragmentAdapter;
+import cn.com.johnson.model.AppMode;
 import cn.com.johnson.model.ChangeViewStateEvent;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
@@ -637,6 +638,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
     @Override
     protected void onDestroy() {
+
         LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
         LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
         unregisterReceiver(screenoffReceive);
@@ -1022,6 +1024,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
         });
     }
+
 
     private int bindtime = 0;
 
