@@ -12,58 +12,66 @@ import android.view.MotionEvent;
 
 public class MyViewPager extends ViewPager {
 
-    /**是否禁止左右滑动，true为禁止，false为不禁止*/
-
-
-    public boolean noScroll = false;
-
-    public void setScrollorNoScroll(boolean noScroll)
-    {
-        this.noScroll=noScroll;
-
+    /*private boolean isScroll=true;
+    public MyViewPager(Context context) {
+        super(context);
     }
 
     public MyViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
+    */
+    /**
+     * @param isScroll 是否滑动（true 滑动，false 禁止）
+     *//*
+    public void setScroll(boolean isScroll){
+        this.isScroll=isScroll;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (isScroll) {
+            return super.onTouchEvent(ev);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (isScroll) {
+            return super.onInterceptTouchEvent(ev);
+        } else {
+            return false;
+        }
+    }
+*/
+    private boolean scrollble = true;
+
     public MyViewPager(Context context) {
         super(context);
     }
 
-    public void setNoScroll(boolean noScroll) {
-        this.noScroll = noScroll;
+    public MyViewPager(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
-    @Override
-    public void scrollTo(int x, int y) {
-        super.scrollTo(x, y);
-    }
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouchEvent(MotionEvent arg0) {
-        if (noScroll)
-            return false;
-        else
-            return super.onTouchEvent(arg0);
-    }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent arg0) {
-        if (noScroll)
-            return false;
-        else
-            return super.onInterceptTouchEvent(arg0);
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (!scrollble) {
+            return true;
+        }
+        return super.onTouchEvent(ev);
     }
 
-    @Override
-    public void setCurrentItem(int item, boolean smoothScroll) {
-        super.setCurrentItem(item, smoothScroll);
+
+    public boolean isScrollble() {
+        return scrollble;
     }
 
-    @Override
-    public void setCurrentItem(int item) {
-        super.setCurrentItem(item);
+    public void setScrollble(boolean scrollble) {
+        this.scrollble = scrollble;
     }
-
 }

@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +21,8 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -27,6 +30,8 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.util.ViewUtil;
+import de.blinkt.openvpn.views.MyViewPager;
+import de.blinkt.openvpn.views.contact.TouchableRecyclerView;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLEPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLESMS;
@@ -45,7 +50,7 @@ public class CellPhoneFragment extends Fragment {
 
     private ArrayList<Fragment> fragments = new ArrayList<>();
     Activity activity;
-    ViewPager mViewPager;
+    MyViewPager mViewPager;
     //悬浮按钮
     public static ImageView floatingActionButton;
     public static boolean isForeground = false;
@@ -118,7 +123,7 @@ public class CellPhoneFragment extends Fragment {
         //拨打电话标题
         dial_tittle_fl = (TextView) view.findViewById(R.id.dial_tittle_tv);
         message_rb = ((RadioButton) view.findViewById(R.id.message_rb));
-        mViewPager = (ViewPager) view.findViewById(R.id.mViewPager);
+        mViewPager = (MyViewPager) view.findViewById(R.id.mViewPager);
 
         //悬浮按钮
         floatingActionButton = (ImageView) view.findViewById(R.id.floatingActionButton);
@@ -224,10 +229,10 @@ public class CellPhoneFragment extends Fragment {
 /**
  * 监听ViewPage的状态变化，控制是否滑动
  */
-        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+     mViewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
+               switch (event.getAction()) {
                     case MotionEvent.ACTION_MOVE:
                         mViewPager.requestDisallowInterceptTouchEvent(false);
                         break;
@@ -237,9 +242,11 @@ public class CellPhoneFragment extends Fragment {
                         break;
                 }
                 if (dial_tittle_fl.getVisibility() == View.VISIBLE) {
-
+                    mViewPager.setScrollble(false);
                     return true;
+
                 } else {
+                    mViewPager.setScrollble(true);
                     return false;
                 }
 

@@ -50,9 +50,6 @@
                 android:text="拨打"
                 android:textColor="@color/white"
                 android:textSize="@dimen/little_18" />
-
-
-
     </RelativeLayout>
 
 
