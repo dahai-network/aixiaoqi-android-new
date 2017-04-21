@@ -80,7 +80,7 @@ public class OutsideSecondStepActivity extends BaseActivity {
         if("263".equals(apnName)){
             outsideItem02Iv.setBackgroundResource(R.drawable.outside_item02);
         }else if("263.cs101".equals(apnName)){
-            outsideItem02Iv.setBackgroundResource(R.drawable.outside_item02);
+            outsideItem02Iv.setBackgroundResource(R.drawable.outside_seconde_apn_263cs101);
         }else if("3gnet".equals(apnName)){
             outsideItem02Iv.setBackgroundResource(R.drawable.outside_second_apn_3gnet);
         }
