@@ -65,8 +65,6 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	public static ImageView editSmsImageView;
 	private int requestNetCount = 0;
 	TextView noDataTextView;
-
-	public static boolean isForeground = false;
 	public static final String NOTIFY_RECEIVED_ACTION = "NOTIFY_RECEIVED_ACTION";
 	public static final String DELTE_MESSAGE = "DELTE_MESSAGE";
 	//储存需要删除的item
@@ -106,7 +104,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (NOTIFY_RECEIVED_ACTION.equals(intent.getAction())) {
-				if (!isForeground)
+
 					onRefresh();
 			} else if (DELTE_MESSAGE.equals(intent.getAction())) {
 				if (mAllTempLists != null && clickPosition != -1 && smsListAdapter != null) {
@@ -121,8 +119,6 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
-		isForeground = isVisibleToUser;
-
 
 	}
 
