@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
+import cn.com.johnson.model.AppMode;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import cn.qfishphone.sipengine.SipEngineCore;
@@ -242,6 +243,9 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		AppMode.getInstance().isClickAddDevice=false;
+		AppMode.getInstance().isClickPackage=false;
+
 		if (handler != null && handler.getLooper() == Looper.getMainLooper()) {
 			handler.removeCallbacksAndMessages(null);
 		}

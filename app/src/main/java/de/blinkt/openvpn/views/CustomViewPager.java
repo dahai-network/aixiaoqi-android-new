@@ -12,8 +12,10 @@ import android.view.MotionEvent;
 public class CustomViewPager extends ViewPager {
 
 
+    /**
+     * 是否禁止左右滑动，true为禁止，false为不禁止
+     */
 
-    /**是否禁止左右滑动，true为禁止，false为不禁止*/
     public boolean noScroll = false;
 
     public CustomViewPager(Context context, AttributeSet attrs) {
@@ -32,6 +34,7 @@ public class CustomViewPager extends ViewPager {
     public void scrollTo(int x, int y) {
         super.scrollTo(x, y);
     }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent arg0) {
@@ -58,7 +61,6 @@ public class CustomViewPager extends ViewPager {
     public void setCurrentItem(int item) {
         super.setCurrentItem(item);
     }
-
 
 
 }
