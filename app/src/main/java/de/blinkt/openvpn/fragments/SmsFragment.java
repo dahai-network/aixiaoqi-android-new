@@ -212,7 +212,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 				smsListHttp();
 				break;
 			case R.id.editSmsImageView:
-				if(!CommonTools.isFastDoubleClick(3000)) {
+				if (!CommonTools.isFastDoubleClick(3000)) {
 					if (!smsListAdapter.isDeleteState()) {
 						//友盟方法统计
 						MobclickAgent.onEvent(getActivity(), CLICKEDITSMS);
@@ -224,14 +224,10 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 						while (iter.hasNext()) {
 							SmsEntity entity = iter.next();
 							if (entity.isCheck()) {
-								if (TextUtils.isEmpty(entity.getRealName())) {
-									if (!User.isCurrentUser(entity.getFm())) {
-										fms.add(entity.getFm());
-									} else {
-										fms.add(entity.getTo());
-									}
+								if (!User.isCurrentUser(entity.getFm())) {
+									fms.add(entity.getFm());
 								} else {
-									fms.add(entity.getRealName());
+									fms.add(entity.getTo());
 								}
 							}
 						}
@@ -373,7 +369,10 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 //					smsListAdapter.remove(iter.next().getPosition());
 //				}
 //				smsListAdapter.notifyDataSetChanged();
+				smsListAdapter.setDeleteImage(false);
 				onRefresh();
+				editSmsImageView.setBackground(getResources().getDrawable(R.drawable.edit_sms_selector));
+
 			} else {
 				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), object.getMsg());
 			}

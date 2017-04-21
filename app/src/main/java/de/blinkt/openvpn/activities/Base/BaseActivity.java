@@ -20,7 +20,7 @@ public class BaseActivity extends CommenActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            initActionBar();
+        initActionBar();
     }
 
     private void initActionBar() {
@@ -48,13 +48,16 @@ public class BaseActivity extends CommenActivity {
             titleBar.setLeftBtnText(getString(leftTextId));
         }
     }
+    protected  void leftViewControl(){
+        onBackPressed();
+    }
 
     protected void hasOnlyLeftViewOption() {
         titleBar.getLeftText().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    onBackPressed();
+                    leftViewControl();
                 } catch (Exception e) {
 
                 }

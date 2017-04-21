@@ -85,7 +85,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	private String bracelettype;
 	//设备名称：类型不同名称不同，分别有【unitoys、unibox】
 	private String bluetoothName = Constant.UNITOYS;
-	private final int REQUEST_ENABLE_BT =2 ;
+	private final int REQUEST_ENABLE_BT = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +115,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			bluetoothName = Constant.UNIBOX;
 			search_bluetooth.setText(getString(R.string.searching_unibox_strap));
 			tip_search.setText(getString(R.string.please_makesure_bind));
+			uniImageView.setBackgroundResource(R.drawable.pic_sdw);
 		} else {
 			bluetoothName = Constant.UNITOYS;
 		}

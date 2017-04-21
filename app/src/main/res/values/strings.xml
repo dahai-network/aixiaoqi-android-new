@@ -373,12 +373,16 @@
     <string name="purchase_packet">购买套餐</string>
     <string name="outside_step_one">插电话卡。</string>
     <string name="outside_step_one_content">将爱小器国际卡插入手机中，然后将您的国内电话卡插入到手环中。</string>
+    <string name="inland_step_one_content">将爱小器国际卡从手机取出，然后将您的国内电话卡插回手环中。</string>
     <string name="outside_step_second">增加APN</string>
-    <string name="outside_step_second_content">打开系统的APN设置器,点击新建APN,然后在"名称"和"APN"行输入%1$s,点击保存,最后启用该APN。</string>
-    <string name="outside_step_second_click">增加APN</string>
+    <string name="inland_step_second">删除APN</string>
+    <string name="outside_step_second_content">打开系统的APN设置界面,点击新建APN,然后在"名称"和"APN"行输入%1$s,点击保存,最后启用该APN。</string>
+    <string name="inland_step_second_content">打开系统的APN设置界面,选择名为%1$s的APN,然后删除。</string>
+    <string name="outside_step_second_click">打开APN设置</string>
     <string name="outside_step_third">修改移动网络设置</string>
     <string name="set_move_net">设置移动网络</string>
     <string name="outside_step_third_content">点击按钮会跳转到系统设置，点击“数据漫游设置”，勾选开启数据漫游</string>
+    <string name="inland_step_third_content">点击按钮会跳转到系统设置，点击“数据漫游设置”，勾选开启数据漫游</string>
     <string name="outside_step_third_two_content">然后点击“首选网络设置”，勾选2/3G</string>
     <string name="outside_step_third_click">设置移动网络</string>
     <string name="outside_step_four">激活套餐后，在境外按以上步骤操作完成后，重启APP，即可免国际漫游在境外上网，接打电话，收发短信</string>
@@ -386,14 +390,6 @@
     <string name="outside_step_four_content">在手机的系统设置的数据漫游管理界面,开启数据漫游</string>
     <string name="outside_step_four_click">打开系统设置</string>
 
-    <string name="outside_step_second_1">删除APN</string>
-    <string name="outside_step_second_content_1">删除系统的APN设置器。</string>
-    <string name="outside_step_third_1">打开4G网络</string>
-    <string name="outside_step_third_content_1">在手机的系统设置的网络连接方式中,打开4G网络</string>
-    <string name="outside_step_four_1">关闭数据漫游</string>
-    <string name="outside_step_four_content_1">在手机的系统设置的数据漫游管理界面,关闭数据漫游</string>
-    <string name="outside_step_five_1">关闭国际免漫游通话,短信功能</string>
-    <string name="outside_step_five_content_1">回国后记得在有网络的情况下关闭该功能,不然回国后手机本身的电话短信功能会有问题</string>
 
 
     <!--激活套餐-->
@@ -663,5 +659,6 @@
     <string name="complete_next">已完成，下一步</string>
 
     <string name="outside_use_guide">出境后使用引导</string>
-    
+    <string name="close">关闭</string>
+    <string name="last_step">上一步</string>
 </resources>
