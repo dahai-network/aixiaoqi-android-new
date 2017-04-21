@@ -382,11 +382,10 @@
     <string name="outside_step_third">修改移动网络设置</string>
     <string name="set_move_net">设置移动网络</string>
     <string name="outside_step_third_content">点击按钮会跳转到系统设置，点击“数据漫游设置”，勾选开启数据漫游</string>
-    <string name="inland_step_third_content">点击按钮会跳转到系统设置，点击“数据漫游设置”，勾选开启数据漫游</string>
+    <string name="inland_step_third_content">点击按钮会跳转到系统设置，点击“数据漫游设置”，勾选关闭数据漫游</string>
     <string name="outside_step_third_two_content">然后点击“首选网络设置”，勾选2/3G</string>
     <string name="outside_step_third_click">设置移动网络</string>
     <string name="outside_step_four">激活套餐后，在境外按以上步骤操作完成后，重启APP，即可免国际漫游在境外上网，接打电话，收发短信</string>
-    <string name="i_know">我知道了</string>
     <string name="outside_step_four_content">在手机的系统设置的数据漫游管理界面,开启数据漫游</string>
     <string name="outside_step_four_click">打开系统设置</string>
 

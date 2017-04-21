@@ -167,8 +167,10 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 
 		if (isBlackList) {
 			topDrawable = getResources().getDrawable(R.drawable.defriended);
+			defriendTv.setTextColor(getResources().getColor(R.color.gray_text));
 		} else {
 			topDrawable = getResources().getDrawable(R.drawable.defriend_selector);
+			defriendTv.setTextColor(getResources().getColor(R.color.color_00a0e9));
 		}
 		if (topDrawable != null) {
 			topDrawable.setBounds(0, 0, topDrawable.getMinimumWidth(), topDrawable.getMinimumHeight());

@@ -17,7 +17,6 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
@@ -39,6 +38,8 @@ public class OutsideThirdStepActivity extends BaseActivity {
     Button activateTextView;
     @BindView(R.id.outside_item03_up)
     ImageView outsideItem03Up;
+    @BindView(R.id.outside_step_third_content_tv)
+    TextView outsideStepThirdContentTv;
     private String statuString;
     boolean isSupport4G;
 
@@ -47,7 +48,7 @@ public class OutsideThirdStepActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outside_item03);
         ButterKnife.bind(this);
-        hasAllViewTitle(R.string.outside_use_guide,R.string.close, R.string.last_step,false);
+        hasAllViewTitle(R.string.outside_use_guide, R.string.close, R.string.last_step, false);
         initData();
         if (!isOutsideThirdStepClick) {
             activateTextView.setBackgroundResource(R.drawable.circle_gray_ret);
@@ -60,8 +61,9 @@ public class OutsideThirdStepActivity extends BaseActivity {
 
         if (!IntentPutKeyConstant.OUTSIDE.equals(statuString)) {
             outsideItem03Up.setImageResource(R.drawable.close_net);
-            outsideStepThirdTwoContentTv.setText(getString(R.string.inland_step_third_content));
+            outsideStepThirdContentTv.setText(getString(R.string.inland_step_third_content));
             outsideItem03Down.setVisibility(View.GONE);
+            activateTextView.setText(getString(R.string.complete));
             outsideStepThirdTwoContentTv.setVisibility(View.GONE);
         }
     }
@@ -85,25 +87,28 @@ public class OutsideThirdStepActivity extends BaseActivity {
                 }
                 break;
             case R.id.activateTextView:
-                if(IntentPutKeyConstant.OUTSIDE.equals(statuString)){
-                    startActivityForResult(new Intent(this,OutsideFourStepActivity.class),100);
-                }else{
+                if (IntentPutKeyConstant.OUTSIDE.equals(statuString)) {
+                    startActivityForResult(new Intent(this, OutsideFourStepActivity.class), 100);
+                } else {
+                    setResult(200);
                     finish();
                 }
                 break;
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        e("requestCode="+requestCode+"  ,resultCode="+resultCode);
-        switch (resultCode){
+        e("requestCode=" + requestCode + "  ,resultCode=" + resultCode);
+        switch (resultCode) {
             case 200:
                 setResult(200);
                 onBackPressed();
                 break;
         }
     }
+
     @Override
     protected void onStop() {
         super.onStop();

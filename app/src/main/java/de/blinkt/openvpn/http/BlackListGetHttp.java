@@ -30,7 +30,8 @@ public class BlackListGetHttp extends BaseHttp {
     }
 
     @Override
-    protected void parseResult(String response) {
+    protected void parseObject(String response) {
+
         blackListEntities = new Gson().fromJson(response, new TypeToken<List<BlackListEntity>>() {
         }.getType());
     }

@@ -43,7 +43,6 @@ public class OutsideFirstStepActivity extends BaseActivity {
             outsideItem01Up.setImageResource(R.drawable.inland_item01);
             outsideItem01Down.setVisibility(View.GONE);
             outsideStepSecondContentTv.setText(getString(R.string.inland_step_one_content));
-            activateTextView.setText(getString(R.string.complete));
         }
     }
 

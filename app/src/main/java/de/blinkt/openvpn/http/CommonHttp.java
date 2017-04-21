@@ -161,12 +161,15 @@ public abstract class CommonHttp implements Callback, Runnable {
 				return;
 			}
 			String responseBody = response.body().string();
+
 			Gson gson = new Gson();
 			BaseEntry baseEntry = gson.fromJson(responseBody, BaseEntry.class);
+
 			status = baseEntry.getStatus();
 			msg = baseEntry.getMsg();
 			data = baseEntry.getData();
 			if (status == 1) {
+
 				right(gson.toJson(baseEntry.getData()));
 			} else if (status == -999) {
 //				ICSOpenVPNApplication.getInstance().finishAllActivity();
@@ -262,6 +265,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
+
 				parseResult(message);
 			}
 		});
@@ -456,9 +460,10 @@ public abstract class CommonHttp implements Callback, Runnable {
 	private Request getRequest(String expires, String md5, SharedUtils sharedUtils) {
 		Request request;
 		//判断token是否为空
-		if (TextUtils.isEmpty(sharedUtils.readString(Constant.TOKEN)))
+		Log.e("TOKEN","sharedUtils.readString(Constant.TOKEN)="+sharedUtils.readString(Constant.TOKEN));
+		if (TextUtils.isEmpty(sharedUtils.readString(Constant.TOKEN))) {
 			request = new Request.Builder().url(hostUrl_).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.TERMINAL_HEADER, "Android").addHeader(Constant.VERSION_HEADER, CommonTools.getVersion(ICSOpenVPNApplication.getContext())).addHeader(Constant.SIGN, md5).build();
-		else
+		}else
 			request = new Request.Builder().url(hostUrl_).addHeader(Constant.TOKEN, sharedUtils.readString(Constant.TOKEN)).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.TERMINAL_HEADER, "Android").addHeader(Constant.VERSION_HEADER, CommonTools.getVersion(ICSOpenVPNApplication.getContext())).addHeader(Constant.SIGN, md5).build();
 		return request;
 	}

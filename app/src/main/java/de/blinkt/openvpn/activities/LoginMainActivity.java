@@ -360,7 +360,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 					if (!usernameEdit.getText().toString().equals(sharedUtils.readString(Constant.TEL)) || !Constant.JPUSH_ALIAS_SUCCESS.equals(sharedUtils.readString(Constant.JPUSH_ALIAS))) {
 						setAlias();
 					}
-					createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_GET);
+
 					createHttpRequest(HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
 				}
 			} else {
@@ -384,10 +384,8 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				e(out.getAsteriskIp());
 				e(out.getAsteriskPort());
 				e(out.getPublicPassword());
+				createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_GET);
 
-				startActivity(new Intent(this, ProMainActivity.class));
-
-				finish();
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG) {
 			GetBasicConfigHttp getBasicConfigHttp = (GetBasicConfigHttp) object;
@@ -401,11 +399,15 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		} else if (cmdType == HttpConfigUrl.COMTYPE_BLACK_LIST_GET) {
 			if (object.getStatus() == 1) {
 				BlackListGetHttp blackListGetHttp = (BlackListGetHttp) object;
+				BlackListDBHelp blackListDBHelp = new BlackListDBHelp(this);
+				blackListDBHelp.deleteAllDefriend();
+
 				if (blackListGetHttp.getBlackListEntities().size() != 0) {
-					BlackListDBHelp blackListDBHelp = new BlackListDBHelp(this);
-					blackListDBHelp.deleteAllDefriend();
+
 					blackListDBHelp.insertDefriendList(blackListGetHttp.getBlackListEntities());
 				}
+				startActivity(new Intent(this, ProMainActivity.class));
+				finish();
 			}
 
 		}
