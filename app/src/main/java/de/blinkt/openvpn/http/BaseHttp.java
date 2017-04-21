@@ -1,6 +1,7 @@
 package de.blinkt.openvpn.http;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.HashMap;
 
@@ -60,8 +61,9 @@ public class BaseHttp extends CommonHttp {
 
 	@Override
 	protected void parseResult(String response) {
+		Log.e(TAG, "JSON 日志：" + response);
 		if (!TextUtils.isEmpty(response)) {
-//			Log.e(TAG, "JSON 日志：" + response);
+
 			parseObject(response);
 		}
 		interfaceCallback.rightComplete(cmdType_, this);
