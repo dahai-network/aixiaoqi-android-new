@@ -112,7 +112,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
     TextView rechargeTextView;
     @BindView(R.id.unBindTextView)
     TextView unBindTextView;
-    SharedUtils utils = SharedUtils.getInstance();
     @BindView(R.id.noPacketRelativeLayout)
     RelativeLayout noPacketRelativeLayout;
     @BindView(R.id.PacketRelativeLayout)

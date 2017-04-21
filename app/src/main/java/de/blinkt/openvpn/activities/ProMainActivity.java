@@ -516,7 +516,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         }
 
 
-        if (!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL, true)) {
+        if (SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL)) {
+            e("onResume "+SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL));
 			tvRedDot01.setVisibility(View.VISIBLE);
         }else{
 			tvRedDot01.setVisibility(View.INVISIBLE);
@@ -563,7 +564,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 switch (position) {
                     case 0:
                         radiogroup.check(R.id.rb_index);
-						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL,true);
+						SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.CLICK_MALL,false);
 						tvRedDot01.setVisibility(View.INVISIBLE);
                         break;
                     case 1:
@@ -1128,6 +1129,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         public void onReceive(final Context context, Intent intent) {
             final String action = intent.getAction();
             if (action.equals(MALL_SHOW_RED_DOT)) {
+                e("showRedDotReceiver");
 				tvRedDot01.setVisibility(View.VISIBLE);
             }
 
