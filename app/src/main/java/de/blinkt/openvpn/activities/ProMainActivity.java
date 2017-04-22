@@ -303,15 +303,21 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	public void initServices() {
+
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
 			i("开启UartService");
 			Intent bindIntent = new Intent(this, UartService.class);
-			bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+			try {
+				bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		//启动常驻服务
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(GrayService.class.getName())) {
 			startService(new Intent(this, GrayService.class));
 		}
+
 	}
 
 	private void startSocketService() {
@@ -1154,8 +1160,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					accountFragment.showDeviceSummarized(false);
 					accountFragment.setRegisted(false);
 					topProgressGone();
-				} else {
-					mService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
 				}
 				i("被主动断掉连接！");
 				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
