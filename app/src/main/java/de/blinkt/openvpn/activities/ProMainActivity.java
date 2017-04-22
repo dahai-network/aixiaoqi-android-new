@@ -91,6 +91,8 @@ import de.blinkt.openvpn.views.TopProgressView;
 
 import static cn.com.aixiaoqi.R.string.index_registing;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
+import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
+import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 
@@ -121,10 +123,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public static boolean isDeploy = true;
 	@BindView(R.id.tv_red_dot_01)
 	TextView tvRedDot01;
-	//    @BindView(R.id.tv_red_dot_02)
-//    TextView tvRedDot02;
-//    @BindView(R.id.tv_red_dot_03)
-//    TextView tvRedDot03;
+
 	@BindView(R.id.tv_red_dot_04)
 	TextView tvRedDot04;
 	public static RadioGroup radiogroup;
@@ -768,10 +767,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
 					if (SocketConstant.REGISTER_STATUE_CODE == 2) {
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
-//						return;
+
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 						sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
-//						return;
+
 					}
 					new Thread(new Runnable() {
 						@Override
@@ -794,6 +793,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 								} else {
 									noPreDataStartSDK();
 								}
+							}else{
+								sendMessageToBlueTooth(BASIC_MESSAGE);
 							}
 						}
 					}).start();

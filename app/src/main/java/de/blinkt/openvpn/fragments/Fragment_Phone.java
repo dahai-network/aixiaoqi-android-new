@@ -104,7 +104,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 
     public void phonecallClicked() {
 
-        //Log.d("aixiaoqi____", "phonecallClicked: ");
         if (t9dialpadview.getT9Input() != null && t9dialpadview.getT9Input().length() > 0) {
             contactRecodeEntity = new ContactRecodeEntity();
             contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());

@@ -261,7 +261,7 @@
     <!--版本升级-->
     <string name="strUpgradeDialogFeatureLabel">更新说明</string>
     <string name="no_find_unitoys">未能搜索到爱小器手环</string>
-    <string name="no_find_unibox">未能搜索到爱小器钥匙扣</string>
+    <string name="no_find_unibox">未能搜索到爱小器双待王</string>
     <string name="sure_once_send">确定重发</string>
 
     <!--拨打电话-->
@@ -273,7 +273,7 @@
     <string name="network_phone">网络电话</string>
     <string name="call_phoning" formatted="false">正在与 %s[%s]通话中…</string>
     <string name="sim_register_phone">手环电话</string>
-    <string name="sim_register_phone_tip">手环内SIM未注册成功，请前往设备里边去注册成功在使用</string>
+    <string name="sim_register_phone_tip">设备内SIM未注册成功，请前往设备里边去注册成功在使用</string>
     <!--提交订单-->
     <string name="commit_order">提交订单</string>
     <string name="buy_days">购买天数</string>
@@ -299,7 +299,7 @@
     <string name="input_money_null">输入金额为空,请重新输入</string>
     <string name="input_money_0">输入金额为0,请重新输入</string>
     <string name="custom_money">自定义金额</string>
-    <string name="max_recharge_amount">最大充值余额为5000</string>
+    <string name="max_recharge_amount">最大充值金额为5000</string>
     <!--余额明细-->
     <string name="particulars">余额明细</string>
 
@@ -560,7 +560,7 @@
     <string name="background_start">受保护应用</string>
     <string name="trust_app">信任应用</string>
     <!--选择绑定设备-->
-    <string name="unibox">爱小器钥匙扣</string>
+    <string name="unibox">爱小器双待王</string>
     <string name="unibox_key">双待王</string>
     <string name="unitoy">爱小器</string>
     <string name="package_surplus_detail">套餐剩余详情</string>
