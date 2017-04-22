@@ -28,8 +28,6 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/add_contact_iv"
             android:layout_toRightOf="@id/sms_receive_text"
-            android:overScrollMode="never"
-            android:scrollbars="none"
             >
 
             <LinearLayout
