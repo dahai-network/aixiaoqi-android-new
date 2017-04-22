@@ -13,23 +13,23 @@
     <RelativeLayout
         android:id="@+id/packetDetailRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/padding_100dp"
         android:background="@color/white"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/padding_15dp"
-        android:paddingTop="@dimen/padding_10dp"
        >
 
         <ImageView
+            android:layout_centerVertical="true"
             android:id="@+id/countryImageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center_vertical"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginLeft="5dp"
 
             />
 
         <TextView
+            android:layout_marginTop="@dimen/padding_13dp"
             android:id="@+id/packageNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,6 +49,7 @@
 
         <TextView
             android:id="@+id/priceTextView"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_expirydate"
@@ -79,12 +80,13 @@
         android:layout_height="55dp"
         android:background="@color/white"
         aixiaoqi:pstsIndicatorColor="#00A0E9"
-        aixiaoqi:pstsIndicatorHeight="2dp"
+        aixiaoqi:pstsIndicatorHeight="1dp"
         aixiaoqi:pstsSelectedTabTextColor="#00A0E9"
         aixiaoqi:pstsSelectedTabTextSize="18sp"
         aixiaoqi:pstsShouldExpand="false"
         aixiaoqi:pstsTabTextSize="@dimen/little_16"
         aixiaoqi:pstsTabPaddingLeftRight="@dimen/padding_15dp"
+        aixiaoqi:pstsUnderlineHeight="1dp"
         >
 
     </de.blinkt.openvpn.views.PagerSlidingTabStripExtends>
