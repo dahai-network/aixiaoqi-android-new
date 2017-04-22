@@ -38,10 +38,6 @@ public class EditNameActivity extends BaseNetActivity {
         int id=-1;
         if(type==IntentPutKeyConstant.EDIT_NICKNAME){
             id=R.string.name_title;
-        }else if(type==IntentPutKeyConstant.EDIT_USER_NAME){
-            id=R.string.real_name_title;
-        }else if(type==IntentPutKeyConstant.EDIT_ID_CARD){
-            id=R.string.id_card_title;
         }
         hasAllViewTitle(id,R.string.save,R.string.cancel,false);
 
@@ -54,8 +50,6 @@ public class EditNameActivity extends BaseNetActivity {
             id=R.string.nick_name;
         }else if(type==IntentPutKeyConstant.EDIT_USER_NAME){
             id=R.string.info_name;
-        }else if(type==IntentPutKeyConstant.EDIT_ID_CARD){
-            id=R.string.info_id_crad;
         }
         etNickName.setHint(getResources().getString(id));
     }
@@ -78,9 +72,8 @@ public class EditNameActivity extends BaseNetActivity {
             if(type==IntentPutKeyConstant.EDIT_NICKNAME)
                 CommonTools.showShortToast(this,getString(R.string.name_is_null));
             else if(type==IntentPutKeyConstant.EDIT_USER_NAME){
-                CommonTools.showShortToast(this,getString(R.string.real_name_is_null));
+
             }else if(type==IntentPutKeyConstant.EDIT_ID_CARD){
-                CommonTools.showShortToast(this,getString(R.string.id_card_is_null));
             }
             return;
         }

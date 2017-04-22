@@ -43,8 +43,8 @@ public class LaunchActivity extends BaseActivity {
 					String token = sharedUtils.readString(Constant.TOKEN);
 					Thread.sleep(1000);
 					if(!sharedUtils.readBoolean(IntentPutKeyConstant.IS_START_UP,false)){
-						toActivity(StartUpHomePageActivity.class);
-					}
+					toStartUpHomePage();
+				}
 					else if (!TextUtils.isEmpty(token)) {
 						if (System.currentTimeMillis() - sharedUtils.readLong(Constant.LOGIN_DATA) > (15*60 * 60 * 24 * 1000)){
 							toLogin();
@@ -70,7 +70,11 @@ public class LaunchActivity extends BaseActivity {
 		finish();
 	}
 
+	private void toStartUpHomePage() {
 
+			toActivity(StartUpHomePageActivity.class);
+
+	}
 
 
 

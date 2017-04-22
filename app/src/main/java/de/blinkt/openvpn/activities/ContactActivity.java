@@ -42,7 +42,6 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
     List<ContactBean> mAllLists=new ArrayList<>();
     EditText searchEditText;
     SelectContactAdapter selectContactAdapter ;
-//    StickyRecyclerHeadersDecoration headersDecor;
     private TextView tvNoPermission;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,22 +77,11 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
         }
         selectContactAdapter.addAll(mAllLists);
         mRecyclerView.setAdapter(selectContactAdapter);
-//        headersDecor = new StickyRecyclerHeadersDecoration(selectContactAdapter);
-//        mRecyclerView.addItemDecoration(headersDecor);
-//        mRecyclerView.addItemDecoration(new SpaceItemDecoration(28));
-//        selectContactAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-//            @Override
-//            public void onChanged() {
-//                headersDecor.invalidateHeaders();
-//            }
-//        });
         mSideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
 
             @Override
             public void onTouchingLetterChanged(String s) {
-//                if (selectContactAdapter != null) {
-//                    selectContactAdapter.closeOpenedSwipeItemLayoutWithAnim();
-//                }
+
                 int position = selectContactAdapter.getPositionForSection(s.charAt(0));
                 if (position != -1) {
                     mRecyclerView.scrollToPosition(position);
@@ -116,10 +104,8 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
                 if (!TextUtils.isEmpty(s)) {
 
                     selectContactAdapter.addAll(search(s.toString()));
-//                    mRecyclerView.removeItemDecoration(headersDecor);
                 } else {
                     selectContactAdapter.addAll(mAllLists);
-//                    mRecyclerView.addItemDecoration(headersDecor);
                 }
             }
 
@@ -214,18 +200,5 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
         return  contactBean1;
     }
 
-    public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int space;
-
-        public SpaceItemDecoration(int space) {
-            this.space = space;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            outRect.left = space;
-        }
-    }
 
 }
