@@ -19,6 +19,7 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
+
 import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
@@ -32,10 +33,10 @@ public class ReceiveSocketService extends Service {
 	private int contactFailCount = 1;
 	PendingIntent sender;
 	AlarmManager am;
-	public static int CONNECT_SUCCEED=0;
-	public static int CONNECT_FAIL=1;
-	public static int CONNECT_STATUE=-1;
-	public static int ACTIVE_DISCENNECT=-2;
+	public static int CONNECT_SUCCEED = 0;
+	public static int CONNECT_FAIL = 1;
+	public static int CONNECT_STATUE = -1;
+	public static int ACTIVE_DISCENNECT = -2;
 	private static String TAG = "ReceiveSocketService";
 
 	@Override
@@ -60,18 +61,18 @@ public class ReceiveSocketService extends Service {
 			Log.i("Blue_Chanl", "正在注册GOIP");
 			SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
 			createSocketLisener.create();
-			CONNECT_STATUE=CONNECT_SUCCEED;
+			CONNECT_STATUE = CONNECT_SUCCEED;
 		}
 
 		@Override
 		public void onConnectFailed() {
-			if(CONNECT_STATUE==ACTIVE_DISCENNECT){
+			if (CONNECT_STATUE == ACTIVE_DISCENNECT) {
 				return;
 			}
 			Log.e("Blue_Chanl", "onConnectFailed");
 
 			connectFailReconnect();
-			CONNECT_STATUE=CONNECT_FAIL;
+			CONNECT_STATUE = CONNECT_FAIL;
 		}
 
 
@@ -85,11 +86,11 @@ public class ReceiveSocketService extends Service {
 
 		@Override
 		public void onDisconnect(SocketTransceiver transceiver) {
-			if(CONNECT_STATUE==ACTIVE_DISCENNECT){
+			if (CONNECT_STATUE == ACTIVE_DISCENNECT) {
 				return;
 			}
 			Log.e("Blue_Chanl", "断开连接 - onDisconnect");
-			CONNECT_STATUE=CONNECT_FAIL;
+			CONNECT_STATUE = CONNECT_FAIL;
 			disConnectReconnect();
 		}
 	};
@@ -112,7 +113,7 @@ public class ReceiveSocketService extends Service {
 	}
 
 	public void disconnect() {
-		CONNECT_STATUE=ACTIVE_DISCENNECT;
+		CONNECT_STATUE = ACTIVE_DISCENNECT;
 		cancelTimer();
 		tcpClient.disconnect();
 	}
@@ -127,9 +128,9 @@ public class ReceiveSocketService extends Service {
 		if (tcpClient != null && !tcpClient.isConnected()) {
 			if (REGISTER_STATUE_CODE == 3) {
 				REGISTER_STATUE_CODE = 2;
-				EventBusUtil.simRegisterStatue( SocketConstant.TCP_DISCONNECT);
+				EventBusUtil.simRegisterStatue(SocketConstant.TCP_DISCONNECT);
 			}
-			if(!SdkAndBluetoothDataInchange.isHasPreData)
+			if (!SdkAndBluetoothDataInchange.isHasPreData)
 				sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
 			recordStringLog(DateUtils.getCurrentDateForFileDetail() + "restart connect :\n");
 			reConnect();

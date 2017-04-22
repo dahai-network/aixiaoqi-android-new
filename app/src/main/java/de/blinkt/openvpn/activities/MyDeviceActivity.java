@@ -453,8 +453,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //						unBindButton.setVisibility(GONE);
 						SharedUtils.getInstance().delete(Constant.IMEI);
 						SharedUtils.getInstance().delete(Constant.BRACELETNAME);
-						macTextView.setText("");
-						firmwareTextView.setText("");
+//						macTextView.setText("");
+//						firmwareTextView.setText("");
 //						statueTextView.setText(getString(R.string.conn_bluetooth));
 						CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 						return;
@@ -487,8 +487,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				} else {
 //					unBindButton.setVisibility(GONE);
 					SharedUtils.getInstance().delete(Constant.IMEI);
-					macTextView.setText("");
-					firmwareTextView.setText("");
+//					macTextView.setText("");
+//					firmwareTextView.setText("");
 //					statueTextView.setText(getString(R.string.conn_bluetooth));
 //					sinking.setVisibility(GONE);
 //					noConnectImageView.setVisibility(View.VISIBLE);

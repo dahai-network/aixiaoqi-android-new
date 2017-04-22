@@ -709,7 +709,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (deviceAddress != null) {
 							deviceAddress = deviceAddress.toUpperCase();
 							BluetoothConstant.IS_BIND = true;
-							accountFragment.showDeviceSummarized(true);
 							skyUpgradeHttp();
 						}
 						SharedUtils utils = SharedUtils.getInstance();

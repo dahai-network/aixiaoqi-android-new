@@ -32,7 +32,6 @@ public class TopProgressView extends View {
 	private final Animation mHiddenAction;
 	private boolean isWhiteBack;
 	private final Context context;
-	public static final int NORMAL_TIME = 5000;
 
 	private static final int DEFAULT_TEXTSIZE = CommonTools.dip2px(ICSOpenVPNApplication.getContext(), 13);
 
@@ -106,7 +105,7 @@ public class TopProgressView extends View {
 			progressColor = R.color.color_ffa0a0;
 		} else {
 			backColor = R.color.transparent_60;
-			textColor = R.color.gray_text;
+			textColor = R.color.gray_text_666666;
 			arrowDrawable = R.drawable.arrow;
 			progressColor = R.color.transparent_60;
 		}
