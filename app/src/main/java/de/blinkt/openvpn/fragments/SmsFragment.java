@@ -89,10 +89,15 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
 			if (keyCode == KeyEvent.KEYCODE_BACK) {  //表示按返回键 时的操作
-				smsListAdapter.setDeleteImage(false);
-				editSmsImageView.setBackground(getResources().getDrawable(R.drawable.edit_sms_selector));
-				smsListAdapter.notifyDataSetChanged();
-				ids.clear();
+                if(smsListAdapter.isDeleteState()) {
+					smsListAdapter.setDeleteImage(false);
+					editSmsImageView.setBackground(getResources().getDrawable(R.drawable.edit_sms_selector));
+					smsListAdapter.notifyDataSetChanged();
+					ids.clear();
+				}else
+				{
+					return false;
+				}
 				return true;    //已处理
 			}
 		}

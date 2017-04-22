@@ -51,7 +51,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/padding_20dp"
             android:layout_marginRight="@dimen/padding_20dp"
-            android:src="@drawable/add_contact"/>
+            android:src="@drawable/add_contact_selector"/>
 
 
         <View
@@ -102,8 +102,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/padding_10"
             android:layout_marginRight="10dp"
-            android:text="@string/send_sms"
-            android:textColor="@color/readed"/>
+            android:background="@drawable/send_sms_button_selector"
+           />
     </LinearLayout>
 
     <ImageView
