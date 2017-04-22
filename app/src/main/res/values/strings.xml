@@ -398,8 +398,8 @@
     <string name="call_history">通话历史</string>
     <string name="call_phone">拨打</string>
     <!--   <string name="call_phone">通话历史</string>-->
-    <string name="no_card_or_rule_break">未能检测到手环内有电话卡，您需要重启手环重新检测吗</string>
-    <string name="no_aixiaoqi_or_rule_break">未能检测到手环内有爱小器卡，您需要重启手环重新检测吗</string>
+    <string name="no_card_or_rule_break">未能检测到设备内有电话卡，您需要重启手环重新检测吗</string>
+    <string name="no_aixiaoqi_or_rule_break">未能检测到设备内有爱小器卡，您需要重启手环重新检测吗</string>
     <string name="sport_no_data">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;暂无运动数据\n绑定手环后可以分析运动情况</string>
 
     <!--提醒功能-->

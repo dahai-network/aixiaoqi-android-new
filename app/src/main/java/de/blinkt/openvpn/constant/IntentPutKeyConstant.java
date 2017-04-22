@@ -33,26 +33,17 @@ public class IntentPutKeyConstant {
     //个人中心
     public static final String TIP_TYPE="tiptype";
 
-    public static final String PROVINCE="province";
-    public static final String CITY="city";
-
     public static final String CELL_PHONE_TYPE="cell_phone_type";
     public static final String REALNAME="real_name";
     public static  final String ID_CARD_NUMBER="id_card_number";
-    public static final String SELECT_NUMBER="select_number";
-    public static final String SELECT_NUMBER_FEE="select_numbe_fee";
+
     public static final String ADD_PHONE_NUMBER="add_phone_number";
-    public static final String E_BUIZ_ORDER="order";
-    public static final String E_BUIZ_ORDER_ID="order_id";
-    public static final String ORDERED_OUTSIDE="ordered_outside";
+
     public static final String IS_SUPPORT_4G="IsSupport4G";
     public static final String APN_NAME="apn_name";
     public static final String COUNTRY_NAME="CountryName";
     public static final String IS_START_UP="isstartup";
     public static final String CONTROL_CALL_PACKAGE="control_call_package";
-
-
-
 
     public static final String PRODUCT_ID="product_id";
     public static final String CLICK_MALL="click_mall";

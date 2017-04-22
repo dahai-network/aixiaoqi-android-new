@@ -6,6 +6,7 @@
 package de.blinkt.openvpn.activities.Base;
 
 import android.app.ActionBar;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -26,6 +27,7 @@ public class BaseActivity extends CommenActivity {
     private void initActionBar() {
         if (actionBar == null)
             actionBar = getActionBar();
+
         if (titleBar == null)
             titleBar = new TitleBar(this);
         if (actionBar != null) {

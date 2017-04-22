@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.aixiaoqi.socket.SocketConstant;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -365,14 +366,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 		}
 	}
 
-	private int[] headIcon = {
-			R.drawable.head_icon_1,
-			R.drawable.head_icon_2,
-			R.drawable.head_icon_3,
-			R.drawable.head_icon_4,
-			R.drawable.head_icon_5,
-			R.drawable.head_icon_1
-	};
+
 	private boolean isClick;
 
 	@Override
@@ -391,13 +385,17 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 				} else {
 					contactBean.setPhoneNum(smsEntity.getFm());
 				}
-				contactBean.setHeader(headIcon[(int) (Math.random() * 6)]);
+
 				contactBean.setDesplayName(smsEntity.getRealName());
 				intent.putExtra("contactBean", contactBean);
 				intent.putExtra(IntentPutKeyConstant.SELECFT_CONTACT_PEOPLE_DETAIL, IntentPutKeyConstant.SELECFT_CONTACT_PEOPLE_DETAIL);
 				startActivity(intent);
 				break;
 			case R.id.send_sms_tv:
+				if(SocketConstant.REGISTER_STATUE_CODE!=3){
+					CommonTools.showShortToast(this, getString(R.string.sim_register_phone_tip));
+					return;
+				}
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKSENDSMS);
 				position = -1;
@@ -452,7 +450,8 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 					consigneeLl.setVisibility(View.GONE);
 				}
 				recyclerView.smoothScrollToPosition(recyclerView.getBottom());
-				sendSmsHttp(phoneNumbertemp, content);
+				sendSmsHttp(phoneNumbertemp, smsDetailEntity.getSMSContent());
+				smsContentEt.setText("");
 				break;
 
 			case R.id.add_contact_iv:
@@ -667,6 +666,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 
 	@Override
 	public void onResendClick(View view, Object data) {
+		position = (Integer) data;
 		showDialog();
 	}
 
@@ -717,7 +717,6 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 				CommonTools.showShortToast(this, smsDetailHttp.getMsg());
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_SEND_SMS_MESSAGE) {
-			smsContentEt.setText("");
 			SendSmsHttp sendSmsHttp = (SendSmsHttp) object;
 			SmsDetailEntity smsDetailEntity = smsDetailAdapter.getItem(smsDetailAdapter.getItemCount() - 1);
 			if (1 == sendSmsHttp.getStatus()) {
@@ -795,7 +794,6 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 
 	private void sendFail() {
 		if (position == -1 && smsContentEt != null) {
-			smsContentEt.setText("");
 			SmsDetailEntity smsDetailEntity = smsDetailAdapter.getItem(smsDetailAdapter.getItemCount() - 1);
 			if (smsDetailEntity != null) {
 				smsDetailEntity.setStatus(SEND_FAIL);
