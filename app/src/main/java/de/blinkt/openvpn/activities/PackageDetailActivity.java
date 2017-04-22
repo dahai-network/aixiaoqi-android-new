@@ -280,7 +280,7 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
 
         // 设置Tab Indicator的高度
         mTabs.setIndicatorHeight((int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 2, dm));
+                TypedValue.COMPLEX_UNIT_DIP, 1, dm));
 
     }
 }

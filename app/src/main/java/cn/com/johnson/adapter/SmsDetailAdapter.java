@@ -48,7 +48,7 @@ public class SmsDetailAdapter extends RecyclerBaseAdapter<RecyclerView.ViewHolde
 				((RightViewHolder) holder).sendErrorIv.setVisibility(View.VISIBLE);
 				((RightViewHolder) holder).sendingPb.setVisibility(View.GONE);
 				((RightViewHolder) holder).sendErrorIv.setOnClickListener(this);
-//				((RightViewHolder) holder).sendErrorIv.setTag(position);
+				((RightViewHolder) holder).sendErrorIv.setTag(position);
 			}
 			if (isDeleteState) {
 				((RightViewHolder) holder).deleteSmsDetailCheckBox.setVisibility(View.VISIBLE);

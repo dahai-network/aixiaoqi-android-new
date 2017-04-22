@@ -54,7 +54,8 @@ public class HttpConfigUrl {
 	public static final String SPORT_REPORT_HISTORY_STEP = "Sport/AddHistorys";
 	public static final String SPORT_GET_RECORD_DATE = "Sport/GetRecordDate";
 	//绑定设备
-	public static final String BIND_DEVICE = "DeviceBracelet/Bind";	public static final String GET_BIND_DEVICE = "DeviceBracelet/Get";
+	public static final String BIND_DEVICE = "DeviceBracelet/Bind";
+	public static final String GET_BIND_DEVICE = "DeviceBracelet/Get";
 	//获取当前账号绑定的设备
 
 	public static final String UN_BIND_DEVICE = "DeviceBracelet/UnBind";
@@ -80,11 +81,6 @@ public class HttpConfigUrl {
 
 	public static final String GET_BASIC_CONFIG="config/GetBasicConfig";
 	public static final String ADD_NUMBER ="OrderByZC/Bind";
-	public static final String ORDER_LIST ="OrderByZC/GetUserOrderByZCList";
-	public static final String ORDER_DETAIL ="OrderByZC/GetByID";
-	public static final String GET_LOCATION_LIST ="ZCSelectionNumber/GetLocationList";
-	public static final String GET_SELECT_NUMBER ="ZCSelectionNumber/Get";
-	public static final String ADD_SELECT_NUMBER_INFO ="OrderByZCSelectionNumber/Add";
 	public static final String BIND_GIFT ="GiftCard/Bind";
 	public static final String ACTIVATE_KINGCARD ="Order/ActivationKindCard";
 	public static final String CHECK_IS_HAVE_PACKET ="Order/CheckUsedExistByPageCategory";
@@ -130,15 +126,12 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_SEND_RETRY_FOR_ERROR = 0x0039;
 	public static final int COMTYPE_GET_BASIC_CONFIG = 0x0040;
 	public static final int COMTYPE_ADD_NUMBER = 0x0041;
-	public static final int COMTYPE_ORDER_LIST = 0x0042;
+
 	public static final int COMTYPE_ALARM_CLOCK_GET = 0x0043;
 	public static final int COMTYPE_ALARM_CLOCK_DELETE = 0x0044;
 	public static final int COMTYPE_ALARM_CLOCK_COUNT=0x0045;
 	public static final int COMTYPE_UPDATE_ALARM_CLOCK_STATUE=0x0046;
-	public static final int COMTYPE_ORDER_DETAIL=0x0047;
-	public static final int COMTYPE_GET_LOCATION_LIST=0x0048;
-	public static final int COMTYPE_GET_SELECT_NUMBER=0x0049;
-	public static final int COMTYPE_ADD_SELECT_NUMBER_INFO=0x0050;
+
 
 	public static final int  COMTYPE_BLACK_LIST_ADD =0x0055;
 	public static final int  COMTYPE_BLACK_LIST_DELETE =0x0056;
@@ -157,7 +150,6 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_CHECKTOKEN = 0x1018;
 	public static final int COMTYPE_EXIT = 0x1019;
 	public static final int COMTYPE_SPORT_GET_TIME_PERIOD_DATE = 0x1020;
-	public static final int COMTYPE_SPORT_REPORT_REALTIME_STEP = 0x1021;
 	public static final int COMTYPE_SPORT_REPORT_HISTORY_STEP = 0x1022;
 	public static final int COMTYPE_SPORT_GET_RECORD_DATE = 0x1030;
 	public static final int COMTYPE_BIND_DEVICE = 0x1031;

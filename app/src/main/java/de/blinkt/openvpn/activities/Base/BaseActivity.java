@@ -6,6 +6,7 @@
 package de.blinkt.openvpn.activities.Base;
 
 import android.app.ActionBar;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,30 +15,27 @@ import de.blinkt.openvpn.views.TitleBar;
 
 public class BaseActivity extends CommenActivity {
 
-	protected ActionBar actionBar;
-	protected TitleBar titleBar;
+    protected ActionBar actionBar;
+    protected TitleBar titleBar;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		initActionBar();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initActionBar();
+    }
 
+    private void initActionBar() {
+        if (actionBar == null)
+            actionBar = getActionBar();
 
-	}
-
-	private void initActionBar() {
-		if (actionBar == null) {
-			actionBar = getActionBar();
-		}
-		if (titleBar == null) {
-			titleBar = new TitleBar(this);
-		}
-		if (actionBar != null) {
-			actionBar.setCustomView(titleBar);
-			actionBar.setDisplayShowTitleEnabled(false);
-			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-		}
-	}
+        if (titleBar == null)
+            titleBar = new TitleBar(this);
+        if (actionBar != null) {
+            actionBar.setCustomView(titleBar);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        }
+    }
 
 	/**
 	 * @param id         表示标题id
@@ -65,11 +63,11 @@ public class BaseActivity extends CommenActivity {
 					leftViewControl();
 				} catch (Exception e) {
 
-				}
+                }
 
-			}
-		});
-	}
+            }
+        });
+    }
 
 	/**
 	 * @param titleId       标题id

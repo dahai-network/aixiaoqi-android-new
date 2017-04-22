@@ -75,14 +75,16 @@ public class PackageMarketActivity extends BaseNetActivity   {
         }else{
             communicationRelativeLayout.setVisibility(View.GONE);
         }
-        initSet();
+        initSet(controlCall);
 
     }
 
-    private void initSet() {
+    private void initSet(String controlCall) {
         activity = this;
         hasLeftViewTitle(R.string.package_market, 0);
-        marketRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+       LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
+        linearLayoutManager.setSmoothScrollbarEnabled(false);
+        marketRecyclerView.setLayoutManager(linearLayoutManager);
         initData();
 
     }

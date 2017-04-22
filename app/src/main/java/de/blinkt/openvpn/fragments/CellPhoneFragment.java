@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,21 +17,14 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import com.umeng.analytics.MobclickAgent;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.MyViewPager;
-import de.blinkt.openvpn.views.contact.TouchableRecyclerView;
-
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLEPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLESMS;
 
@@ -71,7 +63,6 @@ public class CellPhoneFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         isForeground = isVisibleToUser;
         if (isVisibleToUser) {
-
             operation_rg.check(cell_phone_rb.getId());
             ClickPhone();
             hidePhoneBottomBar();
@@ -132,7 +123,6 @@ public class CellPhoneFragment extends Fragment {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-
             }
 
             @Override
@@ -153,6 +143,8 @@ public class CellPhoneFragment extends Fragment {
         //初始化标题下标的小三角
         drawable = getActivity().getResources().getDrawable(R.drawable.image_slidethetriangle);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+
+
     }
 
 
@@ -207,7 +199,11 @@ public class CellPhoneFragment extends Fragment {
             dial_tittle_fl.setVisibility(View.GONE);
             operation_rg.setVisibility(View.VISIBLE);
 
+
         }
+        ViewUtil.hideView(phoneFragment.t9dialpadview);
+        ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
+
 
         message_rb.setCompoundDrawables(null, null, null, drawable);
         cell_phone_rb.setCompoundDrawables(null, null, null, null);

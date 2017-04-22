@@ -75,7 +75,6 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKMYPACKAGE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKRECHARGE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKSET;
 
-
 /**
  * 我的界面
  * A simple {@link Fragment} subclass.

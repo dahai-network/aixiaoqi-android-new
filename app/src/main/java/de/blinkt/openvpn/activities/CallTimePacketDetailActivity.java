@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextPaint;
 import android.text.style.AbsoluteSizeSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -107,6 +108,8 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
         WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         WordtoSpan.setSpan(new AbsoluteSizeSpan(22, true), 1, intLength + 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), intLength + 2, textview.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
         textview.setText(WordtoSpan, TextView.BufferType.SPANNABLE);
     }
     private void createViews() {
@@ -211,7 +214,7 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
 
         // 设置Tab Indicator的高度
         myTabs.setIndicatorHeight((int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 2, dm));
+                TypedValue.COMPLEX_UNIT_DIP, 1, dm));
 
     }
 }

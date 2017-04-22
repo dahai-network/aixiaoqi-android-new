@@ -121,10 +121,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public static boolean isDeploy = true;
 	@BindView(R.id.tv_red_dot_01)
 	TextView tvRedDot01;
-	//    @BindView(R.id.tv_red_dot_02)
-//    TextView tvRedDot02;
-//    @BindView(R.id.tv_red_dot_03)
-//    TextView tvRedDot03;
+
 	@BindView(R.id.tv_red_dot_04)
 	TextView tvRedDot04;
 	public static RadioGroup radiogroup;
@@ -161,16 +158,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 			switch (msg.what) {
 				case 1:
-
 					tvRedDot04.setVisibility(View.VISIBLE);
 					intent.putExtra("flg", true);
-
-					// noticeNewVersion(3);
 					break;
 				case 2:
 					tvRedDot04.setVisibility(View.GONE);
 					intent.putExtra("flg", false);
-					//  noticeNewVersion(4);
 					break;
 
 
@@ -245,17 +238,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
 	}
 
-
-
-
-   /* *//**
-	 * 通知我的界面是否有新的固件包
-	 *//*
-	public void noticeNewVersion(int state) {
-
-        Log.d("__aixiaoqi", "noticeNewVersion: ");
-        EventBus.getDefault().post(new ChangeViewStateEvent(state));
-    }*/
 
 	/**
 	 * 判断是否显示红点
@@ -644,6 +626,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	@Override
 	protected void onDestroy() {
+
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
 		unregisterReceiver(screenoffReceive);
@@ -710,7 +693,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							deviceAddress = deviceAddress.toUpperCase();
 							BluetoothConstant.IS_BIND = true;
 							skyUpgradeHttp();
-							accountFragment.showDeviceSummarized(true);	
+							accountFragment.showDeviceSummarized(true);
 						}
 						SharedUtils utils = SharedUtils.getInstance();
 
@@ -720,11 +703,15 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
 						if (!TextUtils.isEmpty(deviceTypeStr)) {
 							int deviceType = Integer.parseInt(deviceTypeStr);
+							String typeText;
 							if (deviceType == 0) {
 								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
+								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
 							} else {
 								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
+								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
 							}
+							accountFragment.setSummarized(typeText, null, false);
 						}
 						Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -1202,7 +1189,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							String typeText;
 							int powerText;
 							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16);
-							String bracelettype = SharedUtils.getInstance().readString(MyDeviceActivity.BRACELETTYPE);
+							String bracelettype = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 							if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
 								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
 							} else {
