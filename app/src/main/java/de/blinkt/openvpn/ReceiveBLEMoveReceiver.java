@@ -118,7 +118,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		mService = ICSOpenVPNApplication.uartService;
 		if (action.equals(UartService.FINDED_SERVICE)) {
 			Log.d(TAG, "UART_CONNECT_MSG");
-			ICSOpenVPNApplication.isConnect = true;
 			IS_TEXT_SIM = false;
 			BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
 			entity.setBlueType(BluetoothConstant.BLUE_BIND);
@@ -197,6 +196,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				retryTime++;
 			}
 		}
+
+		if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+			ICSOpenVPNApplication.isConnect = true;
+		}
+
 		if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
 			mService.enableTXNotification();
 			//如果版本号小于android N

@@ -6,6 +6,10 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <de.blinkt.openvpn.views.TitleBar
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_50dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -146,6 +150,7 @@
             <View
                 android:id="@+id/alarmClockView"
                 style="@style/horizontal_line_view"
+                android:visibility="gone"
                 />
 
             <LinearLayout
@@ -156,7 +161,8 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+                android:paddingRight="20dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="0dp"
@@ -177,6 +183,7 @@
             <View
                 android:id="@+id/messageRemindView"
                 style="@style/horizontal_line_view"
+                android:visibility="gone"
                 />
 
             <LinearLayout
@@ -187,7 +194,8 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+                android:paddingRight="20dp"
+                android:visibility="gone">
 
 
                 <TextView
@@ -209,6 +217,7 @@
             <View
                 android:id="@+id/findStatusView"
                 style="@style/horizontal_line_view"
+                android:visibility="gone"
                 />
 
             <LinearLayout
@@ -219,7 +228,8 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+                android:paddingRight="20dp"
+                android:visibility="gone">
 
 
                 <TextView

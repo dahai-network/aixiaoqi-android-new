@@ -119,7 +119,7 @@ public class TopProgressView extends View {
 		mPaint.setTextSize(DEFAULT_TEXTSIZE);
 		String text;
 		if (content == null) {
-			text = context.getString(R.string.registing);
+			text = "";
 		} else {
 			text = content;
 		}

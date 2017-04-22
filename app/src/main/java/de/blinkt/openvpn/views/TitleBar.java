@@ -52,7 +52,7 @@ public class TitleBar extends LinearLayout {
 		leftText = (TextView) findViewById(R.id.titlebar_iv_lefttext);
 		title = (TextView) findViewById(R.id.titlebar_iv_title);
 		rightText = (TextView) findViewById(R.id.titlebar_iv_righttext);
-//		rootRelativeLayout = (RelativeLayout) findViewById(R.id.rootRelativeLayout);
+		rootRelativeLayout = (RelativeLayout) findViewById(R.id.rootRelativeLayout);
 //		int statusBarHeight = getStatusBarHeight(context);
 //		int w = View.MeasureSpec.makeMeasureSpec(0,
 //				View.MeasureSpec.UNSPECIFIED);
@@ -136,5 +136,8 @@ public class TitleBar extends LinearLayout {
 		return result;
 	}
 
+	public void setBackground(int resource) {
+		rootRelativeLayout.setBackgroundResource(resource);
+	}
 
 }

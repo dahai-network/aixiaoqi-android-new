@@ -710,6 +710,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							deviceAddress = deviceAddress.toUpperCase();
 							BluetoothConstant.IS_BIND = true;
 							skyUpgradeHttp();
+							accountFragment.showDeviceSummarized(true);	
 						}
 						SharedUtils utils = SharedUtils.getInstance();
 
@@ -958,7 +959,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				break;
 			case SocketConstant.REGISTER_CHANGING:
 				double percent = entity.getProgressCount();
-				if (topProgressView.getVisibility() != View.VISIBLE) {
+				if (topProgressView.getVisibility() != View.VISIBLE && SocketConstant.REGISTER_STATUE_CODE == 3) {
 					topProgressView.setVisibility(View.VISIBLE);
 					topProgressView.setContent(getString(R.string.registing));
 					topProgressView.setOnClickListener(new View.OnClickListener() {
@@ -1080,16 +1081,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		switch (entity.getStateType()) {
 			case StateChangeEntity.BLUETOOTH_STATE:
 				if (entity.isopen() && getString(R.string.bluetooth_unopen).equals(topProgressView.getContent())) {
-					if (checkNetWorkAndBlueIsOpen())
+					if (checkNetWorkAndBlueIsOpen()) {
 						topProgressView.setVisibility(View.GONE);
+					} else {
+						topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
+					}
 				} else {
 					topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
 				}
 				break;
 			case StateChangeEntity.NET_STATE:
 				if (entity.isopen() && getString(R.string.no_wifi).equals(topProgressView.getContent())) {
-					if (checkNetWorkAndBlueIsOpen())
+					if (checkNetWorkAndBlueIsOpen()) {
 						topProgressView.setVisibility(View.GONE);
+					} else {
+						topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
+					}
 				} else {
 					topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
 					accountFragment.setRegisted(false);
@@ -1152,7 +1159,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (action.equals(UartService.FINDED_SERVICE)) {
-				MyDeviceActivity.isConnectOnce = true;
 				accountFragment.showDeviceSummarized(true);
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				if (!ICSOpenVPNApplication.isConnect) {
