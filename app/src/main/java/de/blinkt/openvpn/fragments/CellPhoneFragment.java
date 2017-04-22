@@ -143,6 +143,8 @@ public class CellPhoneFragment extends Fragment {
         //初始化标题下标的小三角
         drawable = getActivity().getResources().getDrawable(R.drawable.image_slidethetriangle);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+
+
     }
 
 
@@ -197,7 +199,11 @@ public class CellPhoneFragment extends Fragment {
             dial_tittle_fl.setVisibility(View.GONE);
             operation_rg.setVisibility(View.VISIBLE);
 
+
         }
+        ViewUtil.hideView(phoneFragment.t9dialpadview);
+        ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
+
 
         message_rb.setCompoundDrawables(null, null, null, drawable);
         cell_phone_rb.setCompoundDrawables(null, null, null, null);

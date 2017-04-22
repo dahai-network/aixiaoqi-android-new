@@ -102,6 +102,7 @@
                 aixiaoqi:pstsSelectedTabTextSize="18sp"
                 aixiaoqi:pstsShouldExpand="false"
                 aixiaoqi:pstsTabPaddingLeftRight="@dimen/padding_15dp"
+                aixiaoqi:pstsUnderlineHeight="1dp"
                 aixiaoqi:pstsTabTextSize="16sp">
             </de.blinkt.openvpn.views.PagerSlidingTabStripExtends>
 
