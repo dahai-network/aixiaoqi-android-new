@@ -77,7 +77,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	public ScrollView indexScrollView;
 
 	private RelativeLayout hotPacketLinearLayout;
-	private RelativeLayout communicationRelativeLayout;
+	private LinearLayout communicationLinearLayout;
 	private RelativeLayout leftPacketRelativeLayout;
 	private RelativeLayout rightPacketRelativeLayout;
 	private LinearLayout flowPackageLinearLayout;
@@ -130,7 +130,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		hardWareRecyclerView = (RecyclerView) view.findViewById(R.id.hardWareRecyclerView);
 		hotPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.hotPacketLinearLayout);
 		guiderImageView = (ImageView) view.findViewById(R.id.guiderImageView);
-		communicationRelativeLayout = (RelativeLayout) view.findViewById(R.id.communicationRelativeLayout);
+		communicationLinearLayout = (LinearLayout) view.findViewById(R.id.communicationLinearLayout);
 		leftPacketRelativeLayout = (RelativeLayout) view.findViewById(R.id.leftPacketRelativeLayout);
 		rightPacketRelativeLayout = (RelativeLayout) view.findViewById(R.id.rightPacketRelativeLayout);
 		flowPackageLinearLayout = (LinearLayout) view.findViewById(R.id.flowPackageLinearLayout);
@@ -300,7 +300,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 					}
 				});
 			} else {
-				communicationRelativeLayout.setVisibility(GONE);
+				communicationLinearLayout.setVisibility(GONE);
 			}
 		} else if (cmdType == COMTYPE_GET_PRODUCTS) {
 			GetProductHttp http = (GetProductHttp) object;

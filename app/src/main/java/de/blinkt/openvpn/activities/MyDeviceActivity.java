@@ -58,6 +58,7 @@ import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.MySinkingView;
+import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.dialog.DialogTipUpgrade;
@@ -122,6 +123,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	View alarmClockView;
 	@BindView(R.id.messageRemindView)
 	View messageRemindView;
+	@BindView(R.id.title)
+	TitleBar title;
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_ENABLE_BT = 2;
@@ -204,26 +207,29 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void initSet() {
 		Log.e(TAG, "initSet");
+		actionBar.hide();
 		bracelettype = getIntent().getStringExtra(BRACELETTYPE);
 		if (SharedUtils.getInstance().readBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE)) {
 			setPoint();
 		}
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
-			alarmClockLinearLayout.setVisibility(GONE);
-			messageRemindLinearLayout.setVisibility(GONE);
-			findStatusLinearLayout.setVisibility(GONE);
-			findStatusView.setVisibility(GONE);
-			alarmClockView.setVisibility(GONE);
-			messageRemindView.setVisibility(GONE);
 			deviceNameTextView.setText(getString(R.string.unibox_key));
 		} else {
+			alarmClockLinearLayout.setVisibility(View.VISIBLE);
+			messageRemindLinearLayout.setVisibility(View.VISIBLE);
+			findStatusLinearLayout.setVisibility(View.VISIBLE);
+			findStatusView.setVisibility(View.VISIBLE);
+			alarmClockView.setVisibility(View.VISIBLE);
+			messageRemindView.setVisibility(View.VISIBLE);
 			deviceNameTextView.setText(getString(R.string.unitoy));
 		}
 
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
 		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 
-		hasLeftViewTitle(device, 0);
+//		hasLeftViewTitle(device, 0);
+		titleSet();
+
 		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 			int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
 //			noConnectImageView.setVisibility(GONE);
@@ -252,6 +258,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (percentInt != 0 && ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.mConnectionState == UartService.STATE_CONNECTED) {
 			percentTextView.setText(percentInt + "%");
 		}
+	}
+
+	private void titleSet() {
+		title.setTextTitle(getString(device));
+		title.setLeftBtnIcon(R.drawable.btn_top_back);
+		title.getLeftText().setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onBackPressed();
+			}
+		});
+		title.setBackground(R.color.color_0F93FE);
 	}
 
 	@Override
@@ -451,8 +469,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //						unBindButton.setVisibility(GONE);
 						SharedUtils.getInstance().delete(Constant.IMEI);
 						SharedUtils.getInstance().delete(Constant.BRACELETNAME);
-						macTextView.setText("");
-						firmwareTextView.setText("");
+//						macTextView.setText("");
+//						firmwareTextView.setText("");
 //						statueTextView.setText(getString(R.string.conn_bluetooth));
 						CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 						return;
@@ -485,8 +503,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				} else {
 //					unBindButton.setVisibility(GONE);
 					SharedUtils.getInstance().delete(Constant.IMEI);
-					macTextView.setText("");
-					firmwareTextView.setText("");
+//					macTextView.setText("");
+//					firmwareTextView.setText("");
 //					statueTextView.setText(getString(R.string.conn_bluetooth));
 //					sinking.setVisibility(GONE);
 //					noConnectImageView.setVisibility(View.VISIBLE);

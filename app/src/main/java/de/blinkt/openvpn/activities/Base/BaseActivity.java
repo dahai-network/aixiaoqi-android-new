@@ -37,30 +37,31 @@ public class BaseActivity extends CommenActivity {
         }
     }
 
-    /**
-     * @param id         表示标题id
-     * @param leftTextId 当leftTextId<0时，左边的标签是默认的返回键，大于零时，表示自定义的值
-     */
-    protected void hasLeftViewTitle(int id, int leftTextId) {
-        titleBar.setTextTitle(getString(id));
-        hasOnlyLeftViewOption();
-        if (leftTextId <= 0) {
-            titleBar.setLeftBtnIcon(R.drawable.btn_top_back);
-        } else {
-            titleBar.setLeftBtnText(getString(leftTextId));
-        }
-    }
-    protected  void leftViewControl(){
-        onBackPressed();
-    }
+	/**
+	 * @param id         表示标题id
+	 * @param leftTextId 当leftTextId<0时，左边的标签是默认的返回键，大于零时，表示自定义的值
+	 */
+	protected void hasLeftViewTitle(int id, int leftTextId) {
+		titleBar.setTextTitle(getString(id));
+		hasOnlyLeftViewOption();
+		if (leftTextId <= 0) {
+			titleBar.setLeftBtnIcon(R.drawable.btn_top_back);
+		} else {
+			titleBar.setLeftBtnText(getString(leftTextId));
+		}
+	}
 
-    protected void hasOnlyLeftViewOption() {
-        titleBar.getLeftText().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    leftViewControl();
-                } catch (Exception e) {
+	protected void leftViewControl() {
+		onBackPressed();
+	}
+
+	protected void hasOnlyLeftViewOption() {
+		titleBar.getLeftText().setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				try {
+					leftViewControl();
+				} catch (Exception e) {
 
                 }
 
@@ -68,44 +69,44 @@ public class BaseActivity extends CommenActivity {
         });
     }
 
-    /**
-     * @param titleId       标题id
-     * @param rightTextId   右边文字或者图片的id
-     * @param leftTextId    如果leftTextId>0,则显示文字，否则显示默认的图片
-     * @param isRegihtImage 右边是否是图片
-     */
-    protected void hasAllViewTitle(int titleId, int rightTextId, int leftTextId, boolean isRegihtImage) {
-        titleBar.setTextTitle(getString(titleId));
-        if (leftTextId <= 0) {
-            titleBar.setLeftBtnIcon(R.drawable.btn_top_back);
-        } else {
-            titleBar.setLeftBtnText(getString(leftTextId));
-        }
-        if (isRegihtImage) {
-            titleBar.setRightBtnIcon(rightTextId);
-        } else {
-            titleBar.setRightBtnText(getString(rightTextId));
-        }
-        hasAllViewTitleOption();
-    }
+	/**
+	 * @param titleId       标题id
+	 * @param rightTextId   右边文字或者图片的id
+	 * @param leftTextId    如果leftTextId>0,则显示文字，否则显示默认的图片
+	 * @param isRegihtImage 右边是否是图片
+	 */
+	protected void hasAllViewTitle(int titleId, int rightTextId, int leftTextId, boolean isRegihtImage) {
+		titleBar.setTextTitle(getString(titleId));
+		if (leftTextId <= 0) {
+			titleBar.setLeftBtnIcon(R.drawable.btn_top_back);
+		} else {
+			titleBar.setLeftBtnText(getString(leftTextId));
+		}
+		if (isRegihtImage) {
+			titleBar.setRightBtnIcon(rightTextId);
+		} else {
+			titleBar.setRightBtnText(getString(rightTextId));
+		}
+		hasAllViewTitleOption();
+	}
 
-    private void hasAllViewTitleOption() {
-        hasOnlyLeftViewOption();
-        titleBar.getRightText().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickRightView();
-            }
-        });
-    }
+	private void hasAllViewTitleOption() {
+		hasOnlyLeftViewOption();
+		titleBar.getRightText().setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onClickRightView();
+			}
+		});
+	}
 
-    protected void onClickRightView() {
+	protected void onClickRightView() {
 
-    }
+	}
 
-    @Override
-    protected void onDestroy() {
+	@Override
+	protected void onDestroy() {
 //		CommonHttp.cancel();
-        super.onDestroy();
-    }
+		super.onDestroy();
+	}
 }

@@ -28,6 +28,7 @@
     <color name="gray_back_2">#EDEDED</color>
     <color name="regist_back">#EAECF0</color>
     <color name="gray_text">#999999</color>
+    <color name="gray_text_666666">#666666</color>
     <color name="gray_line">#D2D2D2</color>
     <color name="login_back">#333a48</color>
     <color name="index_black">#333333</color>
@@ -67,7 +68,7 @@
     <color name="white">#ffffffff</color>
     <color name="dark_orange">#FF8C00</color>
     <color name="transparent">#00FFFFFF</color>
-    <color name="transparent_60">#3CFFFFFF</color>
+    <color name="transparent_60">#6EFFFFFF</color>
     <color name="color_A2A2A2">#A2A2A2</color>
     <color name="color_F62C2A">#F62A2A</color>
     <color name="color_fc3b30">#fc3b30</color>
@@ -105,6 +106,7 @@
     <color name="color_ececec">#ECECEC</color>
     <color name="color_323232">#323232</color>
     <color name="color_00A0EA">#00A0EA</color>
+    <color name="color_0F93FE">#0F93FE</color>
 
     <color name="color_333333">#333333</color>
 </resources>

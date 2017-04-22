@@ -71,6 +71,7 @@
     <string name="international_flow_packet">国际流量套餐</string>
     <string name="bind_packet_giftcard">绑定套餐礼包卡</string>
     <string name="are_you_sure_exit_login">确定退出登陆吗？</string>
+    <string name="are_you_sure_unbind">确定解除绑定吗？</string>
 
     <!--权限引导-->
     <string name="lemobile_test_1_1">找到爱小器App，关闭开关</string>
@@ -562,7 +563,7 @@
     <!--选择绑定设备-->
     <string name="unibox">爱小器双待王</string>
     <string name="unibox_key">双待王</string>
-    <string name="unitoy">爱小器</string>
+    <string name="unitoy">爱小器手环</string>
     <string name="package_surplus_detail">套餐剩余详情</string>
     <string name="going_buy"><u>续费</u></string>
     <string name="call_time">通话</string>
