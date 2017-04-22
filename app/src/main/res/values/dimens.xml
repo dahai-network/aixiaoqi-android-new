@@ -25,6 +25,7 @@
     <dimen name="padding_72dp">72dp</dimen>
     <dimen name="padding_100dp">100dp</dimen>
     <dimen name="padding_120dp">120dp</dimen>
+    <dimen name="padding_140dp">140dp</dimen>
     <dimen name="padding_115dp">115dp</dimen>
     <dimen name="padding_150dp">150dp</dimen>
     <dimen name="padding_175dp">175dp</dimen>
@@ -41,8 +42,10 @@
     <dimen name="little_14">14sp</dimen>
     <dimen name="little_18">18sp</dimen>
     <dimen name="little_22">22sp</dimen>
+    <dimen name="little_24">24sp</dimen>
     <dimen name="little_28">28sp</dimen>
     <dimen name="little_38">38sp</dimen>
+    <dimen name="little_30">30sp</dimen>
     <dimen name="dialpad_row_height">54dp</dimen>
     <dimen name="view_small_padding">1dp</dimen>
     <dimen name="height_262">262dp</dimen>

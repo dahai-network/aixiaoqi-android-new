@@ -536,14 +536,6 @@
         <activity android:name="de.blinkt.openvpn.activities.CallTimePacketDetailActivity">
         </activity>
 
-        <activity
-            android:name="de.blinkt.openvpn.activities.KeepAliveActivity"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:launchMode="singleInstance"
-            android:finishOnTaskLaunch="false"
-            android:theme="@style/LiveActivityStyle">
-        </activity>
         <activity android:name="de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity">
         </activity>
         <activity android:name="de.blinkt.openvpn.activities.TipUserOptionsActivity">

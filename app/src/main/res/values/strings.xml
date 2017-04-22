@@ -41,7 +41,7 @@
     <string name="forget_psw"><u>忘记密码,马上找回</u></string>
     <string name="input_phone">请输入手机号码</string>
     <string name="input_psw">请输入6–12位密码</string>
-    <string name="inland_set">国内节费</string>
+
     <string name="dual_sim">双卡双待</string>
     <string name="dual_sim_standby_tutorial">双卡双待使用教程</string>
     <string name="standby_tutorial">使用教程</string>
@@ -481,11 +481,7 @@
     <string name="bind_seccess">绑定成功</string>
     <string name="sure_and_use">绑定并使用</string>
     <string name="input_compelete_password">请输入16位完整卡密码</string>
-    <!--国内节费-->
-    <string name="activate_card">激活联通流量卡</string>
-    <string name="get_free_redbag">领取免费体验红包</string>
     <string name="communication_packet">通话套餐</string>
-    <string name="crowd_funding">众筹选号</string>
     <!--开卡激活-->
     <string name="card_activate">开卡激活</string>
 

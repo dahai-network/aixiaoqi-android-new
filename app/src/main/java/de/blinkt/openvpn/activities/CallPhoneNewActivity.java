@@ -288,7 +288,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				break;
 			case  R.id.keyboard:
 				t9dialpadview.setVisibility(View.VISIBLE);
-				llControlVoide.setVisibility(View.GONE);
+				llControlVoide.setVisibility(View.INVISIBLE);
 				hideKeyboard.setVisibility(View.VISIBLE);
 				break;
 			case R.id.hide_keyboard:

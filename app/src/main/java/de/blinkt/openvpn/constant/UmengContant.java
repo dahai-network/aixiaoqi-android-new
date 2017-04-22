@@ -106,7 +106,5 @@ public class UmengContant {
 	public static final String CLICKOPENSYSTEMSET = "clickOpenSystemSet";//打开系统设置
 	public static final String CLICKOPEN = "clickOpen";//点击开启
 	public static final String CLICKCLOSE = "clickClose";//点击关闭
-	public static final String CLICKSELECTNUMBER = "clickSelectNumber";//众筹选号
-	public static final String CLICKACTIVENUMBER = "clickActiveNumber";//激活联通流量卡
 
 }

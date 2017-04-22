@@ -145,7 +145,6 @@ public class MyReceiver extends BroadcastReceiver {
 			//在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..
 			Intent i = new Intent(context, SMSAcivity.class);
 			i.putExtras(bundle);
-			//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(context, i);
 		} else if (JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
 			boolean connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
@@ -183,10 +182,8 @@ public class MyReceiver extends BroadcastReceiver {
 	}
 
 	private void processCustomNotify(Context context) {
-		if (SmsFragment.isForeground&& CellPhoneFragment.isForeground) {
 			Intent msgIntent = new Intent(SmsFragment.NOTIFY_RECEIVED_ACTION);
 			context.sendBroadcast(msgIntent);
-		}
 	}
 	NotificationManager	mNotificationManager;
 	private void processNotification(Context context,Bundle bundle){

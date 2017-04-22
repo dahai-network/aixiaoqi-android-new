@@ -20,13 +20,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.analytics.MobclickAgent;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -59,6 +62,7 @@ import de.blinkt.openvpn.model.UsageRemainEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
+
 import static android.view.View.GONE;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.BRACELETTYPE;
 import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
@@ -184,10 +188,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
         //初始化状态
         tvNewPackagetAction.setVisibility(View.GONE);
         tvNewVersion.setVisibility(View.GONE);
-       // EventBus.getDefault().register(this);
+        // EventBus.getDefault().register(this);
 
         //注册广播
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver,new IntentFilter("Notic"));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver, new IntentFilter("Notic"));
         return rootView;
     }
 
@@ -286,6 +290,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                 //友盟方法统计
                 MobclickAgent.onEvent(getActivity(), CLICKMYPACKAGE);
                 if (!hasPackage) {
+
                     intent = new Intent(getActivity(), PackageMarketActivity.class);
                     intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
                 } else {
@@ -293,9 +298,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 
                     if (tvNewPackagetAction.getVisibility() == View.VISIBLE) {
                         mHandler.sendEmptyMessage(2);
-                        AppMode.getInstance().isClickPackage = true;
                     }
                 }
+                //记录点击状态
+                AppMode.getInstance().isClickPackage = true;
                 break;
             case R.id.addDeviceRelativeLayout:
                 //友盟方法统计
@@ -405,7 +411,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                     return;
                 }
                 if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
-                    mHandler.sendEmptyMessage(1);
+
+                    if (!AppMode.getInstance().isClickPackage)
+                        mHandler.sendEmptyMessage(1);
 
                     hasPackage = true;
                     PacketRelativeLayout.setVisibility(View.GONE);
@@ -436,9 +444,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
                     //显示出有未激活套餐的提示
                     if (!"0".equals(unactivated.getTotalNumFlow()) && !AppMode.getInstance().isClickPackage) {
 
+                        Log.d("__aixiaoqi", "---rightComplete1: "+unactivated.getTotalNumFlow());
                         mHandler.sendEmptyMessage(1);
 
                     } else {
+                        Log.d("__aixiaoqi", "---rightComplete2: "+unactivated.getTotalNumFlow());
                         mHandler.sendEmptyMessage(2);
                     }
                     if ("0".equals(used.getTotalNumFlow())) {
@@ -512,7 +522,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 
     public final String NoticSign = "flg";
 
-    public BroadcastReceiver mNoticBroadCastReciver =new  BroadcastReceiver() {
+    public BroadcastReceiver mNoticBroadCastReciver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
@@ -531,6 +541,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        AppMode.getInstance().isClickPackage=false;
+        AppMode.getInstance().isClickAddDevice=false;
         tvNewVersion = null;
         tvNewPackagetAction = null;
         //null.unbind();
