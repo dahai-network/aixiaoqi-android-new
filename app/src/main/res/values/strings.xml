@@ -632,4 +632,5 @@
     <string name="outside_use_guide">出境后使用引导</string>
     <string name="close">关闭</string>
     <string name="last_step">上一步</string>
+    <string name="update_header">正在更新头像，请稍后...</string>
 </resources>

@@ -449,6 +449,7 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 	}
 
 	private void uploadHeaderHttp(String url){
+		showProgress(R.string.update_header);
 		createHttpRequest(HttpConfigUrl.COMTYPE_UPLOAD_HEADER,url);
 	}
 
@@ -462,6 +463,7 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_UPLOAD_HEADER) {
+			dismissProgress();
 			UploadHeaderHttp uploadHeaderHttp = (UploadHeaderHttp) object;
 			if(uploadHeaderHttp.getStatus()==1) {
 				SharedUtils sharedUtils = SharedUtils.getInstance();
