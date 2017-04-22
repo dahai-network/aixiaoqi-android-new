@@ -427,10 +427,6 @@
             android:persistent="true"/>
 
         <activity
-            android:name="de.blinkt.openvpn.activities.BeforeGoingAbroadActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name="de.blinkt.openvpn.activities.OrderedOutsidePurchaseActivity"
             android:screenOrientation="portrait">
         </activity>
@@ -499,10 +495,6 @@
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.EBuzOrderListActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name="de.blinkt.openvpn.activities.EBuizOrderDetailActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity

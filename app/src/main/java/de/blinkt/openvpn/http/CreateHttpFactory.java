@@ -101,17 +101,8 @@ public class CreateHttpFactory {
             case  HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES://获取sim卡状态
                 startHttp(new GetDeviceSimRegStatuesHttp(interfaceCallback, cmdType));
                 break;
-            case  HttpConfigUrl.COMTYPE_GET_LOCATION_LIST://获取国家
-                startHttp(new GetLocationListHttp(interfaceCallback, cmdType));
-                break;
             case  HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID://通过id查询订单
                 startHttp(new GetOrderByIdHttp(interfaceCallback, cmdType,params));
-                break;
-            case  HttpConfigUrl.COMTYPE_ORDER_DETAIL://订单详情
-                startHttp(new GetOrderDetailHttp(interfaceCallback, cmdType,params));
-                break;
-            case  HttpConfigUrl.COMTYPE_ORDER_LIST://订单列表
-                startHttp(new GetOrderListHttp(interfaceCallback, cmdType,params));
                 break;
             case  HttpConfigUrl.COMTYPE_PACKET_GET://获取包
                 startHttp(new GetPakcetHttp(interfaceCallback, cmdType,params));
@@ -151,12 +142,6 @@ public class CreateHttpFactory {
                 break;
             case  HttpConfigUrl.COMTYPE_SECURITY_CONFIG://获取选择号码
                 startHttp(new SecurityConfigHttp(interfaceCallback, cmdType));
-                break;
-            case  HttpConfigUrl.COMTYPE_GET_SELECT_NUMBER://获取选择号码
-                startHttp(new SelectNumberHttp(interfaceCallback, cmdType,params));
-                break;
-            case  HttpConfigUrl.COMTYPE_ADD_SELECT_NUMBER_INFO://获取选择号码
-                startHttp(new SelectNumberInfoHttp(interfaceCallback, cmdType,params));
                 break;
             case  HttpConfigUrl.COMTYPE_SEND_SMS://获取选择号码
                 startHttp(new SendMsgHttp(interfaceCallback, cmdType,params));

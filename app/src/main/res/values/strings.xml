@@ -358,7 +358,6 @@
 
     <string name="outside_package_course">境外套餐教程</string>
     <string name="before_going_abroad">出境前激活套餐</string>
-    <string name="ordered_outside_purchase">已购境外套餐</string>
     <string name="outside">在境外使用</string>
     <string name="user_intro">使用简介</string>、
     <string name="user_intro_content">
@@ -485,36 +484,12 @@
     <!--开卡激活-->
     <string name="card_activate">开卡激活</string>
 
-    <!--国内消费-->
-    <string name="e_biz_order_list">购买订单列表</string>
-    <string name="e_biz_order_detail">购买订单详情</string>
     <!--众筹选号信息-->
     <string name="info_name">姓名</string>
-    <string name="info_id_crad">身份证号</string>
-    <string name="info_address">归属地</string>
-    <string name="info_select_number">选择号码</string>
-    <string name="info_tip">联通需要您的姓名，身份证等信息才能发卡，等收到卡后，需要您提交更详细的身份信息进行实名认证，方可激活联通大王卡</string>
-    <string name="info_tip_action">注意：当前填写的信息要和实名认证的一致，请认真填写</string>
-    <string name="select_number_info">提交选号资料</string>
-    <string name="id_card_title">输入身份证号码</string>
     <string name="real_name_title">填写姓名</string>
-    <string name="real_name_is_null">姓名不能为空</string>
-    <string name="id_card_is_null">身份证号码不能为空</string>
-    <string name="info_number_list">号码列表</string>
     <string name="payment">支付</string>
-    <string name="commit_person_info">个人信息和选择号码一旦提交\n不能再更改。</string>
-    <string name="commit_person_info_action">确认信息无误吗？</string>
     <string name="add_number">添加号码</string>
-    <string name="order_number">订单号</string>
-    <string name="parchase_number">购买数量</string>
-    <string name="receive_phone_number">收货人手机号</string>
-    <string name="add_new_phone_number">增加新号码</string>
-    <string name="select_phone_number">选择号码</string>
-
     <string name="free">免费</string>
-    <string name="address_is_null">只有选好归属地，才能选择号码哦！</string>
-    <string name="phone_number_is_null">还没有选择的号码</string>
-    <string name="no_number">暂无可选号码</string>
 
     <!--通话时长订单详情-->
     <string name="packet_status">套餐状态</string>

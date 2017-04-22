@@ -216,9 +216,9 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 	@Override
 	public void queryComplete(List<ContactRecodeEntity> mAllLists) {
 
-
+		callRecordRv.loadMoreComplete();
 		if (mAllLists.size() < 10) {
-			callRecordRv.loadMoreComplete();
+
 			callRecordRv.noMoreLoading();
 		}
 		mAllList.addAll(mAllLists);
