@@ -463,9 +463,10 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_UPLOAD_HEADER) {
-			dismissProgress();
+
 			UploadHeaderHttp uploadHeaderHttp = (UploadHeaderHttp) object;
 			if(uploadHeaderHttp.getStatus()==1) {
+				dismissProgress();
 				SharedUtils sharedUtils = SharedUtils.getInstance();
 				sharedUtils.writeString(Constant.USER_HEAD, uploadHeaderHttp.getImageEntity().getUserHead());
 				Glide.with(ICSOpenVPNApplication.getContext()).load(uploadHeaderHttp.getImageEntity().getUserHead()).
