@@ -115,10 +115,11 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
             braceletDial();
             closedialClicked();
         } else {
-            Toast.makeText(getActivity(), "请输入要拨打的电话号码", Toast.LENGTH_SHORT).show();
+            CommonTools.showShortToast(getActivity(), "请输入要拨打的电话号码");
         }
 
     }
+
     /***
      *手环拨打电话
      */
@@ -131,7 +132,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         if (SocketConstant.REGISTER_STATUE_CODE == 3) {
             //检测是否开启读取联系人电话
             int hasWriteContactsPermission = checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS);
-            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED&&version>22) {
+            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED && version > 22) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_CONTACTS},
                         REQUEST_CODE_ASK_PERMISSIONS);
                 return;
@@ -171,6 +172,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         }
         return true;
     }
+
     public void inited() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(ReceiveCallActivity.UPDATE_CONTACT_REDORE);
@@ -209,19 +211,23 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     public void clearInputEdit() {
         t9dialpadview.mT9InputEt.setText("");
     }
+
     private void searchContactRedocer() {
         AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, getActivity().getContentResolver(), false);
         FindContactUtil.queryContactRecoderData(asyncQueryContactRecodeHandler);
 
     }
+
     public void hidePhoneBottomBar() {
         ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
         ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
     }
+
     public void showPhoneBottomBar() {
         ProMainActivity.radiogroup.setVisibility(View.GONE);
         ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
     }
+
     public void clickPhoneLinearLayout() {
         //ProMainActivity.llArray[1].performClick();
     }
