@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -10,11 +11,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.provider.Settings;
+import android.support.v13.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
@@ -88,15 +94,18 @@ import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.CustomViewPager;
 import de.blinkt.openvpn.views.MyRadioButton;
 import de.blinkt.openvpn.views.TopProgressView;
+import de.blinkt.openvpn.views.dialog.DialogBalance;
+import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static cn.com.aixiaoqi.R.string.index_registing;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 
-public class ProMainActivity extends BaseNetActivity implements View.OnClickListener, View.OnLongClickListener {
+public class ProMainActivity extends BaseNetActivity implements View.OnClickListener, View.OnLongClickListener, DialogInterfaceTypeBase {
 
 	public static ProMainActivity instance = null;
+	private int REQUEST_LOCATION_PERMISSION = 3;
 	@BindView(R.id.mViewPager)
 	CustomViewPager mViewPager;
 	@BindView(R.id.callImageView)
@@ -172,6 +181,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 		}
 	};
+	//位置权限提示DIALOG
+	private DialogBalance noLocationPermissionDialog;
+
 
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
@@ -209,11 +221,24 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		setListener();
 		initBrocast();
 		initServices();
+		initSet();
 		// initData();
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
 		//注册eventbus，观察goip注册问题
 		EventBus.getDefault().register(this);
+	}
+
+
+	/**
+	 * android 6.01需要位置信息动态获取
+	 */
+	private void initSet() {
+		if (Build.VERSION.SDK_INT == 23 && !NetworkUtils.isLocationOpen(getApplicationContext())) {
+			//不能按返回键，只能二选其一
+			noLocationPermissionDialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
+			noLocationPermissionDialog.changeText(getResources().getString(R.string.no_location_permission), getResources().getString(R.string.sure));
+		}
 	}
 
 	private void initData() {
@@ -418,6 +443,27 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			} else {
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
 			}
+		} else if (requestCode == REQUEST_LOCATION_PERMISSION) {
+			if (NetworkUtils.isLocationOpen(getApplicationContext())) {
+				Log.i(TAG, "打开位置权限");
+				//Android6.0需要动态申请权限
+				if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+						!= PackageManager.PERMISSION_GRANTED) {
+					//请求权限
+					ActivityCompat.requestPermissions(this,
+							new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+									Manifest.permission.ACCESS_FINE_LOCATION},
+							REQUEST_LOCATION_PERMISSION);
+					if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+							Manifest.permission.ACCESS_COARSE_LOCATION)) {
+						//判断是否需要解释
+//							DialogUtils.shortT(getApplicationContext(), "需要蓝牙权限");
+					}
+				}
+
+			} else {
+				CommonTools.showShortToast(this,getString(R.string.no_location_tips));
+			}
 		}
 	}
 
@@ -601,6 +647,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		});
 
+	}
+
+	@Override
+	public void dialogText(int type, String text) {
+		if (type == 2) {
+			Intent enableLocate = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+			startActivityForResult(enableLocate, REQUEST_LOCATION_PERMISSION);
+		}
 	}
 
 	private class MyRadioGroupListener implements RadioGroup.OnCheckedChangeListener {
@@ -1070,8 +1124,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				if (entity.isopen() && getString(R.string.bluetooth_unopen).equals(topProgressView.getContent())) {
 					if (checkNetWorkAndBlueIsOpen()) {
 						topProgressView.setVisibility(View.GONE);
-					} else {
-						topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
 					}
 				} else {
 					topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
@@ -1081,8 +1133,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				if (entity.isopen() && getString(R.string.no_wifi).equals(topProgressView.getContent())) {
 					if (checkNetWorkAndBlueIsOpen()) {
 						topProgressView.setVisibility(View.GONE);
-					} else {
-						topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
 					}
 				} else {
 					topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
@@ -1190,7 +1240,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							int powerText;
 							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16);
 							String bracelettype = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-							if (MyDeviceActivity.UNIBOX.equals(bracelettype)) {
+							if (MyDeviceActivity.UNIBOX.contains(bracelettype)) {
 								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
 							} else {
 								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);

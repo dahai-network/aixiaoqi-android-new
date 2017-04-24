@@ -242,6 +242,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 //			statueTextView.setVisibility(GONE);
 			if (blueStatus != null) {
+				//如果状态来不及更新，仍是未绑定则修改为未插卡
+				if (blueStatus.equals(getString(R.string.index_unbind))) {
+					blueStatus = getString(R.string.index_un_insert_card);
+				}
 				setConStatus(blueStatus);
 			}
 			skyUpgradeHttp();
@@ -647,7 +651,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				ICSOpenVPNApplication.isConnect = false;
 				ReceiveBLEMoveReceiver.isConnect = false;
 				registFail();
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
 				CommonTools.showShortToast(this, "已解绑设备");
 				mService.disconnect();
 				finish();
@@ -824,7 +827,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	@Override
 	public void noNet() {
-
 		CommonTools.showShortToast(this, getString(R.string.no_wifi));
 	}
 

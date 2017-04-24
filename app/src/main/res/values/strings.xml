@@ -633,4 +633,7 @@
     <string name="close">关闭</string>
     <string name="last_step">上一步</string>
     <string name="update_header">正在更新头像，请稍后...</string>
+
+    <string name="no_location_permission">蓝牙搜索需要打开位置信息</string>
+    <string name="no_location_tips">未打开位置服务，将无法搜索手环</string>
 </resources>
