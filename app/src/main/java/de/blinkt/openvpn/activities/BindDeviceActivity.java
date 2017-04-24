@@ -76,7 +76,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	private Handler findDeviceHandler;
 	private HashSet<BluetoothModel> deviceSet;
 	private BluetoothAdapter mBluetoothAdapter;
-	private static final long SCAN_PERIOD = 120000; //120 seconds
+	private static final long SCAN_PERIOD = 20000; //120 seconds
 	private String deviceAddress = "";
 	SharedUtils utils = SharedUtils.getInstance();
 	private DialogBalance noDevicedialog;
@@ -197,7 +197,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 
 	private void showDialog() {
 		//不能按返回键，只能二选其一
-		noDevicedialog = new DialogBalance(BindDeviceActivity.this, BindDeviceActivity.this, R.layout.dialog_balance, 2);
+		noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
 //		noDevicedialog.setCanClickBack(false);
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
@@ -435,6 +435,12 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 								@Override
 								public void run() {
 									updateDeviceInfo();
+									Intent intent = new Intent(BindDeviceActivity.this, MyDeviceActivity.class);
+									String type = getIntent().getStringExtra(MyDeviceActivity.BRACELETTYPE);
+									intent.putExtra(MyDeviceActivity.BRACELETTYPE, type);
+									intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
+									SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE, type);
+									startActivity(intent);
 									finish();
 								}
 							});

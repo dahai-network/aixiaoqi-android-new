@@ -15,6 +15,7 @@
             android:id="@+id/packageImageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:background="@drawable/default_img"
             />
 
