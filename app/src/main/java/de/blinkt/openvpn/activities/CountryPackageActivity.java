@@ -121,7 +121,7 @@ public class CountryPackageActivity extends BaseNetActivity implements Interface
 			if (bean.size() != 0) {
 				NoNetRelativeLayout.setVisibility(GONE);
 				packageDetailRecyclerView.setVisibility(View.VISIBLE);
-				packageImageView.setVisibility(View.VISIBLE);
+				//packageImageView.setVisibility(View.VISIBLE);
 				packageDetailRecyclerView.setAdapter(new CountryDetailPackageAdapter(this, http.getCountryPacketList(),countryPic));
 			} else {
 				packageDetailRecyclerView.setVisibility(View.GONE);
