@@ -698,12 +698,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
 							Log.d(TAG, "rightComplete: " + "有新的版本");
 							setPoint();
+						}else {
+							CommonTools.showShortToast(this, getString(R.string.last_version));
+							SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, false);
+							stopAnim();
+							firmwareTextView.setCompoundDrawables(null, null, null, null);
 						}
-					} else {
-						CommonTools.showShortToast(this, getString(R.string.last_version));
-						SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, false);
-						stopAnim();
-						firmwareTextView.setCompoundDrawables(null, null, null, null);
 					}
 				}
 			}

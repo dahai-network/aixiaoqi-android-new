@@ -34,125 +34,9 @@
                 android:layout_height="150dp">
             </de.blinkt.openvpn.views.bannerview.CycleViewPager>
 
-            <LinearLayout
-                android:id="@+id/communicationLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4.5dp"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/padding_15dp"
-                android:paddingLeft="7.5dp"
-                android:paddingRight="7.5dp"
-                android:paddingTop="18dp"
-                >
 
-                <TextView
-                    android:id="@+id/communicationTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/communication_packet"
-                    android:textColor="@color/index_black"
-                    android:textSize="16sp"
-                    />
+             <include layout="@layout/inland_package"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <RelativeLayout
-                        android:id="@+id/leftPacketRelativeLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="18dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/index_call_packet_back_purple"
-                        android:padding="@dimen/padding_15dp"
-                        >
-
-                        <TextView
-                            android:id="@+id/leftPriceTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            tools:text="12元"
-                            />
-
-                        <TextView
-                            android:id="@+id/leftContentTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/leftPriceTextView"
-                            android:layout_centerHorizontal="true"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            tools:text="通话时长500分钟"
-                            />
-
-                        <TextView
-                            android:id="@+id/leftExpiryDateTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/leftContentTextView"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/padding_5dp"
-                            android:textColor="@color/white"
-                            android:textSize="12sp"
-                            tools:text="通话时长500分钟"
-                            />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/rightPacketRelativeLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/index_call_packet_back_orange"
-                        android:padding="@dimen/padding_15dp"
-                        >
-
-                        <TextView
-                            android:id="@+id/rightPriceTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            tools:text="12元"
-                            />
-
-                        <TextView
-                            android:id="@+id/rightContentTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/rightPriceTextView"
-                            android:layout_centerHorizontal="true"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            tools:text="通话时长500分钟"
-                            />
-
-                        <TextView
-                            android:id="@+id/rightExpiryDateTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/rightContentTextView"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/padding_5dp"
-                            android:textColor="@color/white"
-                            android:textSize="12sp"
-                            tools:text="通话时长500分钟"
-                            />
-
-                    </RelativeLayout>
-                </LinearLayout>
-            </LinearLayout>
 
 
             <RelativeLayout
@@ -184,8 +68,7 @@
                     android:paddingRight="7.5dp"
                     android:text="@string/more"
                     android:textColor="@color/index_gray_text"
-                    android:textSize="14sp"
-                    android:visibility="gone"/>
+                    android:textSize="14sp" />
 
                 <View
                     style="@style/horizontal_line_view"
@@ -236,6 +119,7 @@
                     android:drawableRight="@drawable/more"
                     android:paddingRight="7.5dp"
                     android:text="@string/more"
+                    android:visibility="gone"
                     android:textColor="@color/index_gray_text"
                     android:textSize="14sp"
                     />

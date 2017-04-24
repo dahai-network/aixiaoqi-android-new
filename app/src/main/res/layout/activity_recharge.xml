@@ -149,11 +149,11 @@
            android:layout_marginTop="@dimen/padding_5dp">
 
             <TextView
+                android:id="@+id/textView5"
                 android:layout_width="0dp"
-                android:layout_marginRight="@dimen/padding_10dp"
                 android:layout_height="@dimen/padding_50dp"
-                android:layout_weight="1"
-                />
+                android:layout_marginRight="@dimen/padding_10dp"
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="0dp"
@@ -191,7 +191,7 @@
         android:orientation="vertical"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:paddingTop="@dimen/padding_50dp">
+        android:paddingTop="@dimen/padding_30dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -207,8 +207,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:paddingBottom="@dimen/padding_10dp"
-            android:paddingTop="@dimen/padding_10dp">
+            android:paddingBottom="@dimen/padding_15dp"
+            android:paddingTop="@dimen/padding_15dp">
 
 
 
@@ -260,8 +260,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:paddingBottom="@dimen/padding_10dp"
-            android:paddingTop="@dimen/padding_10dp">
+            android:paddingBottom="@dimen/padding_15dp"
+            android:paddingTop="@dimen/padding_15dp">
 
 
 

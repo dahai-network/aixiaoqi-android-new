@@ -99,7 +99,7 @@ public class ReceiveSocketService extends Service {
 	private void connectFailReconnect() {
 		ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "connect fail:\n");
 		if (!isDisconnect) {
-			CommonTools.delayTime(5000);
+			CommonTools.delayTime(15000);
 			if (tcpClient != null && !tcpClient.isConnected()) {
 				if (contactFailCount <= 3) {
 					reConnect();

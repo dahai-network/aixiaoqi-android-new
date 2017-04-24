@@ -116,6 +116,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 				if (TextUtils.isEmpty(cacheControl)) {
 					cacheControl = "public, only-if-cached, max-stale=" + 4 * 24 * 60 * 60;
 				}
+				noNetShow();
 				Log.i("http", "response.code():" + response.code());
 				return response.newBuilder()
 						.removeHeader("Cache-Control")

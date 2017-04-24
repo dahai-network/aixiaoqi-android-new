@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/communicationRelativeLayout"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_marginTop="4.5dp"
+android:background="@color/white"
+android:paddingBottom="@dimen/padding_15dp"
+android:paddingLeft="7.5dp"
+android:paddingRight="7.5dp"
+android:paddingTop="18dp"
+    >
+
+<TextView
+    android:id="@+id/communicationTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/communication_packet"
+    android:textColor="@color/index_black"
+    android:textSize="16sp"
+    />
+
+<RelativeLayout
+    android:id="@+id/leftPacketRelativeLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@id/communicationTextView"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="@dimen/padding_20dp"
+    android:background="@drawable/index_call_packet_back_purple"
+    android:padding="@dimen/padding_15dp"
+    >
+
+    <TextView
+        android:id="@+id/leftPriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+
+        />
+
+    <TextView
+        android:id="@+id/leftContentTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/leftPriceTextView"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+
+        />
+
+    <TextView
+        android:id="@+id/leftExpiryDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/leftContentTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+
+        />
+
+</RelativeLayout>
+
+<RelativeLayout
+    android:id="@+id/rightPacketRelativeLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_below="@id/communicationTextView"
+    android:layout_marginTop="@dimen/padding_20dp"
+    android:background="@drawable/index_call_packet_back_orange"
+    android:padding="@dimen/padding_15dp"
+    >
+
+    <TextView
+        android:id="@+id/rightPriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+
+        />
+
+    <TextView
+        android:id="@+id/rightContentTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rightPriceTextView"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+
+        />
+
+    <TextView
+        android:id="@+id/rightExpiryDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rightContentTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+
+        />
+
+</RelativeLayout>
+</RelativeLayout>

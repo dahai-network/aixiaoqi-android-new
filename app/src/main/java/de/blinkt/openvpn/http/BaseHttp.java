@@ -3,6 +3,8 @@ package de.blinkt.openvpn.http;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.JsonSyntaxException;
+
 import java.util.HashMap;
 
 /**
@@ -64,7 +66,11 @@ public class BaseHttp extends CommonHttp {
 		Log.e(TAG, "JSON 日志：" + response);
 		if (!TextUtils.isEmpty(response)) {
 
-			parseObject(response);
+			try{
+				parseObject(response);
+			}catch (JsonSyntaxException e){
+
+			}
 		}
 		interfaceCallback.rightComplete(cmdType_, this);
 	}

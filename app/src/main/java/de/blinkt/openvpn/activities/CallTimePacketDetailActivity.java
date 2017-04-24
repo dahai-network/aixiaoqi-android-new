@@ -141,12 +141,6 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
             Log.d("aixiaoqi__", "rightComplete: " + bean.getFeatures());
             SharedUtils.getInstance().writeString(Constant.CALLTIME_FEATURES_SIGN, bean.getFeatures());
             tv_expirydate.setText("有效期：" + bean.getExpireDays() + "天");
-        } else if (cmdType == HttpConfigUrl.COMTYPE_ACTIVATE_KINGCARD) {
-            if (object.getStatus() == 1) {
-                orderStatus = 1;
-                refresh();
-            }
-            CommonTools.showShortToast(this, object.getMsg());
         }
     }
 
