@@ -77,7 +77,7 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
     private void initView() {
         vpPager = (ViewPager) findViewById(R.id.vp_pager);
         myTabs = (PagerSlidingTabStripExtends) findViewById(R.id.my_tabs);
-        if (callTimePDDetailFragment == null ||! callTimePDDetailFragment.isAdded()) {
+        if (callTimePDDetailFragment == null || !callTimePDDetailFragment.isAdded()) {
             //判断是否已经被添加
             callTimePacketDetailAdapter = new CallTimePacketDetailAdapter(getSupportFragmentManager());
         }
