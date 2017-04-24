@@ -182,7 +182,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 		View rootView = inflater.inflate(R.layout.fragment_account,
 				container, false);
 		ButterKnife.bind(this, rootView);
-
+		title.setTextTitle(getString(R.string.personal_center));
 		tvNewPackagetAction = (TextView) rootView.findViewById(R.id.tv_new_packaget_action);
 		tvNewVersion = (TextView) rootView.findViewById(R.id.tv_new_version);
 		//初始化状态
@@ -260,7 +260,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	}
 
 	private void getData() {
-		title.setTextTitle(getString(R.string.personal_center));
+
 		if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.NICK_NAME)))
 			accountNameTextView.setText(SharedUtils.getInstance().readString(Constant.NICK_NAME));
 		Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).centerCrop().placeholder(R.drawable.default_head)

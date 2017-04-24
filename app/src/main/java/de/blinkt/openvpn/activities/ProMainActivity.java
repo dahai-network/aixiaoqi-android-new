@@ -233,10 +233,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	}
 
-	private void findViewsById() {
+	/*private void findViewsById() {
 		phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
 		radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
-	}
+	}*/
 
 
 	/**

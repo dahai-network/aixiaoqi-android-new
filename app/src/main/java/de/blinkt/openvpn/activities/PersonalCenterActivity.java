@@ -467,8 +467,8 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 				dismissProgress();
 				SharedUtils sharedUtils = SharedUtils.getInstance();
 				sharedUtils.writeString(Constant.USER_HEAD, uploadHeaderHttp.getImageEntity().getUserHead());
-				Glide.with(ICSOpenVPNApplication.getContext()).load(uploadHeaderHttp.getImageEntity().getUserHead()).
-						transform(new GlideCircleTransform(this)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(headImageView);
+				Glide.with(ICSOpenVPNApplication.getContext()).load(uploadHeaderHttp.getImageEntity().getUserHead()).placeholder(R.drawable.default_head).
+						transform(new GlideCircleTransform(this)).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(headImageView);
 			}else{
 				CommonTools.showShortToast(this,getString(R.string.update_fail));
 			}

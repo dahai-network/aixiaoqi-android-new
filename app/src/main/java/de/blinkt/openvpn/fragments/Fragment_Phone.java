@@ -74,7 +74,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     ContactRecodeAdapter contactRecodeAdapter;
     public SQLiteDatabase sqliteDB;
     public DatabaseDAO dao;
-    public EditText dial_input_edit_text;
     ConnectedRecoderReceive connectedRecoderReceive;
 
     public static Fragment_Phone newInstance() {

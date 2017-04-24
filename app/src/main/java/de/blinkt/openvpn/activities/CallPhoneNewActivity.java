@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.hardware.Sensor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -16,7 +15,6 @@ import android.provider.CallLog;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -64,6 +62,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	public static boolean isForeground = false;
 	TextView keyboard;
 	T9TelephoneDialpadView t9dialpadview;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -82,13 +81,17 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 	@Override
 	public void onAddDialCharacter(String addCharacter) {
-		if(!TextUtils.isEmpty(addCharacter))
+		if(!TextUtils.isEmpty(addCharacter)){
 			ICSOpenVPNApplication.the_sipengineReceive.SendDtmf(0,addCharacter);
+
+		}
 	}
 
 	@Override
 	public void onDialInputTextChanged(String curCharacter) {
-
+		if(!TextUtils.isEmpty(curCharacter)){
+			phonenumtxt.setText(curCharacter);
+		}
 	}
 
 	@Override
@@ -145,7 +148,6 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 		t9dialpadview.setOnT9TelephoneDialpadView(this);
 		t9dialpadview.searchEtHidden();
-
 		t9dialpadview.setBtnColor( Color.WHITE);
 		displayStatus(R.string.calling);
 
@@ -282,9 +284,11 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 						if (ICSOpenVPNApplication.the_sipengineReceive != null) {
 							CommonTools.delayTime(500);
 							ICSOpenVPNApplication.the_sipengineReceive.Hangup();
+
 						}
 					}
 				}).start();
+				t9dialpadview.clearT9Input();
 				break;
 			case  R.id.keyboard:
 				t9dialpadview.setVisibility(View.VISIBLE);

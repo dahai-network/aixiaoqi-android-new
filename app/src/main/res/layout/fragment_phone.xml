@@ -4,7 +4,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     >
 
     <android.support.v7.widget.RecyclerView
@@ -18,12 +17,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title"
-        android:background="@color/gray_back"
-        android:paddingTop="@dimen/padding_175dp"
+        android:background="@color/white"
         android:visibility="gone"
+        android:padding="@dimen/padding_15dp"
         android:textColor="@color/gray_text"
-        android:paddingLeft="@dimen/padding_30dp"
-        android:paddingRight="@dimen/padding_30dp"
+        android:gravity="center"
         android:text="@string/no_permission"
         />
 

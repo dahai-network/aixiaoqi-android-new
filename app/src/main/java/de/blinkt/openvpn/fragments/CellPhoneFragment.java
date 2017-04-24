@@ -5,10 +5,12 @@ package de.blinkt.openvpn.fragments;
  */
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -224,10 +226,10 @@ public class CellPhoneFragment extends Fragment {
 /**
  * 监听ViewPage的状态变化，控制是否滑动
  */
-     mViewPager.setOnTouchListener(new View.OnTouchListener() {
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-               switch (event.getAction()) {
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_MOVE:
                         mViewPager.requestDisallowInterceptTouchEvent(false);
                         break;
