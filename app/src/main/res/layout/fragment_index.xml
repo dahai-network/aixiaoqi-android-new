@@ -37,8 +37,6 @@
 
              <include layout="@layout/inland_package"/>
 
-
-
             <RelativeLayout
                 android:id="@+id/hotPacketLinearLayout"
                 android:layout_width="match_parent"

@@ -53,7 +53,6 @@ public class PackageMarketAdapter extends RecyclerView.Adapter {
 			((ViewHolder) holder).continentLinearLayout.setVisibility(View.VISIBLE);
 			((ViewHolder) holder).continentTextView.setVisibility(View.VISIBLE);
 			 GridLayoutManager  gridLayoutManager=	new GridLayoutManager(context,4);
-			gridLayoutManager.setSmoothScrollbarEnabled(false);
 			recyclerView.setVisibility(View.VISIBLE);
 			recyclerView.addItemDecoration(new DividerGridItemDecoration(context));
 			recyclerView.setLayoutManager(gridLayoutManager);
