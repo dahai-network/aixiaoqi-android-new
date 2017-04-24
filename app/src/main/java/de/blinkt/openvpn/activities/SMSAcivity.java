@@ -641,10 +641,8 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 		SmsDetailEntity smsEntity = (SmsDetailEntity) data;
 		if (isCheck) {
 			ids.add(smsEntity);
-			CommonTools.showShortToast(this, "添加短信ID:" + smsEntity.getSMSID() + "，位置：" + smsEntity.getPosition());
 		} else {
 			ids.remove(smsEntity);
-			CommonTools.showShortToast(this, "删除短信ID:" + smsEntity.getSMSID() + "，位置：" + smsEntity.getPosition());
 		}
 	}
 

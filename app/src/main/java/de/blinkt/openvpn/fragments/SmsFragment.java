@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -89,13 +88,12 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
 			if (keyCode == KeyEvent.KEYCODE_BACK) {  //表示按返回键 时的操作
-                if(smsListAdapter.isDeleteState()) {
+				if (smsListAdapter.isDeleteState()) {
 					smsListAdapter.setDeleteImage(false);
 					editSmsImageView.setBackground(getResources().getDrawable(R.drawable.edit_sms_selector));
 					smsListAdapter.notifyDataSetChanged();
 					ids.clear();
-				}else
-				{
+				} else {
 					return false;
 				}
 				return true;    //已处理
@@ -110,7 +108,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		public void onReceive(Context context, Intent intent) {
 			if (NOTIFY_RECEIVED_ACTION.equals(intent.getAction())) {
 
-					onRefresh();
+				onRefresh();
 			} else if (DELTE_MESSAGE.equals(intent.getAction())) {
 				if (mAllTempLists != null && clickPosition != -1 && smsListAdapter != null) {
 					mAllTempLists.remove(clickPosition);
@@ -275,26 +273,8 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 			SmsEntity smsEntity = (SmsEntity) object;
 			if (isCheck) {
 				ids.add(smsEntity);
-				if (TextUtils.isEmpty(smsEntity.getRealName())) {
-					if (!User.isCurrentUser(smsEntity.getFm())) {
-						CommonTools.showShortToast(getActivity(), "添加短信ID:" + smsEntity.getFm() + "，位置：" + smsEntity.getPosition());
-					} else {
-						CommonTools.showShortToast(getActivity(), "添加短信ID:" + smsEntity.getTo() + "，位置：" + smsEntity.getPosition());
-					}
-				} else {
-					CommonTools.showShortToast(getActivity(), "添加短信ID:" + smsEntity.getRealName() + "，位置：" + smsEntity.getPosition());
-				}
 			} else {
 				ids.remove(smsEntity);
-				if (TextUtils.isEmpty(smsEntity.getRealName())) {
-					if (!User.isCurrentUser(smsEntity.getFm())) {
-						CommonTools.showShortToast(getActivity(), "删除短信ID:" + smsEntity.getFm() + "，位置：" + smsEntity.getPosition());
-					} else {
-						CommonTools.showShortToast(getActivity(), "删除短信ID:" + smsEntity.getTo() + "，位置：" + smsEntity.getPosition());
-					}
-				} else {
-					CommonTools.showShortToast(getActivity(), "删除短信ID:" + smsEntity.getRealName() + "，位置：" + smsEntity.getPosition());
-				}
 			}
 		}
 	}

@@ -348,7 +348,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 				} else if (getString(R.string.index_aixiaoqicard).equals(getBleStatus())) {
 					status = R.string.index_aixiaoqicard;
 				}
-				intent.putExtra(BRACELETTYPE, SharedUtils.getInstance().readString(Constant.BRACELETNAME));
+				String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+				//如果设备名没有就设置成爱小器钥匙扣
+				if (TextUtils.isEmpty(braceletName)) {
+					braceletName = MyDeviceActivity.UNIBOX;
+				}
+				intent.putExtra(BRACELETTYPE, braceletName);
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
 				break;
 			case R.id.permission_set:
