@@ -77,7 +77,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	public ScrollView indexScrollView;
 
 	private RelativeLayout hotPacketLinearLayout;
-	private LinearLayout communicationLinearLayout;
+	private RelativeLayout communicationRelativeLayout;
 	private RelativeLayout leftPacketRelativeLayout;
 	private RelativeLayout rightPacketRelativeLayout;
 	private LinearLayout flowPackageLinearLayout;
@@ -105,6 +105,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		view = inflater.inflate(R.layout.fragment_index, container, false);
 		ButterKnife.bind(this, view);
 		findById(view);
+
 		return view;
 	}
 
@@ -130,7 +131,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 		hardWareRecyclerView = (RecyclerView) view.findViewById(R.id.hardWareRecyclerView);
 		hotPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.hotPacketLinearLayout);
 		guiderImageView = (ImageView) view.findViewById(R.id.guiderImageView);
-		communicationLinearLayout = (LinearLayout) view.findViewById(R.id.communicationLinearLayout);
+		communicationRelativeLayout = (RelativeLayout) view.findViewById(R.id.communicationRelativeLayout);
 		leftPacketRelativeLayout = (RelativeLayout) view.findViewById(R.id.leftPacketRelativeLayout);
 		rightPacketRelativeLayout = (RelativeLayout) view.findViewById(R.id.rightPacketRelativeLayout);
 		flowPackageLinearLayout = (LinearLayout) view.findViewById(R.id.flowPackageLinearLayout);
@@ -151,7 +152,9 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	private void addData() {
 		getIndexBanner();
 		pageViews = new ArrayList<>();
+		getCallPackage();
 		getHotPackage();
+		getHardWare();
 	}
 
 	/**
@@ -195,8 +198,6 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	@Override
 	public void onResume() {
 		super.onResume();
-		getCallPackage();
-		getHardWare();
 		controlWheel(true);
 	}
 
@@ -300,7 +301,7 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 					}
 				});
 			} else {
-				communicationLinearLayout.setVisibility(GONE);
+				communicationRelativeLayout.setVisibility(GONE);
 			}
 		} else if (cmdType == COMTYPE_GET_PRODUCTS) {
 			GetProductHttp http = (GetProductHttp) object;

@@ -19,7 +19,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,7 +38,9 @@ import de.blinkt.openvpn.model.PacketDtailEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.PagerSlidingTabStripExtends;
+
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.orderStatus;
+
 public class CallTimePacketDetailActivity extends BaseNetActivity implements InterfaceCallback {
     public static CallTimePacketDetailActivity activity;
     @BindView(R.id.retryTextView)
@@ -68,10 +72,15 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
         addData();
     }
 
+    CallTimePacketDetailAdapter callTimePacketDetailAdapter;
+
     private void initView() {
         vpPager = (ViewPager) findViewById(R.id.vp_pager);
         myTabs = (PagerSlidingTabStripExtends) findViewById(R.id.my_tabs);
-        CallTimePacketDetailAdapter callTimePacketDetailAdapter = new CallTimePacketDetailAdapter(getSupportFragmentManager());
+        if (callTimePDDetailFragment == null || !callTimePDDetailFragment.isAdded()) {
+            //判断是否已经被添加
+            callTimePacketDetailAdapter = new CallTimePacketDetailAdapter(getSupportFragmentManager());
+        }
         //创建适配器
         vpPager.setAdapter(callTimePacketDetailAdapter);
         myTabs.setViewPager(vpPager);
@@ -96,11 +105,13 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
                 break;
         }
     }
+
     //获取数据
     private void addData() {
         showDefaultProgress();
         createHttpRequest(HttpConfigUrl.COMTYPE_PACKET_DETAIL, getIntent().getStringExtra("id"));
     }
+
     //设置大小字体
     public void setSpan(TextView textview) {
         Spannable WordtoSpan = new SpannableString(textview.getText().toString());
@@ -112,6 +123,7 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
 
         textview.setText(WordtoSpan, TextView.BufferType.SPANNABLE);
     }
+
     private void createViews() {
         setContentView(R.layout.activity_call_time_packet_detail);
         initView();
@@ -141,12 +153,6 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
             Log.d("aixiaoqi__", "rightComplete: " + bean.getFeatures());
             SharedUtils.getInstance().writeString(Constant.CALLTIME_FEATURES_SIGN, bean.getFeatures());
             tv_expirydate.setText("有效期：" + bean.getExpireDays() + "天");
-        } else if (cmdType == HttpConfigUrl.COMTYPE_ACTIVATE_KINGCARD) {
-            if (object.getStatus() == 1) {
-                orderStatus = 1;
-                refresh();
-            }
-            CommonTools.showShortToast(this, object.getMsg());
         }
     }
 

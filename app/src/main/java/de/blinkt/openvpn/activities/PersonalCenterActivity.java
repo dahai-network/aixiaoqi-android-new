@@ -100,8 +100,6 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 	private static int output_X = 150;
 	private static int output_Y = 150;
 
-	private ImageView headImage = null;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -161,62 +161,26 @@ public class AsyncQueryContactHandler extends AsyncQueryHandler {
             // 打开头像图片的InputStream
             InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(), uri);
             // 从InputStream获得bitmap
-//            try {
-//
-//                byte[] data=readStream(input);
-//            BitmapFactory.Options options = new BitmapFactory.Options();
-//            options.inJustDecodeBounds = true;
-//            BitmapFactory.decodeByteArray(data, 0, data.length, options);
-//            options.inSampleSize =2;
-//            options.inJustDecodeBounds = false;
-//            return BitmapFactory.decodeByteArray(data, 0, data.length, options);
-//            }catch (Exception e){
-//
-//            }
+
             try {
 
                 byte[] data=readStream(input);
                 if(data!=null) {
                     bmp_head = BitmapFactory.decodeByteArray(data, 0, data.length);
-//                    double scale =10;
-//                    int bmpWidth = bmp_head.getWidth();
-//                    int bmpHeight = bmp_head.getHeight();
-////        /* 放大以后的宽高，一定要强制转换为float型的 */
-//                    float    scaleWidth = (float) (1 * scale);
-//                    float   scaleHeight = (float) (1 * scale);
-//
-//        /* 产生resize后的Bitmap对象 */
-//                    Matrix matrix = new Matrix();
-//                    matrix.postScale(scaleWidth, scaleHeight);
-//                    Bitmap resizeBmp = Bitmap.createBitmap(bmp_head, 0, 0, bmpWidth, bmpHeight,
-//                            matrix, true);
-//
-//                    int resizeBmpWidth = resizeBmp.getWidth();
-//                    int resizeBmpHeight = resizeBmp.getHeight();
-//                    Bitmap output = Bitmap.createBitmap(resizeBmpWidth, resizeBmpHeight, Bitmap.Config.ARGB_8888);
-//                    Canvas canvas = new Canvas(output);
-//                    int color = 0xff424242;
-//                    Paint paint = new Paint();
-//                    Rect rect = new Rect(resizeBmpWidth/2-(int)(resizeBmpWidth/2*Math.sqrt(2)/2), resizeBmpHeight/2-(int)(resizeBmpHeight/2*Math.sqrt(2)/2), resizeBmpWidth/2+(int)(resizeBmpWidth/2*Math.sqrt(2)/2)
-//                            , resizeBmpHeight/2+(int)(resizeBmpHeight/2*Math.sqrt(2)/2));
-//                    Log.e("getContactPhoto","resizeBmp="+resizeBmp.getWidth()+","+resizeBmp.getHeight()+","+(int)(resizeBmpWidth/2*Math.sqrt(2)/2)+","+(int)(resizeBmpHeight/2*Math.sqrt(2)/2));
-//                    Log.e("getContactPhoto","bmp_head="+bmp_head.getWidth()+bmp_head.getHeight());
-//                    RectF rectF = new RectF(rect);
-//
-//                    paint.setAntiAlias(true);
-//                    canvas.drawARGB(0, 0, 0, 0);
-//                    paint.setColor(color);
-//                    canvas.drawRoundRect(rectF, 5, 5, paint);
-//                    paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-//                    canvas.drawBitmap(resizeBmp, rect, rect, paint);
-//                    int outputWidth = output.getWidth();
-//                    int outputHeight = output.getHeight();
-//                    Bitmap resizeOutputBmp = Bitmap.createBitmap(output, 0, 0, outputWidth, outputHeight,
-//                            matrix, true);
-//                    return  output;
                 }
 
             }catch (Exception e){
+
+            }finally {
+                try {
+                    if(input!=null)
+                        input.close();
+                    if(cursorCantacts!=null){
+                        cursorCantacts.close();
+                    }
+                }catch (Exception e){
+
+                }
 
             }
 

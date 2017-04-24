@@ -123,6 +123,7 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
 
         mTabs = (PagerSlidingTabStripExtends) findViewById(R.id.jbp_tabs);
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
+
         DtailFragmentStatePagerAdapter adapter = new DtailFragmentStatePagerAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
         mTabs.setViewPager(pager);

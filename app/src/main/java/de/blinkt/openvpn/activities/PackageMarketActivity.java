@@ -2,7 +2,7 @@ package de.blinkt.openvpn.activities;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,21 +19,20 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetPakcetHttp;
-import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.PacketMarketHttp;
 import de.blinkt.openvpn.model.PacketEntity;
 import de.blinkt.openvpn.model.PacketMarketEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.pinyin.CharacterParser;
+import de.blinkt.openvpn.views.addHeaderAndFooterRecyclerView.WrapRecyclerView;
 
 
-public class PackageMarketActivity extends BaseNetActivity   {
+public class PackageMarketActivity extends BaseNetActivity {
 
     public static PackageMarketActivity activity;
     @BindView(R.id.marketRecyclerView)
-    RecyclerView marketRecyclerView;
+    WrapRecyclerView marketRecyclerView;
     @BindView(R.id.retryTextView)
     TextView retryTextView;
     @BindView(R.id.NoNetRelativeLayout)
@@ -42,47 +41,55 @@ public class PackageMarketActivity extends BaseNetActivity   {
     TextView noDataTextView;
     @BindView(R.id.NodataRelativeLayout)
     RelativeLayout NodataRelativeLayout;
-    @BindView(R.id.communicationTextView)
-    TextView communicationTextView;
-    @BindView(R.id.leftPriceTextView)
-    TextView leftPriceTextView;
-    @BindView(R.id.leftContentTextView)
-    TextView leftContentTextView;
-    @BindView(R.id.leftExpiryDateTextView)
-    TextView leftExpiryDateTextView;
-    @BindView(R.id.leftPacketRelativeLayout)
-    RelativeLayout leftPacketRelativeLayout;
-    @BindView(R.id.rightPriceTextView)
-    TextView rightPriceTextView;
-    @BindView(R.id.rightContentTextView)
-    TextView rightContentTextView;
-    @BindView(R.id.rightExpiryDateTextView)
-    TextView rightExpiryDateTextView;
-    @BindView(R.id.rightPacketRelativeLayout)
-    RelativeLayout rightPacketRelativeLayout;
-    @BindView(R.id.communicationRelativeLayout)
-    RelativeLayout communicationRelativeLayout;
 
+    String controlCall;
+
+    TextView communicationTextView;
+    TextView leftPriceTextView;
+    TextView leftContentTextView;
+    TextView leftExpiryDateTextView;
+    RelativeLayout leftPacketRelativeLayout;
+    TextView rightPriceTextView;
+    TextView rightContentTextView;
+    TextView rightExpiryDateTextView;
+    RelativeLayout rightPacketRelativeLayout;
+    RelativeLayout communicationRelativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_package_market);
         ButterKnife.bind(this);
-        String controlCall= getIntent().getStringExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE);
-        if(Constant.SHOW.equals(controlCall)){
-            communicationRelativeLayout.setVisibility(View.VISIBLE);
-        }else{
-            communicationRelativeLayout.setVisibility(View.GONE);
-        }
-        initSet(controlCall);
+        controlCall = getIntent().getStringExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE);
+        initSet();
+        if (Constant.SHOW.equals(controlCall)) {
+            addHeader();
+            createHttpRequest(HttpConfigUrl.COMTYPE_PACKET_GET, 1 + "", 2 + "", 1 + "");
+        } else {
 
+        }
     }
 
-    private void initSet(String controlCall) {
+    private void addHeader() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.inland_package, null);
+        communicationTextView= (TextView)view.findViewById(R.id.communicationTextView);
+        leftPriceTextView= (TextView)view.findViewById(R.id.leftPriceTextView);
+        leftContentTextView= (TextView)view.findViewById(R.id.leftContentTextView);
+        leftExpiryDateTextView= (TextView)view.findViewById(R.id.leftExpiryDateTextView);
+        leftPacketRelativeLayout= (RelativeLayout)view.findViewById(R.id.leftPacketRelativeLayout);
+        rightPriceTextView= (TextView)view.findViewById(R.id.rightPriceTextView);
+        rightContentTextView= (TextView)view.findViewById(R.id.rightContentTextView);
+        rightExpiryDateTextView= (TextView)view.findViewById(R.id.rightExpiryDateTextView);
+        rightPacketRelativeLayout= (RelativeLayout)view.findViewById(R.id.rightPacketRelativeLayout);
+        communicationRelativeLayout= (RelativeLayout)view.findViewById(R.id.communicationRelativeLayout);
+        marketRecyclerView.addHeaderView(view);
+    }
+
+    private void initSet() {
         activity = this;
         hasLeftViewTitle(R.string.package_market, 0);
-       LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setSmoothScrollbarEnabled(false);
         marketRecyclerView.setLayoutManager(linearLayoutManager);
         initData();
@@ -93,15 +100,13 @@ public class PackageMarketActivity extends BaseNetActivity   {
     private void initData() {
         //全部展示国家套餐，200个
         createHttpRequest(HttpConfigUrl.COMTYPE_PACKET_MARKET, 200 + "");
-        createHttpRequest(HttpConfigUrl.COMTYPE_PACKET_GET, 1 + "", 2 + "", 1 + "");
-
     }
 
     CharacterParser characterParser;
 
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
-        if(cmdType==HttpConfigUrl.COMTYPE_PACKET_MARKET) {
+        if (cmdType == HttpConfigUrl.COMTYPE_PACKET_MARKET) {
             PacketMarketHttp http = (PacketMarketHttp) object;
             characterParser = CharacterParser.getInstance();
             List<List<PacketMarketEntity>> data = http.getPacketMarketEntityList();
@@ -112,9 +117,9 @@ public class PackageMarketActivity extends BaseNetActivity   {
                     NoNetRelativeLayout.setVisibility(View.GONE);
                     marketRecyclerView.setAdapter(new PackageMarketAdapter(data, this));
                 }
+
             }
-        }
-        else   if (cmdType == HttpConfigUrl.COMTYPE_PACKET_GET) {
+        } else if (cmdType == HttpConfigUrl.COMTYPE_PACKET_GET) {
             GetPakcetHttp http = (GetPakcetHttp) object;
             PacketEntity bean = http.getPacketEntity();
             if (bean != null) {

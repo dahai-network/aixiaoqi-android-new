@@ -40,8 +40,11 @@ public class GetHotHttp extends BaseHttp {
 
 	@Override
 	protected void parseObject(String response) {
-		hotPackageEntityList = new Gson().fromJson(response, new TypeToken<List<HotPackageEntity>>() {
-		}.getType());
+
+			hotPackageEntityList = new Gson().fromJson(response, new TypeToken<List<HotPackageEntity>>() {
+			}.getType());
+
+
 	}
 
 

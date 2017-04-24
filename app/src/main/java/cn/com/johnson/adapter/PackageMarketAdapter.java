@@ -52,9 +52,10 @@ public class PackageMarketAdapter extends RecyclerView.Adapter {
 		} else {
 			((ViewHolder) holder).continentLinearLayout.setVisibility(View.VISIBLE);
 			((ViewHolder) holder).continentTextView.setVisibility(View.VISIBLE);
+			 GridLayoutManager  gridLayoutManager=	new GridLayoutManager(context,4);
 			recyclerView.setVisibility(View.VISIBLE);
 			recyclerView.addItemDecoration(new DividerGridItemDecoration(context));
-			recyclerView.setLayoutManager(new GridLayoutManager(context,4));
+			recyclerView.setLayoutManager(gridLayoutManager);
 
 			recyclerView.setAdapter(new CountryAdapter(packetMarketEntityList, context));
 			((ViewHolder) holder).continentTextView.setText(packetMarketEntityList.get(0).getContinentsDescr() + "");
