@@ -462,7 +462,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				}
 
 			} else {
-				CommonTools.showShortToast(this,getString(R.string.no_location_tips));
+				CommonTools.showShortToast(this, getString(R.string.no_location_tips));
 			}
 		}
 	}
@@ -758,6 +758,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (!TextUtils.isEmpty(deviceTypeStr)) {
 							int deviceType = Integer.parseInt(deviceTypeStr);
 							String typeText;
+							//0是手环，1是钥匙扣
 							if (deviceType == 0) {
 								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
 								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
@@ -1240,10 +1241,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							int powerText;
 							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16);
 							String bracelettype = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-							if (MyDeviceActivity.UNIBOX.contains(bracelettype)) {
-								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-							} else {
+							if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)) {
 								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
+							} else {
+								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
 							}
 							accountFragment.setSummarized(typeText, powerText + "", false);
 							break;

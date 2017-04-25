@@ -381,6 +381,7 @@
                             android:paddingRight="12dp"
                             android:paddingTop="12dp"
                             android:text="@string/remove_bind_under_line"
+                            android:visibility="gone"
                             android:textColor="@color/white"/>
 
                         <View

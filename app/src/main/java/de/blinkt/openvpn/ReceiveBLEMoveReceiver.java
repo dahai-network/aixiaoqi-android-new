@@ -130,14 +130,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						Thread.sleep(100);
 						//8880021400
 						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
+						Thread.sleep(400);
+						sendMessageToBlueTooth(BASIC_MESSAGE);
 						Log.i(TAG, "发送了专属命令");
 						String braceletname = utils.readString(Constant.BRACELETNAME);
 						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
 							Thread.sleep(100);
 							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
 						} else {
-							Thread.sleep(400);
-							sendMessageToBlueTooth(BASIC_MESSAGE);
 							Log.i("toBLue", "连接成功");
 							//更新时间操作
 							sendMessageToBlueTooth(getBLETime());

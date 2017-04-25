@@ -262,6 +262,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (percentInt != 0 && ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.mConnectionState == UartService.STATE_CONNECTED) {
 			percentTextView.setText(percentInt + "%");
 		}
+
+		//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
+		String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
+		if (retryTime >= 20 && mService != null && mService.isConnectedBlueTooth() && TextUtils.isEmpty(macStr)) {
+			retryTime = 0;
+			ReceiveBLEMoveReceiver.retryTime = 0;
+			mService.connect(macStr);
+			Log.i(TAG, "重连重新触发");
+		}
 	}
 
 	private void titleSet() {
@@ -309,7 +318,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					return;
 				}
 				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
-				createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
+				showUnBindDialog();
 				break;
 			case R.id.callPayLinearLayout:
 				if (CommonTools.isFastDoubleClick(1000)) {
@@ -466,17 +475,21 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				if (mService != null) {
-					if (retryTime >= 20 || !ICSOpenVPNApplication.isConnect) {
+					if (retryTime >= 20) {
 //						sinking.setVisibility(GONE);
 //						noConnectImageView.setVisibility(View.VISIBLE);
 //						statueTextView.setVisibility(View.VISIBLE);
 //						unBindButton.setVisibility(GONE);
-						SharedUtils.getInstance().delete(Constant.IMEI);
-						SharedUtils.getInstance().delete(Constant.BRACELETNAME);
+//						SharedUtils.getInstance().delete(Constant.IMEI);
+//						SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 //						macTextView.setText("");
 //						firmwareTextView.setText("");
 //						statueTextView.setText(getString(R.string.conn_bluetooth));
 						CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
+						return;
+					}
+					if (!ICSOpenVPNApplication.isConnect) {
+						CommonTools.showShortToast(MyDeviceActivity.this, "已断开,请退出重新进入我的设备进行重连");
 						return;
 					}
 					connectThread = new Thread(new Runnable() {
@@ -701,7 +714,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
 							Log.d(TAG, "rightComplete: " + "有新的版本");
 							setPoint();
-						}else {
+						} else {
 							CommonTools.showShortToast(this, getString(R.string.last_version));
 							SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, false);
 							stopAnim();
@@ -759,6 +772,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		upgrade.changeText(desc);
 	}
+
 
 	private void uploadToBlueTooth(String deviceName, String deviceAddress) {
 		Log.e(TAG, "uploadToBlueTooth");
@@ -832,6 +846,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	public static final int DOWNLOAD_SKY_UPGRADE = 5;
 	public static final int NOT_YET_REARCH = 6;
+	public static final int UNBIND = 7;
 
 	@Override
 	public void dialogText(int type, String text) {
@@ -851,6 +866,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (type == NOT_YET_REARCH) {
 			retryTime = 0;
 			connDevice(SharedUtils.getInstance().readString(Constant.IMEI));
+		} else if (type == UNBIND) {
+			createHttpRequest(HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
 		} else {
 			onBackPressed();
 		}
@@ -967,6 +984,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					}
 				}
 			};
+
+	private void showUnBindDialog() {
+		//不能按返回键，只能二选其一
+		DialogBalance cardRuleBreakDialog = new DialogBalance(this, this, R.layout.dialog_balance, UNBIND);
+		cardRuleBreakDialog.setCanClickBack(false);
+		cardRuleBreakDialog.changeText(getResources().getString(R.string.are_you_sure_unbind), getResources().getString(R.string.sure));
+	}
 
 
 	private void showDialog() {

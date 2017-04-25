@@ -92,12 +92,12 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 			CrashHandler crashHandler = CrashHandler.getInstance();
 			crashHandler.init(getApplicationContext(), this);
 		}
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-
-			}
-		}).start();
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//
+//			}
+//		}).start();
 		initUpgrade();
 		EventBus.getDefault().register(this);
 		searchContact();
