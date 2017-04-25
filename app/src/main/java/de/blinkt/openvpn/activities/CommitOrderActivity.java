@@ -35,6 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
+import cn.com.aixiaoqi.wxapi.WXPayEntryActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -132,8 +133,9 @@ public class CommitOrderActivity extends BaseNetActivity {
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                         Toast.makeText(CommitOrderActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-                        PaySuccessActivity.launch(CommitOrderActivity.this, PaySuccessActivity.BUY, PaySuccessActivity.ALI,
-                                orderEntity.getOrder().getTotalPrice() + "", orderEntity.getOrder().getOrderID());
+//                        PaySuccessActivity.launch(CommitOrderActivity.this, PaySuccessActivity.BUY, PaySuccessActivity.ALI,
+//                                orderEntity.getOrder().getTotalPrice() + "", orderEntity.getOrder().getOrderID());
+                        MyOrderDetailActivity.launch(CommitOrderActivity.this, orderEntity.getOrder().getOrderID());
                         sureTextView.setEnabled(true);
                         resetCount();
                         finish();
@@ -330,6 +332,7 @@ public class CommitOrderActivity extends BaseNetActivity {
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID) {
             try {
+                WXPayEntryActivity.PAY_PURPOSE=WXPayEntryActivity.PAY_ORDER;
                 api = WXAPIFactory.createWXAPI(CommitOrderActivity.this, WEIXIN_APPID);
                 WeixinGetPayIdHttp http = (WeixinGetPayIdHttp) object;
                 WeiXinResultEntity entity = http.getWeixinResultEntity();
