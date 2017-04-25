@@ -19,14 +19,18 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import com.umeng.analytics.MobclickAgent;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.MyViewPager;
+
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLEPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLESMS;
 
@@ -41,7 +45,6 @@ public class CellPhoneFragment extends Fragment {
      * 拨打电话标题
      */
     public static TextView dial_tittle_fl;
-
     private ArrayList<Fragment> fragments = new ArrayList<>();
     Activity activity;
     MyViewPager mViewPager;
@@ -89,7 +92,6 @@ public class CellPhoneFragment extends Fragment {
 
     private void addListener() {
 
-
         /**
          * 悬浮按钮事件
          */
@@ -102,6 +104,7 @@ public class CellPhoneFragment extends Fragment {
                 hidePhoneBottomBar();
                 if (ProMainActivity.phone_linearLayout.getVisibility() == View.GONE || ProMainActivity.phone_linearLayout.getVisibility() == View.INVISIBLE) {
                     ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
+                    Log.d("aixiaoqi__", "onClick:floatingActionButton ");
                     ProMainActivity.radiogroup.setVisibility(View.GONE);
                 }
             }
@@ -151,7 +154,10 @@ public class CellPhoneFragment extends Fragment {
 
     @Override
     public void onResume() {
+
         super.onResume();
+        if (floatingActionButton.getVisibility() == View.VISIBLE)
+            hidePhoneBottomBar();
     }
 
 

@@ -247,7 +247,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 
     }
 
-//	long time;
+
 
 
     ContactRecodeEntity contactRecodeEntity;
@@ -264,8 +264,11 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
                 startActivity(intent);
                 break;
             default:
+
                 if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+
                     simCellPhone();
+
                 } else {
                     CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
                 }
@@ -316,6 +319,8 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         //进行逻辑判断
         if (!curCharacter.equals("") && this.t9dialpadview.getVisibility() == View.VISIBLE) {
             showPhoneBottomBar();
+            Log.d(TAG, "onDialInputTextChanged: onDialInputTextChanged");
+
         } else if (this.t9dialpadview.getVisibility() == View.GONE) {
 
             hidePhoneBottomBar();
