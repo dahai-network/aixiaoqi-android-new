@@ -35,6 +35,7 @@ import de.blinkt.openvpn.model.ContactRecodeEntity;
 import de.blinkt.openvpn.model.SmsEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
+import de.blinkt.openvpn.util.PhoneFormatUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactRecodeHandler;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
@@ -61,12 +62,6 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 	TextView phoneNameTv;
 	@BindView(R.id.last_call_time_tv)
 	TextView lastCallTimeTv;
-	@BindView(R.id.sms_tv)
-	TextView smsTv;
-	@BindView(R.id.net_call_tv)
-	TextView netCallTv;
-	@BindView(R.id.dual_standby_king_tv)
-	TextView dualStandbyKingTv;
 	@BindView(R.id.defriend_tv)
 	TextView defriendTv;
 	@BindView(R.id.call_record_rv)
@@ -273,7 +268,7 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 
 	private void simCellPhone() {
 		ContactRecodeEntity contactRecodeEntity = new ContactRecodeEntity();
-		contactRecodeEntity.setPhoneNumber(deleteprefix("-", contactBean.getPhoneNum()));
+		contactRecodeEntity.setPhoneNumber(PhoneFormatUtil.deleteprefix("-", contactBean.getPhoneNum()));
 		contactRecodeEntity.setName(contactBean.getDesplayName());
 		Intent intent = new Intent(this, CallPhoneNewActivity.class);
 		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO, contactRecodeEntity);
@@ -293,7 +288,7 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 				OnlyCallModel onlyCallModel = onlyCallHttp.getOnlyCallModel();
 				if (!onlyCallModel.getMaximumPhoneCallTime().equals("0")) {
 					ContactRecodeEntity contactRecodeEntity = new ContactRecodeEntity();
-					contactRecodeEntity.setPhoneNumber(deleteprefix("-", contactBean.getPhoneNum()));
+					contactRecodeEntity.setPhoneNumber(PhoneFormatUtil.deleteprefix("-", contactBean.getPhoneNum()));
 					contactRecodeEntity.setName(contactBean.getDesplayName());
 					Intent intent = new Intent(this, CallPhoneNewActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -330,20 +325,7 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 		super.onDestroy();
 	}
 
-	private String deleteprefix(String type, String s) {
-		if (TextUtils.isEmpty(s)) {
-			return "";
-		}
-		String phoneNumber;
-		if (s.replace(type, "").startsWith("+86")) {
-			phoneNumber = s.substring(3, s.length());
-		} else if (s.replace(type, "").startsWith("86")) {
-			phoneNumber = s.substring(2, s.length());
-		} else {
-			phoneNumber = s;
-		}
-		return phoneNumber;
-	}
+
 
 	@Override
 	public void dialogText(int type, String text) {

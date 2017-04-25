@@ -482,14 +482,13 @@
     <string name="sure_and_use">绑定并使用</string>
     <string name="input_compelete_password">请输入16位完整卡密码</string>
     <string name="communication_packet">通话套餐</string>
-    <!--开卡激活-->
-    <string name="card_activate">开卡激活</string>
+
 
     <!--众筹选号信息-->
     <string name="info_name">姓名</string>
     <string name="real_name_title">填写姓名</string>
     <string name="payment">支付</string>
-    <string name="add_number">添加号码</string>
+
     <string name="free">免费</string>
 
     <!--通话时长订单详情-->

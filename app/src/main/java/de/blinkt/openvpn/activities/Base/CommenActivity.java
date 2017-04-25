@@ -3,6 +3,7 @@ package de.blinkt.openvpn.activities.Base;
 import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -68,6 +69,8 @@ public class CommenActivity extends FragmentActivity {
 			requestWindowFeature(Window.FEATURE_OPTIONS_PANEL);
 		}
 		//不需要的背景删掉
+		setRequestedOrientation(ActivityInfo
+        .SCREEN_ORIENTATION_PORTRAIT);
 		getWindow().setBackgroundDrawable(null);
 		application = (ICSOpenVPNApplication) getApplicationContext();
 		mContext = this;

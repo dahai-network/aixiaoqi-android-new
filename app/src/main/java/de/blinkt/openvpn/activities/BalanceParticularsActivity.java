@@ -74,7 +74,7 @@ public class BalanceParticularsActivity extends BaseNetActivity implements Inter
 			particularsRecyclerView.setVisibility(View.VISIBLE);
 			NoNetRelativeLayout.setVisibility(View.GONE);
 			if (pageNumber == 1) {
-//				if (particularAdapter.getItemCount() == 0) {
+
 				if (http.getParticularEntity().getList().size() < Constant.PAGESIZE) {
 					particularAdapter.add(http.getParticularEntity().getList());
 					particularsRecyclerView.noMoreLoading();

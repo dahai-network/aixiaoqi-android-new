@@ -27,6 +27,7 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.util.AssetsDatabaseManager;
 import de.blinkt.openvpn.util.DatabaseDAO;
+import de.blinkt.openvpn.util.PhoneFormatUtil;
 import de.blinkt.openvpn.util.PhoneNumberZone;
 import de.blinkt.openvpn.views.RoundImageView;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
@@ -137,8 +138,8 @@ public class ContactDetailActivity extends BaseActivity implements View.OnClickL
 			TextView contactAddress = (TextView) view.findViewById(R.id.contact_address);
 
 			String phoneNumber;
-			phoneNumber = deleteprefix(" ",arrayNum[i]);
-			String address= PhoneNumberZone.getAddress(dao,deleteprefix(" ",phoneNumber));
+			phoneNumber = PhoneFormatUtil.deleteprefix(" ",arrayNum[i]);
+			String address= PhoneNumberZone.getAddress(dao,PhoneFormatUtil.deleteprefix(" ",phoneNumber));
 			final String phonenum = arrayNum[i];
 			String phonetemp = PhoneNumberZone.getPhoneNumberFormat(phonenum);
 			contactPhone.setText(phonetemp);
@@ -177,22 +178,7 @@ public class ContactDetailActivity extends BaseActivity implements View.OnClickL
 				break;
 		}
 	}
-	private String deleteprefix(String type,String s) {
-		if(TextUtils.isEmpty(s)){
-			return "";
-		}
-		String phoneNumber;
-		if(s.replace(type,"").startsWith("+86")){
 
-			phoneNumber= s.substring(3, s.length());
-
-		}else if(s.replace(type,"").startsWith("86")){
-			phoneNumber= s.substring(2, s.length());
-		}else{
-			phoneNumber= s;
-		}
-		return phoneNumber;
-	}
 
 
 

@@ -113,25 +113,24 @@
 
         <activity
             android:name="de.blinkt.openvpn.activities.SMSAcivity"
-            android:screenOrientation="portrait"/>
+           />
         <activity
             android:name="de.blinkt.openvpn.activities.EditNameActivity"
-            android:screenOrientation="portrait"/>
+          />
         <activity
             android:name="de.blinkt.openvpn.activities.WebViewActivity"
-            android:screenOrientation="portrait"/>
+           />
         <activity
             android:name="de.blinkt.openvpn.activities.CallPhoneNewActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:permission="android.permission.RECORD_AUDIO"
-            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="de.blinkt.openvpn.activities.ProMainActivity"
             android:label="@string/app"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
@@ -153,7 +152,7 @@
         <activity
             android:name="de.blinkt.openvpn.activities.LoginMainActivity"
             android:label="@string/app"
-            android:screenOrientation="portrait"
+
             android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -163,10 +162,10 @@
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.RegistActivity"
-            android:screenOrientation="portrait"/>
+           />
         <activity
             android:name="de.blinkt.openvpn.activities.StartUpHomePageActivity"
-            android:screenOrientation="portrait"/>
+           />
         <!--
         <receiver android:name="core.GetRestrictionReceiver">
             <intent-filter>
@@ -181,65 +180,64 @@
             android:name="de.blinkt.openvpn.activities.ReceiveCallActivity"
             android:launchMode="singleTop"
           
-            android:screenOrientation="portrait">
+            >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.GetBackPswActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.MyDeviceActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
+           >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.MyPackageActivity"
-            android:screenOrientation="portrait">
+          >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.TipUserOptionActivity"
-            android:screenOrientation="portrait">
+            >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.AlarmClockActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.BindDeviceActivity"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar">
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.MyOrderDetailActivity"
-            android:screenOrientation="portrait">
+            >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.SettingActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.PersonalCenterActivity"
-            android:screenOrientation="portrait">
+            >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.UserFeedbackActivity"
-            android:screenOrientation="portrait">
+          >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.PackageDetailActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.PackageMarketActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.ContactUsActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.CountryPackageActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
@@ -257,16 +255,16 @@
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
+
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.CommitOrderActivity"
-            android:screenOrientation="portrait">
+         >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.RechargeActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
         <activity android:name="de.blinkt.openvpn.activities.NotificationActivity"/>
 
@@ -335,7 +333,7 @@
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true"
-            android:screenOrientation="portrait">
+           >
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>
 
@@ -382,13 +380,12 @@
 
         <activity
             android:name="de.blinkt.openvpn.activities.BalanceParticularsActivity"
-            android:screenOrientation="portrait">
+            >
         </activity>
         <!--de.blinkt.openvpn.activities.LaunchActivity-->
         <!---->
         <activity
             android:name="de.blinkt.openvpn.activities.LaunchActivity"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent"
             >
             <intent-filter>
@@ -400,11 +397,11 @@
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.PaySuccessActivity"
-            android:screenOrientation="portrait">
+            >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.ActivateActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
 
         <service
@@ -427,26 +424,23 @@
             android:exported="false"
             android:persistent="true"/>
 
-        <activity
-            android:name="de.blinkt.openvpn.activities.OrderedOutsidePurchaseActivity"
-            android:screenOrientation="portrait">
-        </activity>
+
         <activity
             android:name="de.blinkt.openvpn.activities.OutsideFirstStepActivity"
-            android:screenOrientation="portrait">
+            >
         </activity>
 
         <activity
             android:name="de.blinkt.openvpn.activities.OutsideSecondStepActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.OutsideThirdStepActivity"
-            android:screenOrientation="portrait">
+            >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.OutsideFourStepActivity"
-            android:screenOrientation="portrait">
+            >
         </activity>
         <service
             android:name="de.blinkt.openvpn.service.NotificationMonitor"
@@ -476,50 +470,26 @@
 
         <activity
             android:name="de.blinkt.openvpn.activities.SetAlarmActivity"
-            android:screenOrientation="portrait">
+            >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.RepeatActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.LableActivity"
-            android:screenOrientation="portrait">
+            >
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.BindRechargeCardActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
-        <activity
-            android:name="de.blinkt.openvpn.activities.InlandSaveActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name="de.blinkt.openvpn.activities.EBuzOrderListActivity"
-            android:screenOrientation="portrait">
-        </activity>
+
         <activity
             android:name="de.blinkt.openvpn.activities.AddNumberActivity"
-            android:screenOrientation="portrait">
+           >
         </activity>
-        <activity
-            android:name="de.blinkt.openvpn.activities.SelectNumberInfoActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name="de.blinkt.openvpn.activities.SelectNumberActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name="de.blinkt.openvpn.activities.ChinaAddressActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name="de.blinkt.openvpn.activities.PaymentSelectNumberFeeActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity android:name="de.blinkt.openvpn.activities.ActivateLinkCardActivity">
-        </activity>
+
         <activity android:name="de.blinkt.openvpn.activities.CallPackageLlistActivity">
         </activity>
         <activity android:name="de.blinkt.openvpn.activities.CallTimeOrderDetailActitivy">
@@ -537,7 +507,6 @@
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.ShadeActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleInstance"
             android:theme="@style/translucent">
         </activity>
