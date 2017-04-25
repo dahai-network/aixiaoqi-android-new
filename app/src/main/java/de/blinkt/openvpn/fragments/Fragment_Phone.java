@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aixiaoqi.socket.SocketConstant;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +53,7 @@ import de.blinkt.openvpn.util.AssetsDatabaseManager;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DatabaseDAO;
 import de.blinkt.openvpn.util.NetworkUtils;
+import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactRecodeHandler;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.QueryCompleteListener;
@@ -248,8 +252,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     }
 
 
-
-
     ContactRecodeEntity contactRecodeEntity;
 
     @Override
@@ -436,6 +438,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         return list;
     }
 
+
     //对话框
     @Override
     public void dialogText(int type, String text) {
@@ -484,7 +487,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     @Override
     public void noNet() {
         CommonTools.showShortToast(getActivity(), getResources().getString(R.string.no_wifi));
-
     }
 
 
@@ -507,12 +509,34 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         }
     }
 
-
     int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
-    private void insertDummyContactWrapper() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        getFocus();
+    }
 
-
+    //主界面获取焦点
+    private void getFocus() {
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    // 监听到返回按钮点击事件
+                    if (ProMainActivity.phone_linearLayout.getVisibility() == View.VISIBLE) {
+                        CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
+                        ViewUtil.hideView(t9dialpadview);
+                        hidePhoneBottomBar();
+                        clearInputEdit();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
 
