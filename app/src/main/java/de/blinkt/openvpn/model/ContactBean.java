@@ -60,31 +60,6 @@ public class ContactBean implements Serializable, Indexable {
 		this.header = header;
 	}
 
-//	private void writeObject(ObjectOutputStream oos) throws IOException {
-//		// This will serialize all fields that you did not mark with 'transient'
-//		// (Java's default behaviour)
-//		oos.defaultWriteObject();
-//		// Now, manually serialize all transient fields that you want to be serialized
-//		if(bitmapHeader!=null){
-//			ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-//			boolean success = bitmapHeader.compress(Bitmap.CompressFormat.PNG, 20, byteStream);
-//			if(success){
-//				oos.writeObject(byteStream.toByteArray());
-//			}
-//		}
-//	}
-//
-//	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
-//		// Now, all again, deserializing - in the SAME ORDER!
-//		// All non-transient fields
-//		ois.defaultReadObject();
-//		// All other fields that you serialized
-//		byte[] image = (byte[]) ois.readObject();
-//		if(image != null && image.length > 0){
-//			bitmapHeader = BitmapFactory.decodeByteArray(image, 0, image.length);
-//		}
-//	}
-
 	public Bitmap getBitmapHeader() {
 		return bitmapHeader;
 	}

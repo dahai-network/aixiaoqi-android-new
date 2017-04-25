@@ -50,7 +50,7 @@ public class CountryDetailPackageAdapter extends RecyclerView.Adapter<CountryDet
         holder.priceTextView.setText("￥" + data.get(position).getPrice());
         setSpan(holder.priceTextView, position);
 
-        if (data.get(position).getPrice() > 20)
+        if (data.get(position).getPrice() >= 20)
             holder.numberTextView.setBackgroundResource(R.drawable.flow_yellow);
         else
             holder.numberTextView.setBackgroundResource(R.drawable.flow_gree);

@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.util;
+package de.blinkt.openvpn.views;
 
 import android.content.Context;
 import android.graphics.Rect;

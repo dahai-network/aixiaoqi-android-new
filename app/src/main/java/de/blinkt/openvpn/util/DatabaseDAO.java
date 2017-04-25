@@ -28,14 +28,7 @@ public class DatabaseDAO {
 	public Map<String, String> queryNumber(String prefix, String center) {
 		if (center.isEmpty() || !isTableExists("Number_" + prefix))
 			return new HashMap<>();
-
-//		int num = Integer.parseInt(center) - 1;
-//		String sql1 = "select city_id from number_" + prefix + " limit " + num + ",1";//空格不能少
-//		String sql2 = "select province_id from city where _id = (" + sql1 + ")";
-//		String sql="select a.name as provinceName,b.name as cityName from Number_130 inner join Province as a on Number_130.province_id=a.id inner join City as b on Number_130.city_id=b.id where number=\"0000\";";
 		String sql = "select Province.name as provinceName,City.name as cityName from Number_"+prefix+ " inner join Province  on Number_"+prefix+  ".province_id=Province.id inner join City on Number_"+prefix+".city_id=City.id where number='"+center+"'";
-//	String sql="select name  from sqlite_master where type='table'";
-//		String sql ="select * from Number_177 where id=1";
 			return getCursorResult(sql);
 	}
 
@@ -44,27 +37,6 @@ public class DatabaseDAO {
 
 
 
-	/**
-	 * 查询城市区号。
-	 */
-	public Map<String, String> queryCity(String city) {
-		if (city.isEmpty())
-			return null;
-		String sql1 = "select _id from city where city ='" + city + "'";
-		String sql = "select rowid as rownumber from number_0 where city_id =(" + sql1 + ")";
-		return getCursorResult(sql);
-	}
-
-	/**
-	 * 查询国家的代号。
-	 */
-	public Map<String, String> queryCountry(String country) {
-		if (country.isEmpty())
-			return null;
-		String sql1 = "select _id from country where country  ='" + country + "'";
-		String sql = "select rowid as rownumber from number_00 where country_id =(" + sql1 + ")";
-		return getCursorResult(sql);
-	}
 
 	/**
 	 * 返回查询结果集

@@ -53,9 +53,6 @@ public class CreateHttpFactory {
             case HttpConfigUrl.COMTYPE_UPDATE_ALARM://修改
                 startHttp(new UpdateAlarmHttp(interfaceCallback, cmdType,params));
                 break;
-            case HttpConfigUrl.COMTYPE_ADD_NUMBER://添加数
-                startHttp(new AddNumberHttp(interfaceCallback, cmdType,params));
-                break;
             case HttpConfigUrl.COMTYPE_ALARM_CLOCK_COUNT://添加的闹钟总个数
                 startHttp(new AlarmClockCountHttp(interfaceCallback, cmdType));
                 break;

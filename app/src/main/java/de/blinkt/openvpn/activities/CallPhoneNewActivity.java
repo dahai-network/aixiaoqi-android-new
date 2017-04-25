@@ -36,6 +36,7 @@ import de.blinkt.openvpn.push.PhoneReceiver;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
+import de.blinkt.openvpn.util.PhoneFormatUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 import de.blinkt.openvpn.views.T9TelephoneDialpadView;
@@ -149,6 +150,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		t9dialpadview.setOnT9TelephoneDialpadView(this);
 		t9dialpadview.searchEtHidden();
 		t9dialpadview.setBtnColor( Color.WHITE);
+		t9dialpadview.setLineBackgroundColor(R.color.transparent_60);
 		displayStatus(R.string.calling);
 
 	}
@@ -198,9 +200,9 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		if (contactRecodeEntity.getPhoneNumber().startsWith("sip:")) {
 			ICSOpenVPNApplication.the_sipengineReceive.MakeUrlCall(contactRecodeEntity.getPhoneNumber());
 		} else if (cellPhoneType == Constant.NETWORK_CELL_PHONE) {
-			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("981" + deleteprefix("-", contactRecodeEntity.getPhoneNumber()) + "#" + maxinumPhoneCallTime);
+			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("981" + PhoneFormatUtil.deleteprefix("-", contactRecodeEntity.getPhoneNumber()) + "#" + maxinumPhoneCallTime);
 		} else if (cellPhoneType == Constant.SIM_CELL_PHONE) {
-			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986" + SocketConstant.REGISTER_REMOTE_ADDRESS + SocketConstant.REGISTER_ROMOTE_PORT + deleteprefix("-", contactRecodeEntity.getPhoneNumber()));
+			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("986" + SocketConstant.REGISTER_REMOTE_ADDRESS + SocketConstant.REGISTER_ROMOTE_PORT + PhoneFormatUtil.deleteprefix("-", contactRecodeEntity.getPhoneNumber()));
 		}
 		mtview.performClick();
 		mtview.performClick();
@@ -239,24 +241,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		mNotificationManager.notify(notifyId, mBuilder.build());
 	}
 
-	private String deleteprefix(String type, String s) {
-		if (TextUtils.isEmpty(s)) {
-			return "";
-		}
-		String phoneNumber;
-		if (s.replace(type, "").startsWith("+86")) {
 
-			phoneNumber = s.substring(3, s.length());
-
-		} else if (s.replace(type, "").startsWith("86")) {
-			phoneNumber = s.substring(2, s.length());
-		} else if (s.replace(type, "").startsWith("0086")) {
-			phoneNumber = s.substring(2, s.length());
-		} else {
-			phoneNumber = s;
-		}
-		return phoneNumber;
-	}
 
 	@Override
 	public void onClick(View v) {

@@ -16,9 +16,7 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
 
 public class SwipeMenuView extends ViewGroup {
-    private static final String TAG = "zxt";
     private boolean isSwipeEnable = false;//右滑删除功能的开关,默认开
-
     private int mScaleTouchSlop;//为了处理单击事件的冲突
     private int mMaxVelocity;//计算滑动速度用
     private int mPointerId;//多点触摸只算第一根手指的速度

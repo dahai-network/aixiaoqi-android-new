@@ -30,7 +30,6 @@ import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.util.pinyin.CharacterParser;
 import de.blinkt.openvpn.views.contact.SideBar;
 import de.blinkt.openvpn.views.contact.TouchableRecyclerView;
-import de.blinkt.openvpn.views.contact.expand.StickyRecyclerHeadersDecoration;
 
 /**
  * Created by Administrator on 2016/9/13 0013.

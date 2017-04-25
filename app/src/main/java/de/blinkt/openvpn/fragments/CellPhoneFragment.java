@@ -5,12 +5,12 @@ package de.blinkt.openvpn.fragments;
  */
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +27,7 @@ import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.MyViewPager;
+
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLEPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLESMS;
 
@@ -41,7 +42,6 @@ public class CellPhoneFragment extends Fragment {
      * 拨打电话标题
      */
     public static TextView dial_tittle_fl;
-
     private ArrayList<Fragment> fragments = new ArrayList<>();
     Activity activity;
     MyViewPager mViewPager;
@@ -88,8 +88,6 @@ public class CellPhoneFragment extends Fragment {
 
 
     private void addListener() {
-
-
         /**
          * 悬浮按钮事件
          */
@@ -126,7 +124,6 @@ public class CellPhoneFragment extends Fragment {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
-
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
@@ -151,7 +148,11 @@ public class CellPhoneFragment extends Fragment {
 
     @Override
     public void onResume() {
+
         super.onResume();
+        //隐藏拨号底部
+        if (floatingActionButton.getVisibility() == View.VISIBLE)
+            hidePhoneBottomBar();
     }
 
 
@@ -281,6 +282,7 @@ public class CellPhoneFragment extends Fragment {
             throw new RuntimeException(e);
         }
     }
+
 
 
 }

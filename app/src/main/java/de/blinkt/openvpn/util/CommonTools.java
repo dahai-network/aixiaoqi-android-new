@@ -178,9 +178,6 @@ public class CommonTools {
 
 		bleTime = "8880090500" + addZero(toHex(year)) + addZero(toHex(mouth)) + addZero(toHex(day))
 				+ addZero(toHex(hour)) + addZero(toHex(minute)) + addZero(toHex(second)) + addZero("" + week);
-//		byte[] check = HexStringExchangeBytesUtil.hexStringToBytes(bleTime);
-//		String checkBleStr = HexStringExchangeBytesUtil.bytesToHexString(new byte[]{BLECheckBitUtil.getXor(check)});
-//		bleTime += addZero(checkBleStr);
 		return bleTime;
 	}
 
@@ -191,11 +188,7 @@ public class CommonTools {
 	//为发送的数据添加0，如果小于15
 	private static String addZero(String date) {
 		date = date.toUpperCase();
-		if (date.equals("A") || date.equals("B") || date.equals("C")
-				|| date.equals("D") || date.equals("E") || date.equals("F")
-				|| date.equals("0") || date.equals("1") || date.equals("2")
-				|| date.equals("3") || date.equals("4") || date.equals("5") ||
-				date.equals("6") || date.equals("7") || date.equals("8") || date.equals("9")) {
+		if (date.length()<=1) {
 			return "0" + date;
 		} else {
 			return "" + date;

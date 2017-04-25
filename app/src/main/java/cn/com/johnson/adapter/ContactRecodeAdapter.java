@@ -19,7 +19,8 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
 import de.blinkt.openvpn.util.DatabaseDAO;
-import de.blinkt.openvpn.util.PhoneNumberZero;
+import de.blinkt.openvpn.util.PhoneFormatUtil;
+import de.blinkt.openvpn.util.PhoneNumberZone;
 
 
 /**
@@ -46,7 +47,7 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 
 		final 	String name = contactRecodeEntity.getName();
 
-		String address= PhoneNumberZero.getAddress(dao,deleteprefix(" ",phoneNumber));
+		String address= PhoneNumberZone.getAddress(dao, PhoneFormatUtil.deleteprefix(" ",phoneNumber));
 		if (!TextUtils.isEmpty(name)) {
 			holder.mNameTv.setVisibility(View.VISIBLE);
 			holder.mNameTv.setText(contactRecodeEntity.getName());
@@ -97,22 +98,7 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 		holder.mIvArrow.setTag(contactRecodeEntity);
 		holder.itemView.setTag(contactRecodeEntity);
 	}
-	private String deleteprefix(String type,String s) {
-		if(TextUtils.isEmpty(s)){
-			return "";
-		}
-		String phoneNumber;
-		if(s.replace(type,"").startsWith("+86")){
 
-			phoneNumber= s.substring(3, s.length());
-
-		}else if(s.replace(type,"").startsWith("86")){
-			phoneNumber= s.substring(2, s.length());
-		}else{
-			phoneNumber= s;
-		}
-		return phoneNumber;
-	}
 	private void setSearchContentColor(TextView textView, String phoneNumber) {
 		int index=phoneNumber.indexOf(searchContent);
 		if(index<0){

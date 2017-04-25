@@ -12,7 +12,7 @@
         />
 
 
-    <de.blinkt.openvpn.util.UserDefineScrollView
+    <de.blinkt.openvpn.views.UserDefineScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -356,5 +356,5 @@
                 android:layout_marginBottom="@dimen/padding_20dp"
                 android:textSize="16dp"/>
         </LinearLayout>
-    </de.blinkt.openvpn.util.UserDefineScrollView>
+    </de.blinkt.openvpn.views.UserDefineScrollView>
 </LinearLayout>
