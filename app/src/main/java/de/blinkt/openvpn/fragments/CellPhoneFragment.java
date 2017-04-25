@@ -5,12 +5,12 @@ package de.blinkt.openvpn.fragments;
  */
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,12 +19,9 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import com.umeng.analytics.MobclickAgent;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
 import de.blinkt.openvpn.activities.ProMainActivity;
@@ -91,7 +88,6 @@ public class CellPhoneFragment extends Fragment {
 
 
     private void addListener() {
-
         /**
          * 悬浮按钮事件
          */
@@ -104,7 +100,6 @@ public class CellPhoneFragment extends Fragment {
                 hidePhoneBottomBar();
                 if (ProMainActivity.phone_linearLayout.getVisibility() == View.GONE || ProMainActivity.phone_linearLayout.getVisibility() == View.INVISIBLE) {
                     ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
-                    Log.d("aixiaoqi__", "onClick:floatingActionButton ");
                     ProMainActivity.radiogroup.setVisibility(View.GONE);
                 }
             }
@@ -129,7 +124,6 @@ public class CellPhoneFragment extends Fragment {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
-
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
@@ -156,6 +150,7 @@ public class CellPhoneFragment extends Fragment {
     public void onResume() {
 
         super.onResume();
+        //隐藏拨号底部
         if (floatingActionButton.getVisibility() == View.VISIBLE)
             hidePhoneBottomBar();
     }
@@ -287,6 +282,7 @@ public class CellPhoneFragment extends Fragment {
             throw new RuntimeException(e);
         }
     }
+
 
 
 }
