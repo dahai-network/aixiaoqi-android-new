@@ -36,7 +36,6 @@ import de.blinkt.openvpn.util.pinyin.CharacterParser;
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.contact.SideBar;
 import de.blinkt.openvpn.views.contact.TouchableRecyclerView;
-import de.blinkt.openvpn.views.contact.expand.StickyRecyclerHeadersDecoration;
 
 public class AddressListFragment extends Fragment implements ContactAdapter.CallLisener, ContactDetailActivity.ContactChangeDataListener {
 
@@ -90,15 +89,6 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 		final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), orientation, false);
 		mRecyclerView.setLayoutManager(layoutManager);
 		mRecyclerView.setAdapter(mAdapter);
-//		headersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
-//		mRecyclerView.addItemDecoration(headersDecor);
-////		mRecyclerView.addItemDecoration(new SpaceItemDecoration(28));
-//		mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-//			@Override
-//			public void onChanged() {
-//				headersDecor.invalidateHeaders();
-//			}
-//		});
 		setSearchLinstener();
 	}
 
@@ -113,11 +103,11 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (!TextUtils.isEmpty(s.toString().trim())) {
 					mAdapter.addAll(search(s.toString().trim()));
-//					mRecyclerView.removeItemDecoration(headersDecor);
+
 				} else {
 
 					mAdapter.addAll(mAllLists);
-//					mRecyclerView.addItemDecoration(headersDecor);
+
 				}
 			}
 
@@ -130,9 +120,6 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 
 			@Override
 			public void onTouchingLetterChanged(String s) {
-//				if (mAdapter != null) {
-//					mAdapter.closeOpenedSwipeItemLayoutWithAnim();
-//				}
 				int position = mAdapter.getPositionForSection(s.charAt(0));
 				if (position != -1) {
 					mRecyclerView.scrollToPosition(position);
@@ -229,18 +216,5 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 		mAdapter.notifyItemRemoved(position);
 	}
 
-	public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
-
-		private int space;
-
-		public SpaceItemDecoration(int space) {
-			this.space = space;
-		}
-
-		@Override
-		public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-			outRect.left = space;
-		}
-	}
 
 }

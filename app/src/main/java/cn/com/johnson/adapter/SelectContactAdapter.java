@@ -22,8 +22,8 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.model.ContactBean;
 
 import de.blinkt.openvpn.views.SwipeItemLayout;
-import de.blinkt.openvpn.views.contact.IndexAdapter;
-import de.blinkt.openvpn.views.contact.expand.StickyRecyclerHeadersAdapter;
+
+
 
 /**
  * Created by jiang on 12/3/15.
@@ -31,7 +31,7 @@ import de.blinkt.openvpn.views.contact.expand.StickyRecyclerHeadersAdapter;
  */
 
 public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapter.ContactViewHolder, ContactBean>
-		implements View.OnClickListener, IndexAdapter {
+		implements View.OnClickListener {
 	/**
 	 * 当前处于打开状态的item
 	 */
@@ -75,27 +75,7 @@ public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapt
 		}
 	}
 
-//	@Override
-//	public long getHeaderId(int position) {
-//		return getItem(position).getSortLetters().charAt(0);
-//
-//	}
-//
-//	@Override
-//	public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-//		headView = LayoutInflater.from(mContext)
-//				.inflate(R.layout.contact_header, parent, false);
-//		RecyclerView.ViewHolder holder = new RecyclerView.ViewHolder(headView) {
-//		};
-//		return holder;
-//	}
-//
-//	@Override
-//	public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-//		TextView textView = (TextView) headView.findViewById(R.id.headNameTextView);
-//		String showValue = String.valueOf(getAlpha(getItem(position).getSortKey()));
-//		textView.setText(showValue);
-//	}
+
 
 	@Override
 	public void onClick(View v) {
@@ -118,13 +98,7 @@ public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapt
 
 	}
 
-//	public void closeOpenedSwipeItemLayoutWithAnim() {
-//		List<SwipeItemLayout> localOpenedSil = mOpenedSil;
-//		for (SwipeItemLayout sil : localOpenedSil) {
-//			sil.closeWithAnim();
-//		}
-//		mOpenedSil.clear();
-//	}
+
 
 	public class ContactViewHolder extends RecyclerView.ViewHolder {
 		public TextView mName;

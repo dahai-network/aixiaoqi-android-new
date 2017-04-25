@@ -53,18 +53,6 @@ public class TitleBar extends LinearLayout {
 		title = (TextView) findViewById(R.id.titlebar_iv_title);
 		rightText = (TextView) findViewById(R.id.titlebar_iv_righttext);
 		rootRelativeLayout = (RelativeLayout) findViewById(R.id.rootRelativeLayout);
-//		int statusBarHeight = getStatusBarHeight(context);
-//		int w = View.MeasureSpec.makeMeasureSpec(0,
-//				View.MeasureSpec.UNSPECIFIED);
-//		int h = View.MeasureSpec.makeMeasureSpec(0,
-//				View.MeasureSpec.UNSPECIFIED);
-//		rootRelativeLayout.measure(w, h);
-//		int layoutHeight = rootRelativeLayout.getMeasuredHeight();
-//		int newHight = layoutHeight + statusBarHeight;
-//		ViewGroup.LayoutParams layoutParams = rootRelativeLayout.getLayoutParams();
-//		layoutParams.height = newHight;
-//		rootRelativeLayout.setLayoutParams(layoutParams);
-//		rootRelativeLayout.setPadding(0, statusBarHeight, 0, 0);
 	}
 
 	public void setLeftBtnIcon(int resId) {

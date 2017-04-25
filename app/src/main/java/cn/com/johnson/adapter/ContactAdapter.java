@@ -46,8 +46,7 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.views.RoundImageView;
 import de.blinkt.openvpn.views.SwipeItemLayout;
-import de.blinkt.openvpn.views.contact.IndexAdapter;
-import de.blinkt.openvpn.views.contact.expand.StickyRecyclerHeadersAdapter;
+
 
 /**
  * Created by jiang on 12/3/15.
