@@ -13,6 +13,7 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import de.blinkt.openvpn.activities.Base.CommenActivity;
 import de.blinkt.openvpn.activities.CommitOrderActivity;
+import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.PaySuccessActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -20,7 +21,9 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 public class WXPayEntryActivity extends CommenActivity implements IWXAPIEventHandler {
 
 	private static final String TAG = "MicroMsg.SDKSample.WXPayEntryActivity";
-
+	public static int PAY_PURPOSE=0;
+	public static int PAY_RECHARGE=1;
+	public static int PAY_ORDER=2;
 	private IWXAPI api;
 
 	@Override
@@ -51,7 +54,11 @@ public class WXPayEntryActivity extends CommenActivity implements IWXAPIEventHan
 				String orderAmount = preferences.getString("orderAmount", null);
 				if (orderIdStr != null) {
 					ICSOpenVPNApplication.getInstance().finishActivity(CommitOrderActivity.class);
+					if(PAY_PURPOSE==PAY_RECHARGE){
 					PaySuccessActivity.launch(WXPayEntryActivity.this, PaySuccessActivity.BUY, PaySuccessActivity.WEIXIN, orderAmount, orderIdStr);
+					}else if(PAY_PURPOSE==PAY_ORDER){
+						MyOrderDetailActivity.launch(this, orderIdStr);
+					}
 					preferences.edit().clear().commit();
 					finish();
 				} else {

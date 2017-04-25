@@ -35,6 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
+import cn.com.aixiaoqi.wxapi.WXPayEntryActivity;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
@@ -276,6 +277,7 @@ public class RechargeActivity extends BaseNetActivity implements InterfaceCallba
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID) {
 			try {
+				WXPayEntryActivity.PAY_PURPOSE=WXPayEntryActivity.PAY_RECHARGE;
 				api = WXAPIFactory.createWXAPI(RechargeActivity.this, WEIXIN_APPID);
 				WeixinGetPayIdHttp http = (WeixinGetPayIdHttp) object;
 				WeiXinResultEntity entity = http.getWeixinResultEntity();
