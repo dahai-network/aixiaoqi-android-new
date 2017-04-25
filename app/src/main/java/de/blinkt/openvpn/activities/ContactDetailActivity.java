@@ -10,47 +10,29 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
-import java.util.Map;
 
 import cn.com.aixiaoqi.R;
-import cn.com.johnson.model.OnlyCallModel;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.activities.Base.BaseNetActivity;
-import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.OnlyCallHttp;
 import de.blinkt.openvpn.model.ContactBean;
-import de.blinkt.openvpn.model.ContactRecodeEntity;
-import de.blinkt.openvpn.model.SmsEntity;
 import de.blinkt.openvpn.util.AssetsDatabaseManager;
-import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DatabaseDAO;
-import de.blinkt.openvpn.util.PhoneNumberZero;
-import de.blinkt.openvpn.util.SharedUtils;
+import de.blinkt.openvpn.util.PhoneNumberZone;
 import de.blinkt.openvpn.views.RoundImageView;
-import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
-import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
-import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTDETAILCALL;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTDETAILEDIT;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTDETAILSMS;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDETELECONTACT;
 
 
@@ -156,9 +138,9 @@ public class ContactDetailActivity extends BaseActivity implements View.OnClickL
 
 			String phoneNumber;
 			phoneNumber = deleteprefix(" ",arrayNum[i]);
-			String address= PhoneNumberZero.getAddress(dao,deleteprefix(" ",phoneNumber));
+			String address= PhoneNumberZone.getAddress(dao,deleteprefix(" ",phoneNumber));
 			final String phonenum = arrayNum[i];
-			String phonetemp = PhoneNumberZero.getPhoneNumberFormat(phonenum);
+			String phonetemp = PhoneNumberZone.getPhoneNumberFormat(phonenum);
 			contactPhone.setText(phonetemp);
 			if (!TextUtils.isEmpty(address))
 				contactAddress.setText(address);

@@ -85,40 +85,6 @@ public class DateUtils {
 		return date.getTime();
 	}
 
-	public static String DateToString(Date date, String dateFormat) {
-		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat,
-				Locale.getDefault());
-		String result = null;
-		try {
-			result = sdf.format(date);
-		} catch (android.net.ParseException e) {
-			// e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	public static Date stringToDate(String dateString) {
-
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd",
-				Locale.getDefault());
-		Date date = new Date();
-		try {
-			date = sdf.parse(dateString);
-		} catch (android.net.ParseException e) {
-			e.printStackTrace();
-		} catch (java.text.ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return date;
-
-	}
-
-	/*将天数转换成时间戳*/
-	public static long getDateToDays(long days) {
-		return days * 86400000;
-	}
 
 	public static String friendlyTime(Date time) {
 		//获取time距离当前的秒数

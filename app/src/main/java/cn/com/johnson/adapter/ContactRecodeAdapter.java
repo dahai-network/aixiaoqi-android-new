@@ -19,7 +19,7 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
 import de.blinkt.openvpn.util.DatabaseDAO;
-import de.blinkt.openvpn.util.PhoneNumberZero;
+import de.blinkt.openvpn.util.PhoneNumberZone;
 
 
 /**
@@ -46,7 +46,7 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 
 		final 	String name = contactRecodeEntity.getName();
 
-		String address= PhoneNumberZero.getAddress(dao,deleteprefix(" ",phoneNumber));
+		String address= PhoneNumberZone.getAddress(dao,deleteprefix(" ",phoneNumber));
 		if (!TextUtils.isEmpty(name)) {
 			holder.mNameTv.setVisibility(View.VISIBLE);
 			holder.mNameTv.setText(contactRecodeEntity.getName());

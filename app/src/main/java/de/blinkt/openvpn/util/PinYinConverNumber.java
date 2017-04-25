@@ -30,7 +30,6 @@ public class PinYinConverNumber {
 			StringBuilder stringBuilder = new StringBuilder();
 			StringBuilder stringheaderBuilder = new StringBuilder();
 			String[] str = new String[2];
-//            Log.e(TAG,"name="+name);
 			if (name != null && name.length() != 0) {
 				String litterName = characterParser.getSelling(name).toLowerCase();
 				for (int i = 0; i < litterName.length(); i++) {

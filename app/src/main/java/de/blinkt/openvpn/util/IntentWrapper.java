@@ -121,28 +121,6 @@ public class IntentWrapper {
 			meizuIntent.putExtra("packageName", ICSOpenVPNApplication.getInstance().getPackageName());
 			sIntentWrapperList.add(new IntentWrapper(meizuIntent, MEIZU));
 
-			//魅族 待机耗电管理
-//            Intent meizuGodIntent = new Intent();
-//            meizuGodIntent.setComponent(new ComponentName("com.meizu.safe", "com.meizu.safe.powerui.PowerAppPermissionActivity"));
-//            sIntentWrapperList.add(new IntentWrapper(meizuGodIntent, MEIZU_GOD));
-//            Intent intent = new Intent();
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            ComponentName comp = null;
-//            if (phoneModel.equals("1")) {//华为
-//                comp = ComponentName
-//                        .unflattenFromString("com.huawei.systemmanager/.optimize.process.ProtectActivity");
-//            } else if (phoneModel.equals("2")) {//小米
-//                comp = ComponentName
-//                        .unflattenFromString("com.miui.securitycenter/com.miui.permcenter.autostart.AutoStartManagementActivity");
-//            } else if (phoneModel.equals("3")) {//vivo
-//                comp = ComponentName
-//                        .unflattenFromString("com.iqoo.secure/.ui.phoneoptimize.AddWhiteListActivity");
-//            } else if (phoneModel.equals("4")) {//oppo
-//                comp = ComponentName
-//                        .unflattenFromString("com.coloros.oppoguardelf/com.coloros.powermanager.fuelgaue.PowerUsageModelActivity");
-//            }
-//            intent.setComponent(comp);
-//            startActivity(intent);
 			Intent meizuGodIntent = new Intent();
 			meizuGodIntent.setComponent(new ComponentName("com.meizu.safe", "com.meizu.safe.SecurityCenterActivity"));
 			sIntentWrapperList.add(new IntentWrapper(meizuGodIntent, MEIZU_GOD));

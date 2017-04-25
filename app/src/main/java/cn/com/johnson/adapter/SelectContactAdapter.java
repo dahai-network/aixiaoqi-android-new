@@ -1,27 +1,17 @@
 package cn.com.johnson.adapter;
 
-
 import android.content.Context;
-
 import android.support.v7.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import java.util.regex.Pattern;
-
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.model.ContactBean;
 
-import de.blinkt.openvpn.views.SwipeItemLayout;
+
 
 
 
@@ -35,9 +25,6 @@ public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapt
 	/**
 	 * 当前处于打开状态的item
 	 */
-	private List<SwipeItemLayout> mOpenedSil = new ArrayList<>();
-
-	private View headView;
 
 	public SelectContactAdapter(Context ct, List<ContactBean> mLists) {
 		super(ct, mLists);
@@ -88,7 +75,7 @@ public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapt
 		int count = getItemCount();
 		List<ContactBean> localList = mList;
 		for (int i = 0; i < count; i++) {
-			String sortStr = getAlpha(localList.get(i).getSortKey());
+			String sortStr = localList.get(i).getSortLetters();
 			char firstChar = sortStr.toUpperCase().charAt(0);
 			if (firstChar == section) {
 				return i;
@@ -109,29 +96,7 @@ public class SelectContactAdapter extends RecyclerBaseAdapter<SelectContactAdapt
 			mName = (TextView) itemView.findViewById(R.id.nameTextView);
 			headImage = (ImageView) itemView.findViewById(R.id.headImageView);
 			tag = (TextView) itemView.findViewById(R.id.tag);
-
-		}
-
-
-	}
-
-
-	private String getAlpha(String str) {
-		if (str == null) {
-			return "#";
-		}
-		if (str.trim().length() == 0) {
-			return "#";
-		}
-		char c = str.trim().substring(0, 1).charAt(0);
-		// 正则表达式匹配
-		Pattern pattern = Pattern.compile("^[A-Za-z]+$");
-		if (pattern.matcher(c + "").matches()) {
-			return (c + "").toUpperCase(); // 将小写字母转换为大写
-		} else {
-			return "#";
 		}
 	}
-
 
 }

@@ -35,7 +35,7 @@ import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.AssetsDatabaseManager;
 import de.blinkt.openvpn.util.DatabaseDAO;
 import de.blinkt.openvpn.util.DateUtils;
-import de.blinkt.openvpn.util.PhoneNumberZero;
+import de.blinkt.openvpn.util.PhoneNumberZone;
 import de.blinkt.openvpn.util.PinYinConverNumber;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
@@ -105,7 +105,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	private  void searchArea(){
 		String address;
 		String phoneNumStr =getPhoneNumber();
-		address= PhoneNumberZero.getAddress(dao,phoneNumStr);
+		address= PhoneNumberZone.getAddress(dao,phoneNumStr);
 		if(!TextUtils.isEmpty(address))
 			addressText.setText(address);
 	}

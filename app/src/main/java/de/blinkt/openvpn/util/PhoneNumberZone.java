@@ -10,7 +10,7 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 /**
  * Created by Administrator on 2016/10/13 0013.
  */
-public class PhoneNumberZero {
+public class PhoneNumberZone {
 
 	public static String getMobilePrefix(String number) {
 		return number.substring(0, 3);
