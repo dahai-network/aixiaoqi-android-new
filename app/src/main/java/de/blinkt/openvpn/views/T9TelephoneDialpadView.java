@@ -55,6 +55,8 @@ public class T9TelephoneDialpadView extends LinearLayout implements
 
     private TextView mDialDeleteBtn;
     public EditText mT9InputEt;
+    public Button[] numberButton=new Button[12];
+    public View[] lineView=new View[13];
     private View topView;
     LinearLayout searchEt;
 
@@ -91,8 +93,58 @@ public class T9TelephoneDialpadView extends LinearLayout implements
                 .findViewById(R.id.dial_delete_btn);
         mT9InputEt = (EditText) mDialpadView
                 .findViewById(R.id.dial_input_edit_text);
-        mT9InputEt.setCursorVisible(false);
+        numberButton[0]=(Button) mDialpadView
+                .findViewById(R.id.dialNum1);
+        numberButton[1]=(Button) mDialpadView
+                .findViewById(R.id.dialNum2);
+        numberButton[2]=(Button) mDialpadView
+                .findViewById(R.id.dialNum3);
+        numberButton[3]=(Button) mDialpadView
+                .findViewById(R.id.dialNum4);
+        numberButton[4]=(Button) mDialpadView
+                .findViewById(R.id.dialNum5);
+        numberButton[5]=(Button) mDialpadView
+                .findViewById(R.id.dialNum6);
+        numberButton[6]=(Button) mDialpadView
+                .findViewById(R.id.dialNum7);
+        numberButton[7]=(Button) mDialpadView
+                .findViewById(R.id.dialNum8);
+        numberButton[8]=(Button) mDialpadView
+                .findViewById(R.id.dialNum9);
+        numberButton[9]=(Button) mDialpadView
+                .findViewById(R.id.dialx);
+        numberButton[10]=(Button) mDialpadView
+                .findViewById(R.id.dialNum0);
+        numberButton[11]=(Button) mDialpadView
+                .findViewById(R.id.dialj);
+        lineView[0]= mDialpadView
+                .findViewById(R.id.line1);
+        lineView[1]= mDialpadView
+                .findViewById(R.id.line2);
+        lineView[2]= mDialpadView
+                .findViewById(R.id.line3);
+        lineView[3]= mDialpadView
+                .findViewById(R.id.line4);
+        lineView[4]= mDialpadView
+                .findViewById(R.id.line5);
+        lineView[5]= mDialpadView
+                .findViewById(R.id.line6);
+        lineView[6]= mDialpadView
+                .findViewById(R.id.line7);
+        lineView[7]= mDialpadView
+                .findViewById(R.id.line8);
+        lineView[8]= mDialpadView
+                .findViewById(R.id.line9);
+        lineView[9]= mDialpadView
+                .findViewById(R.id.line10);
+        lineView[10]= mDialpadView
+                .findViewById(R.id.line11);
+        lineView[11]= mDialpadView
+                .findViewById(R.id.line12);
+        lineView[12]= mDialpadView
+                .findViewById(R.id.line13);
 
+        mT9InputEt.setCursorVisible(false);
         searchEt = (LinearLayout) findViewById(R.id.search_et_linearlayout);
 
         //初始化状态
@@ -107,18 +159,22 @@ public class T9TelephoneDialpadView extends LinearLayout implements
 
     public void setBtnColor(int textColor){
         for(int i=0;i<12;i++){
-            Button v =(Button) mDialpadView.findViewById(R.id.dialNum1 + i);
-           v.setBackground(null);
-            v.setTextColor(textColor);
+            numberButton[i].setBackground(null);
+            numberButton[i].setTextColor(textColor);
         }
     }
+
+    public void setLineBackgroundColor(int lineBackgroundColor){
+        for(int i=0;i<12;i++){
+            lineView[i].setBackgroundResource(lineBackgroundColor);
+        }
+    }
+
+
     private void initListener() {
-        /**
-         * set click listener for button("0-9",'*','#')
-         */
+
         for (int i = 0; i < 12; i++) {
-            View v = mDialpadView.findViewById(R.id.dialNum1 + i);
-            v.setOnClickListener(this);
+            numberButton[i].setOnClickListener(this);
         }
 
 

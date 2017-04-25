@@ -176,8 +176,14 @@
         <item name="android:layout_marginRight">@dimen/padding_15dp</item>
     </style>
 
+    <style name="horizontal_line_view_gray">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/light_gray</item>
+    </style>
+
     <style name="vertical_line_view">
-        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_width">1px</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@color/light_gray</item>
     </style>

@@ -149,6 +149,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		t9dialpadview.setOnT9TelephoneDialpadView(this);
 		t9dialpadview.searchEtHidden();
 		t9dialpadview.setBtnColor( Color.WHITE);
+		t9dialpadview.setLineBackgroundColor(R.color.transparent_60);
 		displayStatus(R.string.calling);
 
 	}

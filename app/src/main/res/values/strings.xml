@@ -460,17 +460,17 @@
     <string name="password_not_null">请输入您的密码</string>
     <string name="password_to_short">请输入长度不能小于6的密码</string>
 
-    <string name="t9_1">1\n<font size='10'>&#160;&#160;&#160;&#160;</font></string>
-    <string name="t9_2">2\n<font size='10'>ABC</font></string>
-    <string name="t9_3">3\n<font size='10'>DEF</font></string>
-    <string name="t9_4">4\n<font size='10'>GHI</font></string>
-    <string name="t9_5">5\n<font size='10'>JKL</font></string>
-    <string name="t9_6">6\n<font size='10'>MNO</font></string>
-    <string name="t9_7">7\n<font size='10'>PQRS</font></string>
-    <string name="t9_8">8\n<font size='10'>TUV</font></string>
-    <string name="t9_9">9\n<font size='10'>WXYZ</font></string>
+    <string name="t9_1">1<font size='10'>&#160;&#160;&#160;&#160;</font></string>
+    <string name="t9_2">2<font size='10'>ABC</font></string>
+    <string name="t9_3">3<font size='10'>DEF</font></string>
+    <string name="t9_4">4<font size='10'>GHI</font></string>
+    <string name="t9_5">5<font size='10'>JKL</font></string>
+    <string name="t9_6">6<font size='10'>MNO</font></string>
+    <string name="t9_7">7<font size='10'>PQRS</font></string>
+    <string name="t9_8">8<font size='10'>TUV</font></string>
+    <string name="t9_9">9<font size='10'>WXYZ</font></string>
     <string name="t9_10">*</string>
-    <string name="t9_11">0\n<font size='10'>+</font></string>
+    <string name="t9_11">0<font size='10'>+</font></string>
     <string name="t9_12">#</string>
     <string name="key_board">键盘</string>
     <!--绑定充值卡-->

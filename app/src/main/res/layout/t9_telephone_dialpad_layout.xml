@@ -47,7 +47,9 @@
 
     </LinearLayout>
 
-    <View style="@style/horizontal_line_view" />
+    <View
+        android:id="@+id/line1"
+        style="@style/horizontal_line_view" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,7 +66,9 @@
             android:text="@string/t9_1"
             android:textSize="@dimen/little_22" />
 
-        <View style="@style/vertical_line_view" />
+        <View
+            android:id="@+id/line2"
+            style="@style/vertical_line_view" />
 
         <Button
             android:id="@+id/dialNum2"
@@ -76,7 +80,10 @@
             android:text="@string/t9_2"
             android:textSize="@dimen/little_22" />
 
-        <View style="@style/vertical_line_view" />
+        <View
+            android:id="@+id/line3"
+            style="@style/vertical_line_view" />
+
 
         <Button
             android:id="@+id/dialNum3"
@@ -89,7 +96,9 @@
             android:textSize="@dimen/little_22" />
     </LinearLayout>
 
-    <View style="@style/horizontal_line_view" />
+    <View
+        android:id="@+id/line4"
+        style="@style/horizontal_line_view_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -106,7 +115,9 @@
             android:text="@string/t9_4"
             android:textSize="@dimen/little_22" />
 
-        <View style="@style/vertical_line_view" />
+        <View
+            android:id="@+id/line5"
+            style="@style/vertical_line_view" />
 
         <Button
             android:id="@+id/dialNum5"
@@ -118,7 +129,9 @@
             android:text="@string/t9_5"
             android:textSize="@dimen/little_22" />
 
-        <View style="@style/vertical_line_view" />
+        <View
+            android:id="@+id/line6"
+            style="@style/vertical_line_view" />
 
         <Button
             android:id="@+id/dialNum6"
@@ -131,7 +144,9 @@
             android:textSize="@dimen/little_22" />
     </LinearLayout>
 
-    <View style="@style/horizontal_line_view" />
+    <View
+        android:id="@+id/line7"
+        style="@style/horizontal_line_view_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -148,7 +163,9 @@
             android:text="@string/t9_7"
             android:textSize="@dimen/little_22" />
 
-        <View style="@style/vertical_line_view" />
+        <View
+            android:id="@+id/line8"
+            style="@style/vertical_line_view" />
 
         <Button
             android:id="@+id/dialNum8"
@@ -160,7 +177,9 @@
             android:text="@string/t9_8"
             android:textSize="@dimen/little_22" />
 
-        <View style="@style/vertical_line_view" />
+        <View
+            android:id="@+id/line9"
+            style="@style/vertical_line_view" />
 
         <Button
             android:id="@+id/dialNum9"
@@ -173,7 +192,9 @@
             android:textSize="@dimen/little_22" />
     </LinearLayout>
 
-    <View style="@style/horizontal_line_view" />
+    <View
+        android:id="@+id/line10"
+        style="@style/horizontal_line_view_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -190,7 +211,9 @@
             android:text="@string/t9_10"
             android:textSize="@dimen/little_22" />
 
-        <View style="@style/vertical_line_view" />
+        <View
+            android:id="@+id/line11"
+            style="@style/vertical_line_view" />
 
         <Button
             android:id="@+id/dialNum0"
@@ -202,7 +225,9 @@
             android:text="@string/t9_11"
             android:textSize="@dimen/little_22" />
 
-        <View style="@style/vertical_line_view" />
+        <View
+            android:id="@+id/line12"
+            style="@style/vertical_line_view" />
 
         <Button
             android:id="@+id/dialj"
@@ -215,6 +240,8 @@
             android:textSize="@dimen/little_22" />
     </LinearLayout>
 
-    <View style="@style/horizontal_line_view" />
+    <View
+        android:id="@+id/line13"
+        style="@style/horizontal_line_view_gray" />
 
 </LinearLayout>
