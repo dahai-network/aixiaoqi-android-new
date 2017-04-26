@@ -304,7 +304,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (phone_linearLayout.getVisibility() == View.GONE)
+            if (ProMainActivity.phone_linearLayout.getVisibility() != View.VISIBLE)
                 moveTaskToBack(false);
         }
 
@@ -464,11 +464,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     }
                 }
 
-			} else {
-				CommonTools.showShortToast(this, getString(R.string.no_location_tips));
-			}
-		}
-	}
+            } else {
+                CommonTools.showShortToast(this, getString(R.string.no_location_tips));
+            }
+        }
+    }
 
     private Handler stopHandler = null;
 
@@ -754,27 +754,27 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                         }
                         SharedUtils utils = SharedUtils.getInstance();
 
-						utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
-						utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
-						//防止返回“”或者null
-						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
-						if (!TextUtils.isEmpty(deviceTypeStr)) {
-							int deviceType = Integer.parseInt(deviceTypeStr);
-							String typeText;
-							//0是手环，1是钥匙扣
-							if (deviceType == 0) {
-								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
-								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-							} else {
-								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
-								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-							}
-							accountFragment.setSummarized(typeText, null, false);
-						}
-						Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-					} else {
-						sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
+                        utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
+                        utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
+                        //防止返回“”或者null
+                        String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
+                        if (!TextUtils.isEmpty(deviceTypeStr)) {
+                            int deviceType = Integer.parseInt(deviceTypeStr);
+                            String typeText;
+                            //0是手环，1是钥匙扣
+                            if (deviceType == 0) {
+                                utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
+                                typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
+                            } else {
+                                utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
+                                typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
+                            }
+                            accountFragment.setSummarized(typeText, null, false);
+                        }
+                        Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                        startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+                    } else {
+                        sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
 //						setTipsOnNoBind();
                     }
                 } else {
@@ -1237,37 +1237,37 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 //							} else if (message.get(0).substring(10, 12).equals("13")) {
 //								sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 //							}
-							break;
-						case Constant.SYSTEM_BASICE_INFO:
-							//返回基本信息就更新account的仪表盘栏
-							String typeText;
-							int powerText;
-							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16);
-							String bracelettype = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-							if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)) {
-								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-							} else {
-								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-							}
-							accountFragment.setSummarized(typeText, powerText + "", false);
-							break;
-						case Constant.RECEIVE_ELECTRICITY:
-							powerText = Integer.parseInt(message.get(0).substring(10, 12), 16);
-							accountFragment.setPowerPercent(powerText + "");
-							break;
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					return;
-				}
-			}
-			if (action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)) {
-				stopService(intentCallPhone);
-				unbindTcpService();
-				destorySocketService();
-			}
-		}
-	};
+                            break;
+                        case Constant.SYSTEM_BASICE_INFO:
+                            //返回基本信息就更新account的仪表盘栏
+                            String typeText;
+                            int powerText;
+                            powerText = Integer.parseInt(message.get(0).substring(14, 16), 16);
+                            String bracelettype = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+                            if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)) {
+                                typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
+                            } else {
+                                typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
+                            }
+                            accountFragment.setSummarized(typeText, powerText + "", false);
+                            break;
+                        case Constant.RECEIVE_ELECTRICITY:
+                            powerText = Integer.parseInt(message.get(0).substring(10, 12), 16);
+                            accountFragment.setPowerPercent(powerText + "");
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+            if (action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)) {
+                stopService(intentCallPhone);
+                unbindTcpService();
+                destorySocketService();
+            }
+        }
+    };
 
 
     private void requestPacket() {
@@ -1319,7 +1319,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
     @Override
     public boolean onLongClick(View view) {
-        phoneFragment.clearInputEdit();
+        phoneFragment.t9dialpadview.clearT9Input();
         return false;
     }
 

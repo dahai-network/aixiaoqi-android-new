@@ -1,25 +1,6 @@
 package de.blinkt.openvpn.activities.Base;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-
-import de.blinkt.openvpn.fragments.PackageDetailsFragment;
-
-import static android.content.Context.MODE_PRIVATE;
-
-public abstract class BaseFragment extends Fragment {
+public  class BaseFragment extends Fragment {
 
     protected boolean isVisible;
 
@@ -45,7 +26,7 @@ public abstract class BaseFragment extends Fragment {
         lazyLoad();
     }
 
-    protected abstract void lazyLoad();
+    protected  void lazyLoad(){}
 
 
     protected void onInvisible() {

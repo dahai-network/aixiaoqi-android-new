@@ -10,15 +10,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
 import com.umeng.analytics.MobclickAgent;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.HashMap;
-
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
@@ -39,14 +35,12 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.dialog.DialogYearMonthDayPicker;
-
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.lastSendMessageStr;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVEPACKAGE;
-
 
 public class ActivateActivity extends BaseNetActivity implements View.OnClickListener, DialogInterfaceTypeBase {
 

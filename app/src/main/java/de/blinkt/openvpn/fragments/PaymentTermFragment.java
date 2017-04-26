@@ -25,18 +25,11 @@ public class PaymentTermFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.packagedetail_layout, null);
         tvContext = (TextView) view.findViewById(R.id.tv_context);
-        initData();
         String detail = SharedUtils.getInstance().readString(Constant.PAYTERMS_SIGN);
         if (null != detail)
             tvContext.setText(detail);
         return view;
     }
 
-    private void initData() {
-    }
 
-    @Override
-    protected void lazyLoad() {
-
-    }
 }

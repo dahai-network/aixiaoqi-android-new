@@ -22,7 +22,6 @@ import de.blinkt.openvpn.util.SharedUtils;
 
 public class CallTimePDDetailFragment extends BaseFragment {
     TextView tvContext;
-    Unbinder unbinder;
     String features;
 
 
@@ -32,7 +31,6 @@ public class CallTimePDDetailFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.packagedetail_layout, null);
         tvContext = (TextView) view.findViewById(R.id.tv_context);
-        unbinder = ButterKnife.bind(this, view);
         String features = SharedUtils.getInstance().readString(Constant.CALLTIME_FEATURES_SIGN);
         if (features != null)
             tvContext.setText(features);
@@ -40,17 +38,9 @@ public class CallTimePDDetailFragment extends BaseFragment {
         return view;
     }
 
-
-    @Override
-    protected void lazyLoad() {
-
-    }
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
 
     }
 

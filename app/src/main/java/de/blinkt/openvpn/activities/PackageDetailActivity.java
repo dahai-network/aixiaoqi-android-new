@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -234,6 +235,11 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
         }
 
         @Override
+        public void finishUpdate(ViewGroup container) {
+            super.finishUpdate(container);
+        }
+
+        @Override
         public CharSequence getPageTitle(int position) {
             // TODO
             return detail_titles[position];
@@ -249,7 +255,6 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
         public void destroyItem(ViewGroup container, int position, Object object) {
             // TODO Auto-generated method stub
 
-            Log.d("aixiaoqi___", "destroyItem: "+position);
             super.destroyItem(container, position, object);
         }
     }

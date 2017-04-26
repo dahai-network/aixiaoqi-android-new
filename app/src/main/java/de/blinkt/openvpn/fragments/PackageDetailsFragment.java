@@ -48,7 +48,6 @@ public class PackageDetailsFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.packagedetail_layout, null);
         tvContext = (TextView) view.findViewById(R.id.tv_context);
         unbinder = ButterKnife.bind(this, view);
@@ -66,7 +65,6 @@ public class PackageDetailsFragment extends BaseFragment {
             LocalBroadcastManager.getInstance(getActivity()).registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-
                    detail = intent.getStringExtra(Constant.DETAIL_SIGN);
                     if (detail != null) {
                         mHandler.sendEmptyMessage(0);
@@ -76,11 +74,7 @@ public class PackageDetailsFragment extends BaseFragment {
         }
     }
 
-    @Override
-    protected void lazyLoad() {
-        // TODO Auto-generated method stub
 
-    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
