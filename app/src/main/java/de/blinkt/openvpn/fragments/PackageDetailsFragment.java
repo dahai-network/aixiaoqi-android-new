@@ -4,13 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +18,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.Base.BaseFragment;
+import de.blinkt.openvpn.fragments.base.BaseFragment;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.util.SharedUtils;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by kim

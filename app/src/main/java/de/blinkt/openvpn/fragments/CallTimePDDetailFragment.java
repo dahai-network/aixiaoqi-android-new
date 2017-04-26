@@ -10,7 +10,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.Base.BaseFragment;
+import de.blinkt.openvpn.fragments.base.BaseFragment;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.util.SharedUtils;
 

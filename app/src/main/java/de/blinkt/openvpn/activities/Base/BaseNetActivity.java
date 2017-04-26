@@ -20,7 +20,6 @@ public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		dismissProgress();
-
 	}
 
 	@Override
@@ -29,19 +28,26 @@ public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 		CommonTools.showShortToast(mContext, getString(R.string.no_wifi));
 	}
 
-	public void createHttpRequest(int cmdType) {
+	protected void createHttpRequest(int cmdType) {
+
 		CreateHttpFactory.instanceHttp(this, cmdType);
 	}
 
-	public void createHttpRequestNoCache(int cmdType) {
-		if (NetworkUtils.isNetworkAvailable(this)) {
+	protected void createHttpRequestNoCache(int cmdType) {
+		if (hasWiFi()) {
 			CreateHttpFactory.instanceHttp(this, cmdType);
-		} else {
-			noNet();
 		}
 	}
 
-	public void createHttpRequest(int cmdType, String... params) {
+	private  boolean hasWiFi(){
+		if(!NetworkUtils.isNetworkAvailable(this)){
+			CommonTools.showShortToast(mContext, getString(R.string.no_wifi));
+			return false;
+		}
+		return  true;
+	}
+
+	protected void createHttpRequest(int cmdType, String... params) {
 		CreateHttpFactory.instanceHttp(this, cmdType, params);
 	}
 }

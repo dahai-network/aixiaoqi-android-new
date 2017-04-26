@@ -2,7 +2,7 @@ package de.blinkt.openvpn.factory;
 
 import android.support.v4.util.SparseArrayCompat;
 
-import de.blinkt.openvpn.activities.Base.BaseFragment;
+import de.blinkt.openvpn.fragments.base.BaseFragment;
 import de.blinkt.openvpn.fragments.PackageDetailsFragment;
 import de.blinkt.openvpn.fragments.PaymentTermFragment;
 import de.blinkt.openvpn.fragments.ProductFeatureFragment;

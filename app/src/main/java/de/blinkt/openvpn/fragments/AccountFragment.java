@@ -51,12 +51,12 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.http.BalanceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.OrderUsageRemainHttp;
-import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.UsageRemainEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -179,6 +179,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Glide.get(getActivity()).clearMemory();
+
 		View rootView = inflater.inflate(R.layout.fragment_account,
 				container, false);
 		ButterKnife.bind(this, rootView);
@@ -535,10 +536,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 		} else if (status.equals(getString(R.string.index_blue_un_opne))) {
 			statusDrawable = R.drawable.index_blue_unpen;
 		}
-		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-		entity.setStatus(status);
-		entity.setStatusDrawableInt(statusDrawable);
-		EventBus.getDefault().post(entity);
+		EventBusUtil.changeConnectStatus(status,statusDrawable);
 	}
 
 	public final String NoticSign = "flg";

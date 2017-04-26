@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities.Base;
+package de.blinkt.openvpn.fragments.base;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

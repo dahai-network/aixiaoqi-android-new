@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.aixiaoqi.socket.EventBusUtil;
+
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
@@ -18,7 +20,6 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
-import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.util.SharedUtils;
 
@@ -153,20 +154,12 @@ public class PaySuccessActivity extends BaseNetActivity implements InterfaceCall
 				//TODO 没有通知到设备界面
 				//如果是没有套餐，则通知我的设备界面更新状态并且停止转动
 				SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
+				EventBusUtil.changeConnectStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 			}
 		}
 	}
 
-	/**
-	 * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
-	 */
-	private void sendEventBusChangeBluetoothStatus(String status, int statusDrawableInt) {
-		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-		entity.setStatus(status);
-		entity.setStatusDrawableInt(statusDrawableInt);
-		EventBus.getDefault().post(entity);
-	}
+
 
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {

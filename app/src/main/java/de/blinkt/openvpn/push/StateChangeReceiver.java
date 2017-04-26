@@ -89,30 +89,19 @@ public class StateChangeReceiver extends BroadcastReceiver {
 							break;
 					}
 
-					StateChangeEntity entity = new StateChangeEntity();
-					entity.setStateType(StateChangeEntity.NET_STATE);
-					entity.setIsopen(true);
-					EventBus.getDefault().post(entity);
-
+					EventBusUtil.simStateChange(StateChangeEntity.NET_STATE,true);
 				} else {
-					StateChangeEntity entity = new StateChangeEntity();
-					entity.setStateType(StateChangeEntity.NET_STATE);
-					entity.setIsopen(false);
-					EventBus.getDefault().post(entity);
+					EventBusUtil.simStateChange(StateChangeEntity.NET_STATE,false);
 				}
 				break;
 			case BLUETOOTH_CHANGE:
 				if (ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.isOpenBlueTooth()) {
-					StateChangeEntity entity = new StateChangeEntity();
-					entity.setStateType(StateChangeEntity.BLUETOOTH_STATE);
-					entity.setIsopen(true);
-					EventBus.getDefault().post(entity);
+					EventBusUtil.simStateChange(StateChangeEntity.BLUETOOTH_STATE,true);
 				} else {
-					StateChangeEntity entity = new StateChangeEntity();
-					entity.setStateType(StateChangeEntity.BLUETOOTH_STATE);
-					entity.setIsopen(false);
-					EventBus.getDefault().post(entity);
+					EventBusUtil.simStateChange(StateChangeEntity.BLUETOOTH_STATE,false);
 				}
+
+
 				break;
 		}
 	}
