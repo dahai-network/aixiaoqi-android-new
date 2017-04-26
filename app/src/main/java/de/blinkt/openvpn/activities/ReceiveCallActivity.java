@@ -272,8 +272,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKRECIVEHANGUP);
 				sipEngineCore.Hangup();
-//				stopTimer();
-//				finish();
+
 				TipHelper.stopShock();
 				TipHelper.stopSound();
 				break;

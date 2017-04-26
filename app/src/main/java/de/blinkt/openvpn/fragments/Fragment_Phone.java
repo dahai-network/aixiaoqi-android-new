@@ -67,7 +67,7 @@ import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
 import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
 
 
-public class Fragment_Phone extends Fragment implements InterfaceCallback, T9TelephoneDialpadView.OnT9TelephoneDialpadView, RecyclerBaseAdapter.OnItemClickListener, QueryCompleteListener<ContactRecodeEntity>, DialogInterfaceTypeBase {
+public class Fragment_Phone extends Fragment implements InterfaceCallback, T9TelephoneDialpadView.OnT9TelephoneDialpadView, RecyclerBaseAdapter.OnItemClickListener, QueryCompleteListener<ContactRecodeEntity>, DialogInterfaceTypeBase{
 
 
     private static Fragment_Phone fragment;
@@ -87,7 +87,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         return fragment;
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -105,12 +104,10 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         rvContactRecode = ((RecyclerView) view.findViewById(R.id.rv_contact_recode));
         t9dialpadview = ((T9TelephoneDialpadView) view.findViewById(R.id.t9dialpadview));
         tv_no_permission = ((TextView) view.findViewById(R.id.tv_no_permission));
-
         inited();
     }
 
     public void phonecallClicked() {
-
         if (t9dialpadview.getT9Input() != null && t9dialpadview.getT9Input().length() > 0) {
             contactRecodeEntity = new ContactRecodeEntity();
             contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
@@ -120,14 +117,12 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         } else {
             CommonTools.showShortToast(getActivity(), "请输入要拨打的电话号码");
         }
-
     }
 
     /***
      *手环拨打电话
      */
     public void braceletDial() {
-
         int version = Build.VERSION.SDK_INT;
         if (CommonTools.isFastDoubleClick(500)) {
             return;
@@ -199,11 +194,9 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
                     if (!TextUtils.isEmpty(curInputStr) && curInputStr.length() > 0) {
                         String newCurInputStr = curInputStr.substring(0, curInputStr.length() - 1);
                         if (TextUtils.isEmpty(newCurInputStr)) {
-
                         }
                         t9dialpadview.mT9InputEt.setText(newCurInputStr);
                         onDialInputTextChanged(newCurInputStr);
-
                     }
                 }
             });
@@ -211,9 +204,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         }
     }
 
-    public void clearInputEdit() {
-        t9dialpadview.mT9InputEt.setText("");
-    }
 
     private void searchContactRedocer() {
         AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, getActivity().getContentResolver(), false);
@@ -243,7 +233,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
             tv_no_permission.setVisibility(View.VISIBLE);
         } else {
             tv_no_permission.setVisibility(View.GONE);
-//			time = System.currentTimeMillis();
             mAllList = mAllLists;
             contactRecodeAdapter.addAll(mAllList);
         }
@@ -321,7 +310,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         //进行逻辑判断
         if (!curCharacter.equals("") && this.t9dialpadview.getVisibility() == View.VISIBLE) {
             showPhoneBottomBar();
-            Log.d(TAG, "onDialInputTextChanged: onDialInputTextChanged");
 
         } else if (this.t9dialpadview.getVisibility() == View.GONE) {
 
@@ -340,9 +328,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            /*if (CellPhoneFragment.dial_input_edit_text.getVisibility() == View.VISIBLE) {
-                showPhoneBottomBar();
-			}*/
+
         } else {
             hidePhoneBottomBar();
         }
@@ -454,7 +440,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         getActivity().startActivity(intent);
     }
 
-
     public String curInputStr;
 
     //网络请求结果
@@ -528,10 +513,12 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
                     // 监听到返回按钮点击事件
                     if (ProMainActivity.phone_linearLayout.getVisibility() == View.VISIBLE) {
                         CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
+                        t9dialpadview.clearT9Input();
                         ViewUtil.hideView(t9dialpadview);
                         hidePhoneBottomBar();
-                        clearInputEdit();
+                        // clearInputEdit();
                     }
+                    Log.d(TAG, "onKey: true");
                     return true;
                 }
                 return false;

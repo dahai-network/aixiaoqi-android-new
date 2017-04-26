@@ -27,7 +27,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
-
+            <de.blinkt.openvpn.views.TopProgressView
+                android:id="@+id/top_view"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_30dp" />
             <de.blinkt.openvpn.views.bannerview.CycleViewPager
                 android:id="@+id/scrollViewPagerLayout"
                 android:layout_width="match_parent"

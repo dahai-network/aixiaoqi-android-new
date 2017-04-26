@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities.Base;
+package de.blinkt.openvpn.fragments.base;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -45,7 +45,7 @@ public abstract class BaseFragment extends Fragment {
         lazyLoad();
     }
 
-    protected abstract void lazyLoad();
+    protected  void lazyLoad(){}
 
 
     protected void onInvisible() {

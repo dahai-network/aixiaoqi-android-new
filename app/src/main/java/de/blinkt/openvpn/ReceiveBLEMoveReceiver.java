@@ -327,7 +327,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										Log.i(TAG, "接收数据：是否插卡：" + messages.toString());
 										if (messages.get(0).substring(10, 12).equals("00")) {
 											Log.i(TAG, "未插卡");
-											sendEventBusChangeBluetoothStatus(context
+											EventBusUtil.changeConnectStatus(context
 													.getString(R.string.index_un_insert_card), R.drawable.index_uninsert_card);
 											//未插卡（需要修改：由于没有获取ICCID无法判断所以日后需要修改，暂时这样写）
 											SocketConstant.REGISTER_STATUE_CODE = 0;
@@ -366,10 +366,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 													break;
 												case "04":
 													Log.i(TAG, "爱小器卡！");
-													ChangeConnectStatusEntity aixiaoqiEntity = new ChangeConnectStatusEntity();
-													aixiaoqiEntity.setStatus(context.getString(R.string.index_aixiaoqicard));
-													aixiaoqiEntity.setStatusDrawableInt(R.drawable.index_no_signal);
-													EventBus.getDefault().post(aixiaoqiEntity);
+													EventBusUtil.changeConnectStatus(context.getString(R.string.index_aixiaoqicard),R.drawable.index_no_signal);
 													SharedUtils.getInstance().writeString(Constant.OPERATER, null);
 													break;
 											}
@@ -594,15 +591,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 	private void registFlowPath() {
 		Log.i("Bluetooth", "进入注册流程");
-		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
+
 		if (SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER, false)) {
-			entity.setStatus(context.getString(R.string.index_registing));
-			entity.setStatusDrawableInt(R.drawable.index_no_signal);
+			EventBusUtil.changeConnectStatus(context.getString(R.string.index_registing),R.drawable.index_no_signal);
 		} else {
-			entity.setStatus(context.getString(R.string.index_no_packet));
-			entity.setStatusDrawableInt(R.drawable.index_no_packet);
+			EventBusUtil.changeConnectStatus(context.getString(R.string.index_no_packet),R.drawable.index_no_packet);
 		}
-		EventBus.getDefault().post(entity);
+
 		IS_TEXT_SIM = true;
 		isGetnullCardid = false;
 		StartRegistEntity startRegistEntity = new StartRegistEntity();
@@ -707,16 +702,16 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	/**
 	 * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
 	 */
-	private void sendEventBusChangeBluetoothStatus(String status, int statusDrawableInt) {
-		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-		entity.setStatus(status);
-		entity.setStatusDrawableInt(statusDrawableInt);
-		EventBus.getDefault().post(entity);
-	}
+//	private void sendEventBusChangeBluetoothStatus(String status, int statusDrawableInt) {
+//		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
+//		entity.setStatus(status);
+//		entity.setStatusDrawableInt(statusDrawableInt);
+//		EventBus.getDefault().post(entity);
+//	}
 
 	private void connectGoip() {
 		if (ProMainActivity.sendYiZhengService != null) {
-			sendEventBusChangeBluetoothStatus(context.getString(R.string.index_registing), R.drawable.index_no_signal);
+			EventBusUtil.changeConnectStatus(context.getString(R.string.index_registing), R.drawable.index_no_signal);
 			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}

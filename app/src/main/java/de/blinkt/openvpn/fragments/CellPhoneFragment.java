@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
 import de.blinkt.openvpn.activities.ProMainActivity;
+import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.MyViewPager;
 
@@ -34,7 +35,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLESMS;
 /**
  * 拨打电话界面
  */
-public class CellPhoneFragment extends Fragment {
+public class CellPhoneFragment extends BaseStatusFragment {
     public static RadioGroup operation_rg;
     RadioButton cell_phone_rb;
     RadioButton message_rb;
@@ -54,7 +55,10 @@ public class CellPhoneFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        View view = inflater.inflate(R.layout.cell_phone_fragment, container, false);
+        setLayoutId(R.layout.cell_phone_fragment);
+//        View view = inflater.inflate(R.layout.cell_phone_fragment, container, false);
+        View view=super.onCreateView( inflater,  container,
+                savedInstanceState);
         initView(view);
         addListener();
         return view;

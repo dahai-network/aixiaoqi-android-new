@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.Base.BaseFragment;
+import de.blinkt.openvpn.fragments.base.BaseFragment;
 import de.blinkt.openvpn.constant.Constant;
 
 /**
@@ -37,10 +37,7 @@ public class ProductFeatureFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
         View view = inflater.inflate(R.layout.packagedetail_layout, null);
-
         tvContext = (TextView) view.findViewById(R.id.tv_context);
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(new BroadcastReceiver() {
@@ -57,8 +54,4 @@ public class ProductFeatureFragment extends BaseFragment {
         return view;
     }
 
-    @Override
-    protected void lazyLoad() {
-
-    }
 }

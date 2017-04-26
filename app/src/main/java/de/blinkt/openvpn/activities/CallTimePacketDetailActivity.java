@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
@@ -179,7 +180,7 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
         SharedUtils.getInstance().delete(Constant.CALLTIME_FEATURES_SIGN);
     }
 
-    class CallTimePacketDetailAdapter extends FragmentStatePagerAdapter {
+    class CallTimePacketDetailAdapter extends FragmentPagerAdapter {
 
         public CallTimePacketDetailAdapter(FragmentManager fm) {
             super(fm);

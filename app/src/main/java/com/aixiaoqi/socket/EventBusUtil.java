@@ -2,8 +2,9 @@ package com.aixiaoqi.socket;
 
 import org.greenrobot.eventbus.EventBus;
 
+import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
-import de.blinkt.openvpn.model.SimRegisterType;
+import de.blinkt.openvpn.model.StateChangeEntity;
 
 /**
  * Created by Administrator on 2017/2/9 0009.
@@ -16,9 +17,18 @@ public class EventBusUtil {
         entity.setRigsterSimStatue(regstatues);
         EventBus.getDefault().post(entity);
     }
-    public static void simRegisterType(String registerType) {
-        SimRegisterType entity = new SimRegisterType();
-        entity.setSimRegisterType(registerType);
+
+    public static void simStateChange(String registerType,boolean isopen) {
+        StateChangeEntity entity = new StateChangeEntity();
+        entity.setStateType(registerType);
+        entity.setIsopen(isopen);
         EventBus.getDefault().post(entity);
     }
+    public static void changeConnectStatus(String status, int statusDrawableInt) {
+        ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
+        entity.setStatus(status);
+        entity.setStatusDrawableInt(statusDrawableInt);
+        EventBus.getDefault().post(entity);
+    }
+
 }

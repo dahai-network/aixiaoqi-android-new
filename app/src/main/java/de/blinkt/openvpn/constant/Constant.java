@@ -164,9 +164,6 @@ public class Constant {
 
 	public static final int SAVE_REALNAME = 104;
 	public static final int SAVE_ID_CARD_NUMBER = 101;
-	public static final int SAVE_ADDRESS = 102;
-	public static final int SAVE_SELECT_NUMBER = 103;
-	public static final int ADD_PHONE_NUMBER = 105;
 	//是否有订单参数
 	public static final String ISHAVEORDER = "ishaveorder";
 	public static final int NETWORK_CELL_PHONE = 1;

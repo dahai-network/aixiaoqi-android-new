@@ -293,7 +293,7 @@
     <string name="not_suppert_open_way">手机不支持直接打开方式，请前往设置里边去打开操作</string>
     <!--充值-->
     <string name="recharge">充值</string>
-    <string name="select_rechart_amount">选择充值余额(元)</string>
+    <string name="select_rechart_amount">选择充值金额(元)</string>
     <string name="amount_money">金额</string>
     <string name="recharge_way">选择充值方式</string>
     <string name="next">立即支付</string>
@@ -360,6 +360,7 @@
     <string name="outside_package_course">境外套餐教程</string>
     <string name="before_going_abroad">出境前激活套餐</string>
     <string name="outside">在境外使用</string>
+    <string name="overseas_guide_fee">海外节费引导</string>
     <string name="user_intro">使用简介</string>、
     <string name="user_intro_content">
 1）出国前在套餐超市中，购买需前往地的套餐，然后将它激活到爱小器国际卡。\n
@@ -563,8 +564,8 @@
     <string name="unibox">爱小器双待王</string>
     <string name="unibox_key">双待王</string>
     <string name="unitoy">爱小器手环</string>
-    <string name="package_surplus_detail">套餐剩余详情</string>
-    <string name="going_buy"><u>续费</u></string>
+    <string name="package_surplus_detail">套餐详情</string>
+    <string name="going_buy"><u>套餐超市</u></string>
     <string name="call_time">通话</string>
     <string name="flow_count">激活流量</string>
     <string name="no_flow_count">未激活流量</string>

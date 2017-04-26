@@ -2,7 +2,7 @@ package de.blinkt.openvpn.factory;
 
 import android.support.v4.util.SparseArrayCompat;
 
-import de.blinkt.openvpn.activities.Base.BaseFragment;
+import de.blinkt.openvpn.fragments.base.BaseFragment;
 import de.blinkt.openvpn.fragments.PackageDetailsFragment;
 import de.blinkt.openvpn.fragments.PaymentTermFragment;
 import de.blinkt.openvpn.fragments.ProductFeatureFragment;
@@ -13,7 +13,7 @@ import de.blinkt.openvpn.fragments.ProductFeatureFragment;
 public class FragmentFactory {
 
     //SparseArray 数组进行优化
-    static SparseArrayCompat<BaseFragment> PackageDetailFragments = new SparseArrayCompat<BaseFragment>();
+    static SparseArrayCompat<BaseFragment> PackageDetailFragments = new SparseArrayCompat<>();
     private static final int PACKAGEDETAILS = 0;
     private static final int PRODUCTFEATURE = 1;
     private static final int PAYMENTTERM = 2;
@@ -28,7 +28,6 @@ public class FragmentFactory {
     public static BaseFragment getDetailFragment(int position) {
 
         BaseFragment fragment = null;
-
         BaseFragment tmpFragment = PackageDetailFragments.get(position);
         if (tmpFragment != null) {
             fragment = tmpFragment;
@@ -54,6 +53,7 @@ public class FragmentFactory {
         }
         return fragment;
     }
+
 
 
 }
