@@ -526,36 +526,5 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         });
     }
 
-    /*@Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-
-        Log.d(TAG, "onKey: " + keyCode + "action" + event.getAction());
-
-
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            Log.d(TAG, "onKey: KeyEvent.KEYCODE_BACK" + keyCode);
-            if (keyCode == KeyEvent.KEYCODE_BACK) {  //表示按返回键 时的操作
-                if (ProMainActivity.phone_linearLayout.getVisibility() == View.VISIBLE) {
-                    Log.d(TAG, "onKey: ");
-                    CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
-                    ViewUtil.hideView(t9dialpadview);
-                    hidePhoneBottomBar();
-                    //clearInputEdit();
-                    t9dialpadview.clearT9Input();
-                 *//*   smsListAdapter.setDeleteImage(false);
-                    editSmsImageView.setBackground(getResources().getDrawable(R.drawable.edit_sms_selector));
-                    smsListAdapter.notifyDataSetChanged();
-                    ids.clear();*//*
-                } else {
-                    Log.d(TAG, "onKey: false");
-                    return false;
-                }
-                return true;    //已处理
-            }
-        }
-
-        return false;
-    }*/
 
 }

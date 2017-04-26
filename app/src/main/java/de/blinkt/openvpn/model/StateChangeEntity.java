@@ -8,7 +8,7 @@ package de.blinkt.openvpn.model;
 public class StateChangeEntity {
 	public static final String NET_STATE = "net_state";//网络状态
 	public static final String BLUETOOTH_STATE = "bluetooth_state";//蓝牙状态
-
+	public static final String REGISTERING_SIM="registering_sim";//正在注册sim卡
 	private String stateType;
 	private boolean isopen;
 

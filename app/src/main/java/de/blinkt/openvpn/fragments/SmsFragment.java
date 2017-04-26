@@ -134,8 +134,6 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	}
 
 	NotifyReceiver mNotifyReceiver;
-	private int position;
-
 
 	public void registerMessageReceiver() {
 		mNotifyReceiver = new NotifyReceiver();
@@ -189,14 +187,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 
 	@Override
 	public void onItemLongClick(View view, final Object data) {
-//		position=mAllTempLists.indexOf(data);
-//		Log.e("position","position="+position);
-//		new AlertDialog.Builder(getActivity()).setPositiveButton("删除", new DialogInterface.OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface dialog, int which) {
-//				CreateHttpFactory.instanceHttp(SmsFragment.this,HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TEL,((SmsEntity)data).getFm());
-//			}
-//		}).show();
+
 		smsListAdapter.setDeleteImage(true);
 		editSmsImageView.setBackground(getResources().getDrawable(R.drawable.delete_sms_selector));
 		smsListAdapter.notifyDataSetChanged();
@@ -344,12 +335,6 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TELS) {
 
 			if (object.getStatus() == 1) {
-//				Iterator<SmsEntity> iter
-//						= ids.iterator();
-//				while (iter.hasNext()) {
-//					smsListAdapter.remove(iter.next().getPosition());
-//				}
-//				smsListAdapter.notifyDataSetChanged();
 				smsListAdapter.setDeleteImage(false);
 				onRefresh();
 				editSmsImageView.setBackground(getResources().getDrawable(R.drawable.edit_sms_selector));

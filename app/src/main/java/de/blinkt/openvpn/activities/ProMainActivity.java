@@ -304,7 +304,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (ProMainActivity.phone_linearLayout.getVisibility() != View.VISIBLE)
+            if (phone_linearLayout.getVisibility() == View.GONE)
                 moveTaskToBack(false);
         }
 
@@ -444,7 +444,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     }
                 }).start();
             } else {
-                sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
+                EventBusUtil.changeConnectStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
             }
         } else if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (NetworkUtils.isLocationOpen(getApplicationContext())) {
@@ -478,7 +478,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                sendEventBusChangeBluetoothStatus(getResources().getString(R.string.index_connecting), R.drawable.index_connecting);
+                EventBusUtil.changeConnectStatus(getResources().getString(R.string.index_connecting), R.drawable.index_connecting);
                 if (stopHandler == null) {
                     stopHandler = new Handler();
                 }
@@ -537,8 +537,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 break;
             case R.id.iv_putaway:
                 CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
+                phoneFragment.t9dialpadview.clearT9Input();
                 ViewUtil.hideView(phoneFragment.t9dialpadview);
                 hidePhoneBottomBar();
+
+
                 break;
         }
 
@@ -774,11 +777,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                         Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                         startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
                     } else {
-                        sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
+                        EventBusUtil.changeConnectStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
 //						setTipsOnNoBind();
                     }
                 } else {
-                    sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
+                    EventBusUtil.changeConnectStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
 //					setTipsOnNoBind();
                 }
             }
@@ -792,15 +795,15 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
                     if (SocketConstant.REGISTER_STATUE_CODE != 3) {
                         getConfigInfo();
-                        sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+                        EventBusUtil.changeConnectStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
                     } else {
-                        sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+                        EventBusUtil.changeConnectStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
                     }
                 } else {
                     //TODO 没有通知到设备界面
                     //如果是没有套餐，则通知我的设备界面更新状态并且停止转动
                     SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
-                    sendEventBusChangeBluetoothStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
+                    EventBusUtil.changeConnectStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
                 }
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
@@ -812,10 +815,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
                     SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();
                     if (SocketConstant.REGISTER_STATUE_CODE == 2) {
-                        sendEventBusChangeBluetoothStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
+                        EventBusUtil.changeConnectStatus(getString(R.string.index_registing), R.drawable.index_no_signal);
 //						return;
                     } else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-                        sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+                        EventBusUtil.changeConnectStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
 //						return;
                     }
                     new Thread(new Runnable() {
@@ -848,15 +851,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
             SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
-            Log.d("__aixiaoqi", "rightComplete: " + skyUpgradeHttp);
 
             if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
-                Log.d("__aixiaoqi", "rightComplete: " + "有新的版本");
                 mHandler.sendEmptyMessage(1);
 
 
             } else {
-                Log.d("__aixiaoqi", "rightComplete: " + "已经是最新的");
             }
 
         }
@@ -953,7 +953,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 //				sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
         switch (entity.getRigsterSimStatue()) {
             case SocketConstant.REGISTER_SUCCESS:
-                sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+                EventBusUtil.changeConnectStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
                 topProgressGone();
                 accountFragment.setRegisted(true);
                 break;
@@ -982,17 +982,17 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 break;
             case SocketConstant.TCP_DISCONNECT:
                 //更改为注册中
-                sendEventBusChangeBluetoothStatus(getString(index_registing), R.drawable.index_no_signal);
+                EventBusUtil.changeConnectStatus(getString(index_registing), R.drawable.index_no_signal);
 
                 break;
             case SocketConstant.REGISTER_FAIL_INITIATIVE:
                 //更改为注册中
                 unbindTcpService();
                 destorySocketService();
-                sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
+                EventBusUtil.changeConnectStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
                 break;
             case SocketConstant.RESTART_TCP:
-                sendEventBusChangeBluetoothStatus(getString(index_registing), R.drawable.index_no_signal);
+                EventBusUtil.changeConnectStatus(getString(index_registing), R.drawable.index_no_signal);
                 startSocketService();
                 if (ProMainActivity.sendYiZhengService == null) {
                     ProMainActivity.sendYiZhengService = new SendYiZhengService();
@@ -1000,7 +1000,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 startTcpSocket();
                 break;
             case SocketConstant.REG_STATUE_CHANGE:
-                sendEventBusChangeBluetoothStatus(getString(index_registing), R.drawable.index_no_signal);
+                EventBusUtil.changeConnectStatus(getString(index_registing), R.drawable.index_no_signal);
                 break;
             case SocketConstant.REGISTER_CHANGING:
                 double percent = entity.getProgressCount();
@@ -1095,16 +1095,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             startTcpSocket();
         }
         bindtime = 0;
-    }
-
-    /**
-     * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
-     */
-    private void sendEventBusChangeBluetoothStatus(String status, int statusDrawableInt) {
-        ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-        entity.setStatus(status);
-        entity.setStatusDrawableInt(statusDrawableInt);
-        EventBus.getDefault().post(entity);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1210,9 +1200,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 i("被主动断掉连接！");
                 //判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
                 if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-                    sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
+                    EventBusUtil.changeConnectStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
                 } else {
-                    sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
+                    EventBusUtil.changeConnectStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
                 }
             } else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
                 ArrayList<String> message = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
@@ -1285,7 +1275,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
                         d("STATE_OFF 手机蓝牙关闭");
-                        sendEventBusChangeBluetoothStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
+                        EventBusUtil.changeConnectStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
                         break;
                     case BluetoothAdapter.STATE_TURNING_OFF:
                         d("STATE_TURNING_OFF 手机蓝牙正在关闭");
@@ -1293,9 +1283,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     case BluetoothAdapter.STATE_ON:
                         d("STATE_ON 手机蓝牙开启");
                         if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-                            sendEventBusChangeBluetoothStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
+                            EventBusUtil.changeConnectStatus(getString(R.string.index_unconnect), R.drawable.index_unconnect);
                         } else {
-                            sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
+                            EventBusUtil.changeConnectStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
                         }
                         break;
                     case BluetoothAdapter.STATE_TURNING_ON:
@@ -1321,6 +1311,17 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     public boolean onLongClick(View view) {
         phoneFragment.t9dialpadview.clearT9Input();
         return false;
+    }
+
+    /**
+     * -     * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
+     * -
+     */
+    private void sendEventBusChangeBluetoothStatus(String status, int statusDrawableInt) {
+        ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
+        entity.setStatus(status);
+        entity.setStatusDrawableInt(statusDrawableInt);
+        EventBus.getDefault().post(entity);
     }
 
     //空中升级

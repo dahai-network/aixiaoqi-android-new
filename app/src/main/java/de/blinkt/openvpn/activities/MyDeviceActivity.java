@@ -613,8 +613,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	protected void onPause() {
 		Log.d(TAG, "onPause");
 		super.onPause();
-		sinking.setStatus(MySinkingView.Status.NONE);
 
+
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		sinking.setStatus(MySinkingView.Status.NONE);
 	}
 
 	@Override
@@ -1038,10 +1044,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (status.equals(getString(R.string.index_blue_un_opne))) {
 			statusDrawable = R.drawable.index_blue_unpen;
 		}
-		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-		entity.setStatus(status);
-		entity.setStatusDrawableInt(statusDrawable);
-		EventBus.getDefault().post(entity);
+		EventBusUtil.changeConnectStatus(status, statusDrawable);
 	}
 
 	public void setConStatus(String conStatus) {

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -17,6 +18,9 @@ public class SearchConnectterHelper {
 		 * 根据电话号码取得联系人姓名
 		 */
 	public static String getContactNameByPhoneNumber(Context context, String address) {
+		if(context==null|| TextUtils.isEmpty(address)){
+			return "";
+		}
 		Cursor c = context.getContentResolver().query(Uri.withAppendedPath(
 				ContactsContract.PhoneLookup.CONTENT_FILTER_URI, address), new String[] {
 				ContactsContract.PhoneLookup._ID,
