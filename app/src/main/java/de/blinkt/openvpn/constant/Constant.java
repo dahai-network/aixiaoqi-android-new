@@ -88,7 +88,7 @@ public class Constant {
 	public static final String WEIXIN_PUSH = "888003040003";//微信推送到设备
 	public static final String QQ_PUSH = "888003040004";//QQ推送到设备
 
-	public static final String APP_CONNECT = "8880021400";//APP专属命令
+	public static final String APP_CONNECT = "8880111400";//APP专属命令
 	public static final String BIND_DEVICE = "8880020700";//绑定命令
 	public static final String BIND_SUCCESS = "888003080001";//绑定成功命令
 	public static final String BIND_FAIL = "888003080000";//绑定失败命令
@@ -190,6 +190,7 @@ public class Constant {
 	public static final String ICCID_BLUE_VALUE = "0d00";//检测是否插卡
 	public static final String READED_SIM_DATA = "1200";//读卡数据
 	public static final String WRITE_SIM_DATA = "1300";//写卡数据
+	public static final String APP_CONNECT_RECEIVE = "1400";//返回app专属命令返回
 	public static final String WRITE_SIM_FIRST = "a0a40000023f00";//写卡第一步
 	public static final String WRITE_SIM_STEP_TWO = "a0a40000022f02";//写卡第二步
 	public static final String WRITE_SIM_STEP_THREE = "a0b000000a";//写卡第三步
