@@ -33,11 +33,13 @@ import cn.com.johnson.adapter.ProductsAdapter;
 import cn.com.johnson.model.HotPackageEntity;
 import cn.com.johnson.model.IndexBannerEntity;
 import de.blinkt.openvpn.activities.CallTimePacketDetailActivity;
+import de.blinkt.openvpn.activities.OverseaGuideFeeActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.WebViewActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
+import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.http.BannerHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
@@ -61,7 +63,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKHOTPACKAGEMORE;
 *   商城
 * */
 
-public class IndexFragment extends Fragment implements View.OnClickListener, InterfaceCallback {
+public class IndexFragment extends BaseStatusFragment implements View.OnClickListener, InterfaceCallback {
 
 	private String TAG = "IndexFragment";
 
@@ -102,7 +104,12 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		view = inflater.inflate(R.layout.fragment_index, container, false);
+
+setLayoutId(R.layout.fragment_index);
+		view=super.onCreateView( inflater,  container,
+				 savedInstanceState);
+//		view = inflater.inflate(R.layout.fragment_index, container, false);
+
 		ButterKnife.bind(this, view);
 		findById(view);
 
@@ -190,6 +197,12 @@ public class IndexFragment extends Fragment implements View.OnClickListener, Int
 				Intent marketIntent = new Intent(getActivity(), PackageMarketActivity.class);
 				marketIntent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.HIDDEN);
 				startActivity(marketIntent);
+				break;
+			case R.id.guiderImageView:
+				//友盟方法统计
+				Intent marketIntent1 = new Intent(getActivity(), OverseaGuideFeeActivity.class);
+
+				startActivity(marketIntent1);
 				break;
 		}
 

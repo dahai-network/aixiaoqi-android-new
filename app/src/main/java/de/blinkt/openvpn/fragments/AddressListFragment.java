@@ -29,6 +29,7 @@ import de.blinkt.openvpn.activities.CallDetailActivity;
 import de.blinkt.openvpn.activities.ContactDetailActivity;
 
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.util.pinyin.CharacterParser;
 
@@ -37,7 +38,7 @@ import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.contact.SideBar;
 import de.blinkt.openvpn.views.contact.TouchableRecyclerView;
 
-public class AddressListFragment extends Fragment implements ContactAdapter.CallLisener, ContactDetailActivity.ContactChangeDataListener {
+public class AddressListFragment extends BaseStatusFragment implements ContactAdapter.CallLisener, ContactDetailActivity.ContactChangeDataListener {
 
 	private SideBar mSideBar;
 	private TextView mUserDialog;
@@ -53,8 +54,12 @@ public class AddressListFragment extends Fragment implements ContactAdapter.Call
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_selection_common,
-				container, false);
+		setLayoutId(R.layout.fragment_selection_common);
+//		View rootView = inflater.inflate(R.layout.fragment_selection_common,
+//				container, false);
+		View rootView =super.onCreateView( inflater,  container,
+				 savedInstanceState);
+		topProgressView.setWhiteBack(false);
 		initView(rootView);
 		return rootView;
 	}

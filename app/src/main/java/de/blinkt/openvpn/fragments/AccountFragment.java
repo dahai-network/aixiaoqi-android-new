@@ -79,7 +79,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKSET;
  * 我的界面
  * A simple {@link Fragment} subclass.
  */
-public class AccountFragment extends Fragment implements View.OnClickListener, InterfaceCallback, DialogInterfaceTypeBase {
+public class AccountFragment extends BaseStatusFragment implements View.OnClickListener, InterfaceCallback, DialogInterfaceTypeBase {
 	@BindView(R.id.title)
 	TitleBar title;
 	@BindView(R.id.headImageView)
@@ -179,9 +179,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener, I
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		Glide.get(getActivity()).clearMemory();
-
-		View rootView = inflater.inflate(R.layout.fragment_account,
-				container, false);
+setLayoutId(R.layout.fragment_account);
+//		View rootView = inflater.inflate(R.layout.fragment_account,
+//				container, false);
+		View rootView = super.onCreateView( inflater,  container,
+				 savedInstanceState);
+        topProgressView.setWhiteBack(true);
 		ButterKnife.bind(this, rootView);
 		title.setTextTitle(getString(R.string.personal_center));
 		tvNewPackagetAction = (TextView) rootView.findViewById(R.id.tv_new_packaget_action);

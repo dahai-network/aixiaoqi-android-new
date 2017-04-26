@@ -854,8 +854,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
             if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
                 mHandler.sendEmptyMessage(1);
-
-
             } else {
             }
 

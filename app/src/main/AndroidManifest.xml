@@ -236,6 +236,10 @@
            >
         </activity>
         <activity
+            android:name="de.blinkt.openvpn.activities.OverseaGuideFeeActivity"
+            >
+        </activity>
+        <activity
             android:name="de.blinkt.openvpn.activities.CountryPackageActivity"
            >
         </activity>

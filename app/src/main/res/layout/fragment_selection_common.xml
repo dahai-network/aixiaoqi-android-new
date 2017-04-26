@@ -10,8 +10,15 @@
         android:layout_height="@dimen/padding_50dp"
         />
 
-    <EditText
+    <de.blinkt.openvpn.views.TopProgressView
+        android:id="@+id/top_view"
         android:layout_below="@id/title"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="@dimen/padding_30dp" />
+    <EditText
+        android:layout_below="@id/top_view"
+
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
         android:layout_marginLeft="@dimen/padding_10"
