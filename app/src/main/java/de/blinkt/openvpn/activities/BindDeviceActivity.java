@@ -46,6 +46,7 @@ import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.BluetoothModel;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
@@ -264,12 +265,13 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 													}
 													//排序后连接操作
 													scanLeDevice(false);
-													if (infos.size() == 0) {
+													if (infos.size() == 0 && !isStartFindDeviceDelay) {
 														CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.no_device_around));
 														finish();
 														return;
 													}
 													deviceAddress = infos.get(0).getAddress();
+													EncryptionUtil.encryptMacAddress = deviceAddress;
 													utils.writeString(Constant.BRACELETNAME, infos.get(0).getDiviceName());
 													createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
 													isStartFindDeviceDelay = false;
@@ -292,6 +294,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		scanLeDevice(false);
 		mService.disconnect();
 		ICSOpenVPNApplication.isConnect = false;
+		isStartFindDeviceDelay = true;
 		utils.delete(Constant.IMEI);
 		utils.delete(Constant.BRACELETNAME);
 		finish();
@@ -303,8 +306,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			IsBindHttp http = (IsBindHttp) object;
 			if (http.getStatus() == 1 && http.getIsBindEntity() != null && http.getIsBindEntity().getBindStatus() == 0) {
 				if (mService != null) {
-					//判断无人连接后记录MAC地址
-					utils.writeString(Constant.IMEI, deviceAddress);
+//					//判断无人连接后记录MAC地址
+//					utils.writeString(Constant.IMEI, deviceAddress);
 					String braceletname = utils.readString(Constant.BRACELETNAME);
 					if (!TextUtils.isEmpty(braceletname)) {
 						if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
@@ -334,6 +337,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			if (object.getStatus() == 1) {
 				Log.i("test", "保存设备名成功");
 				if (bluetoothName.contains(Constant.UNITOYS)) {
+					utils.writeString(Constant.IMEI, deviceAddress);
 					mService.connect(deviceAddress);
 				} else {
 //					connectedRelativeLayout.setVisibility(View.VISIBLE);
@@ -355,6 +359,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 							intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
 							SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE, type);
 							startActivity(intent);
+							utils.writeString(Constant.IMEI, deviceAddress);
 							finish();
 						}
 					}, 2000);
@@ -414,7 +419,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		String type = entity.getBlueType();
 		if (BluetoothConstant.BLUE_BIND_SUCCESS.equals(type)) {
 			if (entity.isSuccess()) {
-				Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + utils.readString(Constant.IMEI) + ",版本号：" + utils.readString(Constant.BRACELETVERSION));
+				Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + deviceAddress + ",版本号：" + utils.readString(Constant.BRACELETVERSION));
 				if (bluetoothName.contains(Constant.UNIBOX)) {
 //					final BindDeviceHttp bindDevicehttp = new BindDeviceHttp();
 //					new Thread(bindDevicehttp).start();
