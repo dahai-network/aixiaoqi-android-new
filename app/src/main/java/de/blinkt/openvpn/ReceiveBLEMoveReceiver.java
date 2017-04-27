@@ -39,11 +39,11 @@ import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
 import de.blinkt.openvpn.http.HistoryStepHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
-import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.SportStepEntity;
 import de.blinkt.openvpn.model.StartRegistEntity;
 import de.blinkt.openvpn.model.WriteCardEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 
 import static de.blinkt.openvpn.activities.ActivateActivity.FINISH_ACTIVITY;
@@ -95,6 +95,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	private int UPDATE_HISTORY_DATE = 1;
 	private int WRITE_CARD_COMPLETE = 2;
 	private int CHECK_SIGNAL = 3;
+	//重连次数
+	public static int retryTime;
 	//	private String dataType;//发出数据以后需要把dataType重置为-1；
 	private Handler handler = new Handler() {
 		@Override
@@ -109,8 +111,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			}
 		}
 	};
-	//重连次数
-	public static int retryTime;
 
 	public void onReceive(final Context context, Intent intent) {
 		this.context = context;
@@ -119,9 +119,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		if (action.equals(UartService.FINDED_SERVICE)) {
 			Log.d(TAG, "UART_CONNECT_MSG");
 			IS_TEXT_SIM = false;
-			BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
-			entity.setBlueType(BluetoothConstant.BLUE_BIND);
-			EventBus.getDefault().post(entity);
 
 			sendStepThread = new Thread(new Runnable() {
 				@Override
@@ -129,15 +126,19 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					try {
 						Thread.sleep(100);
 						//8880021400
+//						sendMessageToBlueTooth(APP_CONNECT + EncryptionUtil.random15Number());//APP专属命令
 						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
-						Thread.sleep(400);
-						sendMessageToBlueTooth(BASIC_MESSAGE);
 						Log.i(TAG, "发送了专属命令");
 						String braceletname = utils.readString(Constant.BRACELETNAME);
 						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
-							Thread.sleep(100);
+							CommonTools.delayTime(100);
 							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
+							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
+							entity.setBlueType(BluetoothConstant.BLUE_BIND);
+							EventBus.getDefault().post(entity);
 						} else {
+							Thread.sleep(400);
+							sendMessageToBlueTooth(BASIC_MESSAGE);
 							Log.i("toBLue", "连接成功");
 							//更新时间操作
 							sendMessageToBlueTooth(getBLETime());
@@ -369,7 +370,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 													break;
 												case "04":
 													Log.i(TAG, "爱小器卡！");
-													EventBusUtil.changeConnectStatus(context.getString(R.string.index_aixiaoqicard),R.drawable.index_no_signal);
+													EventBusUtil.changeConnectStatus(context.getString(R.string.index_aixiaoqicard), R.drawable.index_no_signal);
 													SharedUtils.getInstance().writeString(Constant.OPERATER, null);
 													break;
 											}
@@ -406,6 +407,18 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(Iccid);
 										Log.e("ICCID_BLUE_VALUE111111", SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
 										break;
+									case Constant.APP_CONNECT_RECEIVE:
+										Log.i("Encryption", "返回加密数据：" + messages.get(0).toString());
+										if (!EncryptionUtil.isPassEncrypt(messages.get(0).toString().substring(10))) {
+//											mService.disconnect();
+//											CommonTools.showShortToast(context, context.getString(R.string.legitimate_tips));
+										} else {
+											BluetoothMessageCallBackEntity bEntity = new BluetoothMessageCallBackEntity();
+											bEntity.setBlueType(BluetoothConstant.BLUE_BIND);
+											EventBus.getDefault().post(bEntity);
+											sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
+										}
+										break;
 									default:
 										break;
 								}
@@ -425,6 +438,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 
 	}
+
 
 	private void sendMessageSeparate(final String message, final String type) {
 		new Thread(new Runnable() {
@@ -583,9 +597,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		Log.i("Bluetooth", "进入注册流程");
 
 		if (SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER, false)) {
-			EventBusUtil.changeConnectStatus(context.getString(R.string.index_registing),R.drawable.index_no_signal);
+			EventBusUtil.changeConnectStatus(context.getString(R.string.index_registing), R.drawable.index_no_signal);
 		} else {
-			EventBusUtil.changeConnectStatus(context.getString(R.string.index_no_packet),R.drawable.index_no_packet);
+			EventBusUtil.changeConnectStatus(context.getString(R.string.index_no_packet), R.drawable.index_no_packet);
 		}
 
 		IS_TEXT_SIM = true;
@@ -698,7 +712,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //		entity.setStatusDrawableInt(statusDrawableInt);
 //		EventBus.getDefault().post(entity);
 //	}
-
 	private void connectGoip() {
 		if (ProMainActivity.sendYiZhengService != null) {
 			EventBusUtil.changeConnectStatus(context.getString(R.string.index_registing), R.drawable.index_no_signal);

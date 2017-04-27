@@ -85,9 +85,7 @@ public class DialogUpgrade extends DialogBase {
 		public void onFirmwareValidating(String deviceAddress) {
 			Log.e("DialogUpgrade", "onFirmwareValidating=" + deviceAddress);
 			mProgressBar.setIndeterminate(true);
-//            if(TextUtils.isEmpty(deviceAddress)){
-//                noUpgrade();
-//            }
+
 		}
 
 		@Override
@@ -102,9 +100,7 @@ public class DialogUpgrade extends DialogBase {
 			mTextPercentage.setText(R.string.dfu_status_completed);
 			//保存状态
 			SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE,true);
-			UIOperatorEntity entity = new UIOperatorEntity();
-			entity.setType(UIOperatorEntity.onCompelete);
-			EventBus.getDefault().post(entity);
+			UIOperator(UIOperatorEntity.onCompelete);
 			Log.e("DialogUpgrade", "onDfuCompleted");
 			noUpgrade();
 			// let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
@@ -120,6 +116,7 @@ public class DialogUpgrade extends DialogBase {
 
 		@Override
 		public void onDfuAborted(String deviceAddress) {
+			UIOperator(UIOperatorEntity.onError);
 			noUpgrade();
 			Log.e("DialogUpgrade", "onDfuAborted");
 			mTextPercentage.setText(R.string.dfu_status_aborted);
@@ -155,9 +152,7 @@ public class DialogUpgrade extends DialogBase {
 
 		@Override
 		public void onError(final String deviceAddress, final int error, final int errorType, final String message) {
-			UIOperatorEntity entity = new UIOperatorEntity();
-			entity.setType(UIOperatorEntity.onError);
-			EventBus.getDefault().post(entity);
+			UIOperator(UIOperatorEntity.onError);
 			Log.e("DialogUpgrade", "onError");
 			noUpgrade();
 			// We have to wait a bit before canceling notification. This is called before DfuService creates the last notification.
@@ -169,6 +164,18 @@ public class DialogUpgrade extends DialogBase {
 					manager.cancel(DfuService.NOTIFICATION_ID);
 				}
 			}, 200);
+		}
+
+		private void  UIOperator(int result){
+			UIOperatorEntity entity = new UIOperatorEntity();
+			entity.setType(result);
+			EventBus.getDefault().post(entity);
+		}
+
+		@Override
+		public void onDeviceDisconnected(String deviceAddress) {
+			super.onDeviceDisconnected(deviceAddress);
+			UIOperator(UIOperatorEntity.onError);
 		}
 	};
 

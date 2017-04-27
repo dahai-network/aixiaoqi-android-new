@@ -73,7 +73,6 @@ import static cn.com.aixiaoqi.R.string.device;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
-import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.retryTime;
 import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
@@ -85,6 +84,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
 
 public class MyDeviceActivity extends BaseNetActivity implements DialogInterfaceTypeBase, View.OnClickListener {
+
 	//	@BindView(R.id.noConnectImageView)
 //	ImageView noConnectImageView;
 //	@BindView(R.id.statueTextView)
@@ -148,6 +148,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	//手环类型
 	private String bracelettype;
 	public static boolean isUpgrade = false;
+
+	public static int retryTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -265,7 +267,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
 		String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
-		if (retryTime >= 20 && mService != null && mService.isConnectedBlueTooth() && TextUtils.isEmpty(macStr)) {
+		if (retryTime >= 20 && mService != null && !mService.isConnectedBlueTooth() && !mService.isConnecttingBlueTooth() && !TextUtils.isEmpty(macStr)) {
 			retryTime = 0;
 			ReceiveBLEMoveReceiver.retryTime = 0;
 			mService.connect(macStr);
@@ -308,7 +310,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 
-	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, register_sim_statue, R.id.findStatusLinearLayout, R.id.alarmClockLinearLayout, R.id.messageRemindLinearLayout})
+	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.register_sim_statue, R.id.findStatusLinearLayout, R.id.alarmClockLinearLayout, R.id.messageRemindLinearLayout})
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.unBindButton:
@@ -351,9 +353,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					//如没有没插卡检测插卡并且提示用户重启手环。
 					//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
 					//如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
-
 					startAnim();
-					if (!conStatusTextView.getText().toString().equals(getString(R.string.index_high_signal)) || SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
+					//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
+					String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
+					if (mService != null && !mService.isConnectedBlueTooth() && !mService.isConnecttingBlueTooth() && !TextUtils.isEmpty(macStr)) {
+						retryTime = 0;
+						ReceiveBLEMoveReceiver.retryTime = 0;
+						mService.connect(macStr);
+						Log.i(TAG, "重新连接");
+					} else if (!conStatusTextView.getText().toString().equals(getString(R.string.index_high_signal)) || SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
 						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER_NO_RESPONSE);
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
 						if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
@@ -485,11 +493,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //						macTextView.setText("");
 //						firmwareTextView.setText("");
 //						statueTextView.setText(getString(R.string.conn_bluetooth));
-						CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
+						CommonTools.showShortToast(MyDeviceActivity.this, "已断开,请退出重新进入我的设备进行重连");
+						stopAnim();
 						return;
 					}
 					if (!ICSOpenVPNApplication.isConnect) {
-						CommonTools.showShortToast(MyDeviceActivity.this, "已断开,请退出重新进入我的设备进行重连");
+						CommonTools.showShortToast(MyDeviceActivity.this, "已断开，请查看周围有无设备");
+						stopAnim();
 						return;
 					}
 					connectThread = new Thread(new Runnable() {
@@ -508,18 +518,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					connectThread.start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
 					//多次重连无效后关闭蓝牙重启
-					if (retryTime == 6) {
-						mBtAdapter.disable();
-						Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-					}
+//					if (retryTime == 6) {
+//						mBtAdapter.disable();
+//						Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+//					}
 					if (!isUpgrade && isConnectOnce) {
 						showProgress(getString(R.string.reconnecting), true);
 
 					}
 				} else {
 //					unBindButton.setVisibility(GONE);
-					SharedUtils.getInstance().delete(Constant.IMEI);
+//					SharedUtils.getInstance().delete(Constant.IMEI);
 //					macTextView.setText("");
 //					firmwareTextView.setText("");
 //					statueTextView.setText(getString(R.string.conn_bluetooth));

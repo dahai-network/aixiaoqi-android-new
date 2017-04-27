@@ -69,8 +69,10 @@ public class CellPhoneFragment extends BaseStatusFragment {
         super.setUserVisibleHint(isVisibleToUser);
         isForeground = isVisibleToUser;
         if (isVisibleToUser) {
+            if(operation_rg!=null){
             operation_rg.check(cell_phone_rb.getId());
             ClickPhone();
+            }
             hidePhoneBottomBar();
         }
 
@@ -114,12 +116,13 @@ public class CellPhoneFragment extends BaseStatusFragment {
 
     private void initView(View view) {
         operation_rg = ((RadioGroup) view.findViewById(R.id.operation_rg));
+
         cell_phone_rb = ((RadioButton) view.findViewById(R.id.cell_phone_rb));
         //拨打电话标题
         dial_tittle_fl = (TextView) view.findViewById(R.id.dial_tittle_tv);
         message_rb = ((RadioButton) view.findViewById(R.id.message_rb));
         mViewPager = (MyViewPager) view.findViewById(R.id.mViewPager);
-
+        operation_rg.check(cell_phone_rb.getId());
         //悬浮按钮
         floatingActionButton = (ImageView) view.findViewById(R.id.floatingActionButton);
         initFragment();

@@ -67,7 +67,6 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 	}
 
 
-
 	public static SipEngineCore the_sipengineReceive;
 
 	//蓝牙Service
@@ -80,6 +79,8 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 	public void showMsg(String message) {
 		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 	}
+
+
 
 	@Override
 	public void onCreate() {
@@ -300,9 +301,11 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 		}
 		stack.add(activity);
 	}
-	public Stack<Activity> getActivitys(){
+
+	public Stack<Activity> getActivitys() {
 		return stack;
 	}
+
 	/**
 	 * 获取当前Activity（堆栈中最后一个压入的）
 	 */
@@ -378,23 +381,22 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 				}
 			}
 			stack.clear();
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 
 		}
 	}
-	public  void finishOtherActivity(){
+
+	public void finishOtherActivity() {
 		try {
 			if (stack.size() != 0) {
 				for (int i = 0, size = stack.size(); i < size; i++) {
-					if (null != stack.get(i)&&!(stack.get(i) instanceof ProMainActivity)) {
+					if (null != stack.get(i) && !(stack.get(i) instanceof ProMainActivity)) {
 						stack.get(i).finish();
 					}
 				}
 			}
 			stack.clear();
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 
 		}
 

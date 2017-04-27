@@ -636,4 +636,5 @@
 
     <string name="no_location_permission">蓝牙搜索需要打开位置信息</string>
     <string name="no_location_tips">未打开位置服务，将无法搜索手环</string>
+    <string name="legitimate_tips">您的手环不是正版手环，请勿购买！</string>
 </resources>
