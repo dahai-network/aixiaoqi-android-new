@@ -265,7 +265,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 													}
 													//排序后连接操作
 													scanLeDevice(false);
-													if (infos.size() == 0) {
+													if (infos.size() == 0 && !isStartFindDeviceDelay) {
 														CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.no_device_around));
 														finish();
 														return;
@@ -295,7 +295,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		mService.disconnect();
 		ICSOpenVPNApplication.isConnect = false;
 		isStartFindDeviceDelay = true;
-//		utils.delete(Constant.IMEI);
+		utils.delete(Constant.IMEI);
 		utils.delete(Constant.BRACELETNAME);
 		finish();
 	}
@@ -328,7 +328,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 				if (mService != null)
 					mService.disconnect();
 				BluetoothConstant.IS_BIND = false;
-//				SharedUtils.getInstance().delete(Constant.IMEI);
+				SharedUtils.getInstance().delete(Constant.IMEI);
 				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 				finish();
 			}

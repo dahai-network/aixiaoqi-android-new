@@ -15,6 +15,8 @@ public class EncryptionUtil {
 
 	//随机数字符串用于加密算法
 	public static String random15NumberString;
+	//共享密钥
+	private byte[] key = {(byte) 0x7a, (byte) 0x3b, (byte) 0x59, (byte) 0x64, (byte) 0xca, (byte) 0x8e, (byte) 0x9d, (byte) 0xf2};
 
 	public static String encryptMacAddress;
 
@@ -89,6 +91,7 @@ public class EncryptionUtil {
 
 		return Base64.encode(encryptedData);
 	}
+
 	// 3DES解密方法
 	public static String decrypt(String decryptString, byte[] decryptKey) throws Exception {
 		byte[] byteMi = Base64.decode(decryptString);
