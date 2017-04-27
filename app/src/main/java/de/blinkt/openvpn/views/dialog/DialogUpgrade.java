@@ -85,9 +85,7 @@ public class DialogUpgrade extends DialogBase {
 		public void onFirmwareValidating(String deviceAddress) {
 			Log.e("DialogUpgrade", "onFirmwareValidating=" + deviceAddress);
 			mProgressBar.setIndeterminate(true);
-//            if(TextUtils.isEmpty(deviceAddress)){
-//                noUpgrade();
-//            }
+
 		}
 
 		@Override
@@ -120,6 +118,9 @@ public class DialogUpgrade extends DialogBase {
 
 		@Override
 		public void onDfuAborted(String deviceAddress) {
+			UIOperatorEntity entity = new UIOperatorEntity();
+			entity.setType(UIOperatorEntity.onError);
+			EventBus.getDefault().post(entity);
 			noUpgrade();
 			Log.e("DialogUpgrade", "onDfuAborted");
 			mTextPercentage.setText(R.string.dfu_status_aborted);
@@ -169,6 +170,14 @@ public class DialogUpgrade extends DialogBase {
 					manager.cancel(DfuService.NOTIFICATION_ID);
 				}
 			}, 200);
+		}
+
+		@Override
+		public void onDeviceDisconnected(String deviceAddress) {
+			super.onDeviceDisconnected(deviceAddress);
+			UIOperatorEntity entity = new UIOperatorEntity();
+			entity.setType(UIOperatorEntity.onError);
+			EventBus.getDefault().post(entity);
 		}
 	};
 

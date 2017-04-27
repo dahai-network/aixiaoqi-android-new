@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class SimRegisterStatue implements Serializable {
 
+
 	//Goip注册失败类型
 	private int rigsterSimStatue;
 	private int progressCount;

@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_50dp"
+        android:background="@color/blue_title"
+        android:id="@+id/title"
+     >
         <RadioGroup
             android:id="@+id/operation_rg"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/padding_50dp"
-            android:background="@color/blue_title"
-            android:layout_centerInParent="true"
+            android:layout_height="match_parent"
+
             android:gravity="center"
             android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/cell_phone_rb"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/padding_50dp"
+                android:layout_height="match_parent"
                 android:button="@null"
                 android:checked="true"
                 android:drawablePadding="-6dp"
@@ -27,7 +31,7 @@
             <RadioButton
                 android:id="@+id/message_rb"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/padding_50dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="33dp"
                 android:drawablePadding="-6dp"
                 android:button="@null"
@@ -40,36 +44,36 @@
         <TextView
             android:id="@+id/dial_tittle_tv"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/padding_50dp"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:text="拨打"
-            android:layout_centerInParent="true"
             android:textColor="@color/white"
             android:textSize="@dimen/little_18"
             android:visibility="gone" />
 
-
+    </RelativeLayout>
     <de.blinkt.openvpn.views.TopProgressView
         android:id="@+id/top_view"
         android:layout_width="match_parent"
+        android:layout_below="@id/title"
         android:visibility="gone"
-        android:layout_marginTop="@dimen/padding_50dp"
         android:layout_height="@dimen/padding_25dp" />
     <de.blinkt.openvpn.views.MyViewPager
         android:id="@+id/mViewPager"
+        android:layout_below="@id/top_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/padding_75dp"
         android:layout_weight="1" />
 
     <ImageView
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/padding_10dp"
         android:layout_marginRight="@dimen/padding_15dp"
         android:background="@drawable/fl_b_nomer" />
 
 
-</FrameLayout>
+</RelativeLayout>

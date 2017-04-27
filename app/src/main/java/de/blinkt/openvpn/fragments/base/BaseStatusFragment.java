@@ -69,6 +69,23 @@ public class BaseStatusFragment extends Fragment {
 
                 }
                 break;
+            case StateChangeEntity.JUMP_ACTIVITY:
+                topProgressView.showTopProgressView(getString(R.string.un_connect_tip), -1, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+                        if (braceletName != null) {
+                            Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
+                            intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
+                            intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN,
+                                    ICSOpenVPNApplication.bleStatusEntity.getStatus());
+                            startActivity(intent);
+                        }
+
+
+                    }
+                });
+                break;
         }
 
     }

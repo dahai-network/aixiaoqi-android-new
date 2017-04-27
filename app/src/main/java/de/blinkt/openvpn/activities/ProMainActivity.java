@@ -146,7 +146,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     AddressListFragment addressListFragment;
     SportFragment sportFragment;
     IndexFragment indexFragment;
-    // public static LinearLayout bottom_bar_linearLayout;
     Intent intentCallPhone;
     public static boolean isForeground = false;
     public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
@@ -249,7 +248,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
      * \初始化界面
      */
     private void initView() {
-        radiogroup.check(R.id.rb_index);
+        radiogroup.check(R.id.rb_phone);
         radiogroup.setOnCheckedChangeListener(new MyRadioGroupListener());
         //无网络时候提醒
         if (!NetworkUtils.isNetworkAvailable(this)) {
@@ -307,8 +306,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             if (phone_linearLayout.getVisibility() == View.GONE)
                 moveTaskToBack(false);
         }
-
-
         return true;
     }
 
@@ -415,6 +412,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     getSupportFragmentManager(), list);
             mViewPager.setAdapter(adapter);
             mViewPager.setOffscreenPageLimit(4);
+            mViewPager.setCurrentItem(1);
         }
 
     }
@@ -486,6 +484,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     @Override
                     public void run() {
                         scanLeDevice(false);
+
                         if (mService != null && !mService.isConnectedBlueTooth()) {
                             topProgressView.showTopProgressView(getString(R.string.un_connect_tip), -1, new View.OnClickListener() {
                                 @Override
@@ -498,9 +497,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                                                 ICSOpenVPNApplication.bleStatusEntity.getStatus());
                                         startActivity(intent);
                                     }
+
+
                                 }
                             });
+                            EventBusUtil.changeConnectStatus(StateChangeEntity.JUMP_ACTIVITY,0);
                         }
+
                     }
                 }, 10000);
             }
