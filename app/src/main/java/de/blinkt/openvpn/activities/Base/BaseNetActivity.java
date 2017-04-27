@@ -8,7 +8,8 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
 
 /**
- * Created by Administrator on 2016/11/25 0025.
+ * Created by kim
+ * on 2016/11/25 0025.
  */
 public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 
@@ -41,6 +42,7 @@ public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 
 	private  boolean hasWiFi(){
 		if(!NetworkUtils.isNetworkAvailable(this)){
+			dismissProgress();
 			CommonTools.showShortToast(mContext, getString(R.string.no_wifi));
 			return false;
 		}
@@ -50,4 +52,10 @@ public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 	protected void createHttpRequest(int cmdType, String... params) {
 		CreateHttpFactory.instanceHttp(this, cmdType, params);
 	}
+	protected void createHttpRequestNoCache(int cmdType, String... params) {
+		if(hasWiFi()){
+			CreateHttpFactory.instanceHttp(this, cmdType, params);
+		}
+	}
+
 }

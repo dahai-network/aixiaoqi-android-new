@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorf_F5F5F5"
     tools:context="de.blinkt.openvpn.activities.CountryPackageActivity">
 
     <include layout="@layout/view_no_net"/>
@@ -23,7 +24,7 @@
         android:id="@+id/packageDetailRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/colorf_F5F5F5"
        />
 
     <TextView
