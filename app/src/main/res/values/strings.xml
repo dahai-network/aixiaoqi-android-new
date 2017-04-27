@@ -136,7 +136,7 @@
 
     <string name="meizu_test_2_1">找到爱小器APP打自开启动对应的开关</string>
     <string name="meizu_test_3_1">点击上方的更多下拉框里面的高级按钮</string>
-    <string name="meizu_test_3_2">打开WLAN休眠开关</string>
+    <string name="meizu_test_3_2">关闭WLAN休眠开关</string>
 
 
     <!-- <string name="vivo_test1">点击立即设置，弹出后台高费电</string>-->

@@ -8,9 +8,7 @@ import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
@@ -198,9 +196,9 @@ public class ImportantAuthorityActivity extends BaseActivity {
 
 
                     OpenSystemSuspendWindow(entity);
-                    Intent oppoOpenSysIntent=new Intent();
-                    oppoOpenSysIntent.setComponent(new ComponentName("com.coloros.safecenter","com.coloros.safecenter.sysfloatwindow.FloatWindowListActivity"));
-                    dataSave(oppoOpenSysIntent,data);
+                    Intent oppoOpenSysIntent = new Intent();
+                    oppoOpenSysIntent.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.sysfloatwindow.FloatWindowListActivity"));
+                    dataSave(oppoOpenSysIntent, data);
 
 
                 } else if (version == 19) {
@@ -209,7 +207,6 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     oppoIntent.setComponent(new ComponentName("com.color.safecenter", "com.color.safecenter.permission.startup.StartupAppListActivity"));
                     dataSave(oppoIntent, data);
                 }
-
 
 
                 wifiSet(entity);
@@ -248,8 +245,15 @@ public class ImportantAuthorityActivity extends BaseActivity {
      */
     public void dataSave(Intent intent, ArrayList<AuthorityEntity> data) {
         if (intent != null) {
-            entity.setintentEntity(new IntentEntity(intent, shadeIntent));
-            data.add(new AuthorityEntity(entity));
+            try {
+                entity.setintentEntity(new IntentEntity(intent, shadeIntent));
+                data.add(new AuthorityEntity(entity));
+            } catch (Exception e) {
+
+
+            }
+
+
         }
 
     }

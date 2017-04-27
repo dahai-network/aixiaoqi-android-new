@@ -222,7 +222,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         initBrocast();
         initServices();
         initSet();
-        // initData();
         socketUdpConnection = new SocketConnection();
         socketTcpConnection = new SocketConnection();
         //注册eventbus，观察goip注册问题
@@ -241,9 +240,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         }
     }
 
-    private void initData() {
-    }
-
 
     /**
      * \初始化界面
@@ -257,12 +253,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         }
 
     }
-
-	/*private void findViewsById() {
-        phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
-		radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
-	}*/
-
 
     /**
      * 判断是否显示红点
