@@ -80,6 +80,7 @@ public class EncryptionUtil {
 		return decrypted;
 	}
 
+	// 3DES加密方法
 	public static String encrypt(String encryptString, byte[] encryptKey) throws Exception {
 		SecretKeySpec key = new SecretKeySpec(encryptKey, "DESede");
 		Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
@@ -88,7 +89,7 @@ public class EncryptionUtil {
 
 		return Base64.encode(encryptedData);
 	}
-
+	// 3DES解密方法
 	public static String decrypt(String decryptString, byte[] decryptKey) throws Exception {
 		byte[] byteMi = Base64.decode(decryptString);
 		SecretKeySpec key = new SecretKeySpec(decryptKey, "DESede");

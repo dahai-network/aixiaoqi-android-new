@@ -294,6 +294,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		scanLeDevice(false);
 		mService.disconnect();
 		ICSOpenVPNApplication.isConnect = false;
+		isStartFindDeviceDelay = true;
 //		utils.delete(Constant.IMEI);
 		utils.delete(Constant.BRACELETNAME);
 		finish();
