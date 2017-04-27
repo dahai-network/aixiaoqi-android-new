@@ -54,6 +54,8 @@ public class CountryDetailPackageAdapter extends RecyclerView.Adapter<CountryDet
             holder.numberTextView.setBackgroundResource(R.drawable.flow_yellow);
         else
             holder.numberTextView.setBackgroundResource(R.drawable.flow_gree);
+
+
         holder.v_line.setVisibility(View.GONE);
 
        /* if (data.size() == position + 1) {

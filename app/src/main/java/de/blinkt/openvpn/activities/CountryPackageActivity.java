@@ -102,7 +102,7 @@ public class CountryPackageActivity extends BaseNetActivity implements Interface
 		packageDetailRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 		// 增加自定义的分割线
-		packageDetailRecyclerView.addItemDecoration(new DividerDecoration(this));
+		//packageDetailRecyclerView.addItemDecoration(new DividerDecoration(this));
 	}
 
 
