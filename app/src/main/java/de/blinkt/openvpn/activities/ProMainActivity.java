@@ -59,6 +59,7 @@ import cn.com.johnson.model.ChangeViewStateEvent;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -99,6 +100,7 @@ import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static cn.com.aixiaoqi.R.string.index_registing;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
+import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 
@@ -131,24 +133,24 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	@BindView(R.id.tv_red_dot_01)
 	TextView tvRedDot01;
 
-    @BindView(R.id.tv_red_dot_04)
-    TextView tvRedDot04;
-    public static RadioGroup radiogroup;
-    private ReceiveBLEMoveReceiver bleMoveReceiver;
-    private UartService mService = null;
-    //进入主页后打开蓝牙设备搜索绑定过的设备
-    private BluetoothAdapter mBluetoothAdapter;
-    private int REQUEST_ENABLE_BT = 2;
-    private String deviceAddress = "";
-    ArrayList<Fragment> list = new ArrayList<>();
-    CellPhoneFragment cellPhoneFragment;
-    AccountFragment accountFragment;
-    AddressListFragment addressListFragment;
-    SportFragment sportFragment;
-    IndexFragment indexFragment;
-    Intent intentCallPhone;
-    public static boolean isForeground = false;
-    public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
+	@BindView(R.id.tv_red_dot_04)
+	TextView tvRedDot04;
+	public static RadioGroup radiogroup;
+	private ReceiveBLEMoveReceiver bleMoveReceiver;
+	private UartService mService = null;
+	//进入主页后打开蓝牙设备搜索绑定过的设备
+	private BluetoothAdapter mBluetoothAdapter;
+	private int REQUEST_ENABLE_BT = 2;
+	private String deviceAddress = "";
+	ArrayList<Fragment> list = new ArrayList<>();
+	CellPhoneFragment cellPhoneFragment;
+	AccountFragment accountFragment;
+	AddressListFragment addressListFragment;
+	SportFragment sportFragment;
+	IndexFragment indexFragment;
+	Intent intentCallPhone;
+	public static boolean isForeground = false;
+	public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
 
 	//重连时间
 	private int RECONNECT_TIME = 180000;
@@ -244,16 +246,16 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 
-    /**
-     * \初始化界面
-     */
-    private void initView() {
-        radiogroup.check(R.id.rb_phone);
-        radiogroup.setOnCheckedChangeListener(new MyRadioGroupListener());
-        //无网络时候提醒
-        if (!NetworkUtils.isNetworkAvailable(this)) {
-            topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
-        }
+	/**
+	 * \初始化界面
+	 */
+	private void initView() {
+		radiogroup.check(R.id.rb_phone);
+		radiogroup.setOnCheckedChangeListener(new MyRadioGroupListener());
+		//无网络时候提醒
+		if (!NetworkUtils.isNetworkAvailable(this)) {
+			topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
+		}
 
 	}
 
@@ -301,13 +303,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		new Thread(http).start();
 	}
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (phone_linearLayout.getVisibility() == View.GONE)
-                moveTaskToBack(false);
-        }
-        return true;
-    }
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if (phone_linearLayout.getVisibility() == View.GONE)
+				moveTaskToBack(false);
+		}
+		return true;
+	}
 
 	public void initServices() {
 
@@ -385,35 +387,35 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 
-    private void initFragment() {
-        if (phoneFragment == null) {
-            phoneFragment = Fragment_Phone.newInstance();
-        }
-        if (indexFragment == null) {
-            indexFragment = new IndexFragment();
-        }
-        if (cellPhoneFragment == null) {
-            cellPhoneFragment = new CellPhoneFragment();
-            cellPhoneFragment.setFragment_Phone(phoneFragment);
-        }
-        if (addressListFragment == null) {
-            addressListFragment = new AddressListFragment();
-        }
-        if (accountFragment == null) {
-            accountFragment = new AccountFragment();
-        }
-        if (list.size() < 5) {
-            list.clear();
-            list.add(indexFragment);
-            list.add(cellPhoneFragment);
-            list.add(addressListFragment);
-            list.add(accountFragment);
-            FragmentAdapter adapter = new FragmentAdapter(
-                    getSupportFragmentManager(), list);
-            mViewPager.setAdapter(adapter);
-            mViewPager.setOffscreenPageLimit(4);
-            mViewPager.setCurrentItem(1);
-        }
+	private void initFragment() {
+		if (phoneFragment == null) {
+			phoneFragment = Fragment_Phone.newInstance();
+		}
+		if (indexFragment == null) {
+			indexFragment = new IndexFragment();
+		}
+		if (cellPhoneFragment == null) {
+			cellPhoneFragment = new CellPhoneFragment();
+			cellPhoneFragment.setFragment_Phone(phoneFragment);
+		}
+		if (addressListFragment == null) {
+			addressListFragment = new AddressListFragment();
+		}
+		if (accountFragment == null) {
+			accountFragment = new AccountFragment();
+		}
+		if (list.size() < 5) {
+			list.clear();
+			list.add(indexFragment);
+			list.add(cellPhoneFragment);
+			list.add(addressListFragment);
+			list.add(accountFragment);
+			FragmentAdapter adapter = new FragmentAdapter(
+					getSupportFragmentManager(), list);
+			mViewPager.setAdapter(adapter);
+			mViewPager.setOffscreenPageLimit(4);
+			mViewPager.setCurrentItem(1);
+		}
 
 	}
 
@@ -840,6 +842,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 								} else {
 									noPreDataStartSDK();
 								}
+							} else {
+								SendCommandToBluetooth.sendMessageToBlueTooth(ICCID_GET);
 							}
 						}
 					}).start();
