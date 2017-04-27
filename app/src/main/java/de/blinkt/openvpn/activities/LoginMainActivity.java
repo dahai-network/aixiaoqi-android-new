@@ -164,7 +164,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			}
 		});
 		setEditTextListener(pwdEdit,R.id.pwdEdit);
-
 		setEditTextListener(usernameEdit,R.id.usernameEdit);
 	}
 
@@ -173,8 +172,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			@Override
 			public void textChanged(CharSequence s, int id) {
 				switch (id){
-
-
 					case R.id.pwdEdit:
 						pswString = s.toString();
 						if (s.length() != 0) {
@@ -409,7 +406,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 		}
 	}
-
 
 }
 

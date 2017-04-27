@@ -270,10 +270,16 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 														finish();
 														return;
 													}
-													deviceAddress = infos.get(0).getAddress();
-													EncryptionUtil.encryptMacAddress = deviceAddress;
-													utils.writeString(Constant.BRACELETNAME, infos.get(0).getDiviceName());
-													createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
+													try {
+														deviceAddress = infos.get(0).getAddress();
+														EncryptionUtil.encryptMacAddress = deviceAddress;
+														utils.writeString(Constant.BRACELETNAME, infos.get(0).getDiviceName());
+														createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
+													}catch (Exception e){
+
+
+													}
+
 													isStartFindDeviceDelay = false;
 													deviceSet.clear();
 												}
