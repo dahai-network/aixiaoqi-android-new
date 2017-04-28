@@ -6,7 +6,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
-import de.blinkt.openvpn.constant.Constant;
 
 /**
  * Created by Administrator on 2017/4/26.
@@ -15,26 +14,15 @@ import de.blinkt.openvpn.constant.Constant;
 public class EncryptionUtil {
 
 	//随机数字符串用于加密算法
-	public static String random15NumberString;
+	public static String random8NumberString;
 	//共享密钥
 	private static byte[] tribleKey = {(byte) 122, (byte) 59, (byte) 89, (byte) 100, (byte) 202, (byte) 142, (byte) 157, (byte) 242,
 			(byte) 122, (byte) 59, (byte) 89, (byte) 100, (byte) 202, (byte) 142, (byte) 157, (byte) 242};
 
-	public static String encryptMacAddress;
-
 	public static boolean isPassEncrypt(String receiveBlueEncrypt) {
-		if (encryptMacAddress == null)
-			encryptMacAddress = SharedUtils.getInstance().readString(Constant.IMEI);
-		byte[] randomBytes = HexStringExchangeBytesUtil.hexStringToBytes(random15NumberString);
-		byte[] resultBytes = new byte[6];
-		byte[] macBytes = getMacBytes(encryptMacAddress);
-		for (int i = 0; i < 6; i++) {
-			resultBytes[i] = (byte) (macBytes[i] ^ randomBytes[(2 * i) + 4] ^ randomBytes[(2 * i) + 1]);
-		}
-		String result = HexStringExchangeBytesUtil.bytesToHexString(resultBytes);
+		String result = random8NumberString;
 		try {
-			result = TribleDESencrypt(result + "0000");
-//			result = TribleDESencrypt("0102030405060708");
+			result = TribleDESencrypt(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -61,16 +49,19 @@ public class EncryptionUtil {
 	}
 
 	//随机15位数字输出
-	public static String random15Number() {
+	public static String random8Number() {
 		StringBuilder builder = new StringBuilder();
 		String randomNum;
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < 8; i++) {
 			randomNum = Integer.toHexString((int) Math.rint(0xff * Math.random()));
+			if (randomNum.length() == 1) {
+				randomNum = "0" + randomNum;
+			}
 			Log.i("Encryption", "随机数：" + randomNum);
 			builder.append(randomNum);
 		}
-		random15NumberString = builder.toString();
-		Log.i("Encryption", "随机数总：" + random15NumberString);
+		random8NumberString = builder.toString();
+		Log.i("Encryption", "随机数总：" + random8NumberString);
 		return builder.toString();
 	}
 

@@ -80,7 +80,7 @@ public class Constant {
 	public static final String FIND_DEVICE = "8880020C00";//查找手环
 	public static final String BASIC_MESSAGE = "8880020600";//基本信息获取
 	public static final String SKY_UPGRADE_ORDER = "8880030A00B1";//空中升级指令
-	public static final String ICCID_GET = "8880020016";//获取ICCID和卡的类型
+	public static final String ICCID_GET = "8880021600";//获取ICCID和卡的类型
 	public static final String RESTORATION = "8880020100";//复位命令
 
 	public static final String HANG_UP_PUSH = "888003040000";//挂电推送到设备
@@ -89,7 +89,7 @@ public class Constant {
 	public static final String WEIXIN_PUSH = "888003040003";//微信推送到设备
 	public static final String QQ_PUSH = "888003040004";//QQ推送到设备
 
-	public static final String APP_CONNECT = "8880111400";//APP专属命令
+	public static final String APP_CONNECT = "88800a1400";//APP专属命令
 //	public static final String APP_CONNECT = "8880021400";//APP专属命令
 	public static final String BIND_DEVICE = "8880020700";//绑定命令
 	public static final String BIND_SUCCESS = "888003080001";//绑定成功命令

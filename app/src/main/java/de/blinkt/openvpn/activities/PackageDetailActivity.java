@@ -119,6 +119,8 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
     private void initViews() {
         hasLeftViewTitle(R.string.package_detail, 0);
         String paymentOfTerms = SharedUtils.getInstance().readString(IntentPutKeyConstant.PAYMENT_OF_TERMS);
+
+
         if (!TextUtils.isEmpty(paymentOfTerms))
             SharedUtils.getInstance().writeString(Constant.PAYTERMS_SIGN, paymentOfTerms);
 

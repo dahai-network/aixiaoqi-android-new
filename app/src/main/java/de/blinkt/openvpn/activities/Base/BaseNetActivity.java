@@ -8,7 +8,8 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
 
 /**
- * Created by Administrator on 2016/11/25 0025.
+ * Created by kim
+ * on 2016/11/25 0025.
  */
 public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 

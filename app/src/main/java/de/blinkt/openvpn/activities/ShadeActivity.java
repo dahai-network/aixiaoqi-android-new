@@ -7,9 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.PhoneAuthonCountEntity;
 import de.blinkt.openvpn.constant.Constant;

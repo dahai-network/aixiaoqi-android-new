@@ -516,7 +516,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
                         t9dialpadview.clearT9Input();
                         ViewUtil.hideView(t9dialpadview);
                         hidePhoneBottomBar();
-                        // clearInputEdit();
                     }
                     Log.d(TAG, "onKey: true");
                     return true;

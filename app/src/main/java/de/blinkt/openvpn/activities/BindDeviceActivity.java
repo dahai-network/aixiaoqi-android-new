@@ -46,7 +46,6 @@ import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.BluetoothModel;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
@@ -272,7 +271,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 														return;
 													}
 													deviceAddress = infos.get(0).getAddress();
-													EncryptionUtil.encryptMacAddress = deviceAddress;
 													utils.writeString(Constant.BRACELETNAME, infos.get(0).getDiviceName());
 													createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
 													isStartFindDeviceDelay = false;
