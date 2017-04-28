@@ -2,6 +2,7 @@ package com.aixiaoqi.socket;
 
 import org.greenrobot.eventbus.EventBus;
 
+import de.blinkt.openvpn.model.CancelCallService;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.ShowDeviceEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
@@ -37,5 +38,8 @@ public class EventBusUtil {
         entity.setShowDevice(showDevice);
         EventBus.getDefault().post(entity);
     }
-
+    public static void cancelCallService( ) {
+        CancelCallService entity = new CancelCallService();
+        EventBus.getDefault().post(entity);
+    }
 }

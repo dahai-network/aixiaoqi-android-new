@@ -10,12 +10,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.tencent.bugly.beta.Beta;
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.ref.WeakReference;
 import java.util.Set;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -69,6 +71,7 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 		setContentView(R.layout.activity_setting);
 		ButterKnife.bind(this);
 		init();
+
 	}
 
 	private void init() {
@@ -227,9 +230,9 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 		sharedUtils.delete(Constant.BRACELETNAME);
 		//友盟账号统计
 		MobclickAgent.onProfileSignOff();
+		EventBusUtil.cancelCallService();
 		Intent intent = new Intent();
 		intent.setAction(SportFragment.CLEARSPORTDATA);
-		intent.setAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
 		ICSOpenVPNApplication.uartService.disconnect();
 		ICSOpenVPNApplication.getInstance().sendBroadcast(intent);
 		finish();

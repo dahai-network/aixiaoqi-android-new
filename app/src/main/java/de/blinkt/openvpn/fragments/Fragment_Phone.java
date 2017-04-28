@@ -5,11 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,8 +22,10 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +58,7 @@ import de.blinkt.openvpn.util.AssetsDatabaseManager;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DatabaseDAO;
 import de.blinkt.openvpn.util.NetworkUtils;
+import de.blinkt.openvpn.util.SetPermission;
 import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactRecodeHandler;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
@@ -75,6 +81,8 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     public static T9TelephoneDialpadView t9dialpadview;
     public TextView dial_delete_btn;
     TextView tv_no_permission;
+    RelativeLayout   rl_no_permission;
+    Button jump_permission;
     ContactRecodeAdapter contactRecodeAdapter;
     public SQLiteDatabase sqliteDB;
     public DatabaseDAO dao;
@@ -101,9 +109,12 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     }
 
     private void initView(View view) {
-        rvContactRecode = ((RecyclerView) view.findViewById(R.id.rv_contact_recode));
-        t9dialpadview = ((T9TelephoneDialpadView) view.findViewById(R.id.t9dialpadview));
-        tv_no_permission = ((TextView) view.findViewById(R.id.tv_no_permission));
+        rvContactRecode = (RecyclerView) view.findViewById(R.id.rv_contact_recode);
+        t9dialpadview = (T9TelephoneDialpadView) view.findViewById(R.id.t9dialpadview);
+        tv_no_permission = (TextView) view.findViewById(R.id.tv_no_permission);
+        jump_permission = (Button) view.findViewById(R.id.jump_permission);
+        rl_no_permission = (RelativeLayout) view.findViewById(R.id.rl_no_permission);
+        tv_no_permission.setText(String.format(getString(R.string.no_permission), getString(R.string.call_recoder)));
         inited();
     }
 
@@ -140,7 +151,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         }
         if (SocketConstant.REGISTER_STATUE_CODE == 3) {
             //拨打电话
-                simCellPhone();
+            simCellPhone();
         } else {
 
             CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
@@ -168,13 +179,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         t9dialpadview = null;
     }
 
-    protected boolean isWifi() {
-        if (!NetworkUtils.isNetworkAvailable(getActivity())) {
-            CommonTools.showShortToast(getActivity(), getActivity().getString(R.string.no_wifi));
-            return false;
-        }
-        return true;
-    }
 
     public void inited() {
         IntentFilter filter = new IntentFilter();
@@ -207,7 +211,20 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
             });
 
         }
+
+        jump_permission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SetPermission(getActivity());
+            }
+        });
+
     }
+    /**
+     * 跳转到权限设置界面
+     */
+
+
 
 
     private void searchContactRedocer() {
@@ -235,9 +252,9 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     @Override
     public void queryComplete(List<ContactRecodeEntity> mAllLists) {
         if (mAllLists == null || mAllLists.size() == 0) {
-            tv_no_permission.setVisibility(View.VISIBLE);
+            rl_no_permission.setVisibility(View.VISIBLE);
         } else {
-            tv_no_permission.setVisibility(View.GONE);
+            rl_no_permission.setVisibility(View.GONE);
             mAllList = mAllLists;
             contactRecodeAdapter.addAll(mAllList);
         }

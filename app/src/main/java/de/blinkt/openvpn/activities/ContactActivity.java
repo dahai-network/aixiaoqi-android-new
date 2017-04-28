@@ -9,7 +9,9 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -27,6 +29,7 @@ import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ContactBean;
+import de.blinkt.openvpn.util.SetPermission;
 import de.blinkt.openvpn.util.pinyin.CharacterParser;
 import de.blinkt.openvpn.views.contact.SideBar;
 import de.blinkt.openvpn.views.contact.TouchableRecyclerView;
@@ -42,6 +45,8 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
     EditText searchEditText;
     SelectContactAdapter selectContactAdapter ;
     private TextView tvNoPermission;
+    RelativeLayout rl_no_permission;
+    Button jump_permission;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,16 +67,24 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
         searchEditText = (EditText)findViewById(R.id.searchEditText);
         mRecyclerView = (TouchableRecyclerView) findViewById(R.id.contact_member);
         tvNoPermission = (TextView) findViewById(R.id.tv_no_permission);
+        jump_permission = (Button) findViewById(R.id.jump_permission);
+        rl_no_permission = (RelativeLayout) findViewById(R.id.rl_no_permission);
+        tvNoPermission.setText(String.format(getString(R.string.no_permission), getString(R.string.address_list)));
         int orientation = LinearLayoutManager.VERTICAL;
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, orientation, false);
         mRecyclerView.setLayoutManager(layoutManager);
-
+        jump_permission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SetPermission(ContactActivity.this);
+            }
+        });
         selectContactAdapter=new SelectContactAdapter(this,mAllLists);
         mAllLists=ICSOpenVPNApplication.getInstance().getContactList();
         if(mAllLists!=null&&mAllLists.size()!=0){
-            tvNoPermission.setVisibility(View.GONE);
+            rl_no_permission.setVisibility(View.GONE);
         }else{
-            tvNoPermission.setVisibility(View.VISIBLE);
+            rl_no_permission.setVisibility(View.VISIBLE);
 
         }
         selectContactAdapter.addAll(mAllLists);

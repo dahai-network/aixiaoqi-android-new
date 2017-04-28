@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rl_no_permission"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_no_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+android:layout_centerInParent="true"
+        android:padding="@dimen/padding_15dp"
+        android:textColor="@color/index_gray_text"
+        android:text="@string/no_permission"
+        />
+    <Button
+        android:id="@+id/jump_permission"
+        android:layout_below="@+id/tv_no_permission"
+        android:layout_width="wrap_content"
+android:layout_centerHorizontal="true"
+        android:layout_height="@dimen/padding_30dp"
+        android:paddingLeft="@dimen/padding_10dp"
+        android:paddingRight="@dimen/padding_10dp"
+        android:textSize="@dimen/little_14"
+        android:text="@string/start_permission"
+        android:background="@drawable/circle_light_gray_blue_bord_selector"
+        android:textColor="@drawable/blue_btn_click_color_selecor"
+        />
+</RelativeLayout>

@@ -86,6 +86,8 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	RelativeLayout NoNetRelativeLayout;
 	LinearLayout selectContactLl;
 	ImageView deleteSmsImageView;
+	ImageView cancelSmsImageView;
+	RelativeLayout rlSmsImageView;
 	Map<String, String> map = new LinkedHashMap<>();
 	public static boolean isForeground = false;
 	public static final String MESSAGE_RECEIVED_ACTION = "com.aixiaoqi.jpushdemo.MESSAGE_RECEIVED_ACTION";
@@ -96,7 +98,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	public static final String SEND_FAIL = "2";
 	List<ContactBean> mAllLists = new ArrayList<>();
 	ScrollView scrollView;
-
+	LinearLayout llSendSms;
 	private boolean isNoFocus;
 	private boolean isDelete;
 	int pageNumber = 1;
@@ -219,10 +221,13 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 		else
 			swipeRefreshLayout.setEnabled(false);
 		deleteSmsImageView = (ImageView) findViewById(R.id.deleteSmsImageView);
+		cancelSmsImageView = (ImageView) findViewById(R.id.cancelSmsImageView);
+		rlSmsImageView = (RelativeLayout) findViewById(R.id.rlSmsImageView);
+
 		recyclerView = (RecyclerView) findViewById(R.id.sms_detail_rv);
 		selectContactLl = (LinearLayout) findViewById(R.id.select_contact_ll);
 		scrollView = (ScrollView) findViewById(R.id.scrollView);
-
+		llSendSms = (LinearLayout) findViewById(R.id.ll_send_sms);
 		constomEditText();
 		selectContactTextView();
 		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -267,6 +272,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 		sendSmsTv.setOnClickListener(this);
 		addContactIv.setOnClickListener(this);
 		deleteSmsImageView.setOnClickListener(this);
+		cancelSmsImageView.setOnClickListener(this);
 		NoNetRelativeLayout.setOnClickListener(this);
 		smsContentEt.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -284,7 +290,6 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 					sendSmsTv.setTextColor(getResources().getColor(R.color.select_contacct));
 				}
 			}
-
 			@Override
 			public void afterTextChanged(Editable s) {
 
@@ -358,7 +363,8 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	public void onBackPressed() {
 		if (smsDetailAdapter.isDeleteState()) {
 			smsDetailAdapter.setDeleteState(false);
-			deleteSmsImageView.setVisibility(View.GONE);
+			rlSmsImageView.setVisibility(View.GONE);
+			llSendSms.setVisibility(View.VISIBLE);
 			smsDetailAdapter.notifyDataSetChanged();
 			ids.clear();
 		} else {
@@ -479,6 +485,13 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 						CommonTools.showShortToast(this, "删除这些短信：" + new Gson().toJson(new SmsIdsEntity(null, fms)));
 					CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS, new Gson().toJson(new SmsIdsEntity(null, fms)));
 				}
+				break;
+			case R.id.cancelSmsImageView:
+					smsDetailAdapter.setDeleteState(false);
+					rlSmsImageView.setVisibility(View.GONE);
+					llSendSms.setVisibility(View.VISIBLE);
+					smsDetailAdapter.notifyDataSetChanged();
+					ids.clear();
 				break;
 
 		}
@@ -656,7 +669,8 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 //			}
 //		}).show();
 		smsDetailAdapter.setDeleteState(true);
-		deleteSmsImageView.setVisibility(View.VISIBLE);
+		rlSmsImageView.setVisibility(View.VISIBLE);
+		llSendSms.setVisibility(View.GONE);
 		smsDetailAdapter.notifyDataSetChanged();
 		smsDetailAdapter.clearCheckState();
 		ids.clear();

@@ -232,6 +232,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 
 	@Override
 	public void onDestroy() {
+		Log.e(TAG,"onDestroy");
 		if (ICSOpenVPNApplication.the_sipengineReceive != null)
 			ICSOpenVPNApplication.the_sipengineReceive.DeRegisterSipAccount();
 		ICSOpenVPNApplication.the_sipengineReceive = null;

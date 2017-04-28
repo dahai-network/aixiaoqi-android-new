@@ -351,7 +351,7 @@
     <string name="effective_date_is_null">还没有选择生效日期</string>
     <string name="select_time">选择时间</string>
     <string name="effective_length">有效时长</string>
-    <string name="no_permission">无法获取到联系人的信息\n可能是您的联系人权限被禁用\n建议您前往"设置"开启权限</string>
+    <string name="no_permission">无%1$s，可能是设置问题</string>
     <string name="more_current_time">出生年月不能大于当前时间</string>
     <string name="title_activity_outside">OutsideActivity</string>
 
@@ -398,6 +398,7 @@
     <string name="t9_keyboard_input_prompt">输入号码或拼音</string>
     <!-- <string name="call_phone">拨打</string>-->
     <string name="call_history">通话历史</string>
+    <string name="call_recoder">通话记录</string>
     <string name="call_phone">拨打</string>
     <!--   <string name="call_phone">通话历史</string>-->
     <string name="no_card_or_rule_break">未能检测到设备内有电话卡，您需要重启手环重新检测吗</string>
@@ -637,4 +638,5 @@
     <string name="no_location_permission">蓝牙搜索需要打开位置信息</string>
     <string name="no_location_tips">未打开位置服务，将无法搜索手环</string>
     <string name="legitimate_tips">您的手环不是正版手环，请勿购买！</string>
+    <string name="start_permission">立即解决</string>
 </resources>

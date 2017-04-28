@@ -81,6 +81,7 @@ import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.BasicConfigEntity;
+import de.blinkt.openvpn.model.CancelCallService;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
@@ -549,6 +550,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		isForeground = true;
 		super.onResume();
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(CallPhoneService.class.getName())) {
+			e("onResume");
 			intentCallPhone = new Intent(this, CallPhoneService.class);
 			startService(intentCallPhone);
 		}
@@ -1120,6 +1122,18 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	}
 
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void cancelCallService(CancelCallService entity) {
+		if(intentCallPhone!=null){
+			e(ProMainActivity.STOP_CELL_PHONE_SERVICE);
+			stopService(intentCallPhone);
+
+		}
+		unbindTcpService();
+		destorySocketService();
+
+	}
+
 //	@Subscribe(threadMode = ThreadMode.MAIN)
 //	public void receiveStateChangeEntity(StateChangeEntity entity) {
 //		switch (entity.getStateType()) {
@@ -1266,12 +1280,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				}
 			}
 			if (action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)) {
-				stopService(intentCallPhone);
-				unbindTcpService();
-				destorySocketService();
+
 			}
 		}
 	};
+
 
 
 	private void requestPacket() {

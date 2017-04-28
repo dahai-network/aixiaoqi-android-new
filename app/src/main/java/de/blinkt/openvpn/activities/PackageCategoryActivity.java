@@ -2,6 +2,7 @@ package de.blinkt.openvpn.activities;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
@@ -167,6 +168,40 @@ public class PackageCategoryActivity extends BaseActivity {
             checkView.setSelected(ischeck);
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        if(isDestory){
+            onBackPressed();
+        }
+        e("onSaveInstanceState");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+        e("onSaveInstanceState111111111");
+        if(isDestory){
+            onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        e("onStop");
+    }
+
+public boolean isDestory;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        e("onDestroy");
+        isDestory=true;
+    }
+
 
     /**
      * 初始化Fragment

@@ -13,7 +13,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -31,6 +33,7 @@ import de.blinkt.openvpn.activities.ContactDetailActivity;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.model.ContactBean;
+import de.blinkt.openvpn.util.SetPermission;
 import de.blinkt.openvpn.util.pinyin.CharacterParser;
 
 
@@ -43,6 +46,8 @@ public class AddressListFragment extends BaseStatusFragment implements ContactAd
 	private SideBar mSideBar;
 	private TextView mUserDialog;
 	private TextView tvNoPermission;
+	RelativeLayout rl_no_permission;
+	Button jump_permission;
 	private TouchableRecyclerView mRecyclerView;
 	private ContactAdapter mAdapter;
 
@@ -79,14 +84,23 @@ public class AddressListFragment extends BaseStatusFragment implements ContactAd
 		tvNoPermission = (TextView) rootView.findViewById(R.id.tv_no_permission);
 		searchEditText = (EditText) rootView.findViewById(R.id.searchEditText);
 		mRecyclerView = (TouchableRecyclerView) rootView.findViewById(R.id.contact_member);
+		jump_permission = (Button) rootView.findViewById(R.id.jump_permission);
+		rl_no_permission = (RelativeLayout) rootView.findViewById(R.id.rl_no_permission);
+		tvNoPermission.setText(String.format(getString(R.string.no_permission), getString(R.string.address_list)));
 		mSideBar.setTextView(mUserDialog);
+		jump_permission.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new SetPermission(getActivity());
+			}
+		});
 		// 实例化
 		mAdapter = new ContactAdapter(getActivity(), mAllLists, this);
 		mAllLists=ICSOpenVPNApplication.getInstance().getContactList();
 		if(mAllLists!=null&&mAllLists.size()!=0){
-			tvNoPermission.setVisibility(View.GONE);
+			rl_no_permission.setVisibility(View.GONE);
 		}else{
-			tvNoPermission.setVisibility(View.VISIBLE);
+			rl_no_permission.setVisibility(View.VISIBLE);
 		}
 		mAdapter.addAll(mAllLists);
 		int orientation = LinearLayoutManager.VERTICAL;

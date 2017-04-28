@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <RelativeLayout
         android:id="@+id/consignee_ll"
@@ -56,24 +56,52 @@
             style="@style/horizontal_line_view"
             android:layout_alignParentBottom="true"/>
     </RelativeLayout>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/pull_down_sr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/rl_send_sms"
-        android:layout_below="@id/consignee_ll">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/sms_detail_rv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding"/>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
     <LinearLayout
-        android:id="@+id/rl_send_sms"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_send_sms"
+        android:background="#00000000"
+        android:orientation="vertical">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/pull_down_sr"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_below="@id/consignee_ll">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/sms_detail_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <RelativeLayout
+            android:id="@+id/rlSmsImageView"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/padding_15dp"
+            android:layout_marginBottom="@dimen/padding_15dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/deleteSmsImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/delete_sms_selector"
+                />
+            <ImageView
+                android:layout_marginLeft="@dimen/padding_15dp"
+                android:layout_toRightOf="@id/deleteSmsImageView"
+                android:id="@+id/cancelSmsImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cancel_delete_sms_selector"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_send_sms"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -99,22 +127,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/padding_10"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="@dimen/padding_10"
             android:background="@drawable/send_sms_button_selector"
-           />
+            />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/deleteSmsImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="70dp"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/delete_sms_selector"
-        />
+
 
     <include layout="@layout/view_no_net"/>
 </RelativeLayout>

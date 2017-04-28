@@ -319,10 +319,10 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 				if(CallPhoneService.CALL_DIR==0){
 					cancelNotify();
 					stopTimer();
+					if(!isDestroyed())
 					onBackPressed();
 				}
 			}else if(CallPhoneService.reportFlag.equals(action)){
-
 				if(CallPhoneService.CALL_DIR==0){
 					long nativePtr=intent.getLongExtra("nativePtr",-1);
 					if(nativePtr>0){
@@ -334,7 +334,6 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 			}
 		}
 	}
-
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -346,7 +345,6 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 			sipEngineCore.SetLoudspeakerStatus(true);
 			sipEngineCore=null;
 		}
-
 		cancelNotify();
 	}
 

@@ -186,7 +186,7 @@ public class BaseStatusFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-//        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

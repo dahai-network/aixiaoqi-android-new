@@ -67,18 +67,10 @@
     </FrameLayout>
 
 
+<include
+    android:layout_below="@id/title"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    layout="@layout/no_permission"/>
 
-    <TextView
-        android:id="@+id/tv_no_permission"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/title"
-        android:visibility="gone"
-        android:gravity="center"
-        android:background="@color/white"
-        android:textColor="@color/index_gray_text"
-        android:paddingLeft="@dimen/padding_30dp"
-        android:paddingRight="@dimen/padding_30dp"
-        android:text="@string/no_permission"
-        />
 </RelativeLayout>
