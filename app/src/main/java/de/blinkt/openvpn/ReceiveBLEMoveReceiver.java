@@ -56,6 +56,7 @@ import static de.blinkt.openvpn.constant.Constant.BIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.BIND_FAIL;
 import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
+import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_CARD_MSG;
@@ -126,19 +127,21 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					try {
 						Thread.sleep(100);
 						//8880021400
-//						sendMessageToBlueTooth(APP_CONNECT + EncryptionUtil.random15Number());//APP专属命令
-						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
+						sendMessageToBlueTooth(APP_CONNECT + EncryptionUtil.random8Number());//APP专属命令
+//						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
 						Log.i(TAG, "发送了专属命令");
 						String braceletname = utils.readString(Constant.BRACELETNAME);
 						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
-							CommonTools.delayTime(100);
-							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
-							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
-							entity.setBlueType(BluetoothConstant.BLUE_BIND);
-							EventBus.getDefault().post(entity);
+//							CommonTools.delayTime(100);
+//							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
+//							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
+//							entity.setBlueType(BluetoothConstant.BLUE_BIND);
+//							EventBus.getDefault().post(entity);
 						} else {
-							Thread.sleep(400);
+							Thread.sleep(200);
 							sendMessageToBlueTooth(BASIC_MESSAGE);
+							Thread.sleep(200);
+							sendMessageToBlueTooth(ICCID_GET);
 							Log.i("toBLue", "连接成功");
 							//更新时间操作
 							sendMessageToBlueTooth(getBLETime());
@@ -413,10 +416,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //											mService.disconnect();
 //											CommonTools.showShortToast(context, context.getString(R.string.legitimate_tips));
 										} else {
-											BluetoothMessageCallBackEntity bEntity = new BluetoothMessageCallBackEntity();
-											bEntity.setBlueType(BluetoothConstant.BLUE_BIND);
-											EventBus.getDefault().post(bEntity);
-											sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
+											if (!BluetoothConstant.IS_BIND) {
+												BluetoothMessageCallBackEntity bEntity = new BluetoothMessageCallBackEntity();
+												bEntity.setBlueType(BluetoothConstant.BLUE_BIND);
+												EventBus.getDefault().post(bEntity);
+												sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
+											}
 										}
 										break;
 									default:

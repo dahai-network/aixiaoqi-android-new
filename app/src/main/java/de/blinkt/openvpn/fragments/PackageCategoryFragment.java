@@ -133,6 +133,7 @@ public class PackageCategoryFragment extends Fragment implements XRecyclerView.L
                     if (page == 1) {
                         activiteRv.setVisibility(View.GONE);
                         NodataRelativeLayout.setVisibility(View.VISIBLE);
+                        if(getActivity()!=null)
                         noDataTextView.setText(getActivity().getResources().getString(R.string.no_order));
                     }
                     activiteRv.noMoreLoading();

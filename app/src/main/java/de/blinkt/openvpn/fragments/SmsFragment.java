@@ -131,6 +131,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		noDataTextView = (TextView) view.findViewById(R.id.noDataTextView);
 		NoNetRelativeLayout = (RelativeLayout) view.findViewById(R.id.NoNetRelativeLayout);
 		editSmsImageView = (ImageView) view.findViewById(R.id.editSmsImageView);
+		onRefresh();
 	}
 
 	NotifyReceiver mNotifyReceiver;

@@ -31,7 +31,7 @@
                 android:id="@+id/top_view"
                 android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/padding_30dp" />
+                android:layout_height="@dimen/padding_25dp" />
             <de.blinkt.openvpn.views.bannerview.CycleViewPager
                 android:id="@+id/scrollViewPagerLayout"
                 android:layout_width="match_parent"

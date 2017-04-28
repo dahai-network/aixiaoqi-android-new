@@ -64,6 +64,7 @@ public class CellPhoneFragment extends BaseStatusFragment {
                 savedInstanceState);
         initView(view);
         addListener();
+        ClickPhone();
         return view;
     }
 
@@ -125,10 +126,10 @@ public class CellPhoneFragment extends BaseStatusFragment {
         dial_tittle_fl = (TextView) view.findViewById(R.id.dial_tittle_tv);
         message_rb = ((RadioButton) view.findViewById(R.id.message_rb));
         mViewPager = (MyViewPager) view.findViewById(R.id.mViewPager);
-        operation_rg.check(cell_phone_rb.getId());
         //悬浮按钮
         floatingActionButton = (ImageView) view.findViewById(R.id.floatingActionButton);
         initFragment();
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

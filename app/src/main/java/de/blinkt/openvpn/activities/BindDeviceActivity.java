@@ -46,13 +46,13 @@ import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.BluetoothModel;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
+import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
 import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 
@@ -270,10 +270,15 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 														finish();
 														return;
 													}
-													deviceAddress = infos.get(0).getAddress();
-													EncryptionUtil.encryptMacAddress = deviceAddress;
-													utils.writeString(Constant.BRACELETNAME, infos.get(0).getDiviceName());
-													createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
+													try {
+														deviceAddress = infos.get(0).getAddress();
+														utils.writeString(Constant.BRACELETNAME, infos.get(0).getDiviceName());
+														createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
+													}catch (Exception e){
+
+
+													}
+
 													isStartFindDeviceDelay = false;
 													deviceSet.clear();
 												}

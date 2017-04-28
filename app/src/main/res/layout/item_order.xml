@@ -4,17 +4,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rootLinearLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/padding_100dp"
+    android:layout_marginTop="@dimen/padding_10dp"
+    android:layout_gravity="center_vertical"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:background="@drawable/call_phone_selector"
     >
 
     <ImageView
-        android:layout_marginTop="@dimen/padding_10dp"
         android:id="@+id/countryImageView"
-        android:layout_width="@dimen/padding_50dp"
-        android:layout_height="@dimen/padding_50dp"
+        android:layout_width="@dimen/padding_64dp"
+        android:layout_height="@dimen/padding_64dp"
         android:layout_centerVertical="true"
         android:background="@drawable/sport_step"
         />
@@ -22,8 +23,8 @@
     <TextView
         android:id="@+id/packageNameTextView"
         android:layout_width="wrap_content"
-        android:layout_marginTop="@dimen/padding_10dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_18dp"
         android:layout_marginRight="@dimen/padding_10dp"
         android:layout_toRightOf="@id/countryImageView"
         android:layout_marginLeft="@dimen/padding_8dp"
@@ -68,11 +69,7 @@
         android:textColor="@color/order_money"
         android:textStyle="bold"
         />
-    <View
-        style="@style/horizontal_line_view"
-        android:layout_marginTop="@dimen/padding_15dp"
-        android:layout_below="@id/priceTextView"
-        />
+
 </RelativeLayout>
 
 

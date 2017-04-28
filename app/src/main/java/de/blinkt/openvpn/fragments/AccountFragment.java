@@ -211,7 +211,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     private void getPackage() {
         CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
     }
-
+    @Override
     public void showDeviceSummarized(boolean isShow) {
         if (deviceSummarizedRelativeLayout != null) {
             if (isShow) {
@@ -238,6 +238,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         powerTextView.setText(powerPercent + "%");
     }
 
+
+
+    @Override
     public void setRegisted(boolean isRegisted) {
         if (isRegisted) {
             signalIconImageView.setBackgroundResource(R.drawable.registed);
