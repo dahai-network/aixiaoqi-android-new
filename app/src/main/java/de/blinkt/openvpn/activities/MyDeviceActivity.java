@@ -731,6 +731,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					if (versionStr != null) {
 						if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(versionStr)) {
 							url = skyUpgradeHttp.getUpgradeEntity().getUrl();
+
 							showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
 							Log.d(TAG, "rightComplete: " + "有新的版本");
 							setPoint();

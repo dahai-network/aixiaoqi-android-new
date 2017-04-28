@@ -346,6 +346,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
                 if (bluetoothName.contains(Constant.UNITOYS)) {
                     utils.writeString(Constant.IMEI, deviceAddress);
 
+
                     mService.connect(deviceAddress);
                 } else {
 //					connectedRelativeLayout.setVisibility(View.VISIBLE);
@@ -366,6 +367,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
                             intent.putExtra(MyDeviceActivity.BRACELETTYPE, type);
                             intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
                             SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE, type);
+                            SharedUtils.getInstance().writeString(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
                             startActivity(intent);
                             utils.writeString(Constant.IMEI, deviceAddress);
                             finish();

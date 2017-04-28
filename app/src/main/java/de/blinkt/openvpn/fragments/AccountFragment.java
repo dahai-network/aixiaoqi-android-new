@@ -20,12 +20,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.analytics.MobclickAgent;
+
 import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -61,6 +64,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+
 import static android.view.View.GONE;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.BRACELETTYPE;
 import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
@@ -71,6 +75,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKMYDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKMYPACKAGE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKRECHARGE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKSET;
+
 /**
  * 我的界面
  * A simple {@link Fragment} subclass.
@@ -135,6 +140,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     public static TextView tvNewPackagetAction;
     public static TextView tvNewVersion;
     String deviceTypeStr;
+
     public AccountFragment() {
         // Required empty public constructor
     }
@@ -267,16 +273,22 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     case Constant.CHINA_UNICOM:
                         operatorTextView.setText(getString(R.string.china_unicom));
                         break;
-                        //operatorTextView.setText(getString(R.string.unitoy_card));
 
                 }
             }
         } else {
+            String state = SharedUtils.getInstance().readString(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
 
             if (signalIconImageView != null)
                 signalIconImageView.setBackgroundResource(R.drawable.unregist);
-            if (operatorTextView != null)
-                operatorTextView.setText("----");
+
+
+            if (operatorTextView != null) {
+                if (state.equalsIgnoreCase(getResources().getString(R.string.unitoy_card)))
+                    operatorTextView.setText(R.string.unitoy_card);
+                else
+                    operatorTextView.setText("----");
+            }
         }
     }
 
