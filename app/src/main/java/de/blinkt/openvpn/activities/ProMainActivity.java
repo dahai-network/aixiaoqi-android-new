@@ -75,10 +75,12 @@ import de.blinkt.openvpn.fragments.SmsFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
+import de.blinkt.openvpn.http.GetBasicConfigHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
+import de.blinkt.openvpn.model.BasicConfigEntity;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
@@ -242,16 +244,16 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 
-	/**
-	 * \初始化界面
-	 */
-	private void initView() {
-		radiogroup.check(R.id.rb_phone);
-		radiogroup.setOnCheckedChangeListener(new MyRadioGroupListener());
-		//无网络时候提醒
-		if (!NetworkUtils.isNetworkAvailable(this)) {
-			topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
-		}
+    /**
+     * \初始化界面
+     */
+    private void initView() {
+        radiogroup.check(R.id.rb_phone);
+        radiogroup.setOnCheckedChangeListener(new MyRadioGroupListener());
+        //无网络时候提醒
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
+        }
 
     }
 
@@ -293,13 +295,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		new Thread(http).start();
 	}
 
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (phone_linearLayout.getVisibility() == View.GONE)
-				moveTaskToBack(false);
-		}
-		return true;
-	}
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (phone_linearLayout.getVisibility() == View.GONE)
+                moveTaskToBack(false);
+        }
+
+        return true;
+    }
 
     public void initServices() {
 
@@ -377,35 +380,35 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     }
 
 
-	private void initFragment() {
-		if (phoneFragment == null) {
-			phoneFragment = Fragment_Phone.newInstance();
-		}
-		if (indexFragment == null) {
-			indexFragment = new IndexFragment();
-		}
-		if (cellPhoneFragment == null) {
-			cellPhoneFragment = new CellPhoneFragment();
-			cellPhoneFragment.setFragment_Phone(phoneFragment);
-		}
-		if (addressListFragment == null) {
-			addressListFragment = new AddressListFragment();
-		}
-		if (accountFragment == null) {
-			accountFragment = new AccountFragment();
-		}
-		if (list.size() < 5) {
-			list.clear();
-			list.add(indexFragment);
-			list.add(cellPhoneFragment);
-			list.add(addressListFragment);
-			list.add(accountFragment);
-			FragmentAdapter adapter = new FragmentAdapter(
-					getSupportFragmentManager(), list);
-			mViewPager.setAdapter(adapter);
-			mViewPager.setOffscreenPageLimit(4);
-			mViewPager.setCurrentItem(1);
-		}
+    private void initFragment() {
+        if (phoneFragment == null) {
+            phoneFragment = Fragment_Phone.newInstance();
+        }
+        if (indexFragment == null) {
+            indexFragment = new IndexFragment();
+        }
+        if (cellPhoneFragment == null) {
+            cellPhoneFragment = new CellPhoneFragment();
+            cellPhoneFragment.setFragment_Phone(phoneFragment);
+        }
+        if (addressListFragment == null) {
+            addressListFragment = new AddressListFragment();
+        }
+        if (accountFragment == null) {
+            accountFragment = new AccountFragment();
+        }
+        if (list.size() < 5) {
+            list.clear();
+            list.add(indexFragment);
+            list.add(cellPhoneFragment);
+            list.add(addressListFragment);
+            list.add(accountFragment);
+            FragmentAdapter adapter = new FragmentAdapter(
+                    getSupportFragmentManager(), list);
+            mViewPager.setAdapter(adapter);
+            mViewPager.setOffscreenPageLimit(4);
+            mViewPager.setCurrentItem(1);
+        }
 
 	}
 
@@ -547,15 +550,20 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			startService(intentCallPhone);
 		}
 
-
 		if (SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL)) {
 			e("onResume " + SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.CLICK_MALL));
 			tvRedDot01.setVisibility(View.VISIBLE);
 		} else {
 			tvRedDot01.setVisibility(View.INVISIBLE);
 		}
-	}
 
+		basicConfigHttp();
+	}
+	private void basicConfigHttp() {
+		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(IntentPutKeyConstant.USER_AGREEMENT_URL))) {
+			createHttpRequest(HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG);
+		}
+	}
 	public void hidePhoneBottomBar() {
 		ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
 		ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
@@ -849,6 +857,15 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			} else {
 			}
 
+		}else if (cmdType == HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG) {
+			GetBasicConfigHttp getBasicConfigHttp = (GetBasicConfigHttp) object;
+			if (getBasicConfigHttp.getStatus() == 1) {
+				BasicConfigEntity basicConfigEntity = getBasicConfigHttp.getBasicConfigEntity();
+				SharedUtils.getInstance().writeString(IntentPutKeyConstant.USER_AGREEMENT_URL, basicConfigEntity.getUserAgreementUrl());
+				SharedUtils.getInstance().writeString(IntentPutKeyConstant.DUALSIM_STANDBYTUTORIAL_URL, basicConfigEntity.getDualSimStandbyTutorialUrl());
+				SharedUtils.getInstance().writeString(IntentPutKeyConstant.BEFORE_GOING_ABROAD_TUTORIAL_URL, basicConfigEntity.getBeforeGoingAbroadTutorialUrl());
+				SharedUtils.getInstance().writeString(IntentPutKeyConstant.PAYMENT_OF_TERMS, basicConfigEntity.getPaymentOfTerms());
+			}
 		}
 
 	}
@@ -861,6 +878,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preReadEntity.getDataLength();
 		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = preReadEntity.getImsi();
 		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = preReadEntity.getIccid();
+	}
+
+	@Override
+	public void noNet() {
 	}
 
 	//没有绑定提示

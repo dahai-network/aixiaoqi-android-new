@@ -165,7 +165,7 @@ public class T9TelephoneDialpadView extends LinearLayout implements
     }
 
     public void setLineBackgroundColor(int lineBackgroundColor){
-        for(int i=0;i<12;i++){
+        for(int i=0;i<13;i++){
             lineView[i].setBackgroundResource(lineBackgroundColor);
         }
     }

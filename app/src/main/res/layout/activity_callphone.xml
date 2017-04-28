@@ -107,17 +107,11 @@
             android:textSize="12dp"
             />
     </LinearLayout>
-    <de.blinkt.openvpn.views.T9TelephoneDialpadView
-        android:id="@+id/t9dialpadview"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_marginBottom="@dimen/padding_120dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/calendar_image"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/padding_35dp">
         <TextView
@@ -140,6 +134,12 @@
             />
     </RelativeLayout>
 
-
+    <de.blinkt.openvpn.views.T9TelephoneDialpadView
+        android:id="@+id/t9dialpadview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/calendar_image"
+        android:layout_marginBottom="@dimen/padding_35dp"
+        />
 
 </RelativeLayout>

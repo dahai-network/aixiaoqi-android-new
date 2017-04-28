@@ -210,10 +210,11 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 
 
 					if ("1".equals(bean.getPackageCategory())) {
-						expiryDateTextView.setVisibility(GONE);
 						activateTextView.setVisibility(GONE);
 						aboardHowToUse.setVisibility(GONE);
 						inlandReset.setVisibility(GONE);
+						dateTitleTextView.setVisibility(GONE);
+						dateTextView.setVisibility(GONE);
 					} else {
 						if (getIntent().getIntExtra("PackageCategory", -1) != 0) {
 							showBuySucceedDialog();

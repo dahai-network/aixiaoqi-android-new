@@ -97,12 +97,14 @@ public abstract class CommonHttp implements Callback, Runnable {
 				request = request.newBuilder()
 						.cacheControl(CacheControl.FORCE_CACHE)
 						.build();
-				Log.d("CacheInterceptor", "no network");
-
+			}else{
+				request = request.newBuilder()
+						.cacheControl(CacheControl.FORCE_NETWORK)
+						.build();
 			}
-			Log.i("http", "request=" + request);
+
 			Response response = chain.proceed(request);
-			Log.i("http", "response=" + response);
+
 
 			String cacheControl = request.cacheControl().toString();
 			if (NetworkUtils.isNetworkAvailable(context_)) {

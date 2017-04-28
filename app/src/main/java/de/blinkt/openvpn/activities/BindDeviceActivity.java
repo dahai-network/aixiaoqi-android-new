@@ -270,9 +270,15 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 														finish();
 														return;
 													}
-													deviceAddress = infos.get(0).getAddress();
-													utils.writeString(Constant.BRACELETNAME, infos.get(0).getDiviceName());
-													createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
+													try {
+														deviceAddress = infos.get(0).getAddress();
+														utils.writeString(Constant.BRACELETNAME, infos.get(0).getDiviceName());
+														createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
+													}catch (Exception e){
+
+
+													}
+
 													isStartFindDeviceDelay = false;
 													deviceSet.clear();
 												}
@@ -434,8 +440,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 //						CommonTools.delayTime(500);
 						//获取基本信息
 						sendMessageToBlueTooth(BASIC_MESSAGE);
-						CommonTools.delayTime(100);
-						sendMessageToBlueTooth(ICCID_GET);
 						if (!bluetoothName.contains(Constant.UNIBOX)) {
 							runOnUiThread(new Runnable() {
 								@Override

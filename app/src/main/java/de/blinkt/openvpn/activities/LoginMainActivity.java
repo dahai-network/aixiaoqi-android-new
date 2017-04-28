@@ -86,7 +86,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 	private void basicConfigHttp() {
 		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(IntentPutKeyConstant.USER_AGREEMENT_URL))) {
-			createHttpRequest(HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG);
+			createHttpRequestNoCache(HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG);
 		}
 	}
 
@@ -135,6 +135,10 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		loginLinearLayout.setOnClickListener(this);
 		login_btn.setOnClickListener(this);
 		setTextChangeLisener();
+		if(TextUtils.isEmpty(usernameEdit.getText().toString())||TextUtils.isEmpty(pwdEdit.getText().toString())){
+
+			setLoginBtnAttr(false,R.drawable.circle_gray_ret);
+		}
 	}
 
 	@Override
@@ -164,7 +168,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			}
 		});
 		setEditTextListener(pwdEdit,R.id.pwdEdit);
-
 		setEditTextListener(usernameEdit,R.id.usernameEdit);
 	}
 
@@ -173,8 +176,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			@Override
 			public void textChanged(CharSequence s, int id) {
 				switch (id){
-
-
 					case R.id.pwdEdit:
 						pswString = s.toString();
 						if (s.length() != 0) {
@@ -202,7 +203,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 							}
 							loginUserTextView.setVisibility(View.VISIBLE);
 						} else {
-							usernameEdit.setGravity(Gravity.CENTER);
+							usernameEdit.setGravity(Gravity.LEFT);
 							loginUserTextView.setVisibility(View.GONE);
 							setLoginBtnAttr(false,R.drawable.circle_gray_ret);
 						}
@@ -244,7 +245,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				if (pwdEdit != null) {
 					if (CheckUtil.isPassWordNo(pwdEdit.getText().toString(), LoginMainActivity.this)) {
 						showProgress(R.string.login_loading);
-						createHttpRequest(HttpConfigUrl.COMTYPE_LOGIN, usernameEdit.getText().toString(), pwdEdit.getText().toString());
+						createHttpRequestNoCache(HttpConfigUrl.COMTYPE_LOGIN, usernameEdit.getText().toString(), pwdEdit.getText().toString());
 					}
 				}
 				break;
@@ -358,7 +359,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 						setAlias();
 					}
 
-					createHttpRequest(HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
+					createHttpRequestNoCache(HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
 				}
 			} else {
 				CommonTools.showShortToast(this, loginHttp.getMsg());
@@ -381,7 +382,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				e(out.getAsteriskIp());
 				e(out.getAsteriskPort());
 				e(out.getPublicPassword());
-				createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_GET);
+				createHttpRequestNoCache(HttpConfigUrl.COMTYPE_BLACK_LIST_GET);
 
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG) {
@@ -398,9 +399,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 				BlackListGetHttp blackListGetHttp = (BlackListGetHttp) object;
 				BlackListDBHelp blackListDBHelp = new BlackListDBHelp(this);
 				blackListDBHelp.deleteAllDefriend();
-
 				if (blackListGetHttp.getBlackListEntities().size() != 0) {
-
 					blackListDBHelp.insertDefriendList(blackListGetHttp.getBlackListEntities());
 				}
 				startActivity(new Intent(this, ProMainActivity.class));
@@ -409,7 +408,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 		}
 	}
-
 
 }
 
