@@ -73,7 +73,6 @@ import de.blinkt.openvpn.fragments.Fragment_Phone;
 import de.blinkt.openvpn.fragments.IndexFragment;
 import de.blinkt.openvpn.fragments.SmsFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
-import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBasicConfigHttp;

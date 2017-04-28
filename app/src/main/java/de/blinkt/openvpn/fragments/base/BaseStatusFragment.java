@@ -101,13 +101,15 @@ public class BaseStatusFragment extends Fragment {
 
     }
 
-    public void showDeviceSummarized(boolean isRegister){
+   /* public void showDeviceSummarized(boolean isRegister){
 
-    }
+    }*/
 
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程
     public void showDevice(ShowDeviceEntity entity) {
-        showDeviceSummarized(entity.isShowDevice());
+
+       // showDeviceSummarized(entity.isShowDevice());
+
         if(!entity.isShowDevice()){
             setRegisted(false);
             if (!ICSOpenVPNApplication.isConnect)
@@ -118,7 +120,6 @@ public class BaseStatusFragment extends Fragment {
     public void onIsSuccessEntity(SimRegisterStatue entity) {
         switch (entity.getRigsterSimStatue()) {
             case SocketConstant.REGISTER_SUCCESS:
-
                 topProgressGone();
                 setRegisted(true);
                 break;

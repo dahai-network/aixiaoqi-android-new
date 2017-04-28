@@ -34,8 +34,7 @@ public class SearchConnectterHelper {
                     ContactsContract.PhoneLookup.DISPLAY_NAME,
                     ContactsContract.PhoneLookup.TYPE, ContactsContract.PhoneLookup.LABEL}, null, null, null);
         } catch (Exception e) {
-           // CommonTools.showShortToast(context, "请打开手机联系人权限");
-
+           // Log.d("aixiaoqi__", "getContactNameByPhoneNumber: "+e.getMessage());
         }
 
         if (c != null && c.getCount() > 0) {
