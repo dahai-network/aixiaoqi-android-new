@@ -19,9 +19,12 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import com.umeng.analytics.MobclickAgent;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
 import de.blinkt.openvpn.activities.ProMainActivity;
@@ -57,7 +60,7 @@ public class CellPhoneFragment extends BaseStatusFragment {
         // TODO Auto-generated method stub
         setLayoutId(R.layout.cell_phone_fragment);
 //        View view = inflater.inflate(R.layout.cell_phone_fragment, container, false);
-        View view=super.onCreateView( inflater,  container,
+        View view = super.onCreateView(inflater, container,
                 savedInstanceState);
         initView(view);
         addListener();
@@ -69,9 +72,9 @@ public class CellPhoneFragment extends BaseStatusFragment {
         super.setUserVisibleHint(isVisibleToUser);
         isForeground = isVisibleToUser;
         if (isVisibleToUser) {
-            if(operation_rg!=null){
-            operation_rg.check(cell_phone_rb.getId());
-            ClickPhone();
+            if (operation_rg != null) {
+                operation_rg.check(cell_phone_rb.getId());
+                ClickPhone();
             }
             hidePhoneBottomBar();
         }
@@ -131,6 +134,7 @@ public class CellPhoneFragment extends BaseStatusFragment {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
+
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
@@ -149,6 +153,10 @@ public class CellPhoneFragment extends BaseStatusFragment {
         //初始化标题下标的小三角
         drawable = getActivity().getResources().getDrawable(R.drawable.image_slidethetriangle);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        mViewPager.setCurrentItem(0);
+        message_rb.setCompoundDrawables(null, null, null, null);
+        cell_phone_rb.setCompoundDrawables(null, null, null, drawable);
+
 
 
     }
@@ -289,7 +297,6 @@ public class CellPhoneFragment extends BaseStatusFragment {
             throw new RuntimeException(e);
         }
     }
-
 
 
 }

@@ -10,10 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -120,7 +118,6 @@ public class CountryDetailPackageAdapter extends RecyclerView.Adapter<CountryDet
         RelativeLayout rootLinearLayout;
         @BindView(R.id.numberTextView)
         TextView numberTextView;
-
         @BindView(R.id.v_line)
         View v_line;
 

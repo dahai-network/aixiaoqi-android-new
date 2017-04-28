@@ -67,7 +67,7 @@ import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
 import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
 
 
-public class Fragment_Phone extends Fragment implements InterfaceCallback, T9TelephoneDialpadView.OnT9TelephoneDialpadView, RecyclerBaseAdapter.OnItemClickListener, QueryCompleteListener<ContactRecodeEntity>, DialogInterfaceTypeBase{
+public class Fragment_Phone extends Fragment implements InterfaceCallback, T9TelephoneDialpadView.OnT9TelephoneDialpadView, RecyclerBaseAdapter.OnItemClickListener, QueryCompleteListener<ContactRecodeEntity>, DialogInterfaceTypeBase {
 
 
     private static Fragment_Phone fragment;
@@ -108,10 +108,21 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     }
 
     public void phonecallClicked() {
+        int version = Build.VERSION.SDK_INT;
         if (t9dialpadview.getT9Input() != null && t9dialpadview.getT9Input().length() > 0) {
+
+            //检测是否开启读取联系人电话
+            int hasWriteContactsPermission = checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS);
+            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED && version > 22) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_CONTACTS},
+                        REQUEST_CODE_ASK_PERMISSIONS);
+                return;
+            }
+
             contactRecodeEntity = new ContactRecodeEntity();
             contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
             contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
+
             braceletDial();
             closedialClicked();
         } else {
@@ -139,7 +150,9 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
                 simCellPhone();
             }
         } else {
+
             CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
+
         }
     }
 

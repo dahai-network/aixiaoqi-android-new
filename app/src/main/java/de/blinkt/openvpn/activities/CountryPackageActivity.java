@@ -12,19 +12,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CountryDetailPackageAdapter;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -33,8 +29,6 @@ import de.blinkt.openvpn.http.CountryPacketHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.model.CountryPacketEntity;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.views.contact.DividerDecoration;
-
 import static android.view.View.GONE;
 
 public class CountryPackageActivity extends BaseNetActivity implements InterfaceCallback {
