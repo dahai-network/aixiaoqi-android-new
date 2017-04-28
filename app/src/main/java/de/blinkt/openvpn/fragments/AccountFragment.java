@@ -20,15 +20,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.analytics.MobclickAgent;
-
 import org.greenrobot.eventbus.EventBus;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,7 +41,6 @@ import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.PackageCategoryActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
 import de.blinkt.openvpn.activities.SettingActivity;
 import de.blinkt.openvpn.constant.BluetoothConstant;
@@ -65,7 +61,6 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
-
 import static android.view.View.GONE;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.BRACELETTYPE;
 import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
@@ -76,7 +71,6 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKMYDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKMYPACKAGE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKRECHARGE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKSET;
-
 /**
  * 我的界面
  * A simple {@link Fragment} subclass.
@@ -138,10 +132,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     private String bleStatus;
     private String TAG = "AccountFragment";
     boolean hasPackage = false;
-
     public static TextView tvNewPackagetAction;
     public static TextView tvNewVersion;
-
+    String deviceTypeStr;
     public AccountFragment() {
         // Required empty public constructor
     }
@@ -161,15 +154,12 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     }
                     break;
                 case 3:
-
                     if (tvNewVersion != null && !AppMode.getInstance().isClickAddDevice)
                         tvNewVersion.setVisibility(View.VISIBLE);
-
                     break;
                 case 4:
                     if (tvNewVersion != null)
                         tvNewVersion.setVisibility(View.GONE);
-
                     break;
                 case 5:
                     showDeviceSummarized(true);
@@ -202,10 +192,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         tvNewPackagetAction.setVisibility(View.GONE);
         tvNewVersion.setVisibility(View.GONE);
         // EventBus.getDefault().register(this);
-
         //注册广播
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver, new IntentFilter("Notic"));
-
 
         return rootView;
     }
@@ -260,23 +248,31 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
     @Override
     public void setRegisted(boolean isRegisted) {
+
+
         if (isRegisted) {
             signalIconImageView.setBackgroundResource(R.drawable.registed);
             String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
+
             if (operater != null) {
                 switch (operater) {
+
                     case Constant.CHINA_TELECOM:
                         operatorTextView.setText(getString(R.string.china_telecom));
                         break;
+                    //中国移动
                     case Constant.CHINA_MOBILE:
                         operatorTextView.setText(getString(R.string.china_mobile));
                         break;
                     case Constant.CHINA_UNICOM:
                         operatorTextView.setText(getString(R.string.china_unicom));
                         break;
+                        //operatorTextView.setText(getString(R.string.unitoy_card));
+
                 }
             }
         } else {
+
             if (signalIconImageView != null)
                 signalIconImageView.setBackgroundResource(R.drawable.unregist);
             if (operatorTextView != null)
@@ -342,6 +338,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                         mHandler.sendEmptyMessage(2);
                     }
                 }
+
                 //记录点击状态
                 AppMode.getInstance().isClickPackage = true;
                 break;
@@ -503,6 +500,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
                     if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
                         mHandler.sendEmptyMessage(5);
+                        deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
                     } else {
                         mHandler.sendEmptyMessage(6);
                     }

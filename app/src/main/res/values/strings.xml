@@ -607,6 +607,7 @@
     <string name="china_telecom">中国电信</string>
     <string name="china_mobile">中国移动</string>
     <string name="china_unicom">中国联通</string>
+    <string name="unitoy_card">爱小器卡</string>
     <string name="device_name">设备名称</string>
     <string name="unbind_device_tips">请先绑定设备</string>
     <string name="edit_data">修改资料</string>
