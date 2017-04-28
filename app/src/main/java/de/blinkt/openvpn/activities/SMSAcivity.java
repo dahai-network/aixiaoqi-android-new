@@ -481,8 +481,6 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 							fms.add(entity.getSMSID());
 						}
 					}
-					if (fms.size() > 0)
-						CommonTools.showShortToast(this, "删除这些短信：" + new Gson().toJson(new SmsIdsEntity(null, fms)));
 					CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS, new Gson().toJson(new SmsIdsEntity(null, fms)));
 				}
 				break;

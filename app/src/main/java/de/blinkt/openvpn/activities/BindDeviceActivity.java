@@ -388,7 +388,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
         //绑定完成更新设备信息
         if (utils == null)
             utils = SharedUtils.getInstance();
-
         createHttpRequest(HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, utils.readString(Constant.BRACELETVERSION),
                 utils.readInt(Constant.BRACELETPOWER) + "", utils.readInt(Constant.BRACELETTYPEINT) + "");
     }
