@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginTop="100dp"
-        android:textColor="@color/gray_text"
+        android:textColor="@color/index_gray_text"
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
         tools:text="没有xxxx"/>

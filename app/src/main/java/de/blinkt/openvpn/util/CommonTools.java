@@ -22,7 +22,7 @@ public class CommonTools {
 	 */
 	public static void showShortToast(Context context, String message) {
 		if(!TextUtils.isEmpty(message)&&context!=null)
-		Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+		ToastUtils.makeText(context, message, Toast.LENGTH_SHORT).show();
 	}
 
 	/**

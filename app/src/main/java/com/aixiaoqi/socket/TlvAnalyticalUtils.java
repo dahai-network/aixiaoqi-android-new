@@ -142,7 +142,8 @@ public class TlvAnalyticalUtils {
 							preData[8]=orData.replace("8a1000", "8a9000").substring(0,20);
 						}else{
 							byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
-							sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);}
+							sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
+						}
 					}
 				} else if (typeParams == 199) {
 //					if (REGISTER_STATUE_CODE == 2) {//第一次是010101的时候不去复位SDK,第二次的时候才对SDK进行复位

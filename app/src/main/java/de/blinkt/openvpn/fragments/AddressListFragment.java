@@ -59,7 +59,6 @@ public class AddressListFragment extends BaseStatusFragment implements ContactAd
 //				container, false);
 		View rootView =super.onCreateView( inflater,  container,
 				 savedInstanceState);
-		topProgressView.setWhiteBack(false);
 		initView(rootView);
 		return rootView;
 	}

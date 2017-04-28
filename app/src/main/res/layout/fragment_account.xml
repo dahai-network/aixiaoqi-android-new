@@ -40,6 +40,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/top_view"
                 android:layout_marginTop="50dp"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/padding_15dp"
@@ -161,8 +162,7 @@
                             android:id="@+id/add_or_activate_package"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
+                            android:layout_centerInParent="true"
                             android:drawableLeft="@drawable/activate_device_account"
                             android:drawablePadding="@dimen/padding_10dp"
                             android:text="@string/activate_packet"
@@ -342,8 +342,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
+                            android:layout_centerInParent="true"
                             android:drawableLeft="@drawable/add_device"
                             android:drawablePadding="@dimen/padding_10dp"
                             android:text="@string/add_device"

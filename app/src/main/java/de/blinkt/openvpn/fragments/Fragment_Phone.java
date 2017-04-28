@@ -133,22 +133,14 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     /***
      *手环拨打电话
      */
-    public void braceletDial() {
+    private void braceletDial() {
         int version = Build.VERSION.SDK_INT;
         if (CommonTools.isFastDoubleClick(500)) {
             return;
         }
         if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-            //检测是否开启读取联系人电话
-            int hasWriteContactsPermission = checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS);
-            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED && version > 22) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_CONTACTS},
-                        REQUEST_CODE_ASK_PERMISSIONS);
-                return;
-            } else {
-                //拨打电话
+            //拨打电话
                 simCellPhone();
-            }
         } else {
 
             CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
