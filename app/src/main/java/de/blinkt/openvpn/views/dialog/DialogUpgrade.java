@@ -177,6 +177,7 @@ public class DialogUpgrade extends DialogBase {
 			super.onDeviceDisconnected(deviceAddress);
 			UIOperator(UIOperatorEntity.onError);
 		}
+		
 	};
 
 
