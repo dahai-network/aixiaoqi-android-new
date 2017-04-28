@@ -44,6 +44,7 @@ import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.PackageCategoryActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
+import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
 import de.blinkt.openvpn.activities.SettingActivity;
 import de.blinkt.openvpn.constant.BluetoothConstant;
@@ -55,6 +56,7 @@ import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.http.BalanceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
+import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.OrderUsageRemainHttp;
 import de.blinkt.openvpn.model.UsageRemainEntity;
@@ -169,6 +171,13 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                         tvNewVersion.setVisibility(View.GONE);
 
                     break;
+                case 5:
+                    showDeviceSummarized(true);
+                    break;
+                case 6:
+                    showDeviceSummarized(false);
+                    break;
+
 
             }
             EventBus.getDefault().post(new ChangeViewStateEvent(msg.what));
@@ -196,6 +205,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
         //注册广播
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver, new IntentFilter("Notic"));
+
+
         return rootView;
     }
 
@@ -204,6 +215,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         super.onResume();
         //获取数据，每次都重新获取一次以保持正确性。
         getData();
+        GetBindDeviceHttp http = new GetBindDeviceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
+        new Thread(http).start();
         getPackage();
     }
 
@@ -211,7 +224,13 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     private void getPackage() {
         CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
     }
-    @Override
+
+    /**
+     * 设备布局
+     *
+     * @param isShow
+     */
+    //  @Override
     public void showDeviceSummarized(boolean isShow) {
         if (deviceSummarizedRelativeLayout != null) {
             if (isShow) {
@@ -237,7 +256,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     public void setPowerPercent(String powerPercent) {
         powerTextView.setText(powerPercent + "%");
     }
-
 
 
     @Override
@@ -396,9 +414,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 intent = new Intent(getActivity(), PackageMarketActivity.class);
                 intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
                 break;
-
         }
-
         getActivity().startActivity(intent);
 
     }
@@ -420,7 +436,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 //判断是否再次重连的标记
                 ICSOpenVPNApplication.isConnect = false;
                 ReceiveBLEMoveReceiver.isConnect = false;
+                // 注册失败不显示
                 EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_INITIATIVE);
+
                 sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
                 CommonTools.showShortToast(getActivity(), "已解绑设备");
                 ICSOpenVPNApplication.uartService.disconnect();
@@ -439,10 +457,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     return;
                 }
                 if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
-
                     if (!AppMode.getInstance().isClickPackage)
                         mHandler.sendEmptyMessage(1);
-
                     hasPackage = true;
                     PacketRelativeLayout.setVisibility(View.GONE);
                     noPacketRelativeLayout.setVisibility(View.VISIBLE);
@@ -451,8 +467,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
                     addOrActivatePackage.setText(getString(R.string.activate_packet));
                 } else if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
-
-
                     mHandler.sendEmptyMessage(2);
                     hasPackage = false;
                     PacketRelativeLayout.setVisibility(View.GONE);
@@ -467,16 +481,10 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     noPacketRelativeLayout.setVisibility(View.GONE);
                     callTime.setText(used.getTotalRemainingCallMinutes() + "分");
 
-                    Log.d("__aixiaoqi", "rightComplete:有套餐且激活了 ");
-
                     //显示出有未激活套餐的提示
                     if (!"0".equals(unactivated.getTotalNumFlow()) && !AppMode.getInstance().isClickPackage) {
-
-                        Log.d("__aixiaoqi", "---rightComplete1: " + unactivated.getTotalNumFlow());
                         mHandler.sendEmptyMessage(1);
-
                     } else {
-                        Log.d("__aixiaoqi", "---rightComplete2: " + unactivated.getTotalNumFlow());
                         mHandler.sendEmptyMessage(2);
                     }
                     if ("0".equals(used.getTotalNumFlow())) {
@@ -487,6 +495,17 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                         flowCount.setText(used.getTotalNumFlow());
                     }
                     packageAllCount.setText(used.getTotalNum());
+                }
+            }
+        } else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
+            GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
+            if (object.getStatus() == 1) {
+                if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
+                    if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
+                        mHandler.sendEmptyMessage(5);
+                    } else {
+                        mHandler.sendEmptyMessage(6);
+                    }
                 }
             }
         }
