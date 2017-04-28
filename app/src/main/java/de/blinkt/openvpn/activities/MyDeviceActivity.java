@@ -211,11 +211,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		Log.e(TAG, "initSet");
 		actionBar.hide();
 		bracelettype = getIntent().getStringExtra(BRACELETTYPE);
+
 		if (SharedUtils.getInstance().readBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE)) {
 			setPoint();
 		}
+
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			deviceNameTextView.setText(getString(R.string.unibox_key));
+
+
 		} else {
 			alarmClockLinearLayout.setVisibility(View.VISIBLE);
 			messageRemindLinearLayout.setVisibility(View.VISIBLE);
@@ -727,6 +731,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					if (versionStr != null) {
 						if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(versionStr)) {
 							url = skyUpgradeHttp.getUpgradeEntity().getUrl();
+
 							showDialogGOUpgrade(skyUpgradeHttp.getUpgradeEntity().getDescr());
 							Log.d(TAG, "rightComplete: " + "有新的版本");
 							setPoint();
@@ -1058,8 +1063,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	public void setConStatus(String conStatus) {
-		Log.i(TAG, "状态：" + conStatus);
+		Log.i("aixiaoqi__", "状态：" + conStatus);
 		conStatusTextView.setText(conStatus);
+
 		conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 		if (conStatus.equals(getString(R.string.index_connecting))) {
 			percentTextView.setText("");

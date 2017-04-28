@@ -44,7 +44,6 @@ import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.PackageCategoryActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
 import de.blinkt.openvpn.activities.SettingActivity;
 import de.blinkt.openvpn.constant.BluetoothConstant;
@@ -138,9 +137,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     private String bleStatus;
     private String TAG = "AccountFragment";
     boolean hasPackage = false;
-
     public static TextView tvNewPackagetAction;
     public static TextView tvNewVersion;
+    String deviceTypeStr;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -161,15 +160,12 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     }
                     break;
                 case 3:
-
                     if (tvNewVersion != null && !AppMode.getInstance().isClickAddDevice)
                         tvNewVersion.setVisibility(View.VISIBLE);
-
                     break;
                 case 4:
                     if (tvNewVersion != null)
                         tvNewVersion.setVisibility(View.GONE);
-
                     break;
                 case 5:
                     showDeviceSummarized(true);
@@ -202,10 +198,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         tvNewPackagetAction.setVisibility(View.GONE);
         tvNewVersion.setVisibility(View.GONE);
         // EventBus.getDefault().register(this);
-
         //注册广播
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver, new IntentFilter("Notic"));
-
 
         return rootView;
     }
@@ -260,27 +254,41 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
     @Override
     public void setRegisted(boolean isRegisted) {
+
+
         if (isRegisted) {
             signalIconImageView.setBackgroundResource(R.drawable.registed);
             String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
+
             if (operater != null) {
                 switch (operater) {
+
                     case Constant.CHINA_TELECOM:
                         operatorTextView.setText(getString(R.string.china_telecom));
                         break;
+                    //中国移动
                     case Constant.CHINA_MOBILE:
                         operatorTextView.setText(getString(R.string.china_mobile));
                         break;
                     case Constant.CHINA_UNICOM:
                         operatorTextView.setText(getString(R.string.china_unicom));
                         break;
+
                 }
             }
         } else {
+            String state = SharedUtils.getInstance().readString(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
+
             if (signalIconImageView != null)
                 signalIconImageView.setBackgroundResource(R.drawable.unregist);
-            if (operatorTextView != null)
-                operatorTextView.setText("----");
+
+
+            if (operatorTextView != null) {
+                if (state.equalsIgnoreCase(getResources().getString(R.string.unitoy_card)))
+                    operatorTextView.setText(R.string.unitoy_card);
+                else
+                    operatorTextView.setText("----");
+            }
         }
     }
 
@@ -342,6 +350,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                         mHandler.sendEmptyMessage(2);
                     }
                 }
+
                 //记录点击状态
                 AppMode.getInstance().isClickPackage = true;
                 break;
@@ -503,6 +512,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
                     if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
                         mHandler.sendEmptyMessage(5);
+                        deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
                     } else {
                         mHandler.sendEmptyMessage(6);
                     }

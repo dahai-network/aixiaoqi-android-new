@@ -88,6 +88,7 @@ public class EncryptionUtil {
 	// 3DES加密方法
 	public static String TribleDESencrypt(String encryptString) throws Exception {
 		SecretKeySpec key = new SecretKeySpec(tribleKey, "DESede");
+
 		Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
 		cipher.init(Cipher.ENCRYPT_MODE, key);
 		byte[] encryptedData = cipher.doFinal(HexStringExchangeBytesUtil.hexStringToBytes(encryptString), 0, 8);
