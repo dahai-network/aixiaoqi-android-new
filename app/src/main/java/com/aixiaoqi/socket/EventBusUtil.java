@@ -3,6 +3,7 @@ package com.aixiaoqi.socket;
 import org.greenrobot.eventbus.EventBus;
 
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
+import de.blinkt.openvpn.model.ShowDeviceEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StateChangeEntity;
 
@@ -28,6 +29,12 @@ public class EventBusUtil {
         ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
         entity.setStatus(status);
         entity.setStatusDrawableInt(statusDrawableInt);
+        EventBus.getDefault().post(entity);
+    }
+
+    public static void showDevice(boolean showDevice) {
+        ShowDeviceEntity entity = new ShowDeviceEntity();
+        entity.setShowDevice(showDevice);
         EventBus.getDefault().post(entity);
     }
 

@@ -73,6 +73,7 @@ import de.blinkt.openvpn.fragments.Fragment_Phone;
 import de.blinkt.openvpn.fragments.IndexFragment;
 import de.blinkt.openvpn.fragments.SmsFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
+import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBasicConfigHttp;
@@ -128,8 +129,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public static RelativeLayout phone_linearLayout;
 	@BindView(R.id.iv_putaway)
 	public ImageView iv_putaway;
-	@BindView(R.id.topProgressView)
-	public TopProgressView topProgressView;
+//	@BindView(R.id.topProgressView)
+//	public TopProgressView topProgressView;
 	//判断是否展开了键盘
 	public static boolean isDeploy = true;
 	@BindView(R.id.tv_red_dot_01)
@@ -251,9 +252,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         radiogroup.check(R.id.rb_phone);
         radiogroup.setOnCheckedChangeListener(new MyRadioGroupListener());
         //无网络时候提醒
-        if (!NetworkUtils.isNetworkAvailable(this)) {
-            topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
-        }
+//        if (!NetworkUtils.isNetworkAvailable(this)) {
+//            topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
+//        }
 
     }
 
@@ -346,7 +347,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
 		//隐藏拨号界面控件
 		iv_putaway = (ImageView) findViewById(R.id.iv_putaway);
-		topProgressView = (TopProgressView) findViewById(R.id.topProgressView);
+//		topProgressView = (TopProgressView) findViewById(R.id.topProgressView);
 	}
 
 
@@ -480,19 +481,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					public void run() {
 						scanLeDevice(false);
 						if (mService != null && !mService.isConnectedBlueTooth()) {
-							topProgressView.showTopProgressView(getString(R.string.un_connect_tip), -1, new View.OnClickListener() {
-								@Override
-								public void onClick(View v) {
-									String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-									if (braceletName != null) {
-										Intent intent = new Intent(ProMainActivity.this, MyDeviceActivity.class);
-										intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
-										intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN,
-												ICSOpenVPNApplication.bleStatusEntity.getStatus());
-										startActivity(intent);
-									}
-								}
-							});
+							EventBusUtil.changeConnectStatus(StateChangeEntity.JUMP_ACTIVITY,0);
+//							topProgressView.showTopProgressView(getString(R.string.un_connect_tip), -1, new View.OnClickListener() {
+//								@Override
+//								public void onClick(View v) {
+//									String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+//									if (braceletName != null) {
+//										Intent intent = new Intent(ProMainActivity.this, MyDeviceActivity.class);
+//										intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
+//										intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN,
+//												ICSOpenVPNApplication.bleStatusEntity.getStatus());
+//										startActivity(intent);
+//									}
+//
+//
+//								}
+//							});
 						}
 					}
 				}, 10000);
@@ -594,8 +598,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			public void onPageSelected(int position) {
 				//对切换的状态进行保存
 				setPosition(position);
-				topProgressView.setWhiteBack(false);
-				topProgressView.invalidate();
+//				topProgressView.setWhiteBack(false);
+//				topProgressView.invalidate();
 				if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
 					phoneFragment.t9dialpadview.clearT9Input();
 				}
@@ -631,8 +635,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						// MobclickAgent.onEvent(this, CLICKHOMECONTACT);
 						break;
 					case 3:
-						topProgressView.setWhiteBack(true);
-						topProgressView.invalidate();
+//						topProgressView.setWhiteBack(true);
+//						topProgressView.invalidate();
 						radiogroup.check(R.id.rb_personal);
 						//  MobclickAgent.onEvent(this, CLICKHOMECONTACT);
 						break;
@@ -752,6 +756,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							BluetoothConstant.IS_BIND = true;
 							skyUpgradeHttp();
 							accountFragment.showDeviceSummarized(true);
+							EventBusUtil.showDevice(true);
 						}
 						SharedUtils utils = SharedUtils.getInstance();
 
@@ -884,16 +889,16 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	public void noNet() {
 	}
 
-	//没有绑定提示
-	private void setTipsOnNoBind() {
-		topProgressView.showTopProgressView(getString(R.string.unbind_device_tips), -1, new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(ProMainActivity.this, ChoiceDeviceTypeActivity.class);
-				startActivity(intent);
-			}
-		});
-	}
+//	//没有绑定提示
+//	private void setTipsOnNoBind() {
+//		topProgressView.showTopProgressView(getString(R.string.unbind_device_tips), -1, new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				Intent intent = new Intent(ProMainActivity.this, ChoiceDeviceTypeActivity.class);
+//				startActivity(intent);
+//			}
+//		});
+//	}
 
 	private void getConfigInfo() {
 		createHttpRequest(HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
@@ -965,24 +970,18 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		switch (entity.getRigsterSimStatue()) {
 			case SocketConstant.REGISTER_SUCCESS:
 				EventBusUtil.changeConnectStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
-				topProgressGone();
-				accountFragment.setRegisted(true);
 				break;
 			case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 				CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
-				topProgressGone();
 				break;
 			case SocketConstant.REGISTER_FAIL:
 				CommonTools.showShortToast(this, getString(R.string.regist_fail));
-				topProgressGone();
 				break;
 			case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
 				CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
-				topProgressGone();
 				break;
 			case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
 				CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
-				topProgressGone();
 				break;
 			case SocketConstant.NOT_NETWORK:
 				CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
@@ -1013,29 +1012,29 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			case SocketConstant.REG_STATUE_CHANGE:
 				EventBusUtil.changeConnectStatus(getString(index_registing), R.drawable.index_no_signal);
 				break;
-			case SocketConstant.REGISTER_CHANGING:
-				double percent = entity.getProgressCount();
-				if (topProgressView.getVisibility() != View.VISIBLE && SocketConstant.REGISTER_STATUE_CODE != 3) {
-					topProgressView.setVisibility(View.VISIBLE);
-					topProgressView.setContent(getString(R.string.registing));
-					topProgressView.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-							if (braceletName != null) {
-								Intent intent = new Intent(ProMainActivity.this, MyDeviceActivity.class);
-								intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
-								startActivity(intent);
-							}
-						}
-					});
-				}
-				int percentInt = (int) (percent / 1.6);
-				if (percentInt >= 100) {
-					percentInt = 98;
-				}
-				topProgressView.setProgress(percentInt);
-				break;
+//			case SocketConstant.REGISTER_CHANGING:
+//				double percent = entity.getProgressCount();
+//				if (topProgressView.getVisibility() != View.VISIBLE && SocketConstant.REGISTER_STATUE_CODE != 3) {
+//					topProgressView.setVisibility(View.VISIBLE);
+//					topProgressView.setContent(getString(R.string.registing));
+//					topProgressView.setOnClickListener(new View.OnClickListener() {
+//						@Override
+//						public void onClick(View v) {
+//							String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+//							if (braceletName != null) {
+//								Intent intent = new Intent(ProMainActivity.this, MyDeviceActivity.class);
+//								intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
+//								startActivity(intent);
+//							}
+//						}
+//					});
+//				}
+//				int percentInt = (int) (percent / 1.6);
+//				if (percentInt >= 100) {
+//					percentInt = 98;
+//				}
+//				topProgressView.setProgress(percentInt);
+//				break;
 			default:
 //						if (entity 355.getRigsterSimStatue() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
 //							sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail), R.drawable.index_no_signal);
@@ -1046,10 +1045,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	}
 
-	private void topProgressGone() {
-		topProgressView.setVisibility(View.GONE);
-		topProgressView.setProgress(0);
-	}
+//	private void topProgressGone() {
+//		topProgressView.setVisibility(View.GONE);
+//		topProgressView.setProgress(0);
+//	}
 
 	private void noPreDataStartSDK() {
 		isStartSdk = true;
@@ -1122,43 +1121,43 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	}
 
-	@Subscribe(threadMode = ThreadMode.MAIN)
-	public void receiveStateChangeEntity(StateChangeEntity entity) {
-		switch (entity.getStateType()) {
-			case StateChangeEntity.BLUETOOTH_STATE:
-				if (entity.isopen() && getString(R.string.bluetooth_unopen).equals(topProgressView.getContent())) {
-					if (checkNetWorkAndBlueIsOpen()) {
-						topProgressView.setVisibility(View.GONE);
-					}
-				} else {
-					topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
-				}
-				break;
-			case StateChangeEntity.NET_STATE:
-				if (entity.isopen() && getString(R.string.no_wifi).equals(topProgressView.getContent())) {
-					if (checkNetWorkAndBlueIsOpen()) {
-						topProgressView.setVisibility(View.GONE);
-					}
-				} else {
-					topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
-					accountFragment.setRegisted(false);
-				}
-				break;
-		}
-
-	}
-
-	//打开一个开关的同时，检查是否有别的开关是否关闭
-	private boolean checkNetWorkAndBlueIsOpen() {
-		if (!NetworkUtils.isNetworkAvailable(this)) {
-			topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
-			return false;
-		} else if (!mService.isOpenBlueTooth()) {
-			topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
-			return false;
-		}
-		return true;
-	}
+//	@Subscribe(threadMode = ThreadMode.MAIN)
+//	public void receiveStateChangeEntity(StateChangeEntity entity) {
+//		switch (entity.getStateType()) {
+//			case StateChangeEntity.BLUETOOTH_STATE:
+//				if (entity.isopen() && getString(R.string.bluetooth_unopen).equals(topProgressView.getContent())) {
+//					if (checkNetWorkAndBlueIsOpen()) {
+//						topProgressView.setVisibility(View.GONE);
+//					}
+//				} else {
+//					topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
+//				}
+//				break;
+//			case StateChangeEntity.NET_STATE:
+//				if (entity.isopen() && getString(R.string.no_wifi).equals(topProgressView.getContent())) {
+//					if (checkNetWorkAndBlueIsOpen()) {
+//						topProgressView.setVisibility(View.GONE);
+//					}
+//				} else {
+//					topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
+//					accountFragment.setRegisted(false);
+//				}
+//				break;
+//		}
+//
+//	}
+//
+//	//打开一个开关的同时，检查是否有别的开关是否关闭
+//	private boolean checkNetWorkAndBlueIsOpen() {
+//		if (!NetworkUtils.isNetworkAvailable(this)) {
+//			topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
+//			return false;
+//		} else if (!mService.isOpenBlueTooth()) {
+//			topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
+//			return false;
+//		}
+//		return true;
+//	}
 
 	@Subscribe(threadMode = ThreadMode.BACKGROUND)//非UI线程
 	public void onServiceOperation(ServiceOperationEntity entity) {
@@ -1201,14 +1200,18 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		public void onReceive(final Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (action.equals(UartService.FINDED_SERVICE)) {
-				accountFragment.showDeviceSummarized(true);
+//				accountFragment.showDeviceSummarized(true);
+				EventBusUtil.showDevice(true);
 			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-					accountFragment.showDeviceSummarized(false);
-					accountFragment.setRegisted(false);
-					if (!ICSOpenVPNApplication.isConnect)
-						topProgressGone();
+//					accountFragment.showDeviceSummarized(false);
+//					accountFragment.setRegisted(false);
+//					if (!ICSOpenVPNApplication.isConnect)
+//						BaseStatusFragment.topProgressGone();
+					EventBusUtil.showDevice(false);
 				}
+
+
 				i("被主动断掉连接！");
 				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
 				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {

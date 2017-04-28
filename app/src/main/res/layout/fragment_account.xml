@@ -28,7 +28,7 @@
                 android:id="@+id/top_view"
                 android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/padding_30dp" />
+                android:layout_height="@dimen/padding_25dp" />
             <ImageView
                 android:id="@+id/blueImageView"
                 android:layout_width="match_parent"
@@ -529,6 +529,7 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_centerHorizontal="true"
+                android:layout_below="@id/top_view"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/default_head"/>
         </RelativeLayout>
