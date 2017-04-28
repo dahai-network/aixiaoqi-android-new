@@ -138,6 +138,7 @@
         android:id="@+id/t9dialpadview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_above="@+id/calendar_image"
         android:layout_marginBottom="@dimen/padding_35dp"
         />

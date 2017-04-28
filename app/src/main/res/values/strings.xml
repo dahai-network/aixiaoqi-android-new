@@ -238,7 +238,7 @@
     <string name="user_feedback">用户反馈</string>
     <string name="write_your_advice">请写下您的建议(不少于10字，不多于500字)</string>
 
-    <string name="no_wifi">网络不良或者请检查网络是否已连接</string>
+    <string name="no_wifi">当前网路不可用，请检查你的网络设置</string>
     <string name="no_net">网络连接失败，点击</string>
     <string name="retry">重试</string>
     <string name="last_version">固件已经是最新的版本</string>
@@ -351,7 +351,7 @@
     <string name="effective_date_is_null">还没有选择生效日期</string>
     <string name="select_time">选择时间</string>
     <string name="effective_length">有效时长</string>
-    <string name="no_permission">无法获取到联系人的信息,可能是您的联系人权限被禁用,建议您前往"设置"开启权限</string>
+    <string name="no_permission">无法获取到联系人的信息\n可能是您的联系人权限被禁用\n建议您前往"设置"开启权限</string>
     <string name="more_current_time">出生年月不能大于当前时间</string>
     <string name="title_activity_outside">OutsideActivity</string>
 
