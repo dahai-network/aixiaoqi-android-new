@@ -250,6 +250,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				//友盟方法统计
 				MobclickAgent.onEvent(this, CLICKCALLCONTROLVOIDE);
 				Boolean isselected = mtview.isSelected();
+				if(ICSOpenVPNApplication.the_sipengineReceive!=null)
 				ICSOpenVPNApplication.the_sipengineReceive.SetLoudspeakerStatus(!isselected);
 				mtview.setSelected(!isselected);
 				break;
@@ -257,6 +258,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				//友盟方法统计
 				MobclickAgent.onEvent(this, CLICKCALLPHONEQUIET);
 				Boolean iscalmSelected = calmTextView.isSelected();
+				if(ICSOpenVPNApplication.the_sipengineReceive!=null)
 				ICSOpenVPNApplication.the_sipengineReceive.MuteMic(!iscalmSelected);
 				calmTextView.setSelected(!iscalmSelected);
 				break;

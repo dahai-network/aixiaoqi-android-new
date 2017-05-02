@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -178,14 +179,9 @@ public abstract class CommonHttp implements Callback, Runnable {
 //				ICSOpenVPNApplication.getInstance().finishAllActivity();
 				//token过期
 				if (!CommonTools.isFastDoubleClick(1000)) {
-					Intent intent1 = new Intent();
-					intent1.setAction(SportFragment.CLEARSPORTDATA);
-					intent1.setAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
-					if (ICSOpenVPNApplication.uartService != null)
-						ICSOpenVPNApplication.uartService.disconnect();
-					if (ICSOpenVPNApplication.getInstance() != null)
-						ICSOpenVPNApplication.getInstance().sendBroadcast(intent1);
-
+					EventBusUtil.cancelCallService();
+					if (ICSOpenVPNApplication.uartService!=null)
+					ICSOpenVPNApplication.uartService.disconnect();
 					Intent intent = new Intent(context_, LoginMainActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.putExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN, context_.getResources().getString(R.string.token_interrupt));
