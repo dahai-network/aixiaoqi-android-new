@@ -284,9 +284,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
 
             if (operatorTextView != null) {
-                if (state.equalsIgnoreCase(getResources().getString(R.string.unitoy_card)))
-                    operatorTextView.setText(R.string.unitoy_card);
-                else
+              /*  if (state.equalsIgnoreCase(getResources().getString(R.string.unitoy_card)))
+                    operatorTextView.setText(R.string.unitoy_card);*/
+               // else
                     operatorTextView.setText("----");
             }
         }

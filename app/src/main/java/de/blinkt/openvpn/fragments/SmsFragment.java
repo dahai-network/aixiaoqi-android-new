@@ -341,7 +341,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 				editSmsImageView.setBackground(getResources().getDrawable(R.drawable.edit_sms_selector));
 
 			} else {
-				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), object.getMsg());
+				CommonTools.showShortToast(getActivity(), object.getMsg());
 			}
 		}
 	}
