@@ -17,7 +17,7 @@ public class EncryptionUtil {
 	public static String random8NumberString;
 	//共享密钥
 	private static byte[] tribleKey = {(byte) 122, (byte) 59, (byte) 89, (byte) 100, (byte) 202, (byte) 142, (byte) 157, (byte) 242,
-			(byte) 122, (byte) 59, (byte) 89, (byte) 100, (byte) 202, (byte) 142, (byte) 157, (byte) 242};
+			(byte) 23, (byte) 43, (byte) 109, (byte) 72, (byte) 1, (byte) 57, (byte) 252, (byte) 136};
 
 	public static boolean isPassEncrypt(String receiveBlueEncrypt) {
 		String result = random8NumberString;

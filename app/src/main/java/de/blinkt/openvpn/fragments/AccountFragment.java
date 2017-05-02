@@ -282,15 +282,12 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
             if (signalIconImageView != null)
                 signalIconImageView.setBackgroundResource(R.drawable.unregist);
 
+			if (operatorTextView != null) {
 
-            if (operatorTextView != null) {
-              /*  if (state.equalsIgnoreCase(getResources().getString(R.string.unitoy_card)))
-                    operatorTextView.setText(R.string.unitoy_card);*/
-               // else
-                    operatorTextView.setText("----");
-            }
-        }
-    }
+					operatorTextView.setText("----");
+			}
+		}
+	}
 
     private void getData() {
 

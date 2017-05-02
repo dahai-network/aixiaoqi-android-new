@@ -215,11 +215,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (SharedUtils.getInstance().readBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE)) {
 			setPoint();
 		}
-
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			deviceNameTextView.setText(getString(R.string.unibox_key));
-
-
 		} else {
 			alarmClockLinearLayout.setVisibility(View.VISIBLE);
 			messageRemindLinearLayout.setVisibility(View.VISIBLE);

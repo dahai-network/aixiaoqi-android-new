@@ -236,8 +236,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							}
 						}
 						Log.e("Blue_Chanl", "dataType：" + dataType);
-
-
 						switch (firstPackage) {
 							case "55":
 								switch (dataType) {
@@ -374,7 +372,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 												case "04":
 													Log.i(TAG, "爱小器卡！");
 													EventBusUtil.changeConnectStatus(context.getString(R.string.index_aixiaoqicard), R.drawable.index_no_signal);
-													SharedUtils.getInstance().writeString(Constant.OPERATER, null);
 													break;
 											}
 
