@@ -285,7 +285,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 					map.put("statue", 0 + "");
 					//友盟方法统计
 					MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
-					CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活失败！请检查你的SIM卡是否是爱小器SIM卡");
+					CommonTools.showShortToast(MyOrderDetailActivity.this, "激活失败！请检查你的SIM卡是否是爱小器SIM卡");
 				} else {
 					isActivateSuccess = true;
 				}

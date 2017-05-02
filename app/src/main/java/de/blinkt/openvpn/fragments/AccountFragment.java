@@ -141,9 +141,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     public static TextView tvNewVersion;
     String deviceTypeStr;
 
-    public AccountFragment() {
-        // Required empty public constructor
-    }
+	public AccountFragment() {
+		// Required empty public constructor
+	}
 
     private Handler mHandler = new Handler() {
         @Override
@@ -175,88 +175,90 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     break;
 
 
-            }
-            EventBus.getDefault().post(new ChangeViewStateEvent(msg.what));
-        }
-    };
+			}
+			EventBus.getDefault().post(new ChangeViewStateEvent(msg.what));
+		}
+	};
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Glide.get(getActivity()).clearMemory();
-        setLayoutId(R.layout.fragment_account);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		Glide.get(getActivity()).clearMemory();
+		setLayoutId(R.layout.fragment_account);
 //		View rootView = inflater.inflate(R.layout.fragment_account,
 //				container, false);
-        View rootView = super.onCreateView(inflater, container,
-                savedInstanceState);
-        topProgressView.setWhiteBack(true);
-        ButterKnife.bind(this, rootView);
-        title.setTextTitle(getString(R.string.personal_center));
-        tvNewPackagetAction = (TextView) rootView.findViewById(R.id.tv_new_packaget_action);
-        tvNewVersion = (TextView) rootView.findViewById(R.id.tv_new_version);
-        //初始化状态
-        tvNewPackagetAction.setVisibility(View.GONE);
-        tvNewVersion.setVisibility(View.GONE);
-        // EventBus.getDefault().register(this);
-        //注册广播
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver, new IntentFilter("Notic"));
+		View rootView = super.onCreateView(inflater, container,
+				savedInstanceState);
+		topProgressView.setWhiteBack(true);
+		ButterKnife.bind(this, rootView);
+		title.setTextTitle(getString(R.string.personal_center));
+		tvNewPackagetAction = (TextView) rootView.findViewById(R.id.tv_new_packaget_action);
+		tvNewVersion = (TextView) rootView.findViewById(R.id.tv_new_version);
+		//初始化状态
+		tvNewPackagetAction.setVisibility(View.GONE);
+		tvNewVersion.setVisibility(View.GONE);
+		// EventBus.getDefault().register(this);
+		//注册广播
+		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver, new IntentFilter("Notic"));
 
-        return rootView;
-    }
+		return rootView;
+	}
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //获取数据，每次都重新获取一次以保持正确性。
-        getData();
-        GetBindDeviceHttp http = new GetBindDeviceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
-        new Thread(http).start();
-        getPackage();
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+		//获取数据，每次都重新获取一次以保持正确性。
+		getData();
+		GetBindDeviceHttp http = new GetBindDeviceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
+		new Thread(http).start();
+		getPackage();
+	}
 
 
-    private void getPackage() {
-        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
-    }
+	private void getPackage() {
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
+	}
 
-    /**
-     * 设备布局
-     *
-     * @param isShow
-     */
-    //  @Override
-    public void showDeviceSummarized(boolean isShow) {
-        if (deviceSummarizedRelativeLayout != null) {
-            if (isShow) {
-                deviceSummarizedRelativeLayout.setVisibility(View.VISIBLE);
-            } else {
-                deviceSummarizedRelativeLayout.setVisibility(GONE);
-            }
-        }
-    }
+	/**
+	 * 设备布局
+	 *
+	 * @param isShow
+	 */
+	//  @Override
+	public void showDeviceSummarized(boolean isShow) {
+		if (deviceSummarizedRelativeLayout != null) {
+			if (isShow) {
+				deviceSummarizedRelativeLayout.setVisibility(View.VISIBLE);
+			} else {
+				deviceSummarizedRelativeLayout.setVisibility(GONE);
+			}
+		}
+	}
 
-    public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
-        try {
-            if (deviceType != null)
-                deviceNameTextView.setText(deviceType);
-            if (powerPercent != null)
-                setPowerPercent(powerPercent);
-            setRegisted(isRegisted);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
+		try {
+			if (deviceType != null)
+				deviceNameTextView.setText(deviceType);
+			if (powerPercent != null)
+				setPowerPercent(powerPercent);
+			setRegisted(isRegisted);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    public void setPowerPercent(String powerPercent) {
-        powerTextView.setText(powerPercent + "%");
-    }
+	public void setPowerPercent(String powerPercent) {
+		powerTextView.setText(powerPercent + "%");
+	}
 
 
     @Override
     public void setRegisted(boolean isRegisted) {
+
         if (isRegisted) {
             signalIconImageView.setBackgroundResource(R.drawable.registed);
             String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
+
             if (operater != null) {
                 switch (operater) {
 
@@ -270,50 +272,52 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     case Constant.CHINA_UNICOM:
                         operatorTextView.setText(getString(R.string.china_unicom));
                         break;
+
                 }
             }
         } else {
+            String state = SharedUtils.getInstance().readString(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
 
-            if (signalIconImageView != null)
-                signalIconImageView.setBackgroundResource(R.drawable.unregist);
+			if (signalIconImageView != null)
+				signalIconImageView.setBackgroundResource(R.drawable.unregist);
 
-            if (operatorTextView != null) {
+			if (operatorTextView != null) {
 
-                operatorTextView.setText("----");
-            }
-        }
-    }
+					operatorTextView.setText("----");
+			}
+		}
+	}
 
-    private void getData() {
+	private void getData() {
 
-        if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.NICK_NAME)))
-            accountNameTextView.setText(SharedUtils.getInstance().readString(Constant.NICK_NAME));
-        Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).centerCrop().placeholder(R.drawable.default_head)
-                .transform(new GlideCircleTransform(ICSOpenVPNApplication.getContext(), 2, ICSOpenVPNApplication.getContext().getResources().getColor(R.color.white)))
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headImageView);
-        accountPhoneTextView.setText(SharedUtils.getInstance().readString(Constant.USER_NAME));
-        BalanceHttp http = new BalanceHttp(this, HttpConfigUrl.COMTYPE_GET_BALANCE);
-        new Thread(http).start();
+		if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.NICK_NAME)))
+			accountNameTextView.setText(SharedUtils.getInstance().readString(Constant.NICK_NAME));
+		Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).centerCrop().placeholder(R.drawable.default_head)
+				.transform(new GlideCircleTransform(ICSOpenVPNApplication.getContext(), 2, ICSOpenVPNApplication.getContext().getResources().getColor(R.color.white)))
+				.diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headImageView);
+		accountPhoneTextView.setText(SharedUtils.getInstance().readString(Constant.USER_NAME));
+		BalanceHttp http = new BalanceHttp(this, HttpConfigUrl.COMTYPE_GET_BALANCE);
+		new Thread(http).start();
 
-    }
+	}
 
-    private void showDialog() {
-        //不能按返回键，只能二选其一
-        DialogBalance cardRuleBreakDialog = new DialogBalance(this, getActivity(), R.layout.dialog_balance, 2);
-        cardRuleBreakDialog.setCanClickBack(false);
-        cardRuleBreakDialog.changeText(getResources().getString(R.string.are_you_sure_unbind), getResources().getString(R.string.sure));
-    }
+	private void showDialog() {
+		//不能按返回键，只能二选其一
+		DialogBalance cardRuleBreakDialog = new DialogBalance(this, getActivity(), R.layout.dialog_balance, 2);
+		cardRuleBreakDialog.setCanClickBack(false);
+		cardRuleBreakDialog.changeText(getResources().getString(R.string.are_you_sure_unbind), getResources().getString(R.string.sure));
+	}
 
 
-    @Override
-    public void dialogText(int type, String text) {
-        if (type == 2) {
-            if (!CommonTools.isFastDoubleClick(2000)) {
-                //断开连接
-                CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
-            }
-        }
-    }
+	@Override
+	public void dialogText(int type, String text) {
+		if (type == 2) {
+			if (!CommonTools.isFastDoubleClick(2000)) {
+				//断开连接
+				CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
+			}
+		}
+	}
 
     @OnClick({R.id.rechargeTextView,
             R.id.activateRelativeLayout,
@@ -342,6 +346,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                         mHandler.sendEmptyMessage(2);
                     }
                 }
+
                 //记录点击状态
                 AppMode.getInstance().isClickPackage = true;
                 break;
@@ -417,10 +422,10 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         }
         getActivity().startActivity(intent);
 
-    }
+	}
 
-    @Override
-    public void rightComplete(int cmdType, CommonHttp object) {
+	@Override
+	public void rightComplete(int cmdType, CommonHttp object) {
 
         if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
             BalanceHttp http = (BalanceHttp) object;
@@ -508,11 +513,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                         mHandler.sendEmptyMessage(6);
                     }
                 }
-            } else {
-
-                CommonTools.showShortToast(getActivity(),"加载网络失败");
-
-
             }
         }
     }
@@ -522,27 +522,27 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         CommonTools.showShortToast(getActivity(), errorMessage);
     }
 
-    @Override
-    public void noNet() {
-        CommonTools.showShortToast(getActivity(), getResources().getString(R.string.no_wifi));
-    }
+	@Override
+	public void noNet() {
+		CommonTools.showShortToast(getActivity(), getResources().getString(R.string.no_wifi));
+	}
 
 
-    public String getBleStatus() {
-        return bleStatus;
-    }
+	public String getBleStatus() {
+		return bleStatus;
+	}
 
-    public void setBleStatus(String bleStatus) {
-        this.bleStatus = bleStatus;
-        if (isAdded()) {
-            if (getString(R.string.index_un_insert_card).equals(bleStatus)) {
-                signalIconImageView.setBackgroundResource(R.drawable.unregist);
-                operatorTextView.setText("----");
-            } else if (getString(R.string.index_aixiaoqicard).equals(bleStatus)) {
-                operatorTextView.setText(getString(R.string.unitoy_card));
-            }
-        }
-    }
+	public void setBleStatus(String bleStatus) {
+		this.bleStatus = bleStatus;
+		if (isAdded()) {
+			if (getString(R.string.index_un_insert_card).equals(bleStatus) || getString(R.string.index_unconnect).equals(bleStatus)) {
+				signalIconImageView.setBackgroundResource(R.drawable.unregist);
+				operatorTextView.setText("----");
+			} else if (getString(R.string.index_aixiaoqicard).equals(bleStatus)) {
+				operatorTextView.setText(getString(R.string.unitoy_card));
+			}
+		}
+	}
 
     /**
      * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
