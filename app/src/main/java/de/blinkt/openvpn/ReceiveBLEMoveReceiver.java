@@ -240,7 +240,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						switch (firstPackage) {
 							case "55":
 								switch (dataType) {
-
 									//电量多少
 									case RECEIVE_ELECTRICITY:
 										utils.writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(10, 12), 16));

@@ -68,11 +68,13 @@ public class ParticularAdapter extends RecyclerView.Adapter<ParticularAdapter.Vi
 	private void inputNumberTextView(TextView numberTextView, int position) {
 		switch (data.get(position).getBillType()) {
 			case EXPENDITURE:
-				numberTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
+				numberTextView.setTextColor(ContextCompat.getColor(context, R.color.connect_us_red));
+//				numberTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
 				numberTextView.setText("-￥" + data.get(position).getAmount());
 				break;
 			case INCOME:
-				numberTextView.setTextColor(ContextCompat.getColor(context, R.color.select_contacct));
+				numberTextView.setTextColor(ContextCompat.getColor(context, R.color.connect_us_red));
+//				numberTextView.setTextColor(ContextCompat.getColor(context, R.color.select_contacct));
 				numberTextView.setText("+￥" + data.get(position).getAmount());
 				break;
 		}
