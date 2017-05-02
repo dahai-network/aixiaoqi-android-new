@@ -54,6 +54,7 @@ import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.UIOperatorEntity;
+import de.blinkt.openvpn.model.WriteCardEntity;
 import de.blinkt.openvpn.service.DfuService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -499,7 +500,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						return;
 					}
 					if (!ICSOpenVPNApplication.isConnect) {
-						CommonTools.showShortToast(MyDeviceActivity.this, "已断开，请查看周围有无设备");
+						CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 						stopAnim();
 						return;
 					}
@@ -558,7 +559,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					switch (dataType) {
 						case Constant.SYSTEM_BASICE_INFO:
 							String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
-							firmwareTextView.setText(deviceVesion);
+							if (!TextUtils.isEmpty(deviceVesion))
+								firmwareTextView.setText(deviceVesion);
 							dismissProgress();
 							//不让无设备dialog弹出
 							if (noDevicedialog != null)
@@ -668,12 +670,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				//statueTextView.setText(getString(R.string.conn_bluetooth));
 				//statueTextView.setEnabled(true);
 				firmwareTextView.setText("");
-				percentTextView.setText("");
+				percentTextView.setVisibility(GONE);
 				macTextView.setText("");
 				SharedUtils.getInstance().delete(BRACELETPOWER);
 				SharedUtils.getInstance().delete(Constant.IMEI);
 				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 				SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
+				SharedUtils.getInstance().delete(Constant.OPERATER);
 				percentInt = 0;
 				ReceiveBLEMoveReceiver.nullCardId = null;
 				BluetoothConstant.IS_BIND = false;
@@ -1060,14 +1063,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	public void setConStatus(String conStatus) {
-		Log.i("aixiaoqi__", "状态：" + conStatus);
 		conStatusTextView.setText(conStatus);
 
 		conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 		if (conStatus.equals(getString(R.string.index_connecting))) {
-			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
 		} else if (conStatus.equals(getString(R.string.index_aixiaoqicard))) {
-			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
 			if (noDevicedialog != null && noDevicedialog.getDialog() != null)
 				noDevicedialog.getDialog().dismiss();
 			stopAnim();
@@ -1078,24 +1080,24 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			registerSimStatu.setVisibility(View.VISIBLE);
 			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_regist_fail))) {
-			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
 			percentTextView.setVisibility(GONE);
 			percentInt = 0;
 			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_registing))) {
-			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
 			registerSimStatu.setVisibility(View.VISIBLE);
 			if (noDevicedialog != null && noDevicedialog.getDialog() != null)
 				noDevicedialog.getDialog().dismiss();
 			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_unbind))) {
-			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
 		} else if (conStatus.equals(getString(R.string.index_no_packet))) {
 			stopAnim();
-			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
 			registerSimStatu.setVisibility(GONE);
 		} else if (conStatus.equals(getString(R.string.index_un_insert_card))) {
-			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
 			registerSimStatu.setVisibility(View.VISIBLE);
 			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_high_signal))) {
@@ -1104,7 +1106,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			percentInt = 0;
 			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
-			percentTextView.setText("");
+			percentTextView.setVisibility(GONE);
 			percentTextView.setVisibility(GONE);
 		}
 	}
@@ -1199,6 +1201,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Subscribe(threadMode = ThreadMode.MAIN)
 	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
 		setConStatus(entity.getStatus());
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveWriteCardIdEntity(WriteCardEntity entity) {
+		stopAnim();
 	}
 
 	@Override

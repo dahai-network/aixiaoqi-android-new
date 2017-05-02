@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <!-- 填充颜色 -->
-    <solid android:color="@color/bottom_bar_text_enable_click"></solid>
+    <solid android:color="@color/blue_title"></solid>
     <!-- 矩形的圆角半径 -->
     <size
         android:width="200dp"

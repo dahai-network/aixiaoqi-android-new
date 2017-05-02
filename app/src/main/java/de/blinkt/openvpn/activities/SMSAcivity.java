@@ -290,6 +290,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 					sendSmsTv.setTextColor(getResources().getColor(R.color.select_contacct));
 				}
 			}
+
 			@Override
 			public void afterTextChanged(Editable s) {
 
@@ -408,7 +409,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 				startActivity(intent);
 				break;
 			case R.id.send_sms_tv:
-				if(SocketConstant.REGISTER_STATUE_CODE!=3){
+				if (SocketConstant.REGISTER_STATUE_CODE != 3) {
 					CommonTools.showShortToast(this, getString(R.string.sim_register_phone_tip));
 					return;
 				}
@@ -781,7 +782,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 				}
 				smsDetailAdapter.notifyDataSetChanged();*/
 				onRefresh();
-				smsDetailAdapter.setDeleteState(false);
+//				smsDetailAdapter.setDeleteState(false);
 				smsDetailAdapter.notifyDataSetChanged();
 			}
 		}

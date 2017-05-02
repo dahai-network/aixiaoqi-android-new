@@ -35,14 +35,15 @@ import de.blinkt.openvpn.views.TopProgressView;
  */
 
 public class BaseStatusFragment extends Fragment {
-    private int id;
-    protected    TopProgressView topProgressView;
-    protected  void setLayoutId(int id){
-        this.id=id;
-    }
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+	private int id;
+	protected TopProgressView topProgressView;
+	protected void setLayoutId(int id) {
+		this.id = id;
+	}
+
+	@Nullable
+	@Override
+	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(id,
                 container, false);
