@@ -84,7 +84,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="@dimen/padding_10dp"
             android:drawableTop="@drawable/key_board_selector"
             android:drawablePadding="10dp"
             android:gravity="center"
