@@ -135,7 +135,10 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 
 		ContactRecodeEntity phoneInfo = (ContactRecodeEntity) getIntent().getSerializableExtra(PHONE_INFO);
 		contactBean = (ContactBean) getIntent().getSerializableExtra("contactBean");
-		if (contactBean == null) {
+		if(phoneInfo!=null&&!TextUtils.isEmpty(phoneInfo.getName())){
+			isExist=true;
+		}
+		else if (contactBean == null) {
 			isContactExist(phoneInfo.getPhoneNumber());
 		} else {
 			isExist = true;

@@ -147,7 +147,7 @@ public class CallTimeOrderDetailActitivy extends BaseNetActivity   {
 				orderNumberTextView.setText(bean.getOrderNum());
 				orderTimeTextView.setText(DateUtils.getDateToString(bean.getOrderDate() * 1000));
 			} else {
-				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), object.getMsg());
+				CommonTools.showShortToast(this, object.getMsg());
 			}
 		}
 	}

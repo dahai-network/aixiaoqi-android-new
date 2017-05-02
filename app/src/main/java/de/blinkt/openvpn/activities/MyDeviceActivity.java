@@ -559,7 +559,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					switch (dataType) {
 						case Constant.SYSTEM_BASICE_INFO:
 							String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
-							firmwareTextView.setText(deviceVesion);
+							if (!TextUtils.isEmpty(deviceVesion))
+								firmwareTextView.setText(deviceVesion);
 							dismissProgress();
 							//不让无设备dialog弹出
 							if (noDevicedialog != null)

@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
@@ -43,10 +44,13 @@ import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 import com.aixiaoqi.socket.TestProvider;
 import com.umeng.analytics.MobclickAgent;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
@@ -95,6 +99,7 @@ import de.blinkt.openvpn.views.CustomViewPager;
 import de.blinkt.openvpn.views.MyRadioButton;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+
 import static cn.com.aixiaoqi.R.string.index_registing;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
@@ -415,22 +420,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		if (requestCode == REQUEST_ENABLE_BT) {
 			if (resultCode == Activity.RESULT_OK) {
 				CommonTools.showShortToast(this, "蓝牙已启动");
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						final BluetoothManager bluetoothManager =
-								(BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-						mBluetoothAdapter = bluetoothManager.getAdapter();
-						if (mBluetoothAdapter == null) {
-							return;
-						}
-						while (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED) {
-							connDeviceFiveSecond();
-							CommonTools.delayTime(RECONNECT_TIME);
-						}
-
-					}
-				}).start();
+				//连接操作
+				connectOperate();
 			} else {
 				EventBusUtil.changeConnectStatus(getString(R.string.index_blue_un_opne), R.drawable.index_blue_unpen);
 			}
@@ -456,6 +447,26 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				CommonTools.showShortToast(this, getString(R.string.no_location_tips));
 			}
 		}
+	}
+
+	//如果蓝牙开启后，之前已绑定的设备会重新连接上
+	private void connectOperate() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				final BluetoothManager bluetoothManager =
+						(BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+				mBluetoothAdapter = bluetoothManager.getAdapter();
+				if (mBluetoothAdapter == null) {
+					return;
+				}
+				while (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED) {
+					connDeviceFiveSecond();
+					CommonTools.delayTime(RECONNECT_TIME);
+				}
+
+			}
+		}).start();
 	}
 
 	private Handler stopHandler = null;
@@ -777,6 +788,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						if (mService != null && !mService.isOpenBlueTooth()) {
 							Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 							startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+						} else {
+							connectOperate();
 						}
 					} else {
 						EventBusUtil.changeConnectStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
@@ -871,7 +884,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				SharedUtils.getInstance().writeString(IntentPutKeyConstant.PAYMENT_OF_TERMS, basicConfigEntity.getPaymentOfTerms());
 			}
 		}
-
 	}
 
 

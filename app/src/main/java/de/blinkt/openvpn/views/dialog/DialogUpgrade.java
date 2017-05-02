@@ -63,27 +63,26 @@ public class DialogUpgrade extends DialogBase {
 		@Override
 		public void onDeviceConnecting(String deviceAddress) {
 			mProgressBar.setIndeterminate(true);
-			Log.e("DialogUpgrade", "onDeviceConnecting");
+
 			mTextPercentage.setText(R.string.dfu_status_connecting);
 		}
 
 		@Override
 		public void onDfuProcessStarting(String deviceAddress) {
 			mProgressBar.setIndeterminate(true);
-			Log.e("DialogUpgrade", "onDfuProcessStarting");
+
 			mTextPercentage.setText(R.string.dfu_status_starting);
 		}
 
 		@Override
 		public void onEnablingDfuMode(String deviceAddress) {
 			mProgressBar.setIndeterminate(true);
-			Log.e("DialogUpgrade", "onEnablingDfuMode");
+
 			mTextPercentage.setText(R.string.dfu_status_switching_to_dfu);
 		}
 
 		@Override
 		public void onFirmwareValidating(String deviceAddress) {
-			Log.e("DialogUpgrade", "onFirmwareValidating=" + deviceAddress);
 			mProgressBar.setIndeterminate(true);
 
 		}
@@ -91,7 +90,6 @@ public class DialogUpgrade extends DialogBase {
 		@Override
 		public void onDeviceDisconnecting(String deviceAddress) {
 			mProgressBar.setIndeterminate(true);
-			Log.e("DialogUpgrade", "onDeviceDisconnecting");
 			mTextPercentage.setText(R.string.dfu_status_disconnecting);
 		}
 
@@ -101,7 +99,6 @@ public class DialogUpgrade extends DialogBase {
 			//保存状态
 			SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE,true);
 			UIOperator(UIOperatorEntity.onCompelete);
-			Log.e("DialogUpgrade", "onDfuCompleted");
 			noUpgrade();
 			// let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
 			new Handler().postDelayed(new Runnable() {
@@ -118,9 +115,8 @@ public class DialogUpgrade extends DialogBase {
 		public void onDfuAborted(String deviceAddress) {
 			UIOperator(UIOperatorEntity.onError);
 			noUpgrade();
-			Log.e("DialogUpgrade", "onDfuAborted");
 			mTextPercentage.setText(R.string.dfu_status_aborted);
-			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), ICSOpenVPNApplication.getContext().getString(R.string.update_fail_retry));
+			CommonTools.showShortToast(context, ICSOpenVPNApplication.getContext().getString(R.string.update_fail_retry));
 			// let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
 			new Handler().postDelayed(new Runnable() {
 				@Override
@@ -138,11 +134,10 @@ public class DialogUpgrade extends DialogBase {
 		@Override
 		public void onProgressChanged(final String deviceAddress, final int percent, final float speed, final float avgSpeed, final int currentPart, final int partsTotal) {
 			mProgressBar.setIndeterminate(false);
-			Log.e("DialogUpgrade", "onProgressChanged");
 			mProgressBar.setProgress(percent);
 			mTextPercentage.setText(percent + "%");
 			if (percent == 100) {
-				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), ICSOpenVPNApplication.getContext().getString(R.string.dfu_status_completed));
+				CommonTools.showShortToast(context, ICSOpenVPNApplication.getContext().getString(R.string.dfu_status_completed));
 			}
 			if (partsTotal > 1)
 				mTextUploading.setText(context.getString(R.string.dfu_status_uploading_part, currentPart, partsTotal));
@@ -153,7 +148,6 @@ public class DialogUpgrade extends DialogBase {
 		@Override
 		public void onError(final String deviceAddress, final int error, final int errorType, final String message) {
 			UIOperator(UIOperatorEntity.onError);
-			Log.e("DialogUpgrade", "onError");
 			noUpgrade();
 			// We have to wait a bit before canceling notification. This is called before DfuService creates the last notification.
 			new Handler().postDelayed(new Runnable() {

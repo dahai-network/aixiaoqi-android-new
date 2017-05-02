@@ -165,7 +165,7 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
                         }
                     }
                 } else {
-                    CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), getResources().getString(R.string.null_verification));
+                    CommonTools.showShortToast(this, getResources().getString(R.string.null_verification));
                 }
                 break;
             case R.id.hindPswCheckBox:

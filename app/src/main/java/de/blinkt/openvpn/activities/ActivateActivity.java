@@ -134,7 +134,7 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
                     map.put("statue", 0 + "");
                     //友盟方法统计
                     MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
-                    CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活失败，请重试!");
+                    CommonTools.showShortToast(ActivateActivity.this, "激活失败，请重试!");
                 } else {
                     Constant.isOutsideSecondStepClick = false;
                     Constant.isOutsideThirdStepClick = false;

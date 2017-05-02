@@ -224,7 +224,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 						}
 						if (fms.size() > 0)
 							CreateHttpFactory.instanceHttp(SmsFragment.this, HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TELS, new Gson().toJson(new SmsIdsEntity(fms, null)));
-						CommonTools.showShortToast(getActivity(), "删除这些短信：" + new Gson().toJson(new SmsIdsEntity(fms, null)));
+//						CommonTools.showShortToast(getActivity(), "删除这些短信：" + new Gson().toJson(new SmsIdsEntity(fms, null)));
 					}
 				}
 				break;
@@ -341,7 +341,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 //				editSmsImageView.setBackground(getResources().getDrawable(R.drawable.edit_sms_selector));
 
 			} else {
-				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), object.getMsg());
+				CommonTools.showShortToast(getActivity(), object.getMsg());
 			}
 		}
 	}

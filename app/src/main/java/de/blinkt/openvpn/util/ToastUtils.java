@@ -38,6 +38,7 @@ public class ToastUtils {
 
     private ToastUtils(Context context) {
         mContext = context;
+        if(context instanceof  Activity){
         container = (ViewGroup) ((Activity) context)
                 .findViewById(android.R.id.content);
         mView = ((Activity) context).getLayoutInflater().inflate(
@@ -45,6 +46,7 @@ public class ToastUtils {
         mContainer = (LinearLayout) mView.findViewById(R.id.mbContainer);
         mContainer.setVisibility(View.GONE);
         mTextView = (TextView) mView.findViewById(R.id.mbMessage);
+        }
     }
 
     public static ToastUtils makeText(Context context, String message,

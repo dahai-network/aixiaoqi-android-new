@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
@@ -674,15 +675,15 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				map.put("statue", 1 + "");
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKACTIVECARD, map);
-				CommonTools.showShortToast(context, "激活成功！");
+				Toast.makeText(context, "激活成功！", Toast.LENGTH_SHORT).show();
 				orderStatus = 1;
 				Intent intent = new Intent();
 				intent.setAction(FINISH_ACTIVITY);
 				intent.setAction(MyOrderDetailActivity.FINISH_PROCESS);
 				LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 			} else {
-				CommonTools.showShortToast(ICSOpenVPNApplication.getContext()
-						, object.getMsg());
+				Toast.makeText(ICSOpenVPNApplication.getContext()
+						, object.getMsg(), Toast.LENGTH_SHORT).show();
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES) {
 			GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp = (GetDeviceSimRegStatuesHttp) object;
@@ -690,7 +691,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				if (!getDeviceSimRegStatuesHttp.getSimRegStatue().getRegStatus().equals("1")) {
 					connectGoip();
 				} else {
-					CommonTools.showShortToast(context, context.getString(R.string.tip_high_signal));
+					Toast.makeText(context, context.getString(R.string.tip_high_signal), Toast.LENGTH_SHORT).show();
 				}
 
 		}
@@ -699,7 +700,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		try {
-			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), errorMessage);
+			Toast.makeText(ICSOpenVPNApplication.getContext(), errorMessage, Toast.LENGTH_SHORT).show();
 			Log.i("test", "http.getMsg:" + errorMessage);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -729,7 +730,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	@Override
 	public void noNet() {
 		try {
-			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), context.getResources().getString(R.string.no_wifi));
+			Toast.makeText(ICSOpenVPNApplication.getContext(), context.getResources().getString(R.string.no_wifi), Toast.LENGTH_SHORT).show();
 			Intent intent = new Intent();
 			intent.setAction(MyOrderDetailActivity.FINISH_PROCESS_ONLY);
 			LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
