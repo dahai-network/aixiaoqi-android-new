@@ -254,12 +254,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
 	@Override
 	public void setRegisted(boolean isRegisted) {
-
-
 		if (isRegisted) {
 			signalIconImageView.setBackgroundResource(R.drawable.registed);
 			String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
-
 			if (operater != null) {
 				switch (operater) {
 
@@ -273,7 +270,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 					case Constant.CHINA_UNICOM:
 						operatorTextView.setText(getString(R.string.china_unicom));
 						break;
-
 				}
 			}
 		} else {
@@ -542,6 +538,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 			if (getString(R.string.index_un_insert_card).equals(bleStatus)) {
 				signalIconImageView.setBackgroundResource(R.drawable.unregist);
 				operatorTextView.setText("----");
+			}else if(getString(R.string.index_aixiaoqicard).equals(bleStatus))
+			{
+				operatorTextView.setText(getString(R.string.unitoy_card));
 			}
 		}
 	}
