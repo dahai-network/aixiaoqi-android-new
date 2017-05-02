@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="@color/gray_back_2"
+    android:background="@color/gray_back"
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -100,6 +100,7 @@
         android:id="@+id/tip_record_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/index_gray_text"
         android:paddingLeft="@dimen/padding_15dp"
         android:layout_marginTop="@dimen/padding_10dp"
         android:layout_marginBottom="@dimen/padding_10dp"
