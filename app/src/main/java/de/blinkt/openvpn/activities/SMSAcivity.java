@@ -346,9 +346,19 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 				titleBar.setTextTitle(smsEntity.getRealName());
 			} else {
 				if (User.isCurrentUser(smsEntity.getFm())) {
-					titleBar.setTextTitle(smsEntity.getTo().split(",")[0]);
+					String [] array=smsEntity.getTo().split(",");
+					if(array.length>1)
+						titleBar.setTextTitle(smsEntity.getTo().split(",")[0]+"...");
+					else{
+						titleBar.setTextTitle(smsEntity.getTo().split(",")[0]);
+					}
 				} else {
-					titleBar.setTextTitle(smsEntity.getFm().split(",")[0]);
+					String [] array=smsEntity.getFm().split(",");
+					if(array.length>1)
+						titleBar.setTextTitle(smsEntity.getFm().split(",")[0]+"...");
+					else{
+						titleBar.setTextTitle(smsEntity.getFm().split(",")[0]);
+					}
 				}
 			}
 			titleBar.setRightBtnText(R.string.detail_info);
@@ -422,7 +432,6 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 				smsDetailEntity.setStatus(SEND_PROGRESSING);
 				String phoneNumbertemp;
 				if (smsEntity != null) {
-
 					if (User.isCurrentUser(smsEntity.getFm())) {
 						phoneNumbertemp = smsEntity.getTo();
 					} else {
@@ -689,10 +698,11 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	@Override
 	public void dialogText(int type, String text) {
 		SmsDetailEntity smsDetailEntity = list.get(position);
+		smsDetailAdapter.remove(position);
+		smsDetailEntity.setStatus(SEND_PROGRESSING);
+		smsDetailAdapter.add(position, smsDetailEntity);
 		if (!TextUtils.isEmpty(smsDetailEntity.getSMSID())) {
-			smsDetailAdapter.remove(position);
-			smsDetailEntity.setStatus(SEND_PROGRESSING);
-			smsDetailAdapter.add(position, smsDetailEntity);
+
 			sendOnceSmsHttp(smsDetailEntity.getSMSID());
 		} else {
 			String phoneNumber;
@@ -701,6 +711,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 			} else {
 				phoneNumber = smsDetailEntity.getFm();
 			}
+
 			sendSmsHttp(phoneNumber, smsDetailEntity.getSMSContent());
 		}
 	}

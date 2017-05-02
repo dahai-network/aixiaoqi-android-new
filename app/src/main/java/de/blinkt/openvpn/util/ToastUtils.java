@@ -46,7 +46,6 @@ public class ToastUtils {
         mContainer = (LinearLayout) mView.findViewById(R.id.mbContainer);
         mContainer.setVisibility(View.GONE);
         mTextView = (TextView) mView.findViewById(R.id.mbMessage);
-
         }
     }
 

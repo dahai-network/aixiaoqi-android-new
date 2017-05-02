@@ -34,7 +34,6 @@ public class SmsDetailAdapter extends RecyclerBaseAdapter<RecyclerView.ViewHolde
 		SmsDetailEntity smsDetailEntity = mList.get(position);
 		smsDetailEntity.setPosition(position);
 		if (holder instanceof RightViewHolder) {
-
 			((RightViewHolder) holder).rightSmsTv.setText(smsDetailEntity.getSMSContent());
 			((RightViewHolder) holder).showTimeTv.setText(DateUtils.getTimeStampDetailString(smsDetailEntity.getSMSTime()));
 			((RightViewHolder) holder).deleteSmsDetailCheckBox.setChecked(smsDetailEntity.isCheck());
