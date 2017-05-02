@@ -236,8 +236,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							}
 						}
 						Log.e("Blue_Chanl", "dataType：" + dataType);
-
-
 						switch (firstPackage) {
 							case "55":
 								switch (dataType) {

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.PhoneAuthonCountEntity;
 import de.blinkt.openvpn.constant.Constant;
@@ -24,7 +25,6 @@ public class ShadeActivity extends Activity {
     ImageView iv_03;
     ImageView hand;
     LinearLayout ll_root;
-
 
 
     @Override
@@ -311,12 +311,11 @@ public class ShadeActivity extends Activity {
                         setResourceThree(true, null, 0);
                         break;
                     case 3:
-
-                        oppo_test1 = getResources().getString(R.string.oppo_test_3_1);
-                        oppo_test2 = getResources().getString(R.string.oppo_test_3_2);
-                        setResourceOne(true, oppo_test1, R.drawable.oppo_image_1_1);
-                        setResourceTwo(false, oppo_test2, R.drawable.oppo_image_1_2);
-                        setResourceThree(true, null, 0);
+                            oppo_test1 = getResources().getString(R.string.oppo_test_3_1);
+                            oppo_test2 = getResources().getString(R.string.oppo_test_3_2);
+                            setResourceOne(true, oppo_test1, R.drawable.oppo_image_1_1);
+                            setResourceTwo(false, oppo_test2, R.drawable.oppo_image_1_2);
+                            setResourceThree(true, null, 0);
 
                         break;
 
@@ -363,6 +362,7 @@ public class ShadeActivity extends Activity {
 
         }
     }
+
 
 
     /**
