@@ -32,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
@@ -44,13 +43,10 @@ import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 import com.aixiaoqi.socket.TestProvider;
 import com.umeng.analytics.MobclickAgent;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
@@ -99,7 +95,6 @@ import de.blinkt.openvpn.views.CustomViewPager;
 import de.blinkt.openvpn.views.MyRadioButton;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
-
 import static cn.com.aixiaoqi.R.string.index_registing;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;

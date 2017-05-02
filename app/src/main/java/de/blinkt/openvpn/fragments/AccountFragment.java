@@ -273,16 +273,12 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				}
 			}
 		} else {
-			String state = SharedUtils.getInstance().readString(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
 
 			if (signalIconImageView != null)
 				signalIconImageView.setBackgroundResource(R.drawable.unregist);
 
-
 			if (operatorTextView != null) {
-				if (state.equalsIgnoreCase(getResources().getString(R.string.unitoy_card)))
-					operatorTextView.setText(R.string.unitoy_card);
-				else
+
 					operatorTextView.setText("----");
 			}
 		}
