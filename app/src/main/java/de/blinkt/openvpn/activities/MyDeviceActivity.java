@@ -1060,7 +1060,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	public void setConStatus(String conStatus) {
-		Log.i("aixiaoqi__", "状态：" + conStatus);
 		conStatusTextView.setText(conStatus);
 
 		conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));

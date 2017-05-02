@@ -8,7 +8,9 @@ import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
@@ -22,7 +24,6 @@ import de.blinkt.openvpn.util.IntentWrapper;
 
 public class ImportantAuthorityActivity extends BaseActivity {
 
-    private static final String TAG = "aixiaoqi__";
     @BindView(R.id.authorityRecyclerView)
     RecyclerView authorityRecyclerView;
 
@@ -62,11 +63,12 @@ public class ImportantAuthorityActivity extends BaseActivity {
         shadeIntent = new Intent(this, ShadeActivity.class);
 
         String phoneType = Build.MANUFACTURER.toLowerCase();
-        Log.d(TAG, "phoneType: " + phoneType);
+
+        Log.d("setPhoneTypeEntity", "phoneType: " + phoneType);
+
         switch (phoneType) {
             case Constant.LEMOBILE:
                 if (version > 18) {
-
                     appPertectSet(entity);
                     Intent letvIntent = new Intent();
                     letvIntent.setComponent(new ComponentName("com.letv.android.letvsafe", "com.letv.android.letvsafe.AutobootManageActivity"));
@@ -124,6 +126,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     Intent netWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     dataSave(netWorkIntent, data);
                 }
+
                 break;
             case Constant.ONEPLUS:
                 wifiSet(entity);
@@ -194,7 +197,6 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     oppoIntent.setComponent(new ComponentName("com.coloros.oppoguardelf", "com.coloros.powermanager.fuelgaue.PowerUsageModelActivity"));
                     dataSave(oppoIntent, data);
 
-
                     OpenSystemSuspendWindow(entity);
                     Intent oppoOpenSysIntent = new Intent();
                     oppoOpenSysIntent.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.sysfloatwindow.FloatWindowListActivity"));
@@ -208,11 +210,11 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     dataSave(oppoIntent, data);
                 }
 
-
-                wifiSet(entity);
-                Intent vivoNetWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                dataSave(vivoNetWorkIntent, data);
-
+                if (!(version == 22)) {
+                    wifiSet(entity);
+                    Intent vivoNetWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    dataSave(vivoNetWorkIntent, data);
+                }
                 break;
             //小米
             case Constant.XIAOMI:
@@ -232,10 +234,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
                 wifiSet(entity);
                 Intent xiaomiNetWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                 dataSave(xiaomiNetWorkIntent, data);
-
                 break;
-
-
         }
     }
 
@@ -249,15 +248,9 @@ public class ImportantAuthorityActivity extends BaseActivity {
                 entity.setintentEntity(new IntentEntity(intent, shadeIntent));
                 data.add(new AuthorityEntity(entity));
             } catch (Exception e) {
-
-
             }
-
-
         }
-
     }
-
 
     private void appPertectSet(AuthorityEntity entity) {
         entity.setTitle(Constant.APP_PERTECT);

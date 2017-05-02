@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/gray_back"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_back"
     tools:context="de.blinkt.openvpn.activities.ImportantAuthorityActivity">
 
     <TextView
@@ -13,16 +12,14 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/padding_20dp"
-        android:text="@string/authority_tip"
-        />
+        android:text="@string/authority_tip" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/authorityRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/authorityTipTextView"
-        android:layout_marginTop="@dimen/padding_20dp"
-        >
+        android:layout_marginTop="@dimen/padding_20dp">
 
     </android.support.v7.widget.RecyclerView>
 </RelativeLayout>
