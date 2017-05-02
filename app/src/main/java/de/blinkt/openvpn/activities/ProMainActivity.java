@@ -181,7 +181,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 			}
 			LocalBroadcastManager.getInstance(ProMainActivity.this).sendBroadcast(intent);
-
 		}
 	};
 	//位置权限提示DIALOG
@@ -203,6 +202,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				d("Unable to initialize Bluetooth");
 				finish();
 			}
+			initBrocast();
 		}
 
 		public void onServiceDisconnected(ComponentName classname) {
@@ -222,7 +222,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		initView();
 		addListener();
 		setListener();
-		initBrocast();
 		initServices();
 		initSet();
 		socketUdpConnection = new SocketConnection();
@@ -312,6 +311,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			try {
 				bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
 			} catch (Exception e) {
+				initBrocast();
 				e.printStackTrace();
 			}
 		}
@@ -779,8 +779,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							}
 							accountFragment.setSummarized(typeText, null, false);
 						}
-						Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+						if (mService != null && !mService.isOpenBlueTooth()) {
+							Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+							startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+						}
 					} else {
 						EventBusUtil.changeConnectStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
 //						setTipsOnNoBind();

@@ -336,9 +336,9 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TELS) {
 
 			if (object.getStatus() == 1) {
-				smsListAdapter.setDeleteImage(false);
+//				smsListAdapter.setDeleteImage(false);
 				onRefresh();
-				editSmsImageView.setBackground(getResources().getDrawable(R.drawable.edit_sms_selector));
+//				editSmsImageView.setBackground(getResources().getDrawable(R.drawable.edit_sms_selector));
 
 			} else {
 				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), object.getMsg());

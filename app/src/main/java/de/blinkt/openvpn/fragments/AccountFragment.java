@@ -535,11 +535,10 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	public void setBleStatus(String bleStatus) {
 		this.bleStatus = bleStatus;
 		if (isAdded()) {
-			if (getString(R.string.index_un_insert_card).equals(bleStatus)) {
+			if (getString(R.string.index_un_insert_card).equals(bleStatus) || getString(R.string.index_unconnect).equals(bleStatus)) {
 				signalIconImageView.setBackgroundResource(R.drawable.unregist);
 				operatorTextView.setText("----");
-			}else if(getString(R.string.index_aixiaoqicard).equals(bleStatus))
-			{
+			} else if (getString(R.string.index_aixiaoqicard).equals(bleStatus)) {
 				operatorTextView.setText(getString(R.string.unitoy_card));
 			}
 		}

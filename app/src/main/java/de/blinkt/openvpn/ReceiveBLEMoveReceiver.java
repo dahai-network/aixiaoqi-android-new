@@ -373,6 +373,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 													break;
 												case "04":
 													Log.i(TAG, "爱小器卡！");
+													SharedUtils.getInstance().delete(Constant.OPERATER);
 													EventBusUtil.changeConnectStatus(context.getString(R.string.index_aixiaoqicard), R.drawable.index_no_signal);
 													break;
 											}
@@ -675,7 +676,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				map.put("statue", 1 + "");
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKACTIVECARD, map);
-				CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), "激活成功！");
+				CommonTools.showShortToast(context, "激活成功！");
 				orderStatus = 1;
 				Intent intent = new Intent();
 				intent.setAction(FINISH_ACTIVITY);
