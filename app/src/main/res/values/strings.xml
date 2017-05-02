@@ -640,4 +640,6 @@
     <string name="no_location_tips">未打开位置服务，将无法搜索手环</string>
     <string name="legitimate_tips">您的手环不是正版手环，请勿购买！</string>
     <string name="start_permission">立即解决</string>
+    <string name="black_add_success">屏蔽成功！</string>
+    <string name="black_remove_success">解除屏蔽！</string>
 </resources>

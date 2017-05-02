@@ -135,10 +135,10 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 
 		ContactRecodeEntity phoneInfo = (ContactRecodeEntity) getIntent().getSerializableExtra(PHONE_INFO);
 		contactBean = (ContactBean) getIntent().getSerializableExtra("contactBean");
-		 if (phoneInfo != null) {
+		if (phoneInfo != null) {
 			isContactExist(phoneInfo.getPhoneNumber());
-		} else if(contactBean!=null){
-			 isContactExist(contactBean.getPhoneNum());
+		} else if (contactBean != null) {
+			isContactExist(contactBean.getPhoneNum());
 		}
 		if (contactBean == null && phoneInfo != null) {
 			contactBean = new ContactBean();
@@ -301,19 +301,22 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 				}
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_BLACK_LIST_ADD) {
-			CommonTools.showShortToast(this, object.getMsg());
 			if (object.getStatus() == 1) {
+				CommonTools.showShortToast(this, getString(R.string.black_add_success));
 				isBlackList = !isBlackList;
 				blackListDBHelp.insertOneDefriend(contactBean.getPhoneNum());
 				setBlackList();
+			} else {
+				CommonTools.showShortToast(this, object.getMsg());
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_BLACK_LIST_DELETE) {
-			CommonTools.showShortToast(this, object.getMsg());
 			if (object.getStatus() == 1) {
-
+				CommonTools.showShortToast(this, getString(R.string.black_remove_success));
 				isBlackList = !isBlackList;
 				setBlackList();
 				blackListDBHelp.deleteDefriend(contactBean.getPhoneNum());
+			} else {
+				CommonTools.showShortToast(this, object.getMsg());
 			}
 		}
 	}
@@ -324,7 +327,6 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 			blackListDBHelp.close();
 		super.onDestroy();
 	}
-
 
 
 	@Override

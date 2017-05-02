@@ -276,10 +276,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										SharedUtils.getInstance().writeInt(Constant.BRACELETTYPEINT, DeviceType);
 										SharedUtils.getInstance().writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(14, 16), 16));
 										SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, deviceVesion);
-
-										if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-											Log.i(TAG, "进入版本号:" + deviceVesion);
-										}
 										break;
 
 									case Constant.RETURN_POWER:
