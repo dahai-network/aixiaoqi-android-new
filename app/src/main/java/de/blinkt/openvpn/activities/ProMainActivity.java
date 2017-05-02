@@ -77,6 +77,7 @@ import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.BasicConfigEntity;
+import de.blinkt.openvpn.model.CanClickEntity;
 import de.blinkt.openvpn.model.CancelCallService;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.IsHavePacketEntity;
@@ -475,7 +476,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					public void run() {
 						scanLeDevice(false);
 						if (mService != null && !mService.isConnectedBlueTooth()) {
-							EventBusUtil.changeConnectStatus(StateChangeEntity.JUMP_ACTIVITY, 0);
+							EventBusUtil.canClickEntity(CanClickEntity.JUMP_MYDEVICE);
 //							topProgressView.showTopProgressView(getString(R.string.un_connect_tip), -1, new View.OnClickListener() {
 //								@Override
 //								public void onClick(View v) {

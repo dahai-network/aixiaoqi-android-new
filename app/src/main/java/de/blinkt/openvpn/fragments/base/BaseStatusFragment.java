@@ -21,6 +21,7 @@ import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.model.CanClickEntity;
 import de.blinkt.openvpn.model.ShowDeviceEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StateChangeEntity;
@@ -72,7 +73,16 @@ public class BaseStatusFragment extends Fragment {
                     setRegisted(false);
                 }
                 break;
-            case StateChangeEntity.JUMP_ACTIVITY:
+        }
+
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void canClickEntity(CanClickEntity entity) {
+        switch (entity.getJumpTo()) {
+
+            case CanClickEntity.JUMP_MYDEVICE:
                 topProgressView.showTopProgressView(getString(R.string.un_connect_tip), -1, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -84,14 +94,13 @@ public class BaseStatusFragment extends Fragment {
                                     ICSOpenVPNApplication.bleStatusEntity.getStatus());
                             startActivity(intent);
                         }
-
-
                     }
                 });
                 break;
         }
 
     }
+
     public   void topProgressGone() {
         topProgressView.setVisibility(View.GONE);
         topProgressView.setProgress(0);
