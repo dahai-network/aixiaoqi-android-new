@@ -59,6 +59,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		Log.d(TAG, "onCreate: CallPhoneService");
 		httpToken();
 	}
 

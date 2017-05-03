@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.WebSettings;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.widget.CustomWebViewLayout;

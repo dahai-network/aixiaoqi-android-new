@@ -517,7 +517,7 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 		};
 		mWebView.setWebViewClient(mWebViewClient);
 	}
-
+	int fontSize = 1;
 	@SuppressLint({"SetJavaScriptEnabled", "ResourceAsColor"})
 	private void webViewAddJS() {
 		WebSettings webSettings = mWebView.getSettings();
@@ -542,5 +542,6 @@ public class CustomWebViewLayout extends LinearLayout implements OnClickListener
 		webSettings.setNeedInitialFocus(false);
 		webSettings.setLoadsImagesAutomatically(true);
 		webSettings.setDomStorageEnabled(true);
+		//webSettings.setTextSize(WebSettings.TextSize.LARGEST);
 	}
 }
