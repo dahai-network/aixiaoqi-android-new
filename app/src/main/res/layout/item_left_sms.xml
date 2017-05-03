@@ -16,6 +16,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/show_time_tv"
+        android:gravity="center_vertical"
+        android:text="@string/aboard_how_to_use"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="@dimen/padding_50dp"
         android:layout_marginTop="@dimen/padding_10dp"

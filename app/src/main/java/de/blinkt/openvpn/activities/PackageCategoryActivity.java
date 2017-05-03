@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -109,42 +110,57 @@ public class PackageCategoryActivity extends BaseActivity {
 
         for (int i = 0; i < count; i++) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mItemWidth, LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams paramstext = new LinearLayout.LayoutParams(mItemWidth, 0);
+            LinearLayout.LayoutParams paramsImage = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            paramstext.weight=1;
             params.leftMargin = 5;
             params.rightMargin = 5;
+            LinearLayout linearLayout=new LinearLayout(this);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.setLayoutParams(params);
+            linearLayout.setGravity(Gravity.CENTER);
             TextView columnTextView = new TextView(this);
+            ImageView imageView = new ImageView(this);
+            imageView.setLayoutParams(paramsImage);
+            imageView.setVisibility(View.INVISIBLE);
+            imageView.setImageResource(R.drawable.image_slidethetriangle);
             columnTextView.setTextAppearance(this, R.style.top_category_scroll_view_item_text);
-            if (drawable == null) {
-                drawable = getResources().getDrawable(R.drawable.image_slidethetriangle);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth()/2, drawable.getMinimumHeight()/2);
-            }
+//            if (drawable == null) {
+//                drawable = getResources().getDrawable(R.drawable.image_slidethetriangle);
+//                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//            }
             columnTextView.setGravity(Gravity.CENTER);
-//            columnTextView.setPadding(105, 45, 15, 0);
-            columnTextView.setLayoutParams(params);
-            columnTextView.setId(i);
+            columnTextView.setLayoutParams(paramstext);
+            linearLayout.setId(i);
             columnTextView.setText(userChannelList.get(i));
             if (columnSelectIndex == i) {
-                columnTextView.setSelected(true);
-                columnTextView.setCompoundDrawables(null, null, null, drawable);
+                imageView.setVisibility(View.VISIBLE);
             }
-            columnTextView.setOnClickListener(new View.OnClickListener() {
+            linearLayout.addView(columnTextView);
+            linearLayout.addView(imageView);
+            linearLayout.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     for (int i = 0; i < mRadioGroupContent.getChildCount(); i++) {
-                        TextView localView = (TextView) mRadioGroupContent.getChildAt(i);
+                        LinearLayout localView = (LinearLayout) mRadioGroupContent.getChildAt(i);
                         if (localView != v) {
                             localView.setSelected(false);
-                            localView.setCompoundDrawables(null, null, null, null);
+                            if(localView.getChildAt(1) instanceof ImageView){
+                                localView.getChildAt(1).setVisibility(View.INVISIBLE);
+                            }
                         } else {
                             localView.setSelected(true);
                             mViewPager.setCurrentItem(i);
-                            localView.setCompoundDrawables(null, null, null, drawable);
+                            if(localView.getChildAt(1) instanceof ImageView){
+                                localView.getChildAt(1).setVisibility(View.VISIBLE);
+                            }
                         }
                     }
 
                 }
             });
-            mRadioGroupContent.addView(columnTextView, i, params);
+            mRadioGroupContent.addView(linearLayout, i, params);
         }
     }
 
@@ -155,15 +171,20 @@ public class PackageCategoryActivity extends BaseActivity {
         columnSelectIndex = tab_postion;
         //判断是否选中
         for (int j = 0; j < mRadioGroupContent.getChildCount(); j++) {
-            TextView checkView = (TextView) mRadioGroupContent.getChildAt(j);
+            LinearLayout checkView = (LinearLayout) mRadioGroupContent.getChildAt(j);
             boolean ischeck;
             if (j == tab_postion) {
                 ischeck = true;
-                checkView.setCompoundDrawables(null, null, null, drawable);
-
+//                checkView.setCompoundDrawables(null, null, null, drawable);
+                if(checkView.getChildAt(1) instanceof ImageView){
+                    checkView.getChildAt(1).setVisibility(View.VISIBLE);
+                }
             } else {
                 ischeck = false;
-                checkView.setCompoundDrawables(null, null, null, null);
+                if(checkView.getChildAt(1) instanceof ImageView){
+                    checkView.getChildAt(1).setVisibility(View.INVISIBLE);
+                }
+//                checkView.setCompoundDrawables(null, null, null, null);
             }
             checkView.setSelected(ischeck);
         }
