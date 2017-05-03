@@ -40,7 +40,7 @@ public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 		}
 	}
 
-	private  boolean hasWiFi(){
+	protected   boolean hasWiFi(){
 		if(!NetworkUtils.isNetworkAvailable(this)){
 			dismissProgress();
 			CommonTools.showShortToast(mContext, getString(R.string.no_wifi));
