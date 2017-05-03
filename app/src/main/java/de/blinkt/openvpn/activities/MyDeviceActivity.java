@@ -271,7 +271,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
 		String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
-		if (mService != null && !mService.isConnectedBlueTooth() && !mService.isConnecttingBlueTooth() && !TextUtils.isEmpty(macStr)) {
+		boolean isConnectBlueTooth = mService.isConnectedBlueTooth();
+		boolean isConnectintBlueTooth = mService.isConnecttingBlueTooth();
+		if (mService != null && !isConnectBlueTooth && !isConnectintBlueTooth && !TextUtils.isEmpty(macStr)) {
 			retryTime = 0;
 			ReceiveBLEMoveReceiver.retryTime = 0;
 			mService.connect(macStr);
@@ -1062,10 +1064,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			statusDrawable = R.drawable.index_no_signal;
 		} else if (status.equals(getString(R.string.index_high_signal))) {
 			statusDrawable = R.drawable.index_high_signal;
+		} else if (status.equals(getString(R.string.index_blue_un_opne))) {
+			statusDrawable = R.drawable.index_blue_unpen;
+			status = getString(R.string.index_connecting);
 		}
-//		else if (status.equals(getString(R.string.index_blue_un_opne))) {
-//			statusDrawable = R.drawable.index_blue_unpen;
-//		}
 		EventBusUtil.changeConnectStatus(status, statusDrawable);
 	}
 
