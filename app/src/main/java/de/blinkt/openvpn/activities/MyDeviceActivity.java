@@ -199,8 +199,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(braceletname)) {
 				if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
+					//手环固件
 					DeviceType = 0;
 				} else {
+					//钥匙扣固件
 					DeviceType = 1;
 				}
 			}
@@ -269,7 +271,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
 		String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
-		if (retryTime >= 20 && mService != null && !mService.isConnectedBlueTooth() && !mService.isConnecttingBlueTooth() && !TextUtils.isEmpty(macStr)) {
+		if (mService != null && !mService.isConnectedBlueTooth() && !mService.isConnecttingBlueTooth() && !TextUtils.isEmpty(macStr)) {
 			retryTime = 0;
 			ReceiveBLEMoveReceiver.retryTime = 0;
 			mService.connect(macStr);
@@ -790,8 +792,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		//不能按返回键，只能二选其一
 
 		DialogTipUpgrade upgrade = new DialogTipUpgrade(this, this, R.layout.dialog_tip_upgrade, DOWNLOAD_SKY_UPGRADE);
-
-		upgrade.changeText(desc);
+		String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+		if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
+			upgrade.changeText(getString(R.string.dfu_upgrade), desc);
+		} else {
+			upgrade.changeText(getString(R.string.dfu_unibox_upgrade), desc);
+		}
 	}
 
 
@@ -1056,15 +1062,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			statusDrawable = R.drawable.index_no_signal;
 		} else if (status.equals(getString(R.string.index_high_signal))) {
 			statusDrawable = R.drawable.index_high_signal;
-		} else if (status.equals(getString(R.string.index_blue_un_opne))) {
-			statusDrawable = R.drawable.index_blue_unpen;
 		}
+//		else if (status.equals(getString(R.string.index_blue_un_opne))) {
+//			statusDrawable = R.drawable.index_blue_unpen;
+//		}
 		EventBusUtil.changeConnectStatus(status, statusDrawable);
 	}
 
 	public void setConStatus(String conStatus) {
 		conStatusTextView.setText(conStatus);
-
 		conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 		if (conStatus.equals(getString(R.string.index_connecting))) {
 			percentTextView.setVisibility(GONE);
@@ -1075,10 +1081,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			stopAnim();
 			//重新上电清空
 			SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
-		} else if (conStatus.equals(getString(R.string.index_no_signal))) {
-			percentTextView.setText("0%");
-			registerSimStatu.setVisibility(View.VISIBLE);
-			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_regist_fail))) {
 			percentTextView.setVisibility(GONE);
 			percentTextView.setVisibility(GONE);
@@ -1105,6 +1107,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			percentTextView.setVisibility(GONE);
 			percentInt = 0;
 			stopAnim();
+		} else if (conStatus.equals(getString(R.string.index_no_signal))) {
+			percentTextView.setText("0%");
+			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
+			registerSimStatu.setVisibility(View.VISIBLE);
+			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
 			percentTextView.setVisibility(GONE);
 			percentTextView.setVisibility(GONE);
