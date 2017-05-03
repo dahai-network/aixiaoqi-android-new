@@ -467,8 +467,6 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 									CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
 								}
 							});
-						} else {
-							ICSOpenVPNApplication.getInstance().finishOtherActivity();
 						}
 					}
 				}).start();

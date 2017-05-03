@@ -270,14 +270,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 
 		//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
-		String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
 		boolean isConnectBlueTooth = mService.isConnectedBlueTooth();
-		boolean isConnectintBlueTooth = mService.isConnecttingBlueTooth();
-		if (mService != null && !isConnectBlueTooth && !isConnectintBlueTooth && !TextUtils.isEmpty(macStr)) {
-			retryTime = 0;
-			ReceiveBLEMoveReceiver.retryTime = 0;
-			mService.connect(macStr);
-			Log.i(TAG, "重连重新触发");
+		if (!isConnectBlueTooth) {
+			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 		}
 	}
 
@@ -298,12 +294,20 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		switch (requestCode) {
 			case REQUEST_ENABLE_BT:
 				if (resultCode == Activity.RESULT_OK) {
-					String deviceAddress = SharedUtils.getInstance().readString(Constant.IMEI);
-					if (!TextUtils.isEmpty(deviceAddress)) {
-						connDevice(deviceAddress);
-					} else {
-						clickFindBracelet();
+					String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
+					boolean isConnectintBlueTooth = mService.isConnecttingBlueTooth();
+					if (mService != null && !isConnectintBlueTooth && !TextUtils.isEmpty(macStr)) {
+						retryTime = 0;
+						ReceiveBLEMoveReceiver.retryTime = 0;
+						mService.connect(macStr);
+						Log.i(TAG, "重连重新触发");
 					}
+//					String deviceAddress = SharedUtils.getInstance().readString(Constant.IMEI);
+//					if (!TextUtils.isEmpty(deviceAddress)) {
+//						connDevice(deviceAddress);
+//					} else {
+//						clickFindBracelet();
+//					}
 				} else {
 					Log.d(TAG, "蓝牙未打开");
 					finish();
@@ -362,7 +366,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					startAnim();
 					//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
 					String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
-					if (mService != null && !mService.isConnectedBlueTooth() && !mService.isConnecttingBlueTooth() && !TextUtils.isEmpty(macStr)) {
+					if (mService != null && !mService.isConnectedBlueTooth() && !TextUtils.isEmpty(macStr)) {
 						retryTime = 0;
 						ReceiveBLEMoveReceiver.retryTime = 0;
 						mService.connect(macStr);
@@ -523,6 +527,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					});
 					connectThread.start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
+					percentTextView.setVisibility(GONE);
 					//多次重连无效后关闭蓝牙重启
 //					if (retryTime == 6) {
 //						mBtAdapter.disable();
@@ -1117,6 +1122,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
 			percentTextView.setVisibility(GONE);
 			percentTextView.setVisibility(GONE);
+		}
+		//蓝牙未开的时候提示未连接，诱导用户点击刷新
+		else if (conStatus.equals(getString(R.string.index_blue_un_opne))) {
+			conStatusTextView.setText(getString(R.string.index_unconnect));
 		}
 	}
 

@@ -129,12 +129,11 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
                 showDialog();
             } else if (TextUtils.equals(intent.getAction(), MyOrderDetailActivity.FINISH_PROCESS)) {
                 if (ReceiveBLEMoveReceiver.orderStatus == 4) {
-
                     HashMap<String, String> map = new HashMap<>();
                     map.put("statue", 0 + "");
                     //友盟方法统计
                     MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
-                    CommonTools.showShortToast(ActivateActivity.this, "激活失败，请重试!");
+                    CommonTools.showShortToast(ActivateActivity.this, getString(R.string.activate_fail));
                 } else {
                     Constant.isOutsideSecondStepClick = false;
                     Constant.isOutsideThirdStepClick = false;
