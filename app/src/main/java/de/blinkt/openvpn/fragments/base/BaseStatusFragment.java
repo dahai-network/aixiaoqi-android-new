@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
 
 import org.greenrobot.eventbus.EventBus;
@@ -67,6 +68,9 @@ public class BaseStatusFragment extends Fragment {
                 if (entity.isopen() && getString(R.string.no_wifi).equals(topProgressView.getContent())) {
                     if (checkNetWorkAndBlueIsOpen()) {
                         topProgressView.setVisibility(View.GONE);
+                        if(ICSOpenVPNApplication.the_sipengineReceive==null){
+                            EventBusUtil.getTokenRes();
+                        }
                     }
                 } else {
                     topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);

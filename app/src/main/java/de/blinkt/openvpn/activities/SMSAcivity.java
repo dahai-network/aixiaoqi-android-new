@@ -660,6 +660,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	@Override
 	public void onItemClick(View view, Object data, boolean isCheck) {
 		SmsDetailEntity smsEntity = (SmsDetailEntity) data;
+
 		if (isCheck) {
 			ids.add(smsEntity);
 		} else {
@@ -735,7 +736,6 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 					smsDetailAdapter.addTopAll(smsDetailEntityList);
 				}
 			} else {
-
 				CommonTools.showShortToast(this, smsDetailHttp.getMsg());
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_SEND_SMS_MESSAGE) {
@@ -764,28 +764,39 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 			smsDetailAdapter.add(position, smsDetailEntity);
 		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE) {
 			if (object.getStatus() == 1) {
-				if (smsDetailAdapter.getItemCount() != 1) {
-					smsDetailAdapter.remove(position);
-					smsDetailAdapter.notifyDataSetChanged();
-				} else {
+//				if (smsDetailAdapter.getItemCount() != 1) {
+				smsDetailAdapter.remove(position);
+				smsDetailAdapter.notifyDataSetChanged();
+//				} else {
+				if(smsDetailAdapter.getItemCount()==0){
+					Intent msgIntent = new Intent(SmsFragment.DELTE_MESSAGE);
+					sendBroadcast(msgIntent);
+					finish();
+				}
+//				}
+			}
+		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS) {
+			if (object.getStatus() == 1) {
+				Iterator<SmsDetailEntity> iter
+						= ids.iterator();
+				List<Integer> positions=new ArrayList<>();
+				while (iter.hasNext()) {
+					int pisition=	iter.next().getPosition();
+					positions.add(pisition);
+				}
+				ids.clear();
+				Collections.sort(positions);
+				for(int i=positions.size()-1;i>=0;i--)
+					smsDetailAdapter.remove(positions.get(i));
+				}
+				smsDetailAdapter.notifyDataSetChanged();
+				if(smsDetailAdapter.getItemCount()==0){
 					Intent msgIntent = new Intent(SmsFragment.DELTE_MESSAGE);
 					sendBroadcast(msgIntent);
 					finish();
 				}
 			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS) {
-			if (object.getStatus() == 1) {
-			/*	Iterator<SmsDetailEntity> iter
-						= ids.iterator();
-				while (iter.hasNext()) {
-					smsDetailAdapter.remove(iter.next().getPosition());
-				}
-				smsDetailAdapter.notifyDataSetChanged();*/
-				onRefresh();
-//				smsDetailAdapter.setDeleteState(false);
-				smsDetailAdapter.notifyDataSetChanged();
-			}
-		}
+
 	}
 
 	@Override

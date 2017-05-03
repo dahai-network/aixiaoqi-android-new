@@ -10,6 +10,10 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,6 +33,8 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.SecurityConfigHttp;
+import de.blinkt.openvpn.model.GetTokenRes;
+import de.blinkt.openvpn.model.ShowDeviceEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.PublicEncoderTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -59,6 +65,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		EventBus.getDefault().register(this);
 		Log.d(TAG, "onCreate: CallPhoneService");
 		httpToken();
 	}
@@ -230,10 +237,14 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 		intent.setAction(reportFlag);
 		sendBroadcast(intent);
 	}
-
+	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
+	public void getToken(GetTokenRes entity) {
+		httpToken();
+	}
 	@Override
 	public void onDestroy() {
 		Log.e(TAG,"onDestroy");
+		EventBus.getDefault().unregister(this);
 		if (ICSOpenVPNApplication.the_sipengineReceive != null)
 			ICSOpenVPNApplication.the_sipengineReceive.DeRegisterSipAccount();
 		ICSOpenVPNApplication.the_sipengineReceive = null;
@@ -287,10 +298,7 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 
 	@Override
 	public void noNet() {
-		if (count == 0)
 			CommonTools.showShortToast(getApplicationContext(), getString(R.string.no_wifi));
-		count++;
-		httpToken();
 	}
 
 	/**
