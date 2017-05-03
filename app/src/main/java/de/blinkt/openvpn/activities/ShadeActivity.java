@@ -226,8 +226,6 @@ public class ShadeActivity extends Activity {
                         break;
 
                 }
-
-
                 break;
             case Constant.GIONEE:
                 String gionee_s1;
@@ -318,12 +316,8 @@ public class ShadeActivity extends Activity {
                             setResourceThree(true, null, 0);
 
                         break;
-
-
                 }
-
                 break;
-
             case Constant.XIAOMI:
                 String xiaomi_s1;
                 String xiaomi_s2;
