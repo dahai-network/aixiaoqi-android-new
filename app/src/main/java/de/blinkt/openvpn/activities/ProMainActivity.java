@@ -783,8 +783,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							} else {
 								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
 								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-							}
-							accountFragment.setSummarized(typeText, null, false);
+							}							accountFragment.setSummarized(typeText, null, false);
+
 						}
 						if (mService != null && !mService.isOpenBlueTooth()) {
 							Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
