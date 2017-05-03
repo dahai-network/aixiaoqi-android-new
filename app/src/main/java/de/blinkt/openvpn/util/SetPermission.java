@@ -113,14 +113,10 @@ public class SetPermission {
      */
     private void goCoolpadMainager(){
         doStartApplicationWithPackageName("com.yulong.android.security:remote");
-      /*  Intent openQQ = getPackageManager().getLaunchIntentForPackage("com.yulong.android.security:remote");
-        startActivity(openQQ);*/
     }
     //vivo
     private void goVivoMainager(){
         doStartApplicationWithPackageName("com.bairenkeji.icaller");
-     /*   Intent openQQ = getPackageManager().getLaunchIntentForPackage("com.vivo.securedaemonservice");
-        startActivity(openQQ);*/
     }
 
     private void doStartApplicationWithPackageName(String packagename) {
@@ -142,10 +138,6 @@ public class SetPermission {
         // 通过getPackageManager()的queryIntentActivities方法遍历
         List<ResolveInfo> resolveinfoList = context.getPackageManager()
                 .queryIntentActivities(resolveIntent, 0);
-        Log.i("MainActivity","resolveinfoList"+resolveinfoList.size());
-        for (int i = 0; i < resolveinfoList.size(); i++) {
-            Log.i("MainActivity",resolveinfoList.get(i).activityInfo.packageName+resolveinfoList.get(i).activityInfo.name);
-        }
         ResolveInfo resolveinfo = resolveinfoList.iterator().next();
         if (resolveinfo != null) {
             // packagename = 参数packname
