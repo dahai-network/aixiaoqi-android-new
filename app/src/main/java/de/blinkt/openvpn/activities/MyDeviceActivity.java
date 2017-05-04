@@ -800,7 +800,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		DialogTipUpgrade upgrade = new DialogTipUpgrade(this, this, R.layout.dialog_tip_upgrade, DOWNLOAD_SKY_UPGRADE);
 		String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-		if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
+		if (braceletname != null && braceletname.contains(MyDeviceActivity.UNITOYS)) {
 			upgrade.changeText(getString(R.string.dfu_upgrade), desc);
 		} else {
 			upgrade.changeText(getString(R.string.dfu_unibox_upgrade), desc);

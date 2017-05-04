@@ -141,8 +141,10 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 							runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
-									CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.bind_error));
-									stopTextView.performClick();
+									if (mService != null && !mService.isConnectedBlueTooth()) {
+										CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.bind_error));
+										stopTextView.performClick();
+									}
 								}
 							});
 						}

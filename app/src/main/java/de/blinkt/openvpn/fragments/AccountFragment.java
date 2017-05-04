@@ -507,6 +507,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
 					if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
 						mHandler.sendEmptyMessage(5);
+						SharedUtils.getInstance().writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI());
 						deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
 					} else {
 						mHandler.sendEmptyMessage(6);

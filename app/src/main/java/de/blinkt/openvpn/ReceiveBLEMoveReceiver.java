@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.ActivateActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
@@ -264,7 +265,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										int DeviceType = 0;
 										String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 										if (!TextUtils.isEmpty(braceletname)) {
-
 											if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
 												DeviceType = 0;
 											} else {
@@ -615,7 +615,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 
 	private void activationLocalCompletedHttp() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ORDER_ACTIVATION_LOCAL_COMPLETED, MyOrderDetailActivity.OrderID);
+		if (MyOrderDetailActivity.OrderID != null) {
+			CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ORDER_ACTIVATION_LOCAL_COMPLETED, MyOrderDetailActivity.OrderID);
+		} else {
+			CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ORDER_ACTIVATION_LOCAL_COMPLETED, ActivateActivity.orderId);
+		}
 	}
 
 	/**

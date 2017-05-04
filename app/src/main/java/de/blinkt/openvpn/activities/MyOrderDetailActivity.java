@@ -216,7 +216,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 						dateTitleTextView.setVisibility(GONE);
 						dateTextView.setVisibility(GONE);
 					} else {
-						if (getIntent().getIntExtra("PackageCategory", -1) != 0) {
+						if (getIntent().getIntExtra("PackageCategory", -1) != 0 && !isActivateSuccess) {
 							showBuySucceedDialog();
 						}
 					}
