@@ -78,12 +78,13 @@ public class SetPermission {
     }
     private void goMeizuMainager(){
         try {
-            Intent intent=new Intent("com.meizu.safe.security.SHOW_APPSEC");
+            Intent intent=new Intent("com.meizu.safe.security");
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             intent.putExtra("packageName", "xiang.settingpression");
             context.startActivity(intent);
         } catch (ActivityNotFoundException localActivityNotFoundException) {
             localActivityNotFoundException.printStackTrace();
+            Log.e("goMeizuMainager","localActivityNotFoundException.printStackTrace()");
             goIntentSetting();
         }
     }

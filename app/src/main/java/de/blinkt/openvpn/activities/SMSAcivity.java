@@ -57,6 +57,7 @@ import de.blinkt.openvpn.model.SmsDetailEntity;
 import de.blinkt.openvpn.model.SmsEntity;
 import de.blinkt.openvpn.model.SmsIdsEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.User;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
@@ -274,14 +275,9 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 		deleteSmsImageView.setOnClickListener(this);
 		cancelSmsImageView.setOnClickListener(this);
 		NoNetRelativeLayout.setOnClickListener(this);
-		smsContentEt.addTextChangedListener(new TextWatcher() {
+		new ExditTextWatcher(smsContentEt,R.id.sms_content_et){
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			public void textChanged(CharSequence s, int id) {
 				if (TextUtils.isEmpty(s)) {
 					sendSmsTv.setTextColor(getResources().getColor(R.color.readed));
 				} else {
@@ -290,12 +286,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 					sendSmsTv.setTextColor(getResources().getColor(R.color.select_contacct));
 				}
 			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-
-			}
-		});
+		};
 
 		editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override

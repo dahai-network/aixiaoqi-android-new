@@ -100,23 +100,18 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     Intent meizuGodIntent = new Intent();
                     meizuGodIntent.setComponent(new ComponentName("com.meizu.safe", "com.meizu.safe.SecurityCenterActivity"));
                     dataSave(meizuGodIntent, data);
-
-
                     //自启动
                     autoRunSet(entity);
                     Intent meizuIntent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
                     meizuIntent.addCategory(Intent.CATEGORY_DEFAULT);
                     meizuIntent.putExtra("packageName", ICSOpenVPNApplication.getInstance().getPackageName());
                     dataSave(meizuIntent, data);
-
-
                     wifiSet(entity);
                     Intent netWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     dataSave(netWorkIntent, data);
                 }
                 break;
             case Constant.SAMSUNG:
-
                 if (version > 18) {
                     autoRunSet(entity);
                     Intent samsungLIntent = ICSOpenVPNApplication.getInstance().getPackageManager().getLaunchIntentForPackage("com.samsung.android.sm");
