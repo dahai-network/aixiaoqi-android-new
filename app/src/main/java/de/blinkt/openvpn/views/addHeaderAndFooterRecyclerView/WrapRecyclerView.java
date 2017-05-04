@@ -10,6 +10,8 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.blinkt.openvpn.views.FullyRecylerView;
+
 /**
  * 版权所有：XXX有限公司
  *
@@ -21,7 +23,7 @@ import java.util.List;
  * 注:如果您修改了本类请填写以下内容作为记录，如非本人操作劳烦通知，谢谢！！！
  * @author mender，Modified Date Modify Content:
  */
-public class WrapRecyclerView extends RecyclerView {
+public class WrapRecyclerView extends FullyRecylerView {
 
     private WrapAdapter mWrapAdapter;
     private boolean shouldAdjustSpanSize;
