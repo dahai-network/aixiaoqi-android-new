@@ -89,6 +89,7 @@ public class CommonTools {
 		long timeD = time - lastClickTime;
 		Log.i("timetest", "time:" + time + ",timeD:" + timeD);
 		if (0 < timeD && timeD < maxTime) {
+			lastClickTime = time;
 			return true;
 		}
 		lastClickTime = time;

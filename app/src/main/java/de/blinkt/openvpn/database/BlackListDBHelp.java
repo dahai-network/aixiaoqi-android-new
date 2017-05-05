@@ -68,7 +68,6 @@ public class BlackListDBHelp {
         if (mCursor != null&&mCursor.moveToFirst()){
             isBlackList=true;
         }
-
-        return  isBlackList;
+        return isBlackList;
     }
 }

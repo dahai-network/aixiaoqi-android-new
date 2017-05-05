@@ -415,6 +415,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	Fragment_Phone phoneFragment;
 
+
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);

@@ -42,6 +42,7 @@ import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.model.SmsEntity;
 import de.blinkt.openvpn.model.SmsIdsEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.User;
 import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
 
@@ -181,6 +182,9 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 
 	@Override
 	public void onRefresh() {
+		if(!NetworkUtils.isNetworkAvailable(getActivity())){
+			return;
+		}
 		mRecyclerView.canMoreLoading();
 		pageNumber = 1;
 		smsListHttp();
@@ -233,6 +237,9 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 
 	@Override
 	public void onLoadMore() {
+		if(!NetworkUtils.isNetworkAvailable(getActivity())){
+			return;
+		}
 		pageNumber = pageNumber + 1;
 		smsListHttp();
 	}
@@ -353,10 +360,12 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 
 	@Override
 	public void noNet() {
-		if (requestNetCount == 1) {
-			NoNetRelativeLayout.setVisibility(View.VISIBLE);
-		} else {
-			CommonTools.showShortToast(getActivity(), getString(R.string.no_wifi));
+		if(isAdded()){
+			if (requestNetCount == 1) {
+				NoNetRelativeLayout.setVisibility(View.VISIBLE);
+			} else {
+				CommonTools.showShortToast(getActivity(), getString(R.string.no_wifi));
+			}
 		}
 	}
 }

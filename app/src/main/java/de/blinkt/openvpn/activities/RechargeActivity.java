@@ -48,6 +48,7 @@ import de.blinkt.openvpn.model.PayResult;
 import de.blinkt.openvpn.model.RechargeEntity;
 import de.blinkt.openvpn.model.WeiXinResultEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.OrderInfoUtil2_0;
 import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.RadioGroup;
@@ -134,12 +135,9 @@ public class RechargeActivity extends BaseNetActivity implements InterfaceCallba
 
 	private void initSet() {
 		hasLeftViewTitle(R.string.recharge, 0);
-
-		amountEditText.addTextChangedListener(new TextWatcher() {
-
+		new ExditTextWatcher(amountEditText,R.id.amountEditText){
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-									  int count) {
+			public void textChanged(CharSequence s, int id) {
 				if (s.toString().contains(".")) {
 					if (s.length() - 1 - s.toString().indexOf(".") > 2) {
 						s = s.toString().subSequence(0,
@@ -181,20 +179,7 @@ public class RechargeActivity extends BaseNetActivity implements InterfaceCallba
 					moneyAmount = Float.valueOf(s.toString());
 				}
 			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-										  int after) {
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
+		};
 		moneyRadioGroup.setOnCheckedChangeListener(this);
 
 	}

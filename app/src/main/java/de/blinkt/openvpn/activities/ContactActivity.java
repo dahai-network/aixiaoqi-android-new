@@ -29,6 +29,7 @@ import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ContactBean;
+import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.SetPermission;
 import de.blinkt.openvpn.util.pinyin.CharacterParser;
 import de.blinkt.openvpn.views.contact.SideBar;
@@ -105,14 +106,9 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
     }
 
     private void setSearchLinstener() {
-        searchEditText.addTextChangedListener(new TextWatcher() {
+        new ExditTextWatcher(searchEditText,R.id.searchEditText){
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void textChanged(CharSequence s, int id) {
                 if (!TextUtils.isEmpty(s)) {
 
                     selectContactAdapter.addAll(search(s.toString()));
@@ -120,12 +116,8 @@ public class ContactActivity  extends BaseActivity implements RecyclerBaseAdapte
                     selectContactAdapter.addAll(mAllLists);
                 }
             }
+        };
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
     }
 
 

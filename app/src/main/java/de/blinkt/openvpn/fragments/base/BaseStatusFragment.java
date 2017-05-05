@@ -18,14 +18,12 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.CanClickEntity;
 import de.blinkt.openvpn.model.ShowDeviceEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StateChangeEntity;
-import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TopProgressView;
@@ -62,12 +60,17 @@ public class BaseStatusFragment extends Fragment {
                     }
                 } else {
                     topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
+					//已连接的就断开连接
+					ICSOpenVPNApplication.uartService.disconnect();
                 }
                 break;
             case StateChangeEntity.NET_STATE:
                 if (entity.isopen() && getString(R.string.no_wifi).equals(topProgressView.getContent())) {
                     if (checkNetWorkAndBlueIsOpen()) {
                         topProgressView.setVisibility(View.GONE);
+                        if(ICSOpenVPNApplication.the_sipengineReceive==null){
+                            EventBusUtil.getTokenRes();
+                        }
                     }
                 } else {
                     topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);

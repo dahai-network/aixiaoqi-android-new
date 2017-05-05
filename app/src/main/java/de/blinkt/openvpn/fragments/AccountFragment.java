@@ -386,9 +386,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
 				break;
 			case R.id.permission_set:
-//				CommonTools.showShortToast(getActivity(), "产品信息: " + Build.MANUFACTURER + ","
-//						+ android.os.Build.VERSION.SDK + ","
-//						+ android.os.Build.VERSION.RELEASE);
 				intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
 				break;
 			case R.id.tv_setting:

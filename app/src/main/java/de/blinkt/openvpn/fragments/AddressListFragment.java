@@ -33,15 +33,19 @@ import de.blinkt.openvpn.activities.ContactDetailActivity;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.model.ContactBean;
+import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.SetPermission;
 import de.blinkt.openvpn.util.pinyin.CharacterParser;
 
 
+import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactHandler;
+import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
+import de.blinkt.openvpn.util.querylocaldatebase.QueryCompleteListener;
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.contact.SideBar;
 import de.blinkt.openvpn.views.contact.TouchableRecyclerView;
 
-public class AddressListFragment extends BaseStatusFragment implements ContactAdapter.CallLisener, ContactDetailActivity.ContactChangeDataListener {
+public class AddressListFragment extends BaseStatusFragment implements QueryCompleteListener<ContactBean>, ContactAdapter.CallLisener, ContactDetailActivity.ContactChangeDataListener {
 
 	private SideBar mSideBar;
 	private TextView mUserDialog;
@@ -54,14 +58,12 @@ public class AddressListFragment extends BaseStatusFragment implements ContactAd
 
 	List<ContactBean> mAllLists=new ArrayList<>();
 	private EditText searchEditText;
-//	private StickyRecyclerHeadersDecoration headersDecor;
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		setLayoutId(R.layout.fragment_selection_common);
-//		View rootView = inflater.inflate(R.layout.fragment_selection_common,
-//				container, false);
 		View rootView =super.onCreateView( inflater,  container,
 				 savedInstanceState);
 		initView(rootView);
@@ -96,29 +98,48 @@ public class AddressListFragment extends BaseStatusFragment implements ContactAd
 		});
 		// 实例化
 		mAdapter = new ContactAdapter(getActivity(), mAllLists, this);
-		mAllLists=ICSOpenVPNApplication.getInstance().getContactList();
-		if(mAllLists!=null&&mAllLists.size()!=0){
-			rl_no_permission.setVisibility(View.GONE);
-		}else{
-			rl_no_permission.setVisibility(View.VISIBLE);
-		}
-		mAdapter.addAll(mAllLists);
+
 		int orientation = LinearLayoutManager.VERTICAL;
 		final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), orientation, false);
 		mRecyclerView.setLayoutManager(layoutManager);
 		mRecyclerView.setAdapter(mAdapter);
 		setSearchLinstener();
 	}
+	private void searchContact() {
+		AsyncQueryContactHandler asyncQueryHandler = new AsyncQueryContactHandler(this, getActivity().getContentResolver());
+		FindContactUtil.queryContactData(asyncQueryHandler);
+	}
 
-	private void setSearchLinstener() {
-		searchEditText.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		if(isVisibleToUser){
+			mAllLists=ICSOpenVPNApplication.getInstance().getContactList();
+			if(mAllLists!=null&&mAllLists.size()!=0){
+				rl_no_permission.setVisibility(View.GONE);
+				mAdapter.addAll(mAllLists);
+			}else{
+				searchContact();
 			}
 
+		}
+	}
+
+	@Override
+	public void queryComplete(List<ContactBean> mAllLists) {
+		ICSOpenVPNApplication.getInstance().setmAllList(mAllLists);
+		if(mAllLists==null||mAllLists.size()==0){
+			rl_no_permission.setVisibility(View.VISIBLE);
+		}else{
+			rl_no_permission.setVisibility(View.GONE);
+			mAdapter.addAll(mAllLists);
+		}
+	}
+	private void setSearchLinstener() {
+
+		new ExditTextWatcher(searchEditText,R.id.searchEditText){
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			public void textChanged(CharSequence s, int id) {
 				if (!TextUtils.isEmpty(s.toString().trim())) {
 					mAdapter.addAll(search(s.toString().trim()));
 
@@ -128,12 +149,8 @@ public class AddressListFragment extends BaseStatusFragment implements ContactAd
 
 				}
 			}
+		};
 
-			@Override
-			public void afterTextChanged(Editable s) {
-
-			}
-		});
 		mSideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
 
 			@Override
