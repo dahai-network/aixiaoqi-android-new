@@ -114,7 +114,8 @@ public class ImportantAuthorityActivity extends BaseActivity {
             case Constant.SAMSUNG:
                 if (version > 18) {
                     autoRunSet(entity);
-                    Intent samsungLIntent = ICSOpenVPNApplication.getInstance().getPackageManager().getLaunchIntentForPackage("com.samsung.android.sm");
+                   Intent samsungLIntent = ICSOpenVPNApplication.getInstance().getPackageManager().getLaunchIntentForPackage("com.samsung.android.sm");
+                    // com.sec.android.app.capabilityma  flipboard.briefing.app
                     dataSave(samsungLIntent, data);
 
                     wifiSet(entity);
