@@ -44,6 +44,7 @@ public class LaunchActivity extends BaseActivity {
 		else if (!TextUtils.isEmpty(token)) {
 			if (System.currentTimeMillis() - sharedUtils.readLong(Constant.LOGIN_DATA) > (15*60 * 60 * 24 * 1000)){
 				toLogin();
+
 			}else{
 				toProMainActivity();
 			}
