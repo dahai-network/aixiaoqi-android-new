@@ -2,6 +2,7 @@ package de.blinkt.openvpn.util;
 
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.database.BlackListDBHelp;
 
 /**
@@ -18,7 +19,7 @@ public class User {
 		return phoneNumber.equals(sharedUtils.readString(Constant.USER_NAME));
 	}
 	public static boolean isBlackList(String phoneNumber) {
-	BlackListDBHelp blackListDBHelp=new BlackListDBHelp(ProMainActivity.instance);
+	BlackListDBHelp blackListDBHelp=new BlackListDBHelp(ICSOpenVPNApplication.getContext());
 		return blackListDBHelp.isBlackList(phoneNumber);
 	}
 
