@@ -376,6 +376,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 					status = R.string.index_registing;
 				} else if (getString(R.string.index_aixiaoqicard).equals(getBleStatus())) {
 					status = R.string.index_aixiaoqicard;
+				} else if (getString(R.string.index_regist_fail).equals(getBleStatus())) {
+					status = R.string.index_regist_fail;
 				}
 				String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 				//如果设备名没有就设置成爱小器钥匙扣
@@ -504,6 +506,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
 					if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
 						mHandler.sendEmptyMessage(5);
+						SharedUtils.getInstance().writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI());
 						deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
 					} else {
 						mHandler.sendEmptyMessage(6);

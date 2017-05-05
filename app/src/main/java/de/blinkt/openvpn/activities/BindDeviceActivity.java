@@ -125,7 +125,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		findDeviceHandler = new Handler();
 		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 		startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-
 	}
 
 	@Override
@@ -135,6 +134,21 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 				if (resultCode == Activity.RESULT_OK) {
 					setAnimation();
 					scanLeDevice(true);
+					//60秒后由于蓝牙不返回数据则自动退出
+					new Handler().postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									if (mService != null && !mService.isConnectedBlueTooth()) {
+										CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.bind_error));
+										stopTextView.performClick();
+									}
+								}
+							});
+						}
+					}, 60000);
 				} else {
 					Log.d(TAG, "蓝牙未打开");
 					finish();

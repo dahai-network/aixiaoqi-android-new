@@ -614,7 +614,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
 					phoneFragment.t9dialpadview.clearT9Input();
 				}
-				e("position="+position);
+
 				hidePhoneBottomBar();
 				switch (position) {
 					case 0:
@@ -624,6 +624,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						break;
 					case 1:
 						radiogroup.check(R.id.rb_phone);
+
 						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
 							//隐藏键盘，清理数据
 
@@ -642,9 +643,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						break;
 					case 2:
 						radiogroup.check(R.id.rb_address);
+						// MobclickAgent.onEvent(this, CLICKHOMECONTACT);
 						break;
 					case 3:
+//						topProgressView.setWhiteBack(true);
+//						topProgressView.invalidate();
 						radiogroup.check(R.id.rb_personal);
+						//  MobclickAgent.onEvent(this, CLICKHOMECONTACT);
 						break;
 
 
@@ -674,22 +679,20 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private class MyRadioGroupListener implements RadioGroup.OnCheckedChangeListener {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
-			int index=1;
 			switch (checkedId) {
 				case R.id.rb_index:
-					index =0;
+					mViewPager.setCurrentItem(0);
 					break;
 				case R.id.rb_phone:
-					index =1;
+					mViewPager.setCurrentItem(1);
 					break;
 				case R.id.rb_address:
-					index =2;
+					mViewPager.setCurrentItem(2);
 					break;
 				case R.id.rb_personal:
-					index =3;
+					mViewPager.setCurrentItem(3);
 					break;
 			}
-			mViewPager.setCurrentItem(index);
 		}
 	}
 
@@ -776,7 +779,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							} else {
 								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
 								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-							}							accountFragment.setSummarized(typeText, null, false);
+							}
+							accountFragment.setSummarized(typeText, null, false);
 
 						}
 						if (mService != null && !mService.isOpenBlueTooth()) {

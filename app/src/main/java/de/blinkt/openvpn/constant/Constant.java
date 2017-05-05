@@ -7,7 +7,7 @@ import android.os.Environment;
  */
 public class Constant {
 
-	public static final boolean IS_DEBUG = false;
+	public static final boolean IS_DEBUG = true;
 	public static final boolean PRINT_LOGS = true;
 	public static final String UNITOYS = "unitoys";
 	public static final String UNIBOX = "unibox";
@@ -90,7 +90,7 @@ public class Constant {
 	public static final String QQ_PUSH = "888003040004";//QQ推送到设备
 
 	public static final String APP_CONNECT = "88800a1400";//APP专属命令
-//	public static final String APP_CONNECT = "8880021400";//APP专属命令
+	//	public static final String APP_CONNECT = "8880021400";//APP专属命令
 	public static final String BIND_DEVICE = "8880020700";//绑定命令
 	public static final String BIND_SUCCESS = "888003080001";//绑定成功命令
 	public static final String BIND_FAIL = "888003080000";//绑定失败命令

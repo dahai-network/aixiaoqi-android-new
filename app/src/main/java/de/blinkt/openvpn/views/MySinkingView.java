@@ -97,7 +97,7 @@ public class MySinkingView extends FrameLayout {
 		path.reset();
 		canvas.clipPath(path);
 		path.addCircle(halfWidth, halfHeight, halfWidth, Path.Direction.CCW);
-		canvas.clipPath(path, Region.Op.REPLACE);
+		canvas.clipPath(path, Region.Op.UNION);
 
 		mPaint.setColor(ContextCompat.getColor(ICSOpenVPNApplication.getContext(), R.color.color_a4d9ff));
 		mPaint.setStyle(Style.FILL);

@@ -6,7 +6,6 @@
 package de.blinkt.openvpn.activities.Base;
 
 import android.app.ActionBar;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -68,6 +67,7 @@ public class BaseActivity extends CommenActivity {
             }
         });
     }
+
 
 	/**
 	 * @param titleId       标题id
