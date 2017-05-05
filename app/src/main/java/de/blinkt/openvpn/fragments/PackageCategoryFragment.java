@@ -16,7 +16,6 @@ import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.OrderAdapter;
 import cn.com.johnson.model.BoughtPackageEntity;
-import de.blinkt.openvpn.activities.MyPackageActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.BoughtPacketHttp;

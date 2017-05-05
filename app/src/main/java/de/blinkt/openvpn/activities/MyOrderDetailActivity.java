@@ -216,7 +216,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 						dateTitleTextView.setVisibility(GONE);
 						dateTextView.setVisibility(GONE);
 					} else {
-						if (getIntent().getIntExtra("PackageCategory", -1) != 0) {
+						if (getIntent().getIntExtra("PackageCategory", -1) != 0 && !isActivateSuccess) {
 							showBuySucceedDialog();
 						}
 					}
@@ -408,8 +408,8 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 				}
 				break;
 			case R.id.inland_reset:
-				Constant.isOutsideSecondStepClick=false;
-				Constant.isOutsideThirdStepClick=false;
+				Constant.isOutsideSecondStepClick = false;
+				Constant.isOutsideThirdStepClick = false;
 				toActivity(new Intent(this, OutsideFirstStepActivity.class)
 						.putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.AFTER_GOING_ABROAD)
 						.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G())
@@ -417,8 +417,8 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 				);
 				break;
 			case R.id.aboard_how_to_use:
-				Constant.isOutsideSecondStepClick=false;
-				Constant.isOutsideThirdStepClick=false;
+				Constant.isOutsideSecondStepClick = false;
+				Constant.isOutsideThirdStepClick = false;
 				toActivity(new Intent(this, OutsideFirstStepActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.OUTSIDE)
 						.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G())
 						.putExtra(IntentPutKeyConstant.APN_NAME, bean.getPackageApnName())
@@ -429,7 +429,9 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 	}
 
 	private void activatePackage() {
-		if (SharedUtils.getInstance().readString(Constant.OPERATER) != null) {
+		if (SharedUtils.getInstance().readString(Constant.OPERATER) != null
+				&& ICSOpenVPNApplication.uartService != null
+				&& ICSOpenVPNApplication.uartService.isConnectedBlueTooth()) {
 			showDialog();
 			return;
 		}
@@ -442,7 +444,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 				toActivity(new Intent(this, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt())
 						.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G())
 						.putExtra(IntentPutKeyConstant.COUNTRY_NAME, bean.getCountryName())
-						.putExtra(IntentPutKeyConstant.APN_NAME,bean.getPackageApnName())
+						.putExtra(IntentPutKeyConstant.APN_NAME, bean.getPackageApnName())
 				);
 			else {
 				IS_TEXT_SIM = false;
@@ -467,8 +469,6 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 									CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
 								}
 							});
-						} else {
-							ICSOpenVPNApplication.getInstance().finishOtherActivity();
 						}
 					}
 				}).start();

@@ -76,6 +76,7 @@ import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
 import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
+import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.Constant.SKY_UPGRADE_ORDER;
@@ -270,14 +271,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 
 		//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
-		String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
 		boolean isConnectBlueTooth = mService.isConnectedBlueTooth();
-		boolean isConnectintBlueTooth = mService.isConnecttingBlueTooth();
-		if (mService != null && !isConnectBlueTooth && !isConnectintBlueTooth && !TextUtils.isEmpty(macStr)) {
-			retryTime = 0;
-			ReceiveBLEMoveReceiver.retryTime = 0;
-			mService.connect(macStr);
-			Log.i(TAG, "重连重新触发");
+		if (!isConnectBlueTooth) {
+			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 		}
 	}
 
@@ -298,12 +295,20 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		switch (requestCode) {
 			case REQUEST_ENABLE_BT:
 				if (resultCode == Activity.RESULT_OK) {
-					String deviceAddress = SharedUtils.getInstance().readString(Constant.IMEI);
-					if (!TextUtils.isEmpty(deviceAddress)) {
-						connDevice(deviceAddress);
-					} else {
-						clickFindBracelet();
+					String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
+					boolean isConnectintBlueTooth = mService.isConnecttingBlueTooth();
+					if (mService != null && !isConnectintBlueTooth && !TextUtils.isEmpty(macStr)) {
+						retryTime = 0;
+						ReceiveBLEMoveReceiver.retryTime = 0;
+						mService.connect(macStr);
+						Log.i(TAG, "重连重新触发");
 					}
+//					String deviceAddress = SharedUtils.getInstance().readString(Constant.IMEI);
+//					if (!TextUtils.isEmpty(deviceAddress)) {
+//						connDevice(deviceAddress);
+//					} else {
+//						clickFindBracelet();
+//					}
 				} else {
 					Log.d(TAG, "蓝牙未打开");
 					finish();
@@ -355,6 +360,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					isGetnullCardid = true;
 					nullCardId = null;
 					percentInt = 0;
+					IS_TEXT_SIM = false;
 					//TODO 处理异常
 					//如没有没插卡检测插卡并且提示用户重启手环。
 					//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
@@ -362,7 +368,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					startAnim();
 					//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
 					String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
-					if (mService != null && !mService.isConnectedBlueTooth() && !mService.isConnecttingBlueTooth() && !TextUtils.isEmpty(macStr)) {
+					if (mService != null && !mService.isConnectedBlueTooth() && !TextUtils.isEmpty(macStr)) {
 						retryTime = 0;
 						ReceiveBLEMoveReceiver.retryTime = 0;
 						mService.connect(macStr);
@@ -523,6 +529,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					});
 					connectThread.start();
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
+					percentTextView.setVisibility(GONE);
 					//多次重连无效后关闭蓝牙重启
 //					if (retryTime == 6) {
 //						mBtAdapter.disable();
@@ -795,7 +802,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		DialogTipUpgrade upgrade = new DialogTipUpgrade(this, this, R.layout.dialog_tip_upgrade, DOWNLOAD_SKY_UPGRADE);
 		String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-		if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
+		if (braceletname != null && braceletname.contains(MyDeviceActivity.UNITOYS)) {
 			upgrade.changeText(getString(R.string.dfu_upgrade), desc);
 		} else {
 			upgrade.changeText(getString(R.string.dfu_unibox_upgrade), desc);
@@ -1117,6 +1124,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
 			percentTextView.setVisibility(GONE);
 			percentTextView.setVisibility(GONE);
+		}
+		//蓝牙未开的时候提示未连接，诱导用户点击刷新
+		else if (conStatus.equals(getString(R.string.index_blue_un_opne))) {
+			conStatusTextView.setText(getString(R.string.index_unconnect));
 		}
 	}
 

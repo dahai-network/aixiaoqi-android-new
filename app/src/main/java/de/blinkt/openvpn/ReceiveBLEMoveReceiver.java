@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.ActivateActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
@@ -264,7 +265,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										int DeviceType = 0;
 										String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 										if (!TextUtils.isEmpty(braceletname)) {
-
 											if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
 												DeviceType = 0;
 											} else {
@@ -520,10 +520,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							EventBus.getDefault().post(entity);
 							//获取完空卡序列号后获取步数
 							sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
-//							ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-//							entity.setStatus(context.getString(R.string.index_aixiaoqicard));
-//							entity.setStatusDrawableInt(R.drawable.index_no_signal);
-//							EventBus.getDefault().post(entity);
+							EventBusUtil.changeConnectStatus(context.getString(R.string.index_aixiaoqicard), R.drawable.index_no_signal);
 						}
 					}
 					//异常情况重新走一遍流程
@@ -536,8 +533,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 						isGetnullCardid = false;
 						return;
+					} else if (mStrSimCmdPacket.startsWith("ffffff")) {
+						registFlowPath();
 					}
-//					registFlowPath();
 				}
 //				//最后发送信息复位
 //				lastSendMessageStr = "";
@@ -615,7 +613,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 
 	private void activationLocalCompletedHttp() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ORDER_ACTIVATION_LOCAL_COMPLETED, MyOrderDetailActivity.OrderID);
+		if (MyOrderDetailActivity.OrderID != null) {
+			CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ORDER_ACTIVATION_LOCAL_COMPLETED, MyOrderDetailActivity.OrderID);
+		} else {
+			CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_ORDER_ACTIVATION_LOCAL_COMPLETED, ActivateActivity.orderId);
+		}
 	}
 
 	/**

@@ -704,16 +704,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
 		unregisterReceiver(screenoffReceive);
 		bleMoveReceiver = null;
-		//bottom_bar_linearLayout = null;
 		radiogroup = null;
 		screenoffReceive = null;
 		if (intentCallPhone != null)
 			stopService(intentCallPhone);
-		//关闭服务并设置为null
-//		if (isDfuServiceRunning()) {
-//			stopService(new Intent(this, DfuService.class));
-//		}
-
 		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
 			unbindService(socketUdpConnection);
 			if (SocketConnection.mReceiveDataframSocketService != null) {
@@ -785,7 +779,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 							} else {
 								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
 								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-							}							accountFragment.setSummarized(typeText, null, false);
+							}
+							accountFragment.setSummarized(typeText, null, false);
 
 						}
 						if (mService != null && !mService.isOpenBlueTooth()) {
