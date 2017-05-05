@@ -614,7 +614,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
 					phoneFragment.t9dialpadview.clearT9Input();
 				}
-
+				e("position="+position);
 				hidePhoneBottomBar();
 				switch (position) {
 					case 0:
@@ -624,7 +624,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						break;
 					case 1:
 						radiogroup.check(R.id.rb_phone);
-
 						if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
 							//隐藏键盘，清理数据
 
@@ -643,13 +642,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						break;
 					case 2:
 						radiogroup.check(R.id.rb_address);
-						// MobclickAgent.onEvent(this, CLICKHOMECONTACT);
 						break;
 					case 3:
-//						topProgressView.setWhiteBack(true);
-//						topProgressView.invalidate();
 						radiogroup.check(R.id.rb_personal);
-						//  MobclickAgent.onEvent(this, CLICKHOMECONTACT);
 						break;
 
 
@@ -679,20 +674,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private class MyRadioGroupListener implements RadioGroup.OnCheckedChangeListener {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			int index=1;
 			switch (checkedId) {
 				case R.id.rb_index:
-					mViewPager.setCurrentItem(0);
+					index =0;
 					break;
 				case R.id.rb_phone:
-					mViewPager.setCurrentItem(1);
+					index =1;
 					break;
 				case R.id.rb_address:
-					mViewPager.setCurrentItem(2);
+					index =2;
 					break;
 				case R.id.rb_personal:
-					mViewPager.setCurrentItem(3);
+					index =3;
 					break;
 			}
+			mViewPager.setCurrentItem(index);
 		}
 	}
 
