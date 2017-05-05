@@ -229,6 +229,7 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 	}
 
 	private void requestTimeHttp() {
+		if(hasWiFi())
 		createHttpRequest(HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME);
 	}
 
@@ -253,14 +254,18 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 				}
 				break;
 			case R.id.defriend_tv:
-				if (!NetworkUtils.isNetworkAvailable(this) && CommonTools.isFastDoubleClick(1000)) {
+				if ( CommonTools.isFastDoubleClick(1000)) {
+					e("defriend_tv");
 					return;
 				}
+
+				if(hasWiFi())
 				if (!isBlackList) {
+					e("isBlackList=="+isBlackList);
 					createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_ADD, contactBean.getPhoneNum());
 				} else {
+					e("isBlackList"+isBlackList);
 					createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_DELETE, contactBean.getPhoneNum());
-
 				}
 				break;
 		}

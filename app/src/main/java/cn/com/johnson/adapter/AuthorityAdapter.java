@@ -67,9 +67,6 @@ public class AuthorityAdapter extends RecyclerView.Adapter<AuthorityAdapter.Auth
         holder.rootRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//				CommonTools.showShortToast(context, "产品信息: " + android.os.Build.MODEL + ","
-//						+ android.os.Build.VERSION.SDK + ","
-//						+ android.os.Build.VERSION.RELEASE);
                 try {
                     context.startActivity(entity.getintentEntity().getAuthorityIntent());
                     new Handler().postDelayed(new Runnable() {

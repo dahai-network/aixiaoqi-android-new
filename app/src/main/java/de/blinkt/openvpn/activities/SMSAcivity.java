@@ -57,6 +57,7 @@ import de.blinkt.openvpn.model.SmsDetailEntity;
 import de.blinkt.openvpn.model.SmsEntity;
 import de.blinkt.openvpn.model.SmsIdsEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.User;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
@@ -274,14 +275,9 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 		deleteSmsImageView.setOnClickListener(this);
 		cancelSmsImageView.setOnClickListener(this);
 		NoNetRelativeLayout.setOnClickListener(this);
-		smsContentEt.addTextChangedListener(new TextWatcher() {
+		new ExditTextWatcher(smsContentEt,R.id.sms_content_et){
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			public void textChanged(CharSequence s, int id) {
 				if (TextUtils.isEmpty(s)) {
 					sendSmsTv.setTextColor(getResources().getColor(R.color.readed));
 				} else {
@@ -290,12 +286,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 					sendSmsTv.setTextColor(getResources().getColor(R.color.select_contacct));
 				}
 			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-
-			}
-		});
+		};
 
 		editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
@@ -660,6 +651,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 	@Override
 	public void onItemClick(View view, Object data, boolean isCheck) {
 		SmsDetailEntity smsEntity = (SmsDetailEntity) data;
+
 		if (isCheck) {
 			ids.add(smsEntity);
 		} else {
@@ -735,7 +727,6 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 					smsDetailAdapter.addTopAll(smsDetailEntityList);
 				}
 			} else {
-
 				CommonTools.showShortToast(this, smsDetailHttp.getMsg());
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_SEND_SMS_MESSAGE) {
@@ -764,28 +755,39 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 			smsDetailAdapter.add(position, smsDetailEntity);
 		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE) {
 			if (object.getStatus() == 1) {
-				if (smsDetailAdapter.getItemCount() != 1) {
-					smsDetailAdapter.remove(position);
-					smsDetailAdapter.notifyDataSetChanged();
-				} else {
+//				if (smsDetailAdapter.getItemCount() != 1) {
+				smsDetailAdapter.remove(position);
+				smsDetailAdapter.notifyDataSetChanged();
+//				} else {
+				if(smsDetailAdapter.getItemCount()==0){
+					Intent msgIntent = new Intent(SmsFragment.DELTE_MESSAGE);
+					sendBroadcast(msgIntent);
+					finish();
+				}
+//				}
+			}
+		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS) {
+			if (object.getStatus() == 1) {
+				Iterator<SmsDetailEntity> iter
+						= ids.iterator();
+				List<Integer> positions=new ArrayList<>();
+				while (iter.hasNext()) {
+					int pisition=	iter.next().getPosition();
+					positions.add(pisition);
+				}
+				ids.clear();
+				Collections.sort(positions);
+				for(int i=positions.size()-1;i>=0;i--)
+					smsDetailAdapter.remove(positions.get(i));
+				}
+				smsDetailAdapter.notifyDataSetChanged();
+				if(smsDetailAdapter.getItemCount()==0){
 					Intent msgIntent = new Intent(SmsFragment.DELTE_MESSAGE);
 					sendBroadcast(msgIntent);
 					finish();
 				}
 			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE_SMSS) {
-			if (object.getStatus() == 1) {
-			/*	Iterator<SmsDetailEntity> iter
-						= ids.iterator();
-				while (iter.hasNext()) {
-					smsDetailAdapter.remove(iter.next().getPosition());
-				}
-				smsDetailAdapter.notifyDataSetChanged();*/
-				onRefresh();
-//				smsDetailAdapter.setDeleteState(false);
-				smsDetailAdapter.notifyDataSetChanged();
-			}
-		}
+
 	}
 
 	@Override

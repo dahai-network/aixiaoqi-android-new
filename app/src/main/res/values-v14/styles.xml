@@ -19,4 +19,7 @@
 
 
     <style name="AppTheme" parent="AppBaseTheme"/>
+    <style name="launchTheme" parent="android:style/Theme.Black.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/launch_view</item>
+    </style>
 </resources>

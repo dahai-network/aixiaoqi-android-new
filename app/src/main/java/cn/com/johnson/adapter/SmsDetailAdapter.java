@@ -2,6 +2,7 @@ package cn.com.johnson.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,6 +111,7 @@ public class SmsDetailAdapter extends RecyclerBaseAdapter<RecyclerView.ViewHolde
 				//注意这里使用getTag方法获取数据
 				onItemLongAndResendClickListener.onResendClick(v, v.getTag());
 			} else {
+//				Log.e()
 				if (isDeleteState) {
 					//注意这里使用getTag方法获取数据
 					CheckBox check = (CheckBox) v.findViewById(R.id.deleteSmsDetailCheckBox);

@@ -15,41 +15,43 @@ import de.blinkt.openvpn.util.SharedUtils;
 public class LaunchActivity extends BaseActivity {
 
 
-	private SharedUtils sharedUtils;
+
 
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_launch);
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 		initSet();
+
 	}
 
 	private void initSet() {
 		//将注册流程的状态重置
+
 		SocketConstant.REGISTER_STATUE_CODE = 0;
-		Handler handler=new Handler();
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				sharedUtils = SharedUtils.getInstance();
-				String token = sharedUtils.readString(Constant.TOKEN);
-				if(!sharedUtils.readBoolean(IntentPutKeyConstant.IS_START_UP,false)){
-					toStartUpHomePage();
-				}
-				else if (!TextUtils.isEmpty(token)) {
-					if (System.currentTimeMillis() - sharedUtils.readLong(Constant.LOGIN_DATA) > (15*60 * 60 * 24 * 1000)){
-						toLogin();
-					}else{
-						toProMainActivity();
-					}
-				} else {
-					toLogin();
-				}
+		SharedUtils 	sharedUtils = SharedUtils.getInstance();
+		String token = sharedUtils.readString(Constant.TOKEN);
+		if(!sharedUtils.readBoolean(IntentPutKeyConstant.IS_START_UP,false)){
+			toStartUpHomePage();
+		}
+		else if (!TextUtils.isEmpty(token)) {
+			if (System.currentTimeMillis() - sharedUtils.readLong(Constant.LOGIN_DATA) > (15*60 * 60 * 24 * 1000)){
+				toLogin();
+			}else{
+				toProMainActivity();
 			}
-		},1000);
+		} else {
+			toLogin();
+		}
+
+
 
 
 	}
@@ -76,7 +78,6 @@ public class LaunchActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		sharedUtils=null;
 	}
 
 

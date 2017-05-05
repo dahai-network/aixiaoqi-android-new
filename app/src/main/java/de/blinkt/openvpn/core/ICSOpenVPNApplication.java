@@ -65,7 +65,9 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 		}
 		return mAllList;
 	}
-
+	public void setmAllList(List<ContactBean> mAllList){
+		this.mAllList=mAllList;
+	}
 
 	public static SipEngineCore the_sipengineReceive;
 
@@ -93,12 +95,7 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 			CrashHandler crashHandler = CrashHandler.getInstance();
 			crashHandler.init(getApplicationContext(), this);
 		}
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//
-//			}
-//		}).start();
+
 		initUpgrade();
 		EventBus.getDefault().register(this);
 		searchContact();

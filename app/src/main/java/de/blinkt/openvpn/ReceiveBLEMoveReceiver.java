@@ -520,10 +520,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							EventBus.getDefault().post(entity);
 							//获取完空卡序列号后获取步数
 							sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
-//							ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-//							entity.setStatus(context.getString(R.string.index_aixiaoqicard));
-//							entity.setStatusDrawableInt(R.drawable.index_no_signal);
-//							EventBus.getDefault().post(entity);
+							EventBusUtil.changeConnectStatus(context.getString(R.string.index_aixiaoqicard), R.drawable.index_no_signal);
 						}
 					}
 					//异常情况重新走一遍流程
@@ -536,8 +533,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 						isGetnullCardid = false;
 						return;
+					} else if (mStrSimCmdPacket.startsWith("ffffff")) {
+						registFlowPath();
 					}
-//					registFlowPath();
 				}
 //				//最后发送信息复位
 //				lastSendMessageStr = "";

@@ -5,6 +5,7 @@ import org.greenrobot.eventbus.EventBus;
 import de.blinkt.openvpn.model.CanClickEntity;
 import de.blinkt.openvpn.model.CancelCallService;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
+import de.blinkt.openvpn.model.GetTokenRes;
 import de.blinkt.openvpn.model.ShowDeviceEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StateChangeEntity;
@@ -46,6 +47,12 @@ public class EventBusUtil {
 
     public static void canClickEntity(String jumpTo ) {
         CanClickEntity entity = new CanClickEntity();
+        entity.setJumpTo(jumpTo);
+        EventBus.getDefault().post(entity);
+    }
+
+    public static void getTokenRes() {
+        GetTokenRes entity = new GetTokenRes();
         EventBus.getDefault().post(entity);
     }
 }

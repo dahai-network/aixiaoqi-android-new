@@ -100,6 +100,7 @@ import de.blinkt.openvpn.views.MyRadioButton;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
+import static cn.com.aixiaoqi.R.string.index_regist_fail;
 import static cn.com.aixiaoqi.R.string.index_registing;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
@@ -416,6 +417,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	Fragment_Phone phoneFragment;
+
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
@@ -993,12 +995,15 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				break;
 			case SocketConstant.REGISTER_FAIL:
 				CommonTools.showShortToast(this, getString(R.string.regist_fail));
+				EventBusUtil.changeConnectStatus(getString(index_regist_fail), R.drawable.index_no_signal);
 				break;
 			case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
 				CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
+				EventBusUtil.changeConnectStatus(getString(index_regist_fail), R.drawable.index_no_signal);
 				break;
 			case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
 				CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
+				EventBusUtil.changeConnectStatus(getString(index_regist_fail), R.drawable.index_no_signal);
 				break;
 			case SocketConstant.NOT_NETWORK:
 				CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
@@ -1010,7 +1015,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			case SocketConstant.TCP_DISCONNECT:
 				//更改为注册中
 				EventBusUtil.changeConnectStatus(getString(index_registing), R.drawable.index_no_signal);
-
 				break;
 			case SocketConstant.REGISTER_FAIL_INITIATIVE:
 				//更改为注册中

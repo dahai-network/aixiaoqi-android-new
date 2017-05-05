@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,34 +52,37 @@ public class BaseStatusFragment extends Fragment {
 		return rootView;
 	}
 
-	@Subscribe(threadMode = ThreadMode.MAIN)
-	public void receiveStateChangeEntity(StateChangeEntity entity) {
-		switch (entity.getStateType()) {
-			case StateChangeEntity.BLUETOOTH_STATE:
-				if (entity.isopen() && getString(R.string.bluetooth_unopen).equals(topProgressView.getContent())) {
-					if (checkNetWorkAndBlueIsOpen()) {
-						topProgressView.setVisibility(View.GONE);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveStateChangeEntity(StateChangeEntity entity) {
+        switch (entity.getStateType()) {
+            case StateChangeEntity.BLUETOOTH_STATE:
+                if (entity.isopen() && getString(R.string.bluetooth_unopen).equals(topProgressView.getContent())) {
+                    if (checkNetWorkAndBlueIsOpen()) {
+                        topProgressView.setVisibility(View.GONE);
 						//有蓝牙了重新连接
 						String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
 						if (!TextUtils.isEmpty(macStr) && ICSOpenVPNApplication.uartService != null) {
 							ICSOpenVPNApplication.uartService.connect(macStr);
 						}
+                    }
+                } else {
+                    topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
 					}
-				} else {
-					topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
-				}
-				break;
-			case StateChangeEntity.NET_STATE:
+                break;
+            case StateChangeEntity.NET_STATE:
 				if (entity.isopen() && getString(R.string.no_wifi).equals(topProgressView.getContent())) {
 					if (checkNetWorkAndBlueIsOpen()) {
 						topProgressView.setVisibility(View.GONE);
+						if(ICSOpenVPNApplication.the_sipengineReceive==null){
+							EventBusUtil.getTokenRes();
+						}
 					}
 				} else {
 					topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
 					setRegisted(false);
 				}
-				break;
-		}
+                break;
+        }
 
 	}
 

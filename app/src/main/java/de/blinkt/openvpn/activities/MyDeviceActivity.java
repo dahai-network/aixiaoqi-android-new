@@ -76,6 +76,7 @@ import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
 import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
+import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
 import static de.blinkt.openvpn.constant.Constant.SKY_UPGRADE_ORDER;
@@ -359,6 +360,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					isGetnullCardid = true;
 					nullCardId = null;
 					percentInt = 0;
+					IS_TEXT_SIM = false;
 					//TODO 处理异常
 					//如没有没插卡检测插卡并且提示用户重启手环。
 					//如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
