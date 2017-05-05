@@ -60,7 +60,6 @@ public class DefinedToast implements IToast {
 		mParams.setTitle("Toast");
 		mParams.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
 		                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
-		// 默认小米Toast在下方居中
 		mParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
 	}
 
