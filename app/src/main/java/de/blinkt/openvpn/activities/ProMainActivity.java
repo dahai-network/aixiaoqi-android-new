@@ -529,9 +529,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				break;
 			//拨打电话
 			case R.id.callImageView:
-				CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
-				ViewUtil.hideView(phoneFragment.t9dialpadview);
-				hidePhoneBottomBar();
+				//CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
+				//ViewUtil.hideView(phoneFragment.t9dialpadview);
+				//hidePhoneBottomBar();
 				if (phoneFragment != null) {
 					//友盟方法统计
 					MobclickAgent.onEvent(this, CLICKCALLPHONE);

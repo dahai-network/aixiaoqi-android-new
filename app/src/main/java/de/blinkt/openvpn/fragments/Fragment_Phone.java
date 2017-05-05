@@ -26,9 +26,12 @@ import android.widget.Button;
 import android.widget.Filter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.aixiaoqi.socket.SocketConstant;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.ContactRecodeAdapter;
 import cn.com.johnson.adapter.RecyclerBaseAdapter;
@@ -74,7 +77,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     public static T9TelephoneDialpadView t9dialpadview;
     public TextView dial_delete_btn;
     TextView tv_no_permission;
-    RelativeLayout   rl_no_permission;
+    RelativeLayout rl_no_permission;
     Button jump_permission;
     ContactRecodeAdapter contactRecodeAdapter;
     public SQLiteDatabase sqliteDB;
@@ -122,11 +125,9 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
                         REQUEST_CODE_ASK_PERMISSIONS);
                 return;
             }
-
             contactRecodeEntity = new ContactRecodeEntity();
             contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
             contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
-
             braceletDial();
             closedialClicked();
         } else {
@@ -143,6 +144,9 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
             return;
         }
         if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+            hidePhoneBottomBar();
+            ViewUtil.hideView(t9dialpadview);
+            CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
             //拨打电话
             simCellPhone();
         } else {
@@ -213,11 +217,10 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         });
 
     }
+
     /**
      * 跳转到权限设置界面
      */
-
-
 
 
     private void searchContactRedocer() {
@@ -513,6 +516,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         super.onResume();
         getFocus();
     }
+
 
     //主界面获取焦点
     private void getFocus() {
