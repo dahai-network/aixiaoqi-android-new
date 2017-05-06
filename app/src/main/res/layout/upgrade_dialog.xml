@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/padding">
+                android:paddingLeft="@dimen/padding_4dp">
                 <!-- 【必设】升级信息控件tag：beta_upgrade_info-->
                 <TextView
                     android:tag="beta_upgrade_info"

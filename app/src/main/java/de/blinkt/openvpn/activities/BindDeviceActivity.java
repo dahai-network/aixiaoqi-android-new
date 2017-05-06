@@ -87,6 +87,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	private String bluetoothName = Constant.UNITOYS;
 	private final int REQUEST_ENABLE_BT = 2;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -211,7 +212,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 
 	}
 
-	//谈对话框，没有搜索到设备
 	private void showDialog() {
 		//不能按返回键，只能二选其一
 		noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
@@ -258,7 +258,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 										return;
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
-									if (device.getName().contains(bluetoothName)) {
+									if (device.getName().contains(bluetoothName)) {//过滤只需要的设备
 										BluetoothModel model = new BluetoothModel();
 										model.setAddress(device.getAddress());
 										model.setDiviceName(device.getName());
@@ -314,7 +314,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		scanLeDevice(false);
 		mService.disconnect();
 		ICSOpenVPNApplication.isConnect = false;
-		isStartFindDeviceDelay = true;
 		utils.delete(Constant.IMEI);
 		utils.delete(Constant.BRACELETNAME);
 		finish();

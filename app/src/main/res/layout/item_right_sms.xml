@@ -29,7 +29,7 @@
             android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@+id/right_content_tv"
             android:layout_toStartOf="@+id/right_content_tv"
-            android:paddingRight="@dimen/padding"
+            android:paddingRight="@dimen/padding_4dp"
             android:src="@drawable/click_send_sms"/>
 
         <ProgressBar

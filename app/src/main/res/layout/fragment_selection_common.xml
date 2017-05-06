@@ -28,7 +28,7 @@
         android:layout_height="@dimen/padding_30dp"
         android:background="@drawable/search_et"
         android:drawableLeft="@drawable/connecter_search"
-        android:drawablePadding="@dimen/padding"
+        android:drawablePadding="@dimen/padding_4dp"
         android:singleLine="true"
         android:textSize="@dimen/little_12"
         android:hint="@string/search"
