@@ -189,18 +189,20 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		}
 	}
 
+	Runnable showdialogRun = new Runnable() {
+		@Override
+		public void run() {
+			if (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED && !isStartFindDeviceDelay) {
+				mBluetoothAdapter.stopLeScan(mLeScanCallback);
+				showDialog();
+			}
+		}
+	};
+
 	private void scanLeDevice(final boolean enable) {
 		if (enable) {
 			// Stops scanning after a pre-defined scan period.
-			mHandler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					if (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED && !isStartFindDeviceDelay) {
-						mBluetoothAdapter.stopLeScan(mLeScanCallback);
-						showDialog();
-					}
-				}
-			}, SCAN_PERIOD);
+			mHandler.postDelayed(showdialogRun, SCAN_PERIOD);
 
 			mBluetoothAdapter.startLeScan(mLeScanCallback);
 
@@ -234,6 +236,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	protected void onDestroy() {
 		super.onDestroy();
 		deviceSet.clear();
+		seekImageView.clearAnimation();
+		mHandler.removeCallbacks(showdialogRun);
 		EventBus.getDefault().unregister(this);
 	}
 
