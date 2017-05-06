@@ -76,6 +76,7 @@ import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
 import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
+import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
@@ -368,11 +369,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					startAnim();
 					//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
 					String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
+					String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
 					if (mService != null && !mService.isConnectedBlueTooth() && !TextUtils.isEmpty(macStr)) {
 						retryTime = 0;
 						ReceiveBLEMoveReceiver.retryTime = 0;
 						mService.connect(macStr);
 						Log.i(TAG, "重新连接");
+					} else if (operater == null) {
+						SendCommandToBluetooth.sendMessageToBlueTooth(ICCID_GET);
 					} else if (!conStatusTextView.getText().toString().equals(getString(R.string.index_high_signal)) || SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 0) {
 						SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER_NO_RESPONSE);
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 2) {
@@ -420,6 +424,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void connectGoip() {
 		if (ProMainActivity.sendYiZhengService != null) {
 			conStatusTextView.setText(getString(R.string.index_registing));
+			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 			sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
