@@ -707,37 +707,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				CommonTools.showShortToast(this, object.getMsg());
 				Log.i(TAG, object.getMsg());
 			}
-		}
-//		else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
-//			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
-//			//网络获取看有没有存储IMEI设备号,如果没有绑定过则去绑定流程
-//			if (getBindDeviceHttp.getStatus() == 1) {
-//				BlueToothDeviceEntity mBluetoothDevice = getBindDeviceHttp.getBlueToothDeviceEntityity();
-//				if (mBluetoothDevice != null) {
-//					if (!TextUtils.isEmpty(mBluetoothDevice.getVersion())) {
-//						firmwareTextView.setText(mBluetoothDevice.getVersion());
-//						SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
-//					} else {
-//						Log.i(TAG, "mBluetoothDevice.getVersion()为空");
-//					}
-//					if (!TextUtils.isEmpty(mBluetoothDevice.getIMEI())) {
-//						SharedUtils.getInstance().writeString(Constant.IMEI, mBluetoothDevice.getIMEI());
-//					} else {
-//						Log.i(TAG, "mBluetoothDevice.getIMEI()为空");
-//					}
-//					//statueTextView.setText(getString(R.string.blue_connecting));
-//					//statueTextView.setEnabled(false);
-////					unBindButton.setVisibility(View.VISIBLE);
-//					//当接口调用完毕后，扫描设备，打开状态栏
-////				scanLeDevice(true);
-//				}
-//				//如果有设备，则开启重连机制，重连需要该参数为true。
-//				ICSOpenVPNApplication.isConnect = true;
-//			}
-//			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-//		}
-		else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
+		} else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
 
 			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
 			SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());

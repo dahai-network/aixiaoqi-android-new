@@ -19,7 +19,7 @@ public class UpdateConnectInfoHttp extends BaseHttp {
 		super.BuildParams();
 		params.put("Version", valueParams[0]);
 		params.put("Power", valueParams[1]+"");
-		//params.put("DeviceType", valueParams[2]+"");
+		params.put("DeviceType", valueParams[2]+"");
 	}
 
 }

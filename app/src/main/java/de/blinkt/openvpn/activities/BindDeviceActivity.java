@@ -52,6 +52,7 @@ import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
+import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
 import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 
@@ -457,6 +458,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 //						CommonTools.delayTime(500);
 						//获取基本信息
 						sendMessageToBlueTooth(BASIC_MESSAGE);
+						CommonTools.delayTime(200);
+						sendMessageToBlueTooth(ICCID_GET);
 						if (!bluetoothName.contains(Constant.UNIBOX)) {
 							runOnUiThread(new Runnable() {
 								@Override
