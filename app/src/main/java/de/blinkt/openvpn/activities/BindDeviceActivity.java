@@ -452,7 +452,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 							, deviceAddress, "0", 1 + "");
 				}
 				new Thread(new Runnable() {
-					@Over   ride
+					@Override
 					public void run() {
 						BluetoothConstant.IS_BIND = true;
 						//更新时间操作
