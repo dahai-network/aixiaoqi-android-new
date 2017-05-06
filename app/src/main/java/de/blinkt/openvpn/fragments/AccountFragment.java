@@ -197,7 +197,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		tvNewVersion.setVisibility(View.GONE);
 		//注册广播
 		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver, new IntentFilter("Notic"));
-
 		return rootView;
 	}
 

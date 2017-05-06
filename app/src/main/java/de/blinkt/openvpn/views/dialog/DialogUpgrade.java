@@ -166,12 +166,6 @@ public class DialogUpgrade extends DialogBase {
 			EventBus.getDefault().post(entity);
 		}
 
-		@Override
-		public void onDeviceDisconnected(String deviceAddress) {
-			super.onDeviceDisconnected(deviceAddress);
-			UIOperator(UIOperatorEntity.onError);
-		}
-		
 	};
 
 
