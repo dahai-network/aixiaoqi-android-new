@@ -21,8 +21,10 @@ public class CommonTools {
      * @param message
      */
     public static void showShortToast(Context context, String message) {
-        if (!TextUtils.isEmpty(message) && context != null)
+        if (!TextUtils.isEmpty(message) && context != null) {
+            Log.d("CommonTools", "showShortToast: "+message);
             ToastCompat.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

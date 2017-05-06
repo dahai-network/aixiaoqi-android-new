@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -87,15 +88,16 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	private String bluetoothName = Constant.UNITOYS;
 	private final int REQUEST_ENABLE_BT = 2;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {//没有发现设备
 			CommonTools.showShortToast(this, getString(R.string.bluetooth_ble_not_support));
 			finish();
+
 			return;
 		}
-
 		bracelettype = getIntent().getStringExtra(MyDeviceActivity.BRACELETTYPE);
 
 		final BluetoothManager bluetoothManager =
@@ -135,14 +137,16 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 					setAnimation();
 					scanLeDevice(true);
 					//60秒后由于蓝牙不返回数据则自动退出
-					new Handler().postDelayed(new Runnable() {
+					mHandler.postDelayed(new Runnable() {
 						@Override
 						public void run() {
 							runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
 									if (mService != null && !mService.isConnectedBlueTooth()) {
-										CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.bind_error));
+										if(!BindDeviceActivity.this.isFinishing()) {
+											CommonTools.showShortToast(getApplicationContext(), getString(R.string.bind_error));
+										}
 										stopTextView.performClick();
 									}
 								}
@@ -233,6 +237,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	protected void onDestroy() {
 		super.onDestroy();
 		deviceSet.clear();
+
 		EventBus.getDefault().unregister(this);
 	}
 

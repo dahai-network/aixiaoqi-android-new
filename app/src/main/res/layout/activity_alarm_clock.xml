@@ -58,8 +58,8 @@
             android:layout_alignParentRight="true"
             android:paddingLeft="@dimen/padding_15dp"
             android:paddingRight="@dimen/padding_15dp"
-            android:paddingBottom="@dimen/padding"
-            android:paddingTop="@dimen/padding"
+            android:paddingBottom="@dimen/padding_4dp"
+            android:paddingTop="@dimen/padding_4dp"
             android:layout_marginRight="@dimen/padding_15dp"
             android:textColor="@color/color01d0c0"
             android:text="@string/opening"/>

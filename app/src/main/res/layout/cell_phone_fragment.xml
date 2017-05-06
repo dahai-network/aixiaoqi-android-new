@@ -13,7 +13,6 @@
             android:id="@+id/operation_rg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -22,6 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:button="@null"
+                android:drawableBottom="@drawable/image_slidethetriangle"
                 android:checked="true"
                 android:drawablePadding="-6dp"
                 android:text="@string/call_history"
@@ -34,6 +34,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="33dp"
                 android:drawablePadding="-6dp"
+                android:drawableBottom="@drawable/image_slidethetriangle"
                 android:button="@null"
                 android:gravity="center"
                 android:text="@string/message_history"
@@ -50,8 +51,8 @@
             android:textColor="@color/white"
             android:textSize="@dimen/little_18"
             android:visibility="gone" />
-
     </RelativeLayout>
+
     <de.blinkt.openvpn.views.TopProgressView
         android:id="@+id/top_view"
         android:layout_width="match_parent"

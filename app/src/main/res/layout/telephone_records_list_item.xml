@@ -20,7 +20,7 @@
         android:id="@+id/name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/padding"
+        android:layout_marginLeft="@dimen/padding_4dp"
         android:paddingTop="@dimen/padding_10dp"
         android:text="张三"
         android:textSize="@dimen/little_16" />
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/name_text_view"
-        android:layout_marginLeft="@dimen/padding"
+        android:layout_marginLeft="@dimen/padding_4dp"
         android:text="日期"
         android:textColor="@color/country_packet_gray"
         android:textSize="@dimen/little_12" />

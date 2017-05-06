@@ -18,7 +18,6 @@ public class ToastCompat implements IToast {
 	}
 
 	ToastCompat(Context context, String text, int duration) {
-	/*	if (OSJudgementUtil.isMIUI()) {*/
 			mIToast = new DefinedToast(context).setText(text).setDuration(duration)
 					.setGravity(Gravity.BOTTOM, 0, CommonTools.dip2px(context, 64));
 

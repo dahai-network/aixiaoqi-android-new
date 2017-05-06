@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="@dimen/padding"
+                android:layout_marginTop="@dimen/padding_4dp"
                 android:src="@drawable/sms_tip_fail"/>
 
             <ImageView
@@ -103,10 +103,10 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/padding_15dp"
             android:background="@drawable/half_circle"
-            android:paddingBottom="@dimen/padding"
+            android:paddingBottom="@dimen/padding_4dp"
             android:paddingLeft="@dimen/padding_15dp"
             android:paddingRight="@dimen/padding_15dp"
-            android:paddingTop="@dimen/padding"
+            android:paddingTop="@dimen/padding_4dp"
             android:text="@string/opening"
             android:textColor="@color/color01d0c0"/>
     </RelativeLayout>
@@ -166,10 +166,10 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/padding_15dp"
             android:background="@drawable/half_circle"
-            android:paddingBottom="@dimen/padding"
+            android:paddingBottom="@dimen/padding_4dp"
             android:paddingLeft="@dimen/padding_15dp"
             android:paddingRight="@dimen/padding_15dp"
-            android:paddingTop="@dimen/padding"
+            android:paddingTop="@dimen/padding_4dp"
             android:text="@string/opening"
             android:textColor="@color/color01d0c0"/>
     </RelativeLayout>
@@ -200,7 +200,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/opened_option_tip_tv"
             android:layout_marginLeft="@dimen/padding_15dp"
-            android:layout_marginTop="@dimen/padding"
+            android:layout_marginTop="@dimen/padding_4dp"
             android:text="@string/opened_revecie_tip"/>
 
         <de.blinkt.openvpn.views.SwitchView

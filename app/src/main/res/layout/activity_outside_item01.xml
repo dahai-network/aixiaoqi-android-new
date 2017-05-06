@@ -28,7 +28,7 @@
         <TextView
             android:layout_toRightOf="@id/number_1"
             android:id="@+id/outside_step_second_tv"
-            android:paddingLeft="@dimen/padding"
+            android:paddingLeft="@dimen/padding_4dp"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_below="@id/number_rl"
         android:paddingLeft="@dimen/padding_15dp"
-        android:paddingTop="@dimen/padding"
+        android:paddingTop="@dimen/padding_4dp"
         android:paddingRight="@dimen/padding_15dp"
         android:textColor="@color/color_333333"
         android:layout_height="wrap_content"

@@ -53,7 +53,7 @@
         android:background="@drawable/dialog_background"
         android:layout_marginBottom="@dimen/padding_10"
         android:text="@string/complete"
-        android:layout_marginTop="@dimen/padding"
+        android:layout_marginTop="@dimen/padding_4dp"
         android:textSize="14dp"
         android:layout_below="@+id/picker_rel1"
         android:layout_alignParentLeft="true"
