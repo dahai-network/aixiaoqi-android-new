@@ -406,8 +406,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									case Constant.APP_CONNECT_RECEIVE:
 										Log.i("Encryption", "返回加密数据：" + messages.get(0).toString());
 										if (!EncryptionUtil.isPassEncrypt(messages.get(0).toString().substring(10))) {
-//											mService.disconnect();
-//											CommonTools.showShortToast(context, context.getString(R.string.legitimate_tips));
+											mService.disconnect();
+											CommonTools.showShortToast(context, context.getString(R.string.legitimate_tips));
 										} else {
 											if (!BluetoothConstant.IS_BIND) {
 												BluetoothMessageCallBackEntity bEntity = new BluetoothMessageCallBackEntity();
@@ -532,7 +532,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 						isGetnullCardid = false;
 						return;
-					} else if (mStrSimCmdPacket.startsWith("ffffff")) {
+					} else {
 						registFlowPath();
 					}
 				}

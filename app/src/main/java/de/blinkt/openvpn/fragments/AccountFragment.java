@@ -185,8 +185,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 							 Bundle savedInstanceState) {
 		Glide.get(getActivity()).clearMemory();
 		setLayoutId(R.layout.fragment_account);
-//		View rootView = inflater.inflate(R.layout.fragment_account,
-//				container, false);
 		View rootView = super.onCreateView(inflater, container,
 				savedInstanceState);
 		topProgressView.setWhiteBack(true);
@@ -197,10 +195,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		//初始化状态
 		tvNewPackagetAction.setVisibility(View.GONE);
 		tvNewVersion.setVisibility(View.GONE);
-		// EventBus.getDefault().register(this);
 		//注册广播
 		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver, new IntentFilter("Notic"));
-
 		return rootView;
 	}
 
@@ -348,6 +344,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 			case R.id.addDeviceRelativeLayout:
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKMYDEVICE);
+				if (deviceSummarizedRelativeLayout.getVisibility() == View.GONE) {
+					BluetoothConstant.IS_BIND = false;
+				}
 				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
 					intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
 				} else {

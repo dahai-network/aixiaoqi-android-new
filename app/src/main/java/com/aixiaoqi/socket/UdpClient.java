@@ -1,6 +1,5 @@
 package com.aixiaoqi.socket;
 
-import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -30,12 +29,19 @@ public abstract class UdpClient implements Runnable {
 	private String sendAddress = "127.0.0.1";
 	public static String tag = null;
 	private int port = 4567;
+	private String TAG = "UdpClient";
+
 	@Override
 	public void run() {
 		try {
+
 			if (socket == null) {
-				socket = new DatagramSocket(port);
-//                port++;
+				try {
+					Log.e(TAG,"UDPSOCKET CREATE!!!");
+					socket = new DatagramSocket(port);
+				}catch (Exception e){
+					exceptionPort();
+				}
 			}
 			byte data[] = new byte[1024];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
@@ -111,19 +117,19 @@ public abstract class UdpClient implements Runnable {
 
 	private void exceptionPort() {
 		if(sendPort==0){
-            Intent intent = new Intent(ICSOpenVPNApplication.getContext().getApplicationContext(), LaunchActivity.class);
+			Intent intent = new Intent(ICSOpenVPNApplication.getContext().getApplicationContext(), LaunchActivity.class);
 
 
-            PendingIntent restartIntent = PendingIntent.getActivity(
-                    ICSOpenVPNApplication.getContext().getApplicationContext().getApplicationContext(), 0, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            //退出程序
-            AlarmManager mgr = (AlarmManager)ICSOpenVPNApplication.getContext().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
-                    restartIntent);
-            ICSOpenVPNApplication.getInstance().finishAllActivity();
-            System.exit(0);
-        }
+			PendingIntent restartIntent = PendingIntent.getActivity(
+					ICSOpenVPNApplication.getContext().getApplicationContext().getApplicationContext(), 0, intent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
+			//退出程序
+			AlarmManager mgr = (AlarmManager)ICSOpenVPNApplication.getContext().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500,
+					restartIntent);
+			ICSOpenVPNApplication.getInstance().finishAllActivity();
+			System.exit(0);
+		}
 	}
 
 	private void closeSendUdp() {

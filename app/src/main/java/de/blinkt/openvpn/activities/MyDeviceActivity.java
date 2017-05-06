@@ -197,7 +197,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		long beforeRequestTime = SharedUtils.getInstance().readLong(Constant.UPGRADE_INTERVAL);
 		if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
 		{
-			int DeviceType = 0;
+			int DeviceType = 1;
 			String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(braceletname)) {
 				if (braceletname.contains(MyDeviceActivity.UNITOYS)) {

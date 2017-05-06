@@ -26,7 +26,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
@@ -75,15 +74,15 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 
 	private Handler mHandler;
 	private Handler findDeviceHandler;
-	private HashSet<BluetoothModel> deviceSet;
+	private List<BluetoothModel> deviceList;
 	private BluetoothAdapter mBluetoothAdapter;
 	private static final long SCAN_PERIOD = 20000; //120 seconds
 	private String deviceAddress = "";
 	SharedUtils utils = SharedUtils.getInstance();
 	private DialogBalance noDevicedialog;
 	private String TAG = "BindDeviceActivity";
-	private UartService mService = ICSOpenVPNApplication.uartService;
-	private String bracelettype;
+	private UartService mService = ICSOpenVPNApplication.uartService;//
+	private String bracelettype;//手环类型
 	//设备名称：类型不同名称不同，分别有【unitoys、unibox】
 	private String bluetoothName = Constant.UNITOYS;
 	private final int REQUEST_ENABLE_BT = 2;
@@ -121,7 +120,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			bluetoothName = Constant.UNITOYS;
 		}
 
-		deviceSet = new HashSet<>();
+		deviceList = new ArrayList<>();
 		mHandler = new Handler();
 		findDeviceHandler = new Handler();
 		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -212,17 +211,17 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 
 	}
 
+	//谈对话框，没有搜索到设备
 	private void showDialog() {
 		//不能按返回键，只能二选其一
 		noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
-//		noDevicedialog.setCanClickBack(false);
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			noDevicedialog.changeText(getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
 		} else {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
 		}
 	}
-
+	//停止搜索和隐藏对话框
 	protected void onPause() {
 		super.onPause();
 		scanLeDevice(false);
@@ -231,11 +230,11 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		}
 	}
 
-
+//回收数据，取消订阅
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		deviceSet.clear();
+		deviceList.clear();
 		seekImageView.clearAnimation();
 		mHandler.removeCallbacks(showdialogRun);
 		EventBus.getDefault().unregister(this);
@@ -264,41 +263,39 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 										model.setAddress(device.getAddress());
 										model.setDiviceName(device.getName());
 										model.setRssi(rssi);
-										deviceSet.add(model);
+										deviceList.add(model);
 										if (!isStartFindDeviceDelay) {
 											findDeviceHandler.postDelayed(new Runnable() {
 												@Override
 												public void run() {
-													List<BluetoothModel> infos =
-															new ArrayList<>(deviceSet);
-													Collections.sort(infos, new Comparator<BluetoothModel>() {
+
+													//排序后连接操作
+													scanLeDevice(false);
+													if (deviceList.size() == 0 && !isStartFindDeviceDelay) {
+														CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.no_device_around));
+														finish();
+														return;
+													}
+													Collections.sort(deviceList, new Comparator<BluetoothModel>() {
 														@Override
 														public int compare(BluetoothModel lhs, BluetoothModel rhs) {
 															return rhs.getRssi() - lhs.getRssi();
 														}
 													});
-													for (int i = 0; i < infos.size(); i++) {
-														String id = infos.get(i).toString();
+													for (int i = 0; i < deviceList.size(); i++) {
+														String id = deviceList.get(i).toString();
 														Log.i(TAG, "排序后：" + id);
 													}
-													//排序后连接操作
-													scanLeDevice(false);
-													if (infos.size() == 0 && !isStartFindDeviceDelay) {
-														CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.no_device_around));
-														finish();
-														return;
-													}
 													try {
-														deviceAddress = infos.get(0).getAddress();
-														utils.writeString(Constant.BRACELETNAME, infos.get(0).getDiviceName());
+														deviceAddress = deviceList.get(0).getAddress();
+														utils.writeString(Constant.BRACELETNAME, deviceList.get(0).getDiviceName());
 														createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
 													} catch (Exception e) {
-
 
 													}
 
 													isStartFindDeviceDelay = false;
-													deviceSet.clear();
+													deviceList.clear();
 												}
 											}, 5000);
 											isStartFindDeviceDelay = true;
@@ -322,6 +319,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		utils.delete(Constant.BRACELETNAME);
 		finish();
 	}
+
+
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
@@ -454,7 +453,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 							, deviceAddress, "0", 1 + "");
 				}
 				new Thread(new Runnable() {
-					@Override
+					@Over   ride
 					public void run() {
 						BluetoothConstant.IS_BIND = true;
 						//更新时间操作
