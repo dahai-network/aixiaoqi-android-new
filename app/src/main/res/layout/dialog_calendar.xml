@@ -48,8 +48,8 @@
                 android:padding="@dimen/padding_20dp"
                 android:layout_marginLeft="@dimen/padding_50dp"
                 android:layout_toRightOf="@id/tv_show_month_view_dialog"
-                android:paddingLeft="@dimen/padding"
-                android:paddingRight="@dimen/padding"
+                android:paddingLeft="@dimen/padding_4dp"
+                android:paddingRight="@dimen/padding_4dp"
                 android:drawableRight="@drawable/next_month"
                 />
 

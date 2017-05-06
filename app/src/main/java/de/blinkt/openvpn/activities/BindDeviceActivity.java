@@ -87,6 +87,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	private String bluetoothName = Constant.UNITOYS;
 	private final int REQUEST_ENABLE_BT = 2;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -209,7 +210,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 
 	}
 
-	//谈对话框，没有搜索到设备
 	private void showDialog() {
 		//不能按返回键，只能二选其一
 		noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);

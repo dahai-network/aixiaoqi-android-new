@@ -33,7 +33,7 @@
             android:gravity="center"
             android:inputType="phone"
             android:textSize="@dimen/little_22"
-            android:padding="@dimen/padding" />
+            android:padding="@dimen/padding_4dp" />
 
 
         <TextView

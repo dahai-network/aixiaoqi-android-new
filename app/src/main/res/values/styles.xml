@@ -237,7 +237,7 @@
         <item name="android:textSize">11sp</item>
         <item name="android:button">@null</item>
         <item name="android:clickable">true</item>
-        <item name="android:layout_marginTop">@dimen/padding_5dp</item>
+        <item name="android:layout_marginTop">@dimen/padding_1dp</item>
     </style>
     <style name="chart_red_hot">
         <item name="android:layout_width">0dp</item>

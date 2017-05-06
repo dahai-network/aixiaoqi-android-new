@@ -225,7 +225,7 @@
                 android:layout_toRightOf="@id/weixin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding_4dp"
                 android:text="@string/weixin_pay"
                 android:textSize="14sp"/>
 
@@ -234,7 +234,7 @@
                 android:layout_toRightOf="@id/weixin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding_4dp"
                 android:text="@string/weixin_pay_detail"
                 android:textColor="@color/order_gray"
 
@@ -278,7 +278,7 @@
                 android:id="@+id/zhifubao_text"
                 android:layout_toRightOf="@id/zhifubao_icon"
                 android:layout_width="wrap_content"
-                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding_4dp"
                 android:layout_height="wrap_content"
                 android:text="@string/ali_pay"
                 android:textSize="14sp"/>
@@ -286,7 +286,7 @@
                 android:layout_width="wrap_content"
                 android:layout_below="@id/zhifubao_text"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginLeft="@dimen/padding_4dp"
                 android:text="@string/ali_pay_detail"
                 android:layout_toRightOf="@id/zhifubao_icon"
                 android:textColor="@color/order_gray"

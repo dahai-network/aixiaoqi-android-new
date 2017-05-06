@@ -40,8 +40,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/sport_like"
-            android:paddingLeft="@dimen/padding"
-            android:paddingRight="@dimen/padding"
+            android:paddingLeft="@dimen/padding_4dp"
+            android:paddingRight="@dimen/padding_4dp"
             />
 
     </RelativeLayout>
