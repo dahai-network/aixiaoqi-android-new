@@ -350,7 +350,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 					intent = new Intent(getActivity(), MyDeviceActivity.class);
 					AppMode.getInstance().isClickAddDevice = true;
 					mHandler.sendEmptyMessage(4);
-				}
+
 				int status = R.string.index_connecting;
 				if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBleStatus())) {
 					status = R.string.index_no_signal;
@@ -378,6 +378,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				}
 				intent.putExtra(BRACELETTYPE, braceletName);
 				intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
+				}
 				break;
 			case R.id.permission_set:
 				intent = new Intent(getActivity(), ImportantAuthorityActivity.class);

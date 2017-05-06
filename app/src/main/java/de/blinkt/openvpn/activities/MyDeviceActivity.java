@@ -191,7 +191,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	DfuProgressListener mDfuProgressListener;
 
-	//空中升级
+	//空中升级,
 	private void skyUpgradeHttp() {
 		Log.e(TAG, "skyUpgradeHttp");
 		long beforeRequestTime = SharedUtils.getInstance().readLong(Constant.UPGRADE_INTERVAL);
@@ -280,15 +280,17 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	private void titleSet() {
-		title.setTextTitle(getString(device));
-		title.setLeftBtnIcon(R.drawable.btn_top_back);
-		title.getLeftText().setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onBackPressed();
-			}
-		});
+//		title.setTextTitle(getString(device));
+//		title.setLeftBtnIcon(R.drawable.btn_top_back);
+//		title.getLeftText().setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				onBackPressed();
+//			}
+//		});
+		hasLeftViewTitle(device,0);
 		title.setBackground(R.color.color_0F93FE);
+
 	}
 
 	@Override

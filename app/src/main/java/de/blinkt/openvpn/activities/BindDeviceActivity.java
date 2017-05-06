@@ -254,7 +254,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 										return;
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
-									if (device.getName().contains(bluetoothName)) {
+									if (device.getName().contains(bluetoothName)) {//过滤只需要的设备
 										BluetoothModel model = new BluetoothModel();
 										model.setAddress(device.getAddress());
 										model.setDiviceName(device.getName());
@@ -310,7 +310,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		scanLeDevice(false);
 		mService.disconnect();
 		ICSOpenVPNApplication.isConnect = false;
-		isStartFindDeviceDelay = true;
 		utils.delete(Constant.IMEI);
 		utils.delete(Constant.BRACELETNAME);
 		finish();
