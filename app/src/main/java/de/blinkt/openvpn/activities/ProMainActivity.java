@@ -89,6 +89,7 @@ import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StartRegistEntity;
+import de.blinkt.openvpn.model.StateChangeEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
@@ -100,7 +101,6 @@ import de.blinkt.openvpn.views.MyRadioButton;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
-import static cn.com.aixiaoqi.R.string.index_regist_fail;
 import static cn.com.aixiaoqi.R.string.index_registing;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
@@ -217,9 +217,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	protected void onCreate(Bundle savedInstanceState) {
 		instance = this;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		if (savedInstanceState != null) {
-			savedInstanceState.remove("android:support:fragments");   //注意：基类是Activity时参数为android:fragments， 一定要在super.onCreate函数前执行！！！
-		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pro_main);
 		ButterKnife.bind(this);
@@ -241,7 +238,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	 * android 6.01需要位置信息动态获取
 	 */
 	private void initSet() {
-		if (Build.VERSION.SDK_INT >= 23 && !NetworkUtils.isLocationOpen(getApplicationContext())) {
+		if (Build.VERSION.SDK_INT == 23 && !NetworkUtils.isLocationOpen(getApplicationContext())) {
 			//不能按返回键，只能二选其一
 			noLocationPermissionDialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
 			noLocationPermissionDialog.changeText(getResources().getString(R.string.no_location_permission), getResources().getString(R.string.sure));
@@ -419,6 +416,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	Fragment_Phone phoneFragment;
+
 
 
 	@Override
@@ -700,48 +698,40 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	}
 
+
 	@Override
 	protected void onDestroy() {
-		try {
-			LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
-			LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
-			unregisterReceiver(screenoffReceive);
-			bleMoveReceiver = null;
-			//bottom_bar_linearLayout = null;
-			radiogroup = null;
-			screenoffReceive = null;
-			if (intentCallPhone != null)
-				stopService(intentCallPhone);
-			//关闭服务并设置为null
-//		if (isDfuServiceRunning()) {
-//			stopService(new Intent(this, DfuService.class));
-//		}
 
-			if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
-				unbindService(socketUdpConnection);
-				if (SocketConnection.mReceiveDataframSocketService != null) {
-					SocketConnection.mReceiveDataframSocketService.stopSelf();
-				}
+		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
+		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
+		unregisterReceiver(screenoffReceive);
+		bleMoveReceiver = null;
+		radiogroup = null;
+		screenoffReceive = null;
+		if (intentCallPhone != null)
+			stopService(intentCallPhone);
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
+			unbindService(socketUdpConnection);
+			if (SocketConnection.mReceiveDataframSocketService != null) {
+				SocketConnection.mReceiveDataframSocketService.stopSelf();
 			}
-			unbindTcpService();
-			if (mService != null)
-				mService.stopSelf();
-			mService = null;
-			radiogroup = null;
-			phone_linearLayout = null;
-			list.clear();
-			indexFragment = null;
-			cellPhoneFragment = null;
-			accountFragment = null;
-			addressListFragment = null;
-			sportFragment = null;
-			EventBus.getDefault().unregister(this);
-
-
-			super.onDestroy();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		unbindTcpService();
+		if (mService != null)
+			mService.stopSelf();
+		mService = null;
+		radiogroup = null;
+		phone_linearLayout = null;
+		list.clear();
+		indexFragment = null;
+		cellPhoneFragment = null;
+		accountFragment = null;
+		addressListFragment = null;
+		sportFragment = null;
+		EventBus.getDefault().unregister(this);
+
+
+		super.onDestroy();
 	}
 
 	private void unbindTcpService() {
@@ -997,15 +987,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 				break;
 			case SocketConstant.REGISTER_FAIL:
 				CommonTools.showShortToast(this, getString(R.string.regist_fail));
-				EventBusUtil.changeConnectStatus(getString(index_regist_fail), R.drawable.index_no_signal);
 				break;
 			case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
 				CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
-				EventBusUtil.changeConnectStatus(getString(index_regist_fail), R.drawable.index_no_signal);
 				break;
 			case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
 				CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
-				EventBusUtil.changeConnectStatus(getString(index_regist_fail), R.drawable.index_no_signal);
 				break;
 			case SocketConstant.NOT_NETWORK:
 				CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
@@ -1017,6 +1004,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			case SocketConstant.TCP_DISCONNECT:
 				//更改为注册中
 				EventBusUtil.changeConnectStatus(getString(index_registing), R.drawable.index_no_signal);
+
 				break;
 			case SocketConstant.REGISTER_FAIL_INITIATIVE:
 				//更改为注册中

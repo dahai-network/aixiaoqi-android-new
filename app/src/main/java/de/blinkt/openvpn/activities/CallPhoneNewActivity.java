@@ -199,6 +199,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 
 		if (contactRecodeEntity.getPhoneNumber().startsWith("sip:")) {
 			ICSOpenVPNApplication.the_sipengineReceive.MakeUrlCall(contactRecodeEntity.getPhoneNumber());
+
 		} else if (cellPhoneType == Constant.NETWORK_CELL_PHONE) {
 			ICSOpenVPNApplication.the_sipengineReceive.MakeCall("981" + PhoneFormatUtil.deleteprefix("-", contactRecodeEntity.getPhoneNumber()) + "#" + maxinumPhoneCallTime);
 		} else if (cellPhoneType == Constant.SIM_CELL_PHONE) {

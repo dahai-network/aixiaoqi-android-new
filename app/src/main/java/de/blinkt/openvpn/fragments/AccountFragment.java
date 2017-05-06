@@ -137,8 +137,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	private String bleStatus;
 	private String TAG = "AccountFragment";
 	boolean hasPackage = false;
-	public static TextView tvNewPackagetAction;
-	public static TextView tvNewVersion;
+	public static ImageView tvNewPackagetAction;
+	public static ImageView tvNewVersion;
 	String deviceTypeStr;
 
 	public AccountFragment() {
@@ -192,8 +192,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		topProgressView.setWhiteBack(true);
 		ButterKnife.bind(this, rootView);
 		title.setTextTitle(getString(R.string.personal_center));
-		tvNewPackagetAction = (TextView) rootView.findViewById(R.id.tv_new_packaget_action);
-		tvNewVersion = (TextView) rootView.findViewById(R.id.tv_new_version);
+		tvNewPackagetAction = (ImageView) rootView.findViewById(R.id.tv_new_packaget_action);
+		tvNewVersion = (ImageView) rootView.findViewById(R.id.tv_new_version);
 		//初始化状态
 		tvNewPackagetAction.setVisibility(View.GONE);
 		tvNewVersion.setVisibility(View.GONE);
