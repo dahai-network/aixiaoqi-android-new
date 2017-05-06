@@ -176,9 +176,7 @@ public class UartService extends Service implements Serializable {
 				//TODO 单包处理
 //				messages.add(messageFromBlueTooth);
 				ArrayList<String> onePackagemessage = new ArrayList<>();
-
 				onePackagemessage.add(messageFromBlueTooth);
-
 				intent.putStringArrayListExtra(EXTRA_DATA, onePackagemessage);
 
 				LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);

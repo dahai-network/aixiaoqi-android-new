@@ -2,6 +2,7 @@ package de.blinkt.openvpn.model;
 
 /**
  * Created by Administrator on 2017/3/14.
+ * 保存蓝牙地址，信号
  */
 
 public class BluetoothModel {

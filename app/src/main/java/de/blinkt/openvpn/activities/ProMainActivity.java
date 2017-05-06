@@ -188,6 +188,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private DialogBalance noLocationPermissionDialog;
 
 
+
+
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
 		return super.getLastCustomNonConfigurationInstance();
