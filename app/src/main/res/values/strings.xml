@@ -274,7 +274,7 @@
     <string name="network_phone">网络电话</string>
     <string name="call_phoning" formatted="false">正在与 %s[%s]通话中…</string>
     <string name="sim_register_phone">手环电话</string>
-    <string name="sim_register_phone_tip">设备内SIM未注册成功</string>
+    <string name="sim_register_phone_tip">设备内SIM卡未注册成功</string>
     <!--提交订单-->
     <string name="commit_order">提交订单</string>
     <string name="buy_days">购买天数</string>

@@ -254,15 +254,11 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
 	@Override
 	public void setRegisted(boolean isRegisted) {
-
-
 		if (isRegisted) {
 			signalIconImageView.setBackgroundResource(R.drawable.registed);
 			String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
-
 			if (operater != null) {
 				switch (operater) {
-
 					case Constant.CHINA_TELECOM:
 						operatorTextView.setText(getString(R.string.china_telecom));
 						break;
@@ -428,7 +424,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
 			BalanceHttp http = (BalanceHttp) object;
 			if (http.getBalanceEntity() != null)
-				balanceTextView.setText(getString(R.string.balance) + ": " + http.getBalanceEntity().getAmount() + getString(R.string.yuan));
+				balanceTextView.setText(ICSOpenVPNApplication.getInstance().getString(R.string.balance) + ": " + http.getBalanceEntity().getAmount()
+						+ ICSOpenVPNApplication.getInstance().getString(R.string.yuan));
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
 			if (object.getStatus() == 1) {
 				SharedUtils.getInstance().delete(BRACELETPOWER);
@@ -534,9 +531,12 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	public void setBleStatus(String bleStatus) {
 		this.bleStatus = bleStatus;
 		if (isAdded()) {
-			if (getString(R.string.index_un_insert_card).equals(bleStatus) || getString(R.string.index_unconnect).equals(bleStatus)) {
-				signalIconImageView.setBackgroundResource(R.drawable.unregist);
-				operatorTextView.setText("----");
+			if (getString(R.string.index_un_insert_card).equals(bleStatus)
+					|| getString(R.string.index_unconnect).equals(bleStatus)
+					|| getString(R.string.index_registing).equals(bleStatus)) {
+//				signalIconImageView.setBackgroundResource(R.drawable.unregist);
+//				operatorTextView.setText("----");
+				setRegisted(false);
 			} else if (getString(R.string.index_aixiaoqicard).equals(bleStatus)) {
 				operatorTextView.setText(getString(R.string.unitoy_card));
 			}

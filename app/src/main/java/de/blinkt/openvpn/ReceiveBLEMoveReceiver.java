@@ -488,9 +488,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					if (isGetnullCardid)
 						sendMessageSeparate(Constant.WRITE_SIM_STEP_THREE, Constant.WRITE_SIM_DATA);
 				}
-//				else {
-//					registFlowPath();
-//				}
+				else {
+					registFlowPath();
+				}
 				break;
 			//获取空卡序列号第三部
 			case Constant.WRITE_SIM_STEP_THREE:
