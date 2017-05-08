@@ -140,9 +140,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //							EventBus.getDefault().post(entity);
 						} else {
 							Thread.sleep(200);
-							sendMessageToBlueTooth(BASIC_MESSAGE);
-							Thread.sleep(200);
 							sendMessageToBlueTooth(ICCID_GET);
+							Thread.sleep(200);
+							sendMessageToBlueTooth(BASIC_MESSAGE);
 							Log.i("toBLue", "连接成功");
 							//更新时间操作
 							sendMessageToBlueTooth(getBLETime());
@@ -262,7 +262,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									case Constant.SYSTEM_BASICE_INFO:
 										String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
 										Log.i(TAG, "版本号:" + deviceVesion);
-										int DeviceType = 0;
+										int DeviceType = 1;
 										String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 										if (!TextUtils.isEmpty(braceletname)) {
 											if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
@@ -406,8 +406,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									case Constant.APP_CONNECT_RECEIVE:
 										Log.i("Encryption", "返回加密数据：" + messages.get(0).toString());
 										if (!EncryptionUtil.isPassEncrypt(messages.get(0).toString().substring(10))) {
-//											mService.disconnect();
-//											CommonTools.showShortToast(context, context.getString(R.string.legitimate_tips));
+											mService.disconnect();
+											CommonTools.showShortToast(context, context.getString(R.string.legitimate_tips));
 										} else {
 											if (!BluetoothConstant.IS_BIND) {
 												BluetoothMessageCallBackEntity bEntity = new BluetoothMessageCallBackEntity();
@@ -487,8 +487,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				if (mStrSimCmdPacket.contains(GET_NULLCARDID)) {
 					if (isGetnullCardid)
 						sendMessageSeparate(Constant.WRITE_SIM_STEP_THREE, Constant.WRITE_SIM_DATA);
-				}
-				else {
+				} else {
 					registFlowPath();
 				}
 				break;
@@ -505,7 +504,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							nullCardId = mStrSimCmdPacket;
 							//重新上电清空
 //							sendMessageToBlueTooth(UP_TO_POWER);
-							if (nullCardId.contains("005") || Integer.valueOf(nullCardId.substring(12, 16)) >= 301) {
+							if (Integer.valueOf(nullCardId.substring(8, 16)) >= 301) {
 								Log.i(TAG, "这是新卡");
 								utils.writeBoolean(Constant.IS_NEW_SIM_CARD, true);
 							} else {
@@ -533,7 +532,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
 						isGetnullCardid = false;
 						return;
-					} else if (mStrSimCmdPacket.startsWith("ffffff")) {
+					} else {
 						registFlowPath();
 					}
 				}

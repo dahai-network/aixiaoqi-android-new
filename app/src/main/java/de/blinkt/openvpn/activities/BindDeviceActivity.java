@@ -26,7 +26,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,6 +51,7 @@ import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
+import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
 import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 
@@ -189,18 +189,20 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		}
 	}
 
+	Runnable showdialogRun = new Runnable() {
+		@Override
+		public void run() {
+			if (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED && !isStartFindDeviceDelay) {
+				mBluetoothAdapter.stopLeScan(mLeScanCallback);
+				showDialog();
+			}
+		}
+	};
+
 	private void scanLeDevice(final boolean enable) {
 		if (enable) {
 			// Stops scanning after a pre-defined scan period.
-			mHandler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					if (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED && !isStartFindDeviceDelay) {
-						mBluetoothAdapter.stopLeScan(mLeScanCallback);
-						showDialog();
-					}
-				}
-			}, SCAN_PERIOD);
+			mHandler.postDelayed(showdialogRun, SCAN_PERIOD);
 
 			mBluetoothAdapter.startLeScan(mLeScanCallback);
 
@@ -233,6 +235,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	protected void onDestroy() {
 		super.onDestroy();
 		deviceList.clear();
+		seekImageView.clearAnimation();
+		mHandler.removeCallbacks(showdialogRun);
 		EventBus.getDefault().unregister(this);
 	}
 
@@ -254,7 +258,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 										return;
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
-									if (device.getName().contains(bluetoothName)) {
+									if (device.getName().contains(bluetoothName)) {//过滤只需要的设备
 										BluetoothModel model = new BluetoothModel();
 										model.setAddress(device.getAddress());
 										model.setDiviceName(device.getName());
@@ -310,7 +314,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		scanLeDevice(false);
 		mService.disconnect();
 		ICSOpenVPNApplication.isConnect = false;
-		isStartFindDeviceDelay = true;
 		utils.delete(Constant.IMEI);
 		utils.delete(Constant.BRACELETNAME);
 		finish();
@@ -457,6 +460,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 //						CommonTools.delayTime(500);
 						//获取基本信息
 						sendMessageToBlueTooth(BASIC_MESSAGE);
+						CommonTools.delayTime(200);
+						sendMessageToBlueTooth(ICCID_GET);
 						if (!bluetoothName.contains(Constant.UNIBOX)) {
 							runOnUiThread(new Runnable() {
 								@Override

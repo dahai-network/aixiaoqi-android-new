@@ -28,7 +28,7 @@ public class AutoReceiver extends BroadcastReceiver {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					if (ProMainActivity.sendYiZhengService != null&& !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
+					if (ProMainActivity.sendYiZhengService != null) {
 						ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
 					} else {
 						Log.e(TAG, "AutoReceiver 异常！");

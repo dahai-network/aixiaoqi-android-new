@@ -186,22 +186,26 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	DfuProgressListener mDfuProgressListener;
 
-	//空中升级
+	//空中升级,
 	private void skyUpgradeHttp() {
 		Log.e(TAG, "skyUpgradeHttp");
 		long beforeRequestTime = SharedUtils.getInstance().readLong(Constant.UPGRADE_INTERVAL);
 		if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
 		{
-			int DeviceType = 0;
+			int DeviceType = 1;
 			String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(braceletname)) {
 				if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
 					//手环固件
 					DeviceType = 0;
-				} else {
+				} else if(braceletname.contains(MyDeviceActivity.UNIBOX)){
 					//钥匙扣固件
 					DeviceType = 1;
+				}else{
+					return;
 				}
+			}else{
+				return;
 			}
 			createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
 		}
@@ -217,7 +221,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			deviceNameTextView.setText(getString(R.string.unibox_key));
-		} else {
+		} else if(bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)){
 			alarmClockLinearLayout.setVisibility(View.VISIBLE);
 			messageRemindLinearLayout.setVisibility(View.VISIBLE);
 			findStatusLinearLayout.setVisibility(View.VISIBLE);
@@ -284,6 +288,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 		});
 		title.setBackground(R.color.color_0F93FE);
+
 	}
 
 	@Override
@@ -333,12 +338,17 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
-				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETVERSION)) && !isUpgrade) {
-					SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, 0);
-					skyUpgradeHttp();
-				} else if (isUpgrade) {
-					showSkyUpgrade();
+				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED){
+					if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETVERSION)) && !isUpgrade) {
+						SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, 0);
+						skyUpgradeHttp();
+					} else if (isUpgrade) {
+						showSkyUpgrade();
+					}
+				}else{
+					CommonTools.showShortToast(this,getString(R.string.unconnection_device));
 				}
+
 				break;
 			case R.id.findStatusLinearLayout:
 				if (!CommonTools.isFastDoubleClick(3000)) {
@@ -702,37 +712,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				CommonTools.showShortToast(this, object.getMsg());
 				Log.i(TAG, object.getMsg());
 			}
-		}
-//		else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
-//			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
-//			//网络获取看有没有存储IMEI设备号,如果没有绑定过则去绑定流程
-//			if (getBindDeviceHttp.getStatus() == 1) {
-//				BlueToothDeviceEntity mBluetoothDevice = getBindDeviceHttp.getBlueToothDeviceEntityity();
-//				if (mBluetoothDevice != null) {
-//					if (!TextUtils.isEmpty(mBluetoothDevice.getVersion())) {
-//						firmwareTextView.setText(mBluetoothDevice.getVersion());
-//						SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, mBluetoothDevice.getVersion());
-//					} else {
-//						Log.i(TAG, "mBluetoothDevice.getVersion()为空");
-//					}
-//					if (!TextUtils.isEmpty(mBluetoothDevice.getIMEI())) {
-//						SharedUtils.getInstance().writeString(Constant.IMEI, mBluetoothDevice.getIMEI());
-//					} else {
-//						Log.i(TAG, "mBluetoothDevice.getIMEI()为空");
-//					}
-//					//statueTextView.setText(getString(R.string.blue_connecting));
-//					//statueTextView.setEnabled(false);
-////					unBindButton.setVisibility(View.VISIBLE);
-//					//当接口调用完毕后，扫描设备，打开状态栏
-////				scanLeDevice(true);
-//				}
-//				//如果有设备，则开启重连机制，重连需要该参数为true。
-//				ICSOpenVPNApplication.isConnect = true;
-//			}
-//			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-//		}
-		else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
+		} else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
 
 			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
 			SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
@@ -865,6 +845,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void downloadSkyUpgradePackageHttp(String path) {
 		DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = new DownloadSkyUpgradePackageHttp(this, HttpConfigUrl.COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE, true, path);
 		new Thread(downloadSkyUpgradePackageHttp).start();
+
 	}
 
 	@Override
