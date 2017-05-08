@@ -68,6 +68,7 @@
     <color name="white">#ffffffff</color>
     <color name="dark_orange">#FF8C00</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="transparent_00A2A2A2">#00A2A2A2</color>
     <color name="transparent_60">#6EFFFFFF</color>
     <color name="color_A2A2A2">#A2A2A2</color>
     <color name="color_F62C2A">#F62A2A</color>

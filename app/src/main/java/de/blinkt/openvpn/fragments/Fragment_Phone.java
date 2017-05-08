@@ -101,6 +101,11 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_phone, container, false);
         initView(rootView);
+        if (savedInstanceState != null) {
+            String FRAGMENTS_TAG = "Android:support:fragments";
+            savedInstanceState.remove(FRAGMENTS_TAG);
+        }
+
         return rootView;
     }
 
@@ -115,11 +120,17 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     }
 
     public void phonecallClicked() {
+        int hasWriteContactsPermission = 0;
+
         int version = Build.VERSION.SDK_INT;
         if (t9dialpadview.getT9Input() != null && t9dialpadview.getT9Input().length() > 0) {
 
             //检测是否开启读取联系人电话
-            int hasWriteContactsPermission = checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS);
+            if (getActivity() != null) {
+                
+                hasWriteContactsPermission = checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS);
+            }
+
             if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED && version > 22) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_CONTACTS},
                         REQUEST_CODE_ASK_PERMISSIONS);

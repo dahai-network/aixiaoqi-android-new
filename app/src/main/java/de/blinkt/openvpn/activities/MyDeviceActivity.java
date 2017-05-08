@@ -87,11 +87,6 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
 
 public class MyDeviceActivity extends BaseNetActivity implements DialogInterfaceTypeBase, View.OnClickListener {
-
-	//	@BindView(R.id.noConnectImageView)
-//	ImageView noConnectImageView;
-//	@BindView(R.id.statueTextView)
-//	TextView statueTextView;
 	@BindView(R.id.firmwareTextView)
 	TextView firmwareTextView;
 	@BindView(R.id.callPayLinearLayout)
