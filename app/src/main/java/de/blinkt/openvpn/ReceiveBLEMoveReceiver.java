@@ -46,6 +46,8 @@ import de.blinkt.openvpn.model.WriteCardEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
+import de.blinkt.openvpn.views.dialog.DialogBalance;
+import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static de.blinkt.openvpn.activities.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.isUpgrade;
@@ -74,7 +76,7 @@ import static de.blinkt.openvpn.util.CommonTools.getBLETime;
  * Created by Administrator on 2016/10/5.
  */
 
-public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements InterfaceCallback {
+public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements InterfaceCallback, DialogInterfaceTypeBase {
 
 	private UartService mService = null;
 	private Context context;
@@ -670,7 +672,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				map.put("statue", 1 + "");
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKACTIVECARD, map);
-				CommonTools.showShortToast(context, "激活成功！");
+//				CommonTools.showShortToast(context, "激活成功！");
+				DialogBalance dialog = new DialogBalance(this,ProMainActivity.instance, R.layout.dialog_balance, 0);
+				dialog.changeText("激活成功", "确定");
 				orderStatus = 1;
 				Intent intent = new Intent();
 				intent.setAction(FINISH_ACTIVITY);
@@ -735,4 +739,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	}
 
 
+	@Override
+	public void dialogText(int type, String text) {
+
+	}
 }
