@@ -6,7 +6,6 @@
           xmlns:tools="http://schemas.android.com/tools"
           xmlns:uses-featureandroid="http://schemas.android.com/apk/res-auto"
           package="cn.com.aixiaoqi">
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- Required -->
     <permission
         android:name="${JPUSH_PKGNAME}.permission.JPUSH_MESSAGE"
@@ -19,6 +18,8 @@
         android:name="android.hardware.location.gps"
         android:required="true"/>
 
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>

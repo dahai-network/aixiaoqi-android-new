@@ -22,6 +22,7 @@ import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.CanClickEntity;
+import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.ShowDeviceEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StateChangeEntity;
@@ -52,28 +53,28 @@ public class BaseStatusFragment extends Fragment {
 		return rootView;
 	}
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveStateChangeEntity(StateChangeEntity entity) {
-        switch (entity.getStateType()) {
-            case StateChangeEntity.BLUETOOTH_STATE:
-                if (entity.isopen() && getString(R.string.bluetooth_unopen).equals(topProgressView.getContent())) {
-                    if (checkNetWorkAndBlueIsOpen()) {
-                        topProgressView.setVisibility(View.GONE);
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveStateChangeEntity(StateChangeEntity entity) {
+		switch (entity.getStateType()) {
+			case StateChangeEntity.BLUETOOTH_STATE:
+				if (entity.isopen() && getString(R.string.bluetooth_unopen).equals(topProgressView.getContent())) {
+					if (checkNetWorkAndBlueIsOpen()) {
+						topProgressView.setVisibility(View.GONE);
 						//有蓝牙了重新连接
 						String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
 						if (!TextUtils.isEmpty(macStr) && ICSOpenVPNApplication.uartService != null) {
 							ICSOpenVPNApplication.uartService.connect(macStr);
 						}
-                    }
-                } else {
-                    topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
 					}
-                break;
-            case StateChangeEntity.NET_STATE:
+				} else {
+					topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
+				}
+				break;
+			case StateChangeEntity.NET_STATE:
 				if (entity.isopen() && getString(R.string.no_wifi).equals(topProgressView.getContent())) {
 					if (checkNetWorkAndBlueIsOpen()) {
 						topProgressView.setVisibility(View.GONE);
-						if(ICSOpenVPNApplication.the_sipengineReceive==null){
+						if (ICSOpenVPNApplication.the_sipengineReceive == null) {
 							EventBusUtil.getTokenRes();
 						}
 					}
@@ -81,8 +82,8 @@ public class BaseStatusFragment extends Fragment {
 					topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
 					setRegisted(false);
 				}
-                break;
-        }
+				break;
+		}
 
 	}
 
@@ -132,6 +133,14 @@ public class BaseStatusFragment extends Fragment {
 			setRegisted(false);
 			if (!ICSOpenVPNApplication.isConnect)
 				topProgressGone();
+		}
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
+		//如果拔掉卡就让进度条消失
+		if (getString(R.string.index_un_insert_card).equals(entity.getStatus())) {
+			topProgressGone();
 		}
 	}
 
