@@ -216,8 +216,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		instance = this;
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
 		super.onCreate(savedInstanceState);
+		actionBar.hide();
 		setContentView(R.layout.activity_pro_main);
 		ButterKnife.bind(this);
 		findViewById();
