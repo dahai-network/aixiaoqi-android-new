@@ -108,7 +108,6 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
         setLayoutId(R.layout.fragment_index);
         view = super.onCreateView(inflater, container,
                 savedInstanceState);
-//		view = inflater.inflate(R.layout.fragment_index, container, false);
 
         ButterKnife.bind(this, view);
         findById(view);

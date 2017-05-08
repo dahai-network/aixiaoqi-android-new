@@ -3,6 +3,7 @@
     android:id="@+id/ll_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/transparent_00A2A2A2"
     android:orientation="vertical">
 
     <LinearLayout
@@ -26,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/padding_20dp"
-            android:layout_marginTop="@dimen/little_22" />
+            android:layout_marginTop="@dimen/padding_22dp" />
 
         <ImageView
             android:id="@+id/iv_hand"
@@ -58,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/padding_20dp"
-            android:layout_marginTop="@dimen/little_22" />
+            android:layout_marginTop="@dimen/padding_22dp" />
     </LinearLayout>
 
 
@@ -83,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/padding_20dp"
-            android:layout_marginTop="@dimen/little_22" />
+            android:layout_marginTop="@dimen/padding_22dp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -14,6 +14,7 @@
    -->
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
         <!-- API 14 theme customizations can go here. -->
+        <item name="windowActionBarOverlay">true</item>
         <!--<item name="android:windowTranslucentStatus">true</item>-->
     </style>
 
