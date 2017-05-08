@@ -191,13 +191,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	DfuProgressListener mDfuProgressListener;
 
-	//空中升级,
+	//空中升级,如果没有设备类型就不升级，如果有的话再去升级。
 	private void skyUpgradeHttp() {
 		Log.e(TAG, "skyUpgradeHttp");
 		long beforeRequestTime = SharedUtils.getInstance().readLong(Constant.UPGRADE_INTERVAL);
 		if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
 		{
-			int DeviceType = 1;
+			int DeviceType ;
 			String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(braceletname)) {
 				if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
@@ -215,7 +215,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
 		}
 	}
-
+	//初始化设备界面与设备类型
 	private void initSet() {
 		Log.e(TAG, "initSet");
 		actionBar.hide();
@@ -343,16 +343,16 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
-				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED){
+//				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED){
 					if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETVERSION)) && !isUpgrade) {
 						SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, 0);
 						skyUpgradeHttp();
 					} else if (isUpgrade) {
 						showSkyUpgrade();
 					}
-				}else{
-					CommonTools.showShortToast(this,getString(R.string.unconnection_device));
-				}
+//				}else{
+//					CommonTools.showShortToast(this,getString(R.string.unconnection_device));
+//				}
 
 				break;
 			case R.id.findStatusLinearLayout:
@@ -792,6 +792,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else {
 			upgrade.changeText(getString(R.string.dfu_unibox_upgrade), desc);
 		}
+
 	}
 
 

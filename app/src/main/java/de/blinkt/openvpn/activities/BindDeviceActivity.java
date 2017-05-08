@@ -361,8 +361,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 				Log.i("test", "保存设备名成功");
 				if (bluetoothName.contains(Constant.UNITOYS)) {
 					utils.writeString(Constant.IMEI, deviceAddress);
-
-
 					mService.connect(deviceAddress);
 				} else {
 //					connectedRelativeLayout.setVisibility(View.VISIBLE);

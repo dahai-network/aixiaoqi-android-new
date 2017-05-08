@@ -402,8 +402,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
                 break;
         }
-        if(getActivity()!=null)
-            getActivity().startActivity(intent);
+        getActivity().startActivity(intent);
 
     }
     private Intent toActivity(Intent intent,String braceletName){
