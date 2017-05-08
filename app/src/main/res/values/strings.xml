@@ -644,4 +644,6 @@
     <string name="black_add_success">屏蔽成功！</string>
     <string name="black_remove_success">解除屏蔽！</string>
     <string name="bind_error">绑定异常请重试</string>
+    <string name="unconnection_device">未连接设备</string>
+    <string name="no_remind_today">今日不再提醒</string>
 </resources>

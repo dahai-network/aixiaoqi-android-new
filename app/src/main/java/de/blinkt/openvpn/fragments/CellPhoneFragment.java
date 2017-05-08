@@ -9,8 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,19 +17,15 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import com.umeng.analytics.MobclickAgent;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.MyViewPager;
-
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLEPHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLESMS;
 
@@ -58,8 +52,8 @@ public class CellPhoneFragment extends BaseStatusFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
+
         setLayoutId(R.layout.cell_phone_fragment);
-//        View view = inflater.inflate(R.layout.cell_phone_fragment, container, false);
         View view = super.onCreateView(inflater, container,
                 savedInstanceState);
         initView(view);

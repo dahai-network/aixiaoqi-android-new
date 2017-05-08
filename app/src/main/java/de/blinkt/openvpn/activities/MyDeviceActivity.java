@@ -87,11 +87,6 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
 
 public class MyDeviceActivity extends BaseNetActivity implements DialogInterfaceTypeBase, View.OnClickListener {
-
-	//	@BindView(R.id.noConnectImageView)
-//	ImageView noConnectImageView;
-//	@BindView(R.id.statueTextView)
-//	TextView statueTextView;
 	@BindView(R.id.firmwareTextView)
 	TextView firmwareTextView;
 	@BindView(R.id.callPayLinearLayout)
@@ -203,10 +198,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
 					//手环固件
 					DeviceType = 0;
-				} else {
+				} else if(braceletname.contains(MyDeviceActivity.UNIBOX)){
 					//钥匙扣固件
 					DeviceType = 1;
+				}else{
+					return;
 				}
+			}else{
+				return;
 			}
 			createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
 		}
@@ -222,7 +221,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			deviceNameTextView.setText(getString(R.string.unibox_key));
-		} else {
+		} else if(bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)){
 			alarmClockLinearLayout.setVisibility(View.VISIBLE);
 			messageRemindLinearLayout.setVisibility(View.VISIBLE);
 			findStatusLinearLayout.setVisibility(View.VISIBLE);
@@ -280,15 +279,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	private void titleSet() {
-//		title.setTextTitle(getString(device));
-//		title.setLeftBtnIcon(R.drawable.btn_top_back);
-//		title.getLeftText().setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				onBackPressed();
-//			}
-//		});
-		hasLeftViewTitle(device,0);
+		title.setTextTitle(getString(device));
+		title.setLeftBtnIcon(R.drawable.btn_top_back);
+		title.getLeftText().setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onBackPressed();
+			}
+		});
 		title.setBackground(R.color.color_0F93FE);
 
 	}
@@ -340,12 +338,17 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
-				if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETVERSION)) && !isUpgrade) {
-					SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, 0);
-					skyUpgradeHttp();
-				} else if (isUpgrade) {
-					showSkyUpgrade();
+				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED){
+					if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETVERSION)) && !isUpgrade) {
+						SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, 0);
+						skyUpgradeHttp();
+					} else if (isUpgrade) {
+						showSkyUpgrade();
+					}
+				}else{
+					CommonTools.showShortToast(this,getString(R.string.unconnection_device));
 				}
+
 				break;
 			case R.id.findStatusLinearLayout:
 				if (!CommonTools.isFastDoubleClick(3000)) {
@@ -842,6 +845,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void downloadSkyUpgradePackageHttp(String path) {
 		DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = new DownloadSkyUpgradePackageHttp(this, HttpConfigUrl.COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE, true, path);
 		new Thread(downloadSkyUpgradePackageHttp).start();
+
 	}
 
 	@Override
