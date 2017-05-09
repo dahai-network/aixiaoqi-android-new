@@ -356,7 +356,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
                     intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
                 } else {
-
                     String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
                     //如果设备名没有就设置成爱小器钥匙扣
                     if (TextUtils.isEmpty(braceletName)) {

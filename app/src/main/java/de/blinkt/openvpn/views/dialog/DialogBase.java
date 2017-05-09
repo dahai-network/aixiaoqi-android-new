@@ -39,7 +39,6 @@ abstract public class DialogBase{
         try {
             LayoutInflater inflater = LayoutInflater.from(context);
             View view = inflater.inflate(layoutId, null);
-
             dialog = new Dialog(context, R.style.dialog);
             dialog.setCancelable(true);
             dialog.setCanceledOnTouchOutside(true);

@@ -36,20 +36,18 @@ public class CallRecordAdapter extends RecyclerBaseAdapter<CallRecordAdapter.Vie
         ContactRecodeEntity contactRecodeEntity = mList.get(position);
         holder.callDirIv.setImageResource(R.drawable.image_answer_state);
         //来电
+        holder.callTimeTv.setTextColor(Color.argb(255,51,51,51));
+        holder.callDirIv.setVisibility(View.VISIBLE);
         if (Constant.CALL_INCOMING.equals(contactRecodeEntity.getTypeString())) {
-            holder.callTimeTv.setTextColor(Color.argb(255,51,51,51));
-            holder.callDirIv.setVisibility(View.VISIBLE);
             holder.callDirIv.setImageResource(R.drawable.image_answer_state);
         }
         //未接
-        if (Constant.CALL_MISSED.equals(contactRecodeEntity.getTypeString())) {
+       else if (Constant.CALL_MISSED.equals(contactRecodeEntity.getTypeString())) {
             holder.callTimeTv.setTextColor(Color.RED);
             holder.callDirIv.setVisibility(View.INVISIBLE);
         }
         //拨出
-        if (Constant.CALL_OUTGOING.equals(contactRecodeEntity.getTypeString())) {
-            holder.callTimeTv.setTextColor(Color.argb(255,51,51,51));
-            holder.callDirIv.setVisibility(View.VISIBLE);
+      else  if (Constant.CALL_OUTGOING.equals(contactRecodeEntity.getTypeString())) {
             holder.callDirIv.setImageResource(R.drawable.image_dial_state);
         }
         if (!TextUtils.isEmpty(contactRecodeEntity.getData())) {

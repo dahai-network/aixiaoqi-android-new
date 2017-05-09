@@ -216,8 +216,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		instance = this;
-//		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		actionBar.hide();
 		setContentView(R.layout.activity_pro_main);
@@ -286,7 +285,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	}
 
-
+//
 	private void searchBLE() {
 		/**
 		 * 搜索蓝牙步骤：
@@ -402,7 +401,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		if (accountFragment == null) {
 			accountFragment = new AccountFragment();
 		}
-		if (list.size() < 5) {
+		if (list.size() < 4) {
 			list.clear();
 			list.add(indexFragment);
 			list.add(cellPhoneFragment);
@@ -1336,9 +1335,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 	//是否注册成功，如果是则信号强，反之则信号弱
 	private void checkRegisterStatuGoIp() {
-		if (REGISTER_STATUE_CODE == 1) {
-			sendEventBusChangeBluetoothStatus(getString(index_registing), R.drawable.index_no_signal);
-		} else if (REGISTER_STATUE_CODE != 3) {
+		if (REGISTER_STATUE_CODE != 3) {
 			sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
 		} else {
 			sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);

@@ -25,12 +25,12 @@ public class DialogTipUpgrade extends DialogBase implements View.OnClickListener
     }
 
     private void addListener() {
-            tvCancel.setOnClickListener(this);
+        tvCancel.setOnClickListener(this);
         tvRechange.setOnClickListener(this);
     }
 
     public void changeText(String title, String dsc) {
-        if(title==null){
+        if(titleTextView==null){
             CommonTools.delayTime(10);
             changeText(title,dsc);
             return;

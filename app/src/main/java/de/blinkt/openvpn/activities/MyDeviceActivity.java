@@ -338,16 +338,16 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
-//				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED){
+				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED){
 					if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETVERSION)) && !isUpgrade) {
 						SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, 0);
 						skyUpgradeHttp();
 					} else if (isUpgrade) {
 						showSkyUpgrade();
 					}
-//				}else{
-//					CommonTools.showShortToast(this,getString(R.string.unconnection_device));
-//				}
+				}else{
+					CommonTools.showShortToast(this,getString(R.string.unconnection_device));
+				}
 
 				break;
 			case R.id.findStatusLinearLayout:
@@ -821,11 +821,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	Dialog upgradeDialog;
-
+	DialogUpgrade dialogUpgrade;
 
 	private void initDialogUpgrade() {
 		Log.d(TAG, "initDialogUpgrade");
-		DialogUpgrade dialogUpgrade = new DialogUpgrade(this, this, R.layout.dialog_upgrade, 3);
+		dialogUpgrade = new DialogUpgrade(this, this, R.layout.dialog_upgrade, 3);
 		upgradeDialog = dialogUpgrade.getDialogUpgrade();
 		mDfuProgressListener = dialogUpgrade.getDfuProgressListener();
 		hideDialogUpgrade();
@@ -834,8 +834,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void showDialogUpgrade() {
 		Log.d(TAG, "showDialogUpgrade");
 		isUpgrade = true;
-		if (upgradeDialog != null)
+		if (upgradeDialog != null){
+			dialogUpgrade.setProgressBar();
 			upgradeDialog.show();
+		}
 	}
 
 	private void hideDialogUpgrade() {

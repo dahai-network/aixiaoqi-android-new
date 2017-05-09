@@ -646,4 +646,6 @@
     <string name="bind_error">绑定异常请重试</string>
     <string name="unconnection_device">未连接设备</string>
     <string name="no_remind_today">今日不再提醒</string>
+    <string name="no_can_connect_device">没有可连接的设备</string>
+    <string name="service_is_error">服务器出错</string>
 </resources>
