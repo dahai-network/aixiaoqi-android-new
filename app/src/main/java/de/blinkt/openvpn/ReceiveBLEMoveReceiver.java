@@ -706,15 +706,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		}
 	}
 
-	/**
-	 * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
-	 */
-//	private void sendEventBusChangeBluetoothStatus(String status, int statusDrawableInt) {
-//		ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-//		entity.setStatus(status);
-//		entity.setStatusDrawableInt(statusDrawableInt);
-//		EventBus.getDefault().post(entity);
-//	}
 	private void connectGoip() {
 		if (ProMainActivity.sendYiZhengService != null) {
 			EventBusUtil.changeConnectStatus(context.getString(R.string.index_registing), R.drawable.index_no_signal);

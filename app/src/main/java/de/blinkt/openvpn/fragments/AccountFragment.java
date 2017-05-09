@@ -217,7 +217,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
     private void getDeviceType(){
         if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))&&TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))){
-            mHandler.sendEmptyMessage(6);
         CreateHttpFactory.instanceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
         }else{
             mHandler.sendEmptyMessage(5);
