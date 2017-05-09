@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 
 import cn.com.aixiaoqi.R;
 
@@ -40,7 +39,6 @@ abstract public class DialogBase{
         try {
             LayoutInflater inflater = LayoutInflater.from(context);
             View view = inflater.inflate(layoutId, null);
-            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             dialog = new Dialog(context, R.style.dialog);
             dialog.setCancelable(true);
             dialog.setCanceledOnTouchOutside(true);

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (c) 2012-2016 Arne Schwabe
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
 -->
@@ -6,20 +7,20 @@
           xmlns:tools="http://schemas.android.com/tools"
           xmlns:uses-featureandroid="http://schemas.android.com/apk/res-auto"
           package="cn.com.aixiaoqi">
+
     <!-- Required -->
     <permission
         android:name="${JPUSH_PKGNAME}.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"/>
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
-        android:required="true" />
+        android:required="true"/>
     <uses-feature
         android:name="android.hardware.location.gps"
-        android:required="true" />
+        android:required="true"/>
 
-
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
@@ -39,28 +40,28 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission
         android:name="android.permission.WRITE_APN_SETTINGS"
-        tools:ignore="PermissionImpliesUnsupportedHardware,ProtectedPermissions" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!--  <uses-permission android:name="android.permission.READ_CONTACTS" />-->
+        tools:ignore="PermissionImpliesUnsupportedHardware,ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- <uses-permission android:name="android.permission.READ_CONTACTS" /> -->
 
     <uses-feature
         android:name="android.software.leanback"
-        android:required="false" />
+        android:required="false"/>
     <uses-feature
         android:name="android.hardware.touchscreen"
-        android:required="false" />
+        android:required="false"/>
 
     <!-- <uses-permission android:name="com.android.vending.BILLING" />   android:theme="@style/blinkt" -->
     <!-- " -->
@@ -78,84 +79,84 @@
         tools:replace="android:icon">
         <meta-data
             android:name="com.tencent.rdm.uuid"
-            android:value="6a4c151b-706a-41c0-b96e-40738e64c1ad" />
+            android:value="6a4c151b-706a-41c0-b96e-40738e64c1ad"/>
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="58393022bbea837e4b0005e9" />
+            android:value="58393022bbea837e4b0005e9"/>
         <!-- 渠道 -->
 
         <meta-data
             android:name="yingyongbao"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="${UMENG_CHANNEL_VALUE}"/>
         <meta-data
             android:name="xiaomi"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="${UMENG_CHANNEL_VALUE}"/>
         <meta-data
             android:name="baidu"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="${UMENG_CHANNEL_VALUE}"/>
         <meta-data
             android:name="huawei"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="${UMENG_CHANNEL_VALUE}"/>
         <meta-data
             android:name="qihu360"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="${UMENG_CHANNEL_VALUE}"/>
         <meta-data
             android:name="google"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="${UMENG_CHANNEL_VALUE}"/>
         <meta-data
             android:name="oppo"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="${UMENG_CHANNEL_VALUE}"/>
         <meta-data
             android:name="vivo"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="${UMENG_CHANNEL_VALUE}"/>
         <meta-data
             android:name="wandoujia"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="${UMENG_CHANNEL_VALUE}"/>
 
-        <activity android:name="de.blinkt.openvpn.activities.SMSAcivity" />
-        <activity android:name="de.blinkt.openvpn.activities.EditNameActivity" />
-        <activity android:name="de.blinkt.openvpn.activities.WebViewActivity" />
+        <activity android:name="de.blinkt.openvpn.activities.SMSAcivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.EditNameActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.WebViewActivity"/>
         <activity
             android:name="de.blinkt.openvpn.activities.CallPhoneNewActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:permission="android.permission.RECORD_AUDIO"
-
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="de.blinkt.openvpn.activities.ProMainActivity"
             android:label="@string/app"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="de.blinkt.openvpn.activities.ContactActivity"
             android:label="@string/app"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="de.blinkt.openvpn.activities.CallDetailActivity"
             android:label="@string/app"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="de.blinkt.openvpn.activities.ContactDetailActivity"
             android:label="@string/app"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="de.blinkt.openvpn.activities.PackageCategoryActivity"
             android:label="@string/app"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="de.blinkt.openvpn.activities.LoginMainActivity"
             android:label="@string/app"
-
             android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="wxff7e7ee82cd9afc4" /> <!-- 需修改 -->
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data android:scheme="wxff7e7ee82cd9afc4"/> <!-- 需修改 -->
             </intent-filter>
         </activity>
-        <activity android:name="de.blinkt.openvpn.activities.RegistActivity" />
-        <activity android:name="de.blinkt.openvpn.activities.StartUpHomePageActivity" />
+        <activity android:name="de.blinkt.openvpn.activities.RegistActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.StartUpHomePageActivity"/>
         <!--
         <receiver android:name="core.GetRestrictionReceiver">
             <intent-filter>
@@ -165,54 +166,51 @@
         -->
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
-            android:theme="@android:style/Theme.Translucent" />
+            android:theme="@android:style/Theme.Translucent"/>
         <activity
             android:name="de.blinkt.openvpn.activities.ReceiveCallActivity"
-            android:launchMode="singleTop"
-
-            ></activity>
-        <activity android:name="de.blinkt.openvpn.activities.GetBackPswActivity"></activity>
+            android:launchMode="singleTop"/>
+        <activity android:name="de.blinkt.openvpn.activities.GetBackPswActivity"/>
         <activity
             android:name="de.blinkt.openvpn.activities.MyDeviceActivity"
-            android:launchMode="singleTask"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.MyPackageActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.TipUserOptionActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.AlarmClockActivity"></activity>
+            android:launchMode="singleTask"/>
+        <activity android:name="de.blinkt.openvpn.activities.MyPackageActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.TipUserOptionActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.AlarmClockActivity"/>
         <activity
             android:name="de.blinkt.openvpn.activities.BindDeviceActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.MyOrderDetailActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.SettingActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.PersonalCenterActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.UserFeedbackActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.PackageDetailActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.PackageMarketActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.ContactUsActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.OverseaGuideFeeActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.CountryPackageActivity"></activity>
+            android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name="de.blinkt.openvpn.activities.MyOrderDetailActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.SettingActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.PersonalCenterActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.UserFeedbackActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.PackageDetailActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.PackageMarketActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.ContactUsActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.OverseaGuideFeeActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.CountryPackageActivity"/>
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind"/>
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind"/>
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleInstance"
-
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.CommitOrderActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.RechargeActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.NotificationActivity" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
+        <activity android:name="de.blinkt.openvpn.activities.CommitOrderActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.RechargeActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.NotificationActivity"/>
 
         <receiver android:name=".AppRegister">
             <intent-filter>
-                <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
+                <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP"/>
             </intent-filter>
         </receiver>
         <receiver android:name="com.aixiaoqi.socket.AutoReceiver">
@@ -230,37 +228,37 @@
             android:configChanges="orientation|keyboardHidden"
             android:exported="false">
             <intent-filter>
-                <action android:name="cn.jpush.android.ui.PushActivity" />
+                <action android:name="cn.jpush.android.ui.PushActivity"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="cn.com.aixiaoqi" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="cn.com.aixiaoqi"/>
             </intent-filter>
         </activity>
 
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
-            android:exported="false"></service>
-        <service android:name="de.blinkt.openvpn.service.GrayService"></service>
-        <service android:name="de.blinkt.openvpn.service.GrayService$GrayInnerService"></service>
+            android:exported="false"/>
+        <service android:name="de.blinkt.openvpn.service.GrayService"/>
+        <service android:name="de.blinkt.openvpn.service.GrayService$GrayInnerService"/>
         <service
             android:name="cn.jpush.android.service.PushService"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTER" />
-                <action android:name="cn.jpush.android.intent.REPORT" />
-                <action android:name="cn.jpush.android.intent.PushService" />
-                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
+                <action android:name="cn.jpush.android.intent.REGISTER"/>
+                <action android:name="cn.jpush.android.intent.REPORT"/>
+                <action android:name="cn.jpush.android.intent.PushService"/>
+                <action android:name="cn.jpush.android.intent.PUSH_TIME"/>
             </intent-filter>
         </service>
         <service
             android:name="de.blinkt.openvpn.service.DfuService"
             android:exported="true">
             <intent-filter>
-                <action android:name="no.nordicsemi.android.action.DFU_UPLOAD" />
+                <action android:name="no.nordicsemi.android.action.DFU_UPLOAD"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
         <!--
@@ -273,37 +271,37 @@
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true">
             <intent-filter android:priority="1000">
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>
 
-                <category android:name="cn.com.aixiaoqi" />
+                <category android:name="cn.com.aixiaoqi"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
             <!-- Optional -->
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
 
-                <data android:scheme="package" />
+                <data android:scheme="package"/>
             </intent-filter>
         </receiver>
         <receiver
             android:name="cn.jpush.android.service.AlarmReceiver"
-            android:exported="false" />
+            android:exported="false"/>
         <receiver
             android:name="de.blinkt.openvpn.push.MyReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!-- Required  用户注册SDK的intent -->
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!-- Required  用户接收SDK消息的intent -->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!-- Required  用户接收SDK通知栏信息的intent -->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!-- Required  用户打开自定义通知栏的intent -->
-                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" /> <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
-                <action android:name="cn.jpush.android.intent.CONNECTION" /> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
-                <category android:name="${JPUSH_PKGNAME}" />
+                <action android:name="cn.jpush.android.intent.REGISTRATION"/> <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/> <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/> <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/> <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK"/> <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION"/> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name="${JPUSH_PKGNAME}"/>
             </intent-filter>
         </receiver>
         <receiver
@@ -311,61 +309,57 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="cn.phone.android.intent.CALL_PHONE" /> <!-- 打电话 -->
-                <action android:name="cn.phone.android.intent.RECIVE_PHONE" /> <!-- 接电话 -->
+                <action android:name="cn.phone.android.intent.CALL_PHONE"/> <!-- 打电话 -->
+                <action android:name="cn.phone.android.intent.RECIVE_PHONE"/> <!-- 接电话 -->
             </intent-filter>
         </receiver>
 
-        <activity android:name="de.blinkt.openvpn.activities.BalanceParticularsActivity"></activity>
-        <!--de.blinkt.openvpn.activities.LaunchActivity
-
-        -->
-        <!---->
+        <activity android:name="de.blinkt.openvpn.activities.BalanceParticularsActivity"/>
+        <!-- de.blinkt.openvpn.activities.LaunchActivity -->
+        <!--  -->
         <activity
             android:name="de.blinkt.openvpn.activities.LaunchActivity"
             android:theme="@style/launchTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="de.blinkt.openvpn.activities.PaySuccessActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.ActivateActivity"></activity>
+        <activity android:name="de.blinkt.openvpn.activities.PaySuccessActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.ActivateActivity"/>
 
         <service
             android:name="de.blinkt.openvpn.bluetooth.service.UartService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"/>
         <service
             android:name="de.blinkt.openvpn.service.CallPhoneService"
-            android:enabled="true"></service>
+            android:enabled="true"/>
         <service
             android:name="de.blinkt.openvpn.service.UpdateStepService"
-            android:enabled="true" />
+            android:enabled="true"/>
         <service
             android:name="com.aixiaoqi.socket.ReceiveDataframSocketService"
-            android:enabled="true" />
+            android:enabled="true"/>
         <service
             android:name="com.aixiaoqi.socket.ReceiveSocketService"
             android:enabled="true"
             android:exported="false"
-            android:persistent="true" />
+            android:persistent="true"/>
 
-
-        <activity android:name="de.blinkt.openvpn.activities.OutsideFirstStepActivity"></activity>
-
-        <activity android:name="de.blinkt.openvpn.activities.OutsideSecondStepActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.OutsideThirdStepActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.OutsideFourStepActivity"></activity>
+        <activity android:name="de.blinkt.openvpn.activities.OutsideFirstStepActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.OutsideSecondStepActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.OutsideThirdStepActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.OutsideFourStepActivity"/>
 
         <service
             android:name="de.blinkt.openvpn.service.NotificationMonitor"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
+                <action android:name="android.service.notification.NotificationListenerService"/>
             </intent-filter>
         </service>
 
@@ -373,49 +367,54 @@
             android:name="de.blinkt.openvpn.service.NotificationMonitor$PhoneBroadcastReceiver"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter android:priority="2147483647">
-                <action android:name="android.intent.action.PHONE_STATE" />
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-                <action android:name="android.provider.Telephony.SMS_DELIVER" />
-                <action android:name="android.intent.action.SMS_STATUS_RECEIVED" />
+                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <action android:name="android.provider.Telephony.SMS_DELIVER"/>
+                <action android:name="android.intent.action.SMS_STATUS_RECEIVED"/>
             </intent-filter>
         </receiver>
         <receiver android:name="de.blinkt.openvpn.push.StateChangeReceiver">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
             </intent-filter>
         </receiver>
 
-        <activity android:name="de.blinkt.openvpn.activities.SetAlarmActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.RepeatActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.LableActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.BindRechargeCardActivity"></activity>
-
-
-        <activity android:name="de.blinkt.openvpn.activities.CallPackageLlistActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.CallTimeOrderDetailActitivy"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.KingCardDetailActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.CallTimePacketDetailActivity"></activity>
-
-        <activity android:name="de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.TipUserOptionsActivity"></activity>
-        <activity android:name="de.blinkt.openvpn.activities.ImportantAuthorityActivity"></activity>
+        <activity android:name="de.blinkt.openvpn.activities.SetAlarmActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.RepeatActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.LableActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.BindRechargeCardActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.CallPackageLlistActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.CallTimeOrderDetailActitivy"/>
+        <activity android:name="de.blinkt.openvpn.activities.KingCardDetailActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.CallTimePacketDetailActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.TipUserOptionsActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.ImportantAuthorityActivity"/>
         <activity
             android:name="de.blinkt.openvpn.activities.ShadeActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/translucent"></activity>
+            android:theme="@style/translucent"/>
 
-        <!--开机广播接受者-->
+        <!-- 开机广播接受者 -->
         <receiver
             android:name="de.blinkt.openvpn.broadcast.StartBroadcast"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter android:priority="999">
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-                <category android:name="android.intent.category.HOME" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+
+                <category android:name="android.intent.category.HOME"/>
             </intent-filter>
         </receiver>
 
+        <activity android:name="de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity">
+        </activity>
+        <activity
+            android:name="de.blinkt.openvpn.activities.EveryDayRecomActivity"
+            android:theme="@style/ActivityDialogTrancslucent"
+            >
+        </activity>
     </application>
 
 </manifest>

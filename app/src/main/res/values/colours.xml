@@ -54,6 +54,7 @@
     <color name="order_detail_background">#eaecf0</color>
     <color name="light_gray">#e5e5e5</color>
     <color name="transparent_bg">#00000000</color>
+    <color name="transparent_bg_70">#B3000000</color>
     <color name="transparent_gray">#806c7586</color>
     <color name="regist_send_sms_unenable">#ababab</color>
     <color name="login_hint_gray">#6c7586</color>

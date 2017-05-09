@@ -27,7 +27,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -89,10 +88,10 @@ import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StartRegistEntity;
-import de.blinkt.openvpn.model.StateChangeEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
@@ -188,8 +187,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private DialogBalance noLocationPermissionDialog;
 
 
-
-
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
 		return super.getLastCustomNonConfigurationInstance();
@@ -244,6 +241,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			//不能按返回键，只能二选其一
 			noLocationPermissionDialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
 			noLocationPermissionDialog.changeText(getResources().getString(R.string.no_location_permission), getResources().getString(R.string.sure));
+		}
+		//如果没有保存过推送每日推荐的日期，则为第一次推送,如果
+		String recommandStr = SharedUtils.getInstance().readString(Constant.RECOMMAND_DATE);
+		String todayStr = DateUtils.getCurrentDate();
+		Intent intent = new Intent(this, EveryDayRecomActivity.class);
+		if (recommandStr == null || !recommandStr.equals(todayStr)) {
+			startActivity(intent);
+			SharedUtils.getInstance().writeString(Constant.RECOMMAND_DATE, todayStr);
 		}
 	}
 
@@ -418,7 +423,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	Fragment_Phone phoneFragment;
-
 
 
 	@Override
@@ -860,6 +864,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 									noPreDataStartSDK();
 								}
 							} else {
+								CommonTools.delayTime(2000);
 								SendCommandToBluetooth.sendMessageToBlueTooth(ICCID_GET);
 							}
 						}

@@ -2,32 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical"
               android:background="@drawable/dialog_background"
+              android:orientation="vertical"
     >
 
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/padding_25dp"
-        android:textSize="@dimen/little_16"
-        android:paddingRight="@dimen/padding_15dp"
-        android:paddingLeft="@dimen/padding_15dp"
-        android:paddingBottom="@dimen/padding_25dp"
         android:gravity="center"
-        android:text="@string/balance_rechange"
+        android:paddingBottom="@dimen/padding_25dp"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:paddingRight="@dimen/padding_15dp"
+        android:paddingTop="@dimen/padding_25dp"
+        android:text="@string/used_freeforworry_tips"
+        android:textSize="@dimen/little_16"
         />
+
     <CheckBox
         android:id="@+id/remindCheckBox"
         android:layout_width="wrap_content"
-        android:layout_marginLeft="@dimen/padding_15dp"
-        android:layout_marginBottom="@dimen/padding_15dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_15dp"
+        android:layout_marginLeft="@dimen/padding_15dp"
         android:text="@string/no_remind_today"
         />
-    
-    
+
+
     <View
         style="@style/horizontal_line_view"
         />
@@ -39,29 +40,29 @@
         <TextView
             android:id="@+id/tv_rechange"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="@dimen/padding_40dp"
-            android:textSize="@dimen/little_16"
+            android:layout_weight="1"
             android:gravity="center"
+            android:text="@string/to_get"
             android:textColor="@color/aggreement"
-            android:text="@string/rechange"
+            android:textSize="@dimen/little_16"
             />
 
         <View
-            android:background="@color/light_gray"
             android:layout_width="1px"
             android:layout_height="@dimen/padding_40dp"
+            android:background="@color/light_gray"
             />
 
         <TextView
             android:id="@+id/tv_cancel"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="@dimen/padding_40dp"
-            android:textSize="@dimen/little_16"
+            android:layout_weight="1"
             android:gravity="center"
+            android:text="@string/next_time"
             android:textColor="@color/aggreement"
-            android:text="@string/cancel"
+            android:textSize="@dimen/little_16"
             />
     </LinearLayout>
 

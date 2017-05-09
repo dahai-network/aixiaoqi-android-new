@@ -391,7 +391,6 @@
     <string name="outside_step_four_click">打开系统设置</string>
 
 
-
     <!--激活套餐-->
     <string name="less_current_time">生效时间不能小于当前时间</string>
     <string name="app_name">联系人搜索</string>
@@ -646,4 +645,8 @@
     <string name="bind_error">绑定异常请重试</string>
     <string name="unconnection_device">未连接设备</string>
     <string name="no_remind_today">今日不再提醒</string>
+    <string name="used_freeforworry_tips">推荐使用爱小器0元话费体验包，向高额话费说拜拜</string>
+    <string name="to_get">去领取</string>
+    <string name="next_time">下次</string>
+    <string name="free_for_worry">省心服务</string>
 </resources>
