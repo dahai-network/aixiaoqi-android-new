@@ -216,12 +216,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		instance = this;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		actionBar.hide();
 		setContentView(R.layout.activity_pro_main);
+
 		ButterKnife.bind(this);
 		findViewById();
 		initFragment();
 		initView();
+		if(actionBar!=null)
+			actionBar.hide();
+		else{
+			actionBar=getActionBar();
+			if(actionBar!=null)
+			actionBar.hide();
+		}
 		addListener();
 		setListener();
 		initServices();
@@ -291,7 +298,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		}
 	}
 
-//
+	//
 	private void searchBLE() {
 		/**
 		 * 搜索蓝牙步骤：

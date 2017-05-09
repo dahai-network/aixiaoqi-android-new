@@ -217,10 +217,11 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
     private void getDeviceType(){
         if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))&&TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))){
-            mHandler.sendEmptyMessage(5);
+            mHandler.sendEmptyMessage(6);
         CreateHttpFactory.instanceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
         }else{
-            mHandler.sendEmptyMessage(6);
+            mHandler.sendEmptyMessage(5);
+
         }
     }
     /**
@@ -570,8 +571,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
             if (getString(R.string.index_un_insert_card).equals(bleStatus)
                     || getString(R.string.index_unconnect).equals(bleStatus)
                     || getString(R.string.index_registing).equals(bleStatus)) {
-//				signalIconImageView.setBackgroundResource(R.drawable.unregist);
-//				operatorTextView.setText("----");
                 setRegisted(false);
             } else if (getString(R.string.index_aixiaoqicard).equals(bleStatus)) {
                 operatorTextView.setText(getString(R.string.unitoy_card));
