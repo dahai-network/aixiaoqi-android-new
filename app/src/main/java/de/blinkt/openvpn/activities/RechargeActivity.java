@@ -232,6 +232,10 @@ public class RechargeActivity extends BaseNetActivity implements InterfaceCallba
 	private void pay(int payWay) {
 		if (!"".equals(moneyAmount + "")) {
 			if (moneyAmount != 0) {
+				if (moneyAmount > 5000) {
+					moneyAmount=5000;
+
+				}
 				createHttpRequest(HttpConfigUrl.COMTYPE_RECHARGE_ORDER, moneyAmount + "", payWay+"");
 			} else {
 				nextBtn.setEnabled(true);

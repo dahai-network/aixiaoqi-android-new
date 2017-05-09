@@ -186,13 +186,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	DfuProgressListener mDfuProgressListener;
 
-	//空中升级,
+	//空中升级,如果没有设备类型就不升级，如果有的话再去升级。
 	private void skyUpgradeHttp() {
 		Log.e(TAG, "skyUpgradeHttp");
 		long beforeRequestTime = SharedUtils.getInstance().readLong(Constant.UPGRADE_INTERVAL);
 		if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
 		{
-			int DeviceType = 1;
+			int DeviceType ;
 			String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(braceletname)) {
 				if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
@@ -210,7 +210,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
 		}
 	}
-
+	//初始化设备界面与设备类型
 	private void initSet() {
 		Log.e(TAG, "initSet");
 		actionBar.hide();
@@ -234,20 +234,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
 		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 
-//		hasLeftViewTitle(device, 0);
 		titleSet();
 
 		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 			int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
-//			noConnectImageView.setVisibility(GONE);
-//			unBindButton.setVisibility(View.VISIBLE);
-//			sinking.setVisibility(View.VISIBLE);
 			if (electricityInt != 0) {
 				sinking.setPercent(((float) electricityInt) / 100);
 			} else {
 				sinking.setPercent(0f);
 			}
-//			statueTextView.setVisibility(GONE);
 			if (blueStatus != null) {
 				//如果状态来不及更新，仍是未绑定则修改为未插卡
 				if (blueStatus.equals(getString(R.string.index_unbind))) {
@@ -256,8 +251,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				setConStatus(blueStatus);
 			}
 			skyUpgradeHttp();
-		} else {
-//			createHttpRequest(HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 		}
 
 		firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
@@ -266,6 +259,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				&& conStatusTextView.getText().toString().equals(getResources().getString(R.string.index_registing))) {
 			startAnim();
 		}
+		//注册中的时候，初始化进度
 		if (percentInt != 0 && ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.mConnectionState == UartService.STATE_CONNECTED) {
 			percentTextView.setText(percentInt + "%");
 		}
@@ -304,12 +298,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						mService.connect(macStr);
 						Log.i(TAG, "重连重新触发");
 					}
-//					String deviceAddress = SharedUtils.getInstance().readString(Constant.IMEI);
-//					if (!TextUtils.isEmpty(deviceAddress)) {
-//						connDevice(deviceAddress);
-//					} else {
-//						clickFindBracelet();
-//					}
 				} else {
 					Log.d(TAG, "蓝牙未打开");
 					finish();
@@ -325,16 +313,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@OnClick({R.id.unBindButton, R.id.callPayLinearLayout, R.id.register_sim_statue, R.id.findStatusLinearLayout, R.id.alarmClockLinearLayout, R.id.messageRemindLinearLayout})
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.unBindButton:
-				//重启Uart服务
-//				restartUartService();
+			case R.id.unBindButton://解除绑定，解绑以后，删除设备信息
 				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
 				MobclickAgent.onEvent(context, CLICKUNBINDDEVICE);
 				showUnBindDialog();
 				break;
-			case R.id.callPayLinearLayout:
+			case R.id.callPayLinearLayout://空中升级，如果没有连接成功就不升级
 				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
@@ -350,7 +336,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				}
 
 				break;
-			case R.id.findStatusLinearLayout:
+			case R.id.findStatusLinearLayout://查找设备
 				if (!CommonTools.isFastDoubleClick(3000)) {
 					new Thread(new Runnable() {
 						@Override
@@ -399,12 +385,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				}
 				break;
 
-//			case statueTextView:
-//				//当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
-//				registerSimStatu.setVisibility(View.VISIBLE);
-//				Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//				startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-//				break;
 
 			case R.id.alarmClockLinearLayout:
 				//当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
@@ -422,8 +402,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	private void getDeviceSimRegStatues() {
-		GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp = new GetDeviceSimRegStatuesHttp(this, HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES);
-		new Thread(getDeviceSimRegStatuesHttp).start();
+		createHttpRequest(HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES);
 	}
 
 	private void connectGoip() {
@@ -492,29 +471,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (action.equals(UartService.STATE_CONNECTED)) {
 				//TODO 连接成功，操作问题
 				//测试代码
-//				unBindButton.setVisibility(View.VISIBLE);
 				dismissProgress();
 				skyUpgradeHttp();
 				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
-//				if(isUpgrade&&startDfuCount==0){
-//					startDfuCount++;
-//					CommonTools.delayTime(10000);
-
-//				}
 			}
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				if (mService != null) {
 					if (retryTime >= 20) {
-//						sinking.setVisibility(GONE);
-//						noConnectImageView.setVisibility(View.VISIBLE);
-//						statueTextView.setVisibility(View.VISIBLE);
-//						unBindButton.setVisibility(GONE);
-//						SharedUtils.getInstance().delete(Constant.IMEI);
-//						SharedUtils.getInstance().delete(Constant.BRACELETNAME);
-//						macTextView.setText("");
-//						firmwareTextView.setText("");
-//						statueTextView.setText(getString(R.string.conn_bluetooth));
 						CommonTools.showShortToast(MyDeviceActivity.this, "已断开,请退出重新进入我的设备进行重连");
 						stopAnim();
 						return;
@@ -541,33 +505,17 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
 					percentTextView.setVisibility(GONE);
 					//多次重连无效后关闭蓝牙重启
-//					if (retryTime == 6) {
-//						mBtAdapter.disable();
-//						Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//						startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-//					}
 					if (!isUpgrade && isConnectOnce) {
 						showProgress(getString(R.string.reconnecting), true);
 
 					}
 				} else {
-//					unBindButton.setVisibility(GONE);
-//					SharedUtils.getInstance().delete(Constant.IMEI);
-//					macTextView.setText("");
-//					firmwareTextView.setText("");
-//					statueTextView.setText(getString(R.string.conn_bluetooth));
-//					sinking.setVisibility(GONE);
-//					noConnectImageView.setVisibility(View.VISIBLE);
-//					statueTextView.setVisibility(View.VISIBLE);
 					CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
 				}
 			}
 			if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 
 				final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
-//				String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(txValue);
-
-
 				try {
 					if (messages == null || messages.size() == 0 || !messages.get(0).substring(0, 2).equals("55")) {
 						return;
@@ -617,12 +565,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void setView() {
 		dismissProgress();
 		int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
-//		noConnectImageView.setVisibility(GONE);
-//		sinking.setVisibility(View.VISIBLE);
-//		resetDeviceTextView.setVisibility(View.VISIBLE);
 		macAddressStr = SharedUtils.getInstance().readString(Constant.IMEI);
-		if (macAddressStr != null)
-			macAddressStr = macAddressStr.toUpperCase();
 		macTextView.setText(macAddressStr);
 
 		if (electricityInt != 0) {
@@ -630,7 +573,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else {
 			sinking.setPercent(0f);
 		}
-//		statueTextView.setVisibility(GONE);
+
 	}
 
 
@@ -683,13 +626,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
 			if (object.getStatus() == 1) {
 				stopAnim();
-//				sinking.setVisibility(GONE);
-//				unBindButton.setVisibility(GONE);
-//				noConnectImageView.setVisibility(View.VISIBLE);
-//				statueTextView.setVisibility(View.VISIBLE);
 				registerSimStatu.setVisibility(GONE);
-				//statueTextView.setText(getString(R.string.conn_bluetooth));
-				//statueTextView.setEnabled(true);
 				firmwareTextView.setText("");
 				percentTextView.setVisibility(GONE);
 				macTextView.setText("");
@@ -787,6 +724,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} else {
 			upgrade.changeText(getString(R.string.dfu_unibox_upgrade), desc);
 		}
+
 	}
 
 
@@ -820,11 +758,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	}
 
 	Dialog upgradeDialog;
-
+	DialogUpgrade dialogUpgrade;
 
 	private void initDialogUpgrade() {
 		Log.d(TAG, "initDialogUpgrade");
-		DialogUpgrade dialogUpgrade = new DialogUpgrade(this, this, R.layout.dialog_upgrade, 3);
+		dialogUpgrade = new DialogUpgrade(this, this, R.layout.dialog_upgrade, 3);
 		upgradeDialog = dialogUpgrade.getDialogUpgrade();
 		mDfuProgressListener = dialogUpgrade.getDfuProgressListener();
 		hideDialogUpgrade();
@@ -833,8 +771,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void showDialogUpgrade() {
 		Log.d(TAG, "showDialogUpgrade");
 		isUpgrade = true;
-		if (upgradeDialog != null)
+		if (upgradeDialog != null){
+			dialogUpgrade.setProgressBar();
 			upgradeDialog.show();
+		}
 	}
 
 	private void hideDialogUpgrade() {
@@ -995,7 +935,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						Log.e(TAG, "find the device:" + device.getName() + "mac:" + device.getAddress() + "macAddressStr:" + macAddressStr + ",rssi :" + rssi);
 						if (mService != null) {
 							scanLeDevice(false);
-							SharedUtils.getInstance().writeString(Constant.IMEI, macAddressStr);
 							mService.connect(macAddressStr);
 						}
 					}

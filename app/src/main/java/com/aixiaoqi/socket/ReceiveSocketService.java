@@ -101,12 +101,15 @@ public class ReceiveSocketService extends Service {
 		if (!isDisconnect) {
 			CommonTools.delayTime(15000);
 			if (tcpClient != null && !tcpClient.isConnected()) {
+				if (REGISTER_STATUE_CODE == 3) {
+					REGISTER_STATUE_CODE = 2;
+					EventBusUtil.simRegisterStatue(SocketConstant.TCP_DISCONNECT);
+				}
 				if (contactFailCount <= 3) {
 					reConnect();
 					contactFailCount++;
 				} else {
 					contactFailCount = 0;
-					EventBusUtil.simRegisterStatue(SocketConstant.START_TCP_FAIL);
 				}
 			}
 		}

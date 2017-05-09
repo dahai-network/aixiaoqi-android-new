@@ -45,6 +45,8 @@ public class DialogUpgrade extends DialogBase {
 		return dialog;
 	}
 
+
+
 	@Override
 	protected void setDialogContentView(View view) {
 		mTextPercentage = (TextView) view.findViewById(R.id.textviewProgress);
@@ -54,6 +56,10 @@ public class DialogUpgrade extends DialogBase {
 		dialog.setCanceledOnTouchOutside(false);
 	}
 
+	public void setProgressBar(){
+		mProgressBar.setIndeterminate(true);
+		mTextPercentage.setText(R.string.dfu_status_starting);
+	}
 
 	public DfuProgressListener getDfuProgressListener() {
 		return mDfuProgressListener;
@@ -63,8 +69,7 @@ public class DialogUpgrade extends DialogBase {
 		@Override
 		public void onDeviceConnecting(String deviceAddress) {
 			mProgressBar.setIndeterminate(true);
-
-			mTextPercentage.setText(R.string.dfu_status_connecting);
+			mTextPercentage.setText(R.string.dfu_status_starting);
 		}
 
 		@Override

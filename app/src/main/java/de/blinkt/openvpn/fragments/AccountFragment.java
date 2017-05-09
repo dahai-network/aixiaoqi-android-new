@@ -140,7 +140,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     boolean hasPackage = false;
     public static ImageView tvNewPackagetAction;
     public static ImageView tvNewVersion;
-    String deviceTypeStr;
+
 
     public AccountFragment() {
         // Required empty public constructor
@@ -216,7 +216,12 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     }
 
     private void getDeviceType(){
+        if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))&&TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))){
+            mHandler.sendEmptyMessage(5);
         CreateHttpFactory.instanceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
+        }else{
+            mHandler.sendEmptyMessage(6);
+        }
     }
     /**
      * 设备布局
@@ -356,7 +361,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
                     intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
                 } else {
-
                     String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
                     //如果设备名没有就设置成爱小器钥匙扣
                     if (TextUtils.isEmpty(braceletName)) {
@@ -402,8 +406,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
                 break;
         }
-        if(getActivity()!=null)
-            getActivity().startActivity(intent);
+        getActivity().startActivity(intent);
 
     }
     private Intent toActivity(Intent intent,String braceletName){
@@ -524,14 +527,13 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
                         mHandler.sendEmptyMessage(5);
                         SharedUtils.getInstance().writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI());
-                        deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
+                        String        deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
                         if("0".equals(deviceTypeStr)){
                             SharedUtils.getInstance().writeString(Constant.BRACELETNAME,MyDeviceActivity.UNITOYS);
                         }else if("1".equals(deviceTypeStr)){
                             SharedUtils.getInstance().writeString(Constant.BRACELETNAME,MyDeviceActivity.UNIBOX);
                         }
                         if(isClickAddDevice){
-                            isClickAddDevice=false;
                             Intent intent=null;
                             intent=   toActivity(intent, SharedUtils.getInstance().readString(Constant.BRACELETNAME) );
                             startActivity(intent);
@@ -542,6 +544,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     }
                 }
             }
+            isClickAddDevice=false;
         }
     }
 
