@@ -228,6 +228,8 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 		sharedUtils.writeBoolean(Constant.ISFIRSTIN, true);
 		sharedUtils.delete(Constant.JPUSH_ALIAS);
 		sharedUtils.delete(Constant.TEL);
+		sharedUtils.delete(Constant.IMEI);
+		sharedUtils.delete(Constant.BRACELETNAME);
 		//友盟账号统计
 		MobclickAgent.onProfileSignOff();
 		EventBusUtil.cancelCallService();

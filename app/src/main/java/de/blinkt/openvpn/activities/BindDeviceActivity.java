@@ -396,6 +396,10 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 				CommonTools.showShortToast(this, object.getMsg());
 			}
 //			finish();
+		}else if(cmdType == HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO){
+			if(object.getStatus()==1){
+				utils.writeString(deviceAddress,utils.readString(Constant.BRACELETVERSION) );
+			}
 		}
 	}
 

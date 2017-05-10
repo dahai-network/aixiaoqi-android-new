@@ -296,7 +296,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		 * 3.打开后，则通过线程做扫描操作。
 		 * 4.扫描到设备则连接上，没扫描到十秒后自动断开。关闭所有与之相关的东西
 		 */
-		if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))&&TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))){
+		if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))||TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))){
 			createHttpRequest(HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 		}else{
 			skyUpgradeHttp();
@@ -771,7 +771,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						SharedUtils utils = SharedUtils.getInstance();
 
 						utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
-						utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
+//						utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
+						//按MAC地址保存版本号
+						if(!TextUtils.isEmpty(deviceAddress))
+						utils.writeString(deviceAddress, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
 						//防止返回“”或者null
 						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
 						if (!TextUtils.isEmpty(deviceTypeStr)) {

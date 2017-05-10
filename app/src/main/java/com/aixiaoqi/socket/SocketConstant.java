@@ -48,6 +48,9 @@ public class SocketConstant {
 	public static String UPDATE_CONNECTION = "108a0500";
 	public static String CONNECTION = "108a0400";
 	public static String PRE_DATA = "108a9000";
+	public static String RECEIVE_UPDATE_CONNECTION = "108a8500";
+	public static String RECEIVE_CONNECTION = "108a8400";
+	public static String RECEIVE_PRE_DATA = "108a1000";
 	public static final String SESSION_ID_TEMP = "00000000";
 	public static String hostIP = "120.25.161.113";
 	public static int port = 20016;

@@ -339,8 +339,11 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 					sharedUtils.writeString(Constant.WEIGHT, entity.getWeight());
 					sharedUtils.writeString(Constant.SOPRT_TARGET, entity.getMovingTarget());
 					//登录回来缺少连接设备类型，只有MAC
+					//按MAC地址保存版本号
+					if(!TextUtils.isEmpty(entity.getBraceletIMEI())){
 					sharedUtils.writeString(Constant.IMEI, entity.getBraceletIMEI().toUpperCase());
-					sharedUtils.writeString(Constant.BRACELETVERSION, entity.getBraceletVersion());
+					sharedUtils.writeString(entity.getBraceletIMEI().toUpperCase(), entity.getBraceletVersion());
+					}
 					sharedUtils.writeInt(Constant.COMING_TEL_REMIND, entity.getNotificaCall());
 					sharedUtils.writeInt(Constant.MESSAGE_REMIND, entity.getNotificaSMS());
 					sharedUtils.writeInt(Constant.WEIXIN_REMIND, entity.getNotificaWeChat());
