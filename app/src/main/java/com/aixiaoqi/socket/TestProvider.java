@@ -55,46 +55,40 @@ public class TestProvider {
 				iccidEntity.setImmsi(iccidArray1[1]);
 			}
 		}
-		String imsi;
-		if (!TextUtils.isEmpty(iccidEntity.getImmsi()))
-			imsi = iccidEntity.getImmsi().trim();
-		else {
+
+		if (TextUtils.isEmpty(iccidEntity.getImmsi())){
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 			return;
 		}
+
+
+
 		Log.e("preDataSplit", "ICCID:" + iccidEntity.getIccid() + "\nIMMSI:" + iccidEntity.getImmsi());
-		createTcp(imsi);
+		createTcp();
 	}
 
-	private static void createTcp(String imsi) {
-		if (!TextUtils.isEmpty(imsi)) {
-			if (validSim(imsi)) {//因为移动网络编号46000下的IMSI已经用完，所以虚拟了一个46002编号，134/159号段使用了此编号
-				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
-				SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
-				String token = SharedUtils.getInstance().readString(Constant.TOKEN);
-				if (TextUtils.isEmpty(token)) {
-					EventBusUtil.simRegisterStatue(SocketConstant.TOKEN_IS_NULL);
-				} else {
-					SocketConstant.CONNENCT_VALUE[3] = RadixAsciiChange.convertStringToHex(token);
-					REGISTER_STATUE_CODE = 2;
-					isIccid = true;
-					savePreData();
-					if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {
-						ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-					} else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {
-						SocketConnection.mReceiveSocketService.disconnect();
-						connectTcp();
-					} else {
-						connectTcp();
-					}
-
-				}
-			} else {
-				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR);
-			}
+	private static void createTcp() {
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
+		String token = SharedUtils.getInstance().readString(Constant.TOKEN);
+		if (TextUtils.isEmpty(token)) {
+			EventBusUtil.simRegisterStatue(SocketConstant.TOKEN_IS_NULL);
 		} else {
-			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
+			SocketConstant.CONNENCT_VALUE[3] = RadixAsciiChange.convertStringToHex(token);
+			REGISTER_STATUE_CODE = 2;
+			isIccid = true;
+			savePreData();
+			if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {
+				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			} else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {
+				SocketConnection.mReceiveSocketService.disconnect();
+				connectTcp();
+			} else {
+				connectTcp();
+			}
+
 		}
+
 	}
 
 	private static void connectTcp() {
@@ -113,19 +107,6 @@ public class TestProvider {
 		preReadEntity.setDataLength(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2]);
 		db.insertPreData(preReadEntity);
 	}
-
-	private static boolean validSim(String imsi) {
-		return imsi.startsWith("46000") || imsi.startsWith("46002")
-				|| imsi.startsWith("46007")
-				|| imsi.startsWith("46020")
-				|| imsi.startsWith("46001")
-				|| imsi.startsWith("46006")
-				|| imsi.startsWith("46009")
-				|| imsi.startsWith("46003")
-				|| imsi.startsWith("46005")
-				|| imsi.startsWith("46011");
-	}
-
 
 	private static void preDataSplit(String item) {
 

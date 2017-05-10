@@ -412,8 +412,11 @@
         </activity>
         <activity
             android:name="de.blinkt.openvpn.activities.EveryDayRecomActivity"
-            android:theme="@style/ActivityDialogTrancslucent"
-            >
+            android:theme="@style/ActivityDialogTrancslucent">
+        </activity>
+        <activity android:name="de.blinkt.openvpn.activities.FreeWorryIntroActivity">
+        </activity>
+        <activity android:name="de.blinkt.openvpn.activities.CommitFreeWorryActivity">
         </activity>
     </application>
 

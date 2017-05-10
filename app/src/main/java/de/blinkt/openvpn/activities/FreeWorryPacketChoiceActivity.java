@@ -29,7 +29,7 @@ public class FreeWorryPacketChoiceActivity extends BaseNetActivity implements XR
 		packetChoiceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 		packetChoiceRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 		packetChoiceRecyclerView.setLoadingListener(this);
-		FreeWorryPacketChoiceAdapter adapter = new FreeWorryPacketChoiceAdapter();
+		FreeWorryPacketChoiceAdapter adapter = new FreeWorryPacketChoiceAdapter(this);
 		packetChoiceRecyclerView.setAdapter(adapter);
 	}
 

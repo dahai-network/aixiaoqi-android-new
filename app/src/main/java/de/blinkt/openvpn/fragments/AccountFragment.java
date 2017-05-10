@@ -217,13 +217,11 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
 	}
 
-	private void getDeviceType() {
-		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))) {
-			mHandler.sendEmptyMessage(6);
-			CreateHttpFactory.instanceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
-		} else {
-			mHandler.sendEmptyMessage(5);
-
+    private void getDeviceType(){
+        if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))&&TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))){
+        CreateHttpFactory.instanceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
+        }else{
+            mHandler.sendEmptyMessage(5);
 		}
 	}
 

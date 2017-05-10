@@ -15,13 +15,13 @@ import de.blinkt.openvpn.model.StateChangeEntity;
  */
 
 public class EventBusUtil {
-
+    //卡注册状态
     public static void simRegisterStatue(int regstatues) {
         SimRegisterStatue entity = new SimRegisterStatue();
         entity.setRigsterSimStatue(regstatues);
         EventBus.getDefault().post(entity);
     }
-
+    //网络状态改变
     public static void simStateChange(String registerType,boolean isopen) {
         StateChangeEntity entity = new StateChangeEntity();
         entity.setStateType(registerType);
