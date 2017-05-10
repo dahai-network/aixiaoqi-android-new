@@ -298,22 +298,22 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		 * 3.打开后，则通过线程做扫描操作。
 		 * 4.扫描到设备则连接上，没扫描到十秒后自动断开。关闭所有与之相关的东西
 		 */
-		if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))||TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))){
+		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))) {
 			createHttpRequest(HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
-		}else{
+		} else {
 			skyUpgradeHttp();
 			BluetoothConstant.IS_BIND = true;
 			accountFragment.showDeviceSummarized(true);
 			EventBusUtil.showDevice(true);
-			String	deviceType=SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+			String deviceType = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(deviceType)) {
 
-				String typeText="";
+				String typeText = "";
 				//0是手环，1是钥匙扣
 				if (deviceType.contains(MyDeviceActivity.UNITOYS)) {
 
 					typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-				} else if(deviceType.contains(MyDeviceActivity.UNIBOX)){
+				} else if (deviceType.contains(MyDeviceActivity.UNIBOX)) {
 
 					typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
 				}
@@ -775,8 +775,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 						utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
 //						utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
 						//按MAC地址保存版本号
-						if(!TextUtils.isEmpty(deviceAddress))
-						utils.writeString(deviceAddress, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
+						if (!TextUtils.isEmpty(deviceAddress))
+							utils.writeString(deviceAddress, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
 						//防止返回“”或者null
 						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
 						if (!TextUtils.isEmpty(deviceTypeStr)) {
@@ -805,9 +805,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					EventBusUtil.changeConnectStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
 				}
 			}
-		}
-
-		else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
+		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
 			GetHostAndPortHttp http = (GetHostAndPortHttp) object;
 			if (http.getStatus() == 1) {
 				e("端口号");
@@ -853,8 +851,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
 			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
-			if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(SharedUtils.getInstance().readString(Constant.BRACELETVERSION))) {
-				mHandler.sendEmptyMessage(1);
+			if (skyUpgradeHttp.getStatus() == 1) {
+				String braceletVersion = SharedUtils.getInstance().readString(Constant.BRACELETVERSION);
+				if (braceletVersion != null && skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(braceletVersion)) {
+					mHandler.sendEmptyMessage(1);
+				}
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG) {
 			GetBasicConfigHttp getBasicConfigHttp = (GetBasicConfigHttp) object;
