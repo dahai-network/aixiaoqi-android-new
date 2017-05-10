@@ -176,8 +176,7 @@
                         android:id="@+id/PacketRelativeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/has_package"
-                        android:visibility="gone">
+                        android:background="@drawable/has_package">
 
                         <TextView
                             android:id="@+id/tv_packaget_detail"
@@ -210,6 +209,38 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/line1">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/padding_15dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/serviceTitleTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="15dp"
+                                    android:text="@string/service"
+                                    android:textColor="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/serviceTextView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/serviceTitleTextView"
+                                    android:layout_marginTop="5dp"
+                                    android:textColor="@color/white"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+                            </RelativeLayout>
+
+                            <View
+                                android:layout_width="1px"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/padding_15dp"
+                                android:layout_marginTop="15dp"
+                                android:background="@drawable/vertical_dotted_line" />
 
                             <RelativeLayout
                                 android:layout_width="0dp"
@@ -286,14 +317,14 @@
                                 android:layout_marginBottom="@dimen/padding_15dp"
                                 android:layout_marginTop="15dp"
                                 android:background="@drawable/vertical_dotted_line"
-                                android:visibility="invisible" />
+                                android:visibility="gone" />
 
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding_15dp"
                                 android:layout_weight="1"
-                                android:visibility="invisible">
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/all_package"

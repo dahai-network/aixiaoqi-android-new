@@ -391,7 +391,6 @@
     <string name="outside_step_four_click">打开系统设置</string>
 
 
-
     <!--激活套餐-->
     <string name="less_current_time">生效时间不能小于当前时间</string>
     <string name="app_name">联系人搜索</string>
@@ -648,4 +647,15 @@
     <string name="no_remind_today">今日不再提醒</string>
     <string name="no_can_connect_device">没有可连接的设备</string>
     <string name="service_is_error">服务器出错</string>
+    <string name="used_freeforworry_tips">推荐使用爱小器0元话费体验包，向高额话费说拜拜</string>
+    <string name="to_get">去领取</string>
+    <string name="next_time">下次</string>
+    <string name="free_for_worry">省心服务</string>
+    <string name="service">服务</string>
+    <string name="goto_dredge">我要开通</string>
+    <string name="monthly_fee">月套餐费</string>
+    <string name="call_time_duration">通话时长</string>
+    <string name="service_fee">服务费用</string>
+    <string name="input_monthly_fee">请输入你的月套餐费</string>
+    <string name="commit_fw_monthly_deail">月套餐费由用户每月最低费用决定</string>
 </resources>

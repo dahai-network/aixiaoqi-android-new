@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="de.blinkt.openvpn.activities.FreeWorryIntroActivity">
+
+        <ImageView
+            android:id="@+id/titleImageView"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:background="@drawable/demo_fw_intro_title"
+            />
+
+        <TextView
+            android:id="@+id/introTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_15dp"
+            android:layout_marginRight="@dimen/padding_15dp"
+            android:layout_marginTop="200dp"
+            android:background="@drawable/fw_intro_edit"
+            android:text="设备内号码：15088138580"
+            android:textSize="@dimen/little_16"
+            android:textColor="@color/index_black"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/dredgeBtn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/introTextView"
+            android:layout_marginLeft="@dimen/padding_20dp"
+            android:layout_marginRight="@dimen/padding_20dp"
+            android:layout_marginTop="@dimen/padding_15dp"
+            android:background="@drawable/green_btn_click"
+            android:text="@string/goto_dredge"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"/>
+
+        <ImageView
+            android:id="@+id/introContentImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dredgeBtn"
+            android:background="@drawable/demo_fw_intro_content"
+            />
+    </RelativeLayout>
+</ScrollView>

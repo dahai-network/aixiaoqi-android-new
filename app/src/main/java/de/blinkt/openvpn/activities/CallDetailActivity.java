@@ -34,13 +34,13 @@ import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
 import de.blinkt.openvpn.model.SmsEntity;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.PhoneFormatUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactRecodeHandler;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.QueryCompleteListener;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
+import de.blinkt.openvpn.views.dialog.DialogCanNoRemind;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
 
@@ -229,8 +229,8 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 	}
 
 	private void requestTimeHttp() {
-		if(hasWiFi())
-		createHttpRequest(HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME);
+		if (hasWiFi())
+			createHttpRequest(HttpConfigUrl.COMTYPE_GET_MAX_PHONE_CALL_TIME);
 	}
 
 	@OnClick({R.id.sms_tv, R.id.net_call_tv, R.id.dual_standby_king_tv, R.id.defriend_tv})
@@ -248,25 +248,31 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 				break;
 			case R.id.dual_standby_king_tv:
 				if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-					simCellPhone();
+					//如果没有套餐那么就需要弹出提示框
+					if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
+						//拨打电话
+						simCellPhone();
+					} else {
+						new DialogCanNoRemind(this, this, 2);
+					}
 				} else {
 					CommonTools.showShortToast(this, getString(R.string.sim_register_phone_tip));
 				}
 				break;
 			case R.id.defriend_tv:
-				if ( CommonTools.isFastDoubleClick(1000)) {
+				if (CommonTools.isFastDoubleClick(1000)) {
 					e("defriend_tv");
 					return;
 				}
 
-				if(hasWiFi())
-				if (!isBlackList) {
-					e("isBlackList=="+isBlackList);
-					createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_ADD, contactBean.getPhoneNum());
-				} else {
-					e("isBlackList"+isBlackList);
-					createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_DELETE, contactBean.getPhoneNum());
-				}
+				if (hasWiFi())
+					if (!isBlackList) {
+						e("isBlackList==" + isBlackList);
+						createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_ADD, contactBean.getPhoneNum());
+					} else {
+						e("isBlackList" + isBlackList);
+						createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_DELETE, contactBean.getPhoneNum());
+					}
 				break;
 		}
 	}
@@ -336,6 +342,11 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 
 	@Override
 	public void dialogText(int type, String text) {
-
+		if (type == 1) {
+			simCellPhone();
+		} else if (type == 2) {
+			Intent intent = new Intent(CallDetailActivity.this, FreeWorryPacketChoiceActivity.class);
+			startActivity(intent);
+		}
 	}
 }

@@ -74,25 +74,22 @@ import de.blinkt.openvpn.fragments.IndexFragment;
 import de.blinkt.openvpn.fragments.SmsFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBasicConfigHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
-import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.BasicConfigEntity;
 import de.blinkt.openvpn.model.CanClickEntity;
 import de.blinkt.openvpn.model.CancelCallService;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
-import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StartRegistEntity;
-import de.blinkt.openvpn.model.StateChangeEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
@@ -102,7 +99,6 @@ import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static cn.com.aixiaoqi.R.string.index_registing;
-import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
@@ -188,8 +184,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	private DialogBalance noLocationPermissionDialog;
 
 
-
-
 	@Override
 	public Object getLastCustomNonConfigurationInstance() {
 		return super.getLastCustomNonConfigurationInstance();
@@ -224,11 +218,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		findViewById();
 		initFragment();
 		initView();
-		if(actionBar!=null)
+		if (actionBar != null)
 			actionBar.hide();
-		else{
-			actionBar=getActionBar();
-			if(actionBar!=null)
+		else {
+			actionBar = getActionBar();
+			if (actionBar != null)
 				actionBar.hide();
 		}
 		addListener();
@@ -250,6 +244,14 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			//不能按返回键，只能二选其一
 			noLocationPermissionDialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
 			noLocationPermissionDialog.changeText(getResources().getString(R.string.no_location_permission), getResources().getString(R.string.sure));
+		}
+		//如果没有保存过推送每日推荐的日期，则为第一次推送,如果
+		String recommandStr = SharedUtils.getInstance().readString(Constant.RECOMMAND_DATE);
+		String todayStr = DateUtils.getCurrentDate();
+		Intent intent = new Intent(this, EveryDayRecomActivity.class);
+		if (recommandStr == null || !recommandStr.equals(todayStr)) {
+			startActivity(intent);
+			SharedUtils.getInstance().writeString(Constant.RECOMMAND_DATE, todayStr);
 		}
 	}
 
@@ -300,6 +302,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 			createHttpRequest(HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 		}else{
 			skyUpgradeHttp();
+			BluetoothConstant.IS_BIND = true;
 			accountFragment.showDeviceSummarized(true);
 			EventBusUtil.showDevice(true);
 			String	deviceType=SharedUtils.getInstance().readString(Constant.BRACELETNAME);
@@ -443,7 +446,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 	}
 
 	Fragment_Phone phoneFragment;
-
 
 
 	@Override
@@ -840,6 +842,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 									noPreDataStartSDK();
 								}
 							} else {
+								CommonTools.delayTime(2000);
 								SendCommandToBluetooth.sendMessageToBlueTooth(ICCID_GET);
 							}
 						}

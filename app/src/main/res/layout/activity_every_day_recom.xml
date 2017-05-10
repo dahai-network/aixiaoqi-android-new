@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent_bg_70"
+    tools:context="de.blinkt.openvpn.activities.EveryDayRecomActivity">
+
+    <ImageView
+        android:id="@+id/recomImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/demo_show_fw"
+        />
+
+    <ImageView
+        android:id="@+id/dismissImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recomImageView"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/fw_close"
+        android:layout_marginTop="@dimen/padding_15dp"
+        />
+
+</RelativeLayout>

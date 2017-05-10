@@ -690,7 +690,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKACTIVECARD, map);
 //				CommonTools.showShortToast(context, "激活成功！");
-				DialogBalance dialog = new DialogBalance(this,ProMainActivity.instance, R.layout.dialog_balance, 0);
+				DialogBalance dialog = new DialogBalance(this, ProMainActivity.instance, R.layout.dialog_balance, 0);
 				dialog.changeText("激活成功", "确定");
 				orderStatus = 1;
 				Intent intent = new Intent();
