@@ -91,7 +91,6 @@ public class TlvAnalyticalUtils {
 			position = position + value.length();
 			int typeParams = Integer.parseInt(_hexTag, 16);
 			if (tag == 4) {
-
 				if (typeParams == 160) {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
 					SocketConstant.REGISTER_REMOTE_ADDRESS = value.substring(value.indexOf("_") + 1, value.lastIndexOf("."));
@@ -190,13 +189,16 @@ public class TlvAnalyticalUtils {
 						EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
 					}
 				}
+			}else if(tag==101){
+				TCP_HEART_TIME=Integer.parseInt(value,16);
+				TCP_HEART_TIME=TCP_HEART_TIME/2-30;
 			}
 
 			tlvs.add(new TlvEntity(_hexTag, vl + "", value));
 		}
 		return tlvs;
 	}
-
+public static int TCP_HEART_TIME;
 	private static void getOrderNumber(int responeCode) {
 		if(preData[6].startsWith("a088")){
 			preData[7]=(responeCode+2)+"";

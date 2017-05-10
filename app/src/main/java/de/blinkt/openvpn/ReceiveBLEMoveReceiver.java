@@ -273,9 +273,15 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 												DeviceType = 1;
 											}
 										}
+
 										SharedUtils.getInstance().writeInt(Constant.BRACELETTYPEINT, DeviceType);
 										SharedUtils.getInstance().writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(14, 16), 16));
 										SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, deviceVesion);
+										//如果本地保存的版本号与设备中的版本号不一致则更新版本号
+										if(!SharedUtils.getInstance().readString(SharedUtils.getInstance().readString(Constant.IMEI)).equals(deviceVesion)){
+											updateDeviceInfo();
+												}
+
 										break;
 
 									case Constant.RETURN_POWER:
@@ -622,6 +628,17 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	}
 
 	/**
+	 * 更新固件版本号
+	 */
+	//更新设备信息
+	private void updateDeviceInfo() {
+		//绑定完成更新设备信息
+		if (utils == null)
+			utils = SharedUtils.getInstance();
+		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, utils.readString(Constant.BRACELETVERSION),
+				utils.readInt(Constant.BRACELETPOWER) + "", utils.readInt(Constant.BRACELETTYPEINT) + "");
+	}
+	/**
 	 * 更新历史数据
 	 */
 	private void updateHistoryDate() {
@@ -693,6 +710,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					CommonTools.showShortToast(context, context.getString(R.string.tip_high_signal));
 				}
 
+		}else if(cmdType == HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO){
+			if(object.getStatus()==1){
+				utils.writeString(SharedUtils.getInstance().readString(Constant.IMEI),utils.readString(Constant.BRACELETVERSION) );
+			}
 		}
 	}
 

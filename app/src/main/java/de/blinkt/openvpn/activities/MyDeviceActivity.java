@@ -184,6 +184,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		registerSimStatu.startAnimation(RegisterStatueAnim);
 	}
 
+	//空中升级监听
 	DfuProgressListener mDfuProgressListener;
 
 	//空中升级,如果没有设备类型就不升级，如果有的话再去升级。
@@ -230,12 +231,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			messageRemindView.setVisibility(View.VISIBLE);
 			deviceNameTextView.setText(getString(R.string.unitoy));
 		}
-
+//卡状态
 		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
 		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
-
 		titleSet();
-
+		//初始化状态和电量
 		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 			int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
 			if (electricityInt != 0) {
@@ -243,7 +243,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			} else {
 				sinking.setPercent(0f);
 			}
-			if (blueStatus != null) {
+			if (TextUtils.isEmpty(blueStatus)) {
 				//如果状态来不及更新，仍是未绑定则修改为未插卡
 				if (blueStatus.equals(getString(R.string.index_unbind))) {
 					blueStatus = getString(R.string.index_un_insert_card);
@@ -252,7 +252,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			skyUpgradeHttp();
 		}
-
+//显示固件版本
 		firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
 		//如果是在注册中才能打开动画
 		if ((SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 2)
@@ -840,7 +840,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			sinking.setPercent(percent);
 			return;
 		}
-		Thread thread = new Thread(new Runnable() {
+		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
@@ -851,10 +851,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				}
 				slowPercent[0] = percent;
 				sinking.setPercent(slowPercent[0]);
-				// mSinkingView.clear();
 			}
-		});
-		thread.start();
+		}).start();
 	}
 
 	//扫描新设备
@@ -1012,7 +1010,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
 		} else if (conStatus.equals(getString(R.string.index_regist_fail))) {
 			percentTextView.setVisibility(GONE);
-			percentTextView.setVisibility(GONE);
 			percentInt = 0;
 			stopAnim();
 		} else if (conStatus.equals(getString(R.string.index_registing))) {
@@ -1042,7 +1039,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			registerSimStatu.setVisibility(View.VISIBLE);
 			startAnim();
 		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
-			percentTextView.setVisibility(GONE);
 			percentTextView.setVisibility(GONE);
 		}
 		//蓝牙未开的时候提示未连接，诱导用户点击刷新
@@ -1148,16 +1144,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		stopAnim();
 	}
 
-	@Override
-	protected void onRestart() {
-		super.onRestart();
-		//如果没有IMEI就退出页面
-		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-			finish();
-		}
-	}
-
-
+	//升级状态提示
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onUIOperatorEntity(UIOperatorEntity entity) {
 		if (entity.getType() == UIOperatorEntity.onError) {
@@ -1167,7 +1154,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 	}
 
-
+	//没卡弹对话框
 	private void showNoCardDialog() {
 		//不能按返回键，只能二选其一
 		if (cardRuleBreakDialog != null) cardRuleBreakDialog.getDialog().dismiss();

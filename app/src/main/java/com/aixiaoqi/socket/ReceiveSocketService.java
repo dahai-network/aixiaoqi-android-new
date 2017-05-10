@@ -23,6 +23,7 @@ import de.blinkt.openvpn.util.DateUtils;
 import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
+import static com.aixiaoqi.socket.TlvAnalyticalUtils.TCP_HEART_TIME;
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
 
 /**
@@ -33,10 +34,10 @@ public class ReceiveSocketService extends Service {
 	private int contactFailCount = 1;
 	PendingIntent sender;
 	AlarmManager am;
-	public static int CONNECT_SUCCEED = 0;
-	public static int CONNECT_FAIL = 1;
-	public static int CONNECT_STATUE = -1;
-	public static int ACTIVE_DISCENNECT = -2;
+	public static int CONNECT_SUCCEED = 0;//连接成功
+	public static int CONNECT_FAIL = 1;//连接失败
+	public static int CONNECT_STATUE = -1;//连接状态
+	public static int ACTIVE_DISCENNECT = -2;//主动断开
 	private static String TAG = "ReceiveSocketService";
 
 	@Override
@@ -70,7 +71,6 @@ public class ReceiveSocketService extends Service {
 				return;
 			}
 			Log.e("Blue_Chanl", "onConnectFailed");
-
 			connectFailReconnect();
 			CONNECT_STATUE = CONNECT_FAIL;
 		}
@@ -79,7 +79,16 @@ public class ReceiveSocketService extends Service {
 		@Override
 		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
 			Log.e("Blue_Chanl", "onReceive");
-			TlvAnalyticalUtils.builderMessagePackageList(HexStringExchangeBytesUtil.bytesToHexString(s, length));
+			String receiveData=HexStringExchangeBytesUtil.bytesToHexString(s, length);
+			if(SocketConstant.RECEIVE_CONNECTION.equals(s)){
+				receiveConnectionTime=sendConnectionTime;
+			}
+			else if(SocketConstant.RECEIVE_PRE_DATA.equals(s)){
+				receivePreDataTime=sendPreDataTime;
+			}else if(SocketConstant.RECEIVE_UPDATE_CONNECTION.equals(s)){
+				receiveUpdateConnectionTime=sendUpdateConnectionTime;
+			}
+			TlvAnalyticalUtils.builderMessagePackageList(receiveData);
 			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
 		}
@@ -115,8 +124,30 @@ public class ReceiveSocketService extends Service {
 		}
 	}
 
+	private long receiveConnectionTime;
+	private long receiveUpdateConnectionTime;
+	private long receivePreDataTime;
+	private long sendConnectionTime;
+	private long sendUpdateConnectionTime;
+	private long sendPreDataTime;
+	public void sendMessage(String s) {
+		if(SocketConstant.CONNECTION.equals(s)){
+			sendConnectionTime=System.currentTimeMillis();
+		}
+		else if(SocketConstant.PRE_DATA.equals(s)){
+			sendPreDataTime=System.currentTimeMillis();
+		}else if(SocketConstant.UPDATE_CONNECTION.equals(s)){
+			sendUpdateConnectionTime=System.currentTimeMillis();
+		}
+		Log.e("sendMessage", s);
+		Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
+		if (tcpClient != null && tcpClient.getTransceiver() != null) {
+			Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
+			tcpClient.getTransceiver().send(s);
+		}
+	}
 	public void disconnect() {
-		CONNECT_STATUE = ACTIVE_DISCENNECT;
+		CONNECT_STATUE = ACTIVE_DISCENNECT;//主动断开
 		cancelTimer();
 		tcpClient.disconnect();
 	}
@@ -181,7 +212,8 @@ public class ReceiveSocketService extends Service {
 			intent.setAction(HEARTBEAT_PACKET_TIMER);
 			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
 			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60 * 1000, sender);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),TCP_HEART_TIME, sender);
+
 		}
 	}
 
@@ -190,14 +222,7 @@ public class ReceiveSocketService extends Service {
 		initSocket();
 	}
 
-	public void sendMessage(String s) {
-		Log.e("sendMessage", s);
-		Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
-		if (tcpClient != null && tcpClient.getTransceiver() != null) {
-			Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
-			tcpClient.getTransceiver().send(s);
-		}
-	}
+
 
 	@Override
 	public void onDestroy() {
