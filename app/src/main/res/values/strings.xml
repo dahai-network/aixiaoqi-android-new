@@ -658,4 +658,9 @@
     <string name="service_fee">服务费用</string>
     <string name="input_monthly_fee">请输入你的月套餐费</string>
     <string name="commit_fw_monthly_deail">月套餐费由用户每月最低费用决定</string>
+    <string name="month_1">1个月</string>
+    <string name="month_3">3个月</string>
+    <string name="month_6">6个月</string>
+    <string name="month_9">9个月</string>
+    <string name="month_12">12个月</string>
 </resources>

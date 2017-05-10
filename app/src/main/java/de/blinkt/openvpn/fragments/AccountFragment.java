@@ -354,9 +354,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				AppMode.getInstance().isClickPackage = true;
 				break;
 			case R.id.addDeviceRelativeLayout:
-				if (CommonTools.isFastDoubleClick(1000)) {
-					return;
-				}
+//				if (CommonTools.isFastDoubleClick(1000)) {
+//					return;
+//				}
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKMYDEVICE);
 				if (deviceSummarizedRelativeLayout.getVisibility() == View.GONE) {

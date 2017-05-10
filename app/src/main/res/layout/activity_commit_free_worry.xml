@@ -1,65 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorf_F5F5F5"
-    >
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="de.blinkt.openvpn.activities.CommitFreeWorryActivity">
-
-        <LinearLayout
-            android:id="@+id/monthlyFeeLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="84dp"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/padding_20dp"
-            android:paddingLeft="@dimen/padding_15dp"
-            android:paddingRight="@dimen/padding_15dp"
-            android:paddingTop="@dimen/padding_20dp"
-            >
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/monthly_fee"
-                android:textColor="@color/index_gray_text"
-                android:textSize="16sp"/>
-
-            <EditText
-                android:id="@+id/monthlyFeeEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:hint="@string/input_monthly_fee"
-                android:textColor="@color/index_black"
-                android:textSize="16sp"/>
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_below="@id/monthlyFeeLinearLayout"
-            android:layout_marginLeft="@dimen/padding_15dp"
-            android:gravity="center_vertical"
-            android:text="@string/commit_fw_monthly_deail"
-            android:textColor="@color/color_f21f20"/>
+        android:background="@color/colorf_F5F5F5"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/monthlyFeeLinearLayout"
-            android:layout_marginTop="36dp">
+            android:layout_height="match_parent"
+            tools:context="de.blinkt.openvpn.activities.CommitFreeWorryActivity">
 
-            <RelativeLayout
-                android:id="@+id/callTimeRelativeLayout"
+            <LinearLayout
+                android:id="@+id/monthlyFeeLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="84dp"
                 android:background="@color/white"
@@ -71,90 +30,275 @@
                 >
 
                 <TextView
-                    android:id="@+id/callTimeTitleTextView"
+                    android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/call_time_duration"
+                    android:text="@string/monthly_fee"
                     android:textColor="@color/index_gray_text"
                     android:textSize="16sp"/>
 
-                <TextView
-                    android:id="@+id/callTimeTextView"
+                <EditText
+                    android:id="@+id/monthlyFeeEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/callTimeTitleTextView"
-                    android:layout_marginTop="6dp"
                     android:background="@null"
-                    android:text="无限通话"
+                    android:hint="@string/input_monthly_fee"
+                    android:inputType="number"
                     android:textColor="@color/index_black"
                     android:textSize="16sp"/>
 
+            </LinearLayout>
 
-            </RelativeLayout>
-
-            <View
-                android:id="@+id/calltimeLine"
-                style="@style/horizontal_line_margin_15dp"
-                android:layout_below="@id/callTimeRelativeLayout"
-                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_below="@id/monthlyFeeLinearLayout"
+                android:layout_marginLeft="@dimen/padding_15dp"
+                android:gravity="center_vertical"
+                android:text="@string/commit_fw_monthly_deail"
+                android:textColor="@color/color_f21f20"/>
 
             <RelativeLayout
-                android:id="@+id/serviceFeeRelativeLayout"
+                android:id="@+id/messageRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="84dp"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/callTimeRelativeLayout"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/padding_20dp"
-                android:paddingLeft="@dimen/padding_15dp"
-                android:paddingRight="@dimen/padding_15dp"
-                android:paddingTop="@dimen/padding_20dp">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/monthlyFeeLinearLayout"
+                android:layout_marginTop="36dp">
 
-                <TextView
-                    android:id="@+id/serviceFeeTitleTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/service_fee"
-                    android:textColor="@color/index_gray_text"
-                    android:textSize="16sp"/>
+                <RelativeLayout
+                    android:id="@+id/callTimeRelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="84dp"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/padding_20dp"
+                    android:paddingLeft="@dimen/padding_15dp"
+                    android:paddingRight="@dimen/padding_15dp"
+                    android:paddingTop="@dimen/padding_20dp"
+                    >
 
-                <TextView
-                    android:id="@+id/serviceFeeTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/serviceFeeTitleTextView"
-                    android:layout_marginTop="6dp"
-                    android:background="@null"
-                    android:text="现优惠：0元/月"
-                    android:textColor="@color/index_black"
-                    android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/callTimeTitleTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/call_time_duration"
+                        android:textColor="@color/index_gray_text"
+                        android:textSize="16sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/callTimeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="6dp"
+                        android:background="@null"
+                        android:text="无限通话"
+                        android:textColor="@color/index_black"
+                        android:textSize="16sp"/>
+
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/calltimeLine"
+                    style="@style/horizontal_line_margin_15dp"
+                    android:layout_below="@id/callTimeRelativeLayout"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/serviceFeeRelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="84dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/callTimeRelativeLayout"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/padding_20dp"
+                    android:paddingLeft="@dimen/padding_15dp"
+                    android:paddingRight="@dimen/padding_15dp"
+                    android:paddingTop="@dimen/padding_20dp">
+
+                    <TextView
+                        android:id="@+id/serviceFeeTitleTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/service_fee"
+                        android:textColor="@color/index_gray_text"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/serviceFeeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:background="@null"
+                        android:text="现优惠：0元/月"
+                        android:textColor="@color/index_black"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/originalPriceTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toEndOf="@+id/serviceFeeTextView"
+                        android:text="原价：10元/月"
+                        android:textColor="@color/color_f21f20"/>
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/serviceFeeLine"
+                    style="@style/horizontal_line_margin_15dp"
+                    android:layout_below="@id/serviceFeeRelativeLayout"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/buyMonthRelativeLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toEndOf="@+id/serviceFeeTextView"
-                    android:text="原价：10元/月"
-                    android:textColor="@color/color_f21f20"/>
+                    android:layout_below="@id/serviceFeeLine"
+                    android:background="@color/white"
+                    android:paddingBottom="@dimen/padding_20dp"
+                    android:paddingLeft="@dimen/padding_15dp"
+                    android:paddingRight="@dimen/padding_15dp"
+                    android:paddingTop="@dimen/padding_20dp">
+
+                    <TextView
+                        android:id="@+id/buyMonthTitleTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/call_time_duration"
+                        android:textColor="@color/index_gray_text"
+                        android:textSize="16sp"/>
+
+                    <de.blinkt.openvpn.views.RadioGroup
+                        android:id="@+id/buyMonthRadioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/buyMonthTitleTextView"
+                        android:layout_marginRight="@dimen/padding_15dp"
+                        android:layout_marginTop="@dimen/padding_15dp"
+                        android:background="@color/white"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_marginRight="@dimen/padding_10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/commit_fw_selector_icon"
+                                android:button="@null"
+                                android:checked="true"
+                                android:gravity="center"
+                                android:tag="1"
+                                android:text="@string/month_1"
+                                android:textColor="@color/red_background_text_selector"
+                                />
+
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_marginRight="@dimen/padding_10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/commit_fw_selector_icon"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:tag="3"
+                                android:text="@string/month_3"
+                                android:textColor="@color/red_background_text_selector"
+                                />
+
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/commit_fw_selector_icon"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:tag="6"
+                                android:text="@string/month_6"
+                                android:textColor="@color/red_background_text_selector"
+                                />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp">
+
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_marginRight="@dimen/padding_10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/commit_fw_selector_icon"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:tag="9"
+                                android:text="@string/month_9"
+                                android:textColor="@color/red_background_text_selector"
+                                />
+
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_marginRight="@dimen/padding_10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/commit_fw_selector_icon"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:tag="12"
+                                android:text="@string/month_12"
+                                android:textColor="@color/red_background_text_selector"
+                                />
+
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/commit_fw_selector_icon"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="@string/month_6"
+                                android:textColor="@color/red_background_text_selector"
+                                android:visibility="invisible"
+                                />
+
+                        </LinearLayout>
+
+                    </de.blinkt.openvpn.views.RadioGroup>
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/buyMonthFeeLine"
+                    style="@style/horizontal_line_margin_15dp"
+                    android:layout_below="@id/buyMonthRelativeLayout"
+                    />
 
             </RelativeLayout>
+
+            <include
+                android:id="@+id/payInclude"
+                layout="@layout/paymentchange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/messageRelativeLayout"
+                android:layout_marginTop="10dp"/>
 
             <View
-                android:id="@+id/serviceFeeLine"
-                style="@style/horizontal_line_margin_15dp"
-                android:layout_below="@id/serviceFeeRelativeLayout"
-                />
-            
-            <RelativeLayout
-                android:id="@+id/buyMonthRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-            </RelativeLayout>
+                android:layout_height="@dimen/padding_75dp"
+                android:layout_below="@id/payInclude"/>
         </RelativeLayout>
+    </ScrollView>
 
-    </RelativeLayout>
-</ScrollView>
+    <include layout="@layout/include_suer_fee"/>
+</RelativeLayout>

@@ -91,10 +91,10 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 		instance = this;
 
 		CommonHttp.setContext(getApplicationContext());
-		if (Constant.IS_DEBUG) {
+//		if (Constant.IS_DEBUG) {
 			CrashHandler crashHandler = CrashHandler.getInstance();
 			crashHandler.init(getApplicationContext(), this);
-		}
+//		}
 
 		initUpgrade();
 		EventBus.getDefault().register(this);
