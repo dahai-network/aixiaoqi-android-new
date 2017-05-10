@@ -1,6 +1,8 @@
 package de.blinkt.openvpn.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import butterknife.BindView;
@@ -24,8 +26,17 @@ public class EveryDayRecomActivity extends CommenActivity {
 	}
 
 
-	@OnClick(R.id.dismissImageView)
-	public void onViewClicked() {
-		onBackPressed();
+	@OnClick({R.id.recomImageView, R.id.dismissImageView})
+	public void onViewClicked(View view) {
+		switch (view.getId()) {
+			case R.id.recomImageView:
+				Intent intent = new Intent(this, FreeWorryPacketChoiceActivity.class);
+				startActivity(intent);
+				finish();
+				break;
+			case R.id.dismissImageView:
+				onBackPressed();
+				break;
+		}
 	}
 }

@@ -10,7 +10,6 @@
         android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:paddingBottom="@dimen/padding_25dp"
         android:paddingLeft="@dimen/padding_15dp"
         android:paddingRight="@dimen/padding_15dp"
@@ -25,7 +24,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_15dp"
         android:layout_marginLeft="@dimen/padding_15dp"
+        android:button="@drawable/regist_check_seletor"
+        android:paddingLeft="@dimen/padding_5dp"
         android:text="@string/no_remind_today"
+        android:textColor="@color/darker_gray"
+        android:textSize="@dimen/little_12"
         />
 
 

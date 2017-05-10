@@ -44,6 +44,7 @@ public class Constant {
 	public static final String TERMINAL_HEADER = "Terminal";
 	public static final String PHONE_NUMBER_LIST = "phone_number_list";
 	public static final String RECOMMAND_DATE = "recommand_date";
+	public static final String DIALOG_NOREMIND_DATE = "dialog_noremind_date";
 	public static final String IS_NEED_UPGRADE_IN_HARDWARE = "is_need_upgrade_in_hardware";
 	//运营商
 	public static final String OPERATER = "operater";

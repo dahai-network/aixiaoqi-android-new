@@ -222,12 +222,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		findViewById();
 		initFragment();
 		initView();
-		if(actionBar!=null)
+		if (actionBar != null)
 			actionBar.hide();
-		else{
-			actionBar=getActionBar();
-			if(actionBar!=null)
-			actionBar.hide();
+		else {
+			actionBar = getActionBar();
+			if (actionBar != null)
+				actionBar.hide();
 		}
 		addListener();
 		setListener();

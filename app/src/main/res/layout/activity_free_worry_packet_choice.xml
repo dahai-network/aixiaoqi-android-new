@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context="de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <de.blinkt.openvpn.views.xrecycler.XRecyclerView
         android:id="@+id/packetChoiceRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

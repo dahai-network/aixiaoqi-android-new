@@ -12,6 +12,5 @@
         android:layout_marginLeft="@dimen/padding_15dp"
         android:layout_marginRight="@dimen/padding_15dp"
         android:layout_marginTop="@dimen/padding_10dp"
-        android:background="@drawable/demo_packet_fw"
         />
 </LinearLayout>
