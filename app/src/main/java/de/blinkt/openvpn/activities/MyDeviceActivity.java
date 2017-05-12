@@ -253,6 +253,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if(getString(R.string.index_high_signal).equals(blueStatus)){
 					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 				}else{
+
+					if(getString(R.string.index_no_signal).equals(blueStatus)){
+						startAnim();
+					}
 					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 				}
 
@@ -261,11 +265,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 //显示固件版本
 		firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
-		//如果是在注册中才能打开动画
-		if ((SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 2)
-				&& conStatusTextView.getText().toString().equals(getResources().getString(R.string.index_registing))) {
-			startAnim();
-		}
+//		//如果是在注册中才能打开动画
+//		if ((SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 2)
+//				&& conStatusTextView.getText().toString().equals(getResources().getString(R.string.index_registing))) {
+//			startAnim();
+//		}
 		//注册中的时候，初始化进度
 		if (percentInt != 0 && ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.mConnectionState == UartService.STATE_CONNECTED) {
 			percentTextView.setText(percentInt + "%");
@@ -1032,15 +1036,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			case SocketConstant.UPDATE_PERCENT:
 				if (SocketConstant.REGISTER_STATUE_CODE != 3) {
 					percentTextView.setVisibility(View.VISIBLE);
-				double percent = entity.getProgressCount();
-				conStatusTextView.setText(getString(R.string.index_registing));
-				if (percent > percentInt)
-					percentInt = (int) (percent / 1.6);
-				Log.i(TAG, "写卡进度：" + percentInt + "%");
-				if (percentInt >= 100) {
-					percentInt = 98;
-				}
-				percentTextView.setText(percentInt + "%");
+					double percent = entity.getProgressCount();
+					conStatusTextView.setText(getString(R.string.index_registing));
+					if (percent > percentInt)
+						percentInt = (int) (percent / 1.6);
+					Log.i(TAG, "写卡进度：" + percentInt + "%");
+					if (percentInt >= 100) {
+						percentInt = 98;
+					}
+					percentTextView.setText(percentInt + "%");
 				}
 				break;
 			case SocketConstant.REG_STATUE_CHANGE:

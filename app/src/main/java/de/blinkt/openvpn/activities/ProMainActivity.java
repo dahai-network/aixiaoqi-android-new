@@ -1009,9 +1009,9 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 break;
             case SocketConstant.VAILD_CARD:
 
-                if(CommonTools.isFastDoubleClick(3000)){
-                    return;
-                }
+//                if(CommonTools.isFastDoubleClick(3000)){
+//                    return;
+//                }
                 e("SocketConstant.VAILD_CARD1111");
                 requestPacket();
                 break;
