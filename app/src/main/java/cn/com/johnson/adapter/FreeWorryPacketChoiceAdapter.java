@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.CallTimePacketDetailActivity;
 import de.blinkt.openvpn.activities.FreeWorryIntroActivity;
 import de.blinkt.openvpn.model.FreeWorryEntity;
 import de.blinkt.openvpn.util.CommonTools;
@@ -59,7 +60,7 @@ public class FreeWorryPacketChoiceAdapter extends
 					if (data.get(position).isHaveed()) {
 						CommonTools.showShortToast(context, context.getString(R.string.already_get));
 					} else {
-
+						CallTimePacketDetailActivity.launch(context, data.get(position).getPackageId(), context.getString(R.string.receive_fw));
 					}
 				} else if (FREEWORRY.equals(data.get(position).getCategory())) {
 					Intent intent = new Intent(context, FreeWorryIntroActivity.class);

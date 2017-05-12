@@ -673,4 +673,6 @@
     <string name="answer">接听电话</string>
     <string name="bill_detail">账单明细</string>
     <string name="already_get">您已领取了该套餐</string>
+    <string name="receive_fw">领取</string>
+    <string name="receive_call">通话时长领取</string>
 </resources>
