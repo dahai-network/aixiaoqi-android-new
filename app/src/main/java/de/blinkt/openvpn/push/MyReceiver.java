@@ -78,6 +78,7 @@ public class MyReceiver extends BroadcastReceiver {
 					SocketConstant.REGISTER_STATUE_CODE = 2;
 					if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
 						//从预读取数据那里重新注册
+
 						EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.REG_STATUE_CHANGE);
 						connectGoip();
 					} else {
