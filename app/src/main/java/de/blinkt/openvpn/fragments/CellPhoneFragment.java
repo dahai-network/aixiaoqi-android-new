@@ -24,6 +24,7 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
+import de.blinkt.openvpn.util.PageChangeListener;
 import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.MyViewPager;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKTITLEPHONE;
@@ -123,27 +124,18 @@ public class CellPhoneFragment extends BaseStatusFragment {
         //悬浮按钮
         floatingActionButton = (ImageView) view.findViewById(R.id.floatingActionButton);
         initFragment();
-
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        new PageChangeListener(mViewPager){
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
+            public void pageSelected(int position) {
                 if (position == 0) {
                     ClickPhone();
                 } else {
                     ClickMessage();
-
                 }
             }
+        };
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+
 
         //初始化标题下标的小三角
         drawable = getActivity().getResources().getDrawable(R.drawable.image_slidethetriangle);

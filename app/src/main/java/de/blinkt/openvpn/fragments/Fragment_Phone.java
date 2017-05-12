@@ -120,7 +120,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 
 	public void phonecallClicked() {
 		int hasWriteContactsPermission = 0;
-
 		int version = Build.VERSION.SDK_INT;
 		if (t9dialpadview.getT9Input() != null && t9dialpadview.getT9Input().length() > 0) {
 

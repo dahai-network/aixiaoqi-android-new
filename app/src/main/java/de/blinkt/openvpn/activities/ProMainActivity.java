@@ -91,6 +91,7 @@ import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.NetworkUtils;
+import de.blinkt.openvpn.util.PageChangeListener;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.CustomViewPager;
@@ -143,21 +144,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     Intent intentCallPhone;
     public static boolean isForeground = false;
     public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
-
     //重连时间
     private int RECONNECT_TIME = 180000;
     SocketConnection socketUdpConnection;
     SocketConnection socketTcpConnection;
-    public static String STOP_CELL_PHONE_SERVICE = "stopservice";
     public static boolean isStartSdk = false;
     public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
     public static SendYiZhengService sendYiZhengService = null;
     Intent intent = new Intent("Notic");
+    //红点控制
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-
             switch (msg.what) {
                 case 1:
                     tvRedDot04.setVisibility(View.VISIBLE);
@@ -203,7 +202,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         instance = this;
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pro_main);
         ButterKnife.bind(this);
@@ -375,7 +374,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
         intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
-        intentFilter.addAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
         intentFilter.addAction(UartService.FINDED_SERVICE);
         return intentFilter;
     }
@@ -513,8 +511,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         });
     }
 
-    private int clickCount = 0;
-    private int scrollCount = 0;
+//    private int clickCount = 0;
+//    private int scrollCount = 0;
 
     @Override
     public void onClick(View v) {
@@ -601,16 +599,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     }
 
     private void setListener() {
-
-        mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
+        new PageChangeListener(mViewPager){
             @Override
-            public void onPageSelected(int position) {
-                //对切换的状态进行保存
+            public void pageSelected(int position) {
                 setPosition(position);
                 if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
                     phoneFragment.t9dialpadview.clearT9Input();
                 }
-
                 hidePhoneBottomBar();
                 switch (position) {
                     case 0:
@@ -621,21 +616,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     case 1:
                         radiogroup.check(R.id.rb_phone);
 
-                        if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-                            //隐藏键盘，清理数据
-
-                        } else {
-                            if (phoneFragment == null) {
-                                phoneFragment = Fragment_Phone.newInstance();
-                            }
-                        }
-                        if (clickCount == 0 && scrollCount == 0) {
-                            scrollCount++;
-                        }
-                        if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-                            //隐藏键盘
-                            ViewUtil.hideView(phoneFragment.t9dialpadview);
-                        }
                         break;
                     case 2:
                         radiogroup.check(R.id.rb_address);
@@ -647,16 +627,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
                 }
             }
+        };
 
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
-        });
 
     }
 
@@ -943,9 +915,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         switch (failReason){
             case SocketConstant.REGISTER_FAIL_INITIATIVE:
                 //更改为注册中
-                if(SocketConstant.REGISTER_STATUE_CODE!=0){
-                    SocketConstant.REGISTER_STATUE_CODE=1;
-                }
                 unbindTcpService();
                 destorySocketService();
                 break;
@@ -968,11 +937,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 startTcpSocket();
                 break;
             case SocketConstant.VAILD_CARD:
-
-//                if(CommonTools.isFastDoubleClick(3000)){
-//                    return;
-//                }
-                e("SocketConstant.VAILD_CARD1111");
                 requestPacket();
                 break;
         }
@@ -1052,7 +1016,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cancelCallService(CancelCallService entity) {
         if (intentCallPhone != null) {
-            e(ProMainActivity.STOP_CELL_PHONE_SERVICE);
             stopService(intentCallPhone);
 
         }
@@ -1148,9 +1111,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     return;
                 }
             }
-            if (action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)) {
 
-            }
         }
     };
 
