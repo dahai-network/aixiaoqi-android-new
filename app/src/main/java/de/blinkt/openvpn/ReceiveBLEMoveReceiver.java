@@ -101,6 +101,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	private int CHECK_SIGNAL = 3;
 	//重连次数
 	public static int retryTime;
+	//是否是同一张卡
+	public static boolean isSameSimCard = false;
 	//	private String dataType;//发出数据以后需要把dataType重置为-1；
 	private Handler handler = new Handler() {
 		@Override
@@ -278,9 +280,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										SharedUtils.getInstance().writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(14, 16), 16));
 										SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, deviceVesion);
 										//如果本地保存的版本号与设备中的版本号不一致则更新版本号
-										if(!SharedUtils.getInstance().readString(SharedUtils.getInstance().readString(Constant.IMEI)).equals(deviceVesion)){
+										if (!SharedUtils.getInstance().readString(SharedUtils.getInstance().readString(Constant.IMEI)).equals(deviceVesion)) {
 											updateDeviceInfo();
-												}
+										}
 
 										break;
 
@@ -408,7 +410,16 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									case Constant.ICCID_BLUE_VALUE:
 										String Iccid = PacketeUtil.Combination(messages);
 										Log.e("ICCID_BLUE_VALUE", Iccid);
+										String saveIccid = SharedUtils.getInstance().readString(Constant.ICCID);
+										if (saveIccid != null && saveIccid.equals(RadixAsciiChange.convertStringToHex(Iccid))) {
+											isSameSimCard = true;
+										} else {
+											isSameSimCard = false;
+											//存储ICCID
+											SharedUtils.getInstance().writeString(Constant.ICCID, SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
+										}
 										SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(Iccid);
+
 										Log.e("ICCID_BLUE_VALUE111111", SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
 										break;
 									case Constant.APP_CONNECT_RECEIVE:
@@ -635,9 +646,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		//绑定完成更新设备信息
 		if (utils == null)
 			utils = SharedUtils.getInstance();
-		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, utils.readString(Constant.BRACELETVERSION),
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, utils.readString(Constant.BRACELETVERSION),
 				utils.readInt(Constant.BRACELETPOWER) + "", utils.readInt(Constant.BRACELETTYPEINT) + "");
 	}
+
 	/**
 	 * 更新历史数据
 	 */
@@ -710,9 +722,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					CommonTools.showShortToast(context, context.getString(R.string.tip_high_signal));
 				}
 
-		}else if(cmdType == HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO){
-			if(object.getStatus()==1){
-				utils.writeString(SharedUtils.getInstance().readString(Constant.IMEI),utils.readString(Constant.BRACELETVERSION) );
+		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO) {
+			if (object.getStatus() == 1) {
+				utils.writeString(SharedUtils.getInstance().readString(Constant.IMEI), utils.readString(Constant.BRACELETVERSION));
 			}
 		}
 	}

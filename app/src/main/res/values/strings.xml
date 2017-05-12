@@ -496,6 +496,7 @@
     <string name="packet_status">套餐状态</string>
     <string name="pay_date">支付时间</string>
     <string name="expiry_date">有效期</string>
+    <string name="service_time">服务时间</string>
     <string name="click_buy">购买</string>
     <string name="click_action">激活</string>
     <!--大王卡订单详情-->
@@ -663,4 +664,13 @@
     <string name="month_6">6个月</string>
     <string name="month_9">9个月</string>
     <string name="month_12">12个月</string>
+    <string name="input_phone_num_in_device">输入设备内手机号码</string>
+    <string name="vertificate">自动验证</string>
+    <string name="phone_vertification">手机号验证</string>
+    <string name="dredge_free_for_worry">开通省心服务</string>
+    <string name="operator_fee">运营商费用</string>
+    <string name="call">拨打电话</string>
+    <string name="answer">接听电话</string>
+    <string name="bill_detail">账单明细</string>
+    <string name="already_get">您已领取了该套餐</string>
 </resources>

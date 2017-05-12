@@ -74,14 +74,17 @@ import de.blinkt.openvpn.fragments.IndexFragment;
 import de.blinkt.openvpn.fragments.SmsFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBasicConfigHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
+import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.BasicConfigEntity;
 import de.blinkt.openvpn.model.CanClickEntity;
 import de.blinkt.openvpn.model.CancelCallService;
 import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
+import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
@@ -805,6 +808,28 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 					EventBusUtil.changeConnectStatus(getString(R.string.index_unbind), R.drawable.index_unbind);
 				}
 			}
+
+		} else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
+			if (object.getStatus() == 1) {
+				requestCount = 0;
+				IsHavePacketHttp isHavePacketHttp = (IsHavePacketHttp) object;
+				IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
+				if (entity.getUsed() == 1) {
+					e("有套餐");
+					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
+//					if (SocketConstant.REGISTER_STATUE_CODE != 3) {
+//						getConfigInfo();
+//						EventBusUtil.changeConnectStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
+//					} else {
+//						EventBusUtil.changeConnectStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+//					}
+				} else {
+					//TODO 没有通知到设备界面
+					//如果是没有套餐，则通知我的设备界面更新状态并且停止转动
+					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
+//					EventBusUtil.changeConnectStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
+				}
+			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
 			GetHostAndPortHttp http = (GetHostAndPortHttp) object;
 			if (http.getStatus() == 1) {
@@ -943,6 +968,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 		switch (entity.getRigsterSimStatue()) {
 			case SocketConstant.REGISTER_SUCCESS:
 				EventBusUtil.changeConnectStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
+				if (ReceiveBLEMoveReceiver.isSameSimCard) {
+					Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
+					startActivity(intent);
+				}
 				break;
 			case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 				CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
@@ -1176,6 +1205,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
 
 	private void requestPacket() {
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 		getConfigInfo();
 //		checkRegisterStatuGoIp();
 	}

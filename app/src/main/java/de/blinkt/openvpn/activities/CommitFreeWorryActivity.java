@@ -111,7 +111,7 @@ public class CommitFreeWorryActivity extends BaseNetActivity implements RadioGro
 	//每月费用
 	private int monthlyFeeInt;
 	//购买月数
-	private int monthCount;
+	private int monthCount = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -122,9 +122,13 @@ public class CommitFreeWorryActivity extends BaseNetActivity implements RadioGro
 	}
 
 	private void initSet() {
+		hasLeftViewTitle(R.string.dredge_free_for_worry, 0);
 		originalPriceTextView.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 		buyMonthRadioGroup.setOnCheckedChangeListener(this);
 		monthlyFeeEditText.addTextChangedListener(this);
+		buyMonthRadioGroup.check(R.id.month1RadioButton);
+		addUpTextView.setText("￥0");
+		setSpan(addUpTextView);
 	}
 
 	@OnClick({R.id.balancePayLienarLayout, R.id.weixinPayLienarLayout, R.id.aliPayLienarLayout, R.id.sureTextView})
@@ -153,7 +157,7 @@ public class CommitFreeWorryActivity extends BaseNetActivity implements RadioGro
 
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
-		monthCount = (int) group.getTag();
+		monthCount = Integer.parseInt((String) findViewById(checkedId).getTag());
 		if (monthlyFeeInt != 0) {
 			addUpTextView.setText("￥" + monthlyFeeInt * monthCount);
 			setSpan(addUpTextView);
@@ -166,8 +170,8 @@ public class CommitFreeWorryActivity extends BaseNetActivity implements RadioGro
 		Spannable WordtoSpan = new SpannableString(textview.getText().toString());
 		int intLength = String.valueOf(monthlyFeeInt * monthCount).length();
 		WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		WordtoSpan.setSpan(new AbsoluteSizeSpan(22, true), 1, intLength + 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), intLength + 2, textview.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		WordtoSpan.setSpan(new AbsoluteSizeSpan(22, true), 1, intLength + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//		WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), intLength + 2, textview.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		textview.setText(WordtoSpan, TextView.BufferType.SPANNABLE);
 	}
 
@@ -178,9 +182,14 @@ public class CommitFreeWorryActivity extends BaseNetActivity implements RadioGro
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		monthlyFeeInt = Integer.parseInt(s.toString());
-		if (monthCount != 0) {
-			addUpTextView.setText("￥" + monthlyFeeInt * monthCount);
+		if (s.length() != 0) {
+			monthlyFeeInt = Integer.parseInt(s.toString());
+			if (monthCount != 0) {
+				addUpTextView.setText("￥" + monthlyFeeInt * monthCount);
+				setSpan(addUpTextView);
+			}
+		} else {
+			addUpTextView.setText("￥0");
 			setSpan(addUpTextView);
 		}
 	}

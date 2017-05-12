@@ -418,6 +418,14 @@
         </activity>
         <activity android:name="de.blinkt.openvpn.activities.CommitFreeWorryActivity">
         </activity>
+        <activity
+            android:name="de.blinkt.openvpn.activities.VertifyPhoneNumActivity"
+            android:launchMode="singleTask">
+        </activity>
+        <activity android:name="de.blinkt.openvpn.activities.MonthlyOrderActivity">
+        </activity>
+        <activity android:name="de.blinkt.openvpn.activities.FreeWorryOrderDetailActivity">
+        </activity>
     </application>
 
 </manifest>

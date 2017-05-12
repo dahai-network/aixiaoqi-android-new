@@ -197,6 +197,9 @@ public class CreateHttpFactory {
             case  HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING://获取选择号码
                 startHttp(new OrderUsageRemainHttp(interfaceCallback,cmdType));
                 break;
+			case  HttpConfigUrl.COMTYPE_GET_RELAXED://获取省心服务列表
+                startHttp(new GetRelaxedHttp(interfaceCallback,cmdType));
+                break;
 
         }
     }

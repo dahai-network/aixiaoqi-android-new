@@ -10,6 +10,8 @@ import java.util.List;
 public class ParticularEntity implements Serializable {
 
 	private int totalRows;
+
+
 	/**
 	 * ID : ce744540-c8fe-4a79-be44-219f98c748d6
 	 * Amount : 0.01
@@ -48,6 +50,16 @@ public class ParticularEntity implements Serializable {
 		private int PayType;
 		private String PayTips;
 		private long CreateDate;
+		private boolean IsHadDetail;
+
+
+		public boolean isHadDetail() {
+			return IsHadDetail;
+		}
+
+		public void setHadDetail(boolean hadDetail) {
+			IsHadDetail = hadDetail;
+		}
 
 		public String getID() {
 			return ID;
@@ -112,5 +124,28 @@ public class ParticularEntity implements Serializable {
 		public void setCreateDate(long CreateDate) {
 			this.CreateDate = CreateDate;
 		}
+
+		@Override
+		public String toString() {
+			return "ListBean{" +
+					"ID='" + ID + '\'' +
+					", Amount='" + Amount + '\'' +
+					", UserAmount='" + UserAmount + '\'' +
+					", BillType=" + BillType +
+					", Descr='" + Descr + '\'' +
+					", PayType=" + PayType +
+					", PayTips='" + PayTips + '\'' +
+					", CreateDate=" + CreateDate +
+					", IsHadDetail=" + IsHadDetail +
+					'}';
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "ParticularEntity{" +
+				"totalRows=" + totalRows +
+				", list=" + list +
+				'}';
 	}
 }
