@@ -109,14 +109,8 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 
 		ButterKnife.bind(this, view);
 		findById(view);
-
-		return view;
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
 		init();
+		return view;
 	}
 
 	private void init() {
@@ -129,7 +123,6 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 		indexScrollView = (ScrollView) view.findViewById(R.id.indexScrollView);
 		title = (TitleBar) view.findViewById(R.id.title);
 		title.setTextTitle(getString(R.string.shop));
-
 		scrollViewPagerLayout = (CycleViewPager) view.findViewById(R.id.scrollViewPagerLayout);
 		hotMessageMoreTextView = (TextView) view.findViewById(R.id.hotMessageMoreTextView);
 		hardWareRecyclerView = (RecyclerView) view.findViewById(R.id.hardWareRecyclerView);

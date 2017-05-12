@@ -31,7 +31,8 @@ public class TlvAnalyticalUtils {
 		String responeString = hexString.substring(6, 8);
 		int responeCode = getResponeCode(responeString,1);
 		if (responeCode == 41||responeCode == 39) {
-			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
+			//服务器错误注册失败
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SERVER_IS_ERROR);
 			return null;
 		}
 
@@ -40,7 +41,8 @@ public class TlvAnalyticalUtils {
 		String sessionId = hexString.substring(position, position + 8);
 		if(tag==4){
 			SocketConstant.SESSION_ID = sessionId;
-			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_CHANGING);
+			//重新创建连接
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.REGISTER_CHANGING);
 		}
 		else if (!SocketConstant.SESSION_ID.equals(sessionId) && !SocketConstant.SESSION_ID.equals(SocketConstant.SESSION_ID_TEMP)) {
 //			SocketConstant.SESSION_ID = sessionId;
@@ -96,6 +98,10 @@ public class TlvAnalyticalUtils {
 					SocketConstant.REGISTER_REMOTE_ADDRESS = value.substring(value.indexOf("_") + 1, value.lastIndexOf("."));
 					SocketConstant.REGISTER_ROMOTE_PORT = value.substring(value.lastIndexOf(".") + 1, value.length());
 
+				}else if(typeParams==101){
+					TCP_HEART_TIME=Integer.parseInt(value,16);
+					TCP_HEART_TIME=TCP_HEART_TIME/2-30;
+					Log.e("TlvAnalytical","TCP_HEART_TIME"+TCP_HEART_TIME+"\nvalue"+value+"\ntag"+tag);
 				}
 			} else if (tag == 16) {
 				if (typeParams == 1) {
@@ -180,25 +186,25 @@ public class TlvAnalyticalUtils {
 			} else if (tag == 5) {
 				if (typeParams == 162) {
 					if (Integer.parseInt(value, 16) == 3) {
+						if(SdkAndBluetoothDataInchange.isHasPreData){
+							SdkAndBluetoothDataInchange.PERCENT=0;
+						}
 						REGISTER_STATUE_CODE = 3;
 						EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_SUCCESS);
 						registerOrTime = System.currentTimeMillis();
 						isRegisterSucceed = true;
 					} else if (Integer.parseInt(value, 16) > 4) {
 						REGISTER_STATUE_CODE = 2;
-						EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
+						EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SERVER_IS_ERROR);
 					}
 				}
-			}else if(tag==101){
-				TCP_HEART_TIME=Integer.parseInt(value,16);
-				TCP_HEART_TIME=TCP_HEART_TIME/2-30;
 			}
 
 			tlvs.add(new TlvEntity(_hexTag, vl + "", value));
 		}
 		return tlvs;
 	}
-public static int TCP_HEART_TIME;
+	public static int TCP_HEART_TIME;
 	private static void getOrderNumber(int responeCode) {
 		if(preData[6].startsWith("a088")){
 			preData[7]=(responeCode+2)+"";
@@ -242,7 +248,7 @@ public static int TCP_HEART_TIME;
 	 */
 	public static void reRegistering(String orData, int tag) {
 		if(!SdkAndBluetoothDataInchange.isHasPreData)
-		sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));//重置SDK
+			sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));//重置SDK
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(orData);
 		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));

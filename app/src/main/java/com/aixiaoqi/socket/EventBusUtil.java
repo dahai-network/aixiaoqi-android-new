@@ -15,10 +15,38 @@ import de.blinkt.openvpn.model.StateChangeEntity;
  */
 
 public class EventBusUtil {
-    //卡注册状态
+
+    /**
+     *卡注册状态
+     * @param regstatues  注册状态
+     */
     public static void simRegisterStatue(int regstatues) {
         SimRegisterStatue entity = new SimRegisterStatue();
         entity.setRigsterSimStatue(regstatues);
+        EventBus.getDefault().post(entity);
+    }
+    /**
+     * 卡注册状态
+     * @param regstatues  注册状态
+     * @param regstatuesreason  注册状态过程中的原因
+     */
+    public static void simRegisterStatue(int regstatues,int regstatuesreason) {
+        SimRegisterStatue entity = new SimRegisterStatue();
+        entity.setRigsterSimStatue(regstatues);
+        entity.setRigsterStatueReason(regstatuesreason);
+        EventBus.getDefault().post(entity);
+    }
+    /**
+     * 卡注册状态
+     * @param regstatues  注册状态
+     * @param regstatuesreason  注册状态过程中的原因
+     * @param percent 进度条
+     */
+    public static void simRegisterStatue(int regstatues,int regstatuesreason,int percent) {
+        SimRegisterStatue entity = new SimRegisterStatue();
+        entity.setRigsterSimStatue(regstatues);
+        entity.setRigsterStatueReason(regstatuesreason);
+        entity.setProgressCount(percent);
         EventBus.getDefault().post(entity);
     }
     //网络状态改变

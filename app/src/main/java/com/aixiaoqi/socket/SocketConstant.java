@@ -48,7 +48,6 @@ public class SocketConstant {
 	public static String UPDATE_CONNECTION = "108a0500";
 	public static String CONNECTION = "108a0400";
 	public static String PRE_DATA = "108a9000";
-	public static String RECEIVE_UPDATE_CONNECTION = "108a8500";
 	public static String RECEIVE_CONNECTION = "108a8400";
 	public static String RECEIVE_PRE_DATA = "108a1000";
 	public static final String SESSION_ID_TEMP = "00000000";
@@ -67,21 +66,6 @@ public class SocketConstant {
 	public static final String EN_APPEVT_SIMINFO = "07";
 
 
-	public static final int REGISTER_SUCCESS = 0;
-	//注册失败
-	public static final int REGISTER_FAIL = 1;
-	public static final int REGISTER_FAIL_IMSI_IS_NULL = 2;
-	public static final int REGISTER_FAIL_IMSI_IS_ERROR = 3;
-	public static final int REGISTER_FAIL_INITIATIVE = 4;//如果主动解除绑定那么不显示注册失败
-	public static final int TOKEN_IS_NULL = 5;
-	public static final int NOT_CAN_RECEVIE_BLUETOOTH_DATA = 6;
-	public static final int NOT_NETWORK = 7;//注册到GOIP时没有网络
-	public static final int START_TCP_FAIL = 8;//开启TCP失败
-	public static final int TCP_DISCONNECT = 9;//TCP断开
-	public static final int REG_STATUE_CHANGE = 11;//注册状态改变
-	public static final int RESTART_TCP = 10;//重连TCP
-	public static final int REGISTER_CHANGING=12;
-
 
 
 
@@ -91,4 +75,32 @@ public class SocketConstant {
 	public static String REGISTER_REMOTE_ADDRESS;
 	public static String REGISTER_ROMOTE_PORT;
 	public static final String HEARTBEAT_PACKET_TIMER = "heartbeat_packet_timer";
+
+	public static final int REGISTER_SUCCESS = 0;//注册成功
+
+	public static final int REGISTER_FAIL = 1;//注册失败
+	public static final int REGISTER_FAIL_IMSI_IS_NULL = 101;//imsi是空的，注册失败
+	public static final int REGISTER_FAIL_IMSI_IS_ERROR = 102;//imsi是错误的，注册失败
+	public static final int REGISTER_FAIL_INITIATIVE = 103;//如果主动解除绑定那么不显示注册失败
+	public static final int TOKEN_IS_NULL = 104;//没有token，注册失败
+	public static final int SERVER_IS_ERROR = 105;//服务端出错，注册失败
+	public static final int NOT_CAN_RECEVIE_BLUETOOTH_DATA = 106;//收不到蓝牙发过来的数据，注册失败
+	public static final int SDK_SEND_IS_NULL = 107;//sdk发过来的数据是空的
+
+	public static final int REGISTERING= 2;//注册中
+	public static final int START_TCP_FAIL = 201;//开启TCP失败，显示注册中
+	public static final int TCP_DISCONNECT = 202;//TCP主动断开，不显示。否则注册中
+	public static final int REG_STATUE_CHANGE = 203;//注册状态改变，注册中
+	public static final int RESTART_TCP = 204;//重连TCP，注册中
+	public static final int REGISTER_CHANGING=205;//重新注册，注册中
+	public static final int UPDATE_PERCENT=206;//更改进度条
+	public static final int VAILD_CARD=207;//有效卡，注册中
+
+	public static final int UNREGISTER=3;//未注册
+	public static final int UN_INSERT_CARD=301;//未插卡，未注册
+	public static final int AIXIAOQI_CARD=302;//爱小器卡，未注册
+	public static final int BLUETOOTH_CLOSE=303;//蓝牙未打开，未注册
+	public static final int CONNECTING_DEVICE=304;//设备连接中
+	public static final int UNBIND_DEVICE=305;//未绑定设备
+	public static final int DISCOONECT_DEVICE=306;//断开连接
 }
