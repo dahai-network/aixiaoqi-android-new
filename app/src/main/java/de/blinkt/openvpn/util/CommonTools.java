@@ -90,15 +90,15 @@ public class CommonTools {
         long time = System.currentTimeMillis();
         long timeD = time - lastClickTime;
         Log.i("timetest", "time:" + time + ",timeD:" + timeD);
+        lastClickTime = time;
         if (0 < timeD && timeD < maxTime) {
-            lastClickTime = time;
             return true;
         }
-        lastClickTime = time;
         return false;
     }
 
     public static void clearLastClickTime() {
+        if(lastClickTime!=0)
         lastClickTime = 0;
     }
 

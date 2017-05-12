@@ -32,7 +32,7 @@ public class SdkAndBluetoothDataInchange {
 	private String finalTemp;//保存上一次发给蓝牙的数据，以免出错，需要重发
 	private boolean isReceiveBluetoothData = true;//判断5s内是否接收完成，没有完成则重新发送
 	public int count = 0;
-
+	public static int PERCENT=0;
 	public void initReceiveDataframSocketService(ReceiveDataframSocketService receiveDataframSocketService, UartService mService) {
 		receiveDataframSocketService.setListener(new ReceiveDataframSocketService.MessageOutLisener() {
 													 @Override
@@ -59,7 +59,8 @@ public class SdkAndBluetoothDataInchange {
 	TimerTask timerTaskMessage ;
 
 	private void notifyRegisterFail() {
-		EventBusUtil.simRegisterStatue(SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
+		//重试三次发出给蓝牙的指令没有收到蓝牙那边的回应。
+		EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
 	}
 
 	public void sendToSDKAboutBluetoothInfo(ArrayList<String> messages) {
@@ -67,17 +68,13 @@ public class SdkAndBluetoothDataInchange {
 		synchronized (this){
 
 	 if(isHasPreData){
-				if (simRegisterStatue == null) {
-					simRegisterStatue = new SimRegisterStatue();
-				}
-				int percent=simRegisterStatue.getProgressCount()+1;
-				eventPercent(percent);
+
+				 PERCENT=PERCENT+1;
+				eventPercent(PERCENT);
 				registerGoip(messages);
 			}else if(ProMainActivity.isStartSdk) {
-//				startTimer();
-				if (simRegisterStatue == null) {
-					simRegisterStatue = new SimRegisterStatue();
-				}
+
+
 				int percent = Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag()) ? "-1" : mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length() - 4, mReceiveDataframSocketService.getSorcketTag().length() - 1));
 				eventPercent(percent);
 				isReceiveBluetoothData = true;
@@ -124,11 +121,9 @@ public class SdkAndBluetoothDataInchange {
 
         }
 	}
-
+//注册进度变化通知
 	private void eventPercent(int percent) {
-		simRegisterStatue.setRigsterSimStatue(SocketConstant.REGISTER_CHANGING);
-		simRegisterStatue.setProgressCount(percent);
-		EventBus.getDefault().post(simRegisterStatue);
+		EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.UPDATE_PERCENT,percent);
 	}
 
 	private void registerGoip(ArrayList<String> messages) {
@@ -252,7 +247,6 @@ public class SdkAndBluetoothDataInchange {
 
 
 	public static boolean isHasPreData=false;
-	SimRegisterStatue simRegisterStatue;
 
 	private void sendToSDKAboutBluetoothInfo(final String finalMessage) {
 		if (mReceiveDataframSocketService != null) {
@@ -264,7 +258,8 @@ public class SdkAndBluetoothDataInchange {
 
 	private void sendToBluetoothAboutCardInfo(String msg) {
 		if(TextUtils.isEmpty(msg)){
-			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL);
+			//如果卡没有回数据就注册失败
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SDK_SEND_IS_NULL);
 			return;
 		}
 		Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + msg);

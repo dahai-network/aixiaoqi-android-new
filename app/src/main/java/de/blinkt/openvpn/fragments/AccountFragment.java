@@ -137,7 +137,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	@BindView(R.id.serviceTextView)
 	TextView serviceTextView;
 	//bluetooth status蓝牙状态
-	private String bleStatus;
 	private String TAG = "AccountFragment";
 	boolean hasPackage = false;
 	public static ImageView tvNewPackagetAction;
@@ -418,30 +417,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		intent = new Intent(getActivity(), MyDeviceActivity.class);
 		AppMode.getInstance().isClickAddDevice = true;
 		mHandler.sendEmptyMessage(4);
-
-		int status = R.string.index_connecting;
-		if (getActivity().getResources().getString(R.string.index_no_signal).equals(getBleStatus())) {
-			status = R.string.index_no_signal;
-		} else if (getActivity().getResources().getString(R.string.index_connecting).equals(getBleStatus())) {
-			status = R.string.index_connecting;
-		} else if (getActivity().getResources().getString(R.string.index_high_signal).equals(getBleStatus())) {
-			status = R.string.index_high_signal;
-		} else if (getActivity().getResources().getString(R.string.index_no_packet).equals(getBleStatus())) {
-			status = R.string.index_no_packet;
-		} else if (getString(R.string.index_un_insert_card).equals(getBleStatus())) {
-			status = R.string.index_un_insert_card;
-		} else if (getString(R.string.index_high_signal).equals(getBleStatus())) {
-			status = R.string.index_high_signal;
-		} else if (getString(R.string.index_registing).equals(getBleStatus())) {
-			status = R.string.index_registing;
-		} else if (getString(R.string.index_aixiaoqicard).equals(getBleStatus())) {
-			status = R.string.index_aixiaoqicard;
-		} else if (getString(R.string.index_regist_fail).equals(getBleStatus())) {
-			status = R.string.index_regist_fail;
-		}
-
 		intent.putExtra(BRACELETTYPE, braceletName);
-		intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, getString(status));
+		Log.e(TAG,"bleStatus"+bleStatus);
+		intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, bleStatus);
 		return intent;
 	}
 
@@ -464,10 +442,10 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				//判断是否再次重连的标记
 				ICSOpenVPNApplication.isConnect = false;
 				ReceiveBLEMoveReceiver.isConnect = false;
-				// 注册失败不显示
-				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_INITIATIVE);
+				// 解除绑定，注册失败不显示
+				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.REGISTER_FAIL_INITIATIVE);
 
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
+//				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
 				CommonTools.showShortToast(getActivity(), "已解绑设备");
 				ICSOpenVPNApplication.uartService.disconnect();
 				showDeviceSummarized(false);
@@ -565,12 +543,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	}
 
 
-	public String getBleStatus() {
-		return bleStatus;
-	}
 
-	public void setBleStatus(String bleStatus) {
-		this.bleStatus = bleStatus;
+	@Override
+	protected void setBleStatus(String bleStatus) {
 		if (isAdded()) {
 			if (getString(R.string.index_un_insert_card).equals(bleStatus)
 					|| getString(R.string.index_unconnect).equals(bleStatus)
@@ -582,33 +557,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		}
 	}
 
-	/**
-	 * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
-	 */
-	private void sendEventBusChangeBluetoothStatus(String status) {
-		int statusDrawable = R.drawable.index_connecting;
-		if (status.equals(getString(R.string.index_connecting))) {
-		} else if (status.equals(getString(R.string.index_aixiaoqicard))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_no_signal))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_regist_fail))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_registing))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_unbind))) {
-			statusDrawable = R.drawable.index_unbind;
-		} else if (status.equals(getString(R.string.index_no_packet))) {
-			statusDrawable = R.drawable.index_no_packet;
-		} else if (status.equals(getString(R.string.index_un_insert_card))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_high_signal))) {
-			statusDrawable = R.drawable.index_high_signal;
-		} else if (status.equals(getString(R.string.index_blue_un_opne))) {
-			statusDrawable = R.drawable.index_blue_unpen;
-		}
-		EventBusUtil.changeConnectStatus(status, statusDrawable);
-	}
+
+
 
 	public final String NoticSign = "flg";
 

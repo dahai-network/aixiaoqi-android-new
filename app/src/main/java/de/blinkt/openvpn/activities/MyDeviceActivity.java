@@ -70,6 +70,7 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 import static android.view.View.GONE;
 import static cn.com.aixiaoqi.R.id.register_sim_statue;
+import static cn.com.aixiaoqi.R.id.switchView;
 import static cn.com.aixiaoqi.R.string.device;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
@@ -243,12 +244,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			} else {
 				sinking.setPercent(0f);
 			}
-			if (TextUtils.isEmpty(blueStatus)) {
+			if (!TextUtils.isEmpty(blueStatus)) {
 				//如果状态来不及更新，仍是未绑定则修改为未插卡
 				if (blueStatus.equals(getString(R.string.index_unbind))) {
 					blueStatus = getString(R.string.index_un_insert_card);
 				}
-				setConStatus(blueStatus);
+				conStatusTextView.setText(blueStatus);
+				if(getString(R.string.index_high_signal).equals(blueStatus)){
+					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
+				}else{
+					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
+				}
+
 			}
 			skyUpgradeHttp();
 		}
@@ -375,7 +382,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							//从预读取数据那里重新注册
 							connectGoip();
 						} else {
-							EventBusUtil.simRegisterStatue(SocketConstant.RESTART_TCP);
+							//如果TCP服务关闭了，则通知主界面重新开启
+							EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.RESTART_TCP);
 						}
 
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
@@ -409,14 +417,14 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		if (ProMainActivity.sendYiZhengService != null) {
 			conStatusTextView.setText(getString(R.string.index_registing));
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
-			sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.REGISTER_CHANGING);
 			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
-
+	//解除绑定
 	private void registFail() {
 		Log.e(TAG, "registFail");
-		EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_INITIATIVE);
+		EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.REGISTER_FAIL_INITIATIVE);
 	}
 
 	private void restartUartService() {
@@ -473,7 +481,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				//测试代码
 				dismissProgress();
 				skyUpgradeHttp();
-				sendEventBusChangeBluetoothStatus(getString(R.string.index_no_signal));
 			}
 
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
@@ -502,7 +509,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						}
 					});
 					connectThread.start();
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_connecting));
 					percentTextView.setVisibility(GONE);
 					//多次重连无效后关闭蓝牙重启
 					if (!isUpgrade && isConnectOnce) {
@@ -541,14 +547,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							if (messages.get(0).substring(10, 12).equals("03")) {
 								if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
 									conStatusTextView.setText(getString(R.string.index_registing));
-									sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
 								}
 							} else if (messages.get(0).substring(10, 12).equals("13")) {
 								//百分比TextView设置为0
-//							percentTextView.setText("");
 								showNoCardDialog();
 								SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
-								sendEventBusChangeBluetoothStatus(getString(R.string.index_un_insert_card));
 								stopAnim();
 							}
 							break;
@@ -967,176 +970,111 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	}
 
-	/**
-	 * 修改蓝牙连接状态，通过EVENTBUS发送到各个页面。
-	 */
-	private void sendEventBusChangeBluetoothStatus(String status) {
-		int statusDrawable = R.drawable.index_connecting;
-		if (status.equals(getString(R.string.index_connecting))) {
-		} else if (status.equals(getString(R.string.index_aixiaoqicard))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_no_signal))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_regist_fail))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_registing))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_unbind))) {
-			statusDrawable = R.drawable.index_unbind;
-		} else if (status.equals(getString(R.string.index_no_packet))) {
-			statusDrawable = R.drawable.index_no_packet;
-		} else if (status.equals(getString(R.string.index_un_insert_card))) {
-			statusDrawable = R.drawable.index_no_signal;
-		} else if (status.equals(getString(R.string.index_high_signal))) {
-			statusDrawable = R.drawable.index_high_signal;
-		} else if (status.equals(getString(R.string.index_blue_un_opne))) {
-			statusDrawable = R.drawable.index_blue_unpen;
-			status = getString(R.string.index_connecting);
-		}
-		EventBusUtil.changeConnectStatus(status, statusDrawable);
-	}
-
-	public void setConStatus(String conStatus) {
-		conStatusTextView.setText(conStatus);
-		conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
-		if (conStatus.equals(getString(R.string.index_connecting))) {
-			percentTextView.setVisibility(GONE);
-		} else if (conStatus.equals(getString(R.string.index_aixiaoqicard))) {
-			percentTextView.setVisibility(GONE);
-			if (noDevicedialog != null && noDevicedialog.getDialog() != null)
-				noDevicedialog.getDialog().dismiss();
-			stopAnim();
-			//重新上电清空
-			SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
-		} else if (conStatus.equals(getString(R.string.index_regist_fail))) {
-			percentTextView.setVisibility(GONE);
-			percentInt = 0;
-			stopAnim();
-		} else if (conStatus.equals(getString(R.string.index_registing))) {
-			percentTextView.setVisibility(GONE);
-			registerSimStatu.setVisibility(View.VISIBLE);
-			if (noDevicedialog != null && noDevicedialog.getDialog() != null)
-				noDevicedialog.getDialog().dismiss();
-			startAnim();
-		} else if (conStatus.equals(getString(R.string.index_unbind))) {
-			percentTextView.setVisibility(GONE);
-		} else if (conStatus.equals(getString(R.string.index_no_packet))) {
-			stopAnim();
-			percentTextView.setVisibility(GONE);
-			registerSimStatu.setVisibility(GONE);
-		} else if (conStatus.equals(getString(R.string.index_un_insert_card))) {
-			percentTextView.setVisibility(GONE);
-			registerSimStatu.setVisibility(View.VISIBLE);
-			stopAnim();
-		} else if (conStatus.equals(getString(R.string.index_high_signal))) {
-			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
-			percentTextView.setVisibility(GONE);
-			percentInt = 0;
-			stopAnim();
-		} else if (conStatus.equals(getString(R.string.index_no_signal))) {
-			percentTextView.setText("0%");
-			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
-			registerSimStatu.setVisibility(View.VISIBLE);
-			startAnim();
-		} else if (conStatus.equals(getString(R.string.index_unconnect))) {
-			percentTextView.setVisibility(GONE);
-		}
-		//蓝牙未开的时候提示未连接，诱导用户点击刷新
-		else if (conStatus.equals(getString(R.string.index_blue_un_opne))) {
-			conStatusTextView.setText(getString(R.string.index_unconnect));
-		}
-	}
-
+	//接收到到卡注册状态作出相应的操作
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(SimRegisterStatue entity) {
+		e("RigsterSimStatue="+entity.getRigsterSimStatue()+"\nrigsterStatueReason="+entity.getRigsterStatueReason()+"\nSocketConstant.REGISTER_STATUE_CODE ="+SocketConstant.REGISTER_STATUE_CODE );
 		synchronized (MyDeviceActivity.this) {
+			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 			switch (entity.getRigsterSimStatue()) {
-				case SocketConstant.REGISTER_SUCCESS:
+				case SocketConstant.REGISTER_SUCCESS://注册成功
 					conStatusTextView.setText(getString(R.string.index_high_signal));
 					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_high_signal));
 					percentInt = 0;
 					percentTextView.setVisibility(GONE);
 					stopAnim();
 					break;
-				case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
+				case SocketConstant.REGISTER_FAIL://注册失败
 					stopAnim();
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
-					CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
+					registerFail(entity.getRigsterStatueReason());
+
 					break;
-				case SocketConstant.REGISTER_FAIL:
+				case SocketConstant.UNREGISTER://未注册
 					stopAnim();
 					percentTextView.setVisibility(GONE);
-					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					CommonTools.showShortToast(this, getString(R.string.index_regist_fail));
+					unregister(entity.getRigsterStatueReason());
 					break;
-				case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
-					stopAnim();
-					percentTextView.setVisibility(GONE);
-					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
-					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_invalid));
-					break;
-				case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
-					stopAnim();
-					percentTextView.setVisibility(GONE);
-					conStatusTextView.setText(getString(R.string.index_regist_fail));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
-					CommonTools.showShortToast(this, getString(R.string.regist_fail_card_operators));
-					break;
-				case SocketConstant.NOT_NETWORK:
-					CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
-					break;
-				case SocketConstant.START_TCP_FAIL:
-					CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
-					break;
-				case SocketConstant.TCP_DISCONNECT:
-					startAnim();
-					conStatusTextView.setText(getString(R.string.index_registing));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
-					break;
-				case SocketConstant.RESTART_TCP:
-					startAnim();
-					conStatusTextView.setText(getString(R.string.index_registing));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
-					break;
-				case SocketConstant.REG_STATUE_CHANGE:
-					startAnim();
-					conStatusTextView.setText(getString(R.string.index_registing));
-					sendEventBusChangeBluetoothStatus(getString(R.string.index_registing));
-					break;
-				case SocketConstant.REGISTER_CHANGING:
+				case SocketConstant.REGISTERING://注册中
 					if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+						conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 						percentTextView.setVisibility(GONE);
 						return;
-					} else {
-						percentTextView.setVisibility(View.VISIBLE);
 					}
-					double percent = entity.getProgressCount();
+					startAnim();
 					conStatusTextView.setText(getString(R.string.index_registing));
-					if (percent > percentInt)
-						percentInt = (int) (percent / 1.6);
-					Log.i(TAG, "写卡进度：" + percentInt + "%");
-					if (percentInt >= 100) {
-						percentInt = 98;
-					}
-					percentTextView.setText(percentInt + "%");
-					break;
-				default:
-//						if (entity.getFailType() != SocketConstant.REGISTER_FAIL_INITIATIVE) {
-//							sendEventBusChangeBluetoothStatus(getString(R.string.index_regist_fail));
-//						}
+					registering(entity);
 					break;
 			}
 		}
 	}
 
+	private void registerFail(int failReason){
+		switch (failReason){
+			case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 
-	@Subscribe(threadMode = ThreadMode.MAIN)
-	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
-		setConStatus(entity.getStatus());
+				break;
+			case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
+
+				break;
+			case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
+
+				break;
+			case SocketConstant.SERVER_IS_ERROR:
+
+				break;
+		}
+
+	}
+	private void registering(SimRegisterStatue entity){
+		switch (entity.getRigsterStatueReason()){
+			case SocketConstant.UPDATE_PERCENT:
+				if (SocketConstant.REGISTER_STATUE_CODE != 3) {
+					percentTextView.setVisibility(View.VISIBLE);
+				double percent = entity.getProgressCount();
+				conStatusTextView.setText(getString(R.string.index_registing));
+				if (percent > percentInt)
+					percentInt = (int) (percent / 1.6);
+				Log.i(TAG, "写卡进度：" + percentInt + "%");
+				if (percentInt >= 100) {
+					percentInt = 98;
+				}
+				percentTextView.setText(percentInt + "%");
+				}
+				break;
+			case SocketConstant.REG_STATUE_CHANGE:
+				conStatusTextView.setText(getString(R.string.index_registing));
+				break;
+			case SocketConstant.RESTART_TCP:
+				conStatusTextView.setText(getString(R.string.index_registing));
+				break;
+			case SocketConstant.TCP_DISCONNECT:
+				conStatusTextView.setText(getString(R.string.index_registing));
+			case SocketConstant.START_TCP_FAIL:
+				CommonTools.showShortToast(this, getString(R.string.check_net_work_reconnect));
+				break;
+		}
+	}
+	private void unregister(int unregisterReason){
+		switch (unregisterReason){
+			case SocketConstant.AIXIAOQI_CARD:
+				if (noDevicedialog != null && noDevicedialog.getDialog() != null)
+					noDevicedialog.getDialog().dismiss();
+				stopAnim();
+				//重新上电清空
+				SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
+				break;
+
+			case SocketConstant.CONNECTING_DEVICE:
+				percentTextView.setVisibility(GONE);
+				break;
+
+			case SocketConstant.UN_INSERT_CARD:
+				percentTextView.setVisibility(GONE);
+				registerSimStatu.setVisibility(View.VISIBLE);
+				break;
+		}
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)

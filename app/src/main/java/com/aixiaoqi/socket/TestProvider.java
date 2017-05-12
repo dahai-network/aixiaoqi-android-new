@@ -57,7 +57,7 @@ public class TestProvider {
 		}
 
 		if (TextUtils.isEmpty(iccidEntity.getImmsi())){
-			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 			return;
 		}
 
@@ -72,7 +72,7 @@ public class TestProvider {
 		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
 		String token = SharedUtils.getInstance().readString(Constant.TOKEN);
 		if (TextUtils.isEmpty(token)) {
-			EventBusUtil.simRegisterStatue(SocketConstant.TOKEN_IS_NULL);
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.TOKEN_IS_NULL);
 		} else {
 			SocketConstant.CONNENCT_VALUE[3] = RadixAsciiChange.convertStringToHex(token);
 			REGISTER_STATUE_CODE = 2;

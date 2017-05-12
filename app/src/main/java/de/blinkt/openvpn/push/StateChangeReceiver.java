@@ -29,7 +29,8 @@ public class StateChangeReceiver extends BroadcastReceiver {
 
 	private void connectGoip() {
 		if (ProMainActivity.sendYiZhengService != null) {
-			EventBusUtil.simRegisterStatue(SocketConstant.REG_STATUE_CHANGE);
+			//网络状态改变，比如从3G变为2G等网络的改变。
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.REG_STATUE_CHANGE);
 			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
@@ -41,7 +42,8 @@ public class StateChangeReceiver extends BroadcastReceiver {
 				//从预读取数据那里重新注册
 				connectGoip();
 			} else {
-				EventBusUtil.simRegisterStatue(SocketConstant.RESTART_TCP);
+				//如果TCP服务关闭了，则通知主界面重新开启
+				EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.RESTART_TCP);
 			}
 
 		}

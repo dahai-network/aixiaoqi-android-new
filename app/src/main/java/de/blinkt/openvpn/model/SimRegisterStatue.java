@@ -11,6 +11,7 @@ public class SimRegisterStatue implements Serializable {
 
 	//Goip注册失败类型
 	private int rigsterSimStatue;
+	private int rigsterStatueReason;
 	private int progressCount;
 
 	public int getRigsterSimStatue() {
@@ -27,5 +28,13 @@ public class SimRegisterStatue implements Serializable {
 
 	public void setProgressCount(int progressCount) {
 		this.progressCount = progressCount;
+	}
+
+	public int getRigsterStatueReason() {
+		return rigsterStatueReason;
+	}
+
+	public void setRigsterStatueReason(int rigsterStatueReason) {
+		this.rigsterStatueReason = rigsterStatueReason;
 	}
 }

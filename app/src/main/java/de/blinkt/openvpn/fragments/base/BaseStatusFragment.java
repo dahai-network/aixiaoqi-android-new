@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class BaseStatusFragment extends Fragment {
 		EventBus.getDefault().register(this);
 		return rootView;
 	}
-
+	//接收到到卡注册状态作出相应的操作
 	@Subscribe(threadMode = ThreadMode.MAIN)
 	public void receiveStateChangeEntity(StateChangeEntity entity) {
 		switch (entity.getStateType()) {
@@ -143,30 +144,57 @@ public class BaseStatusFragment extends Fragment {
 			topProgressGone();
 		}
 	}
-
+	//接收到到卡注册状态作出相应的操作
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(SimRegisterStatue entity) {
+
 		switch (entity.getRigsterSimStatue()) {
 			case SocketConstant.REGISTER_SUCCESS:
+				bleStatus=getString(R.string.index_high_signal);
 				topProgressGone();
 				setRegisted(true);
 				break;
-			case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
-
-				topProgressGone();
-				break;
 			case SocketConstant.REGISTER_FAIL:
+				bleStatus=getString(R.string.index_regist_fail);
+				topProgressGone();
+				break;
+			case SocketConstant.UNREGISTER://未注册
+				showStatue(entity);
+				break;
+			case SocketConstant.REGISTERING:
+				if(SocketConstant.REGISTER_STATUE_CODE!=3){
+				bleStatus=getString(R.string.index_registing);
+				registeringReason(entity);
+				}
+				break;
 
-				topProgressGone();
-				break;
-			case SocketConstant.REGISTER_FAIL_IMSI_IS_NULL:
 
-				topProgressGone();
-				break;
-			case SocketConstant.REGISTER_FAIL_IMSI_IS_ERROR:
-				topProgressGone();
-				break;
-			case SocketConstant.REGISTER_CHANGING:
+		}
+		Log.e("AccountFragment","bleStatus111="+bleStatus);
+		setBleStatus(bleStatus);
+	}
+	protected  void setBleStatus(String bleStatus){
+
+	}
+	protected  String bleStatus;
+
+	private void showStatue(SimRegisterStatue entity){
+switch (entity.getRigsterStatueReason()){
+	case SocketConstant.UN_INSERT_CARD:
+		bleStatus=getString(R.string.index_un_insert_card);
+		break;
+	case SocketConstant.AIXIAOQI_CARD:
+		bleStatus=getString(R.string.index_aixiaoqicard);
+	case SocketConstant.CONNECTING_DEVICE:
+		bleStatus=getString(R.string.index_connecting);
+		break;
+}
+
+	}
+
+	private void 	registeringReason(SimRegisterStatue entity){
+//		switch (entity.getRigsterSimStatue()){
+//			case SocketConstant.UP:
 				double percent = entity.getProgressCount();
 				if (topProgressView.getVisibility() != View.VISIBLE && SocketConstant.REGISTER_STATUE_CODE != 3) {
 					topProgressView.setVisibility(View.VISIBLE);
@@ -182,14 +210,14 @@ public class BaseStatusFragment extends Fragment {
 							}
 						}
 					});
+					int percentInt = (int) (percent / 1.6);
+					if (percentInt >= 100) {
+						percentInt = 98;
+					}
+					topProgressView.setProgress(percentInt);
 				}
-				int percentInt = (int) (percent / 1.6);
-				if (percentInt >= 100) {
-					percentInt = 98;
-				}
-				topProgressView.setProgress(percentInt);
-				break;
-		}
+
+
 	}
 
 	private boolean checkNetWorkAndBlueIsOpen() {
