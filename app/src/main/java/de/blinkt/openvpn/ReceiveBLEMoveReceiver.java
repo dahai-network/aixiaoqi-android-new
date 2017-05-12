@@ -69,6 +69,7 @@ import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER_NO_RESPONSE;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP1;
 import static de.blinkt.openvpn.constant.Constant.WRITE_CARD_STEP5;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
+import static de.blinkt.openvpn.util.CommonTools.delayTime;
 import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 /**
@@ -361,24 +362,25 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
                                             switch (messages.get(0).substring(12, 14)) {
                                                 //有卡并且上电失败，可能是无效卡/卡未插好/设备异常
                                                 case "00":
+                                                    SharedUtils.getInstance().delete(Constant.OPERATER);
                                                     break;
                                                 case "01":
                                                     Log.i(TAG, "移动卡！");
                                                     SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_MOBILE);
                                                     //卡类型是运营商则开始注册
-                                                    registFlowPath();
+//                                                    registFlowPath();
                                                     break;
                                                 case "02":
                                                     Log.i(TAG, "联通卡！");
                                                     SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_UNICOM);
                                                     //卡类型是运营商则开始注册
-                                                    registFlowPath();
+//                                                    registFlowPath();
                                                     break;
                                                 case "03":
                                                     Log.i(TAG, "电信卡！");
                                                     SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_TELECOM);
                                                     //卡类型是运营商则开始注册
-                                                    registFlowPath();
+
                                                     break;
                                                 case "04":
                                                     Log.i(TAG, "爱小器卡！");
@@ -397,6 +399,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
                                         Log.e("ICCID_BLUE_VALUE", Iccid);
                                         SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(Iccid);
                                         Log.e("ICCID_BLUE_VALUE111111", SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
+                                        delayTime(500);
+                                        Log.e("ICCID_BLUE_VALUE2222",SharedUtils.getInstance().readString(Constant.OPERATER));
+                                        if( !TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.OPERATER))){
+                                            registFlowPath();
+                                        }
                                         break;
                                     case Constant.APP_CONNECT_RECEIVE:
                                         Log.i("Encryption", "返回加密数据：" + messages.get(0).toString());
