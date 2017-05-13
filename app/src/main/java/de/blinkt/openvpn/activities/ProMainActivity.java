@@ -475,10 +475,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
         });
     }
 
-//    private int clickCount = 0;
-//    private int scrollCount = 0;
-
-
     @Override
     protected void onResume() {
         isForeground = true;
@@ -609,8 +605,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
         addressListFragment = null;
         sportFragment = null;
         EventBus.getDefault().unregister(this);
-
-
         super.onDestroy();
     }
 
@@ -648,7 +642,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
                         SharedUtils utils = SharedUtils.getInstance();
 
                         utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
-//						utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
                         //按MAC地址保存版本号
                         if (!TextUtils.isEmpty(deviceAddress))
                             utils.writeString(deviceAddress, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
@@ -746,9 +739,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
         SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = preReadEntity.getIccid();
     }
 
-    @Override
-    public void noNet() {
-    }
+
 
     private void getConfigInfo() {
         createHttpRequest(HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
@@ -1044,7 +1035,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
     private void requestPacket() {
         getConfigInfo();
-//		checkRegisterStatuGoIp();
     }
 
     private BroadcastReceiver screenoffReceive = new BroadcastReceiver() {
@@ -1077,7 +1067,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
     //空中升级
     private void skyUpgradeHttp() {
         Log.e(TAG, "skyUpgradeHttp");
-        int DeviceType = 0;
+        int DeviceType;
         String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
         if (!TextUtils.isEmpty(braceletname)) {
             if (braceletname.contains(MyDeviceActivity.UNITOYS)) {

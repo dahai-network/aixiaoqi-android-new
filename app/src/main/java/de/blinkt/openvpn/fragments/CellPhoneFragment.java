@@ -53,7 +53,6 @@ public class CellPhoneFragment extends BaseStatusFragment {
      */
     public  TextView dial_tittle_fl;
     private ArrayList<Fragment> fragments = new ArrayList<>();
-    Activity activity;
     MyViewPager mViewPager;
     public static boolean isForeground = false;
     Drawable drawable;
@@ -67,9 +66,7 @@ public class CellPhoneFragment extends BaseStatusFragment {
         View view = super.onCreateView(inflater, container,
                 savedInstanceState);
         initView(view);
-
         ClickPhone();
-
         return view;
     }
 
@@ -131,18 +128,14 @@ public class CellPhoneFragment extends BaseStatusFragment {
         drawable = getActivity().getResources().getDrawable(R.drawable.image_slidethetriangle);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         mViewPager.setCurrentItem(0);
-        message_rb.setCompoundDrawables(null, null, null, null);
-        cell_phone_rb.setCompoundDrawables(null, null, null, drawable);
+        setBottomImage(null,drawable);
 
     }
+private void setBottomImage(Drawable messageDrawable,Drawable cellPhoneDrawable){
+    message_rb.setCompoundDrawables(null, null, null, messageDrawable);
+    cell_phone_rb.setCompoundDrawables(null, null, null, cellPhoneDrawable);
+}
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttach(Activity activity) {
-        // TODO Auto-generated method stub
-        this.activity = activity;
-        super.onAttach(activity);
-    }
     Fragment_Phone fragmentPhone ;
     private void initFragment() {
         fragments.clear();//清空
@@ -171,8 +164,8 @@ public class CellPhoneFragment extends BaseStatusFragment {
     }
 
     private void ClickMessage() {
-        message_rb.setCompoundDrawables(null, null, null, drawable);
-        cell_phone_rb.setCompoundDrawables(null, null, null, null);
+        setBottomImage(drawable,null);
+
         mViewPager.setCurrentItem(1);
     }
 
@@ -200,8 +193,7 @@ public class CellPhoneFragment extends BaseStatusFragment {
         /**
          * \根据键盘的显示来实现控件的显示或则隐藏
          */
-        message_rb.setCompoundDrawables(null, null, null, null);
-        cell_phone_rb.setCompoundDrawables(null, null, null, drawable);
+        setBottomImage(null,drawable);
         mViewPager.setCurrentItem(0);
     }
 

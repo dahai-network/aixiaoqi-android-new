@@ -110,8 +110,6 @@ public class T9TelephoneDialpadView extends LinearLayout implements
         ivPutAway = (ImageView) mDialpadView
                 .findViewById(R.id.iv_putaway);
 
-
-
         numberButton[0]=(Button) mDialpadView
                 .findViewById(R.id.dialNum1);
         numberButton[1]=(Button) mDialpadView
@@ -165,7 +163,6 @@ public class T9TelephoneDialpadView extends LinearLayout implements
 
         mT9InputEt.setCursorVisible(false);
         searchEt = (LinearLayout) findViewById(R.id.search_et_linearlayout);
-
         //初始化状态
         mDialDeleteBtn.setVisibility(View.GONE);
         mT9InputEt.setVisibility(View.GONE);
@@ -281,9 +278,6 @@ public class T9TelephoneDialpadView extends LinearLayout implements
                 addSingleDialCharacter(v.getTag().toString());
                 break;
         }
-
-
-
 
     }
 

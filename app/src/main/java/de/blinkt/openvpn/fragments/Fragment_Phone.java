@@ -3,6 +3,7 @@ package de.blinkt.openvpn.fragments;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -71,7 +72,7 @@ import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
 
 
 public class Fragment_Phone extends Fragment implements InterfaceCallback, T9TelephoneDialpadView.OnT9TelephoneDialpadView,
-		RecyclerBaseAdapter.OnItemClickListener, QueryCompleteListener<ContactRecodeEntity>, DialogInterfaceTypeBase,T9TelephoneDialpadView.OnControlCallOptionListener,View.OnClickListener {
+		RecyclerBaseAdapter.OnItemClickListener, QueryCompleteListener<ContactRecodeEntity>, DialogInterfaceTypeBase,T9TelephoneDialpadView.OnControlCallOptionListener,View.OnClickListener,View.OnKeyListener {
 
 
 	RecyclerView rvContactRecode;
@@ -114,7 +115,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		rl_no_permission = (RelativeLayout) view.findViewById(R.id.rl_no_permission);
 		tv_no_permission.setText(String.format(getString(R.string.no_permission), getString(R.string.call_recoder)));
 		inited();
-		floatingActionButton.setOnClickListener(this);
+
 	}
 
 	/***
@@ -188,13 +189,14 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		rvContactRecode.setAdapter(contactRecodeAdapter);
 		t9dialpadview.setOnT9TelephoneDialpadView(this);
 		t9dialpadview.setOnControlCallOptionListener(this);
+		floatingActionButton.setOnClickListener(this);
+		rvContactRecode.setOnKeyListener(this);
 		dial_delete_btn = t9dialpadview.getDeteleBtn();
 		jump_permission.setOnClickListener(this);
-		if (this.dial_delete_btn != null) {
-			this.dial_delete_btn.setOnClickListener(new View.OnClickListener() {
+		if (dial_delete_btn != null) {
+			dial_delete_btn.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-
 					if (!TextUtils.isEmpty(curInputStr) && curInputStr.length() > 0) {
 						String newCurInputStr = curInputStr.substring(0, curInputStr.length() - 1);
 						t9dialpadview.mT9InputEt.setText(newCurInputStr);
@@ -470,18 +472,20 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		super.setUserVisibleHint(isVisibleToUser);
 		Log.e(TAG,"isVisibleToUser="+isVisibleToUser);
 		if(!isVisibleToUser){
-			if(t9dialpadview!=null)
-				t9dialpadview.setVisibility(View.GONE);
-			EventBusUtil.optionView(true);
+			hindT9DiaView();
 		}
+	}
+
+	private void hindT9DiaView() {
+		if(t9dialpadview!=null)
+			t9dialpadview.setVisibility(View.GONE);
+		EventBusUtil.optionView(true);
 	}
 
 	//隐藏自定义键盘
 	@Override
 	public void hideT9() {
-		EventBusUtil.optionView(true);
-		t9dialpadview.setVisibility(View.GONE);
-
+		hindT9DiaView();
 	}
 
 
@@ -511,6 +515,18 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	}
 
 
-
-
+	@Override
+	public boolean onKey(View v, int keyCode, KeyEvent event) {
+		if (event.getAction() == KeyEvent.ACTION_DOWN) {
+			if (keyCode == KeyEvent.KEYCODE_BACK) {  //表示按返回键 时的操作
+				if (t9dialpadview!=null&&t9dialpadview.getVisibility()==View.VISIBLE) {
+					hindT9DiaView();
+				} else {
+					return false;
+				}
+				return true;    //已处理
+			}
+		}
+		return false;
+	}
 }

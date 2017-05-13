@@ -59,7 +59,7 @@ public class BaseSensorActivity extends CommenActivity implements SensorEventLis
 		if (distances != null && event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
 			if (distances[0] == 0.0f) {
 				distance=1;
-				Log.d("unitoy", "hands up in calling activity"+localWakeLock.isHeld());
+				Log.d("unitoy", "hands up in calling activity");
 				if (localWakeLock.isHeld()) {
 					return;
 				} else {
@@ -67,7 +67,7 @@ public class BaseSensorActivity extends CommenActivity implements SensorEventLis
 				}
 			} else {
 				distance=2;
-				Log.d("unitoy", "hands moved in calling activity"+localWakeLock.isHeld());
+				Log.d("unitoy", "hands moved in calling activity");
 				if (localWakeLock.isHeld()) {
 					return;
 				} else {
@@ -118,11 +118,6 @@ public class BaseSensorActivity extends CommenActivity implements SensorEventLis
 				.setSmallIcon(R.drawable.login_icon);
 		Intent intent = new Intent(this, PhoneReceiver.class);
 		intent.setAction(PhoneReceiver.CALL_PHONE);
-
-
-//		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-//				| Intent.FLAG_ACTIVITY_NEW_TASK);
-
 		PendingIntent contextIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 		mBuilder.setContentIntent(contextIntent);
 		mBuilder.build().vibrate = null;

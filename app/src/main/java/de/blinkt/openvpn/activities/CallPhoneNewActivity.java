@@ -377,7 +377,6 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 			} else if (CallPhoneService.waitConnected.equals(action)) {
 				if (timer.getVisibility() == View.GONE)
 					displayStatus(R.string.calling);
-
 			} else if (CallPhoneService.reportFlag.equals(action)) {
 
 				if (CallPhoneService.CALL_DIR == 1) {

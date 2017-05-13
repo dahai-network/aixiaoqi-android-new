@@ -67,14 +67,11 @@ public class SdkAndBluetoothDataInchange {
 
 		synchronized (this){
 
-	 if(isHasPreData){
-
-				 PERCENT=PERCENT+1;
+			if(isHasPreData){
+				PERCENT=PERCENT+1;
 				eventPercent(PERCENT);
 				registerGoip(messages);
 			}else if(ProMainActivity.isStartSdk) {
-
-
 				int percent = Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag()) ? "-1" : mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length() - 4, mReceiveDataframSocketService.getSorcketTag().length() - 1));
 				eventPercent(percent);
 				isReceiveBluetoothData = true;
@@ -92,36 +89,36 @@ public class SdkAndBluetoothDataInchange {
 
 	private void startTimer() {
 		if (countMessage ==0) {
-            Log.e("timer", "开启定时器");
-            countMessage++;
-            if(timerMessage==null){
-                timerMessage= new Timer();
-            }
-            if(timerTaskMessage==null){
-                timerTaskMessage= new TimerTask() {
-                    @Override
-                    public void run() {
+			Log.e("timer", "开启定时器");
+			countMessage++;
+			if(timerMessage==null){
+				timerMessage= new Timer();
+			}
+			if(timerTaskMessage==null){
+				timerTaskMessage= new TimerTask() {
+					@Override
+					public void run() {
 
-                        if (SocketConstant.REGISTER_STATUE_CODE != 3) {
-                            if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
-                                Log.e("timer", "接收不到蓝牙数据");
-                                sendToBluetoothAboutCardInfo(finalTemp);
-                                notCanReceiveBluetoothDataCount++;
-                            }else if(notCanReceiveBluetoothDataCount>=3){
-                                Log.e("timer", "注册失败");
-                                notifyRegisterFail();
-                                clearTimer();
-                                notCanReceiveBluetoothDataCount=0;
-                            }
-                        }
-                    }
-                };
-            }
-            timerMessage.schedule(timerTaskMessage, 5000, 5000);
+						if (SocketConstant.REGISTER_STATUE_CODE != 3) {
+							if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
+								Log.e("timer", "接收不到蓝牙数据");
+								sendToBluetoothAboutCardInfo(finalTemp);
+								notCanReceiveBluetoothDataCount++;
+							}else if(notCanReceiveBluetoothDataCount>=3){
+								Log.e("timer", "注册失败");
+								notifyRegisterFail();
+								clearTimer();
+								notCanReceiveBluetoothDataCount=0;
+							}
+						}
+					}
+				};
+			}
+			timerMessage.schedule(timerTaskMessage, 5000, 5000);
 
-        }
+		}
 	}
-//注册进度变化通知
+	//注册进度变化通知
 	private void eventPercent(int percent) {
 		EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.UPDATE_PERCENT,percent);
 	}
