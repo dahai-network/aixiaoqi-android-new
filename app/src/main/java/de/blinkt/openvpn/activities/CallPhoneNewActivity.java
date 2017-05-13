@@ -58,8 +58,6 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	String maxinumPhoneCallTime;
 	ConnectedReceive connectedReceive;
 	int cellPhoneType;
-	NotificationManager mNotificationManager;
-	NotificationCompat.Builder mBuilder;
 	public static boolean isForeground = false;
 	TextView keyboard;
 	T9TelephoneDialpadView t9dialpadview;
@@ -146,7 +144,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		t9dialpadview = (T9TelephoneDialpadView) findViewById(R.id.t9dialpadview);
 		llControlVoide = (LinearLayout) findViewById(R.id.ll_control_voide);
 		hideKeyboard = (ImageView) findViewById(R.id.hide_keyboard);
-
+		t9dialpadview.phoneRelativeLayout.setVisibility(View.GONE);
 		t9dialpadview.setOnT9TelephoneDialpadView(this);
 		t9dialpadview.searchEtHidden();
 		t9dialpadview.setBtnColor( Color.WHITE);
@@ -209,38 +207,9 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		mtview.performClick();
 	}
 
-	int notifyId = 100;
 
-	private void initNotify() {
-		if (mNotificationManager == null) {
-			mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		}
-		if (mBuilder == null) {
-			mBuilder = new NotificationCompat.Builder(this);
-		}
-		mBuilder.setContentTitle(getString(R.string.unitoys_phone))
-				.setContentText(getString(R.string.call_phoning, phonenumtxt.getText().toString(), contactRecodeEntity.getPhoneNumber()))
-				.setNumber(3)//显示数量
-//				.setTicker("有新短信来啦")//通知首次出现在通知栏，带上升动画效果的
-				.setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示
-				.setPriority(Notification.PRIORITY_DEFAULT)//设置该通知优先级
-				.setAutoCancel(true)//设置这个标志当用户单击面板就可以让通知将自动取消
-//				.setOngoing(true)//ture，设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)
-				.setDefaults(Notification.DEFAULT_VIBRATE)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合：
-				//Notification.DEFAULT_ALL  Notification.DEFAULT_SOUND 添加声音 // requires VIBRATE permission
-				.setSmallIcon(R.drawable.login_icon);
-		Intent intent = new Intent(this, PhoneReceiver.class);
-		intent.setAction(PhoneReceiver.CALL_PHONE);
-		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO, contactRecodeEntity);
-		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE, cellPhoneType);
-		intent.putExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME, maxinumPhoneCallTime);
-//		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-//				| Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		PendingIntent contextIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-		mBuilder.setContentIntent(contextIntent);
-		mNotificationManager.notify(notifyId, mBuilder.build());
-	}
+
 
 
 
@@ -252,7 +221,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				MobclickAgent.onEvent(this, CLICKCALLCONTROLVOIDE);
 				Boolean isselected = mtview.isSelected();
 				if(ICSOpenVPNApplication.the_sipengineReceive!=null)
-				ICSOpenVPNApplication.the_sipengineReceive.SetLoudspeakerStatus(!isselected);
+					ICSOpenVPNApplication.the_sipengineReceive.SetLoudspeakerStatus(!isselected);
 				mtview.setSelected(!isselected);
 				break;
 			case R.id.calmTextView:
@@ -260,7 +229,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				MobclickAgent.onEvent(this, CLICKCALLPHONEQUIET);
 				Boolean iscalmSelected = calmTextView.isSelected();
 				if(ICSOpenVPNApplication.the_sipengineReceive!=null)
-				ICSOpenVPNApplication.the_sipengineReceive.MuteMic(!iscalmSelected);
+					ICSOpenVPNApplication.the_sipengineReceive.MuteMic(!iscalmSelected);
 				calmTextView.setSelected(!iscalmSelected);
 				break;
 			case R.id.cancelcallbtn:
@@ -327,10 +296,18 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 	}
 
 	@Override
+	protected void setDataParam(Intent intent) {
+		super.setDataParam(intent);
+		intent.putExtra(IntentPutKeyConstant.DATA_CALLINFO, contactRecodeEntity);
+		intent.putExtra(IntentPutKeyConstant.CELL_PHONE_TYPE, cellPhoneType);
+		intent.putExtra(IntentPutKeyConstant.MAXINUM_PHONE_CALL_TIME, maxinumPhoneCallTime);
+	}
+
+	@Override
 	protected void onStop() {
 		super.onStop();
 		isForeground = false;
-		initNotify();
+		initNotify(phonenumtxt.getText().toString(), contactRecodeEntity.getPhoneNumber());
 	}
 
 	private void startTimer() {
@@ -396,11 +373,11 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 				startTimer();
 			} else if (CallPhoneService.callProcessing.equals(action)) {
 				displayStatus(R.string.calling);
-//				displayStatus(getString(R.string.connecting));
+
 			} else if (CallPhoneService.waitConnected.equals(action)) {
 				if (timer.getVisibility() == View.GONE)
 					displayStatus(R.string.calling);
-//					displayStatus(getString(R.string.wait_other_connecting));
+
 			} else if (CallPhoneService.reportFlag.equals(action)) {
 
 				if (CallPhoneService.CALL_DIR == 1) {

@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
@@ -44,6 +45,10 @@ public class T9TelephoneDialpadView extends LinearLayout implements
         void onDialInputTextChanging(String curCharacter);
 
     }
+    public interface OnControlCallOptionListener{
+        void hideT9();
+        void callPhone();
+    }
 
     private Context mContext;
     /**
@@ -57,10 +62,13 @@ public class T9TelephoneDialpadView extends LinearLayout implements
     public EditText mT9InputEt;
     public Button[] numberButton=new Button[12];
     public View[] lineView=new View[13];
-    private View topView;
-    LinearLayout searchEt;
 
+    LinearLayout searchEt;
+    public RelativeLayout phoneRelativeLayout;
+    ImageView callImageView;
+    ImageView ivPutAway;
     private OnT9TelephoneDialpadView mOnT9TelephoneDialpadView = null;
+    private OnControlCallOptionListener mOnControlCallOptionListener = null;
 
     public TextView getDeteleBtn() {
         return mDialDeleteBtn;
@@ -93,6 +101,17 @@ public class T9TelephoneDialpadView extends LinearLayout implements
                 .findViewById(R.id.dial_delete_btn);
         mT9InputEt = (EditText) mDialpadView
                 .findViewById(R.id.dial_input_edit_text);
+        phoneRelativeLayout = (RelativeLayout) mDialpadView
+                .findViewById(R.id.phone_relativelayout);
+
+        callImageView = (ImageView) mDialpadView
+                .findViewById(R.id.callImageView);
+
+        ivPutAway = (ImageView) mDialpadView
+                .findViewById(R.id.iv_putaway);
+
+
+
         numberButton[0]=(Button) mDialpadView
                 .findViewById(R.id.dialNum1);
         numberButton[1]=(Button) mDialpadView
@@ -176,8 +195,9 @@ public class T9TelephoneDialpadView extends LinearLayout implements
         for (int i = 0; i < 12; i++) {
             numberButton[i].setOnClickListener(this);
         }
-
-
+        phoneRelativeLayout.setOnClickListener(this);
+        ivPutAway.setOnClickListener(this);
+        callImageView.setOnClickListener(this);
         mT9InputEt.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -190,18 +210,13 @@ public class T9TelephoneDialpadView extends LinearLayout implements
                     mT9InputEt.setSelection(inputStr.length());
 
                 }
-                ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
                 //根据输入框的字符来控制图片的显示
                 if (s != null) {
                     if (s.toString().length() > 0) {
                         mDialDeleteBtn.setVisibility(View.VISIBLE);
                         searchEt.setBackgroundResource(R.color.bottom_bar);
                         mT9InputEt.setVisibility(View.VISIBLE);
-
-
                     } else {
-
-
                         mDialDeleteBtn.setVisibility(View.GONE);
                         mT9InputEt.setVisibility(View.GONE);
                         searchEt.setBackgroundResource(R.color.transparent);
@@ -241,19 +256,33 @@ public class T9TelephoneDialpadView extends LinearLayout implements
         });
     }
 
+
     @Override
     public void onClick(View v) {
         //友盟方法统计
         MobclickAgent.onEvent(mContext, CLICKKEYCALLPHONE);
-        if (v.getId() == R.id.dial_delete_btn) {
-            deleteSingleDialCharacter();
+        switch (v.getId()){
+            case  R.id.dial_delete_btn:
+                deleteSingleDialCharacter();
+                break;
+            case R.id.phone_relativelayout:
+                break;
+            case R.id.iv_putaway:
+                if(mOnControlCallOptionListener!=null){
+                    mOnControlCallOptionListener.hideT9();
+                }
+                break;
+            case R.id.callImageView:
+                if(mOnControlCallOptionListener!=null){
+                    mOnControlCallOptionListener.callPhone();
+                }
+                break;
+            default:
+                addSingleDialCharacter(v.getTag().toString());
+                break;
         }
-//		else if (v.getId() == R.id.dial_input_edit_text) {
-//
-//        }
-        else {
-            addSingleDialCharacter(v.getTag().toString());
-        }
+
+
 
 
     }
@@ -263,7 +292,10 @@ public class T9TelephoneDialpadView extends LinearLayout implements
             OnT9TelephoneDialpadView onT9TelephoneDialpadView) {
         mOnT9TelephoneDialpadView = onT9TelephoneDialpadView;
     }
-
+    public void setOnControlCallOptionListener(
+            OnControlCallOptionListener OnControlCallOptionListener) {
+        mOnControlCallOptionListener = OnControlCallOptionListener;
+    }
     public void deleteSingleDialCharacter() {
         String curInputStr = mT9InputEt.getText().toString();
         if (curInputStr.length() > 0) {

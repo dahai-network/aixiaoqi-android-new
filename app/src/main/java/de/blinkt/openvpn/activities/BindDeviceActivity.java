@@ -384,7 +384,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 						public void run() {
 							Intent intent = new Intent(BindDeviceActivity.this, MyDeviceActivity.class);
 							intent.putExtra(MyDeviceActivity.BRACELETTYPE, bracelettype);
-							intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
+//							intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
 							startActivity(intent);
 							finish();
 						}

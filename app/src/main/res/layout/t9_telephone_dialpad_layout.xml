@@ -257,4 +257,31 @@
         android:id="@+id/line13"
         style="@style/horizontal_line_view_gray" />
 
+    <RelativeLayout
+        android:id="@+id/phone_relativelayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_90"
+        android:background="@color/bottom_bar"
+        android:orientation="horizontal"
+      >
+
+        <ImageView
+            android:id="@+id/callImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="18dp"
+            android:scaleType="center"
+            android:src="@drawable/image_dail_phonebtn_seletor" />
+
+        <ImageView
+            android:id="@+id/iv_putaway"
+            android:layout_width="@dimen/padding_100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:paddingLeft="@dimen/padding_50dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/image_putaway_seletor" />
+    </RelativeLayout>
+
 </LinearLayout>

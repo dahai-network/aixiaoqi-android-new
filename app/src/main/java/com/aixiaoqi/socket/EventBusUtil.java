@@ -9,6 +9,8 @@ import de.blinkt.openvpn.model.GetTokenRes;
 import de.blinkt.openvpn.model.ShowDeviceEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StateChangeEntity;
+import de.blinkt.openvpn.model.enentbus.OptionCellPhoneFragmentView;
+import de.blinkt.openvpn.model.enentbus.OptionProMainActivityView;
 
 /**
  * Created by Administrator on 2017/2/9 0009.
@@ -81,6 +83,18 @@ public class EventBusUtil {
 
     public static void getTokenRes() {
         GetTokenRes entity = new GetTokenRes();
+        EventBus.getDefault().post(entity);
+    }
+
+    public static void optionView(boolean isShow) {
+        OptionProMainActivityView entity = new OptionProMainActivityView();
+        entity.setShow(isShow);
+        EventBus.getDefault().post(entity);
+    }
+
+    public static void optionView(String  textChange) {
+        OptionCellPhoneFragmentView entity = new OptionCellPhoneFragmentView();
+        entity.setTextChange(textChange);
         EventBus.getDefault().post(entity);
     }
 }

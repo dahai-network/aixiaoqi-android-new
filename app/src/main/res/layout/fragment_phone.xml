@@ -13,6 +13,16 @@
     </android.support.v7.widget.RecyclerView>
 
     <include layout="@layout/no_permission"/>
+
+    <ImageView
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/padding_10dp"
+        android:layout_marginRight="@dimen/padding_15dp"
+        android:background="@drawable/fl_b_nomer" />
     <de.blinkt.openvpn.views.T9TelephoneDialpadView
         android:id="@+id/t9dialpadview"
         android:layout_width="match_parent"
