@@ -22,15 +22,12 @@ import android.support.v13.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aixiaoqi.socket.EventBusUtil;
@@ -43,7 +40,6 @@ import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 import com.aixiaoqi.socket.TestProvider;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -69,9 +65,7 @@ import de.blinkt.openvpn.database.DBHelp;
 import de.blinkt.openvpn.fragments.AccountFragment;
 import de.blinkt.openvpn.fragments.AddressListFragment;
 import de.blinkt.openvpn.fragments.CellPhoneFragment;
-import de.blinkt.openvpn.fragments.Fragment_Phone;
 import de.blinkt.openvpn.fragments.IndexFragment;
-import de.blinkt.openvpn.fragments.SmsFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
@@ -88,30 +82,33 @@ import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
-
+import de.blinkt.openvpn.model.enentbus.OptionProMainActivityView;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.NetworkUtils;
+import de.blinkt.openvpn.util.PageChangeListener;
 import de.blinkt.openvpn.util.SharedUtils;
-import de.blinkt.openvpn.util.ViewUtil;
 import de.blinkt.openvpn.views.CustomViewPager;
 import de.blinkt.openvpn.views.MyRadioButton;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
 import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONE;
 
-public class ProMainActivity extends BaseNetActivity implements View.OnClickListener, View.OnLongClickListener, DialogInterfaceTypeBase {
+
+public class ProMainActivity extends BaseNetActivity implements DialogInterfaceTypeBase {
 
     public static ProMainActivity instance = null;
+    @BindView(R.id.radiogroup)
+    RadioGroup radiogroup;
+    @BindView(R.id.bottom_fragment)
+    FrameLayout bottomFragment;
     private int REQUEST_LOCATION_PERMISSION = 3;
     @BindView(R.id.mViewPager)
     CustomViewPager mViewPager;
-    @BindView(R.id.callImageView)
-    ImageView callImageView;
     @BindView(R.id.rb_index)
     MyRadioButton rbIndex;
     @BindView(R.id.rb_phone)
@@ -120,17 +117,11 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     MyRadioButton rbAddress;
     @BindView(R.id.rb_personal)
     MyRadioButton rbPersonal;
-    /**
-     * 拨打电话按钮
-     */
-    public static RelativeLayout phone_linearLayout;
-    @BindView(R.id.iv_putaway)
-    public ImageView iv_putaway;
+
     @BindView(R.id.tv_red_dot_01)
     TextView tvRedDot01;
     @BindView(R.id.tv_red_dot_04)
     TextView tvRedDot04;
-    public static RadioGroup radiogroup;
     private ReceiveBLEMoveReceiver bleMoveReceiver;
     private UartService mService = null;
     //进入主页后打开蓝牙设备搜索绑定过的设备
@@ -146,21 +137,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     Intent intentCallPhone;
     public static boolean isForeground = false;
     public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
-
     //重连时间
     private int RECONNECT_TIME = 180000;
     SocketConnection socketUdpConnection;
     SocketConnection socketTcpConnection;
-    public static String STOP_CELL_PHONE_SERVICE = "stopservice";
     public static boolean isStartSdk = false;
     public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
     public static SendYiZhengService sendYiZhengService = null;
     Intent intent = new Intent("Notic");
+    //红点控制
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-
             switch (msg.what) {
                 case 1:
                     tvRedDot04.setVisibility(View.VISIBLE);
@@ -206,14 +195,12 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         instance = this;
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pro_main);
         ButterKnife.bind(this);
-        findViewById();
         initFragment();
         initView();
-        addListener();
         setListener();
         initServices();
         initSet();
@@ -319,8 +306,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (phone_linearLayout.getVisibility() == View.GONE)
-                moveTaskToBack(false);
+            moveTaskToBack(false);
         }
 
         return true;
@@ -361,16 +347,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     }
 
 
-    private void findViewById() {
-        //主界面下栏
-        radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
-        //拨打电话下栏
-        phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
-        //隐藏拨号界面控件
-        iv_putaway = (ImageView) findViewById(R.id.iv_putaway);
-    }
-
-
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
@@ -378,7 +354,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
         intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
-        intentFilter.addAction(ProMainActivity.STOP_CELL_PHONE_SERVICE);
         intentFilter.addAction(UartService.FINDED_SERVICE);
         return intentFilter;
     }
@@ -395,22 +370,13 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         return intentFilter;
     }
 
-    private void addListener() {
-        callImageView.setOnClickListener(this);
-        iv_putaway.setOnClickListener(this);
-    }
-
-
     private void initFragment() {
-        if (phoneFragment == null) {
-            phoneFragment = Fragment_Phone.newInstance();
-        }
+
         if (indexFragment == null) {
             indexFragment = new IndexFragment();
         }
         if (cellPhoneFragment == null) {
             cellPhoneFragment = new CellPhoneFragment();
-            cellPhoneFragment.setFragment_Phone(phoneFragment);
         }
         if (addressListFragment == null) {
             addressListFragment = new AddressListFragment();
@@ -433,9 +399,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
     }
 
-    Fragment_Phone phoneFragment;
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -445,7 +408,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 //连接操作
                 connectOperate();
             } else {
-                EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER,SocketConstant.BLUETOOTH_CLOSE);
+                EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.BLUETOOTH_CLOSE);
             }
         } else if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (NetworkUtils.isLocationOpen(getApplicationContext())) {
@@ -499,7 +462,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER,SocketConstant.CONNECTING_DEVICE);
+                EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
                 if (stopHandler == null) {
                     stopHandler = new Handler();
                 }
@@ -515,44 +478,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             }
         });
     }
-
-    private int clickCount = 0;
-    private int scrollCount = 0;
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.phoneLinearLayout:
-                if (CellPhoneFragment.floatingActionButton.getVisibility() != View.VISIBLE && phoneFragment.t9dialpadview.getVisibility() != View.VISIBLE) {
-                    if (SmsFragment.editSmsImageView != null) {
-                        if (SmsFragment.editSmsImageView.getVisibility() != View.VISIBLE) {
-                            ViewUtil.hideView(phoneFragment.t9dialpadview);
-                            CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-                break;
-            //拨打电话
-            case R.id.callImageView:
-                if (phoneFragment != null) {
-                    //友盟方法统计
-                    MobclickAgent.onEvent(this, CLICKCALLPHONE);
-                    phoneFragment.phonecallClicked();
-                }
-                break;
-            case R.id.iv_putaway:
-                CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
-                phoneFragment.t9dialpadview.clearT9Input();
-                ViewUtil.hideView(phoneFragment.t9dialpadview);
-                hidePhoneBottomBar();
-
-
-                break;
-        }
-
-    }
-
 
     @Override
     protected void onResume() {
@@ -580,13 +505,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         }
     }
 
-    public void hidePhoneBottomBar() {
-        ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
-        ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
-
-    }
-
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -604,17 +522,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     }
 
     private void setListener() {
-
-        mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
+        new PageChangeListener(mViewPager) {
             @Override
-            public void onPageSelected(int position) {
-                //对切换的状态进行保存
+            public void pageSelected(int position) {
                 setPosition(position);
-                if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-                    phoneFragment.t9dialpadview.clearT9Input();
-                }
-
-                hidePhoneBottomBar();
                 switch (position) {
                     case 0:
                         radiogroup.check(R.id.rb_index);
@@ -624,21 +535,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     case 1:
                         radiogroup.check(R.id.rb_phone);
 
-                        if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-                            //隐藏键盘，清理数据
-
-                        } else {
-                            if (phoneFragment == null) {
-                                phoneFragment = Fragment_Phone.newInstance();
-                            }
-                        }
-                        if (clickCount == 0 && scrollCount == 0) {
-                            scrollCount++;
-                        }
-                        if (phoneFragment != null && phoneFragment.t9dialpadview != null && phoneFragment.t9dialpadview.getVisibility() == View.VISIBLE) {
-                            //隐藏键盘
-                            ViewUtil.hideView(phoneFragment.t9dialpadview);
-                        }
                         break;
                     case 2:
                         radiogroup.check(R.id.rb_address);
@@ -650,16 +546,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
                 }
             }
+        };
 
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
-        });
 
     }
 
@@ -714,7 +602,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             mService.stopSelf();
         mService = null;
         radiogroup = null;
-        phone_linearLayout = null;
         list.clear();
         indexFragment = null;
         cellPhoneFragment = null;
@@ -722,8 +609,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         addressListFragment = null;
         sportFragment = null;
         EventBus.getDefault().unregister(this);
-
-
         super.onDestroy();
     }
 
@@ -761,7 +646,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                         SharedUtils utils = SharedUtils.getInstance();
 
                         utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
-//						utils.writeString(Constant.BRACELETVERSION, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
                         //按MAC地址保存版本号
                         if (!TextUtils.isEmpty(deviceAddress))
                             utils.writeString(deviceAddress, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
@@ -836,7 +720,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                                 PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
                                 if (preReadEntity != null) {
                                     SdkAndBluetoothDataInchange.isHasPreData = true;
-                                    SdkAndBluetoothDataInchange.PERCENT=0;
+                                    SdkAndBluetoothDataInchange.PERCENT = 0;
                                     initPre(preReadEntity);
                                     registerSimPreData();
                                 } else {
@@ -882,9 +766,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = preReadEntity.getIccid();
     }
 
-    @Override
-    public void noNet() {
-    }
+
 
     private void getConfigInfo() {
         createHttpRequest(HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG);
@@ -937,8 +819,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
             };
 
 
-
-
     /**
      * 接收到到卡注册状态作出相应的操作
      * 连接TCP失败，要做操作。
@@ -965,21 +845,19 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
     }
 
-    private void rigisterFail(int failReason){
-        switch (failReason){
+    private void rigisterFail(int failReason) {
+        switch (failReason) {
             case SocketConstant.REGISTER_FAIL_INITIATIVE:
                 //更改为注册中
-                if(SocketConstant.REGISTER_STATUE_CODE!=0){
-                    SocketConstant.REGISTER_STATUE_CODE=1;
-                }
                 unbindTcpService();
                 destorySocketService();
                 break;
         }
 
     }
-    private void registering(int registeringReason){
-        switch (registeringReason){
+
+    private void registering(int registeringReason) {
+        switch (registeringReason) {
             case SocketConstant.START_TCP_FAIL:
                 unbindTcpService();
                 break;
@@ -994,11 +872,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 startTcpSocket();
                 break;
             case SocketConstant.VAILD_CARD:
-
-//                if(CommonTools.isFastDoubleClick(3000)){
-//                    return;
-//                }
-                e("SocketConstant.VAILD_CARD1111");
                 requestPacket();
                 break;
         }
@@ -1074,17 +947,25 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     }
 
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void cancelCallService(CancelCallService entity) {
         if (intentCallPhone != null) {
-            e(ProMainActivity.STOP_CELL_PHONE_SERVICE);
             stopService(intentCallPhone);
 
         }
         unbindTcpService();
         destorySocketService();
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void optionView(OptionProMainActivityView entity) {
+        e("isVisibleToUser=" + entity.isShow());
+        if (entity.isShow()) {
+            bottomFragment.setVisibility(View.VISIBLE);
+        } else {
+            bottomFragment.setVisibility(View.GONE);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)//非UI线程
@@ -1174,9 +1055,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                     return;
                 }
             }
-            if (action.equals(ProMainActivity.STOP_CELL_PHONE_SERVICE)) {
 
-            }
         }
     };
 
@@ -1197,7 +1076,7 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
                         d("STATE_OFF 手机蓝牙关闭");
-                        EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER,SocketConstant.BLUETOOTH_CLOSE);
+                        EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.BLUETOOTH_CLOSE);
                         break;
                     case BluetoothAdapter.STATE_TURNING_OFF:
                         d("STATE_TURNING_OFF 手机蓝牙正在关闭");
@@ -1214,16 +1093,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     };
 
 
-    @Override
-    public boolean onLongClick(View view) {
-        phoneFragment.t9dialpadview.clearT9Input();
-        return false;
-    }
-
     //空中升级
     private void skyUpgradeHttp() {
         Log.e(TAG, "skyUpgradeHttp");
-        int DeviceType = 0;
+        int DeviceType;
         String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
         if (!TextUtils.isEmpty(braceletname)) {
             if (braceletname.contains(MyDeviceActivity.UNITOYS)) {

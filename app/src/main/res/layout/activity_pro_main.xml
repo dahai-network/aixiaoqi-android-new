@@ -23,6 +23,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
+            android:id="@+id/bottom_fragment"
             android:layout_height="wrap_content">
 
             <LinearLayout
@@ -38,7 +39,7 @@
                 android:layout_height="@dimen/padding_50dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="visible">
+               >
 
                 <de.blinkt.openvpn.views.MyRadioButton
                     android:id="@+id/rb_index"
@@ -109,43 +110,8 @@
 
             </LinearLayout>
 
-
-            <RelativeLayout
-                android:id="@+id/phone_linearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height_90"
-                android:background="@color/bottom_bar"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/callImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="18dp"
-                    android:scaleType="center"
-                    android:src="@drawable/image_dail_phonebtn_seletor" />
-
-                <ImageView
-                    android:id="@+id/iv_putaway"
-                    android:layout_width="@dimen/padding_100dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:paddingLeft="@dimen/padding_50dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/image_putaway_seletor" />
-            </RelativeLayout>
-
-
         </FrameLayout>
 
     </LinearLayout>
 
-    <de.blinkt.openvpn.views.TopProgressView
-        android:id="@+id/topProgressView"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/padding_25dp"
-        android:layout_marginTop="50dp"
-        android:visibility="gone" />
 </RelativeLayout>

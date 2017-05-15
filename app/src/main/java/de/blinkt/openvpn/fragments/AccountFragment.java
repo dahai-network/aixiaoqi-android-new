@@ -512,11 +512,15 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 						mHandler.sendEmptyMessage(5);
 						SharedUtils.getInstance().writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI());
 						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
+						String typeText="";
 						if ("0".equals(deviceTypeStr)) {
 							SharedUtils.getInstance().writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
+							typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
 						} else if ("1".equals(deviceTypeStr)) {
+							typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
 							SharedUtils.getInstance().writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
 						}
+						setSummarized(typeText, null, false);
 						if (isClickAddDevice) {
 							Intent intent = null;
 							intent = toActivity(intent, SharedUtils.getInstance().readString(Constant.BRACELETNAME));
@@ -540,6 +544,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
 	@Override
 	public void noNet() {
+		isClickAddDevice = false;
 		CommonTools.showShortToast(getActivity(), getResources().getString(R.string.no_wifi));
 	}
 

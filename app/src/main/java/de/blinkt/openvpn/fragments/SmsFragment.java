@@ -62,7 +62,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 	SmsListAdapter smsListAdapter;
 	RelativeLayout NodataRelativeLayout;
 	RelativeLayout NoNetRelativeLayout;
-	public static ImageView editSmsImageView;
+	public  ImageView editSmsImageView;
 	private int requestNetCount = 0;
 	TextView noDataTextView;
 	public static final String NOTIFY_RECEIVED_ACTION = "NOTIFY_RECEIVED_ACTION";

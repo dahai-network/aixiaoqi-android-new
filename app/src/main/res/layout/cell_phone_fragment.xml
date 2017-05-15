@@ -68,15 +68,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1" />
 
-    <ImageView
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/padding_10dp"
-        android:layout_marginRight="@dimen/padding_15dp"
-        android:background="@drawable/fl_b_nomer" />
+
 
 
 </RelativeLayout>

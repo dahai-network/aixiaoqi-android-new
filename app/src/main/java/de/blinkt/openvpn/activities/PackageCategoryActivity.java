@@ -22,6 +22,7 @@ import cn.com.johnson.adapter.FragmentAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.fragments.PackageCategoryFragment;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.PageChangeListener;
 
 /**
  * Created by Administrator on 2017/4/10 0010.
@@ -244,27 +245,13 @@ public class PackageCategoryActivity extends BaseActivity {
 		}
 		FragmentAdapter mAdapetr = new FragmentAdapter(getSupportFragmentManager(), fragments);
 		mViewPager.setAdapter(mAdapetr);
-		mViewPager.setOnPageChangeListener(pageListener);
+		new PageChangeListener(mViewPager){
+			@Override
+			public void pageSelected(int position) {
+				mViewPager.setCurrentItem(position);
+				selectTab(position);
+			}
+		};
 	}
 
-	/**
-	 * ViewPager切换监听方法
-	 */
-	public ViewPager.OnPageChangeListener pageListener = new ViewPager.OnPageChangeListener() {
-
-		@Override
-		public void onPageScrollStateChanged(int arg0) {
-		}
-
-		@Override
-		public void onPageScrolled(int arg0, float arg1, int arg2) {
-		}
-
-		@Override
-		public void onPageSelected(int position) {
-			// TODO Auto-generated method stub
-			mViewPager.setCurrentItem(position);
-			selectTab(position);
-		}
-	};
 }

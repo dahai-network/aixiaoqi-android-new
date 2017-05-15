@@ -3,6 +3,7 @@ package de.blinkt.openvpn.fragments;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -20,9 +21,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
 
 import java.util.ArrayList;
@@ -68,12 +71,12 @@ import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
 import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
 
 
-public class Fragment_Phone extends Fragment implements InterfaceCallback, T9TelephoneDialpadView.OnT9TelephoneDialpadView, RecyclerBaseAdapter.OnItemClickListener, QueryCompleteListener<ContactRecodeEntity>, DialogInterfaceTypeBase {
+public class Fragment_Phone extends Fragment implements InterfaceCallback, T9TelephoneDialpadView.OnT9TelephoneDialpadView,
+		RecyclerBaseAdapter.OnItemClickListener, QueryCompleteListener<ContactRecodeEntity>, DialogInterfaceTypeBase,T9TelephoneDialpadView.OnControlCallOptionListener,View.OnClickListener,View.OnKeyListener {
 
 
-	private static Fragment_Phone fragment;
 	RecyclerView rvContactRecode;
-	public static T9TelephoneDialpadView t9dialpadview;
+	public  T9TelephoneDialpadView t9dialpadview;
 	public TextView dial_delete_btn;
 	TextView tv_no_permission;
 	RelativeLayout rl_no_permission;
@@ -82,13 +85,8 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	public SQLiteDatabase sqliteDB;
 	public DatabaseDAO dao;
 	ConnectedRecoderReceive connectedRecoderReceive;
+	ImageView  floatingActionButton;
 
-	public static Fragment_Phone newInstance() {
-		if (fragment == null) {
-			fragment = new Fragment_Phone();
-		}
-		return fragment;
-	}
 
 	@Override
 	public void onAttach(Context context) {
@@ -111,38 +109,13 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	private void initView(View view) {
 		rvContactRecode = (RecyclerView) view.findViewById(R.id.rv_contact_recode);
 		t9dialpadview = (T9TelephoneDialpadView) view.findViewById(R.id.t9dialpadview);
+		floatingActionButton = (ImageView) view.findViewById(R.id.floatingActionButton);
 		tv_no_permission = (TextView) view.findViewById(R.id.tv_no_permission);
 		jump_permission = (Button) view.findViewById(R.id.jump_permission);
 		rl_no_permission = (RelativeLayout) view.findViewById(R.id.rl_no_permission);
 		tv_no_permission.setText(String.format(getString(R.string.no_permission), getString(R.string.call_recoder)));
 		inited();
-	}
 
-	public void phonecallClicked() {
-		int hasWriteContactsPermission = 0;
-
-		int version = Build.VERSION.SDK_INT;
-		if (t9dialpadview.getT9Input() != null && t9dialpadview.getT9Input().length() > 0) {
-
-			//检测是否开启读取联系人电话
-			if (getActivity() != null) {
-
-				hasWriteContactsPermission = checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS);
-			}
-
-			if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED && version > 22) {
-				requestPermissions(new String[]{Manifest.permission.WRITE_CONTACTS},
-						REQUEST_CODE_ASK_PERMISSIONS);
-				return;
-			}
-			contactRecodeEntity = new ContactRecodeEntity();
-			contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
-			contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
-			braceletDial();
-			closedialClicked();
-		} else {
-			CommonTools.showShortToast(getActivity(), "请输入要拨打的电话号码");
-		}
 	}
 
 	/***
@@ -154,9 +127,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 			return;
 		}
 		if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-			hidePhoneBottomBar();
-			ViewUtil.hideView(t9dialpadview);
-			CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
 			//如果没有套餐那么就需要弹出提示框
 			if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
 				//拨打电话
@@ -191,6 +161,18 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		t9dialpadview = null;
 	}
 
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()){
+			case R.id.jump_permission:
+				new SetPermission(getActivity());
+				break;
+			case R.id.floatingActionButton:
+				EventBusUtil.optionView(false);
+				t9dialpadview.setVisibility(View.VISIBLE);
+				break;
+		}
+	}
 
 	public void inited() {
 		IntentFilter filter = new IntentFilter();
@@ -206,16 +188,17 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		contactRecodeAdapter.setOnItemClickListener(this);
 		rvContactRecode.setAdapter(contactRecodeAdapter);
 		t9dialpadview.setOnT9TelephoneDialpadView(this);
+		t9dialpadview.setOnControlCallOptionListener(this);
+		floatingActionButton.setOnClickListener(this);
+		rvContactRecode.setOnKeyListener(this);
 		dial_delete_btn = t9dialpadview.getDeteleBtn();
-		if (this.dial_delete_btn != null) {
-			this.dial_delete_btn.setOnClickListener(new View.OnClickListener() {
+		jump_permission.setOnClickListener(this);
+		if (dial_delete_btn != null) {
+			dial_delete_btn.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-
 					if (!TextUtils.isEmpty(curInputStr) && curInputStr.length() > 0) {
 						String newCurInputStr = curInputStr.substring(0, curInputStr.length() - 1);
-						if (TextUtils.isEmpty(newCurInputStr)) {
-						}
 						t9dialpadview.mT9InputEt.setText(newCurInputStr);
 						onDialInputTextChanged(newCurInputStr);
 					}
@@ -223,14 +206,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 			});
 
 		}
-
-		jump_permission.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				new SetPermission(getActivity());
-			}
-		});
-
 	}
 
 	/**
@@ -244,19 +219,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 
 	}
 
-	public void hidePhoneBottomBar() {
-		ProMainActivity.radiogroup.setVisibility(View.VISIBLE);
-		ProMainActivity.phone_linearLayout.setVisibility(View.GONE);
-	}
-
-	public void showPhoneBottomBar() {
-		ProMainActivity.radiogroup.setVisibility(View.GONE);
-		ProMainActivity.phone_linearLayout.setVisibility(View.VISIBLE);
-	}
-
-	public void clickPhoneLinearLayout() {
-		//ProMainActivity.llArray[1].performClick();
-	}
 
 	List<ContactRecodeEntity> mAllList = new ArrayList<>();
 
@@ -343,44 +305,11 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	public void onDialInputTextChanged(String curCharacter) {
 		// TODO Auto-generated method stub
 		//进行逻辑判断
-		if (!curCharacter.equals("") && this.t9dialpadview.getVisibility() == View.VISIBLE) {
-			showPhoneBottomBar();
-
-		} else if (this.t9dialpadview.getVisibility() == View.GONE) {
-
-			hidePhoneBottomBar();
-			if (!TextUtils.isEmpty(this.curInputStr)) {
-				clickPhoneLinearLayout();
-			}
-
-		}
 		this.curInputStr = curCharacter;
-		notifyCellPhoneFragment(curCharacter);
-
+		EventBusUtil.optionView(curCharacter);
 	}
 
-	@Override
-	public void setUserVisibleHint(boolean isVisibleToUser) {
-		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser) {
-
-		} else {
-			hidePhoneBottomBar();
-		}
-	}
-
-
-	public void notifyCellPhoneFragment(String curCharacter) {
-		if (!TextUtils.isEmpty(curCharacter)) {
-			CellPhoneFragment.operation_rg.setVisibility(View.GONE);
-
-			CellPhoneFragment.dial_tittle_fl.setVisibility(View.VISIBLE);
-		} else {
-			CellPhoneFragment.operation_rg.setVisibility(View.VISIBLE);
-			CellPhoneFragment.dial_tittle_fl.setVisibility(View.GONE);
-		}
-	}
-
+	//查找联系人
 	private void searchContect(String str, List<ContactRecodeEntity> searchResultList, boolean isExist) {
 		for (ContactBean contactBean : ICSOpenVPNApplication.getInstance().getContactList()) {
 			for (int i = 0; i < searchResultList.size(); i++) {
@@ -408,7 +337,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	}
 
 	private String TAG = "Fragment_Phone";
-
+	//根据条件进行过滤
 	public Filter getFilter() {
 		Filter filter = new Filter() {
 			String str;
@@ -433,7 +362,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		};
 		return filter;
 	}
-
+	//搜索通话记录
 	private void searchContactRecoder(String str, List<ContactRecodeEntity> searchResultList) {
 		try {
 			for (ContactRecodeEntity contactRecodeEntityntact : mAllList) {
@@ -447,7 +376,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 
 		}
 	}
-
+	//去重
 	public List<ContactRecodeEntity> removeDuplicate(List<ContactRecodeEntity> list) {
 		for (int i = 0; i < list.size() - 1; i++) {
 			for (int j = list.size() - 1; j > i; j--) {
@@ -539,34 +468,65 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		getFocus();
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		Log.e(TAG,"isVisibleToUser="+isVisibleToUser);
+		if(!isVisibleToUser){
+			hindT9DiaView();
+		}
+	}
+
+	private void hindT9DiaView() {
+		if(t9dialpadview!=null)
+			t9dialpadview.setVisibility(View.GONE);
+		EventBusUtil.optionView(true);
+	}
+
+	//隐藏自定义键盘
+	@Override
+	public void hideT9() {
+		hindT9DiaView();
 	}
 
 
-	//主界面获取焦点
-	private void getFocus() {
-		getView().setFocusableInTouchMode(true);
-		getView().requestFocus();
-		getView().setOnKeyListener(new View.OnKeyListener() {
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-					// 监听到返回按钮点击事件
-					if (ProMainActivity.phone_linearLayout.getVisibility() == View.VISIBLE) {
-						CellPhoneFragment.floatingActionButton.setVisibility(View.VISIBLE);
-						t9dialpadview.clearT9Input();
-						ViewUtil.hideView(t9dialpadview);
-						hidePhoneBottomBar();
-					}
-					Log.d(TAG, "onKey: true");
-					return true;
-				}
-				return false;
+	//点击键盘的拨打电话
+	@Override
+	public void callPhone() {
+		int hasWriteContactsPermission = 0;
+		int version = Build.VERSION.SDK_INT;
+		if (t9dialpadview.getT9Input() != null && t9dialpadview.getT9Input().length() > 0) {
+			//检测是否开启读取联系人电话
+			if (getActivity() != null) {
+				hasWriteContactsPermission = checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS);
 			}
-		});
+			if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED && version > 22) {
+				requestPermissions(new String[]{Manifest.permission.WRITE_CONTACTS},
+						REQUEST_CODE_ASK_PERMISSIONS);
+				return;
+			}
+			contactRecodeEntity = new ContactRecodeEntity();
+			contactRecodeEntity.setPhoneNumber(t9dialpadview.getT9Input());
+			contactRecodeEntity.setName(SearchConnectterHelper.getContactNameByPhoneNumber(getActivity(), contactRecodeEntity.getPhoneNumber()));
+			braceletDial();
+			closedialClicked();
+		} else {
+			CommonTools.showShortToast(getActivity(), "请输入要拨打的电话号码");
+		}
 	}
 
 
+	@Override
+	public boolean onKey(View v, int keyCode, KeyEvent event) {
+		if (event.getAction() == KeyEvent.ACTION_DOWN) {
+			if (keyCode == KeyEvent.KEYCODE_BACK) {  //表示按返回键 时的操作
+				if (t9dialpadview!=null&&t9dialpadview.getVisibility()==View.VISIBLE) {
+					hindT9DiaView();
+				} else {
+					return false;
+				}
+				return true;    //已处理
+			}
+		}
+		return false;
+	}
 }
