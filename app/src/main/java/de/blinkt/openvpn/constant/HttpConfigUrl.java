@@ -98,6 +98,7 @@ public class HttpConfigUrl {
 	public static final String GET_PRODUCTS ="config/GetProductList";
 	public static final String GET_USER_ORDER_USAGE_REMAINING ="Order/GetUserOrderUsageRemaining";
 	public static final String GET_RELAXED ="Package/GetRelaxed";
+	public static final String ADD_RECEIVE ="Order/AddReceive";
 	public static final int COMTYPE_LOGIN = 0x0001;
 	public static final int COMTYPE_SECURITY_CONFIG = 0x0002;
 	public static final int COMTYPE_SEND_SMS = 0x0003;
@@ -176,5 +177,6 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_SMS_DELETE_BY_TELS =0x1051;
 	public static final int COMTYPE_GET_PRODUCTS =0x1052;
 	public static final int COMTYPE_GET_RELAXED =0x1053;
+	public static final int COMTYPE_ADD_RECEIVE =0x1054;
 
 }

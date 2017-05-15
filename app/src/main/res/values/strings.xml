@@ -675,4 +675,5 @@
     <string name="already_get">您已领取了该套餐</string>
     <string name="receive_fw">领取</string>
     <string name="receive_call">通话时长领取</string>
+    <string name="receive_success">领取成功</string>
 </resources>

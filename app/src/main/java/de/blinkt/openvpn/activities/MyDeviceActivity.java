@@ -50,7 +50,6 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.DownloadSkyUpgradePackageHttp;
 import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
-import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.UIOperatorEntity;
@@ -70,7 +69,6 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 import static android.view.View.GONE;
 import static cn.com.aixiaoqi.R.id.register_sim_statue;
-import static cn.com.aixiaoqi.R.id.switchView;
 import static cn.com.aixiaoqi.R.string.device;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
@@ -245,15 +243,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				sinking.setPercent(0f);
 			}
 			if (!TextUtils.isEmpty(blueStatus)) {
-				//如果状态来不及更新，仍是未绑定则修改为未插卡
-				if (blueStatus.equals(getString(R.string.index_unbind))) {
-					blueStatus = getString(R.string.index_un_insert_card);
-				}
 				conStatusTextView.setText(blueStatus);
 				if(getString(R.string.index_high_signal).equals(blueStatus)){
 					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 				}else{
-
 					if(getString(R.string.index_no_signal).equals(blueStatus)){
 						startAnim();
 					}
@@ -265,22 +258,17 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 //显示固件版本
 		firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
-//		//如果是在注册中才能打开动画
-//		if ((SocketConstant.REGISTER_STATUE_CODE == 1 || SocketConstant.REGISTER_STATUE_CODE == 2)
-//				&& conStatusTextView.getText().toString().equals(getResources().getString(R.string.index_registing))) {
-//			startAnim();
-//		}
 		//注册中的时候，初始化进度
 		if (percentInt != 0 && ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.mConnectionState == UartService.STATE_CONNECTED) {
 			percentTextView.setText(percentInt + "%");
 		}
+//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
+        boolean isConnectBlueTooth = mService.isConnectedBlueTooth();
+        if (!isConnectBlueTooth) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        }
 
-		//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
-		boolean isConnectBlueTooth = mService.isConnectedBlueTooth();
-		if (!isConnectBlueTooth) {
-			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-		}
 	}
 
 	private void titleSet() {
@@ -419,6 +407,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void connectGoip() {
 		if (ProMainActivity.sendYiZhengService != null) {
+			SocketConstant.REGISTER_STATUE_CODE=2;
 			conStatusTextView.setText(getString(R.string.index_registing));
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.REGISTER_CHANGING);
@@ -549,9 +538,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							break;
 						case Constant.RETURN_POWER:
 							if (messages.get(0).substring(10, 12).equals("03")) {
-								if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
-									conStatusTextView.setText(getString(R.string.index_registing));
-								}
+
 							} else if (messages.get(0).substring(10, 12).equals("13")) {
 								//百分比TextView设置为0
 								showNoCardDialog();
@@ -574,13 +561,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
 		macAddressStr = SharedUtils.getInstance().readString(Constant.IMEI);
 		macTextView.setText(macAddressStr);
-
 		if (electricityInt != 0) {
 			sinking.setPercent(((float) electricityInt) / 100);
 		} else {
 			sinking.setPercent(0f);
 		}
-
 	}
 
 
@@ -673,7 +658,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 						} else {
 							CommonTools.showShortToast(this, getString(R.string.last_version));
 							SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, false);
-							stopAnim();
 							firmwareTextView.setCompoundDrawables(null, null, null, null);
 						}
 					}
@@ -1065,19 +1049,23 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			case SocketConstant.AIXIAOQI_CARD:
 				if (noDevicedialog != null && noDevicedialog.getDialog() != null)
 					noDevicedialog.getDialog().dismiss();
-				stopAnim();
+				conStatusTextView.setText(getString(R.string.index_aixiaoqicard));
 				//重新上电清空
 				SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
 				break;
 
 			case SocketConstant.CONNECTING_DEVICE:
+				conStatusTextView.setText(getString(R.string.index_connecting));
 				percentTextView.setVisibility(GONE);
 				break;
 
 			case SocketConstant.UN_INSERT_CARD:
+				conStatusTextView.setText(getString(R.string.index_un_insert_card));
 				percentTextView.setVisibility(GONE);
 				registerSimStatu.setVisibility(View.VISIBLE);
 				break;
+
+
 		}
 	}
 

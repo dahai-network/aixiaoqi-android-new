@@ -220,6 +220,9 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 		if (mAllList.size() == 0) {
 			callRecordRv.setVisibility(View.GONE);
 			tipRecordTv.setVisibility(View.GONE);
+		}else{
+			callRecordRv.setVisibility(View.VISIBLE);
+			tipRecordTv.setVisibility(View.VISIBLE);
 		}
 		if (mAllLists.size() >= 1)
 			lastCallTimeTv.setText(mAllList.get(0).getData());

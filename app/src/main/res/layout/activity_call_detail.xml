@@ -102,11 +102,13 @@
         android:layout_height="wrap_content"
         android:textColor="@color/index_gray_text"
         android:paddingLeft="@dimen/padding_15dp"
+        android:visibility="gone"
         android:layout_marginTop="@dimen/padding_10dp"
         android:layout_marginBottom="@dimen/padding_10dp"
         android:text="@string/call_record"/>
     <de.blinkt.openvpn.views.xrecycler.XRecyclerView
         android:id="@+id/call_record_rv"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

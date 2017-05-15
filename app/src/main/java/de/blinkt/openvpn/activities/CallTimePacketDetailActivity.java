@@ -30,6 +30,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.CallTimePDDetailFragment;
+import de.blinkt.openvpn.http.AddReceiveHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.PacketDtailHttp;
@@ -91,10 +92,11 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
 		context.startActivity(intent);
 	}
 
-	public static void launch(Context context, String id, String sureText) {
+	public static void launch(Context context, String id, String sureText, boolean isCanClick) {
 		Intent intent = new Intent(context, CallTimePacketDetailActivity.class);
 		intent.putExtra("id", id);
 		intent.putExtra("sureText", sureText);
+		intent.putExtra("isCanClick", isCanClick);
 		context.startActivity(intent);
 	}
 
@@ -106,10 +108,9 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
 				break;
 			case R.id.iv_purchase:
 				String sureText = getIntent().getStringExtra("sureText");
-				if (sureText != null) {
-
-				}else
-				{
+				if (sureText != null && sureText.equals(getString(R.string.receive_fw))) {
+					createHttpRequest(HttpConfigUrl.COMTYPE_ADD_RECEIVE, getIntent().getStringExtra("id"));
+				} else {
 					CommitOrderActivity.launch(this, bean, 0);
 				}
 				break;
@@ -149,9 +150,19 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
 				iv_purchase.setBackgroundResource(R.drawable.image_receive_selector);
 				hasLeftViewTitle(R.string.receive_call, 0);
 			}
-		}else {
+		} else {
 			hasLeftViewTitle(R.string.package_detail, 0);
 		}
+
+		boolean isCanClick = getIntent().getBooleanExtra("isCanClick", true);
+//		if (!isCanClick) {
+//			iv_purchase.setOnClickListener(new View.OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					CommonTools.showShortToast(CallTimePacketDetailActivity.this, getString(R.string.already_get));
+//				}
+//			});
+//		}
 	}
 
 	@Override
@@ -171,6 +182,14 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
 			Log.d("aixiaoqi__", "rightComplete: " + bean.getFeatures());
 			SharedUtils.getInstance().writeString(Constant.CALLTIME_FEATURES_SIGN, bean.getFeatures());
 			tv_expirydate.setText("有效期：" + bean.getExpireDays() + "天");
+		} else if (cmdType == HttpConfigUrl.COMTYPE_ADD_RECEIVE) {
+			if (object.getStatus() == 1) {
+				AddReceiveHttp http = (AddReceiveHttp) object;
+				CommonTools.showShortToast(this, getString(R.string.receive_success));
+				MyOrderDetailActivity.launch(this, http.getOrderEntity().getOrder().getOrderID());
+			} else {
+				CommonTools.showShortToast(this, object.getMsg());
+			}
 		}
 	}
 

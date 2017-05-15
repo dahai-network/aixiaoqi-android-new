@@ -126,13 +126,8 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
     public static RelativeLayout phone_linearLayout;
     @BindView(R.id.iv_putaway)
     public ImageView iv_putaway;
-    //	@BindView(R.id.topProgressView)
-//	public TopProgressView topProgressView;
-    //判断是否展开了键盘
-    public static boolean isDeploy = true;
     @BindView(R.id.tv_red_dot_01)
     TextView tvRedDot01;
-
     @BindView(R.id.tv_red_dot_04)
     TextView tvRedDot04;
     public static RadioGroup radiogroup;
@@ -214,18 +209,10 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pro_main);
-
         ButterKnife.bind(this);
         findViewById();
         initFragment();
         initView();
-        if (actionBar != null)
-            actionBar.hide();
-        else {
-            actionBar = getActionBar();
-            if (actionBar != null)
-                actionBar.hide();
-        }
         addListener();
         setListener();
         initServices();
@@ -376,7 +363,6 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
 
     private void findViewById() {
         //主界面下栏
-
         radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
         //拨打电话下栏
         phone_linearLayout = (RelativeLayout) findViewById(R.id.phone_linearLayout);
@@ -1018,6 +1004,17 @@ public class ProMainActivity extends BaseNetActivity implements View.OnClickList
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (actionBar != null)
+            actionBar.hide();
+        else {
+            actionBar = getActionBar();
+            if (actionBar != null)
+                actionBar.hide();
+        }
+    }
 
     private void noPreDataStartSDK() {
         isStartSdk = true;

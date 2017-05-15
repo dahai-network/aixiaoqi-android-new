@@ -17,7 +17,6 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.CallTimePacketDetailActivity;
 import de.blinkt.openvpn.activities.FreeWorryIntroActivity;
 import de.blinkt.openvpn.model.FreeWorryEntity;
-import de.blinkt.openvpn.util.CommonTools;
 
 /**
  * Created by Administrator on 2017/5/9.
@@ -52,17 +51,18 @@ public class FreeWorryPacketChoiceAdapter extends
 
 	@Override
 	public void onBindViewHolder(FreeWorryPacketChoiceViewHolder holder, final int position) {
-		Glide.with(context).load(data.get(position).getPic()).into(holder.showImageView);
+		final FreeWorryEntity.ListBean bean = data.get(position);
+		if (bean.isHaveed()) {
+			Glide.with(context).load(bean.getPicHaveed()).into(holder.showImageView);
+		} else {
+			Glide.with(context).load(bean.getPic()).into(holder.showImageView);
+		}
 		holder.showImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (FREEPACKET.equals(data.get(position).getCategory())) {
-					if (data.get(position).isHaveed()) {
-						CommonTools.showShortToast(context, context.getString(R.string.already_get));
-					} else {
-						CallTimePacketDetailActivity.launch(context, data.get(position).getPackageId(), context.getString(R.string.receive_fw));
-					}
-				} else if (FREEWORRY.equals(data.get(position).getCategory())) {
+				if (FREEPACKET.equals(bean.getCategory())) {
+					CallTimePacketDetailActivity.launch(context, bean.getPackageId(), context.getString(R.string.receive_fw), !bean.isHaveed());
+				} else if (FREEWORRY.equals(bean.getCategory())) {
 					Intent intent = new Intent(context, FreeWorryIntroActivity.class);
 					context.startActivity(intent);
 				}

@@ -147,7 +147,6 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 		if (getIntent().getIntExtra("PackageCategory", -1) != 0) {
 			aboardHowToUse.setVisibility(GONE);
 			inlandReset.setVisibility(GONE);
-
 		} else {
 			cancelOrderButton.setVisibility(GONE);
 		}
@@ -215,6 +214,14 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 						inlandReset.setVisibility(GONE);
 						dateTitleTextView.setVisibility(GONE);
 						dateTextView.setVisibility(GONE);
+					} else if ("4".equals(bean.getPackageCategory())) {
+						activateTextView.setVisibility(GONE);
+						aboardHowToUse.setVisibility(GONE);
+						inlandReset.setVisibility(GONE);
+						dateTitleTextView.setVisibility(GONE);
+						dateTextView.setVisibility(GONE);
+						statueTextView.setVisibility(GONE);
+						packageStateTextView.setVisibility(GONE);
 					} else {
 						if (getIntent().getIntExtra("PackageCategory", -1) != 0 && !isActivateSuccess) {
 							showBuySucceedDialog();
@@ -403,7 +410,11 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 			case R.id.orderDetailTitleRelativeLayout:
 				if ("1".equals(bean.getPackageCategory())) {
 					CallTimePacketDetailActivity.launch(this, bean.getPackageId());
-				} else {
+				}
+				else if ("4".equals(bean.getPackageCategory())){
+					CallTimePacketDetailActivity.launch(this, bean.getPackageId(), this.getString(R.string.receive_fw), bean.getOrderStatus()==2);
+				}
+				else {
 					PackageDetailActivity.launch(this, bean.getPackageId(), bean.getPic());
 				}
 				break;
