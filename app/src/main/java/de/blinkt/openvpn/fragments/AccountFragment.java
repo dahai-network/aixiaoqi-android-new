@@ -593,6 +593,5 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		AppMode.getInstance().isClickAddDevice = false;
 		tvNewVersion = null;
 		tvNewPackagetAction = null;
-		//null.unbind();
 	}
 }
