@@ -3,10 +3,7 @@ package de.blinkt.openvpn.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -15,7 +12,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -136,7 +132,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		login_btn.setOnClickListener(this);
 		setTextChangeLisener();
 		if(TextUtils.isEmpty(usernameEdit.getText().toString())||TextUtils.isEmpty(pwdEdit.getText().toString())){
-
 			setLoginBtnAttr(false,R.drawable.circle_gray_ret);
 		}
 	}

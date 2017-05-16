@@ -54,6 +54,33 @@ public class PacketDtailEntity implements Serializable {
 		private String Features;
 		private String Details;
 		private String ApnName;
+		private String DescTitlePic;
+		private String DescPic;
+		private String OriginalPrice;
+
+		public String getDescTitlePic() {
+			return DescTitlePic;
+		}
+
+		public void setDescTitlePic(String descTitlePic) {
+			DescTitlePic = descTitlePic;
+		}
+
+		public String getDescPic() {
+			return DescPic;
+		}
+
+		public void setDescPic(String descPic) {
+			DescPic = descPic;
+		}
+
+		public String getOriginalPrice() {
+			return OriginalPrice;
+		}
+
+		public void setOriginalPrice(String originalPrice) {
+			OriginalPrice = originalPrice;
+		}
 
 		public String getApnName() {
 			return ApnName;

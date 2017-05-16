@@ -133,7 +133,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:background="@null"
-                        android:text="现优惠：0元/月"
+                        android:text="@string/price_everymonth"
                         android:textColor="@color/index_black"
                         android:textSize="16sp"/>
 
@@ -144,7 +144,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginLeft="10dp"
                         android:layout_toEndOf="@+id/serviceFeeTextView"
-                        android:text="原价：10元/月"
+                        android:text="@string/origin_price"
                         android:textColor="@color/color_f21f20"/>
 
                 </RelativeLayout>
