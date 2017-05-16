@@ -211,8 +211,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	/**
 	 * 跳转到权限设置界面
 	 */
-
-
 	private void searchContactRedocer() {
 		AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, getActivity().getContentResolver(), false);
 		FindContactUtil.queryContactRecoderData(asyncQueryContactRecodeHandler);

@@ -129,9 +129,9 @@ public class SharedUtils {
 
 	public String readString(String key) {
 		if (mSharedPreferences == null || !mSharedPreferences.contains(key)) {
-			return null;
+			return "";
 		}
-		return mSharedPreferences.getString(key, null);
+		return mSharedPreferences.getString(key, "");
 	}
 	public Set<String> getStringSet(String key) {
 		if (mSharedPreferences == null || !mSharedPreferences.contains(key)) {
