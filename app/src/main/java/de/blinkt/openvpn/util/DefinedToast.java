@@ -60,6 +60,7 @@ public class DefinedToast implements IToast {
         mParams.windowAnimations = android.R.style.Animation_Toast;
         mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
         mParams.setTitle("Toast");
+
         mParams.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
         mParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
@@ -103,7 +104,7 @@ public class DefinedToast implements IToast {
             mDurationMillis = 0;
         }
         if (durationMillis == Toast.LENGTH_SHORT) {
-            mDurationMillis = 2000;
+            mDurationMillis = 1000;
         } else if (durationMillis == Toast.LENGTH_LONG) {
             mDurationMillis = 3500;
         } else {
@@ -154,9 +155,9 @@ public class DefinedToast implements IToast {
 
         return this;
     }
-
     @Override
     public void show() {
+
         // 1. 将本次需要显示的toast加入到队列中
         mQueue.offer(this);
 
@@ -178,7 +179,10 @@ public class DefinedToast implements IToast {
         // 2.1 先移除之前的队列逻辑
         // 2.2 立即暂停当前显示的toast
         // 2.3 重新激活队列
+        Log.d("cancel", "cancel: ");
         if (this.equals(mQueue.peek())) {
+
+
             mHandler.removeCallbacks(mActivite);
             mHandler.post(mHide);
             mHandler.post(mActivite);
@@ -192,8 +196,8 @@ public class DefinedToast implements IToast {
             if (mView.getParent() != null) {
                 mWindowManager.removeView(mView);
             }
+            Log.d("CommonTools", "handleShow: ");
                 mWindowManager.addView(mView, mParams);
-
         }
     }
 

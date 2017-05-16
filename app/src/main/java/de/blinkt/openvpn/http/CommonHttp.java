@@ -3,6 +3,7 @@ package de.blinkt.openvpn.http;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -84,7 +85,8 @@ public abstract class CommonHttp implements Callback, Runnable {
 	static OkHttpClient client;
 	//公钥
 	private String PARTNER = "2006808";
-	private Handler mHandler = new Handler();
+
+	private Handler mHandler = new Handler(context_.getMainLooper());
 	private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/*");
 
 
@@ -306,6 +308,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 	}
 
 	public CommonHttp() {
+		//Looper.prepare();
 		if (null == client) {
 			synchronized (this) {
 //				File file = context_.getCacheDir();
