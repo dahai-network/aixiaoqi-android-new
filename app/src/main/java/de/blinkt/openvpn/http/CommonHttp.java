@@ -3,6 +3,7 @@ package de.blinkt.openvpn.http;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -28,12 +29,10 @@ import javax.net.ssl.TrustManagerFactory;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.BaseEntry;
 import de.blinkt.openvpn.activities.LoginMainActivity;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.PublicEncoderTools;
@@ -86,7 +85,8 @@ public abstract class CommonHttp implements Callback, Runnable {
 	static OkHttpClient client;
 	//公钥
 	private String PARTNER = "2006808";
-	private Handler mHandler = new Handler();
+
+	private Handler mHandler = new Handler(context_.getMainLooper());
 	private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/*");
 
 
@@ -98,7 +98,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 				request = request.newBuilder()
 						.cacheControl(CacheControl.FORCE_CACHE)
 						.build();
-			}else{
+			} else {
 				request = request.newBuilder()
 						.cacheControl(CacheControl.FORCE_NETWORK)
 						.build();
@@ -153,6 +153,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 
 	/**
 	 * 响应
+	 *
 	 * @param arg0
 	 * @param response
 	 * @throws IOException
@@ -180,8 +181,8 @@ public abstract class CommonHttp implements Callback, Runnable {
 				//token过期
 				if (!CommonTools.isFastDoubleClick(1000)) {
 					EventBusUtil.cancelCallService();
-					if (ICSOpenVPNApplication.uartService!=null)
-					ICSOpenVPNApplication.uartService.disconnect();
+					if (ICSOpenVPNApplication.uartService != null)
+						ICSOpenVPNApplication.uartService.disconnect();
 					SharedUtils.getInstance().delete(Constant.IMEI);
 					SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 					Intent intent = new Intent(context_, LoginMainActivity.class);
@@ -297,7 +298,9 @@ public abstract class CommonHttp implements Callback, Runnable {
 			return;
 		}
 		String s = e.getMessage();
-		error(s);
+		if (!"Canceled".equals(s)) {
+			error(s);
+		}
 	}
 
 	public static void setContext(Context context) {
@@ -305,6 +308,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 	}
 
 	public CommonHttp() {
+		//Looper.prepare();
 		if (null == client) {
 			synchronized (this) {
 //				File file = context_.getCacheDir();
@@ -461,10 +465,10 @@ public abstract class CommonHttp implements Callback, Runnable {
 	private Request getRequest(String expires, String md5, SharedUtils sharedUtils) {
 		Request request;
 		//判断token是否为空
-		Log.e("TOKEN","sharedUtils.readString(Constant.TOKEN)="+sharedUtils.readString(Constant.TOKEN));
+		Log.e("TOKEN", "sharedUtils.readString(Constant.TOKEN)=" + sharedUtils.readString(Constant.TOKEN));
 		if (TextUtils.isEmpty(sharedUtils.readString(Constant.TOKEN))) {
 			request = new Request.Builder().url(hostUrl_).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.TERMINAL_HEADER, "Android").addHeader(Constant.VERSION_HEADER, CommonTools.getVersion(ICSOpenVPNApplication.getContext())).addHeader(Constant.SIGN, md5).build();
-		}else
+		} else
 			request = new Request.Builder().url(hostUrl_).addHeader(Constant.TOKEN, sharedUtils.readString(Constant.TOKEN)).addHeader(Constant.PARTNER, PARTNER).addHeader(Constant.EXPIRES, expires).addHeader(Constant.TERMINAL_HEADER, "Android").addHeader(Constant.VERSION_HEADER, CommonTools.getVersion(ICSOpenVPNApplication.getContext())).addHeader(Constant.SIGN, md5).build();
 		return request;
 	}

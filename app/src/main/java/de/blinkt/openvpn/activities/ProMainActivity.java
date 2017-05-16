@@ -67,14 +67,18 @@ import de.blinkt.openvpn.fragments.AddressListFragment;
 import de.blinkt.openvpn.fragments.CellPhoneFragment;
 import de.blinkt.openvpn.fragments.IndexFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
+import de.blinkt.openvpn.http.CheckConfirmedHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBasicConfigHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
+import de.blinkt.openvpn.http.IsHavePacketHttp;
 import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.BasicConfigEntity;
 import de.blinkt.openvpn.model.CanClickEntity;
 import de.blinkt.openvpn.model.CancelCallService;
+import de.blinkt.openvpn.model.IsHavePacketEntity;
 import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
@@ -140,6 +144,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
     public static boolean isStartSdk = false;
     public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
     public static SendYiZhengService sendYiZhengService = null;
+    private String confirmedPhoneNum;
     Intent intent = new Intent("Notic");
     //红点控制
     private Handler mHandler = new Handler() {
@@ -649,7 +654,23 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
                     }
                 }
             }
-        } else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
+        }else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET) {
+            if (object.getStatus() == 1) {
+                requestCount = 0;
+                IsHavePacketHttp isHavePacketHttp = (IsHavePacketHttp) object;
+                IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
+                if (entity.getUsed() == 1) {
+                    e("有套餐");
+                    SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
+
+                } else {
+                    //TODO 没有通知到设备界面
+                    //如果是没有套餐，则通知我的设备界面更新状态并且停止转动
+                    SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
+//				EventBusUtil.changeConnectStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
+                }
+            }
+        }  else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
             GetHostAndPortHttp http = (GetHostAndPortHttp) object;
             if (http.getStatus() == 1) {
                 requestCount = 0;
@@ -704,6 +725,16 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
                 SharedUtils.getInstance().writeString(IntentPutKeyConstant.DUALSIM_STANDBYTUTORIAL_URL, basicConfigEntity.getDualSimStandbyTutorialUrl());
                 SharedUtils.getInstance().writeString(IntentPutKeyConstant.BEFORE_GOING_ABROAD_TUTORIAL_URL, basicConfigEntity.getBeforeGoingAbroadTutorialUrl());
                 SharedUtils.getInstance().writeString(IntentPutKeyConstant.PAYMENT_OF_TERMS, basicConfigEntity.getPaymentOfTerms());
+            }
+        }else if (cmdType == HttpConfigUrl.COMTYPE_CHECK_CONFIRMED) {
+            CheckConfirmedHttp http = (CheckConfirmedHttp) object;
+            if (http.getStatus() == 1) {
+                if (!http.getEntity().isIsConfirmed()) {
+                    Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
+                    startActivity(intent);
+                } else {
+                    confirmedPhoneNum = http.getEntity().getTel();
+                }
             }
         }
     }

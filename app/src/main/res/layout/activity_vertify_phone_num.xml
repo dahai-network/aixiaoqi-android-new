@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/gray_back_2"
+              android:orientation="vertical">
+
+    <View
+        style="@style/horizontal_line_view"
+        android:layout_marginTop="@dimen/padding_10dp"/>
+
+    <EditText
+        android:id="@+id/phoneNumEditText"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_60dp"
+        android:background="@color/white"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:hint="@string/input_phone_num_in_device"
+        android:inputType="phone"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:textSize="@dimen/little_14"/>
+
+    <View
+        style="@style/horizontal_line_view"/>
+
+
+    <Button
+        android:id="@+id/nextBtn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:layout_marginLeft="@dimen/padding_20dp"
+        android:layout_marginRight="@dimen/padding_20dp"
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:background="@drawable/green_btn_click"
+        android:text="@string/vertificate"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/little_16"/>
+</LinearLayout>

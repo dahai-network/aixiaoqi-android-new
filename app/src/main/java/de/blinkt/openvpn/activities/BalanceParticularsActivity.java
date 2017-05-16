@@ -14,7 +14,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.ParticularAdapter;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -52,17 +51,17 @@ public class BalanceParticularsActivity extends BaseNetActivity implements Inter
 	}
 
 	private void initSet() {
-		hasLeftViewTitle(R.string.bill,0);
+		hasLeftViewTitle(R.string.bill, 0);
 		particularsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 		particularsRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 		particularsRecyclerView.setLoadingListener(this);
-		particularAdapter = new ParticularAdapter(this, data);
+		particularAdapter = new ParticularAdapter(this, data, false);
 		particularsRecyclerView.setAdapter(particularAdapter);
 		addData();
 	}
 
 	private void addData() {
-		createHttpRequest( HttpConfigUrl.COMTYPE_PARTICULAR, pageNumber+"", Constant.PAGESIZE+"");
+		createHttpRequest(HttpConfigUrl.COMTYPE_PARTICULAR, pageNumber + "", Constant.PAGESIZE + "");
 	}
 
 	@Override

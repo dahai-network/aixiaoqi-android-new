@@ -28,8 +28,6 @@ import cn.com.johnson.model.BoughtPackageEntity;
 import de.blinkt.openvpn.activities.ActivateActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.OutsideFirstStepActivity;
-import de.blinkt.openvpn.activities.OutsideSecondStepActivity;
-import de.blinkt.openvpn.activities.OutsideThirdStepActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 
@@ -52,7 +50,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		this.layout = layout;
 	}
 
-	public OrderAdapter(Context context, List<BoughtPackageEntity.ListBean> data , int layout) {
+	public OrderAdapter(Context context, List<BoughtPackageEntity.ListBean> data, int layout) {
 		if (data != null) {
 			this.data = data;
 		}
@@ -102,7 +100,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		normalHolder.dateTextView.setText(bean.getExpireDays());
 		//如果订单状态是正在使用，那么就计算时间
 
-		if (bean.getOrderStatus() == 0||bean.getOrderStatus() == 4) {
+		if (bean.getOrderStatus() == 0 || bean.getOrderStatus() == 4) {
 			normalHolder.stateTextView.setText("未激活");
 //			normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.activite_color_selector));
 		} else if (bean.getOrderStatus() == 2) {
@@ -121,20 +119,16 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 			normalHolder.stateTextView.setText("境外设置");
 			normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.gray_background_text_selector));
 			normalHolder.stateTextView.setBackgroundResource(R.drawable.circle_light_gray_selector);
-			if(1==bean.getPackageCategory()){
+			if (1 == bean.getPackageCategory()) {
 				normalHolder.stateTextView.setVisibility(View.GONE);
 
-			}else{
+			} else {
 				normalHolder.stateTextView.setVisibility(View.VISIBLE);
 			}
 		}
 		//判断layout，如果是订单列表layout则需要
 		setSpan(normalHolder.priceTextView, position);
 	}
-
-
-
-
 
 
 	//设置大小字体
@@ -172,11 +166,11 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		}
 
 		//item点击事件
-		@OnClick({R.id.rootLinearLayout,R.id.stateTextView})
+		@OnClick({R.id.rootLinearLayout, R.id.stateTextView})
 		public void onClick(View view) {
 			//友盟方法统计
 			clickPosition = getPosition() - 1;
-			BoughtPackageEntity.ListBean bean	=	data.get(clickPosition);
+			BoughtPackageEntity.ListBean bean = data.get(clickPosition);
 			switch (view.getId()) {
 
 				case R.id.rootLinearLayout:
@@ -186,17 +180,17 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 					break;
 				case R.id.stateTextView:
-					if(bean.getOrderStatus()==0||bean.getOrderStatus() == 4){
+					if (bean.getOrderStatus() == 0 || bean.getOrderStatus() == 4) {
 						context.startActivity(new Intent(context, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt())
 								.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G())
 								.putExtra(IntentPutKeyConstant.COUNTRY_NAME, bean.getCountryName())
-								.putExtra(IntentPutKeyConstant.APN_NAME,bean.getPackageApnName()));
-					}else{
-						Constant.isOutsideSecondStepClick=false;
-						Constant.isOutsideThirdStepClick=false;
-						context.startActivity(new Intent(context,OutsideFirstStepActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE,IntentPutKeyConstant.AFTER_GOING_ABROAD)
-								.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G,bean.isPackageIsSupport4G())
-								.putExtra(IntentPutKeyConstant.APN_NAME,bean.getPackageApnName()));
+								.putExtra(IntentPutKeyConstant.APN_NAME, bean.getPackageApnName()));
+					} else {
+						Constant.isOutsideSecondStepClick = false;
+						Constant.isOutsideThirdStepClick = false;
+						context.startActivity(new Intent(context, OutsideFirstStepActivity.class).putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.AFTER_GOING_ABROAD)
+								.putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G())
+								.putExtra(IntentPutKeyConstant.APN_NAME, bean.getPackageApnName()));
 					}
 					break;
 			}

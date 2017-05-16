@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.views.TitleBar;
 
 public class BaseActivity extends CommenActivity {
@@ -106,7 +107,7 @@ public class BaseActivity extends CommenActivity {
 
 	@Override
 	protected void onDestroy() {
-//		CommonHttp.cancel();
+		CommonHttp.cancel();
 		super.onDestroy();
 	}
 }

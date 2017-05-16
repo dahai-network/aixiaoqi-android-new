@@ -73,30 +73,36 @@ public class HttpConfigUrl {
 	public static final String ADD_ALARM = "AlarmClock/Add";
 	public static final String UPDATE_ALARM = "AlarmClock/Update";
 	public static final String UPLOAD_REMIND_CONFIG = "UsersConfig/UploadConfig";
-	public static final String ALARM_CLOCK_COUNT="AlarmClock/GetByDisabledNum";
-	public static final String UPDATE_ALARM_CLOCK_STATUE="AlarmClock/UpdateStatus";
-	public static final String BIND_RECHARGE_CARD="PaymentCard/Recharge";
+	public static final String ALARM_CLOCK_COUNT = "AlarmClock/GetByDisabledNum";
+	public static final String UPDATE_ALARM_CLOCK_STATUE = "AlarmClock/UpdateStatus";
+	public static final String BIND_RECHARGE_CARD = "PaymentCard/Recharge";
 	//支付宝回调
-	public static final String NOTIFYASYNC="AliPay/NotifyAsync";
+	public static final String NOTIFYASYNC = "AliPay/NotifyAsync";
 
-	public static final String GET_BASIC_CONFIG="config/GetBasicConfig";
-	public static final String ADD_NUMBER ="OrderByZC/Bind";
-	public static final String BIND_GIFT ="GiftCard/Bind";
-	public static final String ACTIVATE_KINGCARD ="Order/ActivationKindCard";
-	public static final String CHECK_IS_HAVE_PACKET ="Order/CheckUsedExistByPageCategory";
-	public static final String GET_SECURITY_CONFIG ="Config/GetSecurityConfig";
-	public static final String GET_DEVICE_SIM_REG_STATUES ="DeviceBracelet/GetRegStatus";
-	public static final String PACKET_GET ="Package/Get";
-	public static final String BLACK_LIST_ADD ="BlackList/Add";
-	public static final String BLACK_LIST_DELETE ="BlackList/Delete";
-	public static final String BLACK_LIST_GET ="BlackList/Get";
-	public static final String UPDATE_CONN_INFO ="DeviceBracelet/UpdateConnectInfo";
-	public static final String SMS_DELETE_BY_TEL ="SMS/DeletesByTel";
-	public static final String SMS_DELETE_BY_TELS ="SMS/DeletesByTels";
-	public static final String SMS_DELETE_SMSs ="SMS/Deletes";
-	public static final String SMS_DELETE ="SMS/Delete";
-	public static final String GET_PRODUCTS ="config/GetProductList";
-	public static final String GET_USER_ORDER_USAGE_REMAINING ="Order/GetUserOrderUsageRemaining";
+	public static final String GET_BASIC_CONFIG = "config/GetBasicConfig";
+	public static final String ADD_NUMBER = "OrderByZC/Bind";
+	public static final String BIND_GIFT = "GiftCard/Bind";
+	public static final String ACTIVATE_KINGCARD = "Order/ActivationKindCard";
+	public static final String CHECK_IS_HAVE_PACKET = "Order/CheckUsedExistByPageCategory";
+	public static final String GET_SECURITY_CONFIG = "Config/GetSecurityConfig";
+	public static final String GET_DEVICE_SIM_REG_STATUES = "DeviceBracelet/GetRegStatus";
+	public static final String PACKET_GET = "Package/Get";
+	public static final String BLACK_LIST_ADD = "BlackList/Add";
+	public static final String BLACK_LIST_DELETE = "BlackList/Delete";
+	public static final String BLACK_LIST_GET = "BlackList/Get";
+	public static final String UPDATE_CONN_INFO = "DeviceBracelet/UpdateConnectInfo";
+	public static final String SMS_DELETE_BY_TEL = "SMS/DeletesByTel";
+	public static final String SMS_DELETE_BY_TELS = "SMS/DeletesByTels";
+	public static final String SMS_DELETE_SMSs = "SMS/Deletes";
+	public static final String SMS_DELETE = "SMS/Delete";
+	public static final String GET_PRODUCTS = "config/GetProductList";
+	public static final String GET_USER_ORDER_USAGE_REMAINING = "Order/GetUserOrderUsageRemaining";
+	public static final String GET_RELAXED = "Package/GetRelaxed";
+	public static final String ADD_RECEIVE = "Order/AddReceive";
+	public static final String CHECK_CONFIRMED = "UserDeviceTel/CheckConfirmed";
+	public static final String CONFIRMED = "UserDeviceTel/Confirmed";
+	public static final String GETCURRENT = "UserDeviceTel/GetCurrent";
+
 	public static final int COMTYPE_LOGIN = 0x0001;
 	public static final int COMTYPE_SECURITY_CONFIG = 0x0002;
 	public static final int COMTYPE_SEND_SMS = 0x0003;
@@ -129,17 +135,17 @@ public class HttpConfigUrl {
 
 	public static final int COMTYPE_ALARM_CLOCK_GET = 0x0043;
 	public static final int COMTYPE_ALARM_CLOCK_DELETE = 0x0044;
-	public static final int COMTYPE_ALARM_CLOCK_COUNT=0x0045;
-	public static final int COMTYPE_UPDATE_ALARM_CLOCK_STATUE=0x0046;
+	public static final int COMTYPE_ALARM_CLOCK_COUNT = 0x0045;
+	public static final int COMTYPE_UPDATE_ALARM_CLOCK_STATUE = 0x0046;
 
 
-	public static final int  COMTYPE_BLACK_LIST_ADD =0x0055;
-	public static final int  COMTYPE_BLACK_LIST_DELETE =0x0056;
-	public static final int  COMTYPE_BLACK_LIST_GET =0x0057;
-	public static final int	COMTYPE_GET_USER_ORDER_USAGE_REMAINING=0x0058;
-	public static final int  COMTYPE_GET_DEVICE_SIM_REG_STATUES =0x0052;
-	public static final int  COMTYPE_SMS_DELETE_BY_TEL =0x0053;
-	public static final int  COMTYPE_SMS_DELETE =0x0054;
+	public static final int COMTYPE_BLACK_LIST_ADD = 0x0055;
+	public static final int COMTYPE_BLACK_LIST_DELETE = 0x0056;
+	public static final int COMTYPE_BLACK_LIST_GET = 0x0057;
+	public static final int COMTYPE_GET_USER_ORDER_USAGE_REMAINING = 0x0058;
+	public static final int COMTYPE_GET_DEVICE_SIM_REG_STATUES = 0x0052;
+	public static final int COMTYPE_SMS_DELETE_BY_TEL = 0x0053;
+	public static final int COMTYPE_SMS_DELETE = 0x0054;
 	public static final int COMTYPE_POST_MODIFY_NICK = 0x1001;
 	public static final int COMTYPE_POST_MODIFY_GENDER = 0x1002;
 	public static final int COMTYPE_POST_MODIFY_AGE = 0x1003;
@@ -172,7 +178,11 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_GET_SECURITY_CONFIG = 0x1048;
 	public static final int COMTYPE_UPDATE_CONN_INFO = 0x1049;
 	public static final int COMTYPE_SMS_DELETE_SMSS = 0x1050;
-	public static final int COMTYPE_SMS_DELETE_BY_TELS =0x1051;
-	public static final int COMTYPE_GET_PRODUCTS =0x1052;
-
+	public static final int COMTYPE_SMS_DELETE_BY_TELS = 0x1051;
+	public static final int COMTYPE_GET_PRODUCTS = 0x1052;
+	public static final int COMTYPE_GET_RELAXED = 0x1053;
+	public static final int COMTYPE_ADD_RECEIVE = 0x1054;
+	public static final int COMTYPE_CHECK_CONFIRMED = 0x1055;
+	public static final int COMTYPE_CONFIRMED = 0x1056;
+	public static final int COMTYPE_GETCURRENT = 0x1057;
 }

@@ -25,11 +25,20 @@ public class UsageRemainEntity {
     }
 
    public class Used{
+        private String ServiceName;
         private String TotalNum;
         private String TotalNumFlow;
         private String TotalRemainingCallMinutes;
 
-        public String getTotalNum() {
+	   public String getServiceName() {
+		   return ServiceName;
+	   }
+
+	   public void setServiceName(String serviceName) {
+		   ServiceName = serviceName;
+	   }
+
+	   public String getTotalNum() {
             return TotalNum;
         }
 

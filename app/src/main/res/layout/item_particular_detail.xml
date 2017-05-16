@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootRelativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="50dp"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -12,10 +12,23 @@
         android:id="@+id/nameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/padding_15dp"
         android:layout_marginTop="@dimen/padding_10dp"
         android:text="充值"
         android:textSize="15sp"
+        />
+
+
+    <TextView
+        android:id="@+id/numberTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/padding_15dp"
+        android:textSize="15sp"
+        tools:text="-20.00"
         />
 
     <TextView
@@ -26,19 +39,8 @@
         android:layout_marginLeft="@dimen/padding_15dp"
         android:text="2016-08-08 15:00:00"
         android:textColor="@color/order_gray"
-        android:textSize="12sp"/>
-
-
-    <TextView
-        android:id="@+id/numberTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/padding_15dp"
-        tools:text="-20.00"
-        android:textSize="15sp"
-        />
+        android:textSize="12sp"
+        android:visibility="gone"/>
 
 
     <View

@@ -216,11 +216,11 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
 	}
 
-    private void getDeviceType(){
-        if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))||TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))){
-        CreateHttpFactory.instanceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
-        }else{
-            mHandler.sendEmptyMessage(5);
+	private void getDeviceType() {
+		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))) {
+			CreateHttpFactory.instanceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
+		} else {
+			mHandler.sendEmptyMessage(5);
 		}
 	}
 
@@ -418,7 +418,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		AppMode.getInstance().isClickAddDevice = true;
 		mHandler.sendEmptyMessage(4);
 		intent.putExtra(BRACELETTYPE, braceletName);
-		Log.e(TAG,"bleStatus"+bleStatus);
+		Log.e(TAG, "bleStatus" + bleStatus);
 		intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, bleStatus);
 		return intent;
 	}
@@ -443,7 +443,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				ICSOpenVPNApplication.isConnect = false;
 				ReceiveBLEMoveReceiver.isConnect = false;
 				// 解除绑定，注册失败不显示
-				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.REGISTER_FAIL_INITIATIVE);
+				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
 
 //				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
 				CommonTools.showShortToast(getActivity(), "已解绑设备");
@@ -501,6 +501,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 						flowCount.setText(used.getTotalNumFlow());
 					}
 					packageAllCount.setText(used.getTotalNum());
+					serviceTextView.setText(used.getServiceName());
 				}
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
@@ -548,7 +549,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	}
 
 
-
 	@Override
 	protected void setBleStatus(String bleStatus) {
 		if (isAdded()) {
@@ -561,8 +561,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 			}
 		}
 	}
-
-
 
 
 	public final String NoticSign = "flg";
