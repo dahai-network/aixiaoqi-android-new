@@ -71,16 +71,13 @@ public class EditNameActivity extends BaseNetActivity {
         }else{
             if(type==IntentPutKeyConstant.EDIT_NICKNAME)
                 CommonTools.showShortToast(this,getString(R.string.name_is_null));
-            else if(type==IntentPutKeyConstant.EDIT_USER_NAME){
-
-            }else if(type==IntentPutKeyConstant.EDIT_ID_CARD){
-            }
             return;
         }
         if(type==IntentPutKeyConstant.EDIT_NICKNAME){
             ModifyPersonInfoHttp modifyPersonInfoHttp=new ModifyPersonInfoHttp(this);
             modifyPersonInfoHttp.setNickName(realName, HttpConfigUrl.COMTYPE_POST_MODIFY_NICK);
             new Thread(modifyPersonInfoHttp).start();
+
         }   else if(type==IntentPutKeyConstant.EDIT_USER_NAME){
             Intent realNameIntent=   new Intent();
             realNameIntent.putExtra(IntentPutKeyConstant.REALNAME,realName);

@@ -191,7 +191,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         instance = this;
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pro_main);
         ButterKnife.bind(this);
@@ -279,24 +278,24 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
             String typeText = "";
             String deviceType = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
             if (!TextUtils.isEmpty(deviceType)) {
-
-
                 //0是手环，1是钥匙扣
                 if (deviceType.contains(MyDeviceActivity.UNITOYS)) {
-
                     typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
                 } else if (deviceType.contains(MyDeviceActivity.UNIBOX)) {
-
                     typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
                 }
                 accountFragment.setSummarized(typeText, null, false);
             }
-            if (mService != null && !mService.isOpenBlueTooth()) {
-                Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            } else {
-                connectOperate();
-            }
+            blueToothOpen();
+        }
+    }
+
+    private void blueToothOpen() {
+        if (mService != null && !mService.isOpenBlueTooth()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        } else {
+            connectOperate();
         }
     }
 
@@ -507,21 +506,10 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
         isForeground = false;
     }
 
-    public int position;
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     private void setListener() {
         new PageChangeListener(mViewPager) {
             @Override
             public void pageSelected(int position) {
-                setPosition(position);
                 switch (position) {
                     case 0:
                         radiogroup.check(R.id.rb_index);
@@ -530,7 +518,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
                         break;
                     case 1:
                         radiogroup.check(R.id.rb_phone);
-
                         break;
                     case 2:
                         radiogroup.check(R.id.rb_address);
@@ -538,8 +525,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
                     case 3:
                         radiogroup.check(R.id.rb_personal);
                         break;
-
-
                 }
             }
         };
@@ -660,19 +645,13 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
                             }
                             accountFragment.setSummarized(typeText, null, false);
                         }
-                        if (mService != null && !mService.isOpenBlueTooth()) {
-                            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-                        } else {
-                            connectOperate();
-                        }
+                        blueToothOpen();
                     }
                 }
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
             GetHostAndPortHttp http = (GetHostAndPortHttp) object;
             if (http.getStatus() == 1) {
-                e("端口号");
                 requestCount = 0;
                 if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
                     SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
@@ -1007,16 +986,21 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
                             break;
                         case Constant.SYSTEM_BASICE_INFO:
                             //返回基本信息就更新account的仪表盘栏
-                            String typeText;
+
                             int powerText;
                             powerText = Integer.parseInt(message.get(0).substring(14, 16), 16);
+                            String typeText="";
                             String bracelettype = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-                            if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)) {
+                            if(bracelettype != null){
+                            if (  bracelettype.contains(MyDeviceActivity.UNITOYS)) {
                                 typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-                            } else {
+                            } else if(bracelettype.contains(MyDeviceActivity.UNIBOX)){
                                 typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
+
+                            }
                             }
                             accountFragment.setSummarized(typeText, powerText + "", false);
+
                             break;
                         case Constant.RECEIVE_ELECTRICITY:
                             powerText = Integer.parseInt(message.get(0).substring(10, 12), 16);

@@ -93,12 +93,12 @@ public class ReceiveSocketService extends Service {
 		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
 			Log.e("Blue_Chanl", "onReceive");
 			String receiveData=HexStringExchangeBytesUtil.bytesToHexString(s, length);
-			if(SocketConstant.RECEIVE_CONNECTION.equals(s)){
+			if(receiveData.startsWith(SocketConstant.RECEIVE_CONNECTION)){
 				receiveConnectionTime=sendConnectionTime;
 				sendConnectionType="";
 
 			}
-			else if(SocketConstant.RECEIVE_PRE_DATA.equals(s)){
+			else if(receiveData.startsWith(SocketConstant.RECEIVE_PRE_DATA)){
 				if(REGISTER_STATUE_CODE!=3&&sendPreDataTime<10000000){
 					receivePreDataTime=sendPreDataTime;
 				}else{
@@ -149,7 +149,9 @@ public class ReceiveSocketService extends Service {
 			tcpResendTimerTask=new TimerTask() {
 				@Override
 				public void run() {
+					Log.e(TAG,"coming");
 					if(CONNECT_STATUE==CONNECT_SUCCEED){
+						Log.e(TAG,"sendConnectionType="+sendConnectionType);
 						if(!TextUtils.isEmpty(sendConnectionType)){
 							if(receiveConnectionTime<sendConnectionTime){
 								receiveConnectionTime=System.currentTimeMillis();

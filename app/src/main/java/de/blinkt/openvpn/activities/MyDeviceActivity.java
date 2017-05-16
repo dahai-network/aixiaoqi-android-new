@@ -238,6 +238,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		titleSet();
 		//初始化状态和电量
 		if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
+			//注册中的时候，初始化进度
+			if (percentInt != 0) {
+				percentTextView.setText(percentInt + "%");
+			}
 			int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
 			if (electricityInt != 0) {
 				sinking.setPercent(((float) electricityInt) / 100);
@@ -247,6 +251,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (!TextUtils.isEmpty(blueStatus)) {
 				conStatusTextView.setText(blueStatus);
 				if(getString(R.string.index_high_signal).equals(blueStatus)){
+					percentTextView.setVisibility(GONE);
 					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 				}else{
 					if(getString(R.string.index_no_signal).equals(blueStatus)){
@@ -260,10 +265,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 //显示固件版本
 		firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
-		//注册中的时候，初始化进度
-		if (percentInt != 0 && ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.mConnectionState == UartService.STATE_CONNECTED) {
-			percentTextView.setText(percentInt + "%");
-		}
+
 //如果重连失败再进入我的设备就清空重连次数重新进入连接流程
         boolean isConnectBlueTooth = mService.isConnectedBlueTooth();
         if (!isConnectBlueTooth) {
