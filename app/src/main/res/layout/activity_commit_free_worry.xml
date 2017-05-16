@@ -174,7 +174,15 @@
                         android:textColor="@color/index_gray_text"
                         android:textSize="16sp"/>
 
-                    <de.blinkt.openvpn.views.RadioGroup
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/monthCountRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/buyMonthTitleTextView"
+                        android:layout_marginRight="@dimen/padding_15dp"
+                        android:layout_marginTop="@dimen/padding_15dp"/>
+
+                    <!--<de.blinkt.openvpn.views.RadioGroup
                         android:id="@+id/buyMonthRadioGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -278,7 +286,7 @@
 
                         </LinearLayout>
 
-                    </de.blinkt.openvpn.views.RadioGroup>
+                    </de.blinkt.openvpn.views.RadioGroup>-->
 
                 </RelativeLayout>
 

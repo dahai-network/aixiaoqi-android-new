@@ -68,8 +68,8 @@ public class CommitFreeWorryActivity extends BaseNetActivity implements RadioGro
 	TextView sureTextView;
 	@BindView(R.id.originalPriceTextView)
 	TextView originalPriceTextView;
-	@BindView(R.id.buyMonthRadioGroup)
-	RadioGroup buyMonthRadioGroup;
+//	@BindView(R.id.buyMonthRadioGroup)
+//	RadioGroup buyMonthRadioGroup;
 	private int WEIXIN_PAY = 2;
 	private int ALI_PAY = 1;
 	private int pay_way = 0;
@@ -130,9 +130,9 @@ public class CommitFreeWorryActivity extends BaseNetActivity implements RadioGro
 		originalPriceTextView.setText(originalPriceStr);
 		serviceFeeTextView.setText(priceStr);
 		originalPriceTextView.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-		buyMonthRadioGroup.setOnCheckedChangeListener(this);
+//		buyMonthRadioGroup.setOnCheckedChangeListener(this);
 		monthlyFeeEditText.addTextChangedListener(this);
-		buyMonthRadioGroup.check(R.id.month1RadioButton);
+//		buyMonthRadioGroup.check(R.id.month1RadioButton);
 		addUpTextView.setText("￥0");
 		setSpan(addUpTextView);
 	}

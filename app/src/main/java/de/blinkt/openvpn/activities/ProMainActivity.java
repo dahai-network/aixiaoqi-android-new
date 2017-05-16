@@ -214,10 +214,10 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
 
 	/**
-	 * android 6.01需要位置信息动态获取
+	 * android 6.0以上需要位置信息动态获取
 	 */
 	private void initSet() {
-		if (Build.VERSION.SDK_INT == 23 && !NetworkUtils.isLocationOpen(getApplicationContext())) {
+		if (Build.VERSION.SDK_INT >= 23 && !NetworkUtils.isLocationOpen(getApplicationContext())) {
 			//不能按返回键，只能二选其一
 			noLocationPermissionDialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
 			noLocationPermissionDialog.changeText(getResources().getString(R.string.no_location_permission), getResources().getString(R.string.sure));
@@ -558,6 +558,12 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		if (type == 2) {
 			Intent enableLocate = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 			startActivityForResult(enableLocate, REQUEST_LOCATION_PERMISSION);
+//			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//			if (android.support.v4.app.ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && android.support.v4.app.ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//				return;
+//			}
+//			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+//					0, this);
 		}
 	}
 
