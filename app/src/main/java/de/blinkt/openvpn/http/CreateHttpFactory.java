@@ -202,6 +202,15 @@ public class CreateHttpFactory {
 			case HttpConfigUrl.COMTYPE_ADD_RECEIVE://领取免费通话时长
 				startHttp(new AddReceiveHttp(interfaceCallback, cmdType, params));
 				break;
+			case HttpConfigUrl.COMTYPE_CHECK_CONFIRMED://检查是否已验证
+				startHttp(new CheckConfirmedHttp(interfaceCallback, cmdType, params));
+				break;
+			case HttpConfigUrl.COMTYPE_CONFIRMED://检查是否已验证
+				startHttp(new ConfirmedHttp(interfaceCallback, cmdType, params));
+				break;
+			case HttpConfigUrl.COMTYPE_GETCURRENT://确认是否绑定了ICCID
+				startHttp(new GetCurrentHttp(interfaceCallback, cmdType));
+				break;
 
 		}
 	}

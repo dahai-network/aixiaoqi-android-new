@@ -123,6 +123,12 @@ public class CommitFreeWorryActivity extends BaseNetActivity implements RadioGro
 
 	private void initSet() {
 		hasLeftViewTitle(R.string.dredge_free_for_worry, 0);
+		float originalPrice = Float.parseFloat(getIntent().getStringExtra("originalPrice"));
+		double price = getIntent().getDoubleExtra("price",0);
+		String priceStr = String.format(getString(R.string.price_everymonth) + "", price);
+		String originalPriceStr = String.format(getString(R.string.origin_price) + "", originalPrice);
+		originalPriceTextView.setText(originalPriceStr);
+		serviceFeeTextView.setText(priceStr);
 		originalPriceTextView.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 		buyMonthRadioGroup.setOnCheckedChangeListener(this);
 		monthlyFeeEditText.addTextChangedListener(this);

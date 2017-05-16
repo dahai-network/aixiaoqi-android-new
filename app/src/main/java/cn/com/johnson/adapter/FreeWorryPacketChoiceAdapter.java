@@ -64,6 +64,7 @@ public class FreeWorryPacketChoiceAdapter extends
 					CallTimePacketDetailActivity.launch(context, bean.getPackageId(), context.getString(R.string.receive_fw), !bean.isHaveed());
 				} else if (FREEWORRY.equals(bean.getCategory())) {
 					Intent intent = new Intent(context, FreeWorryIntroActivity.class);
+					intent.putExtra("id", bean.getPackageId());
 					context.startActivity(intent);
 				}
 			}
