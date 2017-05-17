@@ -77,6 +77,7 @@ public class FreeWorryIntroActivity extends BaseNetActivity {
 			Intent intent = new Intent(this, CommitFreeWorryActivity.class);
 			intent.putExtra("price", http.getPacketDtailEntity().getList().getPrice());
 			intent.putExtra("originalPrice", http.getPacketDtailEntity().getList().getOriginalPrice());
+			intent.putExtra("id", http.getPacketDtailEntity().getList().getPackageId());
 			startActivity(intent);
 		}
 	}

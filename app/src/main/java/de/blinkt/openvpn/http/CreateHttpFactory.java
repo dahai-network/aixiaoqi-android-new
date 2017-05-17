@@ -211,7 +211,9 @@ public class CreateHttpFactory {
 			case HttpConfigUrl.COMTYPE_GETCURRENT://确认是否绑定了ICCID
 				startHttp(new GetCurrentHttp(interfaceCallback, cmdType));
 				break;
-
+			case HttpConfigUrl.COMTYPE_GET_ATTRS_BY_ID://获取
+				startHttp(new GetAttrsByIdHttp(interfaceCallback, cmdType, params));
+				break;
 		}
 	}
 

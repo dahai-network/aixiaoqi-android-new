@@ -501,7 +501,12 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 						flowCount.setText(used.getTotalNumFlow());
 					}
 					packageAllCount.setText(used.getTotalNum());
-					serviceTextView.setText(used.getServiceName());
+					String serviceName = used.getServiceName();
+					if (!TextUtils.isEmpty(serviceName)) {
+						serviceTextView.setText(serviceName);
+					} else {
+						serviceTextView.setText("---");
+					}
 				}
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
@@ -512,7 +517,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 						mHandler.sendEmptyMessage(5);
 						SharedUtils.getInstance().writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI());
 						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
-						String typeText="";
+						String typeText = "";
 						if ("0".equals(deviceTypeStr)) {
 							SharedUtils.getInstance().writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
 							typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
