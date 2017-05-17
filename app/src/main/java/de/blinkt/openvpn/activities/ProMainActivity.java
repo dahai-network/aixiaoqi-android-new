@@ -69,7 +69,6 @@ import de.blinkt.openvpn.fragments.IndexFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.http.CheckConfirmedHttp;
 import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBasicConfigHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
@@ -101,64 +100,65 @@ import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 
 public class ProMainActivity extends BaseNetActivity implements DialogInterfaceTypeBase {
 
-	public static ProMainActivity instance = null;
-	@BindView(R.id.radiogroup)
-	RadioGroup radiogroup;
-	@BindView(R.id.bottom_fragment)
-	FrameLayout bottomFragment;
-	private int REQUEST_LOCATION_PERMISSION = 3;
-	@BindView(R.id.mViewPager)
-	CustomViewPager mViewPager;
-	@BindView(R.id.rb_index)
-	MyRadioButton rbIndex;
-	@BindView(R.id.rb_phone)
-	MyRadioButton rbPhone;
-	@BindView(R.id.rb_address)
-	MyRadioButton rbAddress;
-	@BindView(R.id.rb_personal)
-	MyRadioButton rbPersonal;
+    public static ProMainActivity instance = null;
+    @BindView(R.id.radiogroup)
+    RadioGroup radiogroup;
+    @BindView(R.id.bottom_fragment)
+    FrameLayout bottomFragment;
+    private int REQUEST_LOCATION_PERMISSION = 3;
+    @BindView(R.id.mViewPager)
+    CustomViewPager mViewPager;
+    @BindView(R.id.rb_index)
+    MyRadioButton rbIndex;
+    @BindView(R.id.rb_phone)
+    MyRadioButton rbPhone;
+    @BindView(R.id.rb_address)
+    MyRadioButton rbAddress;
+    @BindView(R.id.rb_personal)
+    MyRadioButton rbPersonal;
 
-	@BindView(R.id.tv_red_dot_01)
-	TextView tvRedDot01;
-	@BindView(R.id.tv_red_dot_04)
-	TextView tvRedDot04;
-	private ReceiveBLEMoveReceiver bleMoveReceiver;
-	private UartService mService = null;
-	//进入主页后打开蓝牙设备搜索绑定过的设备
-	private BluetoothAdapter mBluetoothAdapter;
-	private int REQUEST_ENABLE_BT = 2;
-	private String deviceAddress = "";
-	ArrayList<Fragment> list = new ArrayList<>();
-	CellPhoneFragment cellPhoneFragment;
-	AccountFragment accountFragment;
-	AddressListFragment addressListFragment;
-	SportFragment sportFragment;
-	IndexFragment indexFragment;
-	Intent intentCallPhone;
-	public static boolean isForeground = false;
-	public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
-	//重连时间
-	private int RECONNECT_TIME = 180000;
-	SocketConnection socketUdpConnection;
-	SocketConnection socketTcpConnection;
-	public static boolean isStartSdk = false;
-	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
-	public static SendYiZhengService sendYiZhengService = null;
-	Intent intent = new Intent("Notic");
-	//红点控制
-	private Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			switch (msg.what) {
-				case 1:
-					tvRedDot04.setVisibility(View.VISIBLE);
-					intent.putExtra("flg", true);
-					break;
-				case 2:
-					tvRedDot04.setVisibility(View.GONE);
-					intent.putExtra("flg", false);
-					break;
+    @BindView(R.id.tv_red_dot_01)
+    TextView tvRedDot01;
+    @BindView(R.id.tv_red_dot_04)
+    TextView tvRedDot04;
+    private ReceiveBLEMoveReceiver bleMoveReceiver;
+    private UartService mService = null;
+    //进入主页后打开蓝牙设备搜索绑定过的设备
+    private BluetoothAdapter mBluetoothAdapter;
+    private int REQUEST_ENABLE_BT = 2;
+    private String deviceAddress = "";
+    ArrayList<Fragment> list = new ArrayList<>();
+    CellPhoneFragment cellPhoneFragment;
+    AccountFragment accountFragment;
+    AddressListFragment addressListFragment;
+    SportFragment sportFragment;
+    IndexFragment indexFragment;
+    Intent intentCallPhone;
+    public static boolean isForeground = false;
+    public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
+    //重连时间
+    private int RECONNECT_TIME = 180000;
+    SocketConnection socketUdpConnection;
+    SocketConnection socketTcpConnection;
+    public static boolean isStartSdk = false;
+    public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
+    public static SendYiZhengService sendYiZhengService = null;
+    public static String confirmedPhoneNum;
+    Intent intent = new Intent("Notic");
+    //红点控制
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    tvRedDot04.setVisibility(View.VISIBLE);
+                    intent.putExtra("flg", true);
+                    break;
+                case 2:
+                    tvRedDot04.setVisibility(View.GONE);
+                    intent.putExtra("flg", false);
+                    break;
 
 
 			}
@@ -167,8 +167,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 	};
 	//位置权限提示DIALOG
 	private DialogBalance noLocationPermissionDialog;
-	//验证后手机号码
-	public static String confirmedPhoneNum;
 
 
 	@Override
@@ -197,7 +195,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		instance = this;
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pro_main);
 		ButterKnife.bind(this);
@@ -214,10 +211,10 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
 
 	/**
-	 * android 6.01需要位置信息动态获取
+	 * android 6.0以上需要位置信息动态获取
 	 */
 	private void initSet() {
-		if (Build.VERSION.SDK_INT == 23 && !NetworkUtils.isLocationOpen(getApplicationContext())) {
+		if (Build.VERSION.SDK_INT >= 23 && !NetworkUtils.isLocationOpen(getApplicationContext())) {
 			//不能按返回键，只能二选其一
 			noLocationPermissionDialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
 			noLocationPermissionDialog.changeText(getResources().getString(R.string.no_location_permission), getResources().getString(R.string.sure));
@@ -285,24 +282,24 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			String typeText = "";
 			String deviceType = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(deviceType)) {
-
-
 				//0是手环，1是钥匙扣
 				if (deviceType.contains(MyDeviceActivity.UNITOYS)) {
-
 					typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
 				} else if (deviceType.contains(MyDeviceActivity.UNIBOX)) {
-
 					typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
 				}
 				accountFragment.setSummarized(typeText, null, false);
 			}
-			if (mService != null && !mService.isOpenBlueTooth()) {
-				Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-				startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-			} else {
-				connectOperate();
-			}
+			blueToothOpen();
+		}
+	}
+
+	private void blueToothOpen() {
+		if (mService != null && !mService.isOpenBlueTooth()) {
+			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+		} else {
+			connectOperate();
 		}
 	}
 
@@ -513,21 +510,10 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		isForeground = false;
 	}
 
-	public int position;
-
-	public int getPosition() {
-		return position;
-	}
-
-	public void setPosition(int position) {
-		this.position = position;
-	}
-
 	private void setListener() {
 		new PageChangeListener(mViewPager) {
 			@Override
 			public void pageSelected(int position) {
-				setPosition(position);
 				switch (position) {
 					case 0:
 						radiogroup.check(R.id.rb_index);
@@ -536,7 +522,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 						break;
 					case 1:
 						radiogroup.check(R.id.rb_phone);
-
 						break;
 					case 2:
 						radiogroup.check(R.id.rb_address);
@@ -544,8 +529,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 					case 3:
 						radiogroup.check(R.id.rb_personal);
 						break;
-
-
 				}
 			}
 		};
@@ -666,12 +649,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 							}
 							accountFragment.setSummarized(typeText, null, false);
 						}
-						if (mService != null && !mService.isOpenBlueTooth()) {
-							Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-							startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-						} else {
-							connectOperate();
-						}
+						blueToothOpen();
 					}
 				}
 			}
@@ -683,23 +661,17 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 				if (entity.getUsed() == 1) {
 					e("有套餐");
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-//					if (SocketConstant.REGISTER_STATUE_CODE != 3) {
-//						getConfigInfo();
-//						EventBusUtil.changeConnectStatus(getString(R.string.index_no_signal), R.drawable.index_no_signal);
-//					} else {
-//						EventBusUtil.changeConnectStatus(getString(R.string.index_high_signal), R.drawable.index_high_signal);
-//					}
+
 				} else {
 					//TODO 没有通知到设备界面
 					//如果是没有套餐，则通知我的设备界面更新状态并且停止转动
 					SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
-//					EventBusUtil.changeConnectStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
+//				EventBusUtil.changeConnectStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 				}
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
 			GetHostAndPortHttp http = (GetHostAndPortHttp) object;
 			if (http.getStatus() == 1) {
-				e("端口号");
 				requestCount = 0;
 				if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
 					SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
@@ -740,6 +712,9 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
 			if (skyUpgradeHttp.getStatus() == 1) {
 				String braceletVersion = SharedUtils.getInstance().readString(Constant.BRACELETVERSION);
+				if (TextUtils.isEmpty(braceletVersion)) {
+					braceletVersion = "0";
+				}
 				if (braceletVersion != null && skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(braceletVersion)) {
 					mHandler.sendEmptyMessage(1);
 				}
@@ -757,6 +732,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			CheckConfirmedHttp http = (CheckConfirmedHttp) object;
 			if (http.getStatus() == 1) {
 				if (!http.getEntity().isIsConfirmed()) {
+//				if (http.getEntity().isIsConfirmed()) {
 					Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
 					startActivity(intent);
 				} else {
@@ -1046,16 +1022,21 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 							break;
 						case Constant.SYSTEM_BASICE_INFO:
 							//返回基本信息就更新account的仪表盘栏
-							String typeText;
+
 							int powerText;
 							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16);
+							String typeText = "";
 							String bracelettype = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-							if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)) {
-								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-							} else {
-								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
+							if (bracelettype != null) {
+								if (bracelettype.contains(MyDeviceActivity.UNITOYS)) {
+									typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
+								} else if (bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+									typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
+
+								}
 							}
 							accountFragment.setSummarized(typeText, powerText + "", false);
+
 							break;
 						case Constant.RECEIVE_ELECTRICITY:
 							powerText = Integer.parseInt(message.get(0).substring(10, 12), 16);
@@ -1073,9 +1054,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
 
 	private void requestPacket() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
 		getConfigInfo();
-//		checkRegisterStatuGoIp();
 	}
 
 	private BroadcastReceiver screenoffReceive = new BroadcastReceiver() {
@@ -1120,4 +1099,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		}
 
 	}
+
+
 }

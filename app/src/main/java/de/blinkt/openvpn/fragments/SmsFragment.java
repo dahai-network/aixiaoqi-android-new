@@ -119,13 +119,6 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		}
 	}
 
-
-	@Override
-	public void setUserVisibleHint(boolean isVisibleToUser) {
-		super.setUserVisibleHint(isVisibleToUser);
-
-	}
-
 	private void initView(View view) {
 		mRecyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
 		NodataRelativeLayout = (RelativeLayout) view.findViewById(R.id.NodataRelativeLayout);
@@ -299,12 +292,8 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 			}
 		}
 	}
-
 	List<ContactBean> mAllLists = new ArrayList<>();
-
-
 	List<SmsEntity> mAllTempLists = new ArrayList<>();
-
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 
@@ -343,10 +332,7 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		} else if (cmdType == HttpConfigUrl.COMTYPE_SMS_DELETE_BY_TELS) {
 
 			if (object.getStatus() == 1) {
-//				smsListAdapter.setDeleteImage(false);
 				onRefresh();
-//				editSmsImageView.setBackground(getResources().getDrawable(R.drawable.edit_sms_selector));
-
 			} else {
 				CommonTools.showShortToast(getActivity(), object.getMsg());
 			}
