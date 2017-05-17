@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CheckBox;
 
 import java.util.ArrayList;
 
@@ -20,14 +20,23 @@ import cn.com.aixiaoqi.R;
 public class CommitFreeWorryAdapter extends RecyclerView.Adapter<CommitFreeWorryAdapter.CommitViewHolder> {
 
 
-	private ArrayList<Integer> data;
+	private ArrayList<String> data;
 	private Context context;
+	private OnClickItemLisener lisener;
+	private int choicePosition;
 //	public static final int
 
-	public CommitFreeWorryAdapter(Context context, ArrayList<Integer> data , int type) {
+	public CommitFreeWorryAdapter(Context context, ArrayList<String> data, OnClickItemLisener lisener) {
 		this.context = context;
 		this.data = data;
+		this.lisener = lisener;
 	}
+
+	public void setCheck(int position) {
+		this.choicePosition = position;
+//		notifyDataSetChanged();
+	}
+
 
 	@Override
 	public CommitViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,8 +45,19 @@ public class CommitFreeWorryAdapter extends RecyclerView.Adapter<CommitFreeWorry
 	}
 
 	@Override
-	public void onBindViewHolder(CommitViewHolder holder, int position) {
-        holder.monthButton.setText(data.get(position)+"个月");
+	public void onBindViewHolder(CommitViewHolder holder, final int position) {
+		holder.monthButton.setText(data.get(position));
+		holder.monthButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				lisener.onItemClick(data.get(position), position);
+			}
+		});
+		if (position == choicePosition) {
+			holder.monthButton.setChecked(true);
+		} else {
+			holder.monthButton.setChecked(false);
+		}
 	}
 
 	@Override
@@ -47,7 +67,7 @@ public class CommitFreeWorryAdapter extends RecyclerView.Adapter<CommitFreeWorry
 
 	class CommitViewHolder extends RecyclerView.ViewHolder {
 		@BindView(R.id.monthButton)
-		Button monthButton;
+		CheckBox monthButton;
 
 		public CommitViewHolder(View itemView) {
 			super(itemView);
@@ -55,4 +75,7 @@ public class CommitFreeWorryAdapter extends RecyclerView.Adapter<CommitFreeWorry
 		}
 	}
 
+	public interface OnClickItemLisener {
+		void onItemClick(String textContent, int position);
+	}
 }

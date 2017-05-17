@@ -3,11 +3,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-    <Button
+    <CheckBox
         android:id="@+id/monthButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginRight="@dimen/padding_10dp"
+        android:layout_marginTop="@dimen/padding_10dp"
         android:background="@drawable/commit_fw_selector_icon"
         android:button="@null"
         android:gravity="center"
