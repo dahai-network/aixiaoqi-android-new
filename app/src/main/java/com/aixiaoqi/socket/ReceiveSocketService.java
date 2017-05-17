@@ -279,9 +279,9 @@ public class ReceiveSocketService extends Service {
 
 
             //5.0以上
-             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                 Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
-                 jobEvent();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
+                jobEvent();
 
             } else {
                 am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, TCP_HEART_TIME * 1000, sender);
@@ -290,14 +290,17 @@ public class ReceiveSocketService extends Service {
         }
     }
 
+    JobScheduler mJobScheduler;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void jobEvent() {
-        JobScheduler mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
-        JobInfo.Builder builder = new JobInfo.Builder( 1,
-                new ComponentName( getPackageName(), JobSchedulerService.class.getName() ) );
-        builder.setPeriodic( 1000 );
-        if( mJobScheduler.schedule( builder.build() ) <= 0 ) {
+        mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+
+        JobInfo.Builder builder = new JobInfo.Builder(1,
+                new ComponentName(getPackageName(), JobSchedulerService.class.getName()));
+        builder.setPeriodic(TCP_HEART_TIME * 1000);
+        if (mJobScheduler.schedule(builder.build()) <= 0) {
             //If something goes wrong
         }
     }
@@ -326,6 +329,10 @@ public class ReceiveSocketService extends Service {
 
         if (SocketConstant.REGISTER_STATUE_CODE != 0) {
             SocketConstant.REGISTER_STATUE_CODE = 1;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (mJobScheduler != null)
+                mJobScheduler.cancelAll();
         }
         super.onDestroy();
     }
