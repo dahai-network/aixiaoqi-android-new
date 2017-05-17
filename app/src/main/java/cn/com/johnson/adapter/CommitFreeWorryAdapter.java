@@ -34,7 +34,7 @@ public class CommitFreeWorryAdapter extends RecyclerView.Adapter<CommitFreeWorry
 
 	public void setCheck(int position) {
 		this.choicePosition = position;
-//		notifyDataSetChanged();
+		notifyDataSetChanged();
 	}
 
 

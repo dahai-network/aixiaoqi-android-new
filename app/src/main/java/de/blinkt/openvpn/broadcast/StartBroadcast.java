@@ -3,19 +3,27 @@ package de.blinkt.openvpn.broadcast;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Build;
+import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.aixiaoqi.socket.EventBusUtil;
 
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
+import de.blinkt.openvpn.activities.ProMainActivity;
+import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
@@ -32,6 +40,7 @@ public class StartBroadcast extends BroadcastReceiver implements InterfaceCallba
 	BluetoothManager mBluetoothManager;
 	BluetoothAdapter mBluetoothAdapter;
 	private String deviceAddress;
+	private UartService mService;
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.w(TAG, "StartBroadcast receive action is " + intent.getAction());
@@ -55,17 +64,47 @@ public class StartBroadcast extends BroadcastReceiver implements InterfaceCallba
 					//有绑定过，则搜索设备，没有搜索到，就用通知栏的方式提示用户
 					BluetoothConstant.IS_BIND = true;
 					//搜索到设备，则连接设备。
+					if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
+						Intent bindIntent = new Intent(context, UartService.class);
+						try {
+//							context.bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+						} catch (Exception e) {
+//							initBrocast();
+							e.printStackTrace();
+						}
+					}
+
 				}
 
 			}
 
 
 
-
-
-
 		}
 	}
+
+//	private ServiceConnection mServiceConnection = new ServiceConnection() {
+//		public void onServiceConnected(ComponentName className, IBinder rawBinder) {
+//			mService = ((UartService.LocalBinder) rawBinder).getService();
+//			//存在Application供全局使用
+//			ICSOpenVPNApplication.uartService = mService;
+//			initBrocast();
+//		}
+//
+//		public void onServiceDisconnected(ComponentName classname) {
+//			mService = null;
+//		}
+//	};
+//	private void initBrocast() {
+//		if (bleMoveReceiver == null) {
+//			bleMoveReceiver = new ReceiveBLEMoveReceiver();
+//			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(bleMoveReceiver, makeGattUpdateIntentFilter());
+//			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(updateIndexTitleReceiver, makeGattUpdateIntentFilter());
+//			registerReceiver(screenoffReceive, screenoffIntentFilter());
+//			//打开蓝牙服务后开始搜索
+//			searchBLE();
+//		}
+//	}
 
 	private boolean initialize(Context context) {
 		// For API level 18 and above, get a reference to BluetoothAdapter through
