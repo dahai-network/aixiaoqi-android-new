@@ -144,7 +144,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
     public static boolean isStartSdk = false;
     public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
     public static SendYiZhengService sendYiZhengService = null;
-    private String confirmedPhoneNum;
+    public static String confirmedPhoneNum;
     Intent intent = new Intent("Notic");
     //红点控制
     private Handler mHandler = new Handler() {
@@ -215,7 +215,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
      * android 6.01需要位置信息动态获取
      */
     private void initSet() {
-        if (Build.VERSION.SDK_INT == 23 && !NetworkUtils.isLocationOpen(getApplicationContext())) {
+        if (Build.VERSION.SDK_INT >= 23 && !NetworkUtils.isLocationOpen(getApplicationContext())) {
             //不能按返回键，只能二选其一
             noLocationPermissionDialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
             noLocationPermissionDialog.changeText(getResources().getString(R.string.no_location_permission), getResources().getString(R.string.sure));
@@ -630,7 +630,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
                             EventBusUtil.showDevice(true);
                         }
                         SharedUtils utils = SharedUtils.getInstance();
-
                         utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
                         //按MAC地址保存版本号
                         if (!TextUtils.isEmpty(deviceAddress))
