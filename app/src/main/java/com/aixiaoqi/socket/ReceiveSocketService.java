@@ -273,19 +273,17 @@ public class ReceiveSocketService extends Service {
 		Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
 		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && am == null) {
 			count = count + 1;
-			Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
-			intent.setAction(HEARTBEAT_PACKET_TIMER);
-			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
-			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),TCP_HEART_TIME*1000, sender);
-
-
             //5.0以上
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
+                //Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
                 jobEvent();
 
             } else {
+				Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
+				intent.setAction(HEARTBEAT_PACKET_TIMER);
+				sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
+				am = (AlarmManager) getSystemService(ALARM_SERVICE);
+				am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),TCP_HEART_TIME*1000, sender);
                 am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, TCP_HEART_TIME * 1000, sender);
             }
 
@@ -293,13 +291,10 @@ public class ReceiveSocketService extends Service {
     }
 
     JobScheduler mJobScheduler;
-
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void jobEvent() {
-
         mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-
-        JobInfo.Builder builder = new JobInfo.Builder(1,
+        JobInfo.Builder builder = new JobInfo.Builder(Constant.TYPE_ONE,
                 new ComponentName(getPackageName(), JobSchedulerService.class.getName()));
         builder.setPeriodic(TCP_HEART_TIME * 1000);
         if (mJobScheduler.schedule(builder.build()) <= 0) {
