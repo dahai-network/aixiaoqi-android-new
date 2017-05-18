@@ -28,15 +28,20 @@ public class ToastCompat implements IToast {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-           // mIToast.cancel();
         }
     };
 
     ToastCompat(Context context, String text, int duration) {
 
         mmHandler = mHandler;
-        mIToast = new DefinedToast(context).setText(text).setDuration(duration)
-                .setGravity(Gravity.BOTTOM, 0, CommonTools.dip2px(context, 64));
+        Log.d("ToastCompat", "ToastCompat: -----------");
+        if (!OSJudgementUtil.isMIUI()) {
+            mIToast = new DefinedToast(context).setText(text).setDuration(duration)
+                    .setGravity(Gravity.BOTTOM, 0, CommonTools.dip2px(context, 64));
+        } else {
+            mIToast = new SystemToast(context).setText(text).setDuration(duration);
+
+        }
 
 
     }
