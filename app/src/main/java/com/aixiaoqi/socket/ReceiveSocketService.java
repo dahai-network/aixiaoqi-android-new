@@ -3,10 +3,16 @@ package com.aixiaoqi.socket;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -20,6 +26,7 @@ import java.util.TimerTask;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.service.JobSchedulerService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 
@@ -58,35 +65,35 @@ public class ReceiveSocketService extends Service {
 		return mBinder;
 	}
 
-	public class LocalBinder extends Binder {
-		public ReceiveSocketService getService() {
-			return ReceiveSocketService.this;
-		}
-	}
+    public class LocalBinder extends Binder {
+        public ReceiveSocketService getService() {
+            return ReceiveSocketService.this;
+        }
+    }
 
 
-	public void initSocket() {
-		tcpClient.connect();
-	}
+    public void initSocket() {
+        tcpClient.connect();
+    }
 
-	TcpClient tcpClient = new TcpClient() {
-		@Override
-		public void onConnect(SocketTransceiver transceiver) {
-			Log.i("Blue_Chanl", "正在注册GOIP");
-			SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
-			createSocketLisener.create();
-			CONNECT_STATUE = CONNECT_SUCCEED;
-		}
+    TcpClient tcpClient = new TcpClient() {
+        @Override
+        public void onConnect(SocketTransceiver transceiver) {
+            Log.i("Blue_Chanl", "正在注册GOIP");
+            SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
+            createSocketLisener.create();
+            CONNECT_STATUE = CONNECT_SUCCEED;
+        }
 
-		@Override
-		public void onConnectFailed() {
-			if (CONNECT_STATUE == ACTIVE_DISCENNECT) {
-				return;
-			}
-			Log.e("Blue_Chanl", "onConnectFailed");
-			connectFailReconnect();
-			CONNECT_STATUE = CONNECT_FAIL;
-		}
+        @Override
+        public void onConnectFailed() {
+            if (CONNECT_STATUE == ACTIVE_DISCENNECT) {
+                return;
+            }
+            Log.e("Blue_Chanl", "onConnectFailed");
+            connectFailReconnect();
+            CONNECT_STATUE = CONNECT_FAIL;
+        }
 
 
 		@Override
@@ -266,19 +273,39 @@ public class ReceiveSocketService extends Service {
 		Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
 		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && am == null) {
 			count = count + 1;
-			Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
-			intent.setAction(HEARTBEAT_PACKET_TIMER);
-			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
-			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),TCP_HEART_TIME*1000, sender);
+            //5.0以上
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
+                jobEvent();
 
-		}
-	}
+            } else {
+				Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
+				intent.setAction(HEARTBEAT_PACKET_TIMER);
+				sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
+				am = (AlarmManager) getSystemService(ALARM_SERVICE);
+				am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),TCP_HEART_TIME*1000, sender);
+                am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, TCP_HEART_TIME * 1000, sender);
+            }
+
+        }
+    }
+
+    JobScheduler mJobScheduler;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void jobEvent() {
+        mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        JobInfo.Builder builder = new JobInfo.Builder(Constant.TYPE_ONE,
+                new ComponentName(getPackageName(), JobSchedulerService.class.getName()));
+        builder.setPeriodic(TCP_HEART_TIME * 1000);
+        if (mJobScheduler.schedule(builder.build()) <= 0) {
+            //If something goes wrong
+        }
+    }
 
 
-	private void reConnect() {
-		initSocket();
-	}
+    private void reConnect() {
+        initSocket();
+    }
 
 
 
@@ -298,28 +325,32 @@ public class ReceiveSocketService extends Service {
 		TlvAnalyticalUtils.clearData();
 		TestProvider.clearData();
 
-		if (SocketConstant.REGISTER_STATUE_CODE != 0) {
-			SocketConstant.REGISTER_STATUE_CODE = 1;
-		}
-		super.onDestroy();
-	}
+        if (SocketConstant.REGISTER_STATUE_CODE != 0) {
+            SocketConstant.REGISTER_STATUE_CODE = 1;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (mJobScheduler != null)
+                mJobScheduler.cancelAll();
+        }
+        super.onDestroy();
+    }
 
-	private void cancelTimer() {
-		if (am != null) {
-			am.cancel(sender);
-			am = null;
-		}
-	}
+    private void cancelTimer() {
+        if (am != null) {
+            am.cancel(sender);
+            am = null;
+        }
+    }
 
-	CreateSocketLisener createSocketLisener;
+    CreateSocketLisener createSocketLisener;
 
-	public void setListener(CreateSocketLisener listener) {
-		this.createSocketLisener = listener;
-	}
+    public void setListener(CreateSocketLisener listener) {
+        this.createSocketLisener = listener;
+    }
 
-	public interface CreateSocketLisener {
-		void create();
-	}
+    public interface CreateSocketLisener {
+        void create();
+    }
 
-	int count = 0;
+    int count = 0;
 }

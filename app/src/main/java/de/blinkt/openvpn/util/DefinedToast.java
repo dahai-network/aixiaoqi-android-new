@@ -139,11 +139,11 @@ public class DefinedToast implements IToast {
      * @return 自身对象
      */
     TextView tv;
+
     @Override
     public IToast setText(String text) {
 
         // 模拟Toast的布局文件 com.android.internal.R.layout.transient_notification
-        // 虽然可以手动用java写，但是不同厂商系统，这个布局的设置好像是不同的，因此我们自己获取原生Toast的view进行配置
 
         View view = Toast.makeText(mContext, text, Toast.LENGTH_SHORT).getView();
         if (view != null) {
@@ -155,9 +155,10 @@ public class DefinedToast implements IToast {
 
         return this;
     }
+
     @Override
     public void show() {
-
+        Log.d("CommonTools", "show: ----------");
         // 1. 将本次需要显示的toast加入到队列中
         mQueue.offer(this);
 
@@ -182,7 +183,6 @@ public class DefinedToast implements IToast {
         Log.d("cancel", "cancel: ");
         if (this.equals(mQueue.peek())) {
 
-
             mHandler.removeCallbacks(mActivite);
             mHandler.post(mHide);
             mHandler.post(mActivite);
@@ -196,9 +196,14 @@ public class DefinedToast implements IToast {
             if (mView.getParent() != null) {
                 mWindowManager.removeView(mView);
             }
-            Log.d("CommonTools", "handleShow: ");
+            try {
                 mWindowManager.addView(mView, mParams);
-        }
+            } catch (Exception e) {
+
+            }
+
+        }else
+                mQueue.poll();
     }
 
     private void handleHide() {

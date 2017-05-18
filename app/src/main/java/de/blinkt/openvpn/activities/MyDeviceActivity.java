@@ -145,7 +145,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	//手环类型
 	private String bracelettype;
 	public static boolean isUpgrade = false;
-
+	public static final int DOWNLOAD_SKY_UPGRADE = 5;
+	public static final int NOT_YET_REARCH = 6;
+	public static final int UNBIND = 7;
 	public static int retryTime;
 
 	@Override
@@ -794,9 +796,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		CommonTools.showShortToast(this, getString(R.string.no_wifi));
 	}
 
-	public static final int DOWNLOAD_SKY_UPGRADE = 5;
-	public static final int NOT_YET_REARCH = 6;
-	public static final int UNBIND = 7;
+
 
 	@Override
 	public void dialogText(int type, String text) {

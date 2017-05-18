@@ -249,4 +249,9 @@ public class Constant {
 	public static final String SHOW = "show";
 	public static boolean isOutsideSecondStepClick = false;
 	public static boolean isOutsideThirdStepClick = false;
+
+	/**
+	 * 定时器类型
+	 */
+	public final static int TYPE_ONE = 1;
 }

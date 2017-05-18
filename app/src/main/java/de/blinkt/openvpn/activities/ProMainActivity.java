@@ -100,64 +100,65 @@ import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 
 public class ProMainActivity extends BaseNetActivity implements DialogInterfaceTypeBase {
 
-	public static ProMainActivity instance = null;
-	@BindView(R.id.radiogroup)
-	RadioGroup radiogroup;
-	@BindView(R.id.bottom_fragment)
-	FrameLayout bottomFragment;
-	private int REQUEST_LOCATION_PERMISSION = 3;
-	@BindView(R.id.mViewPager)
-	CustomViewPager mViewPager;
-	@BindView(R.id.rb_index)
-	MyRadioButton rbIndex;
-	@BindView(R.id.rb_phone)
-	MyRadioButton rbPhone;
-	@BindView(R.id.rb_address)
-	MyRadioButton rbAddress;
-	@BindView(R.id.rb_personal)
-	MyRadioButton rbPersonal;
-	@BindView(R.id.tv_red_dot_01)
-	TextView tvRedDot01;
-	@BindView(R.id.tv_red_dot_04)
-	TextView tvRedDot04;
-	private ReceiveBLEMoveReceiver bleMoveReceiver;
-	private UartService mService = null;
-	//进入主页后打开蓝牙设备搜索绑定过的设备
-	private BluetoothAdapter mBluetoothAdapter;
-	private int REQUEST_ENABLE_BT = 2;
-	private String deviceAddress = "";
-	ArrayList<Fragment> list = new ArrayList<>();
-	CellPhoneFragment cellPhoneFragment;
-	AccountFragment accountFragment;
-	AddressListFragment addressListFragment;
-	SportFragment sportFragment;
-	IndexFragment indexFragment;
-	Intent intentCallPhone;
-	public static boolean isForeground = false;
-	public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
-	//重连时间
-	private int RECONNECT_TIME = 180000;
-	SocketConnection socketUdpConnection;
-	SocketConnection socketTcpConnection;
-	public static boolean isStartSdk = false;
-	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
-	public static SendYiZhengService sendYiZhengService = null;
-	public static String confirmedPhoneNum;
-	Intent intent = new Intent("Notic");
-	//红点控制
-	private Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			switch (msg.what) {
-				case 1:
-					tvRedDot04.setVisibility(View.VISIBLE);
-					intent.putExtra("flg", true);
-					break;
-				case 2:
-					tvRedDot04.setVisibility(View.GONE);
-					intent.putExtra("flg", false);
-					break;
+    public static ProMainActivity instance = null;
+    @BindView(R.id.radiogroup)
+    RadioGroup radiogroup;
+    @BindView(R.id.bottom_fragment)
+    FrameLayout bottomFragment;
+    private int REQUEST_LOCATION_PERMISSION = 3;
+    @BindView(R.id.mViewPager)
+    CustomViewPager mViewPager;
+    @BindView(R.id.rb_index)
+    MyRadioButton rbIndex;
+    @BindView(R.id.rb_phone)
+    MyRadioButton rbPhone;
+    @BindView(R.id.rb_address)
+    MyRadioButton rbAddress;
+    @BindView(R.id.rb_personal)
+    MyRadioButton rbPersonal;
+
+    @BindView(R.id.tv_red_dot_01)
+    TextView tvRedDot01;
+    @BindView(R.id.tv_red_dot_04)
+    TextView tvRedDot04;
+    private ReceiveBLEMoveReceiver bleMoveReceiver;
+    private UartService mService = null;
+    //进入主页后打开蓝牙设备搜索绑定过的设备
+    private BluetoothAdapter mBluetoothAdapter;
+    private int REQUEST_ENABLE_BT = 2;
+    private String deviceAddress = "";
+    ArrayList<Fragment> list = new ArrayList<>();
+    CellPhoneFragment cellPhoneFragment;
+    AccountFragment accountFragment;
+    AddressListFragment addressListFragment;
+    SportFragment sportFragment;
+    IndexFragment indexFragment;
+    Intent intentCallPhone;
+    public static boolean isForeground = false;
+    public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
+    //重连时间
+    private int RECONNECT_TIME = 180000;
+    SocketConnection socketUdpConnection;
+    SocketConnection socketTcpConnection;
+    public static boolean isStartSdk = false;
+    public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
+    public static SendYiZhengService sendYiZhengService = null;
+    public static String confirmedPhoneNum;
+    Intent intent = new Intent("Notic");
+    //红点控制
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    tvRedDot04.setVisibility(View.VISIBLE);
+                    intent.putExtra("flg", true);
+                    break;
+                case 2:
+                    tvRedDot04.setVisibility(View.GONE);
+                    intent.putExtra("flg", false);
+                    break;
 
 
 			}
