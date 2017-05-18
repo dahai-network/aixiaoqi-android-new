@@ -139,6 +139,7 @@ public class DefinedToast implements IToast {
      * @return 自身对象
      */
     TextView tv;
+
     @Override
     public IToast setText(String text) {
 
@@ -155,6 +156,7 @@ public class DefinedToast implements IToast {
 
         return this;
     }
+
     @Override
     public void show() {
 
@@ -182,7 +184,6 @@ public class DefinedToast implements IToast {
         Log.d("cancel", "cancel: ");
         if (this.equals(mQueue.peek())) {
 
-
             mHandler.removeCallbacks(mActivite);
             mHandler.post(mHide);
             mHandler.post(mActivite);
@@ -196,9 +197,16 @@ public class DefinedToast implements IToast {
             if (mView.getParent() != null) {
                 mWindowManager.removeView(mView);
             }
-            Log.d("CommonTools", "handleShow: ");
+            try {
                 mWindowManager.addView(mView, mParams);
-        }
+            } catch (Exception e) {
+
+            }
+
+        }else
+            {
+                mQueue.poll();
+            }
     }
 
     private void handleHide() {
