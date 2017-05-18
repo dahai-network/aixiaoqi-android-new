@@ -537,7 +537,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							//不让无设备dialog弹出
 							if (noDevicedialog != null)
 								noDevicedialog.getDialog().dismiss();
-
 							slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
 							break;
 						case Constant.RETURN_POWER:
@@ -623,6 +622,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (object.getStatus() == 1) {
 				stopAnim();
 				registerSimStatu.setVisibility(GONE);
+				conStatusTextView.setVisibility(GONE);
 				firmwareTextView.setText("");
 				percentTextView.setVisibility(GONE);
 				macTextView.setText("");

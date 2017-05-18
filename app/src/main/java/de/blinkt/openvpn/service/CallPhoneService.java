@@ -34,7 +34,6 @@ import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.SecurityConfigHttp;
 import de.blinkt.openvpn.model.GetTokenRes;
-import de.blinkt.openvpn.model.ShowDeviceEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.PublicEncoderTools;
 import de.blinkt.openvpn.util.SharedUtils;

@@ -271,7 +271,7 @@ public class ReceiveSocketService extends Service {
 
 	private void createHeartBeatPackage() {
 		Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
-		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && am == null) {
+		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && (am == null||mJobScheduler==null)) {
 			count = count + 1;
             //5.0以上
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -328,10 +328,7 @@ public class ReceiveSocketService extends Service {
         if (SocketConstant.REGISTER_STATUE_CODE != 0) {
             SocketConstant.REGISTER_STATUE_CODE = 1;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (mJobScheduler != null)
-                mJobScheduler.cancelAll();
-        }
+
         super.onDestroy();
     }
 
@@ -340,6 +337,10 @@ public class ReceiveSocketService extends Service {
             am.cancel(sender);
             am = null;
         }
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if (mJobScheduler != null)
+				mJobScheduler.cancelAll();
+		}
     }
 
     CreateSocketLisener createSocketLisener;

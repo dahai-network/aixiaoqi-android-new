@@ -176,13 +176,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     if (tvNewVersion != null)
                         tvNewVersion.setVisibility(View.GONE);
                     break;
-                case SIGN_MSG_FIVE:
-                    showDeviceSummarized(true);
-                    break;
-                case SIGN_MSG_SIX:
-                    showDeviceSummarized(false);
-                    break;
-
 
             }
             EventBus.getDefault().post(new ChangeViewStateEvent(msg.what));
@@ -223,13 +216,25 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
     }
 
-    private void getDeviceType() {
-        if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))) {
-            CreateHttpFactory.instanceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
-        } else {
-            mHandler.sendEmptyMessage(5);
-        }
-    }
+	private void getDeviceType() {
+		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))) {
+			CreateHttpFactory.instanceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
+		} else {
+			showDeviceSummarized(true);
+			String typeText = "";
+			String deviceType = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+			if (!TextUtils.isEmpty(deviceType)) {
+				//0是手环，1是钥匙扣
+				if (deviceType.contains(MyDeviceActivity.UNITOYS)) {
+					typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
+				} else if (deviceType.contains(MyDeviceActivity.UNIBOX)) {
+					typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
+				}
+				showDeviceType(typeText);
+			}
+			setPowerPercent();
+		}
+	}
 
     /**
      * 设备布局
@@ -247,52 +252,59 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         }
     }
 
-    public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
-        try {
-            if (deviceType != null)
-                deviceNameTextView.setText(deviceType);
-            if (powerPercent != null)
-                setPowerPercent(powerPercent);
-            setRegisted(isRegisted);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setPowerPercent(String powerPercent) {
-        powerTextView.setText(powerPercent + "%");
-    }
+//	public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
+//		try {
+//
+//			showDeviceType(deviceType);
+//			setPowerPercent(powerPercent);
+//			setRegisted(isRegisted);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 
-    @Override
-    public void setRegisted(boolean isRegisted) {
-        if (isRegisted) {
-            signalIconImageView.setBackgroundResource(R.drawable.registed);
-            String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
-            if (operater != null) {
-                switch (operater) {
-                    case Constant.CHINA_TELECOM:
-                        operatorTextView.setText(getString(R.string.china_telecom));
-                        break;
-                    //中国移动
-                    case Constant.CHINA_MOBILE:
-                        operatorTextView.setText(getString(R.string.china_mobile));
-                        break;
-                    case Constant.CHINA_UNICOM:
-                        operatorTextView.setText(getString(R.string.china_unicom));
-                        break;
+	private void showDeviceType(String deviceType){
+		if (!TextUtils.isEmpty(deviceType))
+			deviceNameTextView.setText(deviceType);
+	}
+	//显示电量
+	public void setPowerPercent() {
+		Log.e(TAG,"PowerPercent="+SharedUtils.getInstance().readInt(Constant.BRACELETPOWER));
+		if (SharedUtils.getInstance().readInt(Constant.BRACELETPOWER)!=0)
+			powerTextView.setText(SharedUtils.getInstance().readInt(Constant.BRACELETPOWER) + "%");
+	}
 
-                }
-            }
-        } else {
-            if (signalIconImageView != null)
-                signalIconImageView.setBackgroundResource(R.drawable.unregist);
+	//控制注册信息
+	@Override
+	public void setRegisted(boolean isRegisted) {
+		if (isRegisted) {
+			signalIconImageView.setBackgroundResource(R.drawable.registed);
+			String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
+			if (operater != null) {
+				switch (operater) {
+					case Constant.CHINA_TELECOM:
+						operatorTextView.setText(getString(R.string.china_telecom));
+						break;
+					//中国移动
+					case Constant.CHINA_MOBILE:
+						operatorTextView.setText(getString(R.string.china_mobile));
+						break;
+					case Constant.CHINA_UNICOM:
+						operatorTextView.setText(getString(R.string.china_unicom));
+						break;
 
-            if (operatorTextView != null) {
-                operatorTextView.setText("----");
-            }
-        }
-    }
+				}
+			}
+		} else {
+			if (signalIconImageView != null)
+				signalIconImageView.setBackgroundResource(R.drawable.unregist);
+
+			if (operatorTextView != null) {
+				operatorTextView.setText("----");
+			}
+		}
+	}
 
     private void getData() {
 
@@ -449,33 +461,33 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
 
-        if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
-            BalanceHttp http = (BalanceHttp) object;
-            if (http.getBalanceEntity() != null)
-                balanceTextView.setText(ICSOpenVPNApplication.getInstance().getString(R.string.balance) + ": " + http.getBalanceEntity().getAmount()
-                        + ICSOpenVPNApplication.getInstance().getString(R.string.yuan));
-        } else if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
-            if (object.getStatus() == 1) {
-                SharedUtils.getInstance().delete(BRACELETPOWER);
-                SharedUtils.getInstance().delete(Constant.IMEI);
-                SharedUtils.getInstance().delete(BRACELETNAME);
-                SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
-                BluetoothConstant.IS_BIND = false;
-                //判断是否再次重连的标记
-                ICSOpenVPNApplication.isConnect = false;
-                ReceiveBLEMoveReceiver.isConnect = false;
-                // 解除绑定，注册失败不显示
-                EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
+		if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
+			BalanceHttp http = (BalanceHttp) object;
+			if (http.getBalanceEntity() != null)
+				balanceTextView.setText(ICSOpenVPNApplication.getInstance().getString(R.string.balance) + ": " + http.getBalanceEntity().getAmount()
+						+ ICSOpenVPNApplication.getInstance().getString(R.string.yuan));
+		} else if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
+			if (object.getStatus() == 1) {
+				SharedUtils.getInstance().delete(BRACELETPOWER);
+				SharedUtils.getInstance().delete(Constant.IMEI);
+				SharedUtils.getInstance().delete(BRACELETNAME);
+				SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
+				BluetoothConstant.IS_BIND = false;
+				//判断是否再次重连的标记
+				ICSOpenVPNApplication.isConnect = false;
+				ReceiveBLEMoveReceiver.isConnect = false;
+				// 解除绑定，注册失败不显示
+				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
 
 //				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
-                CommonTools.showShortToast(getActivity(), "已解绑设备");
-                ICSOpenVPNApplication.uartService.disconnect();
-                showDeviceSummarized(false);
-            } else {
-                CommonTools.showShortToast(getActivity(), object.getMsg());
-                Log.i(TAG, object.getMsg());
-            }
-        } else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
+				CommonTools.showShortToast(getActivity(), "已解绑设备");
+				ICSOpenVPNApplication.uartService.disconnect();
+				showDeviceSummarized(false);
+			} else {
+				CommonTools.showShortToast(getActivity(), object.getMsg());
+				Log.i(TAG, object.getMsg());
+			}
+		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
 
             if (object.getStatus() == 1) {
                 OrderUsageRemainHttp orderUsageRemainHttp = (OrderUsageRemainHttp) object;
@@ -537,8 +549,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
 			if (object.getStatus() == 1) {
 				if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
+					showDeviceSummarized(!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI()));
 					if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
-						mHandler.sendEmptyMessage(5);
 						SharedUtils.getInstance().writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI());
 						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
 						String typeText = "";
@@ -549,21 +561,19 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 							typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
 							SharedUtils.getInstance().writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
 						}
-						setSummarized(typeText, null, false);
+						showDeviceType(typeText);
 						if (isClickAddDevice) {
 							Intent intent = null;
 							intent = toActivity(intent, SharedUtils.getInstance().readString(Constant.BRACELETNAME));
 							startActivity(intent);
 						}
 
-                    } else {
-                        mHandler.sendEmptyMessage(6);
-                    }
-                }
-            }
-            isClickAddDevice = false;
-        }
-    }
+					}
+				}
+			}
+			isClickAddDevice = false;
+		}
+	}
 
     @Override
     public void errorComplete(int cmdType, String errorMessage) {
@@ -578,18 +588,15 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     }
 
 
-    @Override
-    protected void setBleStatus(String bleStatus) {
-        if (isAdded()) {
-            if (getString(R.string.index_un_insert_card).equals(bleStatus)
-                    || getString(R.string.index_unconnect).equals(bleStatus)
-                    || getString(R.string.index_registing).equals(bleStatus)) {
-                setRegisted(false);
-            } else if (getString(R.string.index_aixiaoqicard).equals(bleStatus)) {
-                operatorTextView.setText(getString(R.string.unitoy_card));
-            }
-        }
-    }
+	@Override
+	protected void setBleStatus(String bleStatus) {
+		Log.i(TAG,"bleStatus="+bleStatus);
+		if (isAdded()) {
+			if (getString(R.string.index_aixiaoqicard).equals(bleStatus)) {
+				operatorTextView.setText(getString(R.string.unitoy_card));
+			}
+		}
+	}
 
 
     public final String NoticSign = "flg";
