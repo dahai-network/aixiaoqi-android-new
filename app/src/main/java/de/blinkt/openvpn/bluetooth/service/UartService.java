@@ -52,7 +52,7 @@ public class UartService extends Service implements Serializable {
 	private final static String TAG = UartService.class.getSimpleName();
 
 	private BluetoothManager mBluetoothManager;
-	private BluetoothAdapter mBluetoothAdapter;
+	public BluetoothAdapter mBluetoothAdapter;
 	private BluetoothGatt mBluetoothGatt;
 	public int mConnectionState = STATE_DISCONNECTED;
 

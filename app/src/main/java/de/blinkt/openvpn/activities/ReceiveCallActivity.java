@@ -60,7 +60,6 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	private TextView hangUpBtn;
 	private LinearLayout llControlVoide;
 	private SipEngineCore sipEngineCore;
-	private int notifyId=101;
 	private ReceiveCallReceiver receiver;
 	public SQLiteDatabase sqliteDB;
 	public DatabaseDAO dao;
@@ -290,12 +289,12 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 		public void onReceive(Context context, Intent intent) {
 			String action=intent.getAction();
 			if(CallPhoneService.endFlag.equals(action)){
+
 				if(CallPhoneService.CALL_DIR==0){
 					cancelNotify();
 					stopTimer();
 					if(!isDestroyed())
 						try {
-
 							onBackPressed();
 						}catch (Exception e){
 

@@ -28,19 +28,18 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
+import de.blinkt.openvpn.service.SimRegisterFlowService;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 
 /**
  * 自启动
  */
-public class StartBroadcast extends BroadcastReceiver implements InterfaceCallback{
+public class StartBroadcast extends BroadcastReceiver  {
 
 	private static final String TAG = "StartBroadcast";
 	BluetoothManager mBluetoothManager;
 	BluetoothAdapter mBluetoothAdapter;
-	private String deviceAddress;
-	private UartService mService;
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.w(TAG, "StartBroadcast receive action is " + intent.getAction());
@@ -56,26 +55,11 @@ public class StartBroadcast extends BroadcastReceiver implements InterfaceCallba
 
 				return;
 			}else{
-				//本地是否保存有设备地址和设备类型
-				if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))||TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))){
-					//如果没有保存设备地址和设备类型则去请求
-						CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
-				}else{
-					//有绑定过，则搜索设备，没有搜索到，就用通知栏的方式提示用户
-					BluetoothConstant.IS_BIND = true;
-					//搜索到设备，则连接设备。
-					if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
-						Intent bindIntent = new Intent(context, UartService.class);
-						try {
-//							context.bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-						} catch (Exception e) {
-//							initBrocast();
-							e.printStackTrace();
-						}
-					}
 
+				if (!ICSOpenVPNApplication.getInstance().isServiceRunning(SimRegisterFlowService.class.getName())) {
+					Intent intentSimRegisterFlow = new Intent(context, SimRegisterFlowService.class);
+					context.startService(intentSimRegisterFlow);
 				}
-
 			}
 
 
@@ -83,28 +67,7 @@ public class StartBroadcast extends BroadcastReceiver implements InterfaceCallba
 		}
 	}
 
-//	private ServiceConnection mServiceConnection = new ServiceConnection() {
-//		public void onServiceConnected(ComponentName className, IBinder rawBinder) {
-//			mService = ((UartService.LocalBinder) rawBinder).getService();
-//			//存在Application供全局使用
-//			ICSOpenVPNApplication.uartService = mService;
-//			initBrocast();
-//		}
-//
-//		public void onServiceDisconnected(ComponentName classname) {
-//			mService = null;
-//		}
-//	};
-//	private void initBrocast() {
-//		if (bleMoveReceiver == null) {
-//			bleMoveReceiver = new ReceiveBLEMoveReceiver();
-//			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(bleMoveReceiver, makeGattUpdateIntentFilter());
-//			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(updateIndexTitleReceiver, makeGattUpdateIntentFilter());
-//			registerReceiver(screenoffReceive, screenoffIntentFilter());
-//			//打开蓝牙服务后开始搜索
-//			searchBLE();
-//		}
-//	}
+
 
 	private boolean initialize(Context context) {
 		// For API level 18 and above, get a reference to BluetoothAdapter through
@@ -128,54 +91,11 @@ public class StartBroadcast extends BroadcastReceiver implements InterfaceCallba
 
 	private boolean isBluetoothOpen() {
 		if(mBluetoothAdapter!=null)
-		return mBluetoothAdapter.isEnabled();
+			return mBluetoothAdapter.isEnabled();
 		else{
 			return false;
 		}
 	}
 
-	@Override
-	public void rightComplete(int cmdType, CommonHttp object) {
-		//如果没有绑定过则所有的操作结束。否则继续下面的操作
-		if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
-			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
-			if (object.getStatus() == 1) {
-				if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
-					if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
-						deviceAddress = getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI();
-						if (deviceAddress != null) {
-							deviceAddress = deviceAddress.toUpperCase();
-							BluetoothConstant.IS_BIND = true;
-						}
-						SharedUtils utils = SharedUtils.getInstance();
 
-						utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
-						//按MAC地址保存版本号
-						if (!TextUtils.isEmpty(deviceAddress))
-							utils.writeString(deviceAddress, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
-						//防止返回“”或者null
-						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
-						if (!TextUtils.isEmpty(deviceTypeStr)) {
-							int deviceType = Integer.parseInt(deviceTypeStr);
-							if (deviceType == 0) {
-								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
-							} else {
-								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
-
-	}
-
-	@Override
-	public void noNet() {
-
-	}
 }

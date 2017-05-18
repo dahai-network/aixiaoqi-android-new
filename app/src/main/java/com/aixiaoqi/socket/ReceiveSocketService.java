@@ -271,21 +271,19 @@ public class ReceiveSocketService extends Service {
 
 	private void createHeartBeatPackage() {
 		Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
-		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && am == null) {
+		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && (am == null||mJobScheduler==null)) {
 			count = count + 1;
-			Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
-			intent.setAction(HEARTBEAT_PACKET_TIMER);
-			sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
-			am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),TCP_HEART_TIME*1000, sender);
-
-
             //5.0以上
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
                 jobEvent();
 
             } else {
+				Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
+				intent.setAction(HEARTBEAT_PACKET_TIMER);
+				sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
+				am = (AlarmManager) getSystemService(ALARM_SERVICE);
+				am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),TCP_HEART_TIME*1000, sender);
                 am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, TCP_HEART_TIME * 1000, sender);
             }
 
@@ -296,7 +294,6 @@ public class ReceiveSocketService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void jobEvent() {
-
         mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
         JobInfo.Builder builder = new JobInfo.Builder(1,
@@ -333,10 +330,7 @@ public class ReceiveSocketService extends Service {
         if (SocketConstant.REGISTER_STATUE_CODE != 0) {
             SocketConstant.REGISTER_STATUE_CODE = 1;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (mJobScheduler != null)
-                mJobScheduler.cancelAll();
-        }
+
         super.onDestroy();
     }
 
@@ -345,6 +339,10 @@ public class ReceiveSocketService extends Service {
             am.cancel(sender);
             am = null;
         }
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if (mJobScheduler != null)
+				mJobScheduler.cancelAll();
+		}
     }
 
     CreateSocketLisener createSocketLisener;

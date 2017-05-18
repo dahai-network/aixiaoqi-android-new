@@ -125,25 +125,22 @@ public class BaseStatusFragment extends Fragment {
 
     }*/
 
-	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
-	public void showDevice(ShowDeviceEntity entity) {
+//	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
+//	public void showDevice(ShowDeviceEntity entity) {
+//		if (!entity.isShowDevice()) {
+//			setRegisted(false);
+//			if (!ICSOpenVPNApplication.isConnect)
+//				topProgressGone();
+//		}
+//	}
 
-		// showDeviceSummarized(entity.isShowDevice());
-
-		if (!entity.isShowDevice()) {
-			setRegisted(false);
-			if (!ICSOpenVPNApplication.isConnect)
-				topProgressGone();
-		}
-	}
-
-	@Subscribe(threadMode = ThreadMode.MAIN)
-	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
-		//如果拔掉卡就让进度条消失
-		if (getString(R.string.index_un_insert_card).equals(entity.getStatus())) {
-			topProgressGone();
-		}
-	}
+	//	@Subscribe(threadMode = ThreadMode.MAIN)
+//	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
+//		//如果拔掉卡就让进度条消失
+//		if (getString(R.string.index_un_insert_card).equals(entity.getStatus())) {
+//
+//		}
+//	}
 	//接收到到卡注册状态作出相应的操作
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(SimRegisterStatue entity) {
@@ -156,21 +153,22 @@ public class BaseStatusFragment extends Fragment {
 				break;
 			case SocketConstant.REGISTER_FAIL:
 				bleStatus=getString(R.string.index_regist_fail);
+				setRegisted(false);
 				topProgressGone();
 				break;
 			case SocketConstant.UNREGISTER://未注册
 				showStatue(entity);
+				setRegisted(false);
 				break;
 			case SocketConstant.REGISTERING:
 				if(SocketConstant.REGISTER_STATUE_CODE!=3){
-				bleStatus=getString(R.string.index_registing);
-				registeringReason(entity);
+					bleStatus=getString(R.string.index_registing);
+					registeringReason(entity);
+					setRegisted(false);
 				}
 				break;
-
-
 		}
-		Log.e("AccountFragment","bleStatus111="+bleStatus);
+		Log.e("AccountFragment","bleStatus111="+bleStatus+"/StatueReason:"+entity.getRigsterStatueReason());
 		setBleStatus(bleStatus);
 	}
 	protected  void setBleStatus(String bleStatus){
@@ -179,43 +177,45 @@ public class BaseStatusFragment extends Fragment {
 	protected  String bleStatus;
 
 	private void showStatue(SimRegisterStatue entity){
-switch (entity.getRigsterStatueReason()){
-	case SocketConstant.UN_INSERT_CARD:
-		bleStatus=getString(R.string.index_un_insert_card);
-		break;
-	case SocketConstant.AIXIAOQI_CARD:
-		bleStatus=getString(R.string.index_aixiaoqicard);
-	case SocketConstant.CONNECTING_DEVICE:
-		bleStatus=getString(R.string.index_connecting);
-		break;
-}
+		switch (entity.getRigsterStatueReason()){
+			case SocketConstant.UN_INSERT_CARD:
+				bleStatus=getString(R.string.index_un_insert_card);
+				topProgressGone();
+				break;
+			case SocketConstant.AIXIAOQI_CARD:
+				bleStatus=getString(R.string.index_aixiaoqicard);
+				break;
+			case SocketConstant.CONNECTING_DEVICE:
+				bleStatus=getString(R.string.index_connecting);
+				break;
+		}
 
 	}
 
 	private void 	registeringReason(SimRegisterStatue entity){
 //		switch (entity.getRigsterSimStatue()){
 //			case SocketConstant.UP:
-				double percent = entity.getProgressCount();
-				if (topProgressView.getVisibility() != View.VISIBLE && SocketConstant.REGISTER_STATUE_CODE != 3) {
-					topProgressView.setVisibility(View.VISIBLE);
-					topProgressView.setContent(getString(R.string.registing));
-					topProgressView.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-							if (braceletName != null) {
-								Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
-								intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
-								startActivity(intent);
-							}
-						}
-					});
-					int percentInt = (int) (percent / 1.6);
-					if (percentInt >= 100) {
-						percentInt = 98;
+		double percent = entity.getProgressCount();
+		if (topProgressView.getVisibility() != View.VISIBLE && SocketConstant.REGISTER_STATUE_CODE != 3) {
+			topProgressView.setVisibility(View.VISIBLE);
+			topProgressView.setContent(getString(R.string.registing));
+			topProgressView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+					if (braceletName != null) {
+						Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
+						intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
+						startActivity(intent);
 					}
-					topProgressView.setProgress(percentInt);
 				}
+			});
+			int percentInt = (int) (percent / 1.6);
+			if (percentInt >= 100) {
+				percentInt = 98;
+			}
+			topProgressView.setProgress(percentInt);
+		}
 
 
 	}
