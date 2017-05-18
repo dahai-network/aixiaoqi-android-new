@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.aixiaoqi.socket.SocketConstant;
 
 import de.blinkt.openvpn.activities.ProMainActivity;
+import de.blinkt.openvpn.constant.Constant;
 
 /**
  * Created by kim
@@ -23,14 +24,17 @@ public class JobSchedulerService extends JobService {
     private Handler mJobHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-
-            Log.d("JobSchedulerService", "handleMessage: 发送心跳包");
-
-            if (ProMainActivity.sendYiZhengService != null) {
-                ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
-            } else {
-                Log.e("JobSchedulerService", "AutoReceiver 异常！");
+            switch (msg.what) {
+                case Constant.TYPE_ONE:
+                    Log.d("JobSchedulerService", "handleMessage: 发送心跳包");
+                    if (ProMainActivity.sendYiZhengService != null) {
+                        ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
+                    } else {
+                        Log.e("JobSchedulerService", "AutoReceiver 异常！");
+                    }
+                    break;
             }
+
             jobFinished((JobParameters) msg.obj, false);
             return true;
         }
@@ -38,7 +42,8 @@ public class JobSchedulerService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        mJobHandler.sendMessage(Message.obtain(mJobHandler, 1, params));
+        Log.d("JobSchedulerService", "onStartJob: " + params.getJobId());
+        mJobHandler.sendMessage(Message.obtain(mJobHandler, params.getJobId(), params));
         return true;
     }
 

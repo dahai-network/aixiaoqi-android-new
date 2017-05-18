@@ -275,7 +275,7 @@ public class ReceiveSocketService extends Service {
 			count = count + 1;
             //5.0以上
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
+                //Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
                 jobEvent();
 
             } else {
@@ -291,12 +291,10 @@ public class ReceiveSocketService extends Service {
     }
 
     JobScheduler mJobScheduler;
-
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void jobEvent() {
         mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-
-        JobInfo.Builder builder = new JobInfo.Builder(1,
+        JobInfo.Builder builder = new JobInfo.Builder(Constant.TYPE_ONE,
                 new ComponentName(getPackageName(), JobSchedulerService.class.getName()));
         builder.setPeriodic(TCP_HEART_TIME * 1000);
         if (mJobScheduler.schedule(builder.build()) <= 0) {
