@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -39,6 +40,7 @@ import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.BalanceParticularsActivity;
 import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
+import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
 import de.blinkt.openvpn.activities.ImportantAuthorityActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.PackageCategoryActivity;
@@ -328,29 +330,15 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 			R.id.rl_people_center,
 			R.id.permission_set,
 			R.id.unBindTextView,
-			R.id.going_buy
+			R.id.going_buy,
+			R.id.serviceTextView
 	})
 
 	public void onClick(View v) {
 		Intent intent = null;
 		switch (v.getId()) {
 			case R.id.activateRelativeLayout:
-				//友盟方法统计
-				MobclickAgent.onEvent(getActivity(), CLICKMYPACKAGE);
-				if (!hasPackage) {
-
-					intent = new Intent(getActivity(), PackageMarketActivity.class);
-					intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
-				} else {
-					intent = new Intent(getActivity(), PackageCategoryActivity.class);
-
-					if (tvNewPackagetAction.getVisibility() == View.VISIBLE) {
-						mHandler.sendEmptyMessage(2);
-					}
-				}
-
-				//记录点击状态
-				AppMode.getInstance().isClickPackage = true;
+				intent = activateClick();
 				break;
 			case R.id.addDeviceRelativeLayout:
 //				if (CommonTools.isFastDoubleClick(1000)) {
@@ -408,9 +396,38 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				intent = new Intent(getActivity(), PackageMarketActivity.class);
 				intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
 				break;
+			case R.id.serviceTextView:
+				if ("---".equals(serviceTextView.getText().toString())) {
+					intent = new Intent(getActivity(), FreeWorryPacketChoiceActivity.class);
+					startActivity(intent);
+				} else {
+					intent = activateClick();
+				}
+				break;
 		}
 		getActivity().startActivity(intent);
 
+	}
+
+	@NonNull
+	private Intent activateClick() {
+		Intent intent;//友盟方法统计
+		MobclickAgent.onEvent(getActivity(), CLICKMYPACKAGE);
+		if (!hasPackage) {
+
+			intent = new Intent(getActivity(), PackageMarketActivity.class);
+			intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
+		} else {
+			intent = new Intent(getActivity(), PackageCategoryActivity.class);
+
+			if (tvNewPackagetAction.getVisibility() == View.VISIBLE) {
+				mHandler.sendEmptyMessage(2);
+			}
+		}
+
+		//记录点击状态
+		AppMode.getInstance().isClickPackage = true;
+		return intent;
 	}
 
 	private Intent toActivity(Intent intent, String braceletName) {
@@ -503,8 +520,10 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 					packageAllCount.setText(used.getTotalNum());
 					String serviceName = used.getServiceName();
 					if (!TextUtils.isEmpty(serviceName)) {
+						SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
 						serviceTextView.setText(serviceName);
 					} else {
+						SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
 						serviceTextView.setText("---");
 					}
 				}

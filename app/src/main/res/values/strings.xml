@@ -679,6 +679,7 @@
     <string name="price_everymonth">现优惠：%1$s元/月</string>
     <string name="origin_price">原价：%1$s元/月</string>
     <string name="vertify_success">验证成功！</string>
+    <string name="vertify_overtime">验证失败！请检查您的手机号码是否正确。</string>
     <string name="vertifying">验证中...</string>
     <string name="please_regist_confirmed">请注册和验证手机！</string>
     <string name="phone_in_device">设备内号码：</string>

@@ -214,7 +214,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 						inlandReset.setVisibility(GONE);
 						dateTitleTextView.setVisibility(GONE);
 						dateTextView.setVisibility(GONE);
-					} else if ("4".equals(bean.getPackageCategory())) {
+					} else if ("4".equals(bean.getPackageCategory()) || "5".equals(bean.getPackageCategory())) {
 						activateTextView.setVisibility(GONE);
 						aboardHowToUse.setVisibility(GONE);
 						inlandReset.setVisibility(GONE);
@@ -410,11 +410,11 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 			case R.id.orderDetailTitleRelativeLayout:
 				if ("1".equals(bean.getPackageCategory())) {
 					CallTimePacketDetailActivity.launch(this, bean.getPackageId());
-				}
-				else if ("4".equals(bean.getPackageCategory())){
-					CallTimePacketDetailActivity.launch(this, bean.getPackageId(), this.getString(R.string.receive_fw), bean.getOrderStatus()==2);
-				}
-				else {
+				} else if ("4".equals(bean.getPackageCategory())) {
+					CallTimePacketDetailActivity.launch(this, bean.getPackageId(), this.getString(R.string.receive_fw), bean.getOrderStatus() == 2);
+				} else if ("5".equals(bean.getPackageCategory())) {
+					FreeWorryIntroActivity.launch(this, bean.getPackageId());
+				} else {
 					PackageDetailActivity.launch(this, bean.getPackageId(), bean.getPic());
 				}
 				break;

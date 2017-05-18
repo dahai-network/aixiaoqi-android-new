@@ -3,9 +3,11 @@ package de.blinkt.openvpn.activities;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -14,10 +16,12 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
+import de.blinkt.openvpn.http.CheckConfirmedHttp;
 import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.GetCurrentHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
+
+import static de.blinkt.openvpn.activities.ProMainActivity.confirmedPhoneNum;
 
 public class VertifyPhoneNumActivity extends BaseNetActivity {
 
@@ -33,6 +37,8 @@ public class VertifyPhoneNumActivity extends BaseNetActivity {
 			checkIsConFirmed();
 		}
 	};
+	//单线程线程池
+	private ExecutorService pool = Executors.newFixedThreadPool(2);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,31 +57,56 @@ public class VertifyPhoneNumActivity extends BaseNetActivity {
 		createHttpRequest(HttpConfigUrl.COMTYPE_CONFIRMED, phoneNumEditText.getText().toString(),
 				SharedUtils.getInstance().readString(Constant.ICCID));//服务器验证操作
 		showProgress(R.string.vertifying);
+		pool.execute(new Runnable() {
+			@Override
+			public void run() {
+				CommonTools.delayTime(6000);
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						CommonTools.showShortToast(VertifyPhoneNumActivity.this, getString(R.string.vertify_success));
+						finish();
+					}
+				});
+			}
+		});
 		checkIsConFirmed();
 	}
 
 	private void checkIsConFirmed() {
-		createHttpRequest(HttpConfigUrl.COMTYPE_GETCURRENT);
+
+		createHttpRequest(HttpConfigUrl.COMTYPE_CHECK_CONFIRMED, SharedUtils.getInstance().readString(Constant.ICCID));
 	}
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
-		if (cmdType == HttpConfigUrl.COMTYPE_GETCURRENT) {
-			GetCurrentHttp http = (GetCurrentHttp) object;
-			if (!TextUtils.isEmpty(http.getEntity().getTel())) {
-				CommonTools.showShortToast(this, getString(R.string.vertify_success));
-				dismissProgress();
-				finish();
+		if (cmdType == HttpConfigUrl.COMTYPE_CHECK_CONFIRMED) {
+			CheckConfirmedHttp http = (CheckConfirmedHttp) object;
+			if (http.getStatus() == 1) {
+				if (http.getEntity().isIsConfirmed()) {
+					dismissProgress();
+					confirmedPhoneNum = http.getEntity().getTel();
+					CommonTools.showShortToast(this, getString(R.string.vertify_success));
+					finish();
+				} else {
+					pool.execute(new Thread(new Runnable() {
+						@Override
+						public void run() {
+							CommonTools.delayTime(3000);
+							handler.sendEmptyMessage(0);
+						}
+					}));
+				}
 			} else {
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						CommonTools.delayTime(3000);
-						handler.sendEmptyMessage(0);
-					}
-				}).start();
-
+				CommonTools.showShortToast(this, http.getMsg());
 			}
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		pool.shutdown();
+		pool = null;
 	}
 }
