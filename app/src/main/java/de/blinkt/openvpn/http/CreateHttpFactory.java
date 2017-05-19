@@ -214,6 +214,9 @@ public class CreateHttpFactory {
 			case HttpConfigUrl.COMTYPE_GET_ATTRS_BY_ID://获取
 				startHttp(new GetAttrsByIdHttp(interfaceCallback, cmdType, params));
 				break;
+			case HttpConfigUrl.COMTYPE_CREATE_ORDER://创建订单
+				startHttp(new OrderAddHttp(interfaceCallback, cmdType, params));
+				break;
 		}
 	}
 

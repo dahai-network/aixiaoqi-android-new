@@ -24,7 +24,6 @@ public class CommitFreeWorryAdapter extends RecyclerView.Adapter<CommitFreeWorry
 	private Context context;
 	private OnClickItemLisener lisener;
 	private int choicePosition;
-//	public static final int
 
 	public CommitFreeWorryAdapter(Context context, ArrayList<String> data, OnClickItemLisener lisener) {
 		this.context = context;
@@ -34,7 +33,6 @@ public class CommitFreeWorryAdapter extends RecyclerView.Adapter<CommitFreeWorry
 
 	public void setCheck(int position) {
 		this.choicePosition = position;
-		notifyDataSetChanged();
 	}
 
 

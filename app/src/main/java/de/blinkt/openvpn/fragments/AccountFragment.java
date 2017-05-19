@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -39,6 +40,7 @@ import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.BalanceParticularsActivity;
 import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
+import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
 import de.blinkt.openvpn.activities.ImportantAuthorityActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.PackageCategoryActivity;
@@ -337,108 +339,123 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
     private boolean isClickAddDevice = false;
 
-    @OnClick({R.id.rechargeTextView,
-            R.id.activateRelativeLayout,
-            R.id.billtv,
-            R.id.addDeviceRelativeLayout,
-            R.id.tv_setting,
-            R.id.rl_people_center,
-            R.id.permission_set,
-            R.id.unBindTextView,
-            R.id.going_buy
-    })
+	@OnClick({R.id.rechargeTextView,
+			R.id.activateRelativeLayout,
+			R.id.billtv,
+			R.id.addDeviceRelativeLayout,
+			R.id.tv_setting,
+			R.id.rl_people_center,
+			R.id.permission_set,
+			R.id.unBindTextView,
+			R.id.going_buy,
+			R.id.serviceTextView
+	})
 
-    public void onClick(View v) {
-        Intent intent = null;
-        switch (v.getId()) {
-            case R.id.activateRelativeLayout:
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKMYPACKAGE);
-                if (!hasPackage) {
-
-                    intent = new Intent(getActivity(), PackageMarketActivity.class);
-                    intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
-                } else {
-                    intent = new Intent(getActivity(), PackageCategoryActivity.class);
-
-                    if (tvNewPackagetAction.getVisibility() == View.VISIBLE) {
-                        mHandler.sendEmptyMessage(2);
-                    }
-                }
-
-                //记录点击状态
-                AppMode.getInstance().isClickPackage = true;
-                break;
-            case R.id.addDeviceRelativeLayout:
+	public void onClick(View v) {
+		Intent intent = null;
+		switch (v.getId()) {
+			case R.id.activateRelativeLayout:
+				intent = activateClick();
+				break;
+			case R.id.addDeviceRelativeLayout:
 //				if (CommonTools.isFastDoubleClick(1000)) {
 //					return;
 //				}
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKMYDEVICE);
-                if (deviceSummarizedRelativeLayout.getVisibility() == View.GONE) {
-                    BluetoothConstant.IS_BIND = false;
-                }
-                if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-                    intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
-                } else {
-                    String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-                    //如果设备名没有就设置成爱小器钥匙扣
-                    if (TextUtils.isEmpty(braceletName)) {
-                        if (NetworkUtils.isNetworkAvailable(getActivity())) {
-                            isClickAddDevice = true;
-                            getDeviceType();
-                        } else {
-                            CommonTools.showShortToast(getActivity(), getActivity().getString(R.string.no_wifi));
-                        }
-                        return;
-                    }
-                    intent = toActivity(intent, braceletName);
-                }
-                break;
-            case R.id.permission_set:
-                intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
-                break;
-            case R.id.tv_setting:
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKSET);
-                intent = new Intent(getActivity(), SettingActivity.class);
-                break;
-            case R.id.rl_people_center:
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKENTERPERSONCENTER);
-                intent = new Intent(getActivity(), PersonalCenterActivity.class);
-                break;
-            case R.id.billtv:
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKBALANCE);
-                intent = new Intent(getActivity(), BalanceParticularsActivity.class);
-                break;
-            case R.id.rechargeTextView:
-                //友盟方法统计
-                MobclickAgent.onEvent(getActivity(), CLICKRECHARGE);
-                intent = new Intent(getActivity(), RechargeActivity.class);
-                break;
-            case R.id.unBindTextView:
-                showDialog();
-                return;
-            case R.id.going_buy:
-                intent = new Intent(getActivity(), PackageMarketActivity.class);
-                intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
-                break;
-        }
-        getActivity().startActivity(intent);
+				//友盟方法统计
+				MobclickAgent.onEvent(getActivity(), CLICKMYDEVICE);
+				if (deviceSummarizedRelativeLayout.getVisibility() == View.GONE) {
+					BluetoothConstant.IS_BIND = false;
+				}
+				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
+					intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
+				} else {
+					String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+					//如果设备名没有就设置成爱小器钥匙扣
+					if (TextUtils.isEmpty(braceletName)) {
+						if (NetworkUtils.isNetworkAvailable(getActivity())) {
+							isClickAddDevice = true;
+							getDeviceType();
+						} else {
+							CommonTools.showShortToast(getActivity(), getActivity().getString(R.string.no_wifi));
+						}
+						return;
+					}
+					intent = toActivity(intent, braceletName);
+				}
+				break;
+			case R.id.permission_set:
+				intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
+				break;
+			case R.id.tv_setting:
+				//友盟方法统计
+				MobclickAgent.onEvent(getActivity(), CLICKSET);
+				intent = new Intent(getActivity(), SettingActivity.class);
+				break;
+			case R.id.rl_people_center:
+				//友盟方法统计
+				MobclickAgent.onEvent(getActivity(), CLICKENTERPERSONCENTER);
+				intent = new Intent(getActivity(), PersonalCenterActivity.class);
+				break;
+			case R.id.billtv:
+				//友盟方法统计
+				MobclickAgent.onEvent(getActivity(), CLICKBALANCE);
+				intent = new Intent(getActivity(), BalanceParticularsActivity.class);
+				break;
+			case R.id.rechargeTextView:
+				//友盟方法统计
+				MobclickAgent.onEvent(getActivity(), CLICKRECHARGE);
+				intent = new Intent(getActivity(), RechargeActivity.class);
+				break;
+			case R.id.unBindTextView:
+				showDialog();
+				return;
+			case R.id.going_buy:
+				intent = new Intent(getActivity(), PackageMarketActivity.class);
+				intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
+				break;
+			case R.id.serviceTextView:
+				if ("---".equals(serviceTextView.getText().toString())) {
+					intent = new Intent(getActivity(), FreeWorryPacketChoiceActivity.class);
+					startActivity(intent);
+				} else {
+					intent = activateClick();
+				}
+				break;
+		}
+		getActivity().startActivity(intent);
 
     }
 
-    private Intent toActivity(Intent intent, String braceletName) {
-        intent = new Intent(getActivity(), MyDeviceActivity.class);
-        AppMode.getInstance().isClickAddDevice = true;
-        mHandler.sendEmptyMessage(4);
-        intent.putExtra(BRACELETTYPE, braceletName);
-        Log.e(TAG, "bleStatus" + bleStatus);
-        intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, bleStatus);
-        return intent;
-    }
+	@NonNull
+	private Intent activateClick() {
+		Intent intent;//友盟方法统计
+		MobclickAgent.onEvent(getActivity(), CLICKMYPACKAGE);
+		if (!hasPackage) {
+
+			intent = new Intent(getActivity(), PackageMarketActivity.class);
+			intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
+		} else {
+			intent = new Intent(getActivity(), PackageCategoryActivity.class);
+
+			if (tvNewPackagetAction.getVisibility() == View.VISIBLE) {
+				mHandler.sendEmptyMessage(2);
+			}
+		}
+
+		//记录点击状态
+		AppMode.getInstance().isClickPackage = true;
+		return intent;
+	}
+
+	private Intent toActivity(Intent intent, String braceletName) {
+		intent = new Intent(getActivity(), MyDeviceActivity.class);
+		AppMode.getInstance().isClickAddDevice = true;
+		mHandler.sendEmptyMessage(4);
+		intent.putExtra(BRACELETTYPE, braceletName);
+		Log.e(TAG, "bleStatus" + bleStatus);
+		intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, bleStatus);
+		return intent;
+	}
 
 
     @Override
@@ -520,8 +537,10 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 					packageAllCount.setText(used.getTotalNum());
 					String serviceName = used.getServiceName();
 					if (!TextUtils.isEmpty(serviceName)) {
+						SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
 						serviceTextView.setText(serviceName);
 					} else {
+						SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
 						serviceTextView.setText("---");
 					}
 				}

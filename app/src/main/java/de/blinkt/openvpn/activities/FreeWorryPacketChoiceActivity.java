@@ -57,6 +57,11 @@ public class FreeWorryPacketChoiceActivity extends BaseNetActivity implements XR
 		createHttpRequest(HttpConfigUrl.COMTYPE_GET_RELAXED);
 	}
 
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		onRefresh();
+	}
 
 	@Override
 	public void onRefresh() {
