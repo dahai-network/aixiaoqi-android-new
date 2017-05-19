@@ -240,6 +240,7 @@
             android:enabled="true"
             android:exported="false"/>
         <service android:name="de.blinkt.openvpn.service.GrayService"/>
+        <service android:name="de.blinkt.openvpn.service.SimRegisterFlowService"/>
         <service android:name="de.blinkt.openvpn.service.GrayService$GrayInnerService"/>
         <service
             android:name="cn.jpush.android.service.PushService"

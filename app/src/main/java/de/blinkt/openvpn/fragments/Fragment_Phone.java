@@ -201,7 +201,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 					}
 				}
 			});
-
 		}
 	}
 
@@ -209,6 +208,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	 * 跳转到权限设置界面
 	 */
 	private void searchContactRedocer() {
+		Log.e(TAG,"time="+System.currentTimeMillis());
 		AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, getActivity().getContentResolver(), false);
 		FindContactUtil.queryContactRecoderData(asyncQueryContactRecodeHandler);
 
@@ -225,6 +225,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 			rl_no_permission.setVisibility(View.GONE);
 			mAllList = mAllLists;
 			contactRecodeAdapter.addAll(mAllList);
+			Log.e(TAG,"time111="+System.currentTimeMillis());
 		}
 
 

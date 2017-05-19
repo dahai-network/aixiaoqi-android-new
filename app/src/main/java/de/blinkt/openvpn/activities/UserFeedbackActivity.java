@@ -22,7 +22,6 @@ import de.blinkt.openvpn.http.UserFeedBackHttp;
 import de.blinkt.openvpn.util.CommonTools;
 
 public class UserFeedbackActivity extends BaseNetActivity   {
-
 	@BindView(R.id.infoEditText)
 	EditText infoEditText;
 	@BindView(R.id.sendBtn)
@@ -39,24 +38,6 @@ public class UserFeedbackActivity extends BaseNetActivity   {
 	private void init() {
 		hasLeftViewTitle(R.string.user_feedback,0);
 	}
-
-	//获取当前版本号
-	private String getAppVersionName(Context context) {
-		String versionName = "";
-		try {
-			PackageManager packageManager = context.getPackageManager();
-			PackageInfo packageInfo = packageManager.getPackageInfo("cn.com.aixiaoqi", 0);
-			versionName = packageInfo.versionName;
-			if (TextUtils.isEmpty(versionName)) {
-				return "";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return versionName;
-	}
-
-
 	@OnClick(R.id.sendBtn)
 	public void onClick() {
 		if(TextUtils.isEmpty(infoEditText.getText().toString().trim())){
@@ -71,14 +52,13 @@ public class UserFeedbackActivity extends BaseNetActivity   {
 			CommonTools.showShortToast(this,getString(R.string.feedback_content_is_too_long));
 			return;
 		}
-		createHttpRequest( HttpConfigUrl.COMTYPE_USER_FEED_BACK,Build.MANUFACTURER + Build.BRAND + Build.MODEL, "" + getAppVersionName(this), infoEditText.getText().toString());
+		createHttpRequest( HttpConfigUrl.COMTYPE_USER_FEED_BACK,Build.MANUFACTURER + Build.BRAND + Build.MODEL, "" + CommonTools.getVersion(this), infoEditText.getText().toString());
 	}
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
 
 		if (object.getStatus() == 1) {
-
 			finish();
 		}
 		CommonTools.showShortToast(UserFeedbackActivity.this, object.getMsg());

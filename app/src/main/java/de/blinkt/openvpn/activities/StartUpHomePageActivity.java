@@ -14,13 +14,14 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.OutsideAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
+import de.blinkt.openvpn.util.PageChangeListener;
 
 
 /**
  * Created by Administrator on 2017/3/22 0022.
  */
 
-public class StartUpHomePageActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
+public class StartUpHomePageActivity extends BaseActivity implements  View.OnClickListener {
 
 	private ViewPager viewPager;
 	private ArrayList<View> list;
@@ -81,7 +82,12 @@ public class StartUpHomePageActivity extends BaseActivity implements ViewPager.O
 
 
 		viewPager.setAdapter(new OutsideAdapter(list));
-		viewPager.setOnPageChangeListener(this);
+		new PageChangeListener(viewPager){
+			@Override
+			public void pageSelected(int position) {
+				setImageBackground(position % list.size());
+			}
+		};
 		viewPager.setCurrentItem(0);
 	}
 
@@ -99,28 +105,13 @@ public class StartUpHomePageActivity extends BaseActivity implements ViewPager.O
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.experience_iv:
-
 				toActivity(ImportantAuthorityActivity.class);
-//				toActivity(LoginMainActivity.class);
 				finish();
 				break;
 		}
 	}
 
-	@Override
-	public void onPageScrollStateChanged(int arg0) {
 
-	}
-
-	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-	}
-
-	@Override
-	public void onPageSelected(int arg0) {
-		setImageBackground(arg0 % list.size());
-	}
 
 	private void setImageBackground(int selectItems) {
 		int length = imageViews.length;

@@ -100,10 +100,10 @@ public class ReceiveSocketService extends Service {
 		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
 			Log.e("Blue_Chanl", "onReceive");
 			String receiveData=HexStringExchangeBytesUtil.bytesToHexString(s, length);
+			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n"+receiveData);
 			if(receiveData.startsWith(SocketConstant.RECEIVE_CONNECTION)){
 				receiveConnectionTime=sendConnectionTime;
 				sendConnectionType="";
-
 			}
 			else if(receiveData.startsWith(SocketConstant.RECEIVE_PRE_DATA)){
 				if(REGISTER_STATUE_CODE!=3&&sendPreDataTime<10000000){
@@ -114,7 +114,6 @@ public class ReceiveSocketService extends Service {
 				sendPreDataType="";
 			}
 			TlvAnalyticalUtils.builderMessagePackageList(receiveData);
-			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
 		}
 
@@ -204,12 +203,12 @@ public class ReceiveSocketService extends Service {
 				sendPreDataTime=System.currentTimeMillis();
 			}
 		}
-		Log.e("sendMessage", s);
 		Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
 		if (tcpClient != null && tcpClient.getTransceiver() != null) {
 			Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
 			tcpClient.getTransceiver().send(s);
 		}
+		ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n"+s);
 	}
 	public void disconnect() {
 		CONNECT_STATUE = ACTIVE_DISCENNECT;//主动断开
@@ -277,7 +276,6 @@ public class ReceiveSocketService extends Service {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 //Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
                 jobEvent();
-
             } else {
 				Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
 				intent.setAction(HEARTBEAT_PACKET_TIMER);
