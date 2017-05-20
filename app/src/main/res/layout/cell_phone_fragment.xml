@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
     >
+
     <RelativeLayout
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/padding_50dp"
-        android:background="@color/blue_title"
-        android:id="@+id/title"
         android:layout_alignParentTop="true"
+        android:background="@color/blue_title"
+        >
 
-       >
         <RadioGroup
             android:id="@+id/operation_rg"
             android:layout_width="match_parent"
@@ -23,11 +24,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:button="@null"
-                android:drawableBottom="@drawable/image_slidethetriangle"
                 android:checked="true"
+                android:drawableBottom="@drawable/image_slidethetriangle"
                 android:drawablePadding="-6dp"
                 android:text="@string/call_history"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"/>
 
 
             <RadioButton
@@ -35,12 +36,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="33dp"
-                android:drawablePadding="-6dp"
-                android:drawableBottom="@drawable/image_slidethetriangle"
                 android:button="@null"
+                android:drawableBottom="@drawable/image_slidethetriangle"
+                android:drawablePadding="-6dp"
                 android:gravity="center"
                 android:text="@string/message_history"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"/>
         </RadioGroup>
 
 
@@ -52,23 +53,22 @@
             android:text="拨打"
             android:textColor="@color/white"
             android:textSize="@dimen/little_18"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <de.blinkt.openvpn.views.TopProgressView
         android:id="@+id/top_view"
         android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_30dp"
         android:layout_below="@id/title"
-        android:visibility="gone"
-        android:layout_height="@dimen/padding_25dp" />
+        android:visibility="gone"/>
+
     <de.blinkt.openvpn.views.MyViewPager
         android:id="@+id/mViewPager"
-        android:layout_below="@id/top_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
-
-
+        android:layout_below="@id/top_view"
+        android:layout_weight="1"/>
 
 
 </RelativeLayout>

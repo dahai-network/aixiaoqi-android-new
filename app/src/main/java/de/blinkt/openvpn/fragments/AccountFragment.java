@@ -414,7 +414,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				return;
 			case R.id.going_buy:
 				intent = new Intent(getActivity(), PackageMarketActivity.class);
-				intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
+				intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.HIDDEN);
 				break;
 			case R.id.serviceTextView:
 				if ("---".equals(serviceTextView.getText().toString())) {
@@ -434,9 +434,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		Intent intent;//友盟方法统计
 		MobclickAgent.onEvent(getActivity(), CLICKMYPACKAGE);
 		if (!hasPackage) {
-
 			intent = new Intent(getActivity(), PackageMarketActivity.class);
-			intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.SHOW);
+			intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.HIDDEN);
 		} else {
 			intent = new Intent(getActivity(), PackageCategoryActivity.class);
 

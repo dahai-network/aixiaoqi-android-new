@@ -33,7 +33,7 @@ public class TopProgressView extends View {
 	private boolean isWhiteBack;
 	private final Context context;
 
-	private static final int DEFAULT_TEXTSIZE = CommonTools.dip2px(ICSOpenVPNApplication.getContext(), 13);
+	private static final int DEFAULT_TEXTSIZE = CommonTools.dip2px(ICSOpenVPNApplication.getContext(), 15);
 
 	//进度
 	private int progress;
