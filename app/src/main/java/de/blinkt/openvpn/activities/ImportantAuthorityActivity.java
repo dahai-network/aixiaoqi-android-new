@@ -52,6 +52,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         authorityRecyclerView.setLayoutManager(layoutManager);
+        // Log.d("test__", "initSet: "+getPhoneTypeEntity());
         AuthorityAdapter adapter = new AuthorityAdapter(this, getPhoneTypeEntity());
         authorityRecyclerView.setAdapter(adapter);
     }
@@ -64,6 +65,8 @@ public class ImportantAuthorityActivity extends BaseActivity {
             finish();
         }
         data.get(0).setCanClick(true);
+
+
         if (SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.IS_START_UP)) {
             for (int i = 1; i < data.size(); i++) {
                 data.get(i).setCanClick(true);
@@ -209,7 +212,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
                 if (version > Build.VERSION_CODES.KITKAT) {
                     ShutDownBackground(entity);
                     Intent oppoIntent = new Intent();
-                    oppoIntent.setComponent(new ComponentName("com.coloros.oppoguardelf", "com.coloros.powermanager.fuelgaue.PowerUsageModelActivity"));
+                    oppoIntent.setComponent(new ComponentName("com.coloros.oppoguardelf", "com.coloros.powermanager.fuelgaue.PowerConsumptionActivity"));
                     dataSave(oppoIntent, data);
 
                     OpenSystemSuspendWindow(entity);
@@ -217,10 +220,14 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     oppoOpenSysIntent.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.sysfloatwindow.FloatWindowListActivity"));
                     dataSave(oppoOpenSysIntent, data);
 
+/*
                     autoRunSet(entity);
                     Intent oppo1Intent = new Intent();
-                    oppoIntent.setComponent(new ComponentName("com.color.safecenter", "com.color.safecenter.permission.startup.StartupAppListActivity"));
-                    dataSave(oppo1Intent, data);
+                    oppoIntent.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.startupapp.StartupAppListActivity"));
+                    dataSave(oppo1Intent, data);*/
+
+               /*     Run #11: ActivityRecord{238883f8 u0 com.coloros.safecenter/.startupapp.S
+                        tartupAppListActivity t600}*/
 
 
                 } else if (version == Build.VERSION_CODES.KITKAT) {
@@ -229,7 +236,6 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     oppoIntent.setComponent(new ComponentName("com.color.safecenter", "com.color.safecenter.permission.startup.StartupAppListActivity"));
                     dataSave(oppoIntent, data);
                 }
-
 
 
                 if (!(version == Build.VERSION_CODES.LOLLIPOP_MR1)) {
@@ -270,6 +276,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
                 entity.setintentEntity(new IntentEntity(intent, shadeIntent));
                 data.add(new AuthorityEntity(entity));
             } catch (Exception e) {
+
             }
         }
     }
