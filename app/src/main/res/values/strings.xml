@@ -122,7 +122,7 @@
     <string name="oppo_test_3_1">点击下方高级设置按钮</string>
     <string name="oppo_test_3_2">打开休眠状态下保持WLAN连接开关</string>
 
-    <string name="oppoR7_test_1_1">找到爱小器APP对应的开关打开</string>
+    <string name="oppoR7_test_1_1">找到爱小器APP对应的开关打开,开启自动启动管理</string>
 
 
     <string name="lenovo_test_1_0">打开WLAN开关</string>

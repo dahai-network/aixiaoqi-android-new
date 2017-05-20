@@ -276,7 +276,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 											findDeviceHandler.postDelayed(new Runnable() {
 												@Override
 												public void run() {
-
 													//排序后连接操作
 													scanLeDevice(false);
 													if (deviceList.size() == 0 && !isStartFindDeviceDelay) {
@@ -284,6 +283,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 														finish();
 														return;
 													}
+
 													Collections.sort(deviceList, new Comparator<BluetoothModel>() {
 														@Override
 														public int compare(BluetoothModel lhs, BluetoothModel rhs) {
@@ -299,7 +299,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 													} catch (Exception e) {
 														e.printStackTrace();
 													}
-
 													isStartFindDeviceDelay = false;
 													deviceList.clear();
 												}

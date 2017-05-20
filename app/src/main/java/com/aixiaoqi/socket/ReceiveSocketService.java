@@ -29,8 +29,6 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.service.JobSchedulerService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
-
-import static com.aixiaoqi.socket.SocketConstant.CONNECTION;
 import static com.aixiaoqi.socket.SocketConstant.HEARTBEAT_PACKET_TIMER;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
@@ -98,7 +96,6 @@ public class ReceiveSocketService extends Service {
 
 		@Override
 		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
-			Log.e("Blue_Chanl", "onReceive");
 			String receiveData=HexStringExchangeBytesUtil.bytesToHexString(s, length);
 			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n"+receiveData);
 			if(receiveData.startsWith(SocketConstant.RECEIVE_CONNECTION)){
@@ -274,7 +271,7 @@ public class ReceiveSocketService extends Service {
 			count = count + 1;
             //5.0以上
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
+               Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
                 jobEvent();
             } else {
 				Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
@@ -289,24 +286,19 @@ public class ReceiveSocketService extends Service {
     }
 
     JobScheduler mJobScheduler;
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void jobEvent() {
         mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
         JobInfo.Builder builder = new JobInfo.Builder(Constant.TYPE_ONE,
                 new ComponentName(getPackageName(), JobSchedulerService.class.getName()));
-        builder.setPeriodic(TCP_HEART_TIME * 1000);
+		builder.setPeriodic(TCP_HEART_TIME * 1000);
         if (mJobScheduler.schedule(builder.build()) <= 0) {
             //If something goes wrong
         }
     }
-
-
     private void reConnect() {
         initSocket();
     }
-
-
-
 	@Override
 	public void onDestroy() {
 		Log.e(TAG, "onDestroy()");
