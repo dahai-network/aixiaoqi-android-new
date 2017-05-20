@@ -26,6 +26,10 @@ public class ShadeActivity extends Activity {
     ImageView hand;
     LinearLayout ll_root;
 
+    private final static int ONE_STEP = 1;
+    private final static int TWO_STEP = 2;
+    private final static int THREE_STEP = 3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,19 +91,19 @@ public class ShadeActivity extends Activity {
                 String le_s2;
                 String le_s3;
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
-                    case 1:
+                    case ONE_STEP:
                         le_s1 = getResources().getString(R.string.lemobile_test_1_1);
                         setResourceOne(false, le_s1, R.drawable.lemobile_image_1_1);
                         setResourceTwo(true, null, 0);
                         setResourceThree(true, null, 0);
                         break;
-                    case 2:
+                    case TWO_STEP:
                         le_s1 = getResources().getString(R.string.lemobile_test_2_1);
                         setResourceOne(false, le_s1, R.drawable.lemobile_image_2_1);
                         setResourceTwo(true, null, 0);
                         setResourceThree(true, null, 0);
                         break;
-                    case 3:
+                    case THREE_STEP:
                         le_s1 = getResources().getString(R.string.lemobile_test_3_1);
                         le_s2 = getResources().getString(R.string.lemobile_test_3_2);
                         le_s3 = getResources().getString(R.string.lemobile_test_3_3);
@@ -126,7 +130,7 @@ public class ShadeActivity extends Activity {
                 String meizu_s3;
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
 
-                    case 1://保持后台运行
+                    case ONE_STEP://保持后台运行
                         meizu_s1 = getResources().getString(R.string.meizu_test_1_1);
                         meizu_s2 = getResources().getString(R.string.meizu_test_1_2);
                         meizu_s3 = getResources().getString(R.string.meizu_test_1_3);
@@ -134,13 +138,13 @@ public class ShadeActivity extends Activity {
                         setResourceTwo(false, meizu_s2, R.drawable.meizu_image_1_2);
                         setResourceThree(false, meizu_s3, R.drawable.meizu_image_1_3);
                         break;
-                    case 2://自启动
+                    case TWO_STEP://自启动
                         meizu_s1 = getResources().getString(R.string.meizu_test_2_1);
                         setResourceOne(false, meizu_s1, R.drawable.meizu_note2_image_2_1);
                         setResourceTwo(true, null, 0);
                         setResourceThree(true, null, 0);
                         break;
-                    case 3://网络
+                    case THREE_STEP://网络
                         meizu_s1 = getResources().getString(R.string.meizu_test_3_1);
                         meizu_s2 = getResources().getString(R.string.meizu_test_3_2);
                         setResourceOne(true, meizu_s1, R.drawable.meizu_image_3_1);
@@ -155,14 +159,14 @@ public class ShadeActivity extends Activity {
                 String samsung_s2;
 
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
-                    case 1:
+                    case ONE_STEP:
                         samsung_s1 = getResources().getString(R.string.samsung_test_1_1);
                         samsung_s2 = getResources().getString(R.string.samsung_test_1_2);
                         setResourceOne(true, samsung_s1, R.drawable.samsung_image_1_1);
                         setResourceTwo(false, samsung_s2, R.drawable.samsung_image_1_2);
                         setResourceThree(true, null, 0);
                         break;
-                    case 2:
+                    case TWO_STEP:
 
                         samsung_s1 = getResources().getString(R.string.samsung_test_2_1);
                         samsung_s2 = getResources().getString(R.string.samsung_test_2_2);
@@ -190,7 +194,7 @@ public class ShadeActivity extends Activity {
                 String huawei_s3;
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
 
-                    case 1: //锁屏清理
+                    case ONE_STEP: //锁屏清理
 
                         huawei_s1 = getResources().getString(R.string.huawei_mate9_test_1_1);
                         setResourceOne(false, huawei_s1, R.drawable.huawei_mate9_image_1_1);
@@ -198,23 +202,23 @@ public class ShadeActivity extends Activity {
                         setResourceThree(true, null, 0);
                         break;
 
-                    case 2://自启动
+                    case TWO_STEP://自启动
                         huawei_s1 = getResources().getString(R.string.huawei_mate9_test_1_1);
                         setResourceOne(false, huawei_s1, R.drawable.huawei_mate9_image_2_1);
                         setResourceTwo(true, null, 0);
                         setResourceThree(true, null, 0);
                         break;
 
-                    case 3://p8
+                    case THREE_STEP://p8
 
-                        if (Build.VERSION.SDK_INT > 18 && Build.VERSION.SDK_INT < 24) {
+                        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2&& Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                             huawei_s1 = getResources().getString(R.string.huawei_mateP8_test_3_1);
                             huawei_s2 = getResources().getString(R.string.huawei_mateP8_test_3_2);
                             huawei_s3 = getResources().getString(R.string.huawei_mateP8_test_3_3);
                             setResourceOne(true, huawei_s1, R.drawable.huawei_p8_image_3_1);
                             setResourceTwo(false, huawei_s2, R.drawable.huawei_p8_image_3_2);
                             setResourceThree(false, huawei_s3, R.drawable.huawei_p8_image_3_3);
-                        } else if (Build.VERSION.SDK_INT == 24) {
+                        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
                             huawei_s1 = getResources().getString(R.string.huawei_mate9_test_3_1);
                             huawei_s2 = getResources().getString(R.string.huawei_mate9_test_3_2);
                             setResourceOne(true, huawei_s1, R.drawable.huawei_mate9_image_3_1);
@@ -232,7 +236,7 @@ public class ShadeActivity extends Activity {
                 String gionee_s3;
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
                     //权限
-                    case 1:
+                    case ONE_STEP:
                         gionee_s1 = getResources().getString(R.string.gionee_test_1_1);
                         gionee_s2 = getResources().getString(R.string.gionee_test_1_2);
                         gionee_s3 = getResources().getString(R.string.gionee_test_1_3);
@@ -240,7 +244,7 @@ public class ShadeActivity extends Activity {
                         setResourceTwo(false, gionee_s2, R.drawable.goinee_image_1_2);
                         setResourceThree(false, gionee_s3, R.drawable.goinee_image_1_3);
                         break;
-                    case 2:
+                    case TWO_STEP:
                         gionee_s1 = getResources().getString(R.string.gionee_test_2_1);
                         gionee_s2 = getResources().getString(R.string.gionee_test_2_2);
                         gionee_s3 = getResources().getString(R.string.gionee_test_2_3);
@@ -258,14 +262,14 @@ public class ShadeActivity extends Activity {
                 String vivo_test1;
 
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
-                    case 1:
+                    case ONE_STEP:
                         vivo_test = getResources().getString(R.string.vivo_test_1_1);
                         setResourceOne(false, vivo_test, R.drawable.vivo_image_1_1);
                         setResourceTwo(true, null, 0);
                         setResourceThree(true, null, 0);
                         break;
 
-                    case 2:
+                    case TWO_STEP:
                         vivo_test = getResources().getString(R.string.vivo_test_2_1);
                         vivo_test1 = getResources().getString(R.string.vivo_test_2_2);
                         setResourceOne(true, vivo_test, R.drawable.vivo_image_2_1);
@@ -283,14 +287,14 @@ public class ShadeActivity extends Activity {
                 String oppo_test2;
 
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
-                    case 1:
-                        if (version > 19) {
+                    case ONE_STEP:
+                        if (version > Build.VERSION_CODES.KITKAT) {
                             oppo_test1 = getResources().getString(R.string.oppo_test_1_1);
                             oppo_test2 = getResources().getString(R.string.oppo_test_1_2);
                             setResourceOne(true, oppo_test1, R.drawable.oppo_image_2_1);
                             setResourceTwo(false, oppo_test2, R.drawable.oppo_image_2_2);
                             setResourceThree(true, null, 0);
-                        } else if (version == 19) {
+                        } else if (version == Build.VERSION_CODES.KITKAT) {
 
                             oppo_test1 = getResources().getString(R.string.oppoR7_test_1_1);
                             setResourceOne(false, oppo_test1, R.drawable.oppor7_image_2_1);
@@ -300,28 +304,30 @@ public class ShadeActivity extends Activity {
                         }
                         break;
 
-                    case 2:
-                            if(version == Build.VERSION_CODES.KITKAT){
+                    case TWO_STEP:
+                        if (version == Build.VERSION_CODES.KITKAT) {
 
-                                oppo_test1 = getResources().getString(R.string.oppo_test_3_1);
-                                oppo_test2 = getResources().getString(R.string.oppo_test_3_2);
-                                setResourceOne(true, oppo_test1, R.drawable.oppo_image_1_1);
-                                setResourceTwo(false, oppo_test2, R.drawable.oppo_image_1_2);
-                                setResourceThree(true, null, 0);
-                            }else {
-                                oppo_test1 = getResources().getString(R.string.oppo_test_2_1);
-                                setResourceOne(false, oppo_test1, R.drawable.oppo_r9_image_2_1);
-                                setResourceTwo(true, null, 0);
-                                setResourceThree(true, null, 0);
-                            }
-
-                        break;
-                    case 3:
                             oppo_test1 = getResources().getString(R.string.oppo_test_3_1);
                             oppo_test2 = getResources().getString(R.string.oppo_test_3_2);
                             setResourceOne(true, oppo_test1, R.drawable.oppo_image_1_1);
                             setResourceTwo(false, oppo_test2, R.drawable.oppo_image_1_2);
                             setResourceThree(true, null, 0);
+                        } else {
+                            oppo_test1 = getResources().getString(R.string.oppo_test_2_1);
+                            setResourceOne(false, oppo_test1, R.drawable.oppo_r9_image_2_1);
+                            setResourceTwo(true, null, 0);
+                            setResourceThree(true, null, 0);
+                        }
+
+                        break;
+                    case THREE_STEP:
+                        if (version > Build.VERSION_CODES.KITKAT) {
+                            oppo_test1 = getResources().getString(R.string.oppoR7_test_1_1);
+                            // oppo_test2 = getResources().getString(R.string.oppo_test_3_2);
+                            setResourceOne(false, oppo_test1, R.drawable.oppo_r9_image_2_1);
+                            setResourceTwo(true, null, 0);
+                            setResourceThree(true, null, 0);
+                        }
 
                         break;
                 }
@@ -333,7 +339,7 @@ public class ShadeActivity extends Activity {
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
 
                     //第一个权限
-                    case 1:
+                    case ONE_STEP:
                         xiaomi_s1 = getResources().getString(R.string.xiaomi_test_1_1);
                         xiaomi_s2 = getResources().getString(R.string.xiaomi_test_1_2);
                         xiaomi_s3 = getResources().getString(R.string.xiaomi_spirit_test_1_3);
@@ -341,14 +347,14 @@ public class ShadeActivity extends Activity {
                         setResourceTwo(false, xiaomi_s2, R.drawable.xiaomi_image_02);
                         setResourceThree(false, xiaomi_s3, R.drawable.xiaomi_image_1_3);
                         break;
-                    case 2:
+                    case TWO_STEP:
                         xiaomi_s1 = getResources().getString(R.string.xiaomi_spirit_test_2_1);
                         setResourceOne(false, xiaomi_s1, R.drawable.xiaomi_image_2_2);
                         setResourceTwo(true, null, 0);
                         setResourceThree(true, null, 0);
 
                         break;
-                    case 3:
+                    case THREE_STEP:
 
                         xiaomi_s1 = getResources().getString(R.string.xiaomi_test_3_1);
                         xiaomi_s2 = getResources().getString(R.string.xiaomi_test_3_2);
@@ -364,7 +370,6 @@ public class ShadeActivity extends Activity {
 
         }
     }
-
 
 
     /**

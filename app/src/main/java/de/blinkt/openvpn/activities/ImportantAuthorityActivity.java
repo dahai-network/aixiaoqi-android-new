@@ -230,11 +230,18 @@ public class ImportantAuthorityActivity extends BaseActivity {
                         tartupAppListActivity t600}*/
 
 
-                } else if (version == Build.VERSION_CODES.KITKAT) {
+                }
+                if (version == Build.VERSION_CODES.KITKAT) {
                     autoRunSet(entity);
                     Intent oppoIntent = new Intent();
                     oppoIntent.setComponent(new ComponentName("com.color.safecenter", "com.color.safecenter.permission.startup.StartupAppListActivity"));
                     dataSave(oppoIntent, data);
+                } else {
+                    autoRunSet(entity);
+                    Intent oppo1Intent = new Intent();
+                    oppo1Intent.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.startupapp.StartupAppListActivity"));
+                    dataSave(oppo1Intent, data);
+
                 }
 
 
