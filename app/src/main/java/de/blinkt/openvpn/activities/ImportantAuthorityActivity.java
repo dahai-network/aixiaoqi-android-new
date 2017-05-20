@@ -78,9 +78,10 @@ public class ImportantAuthorityActivity extends BaseActivity {
 
 		Log.d("setPhoneTypeEntity", "phoneType: " + phoneType);
 
+
 		switch (phoneType) {
 			case Constant.LEMOBILE:
-				if (version > 18) {
+				if (version > Build.VERSION_CODES.JELLY_BEAN_MR2) {
 					appPertectSet(entity);
 					Intent letvIntent = new Intent();
 					letvIntent.setComponent(new ComponentName("com.letv.android.letvsafe", "com.letv.android.letvsafe.AutobootManageActivity"));
@@ -98,14 +99,14 @@ public class ImportantAuthorityActivity extends BaseActivity {
 				break;
 			//  case Constant.LENOVO
 			case Constant.LENOVO:
-				if (version > 18) {
+				if (version >  Build.VERSION_CODES.JELLY_BEAN_MR2) {
 					wifiSet(entity);
 					Intent netWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
 					dataSave(netWorkIntent, data);
 				}
 				break;
 			case Constant.MEIZU:
-				if (version > 18) {
+				if (version >  Build.VERSION_CODES.JELLY_BEAN_MR2) {
 
 					//保持后台运行
 					keepStandbySet(entity);
@@ -124,7 +125,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
 				}
 				break;
 			case Constant.SAMSUNG:
-				if (version > 18) {
+				if (version >  Build.VERSION_CODES.JELLY_BEAN_MR2) {
 					autoRunSet(entity);
 					Intent samsungLIntent = ICSOpenVPNApplication.getInstance().getPackageManager().getLaunchIntentForPackage("com.samsung.android.sm");
 					// com.sec.android.app.capabilityma  flipboard.briefing.app
@@ -145,7 +146,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
 			//华为
 			case Constant.HUAWEI:
 				//lock screen clear white list
-				if (version > 18) {
+				if (version >  Build.VERSION_CODES.JELLY_BEAN_MR2) {
 					//锁屏清理
 					lockScreenSet(entity);
 					Intent huaweiGodIntent = new Intent();
@@ -168,7 +169,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
 
 			//金立
 			case Constant.GIONEE:
-				if (version > 18) {
+				if (version >  Build.VERSION_CODES.JELLY_BEAN_MR2) {
 					//auto running
 					autoRunSet(entity);
 					Intent gioneeIntent = new Intent();
@@ -185,7 +186,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
 			//vivo
 			case Constant.VIVO:
 
-				if (version > 18) {
+				if (version >  Build.VERSION_CODES.JELLY_BEAN_MR2) {
 					//background high power
 					highPowerSet(entity);
 					Intent vivoGodIntent = new Intent();
@@ -199,7 +200,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
 				break;
 			//oppo
 			case Constant.OPPO:
-				if (version > 19) {
+				if (version > Build.VERSION_CODES.KITKAT) {
 					ShutDownBackground(entity);
 					Intent oppoIntent = new Intent();
 					oppoIntent.setComponent(new ComponentName("com.coloros.oppoguardelf", "com.coloros.powermanager.fuelgaue.PowerUsageModelActivity"));
@@ -211,14 +212,14 @@ public class ImportantAuthorityActivity extends BaseActivity {
 					dataSave(oppoOpenSysIntent, data);
 
 
-				} else if (version == 19) {
+				} else if (version == Build.VERSION_CODES.KITKAT) {
 					autoRunSet(entity);
 					Intent oppoIntent = new Intent();
 					oppoIntent.setComponent(new ComponentName("com.color.safecenter", "com.color.safecenter.permission.startup.StartupAppListActivity"));
 					dataSave(oppoIntent, data);
 				}
 
-				if (!(version == 22)) {
+				if (!(version == Build.VERSION_CODES.LOLLIPOP_MR1)) {
 					wifiSet(entity);
 					Intent vivoNetWorkIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
 					dataSave(vivoNetWorkIntent, data);

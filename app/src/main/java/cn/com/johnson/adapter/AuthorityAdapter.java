@@ -31,6 +31,10 @@ public class AuthorityAdapter extends RecyclerView.Adapter<AuthorityAdapter.Auth
     private final Context context;
     private ArrayList<AuthorityEntity> data = null;
 
+    public final static int FRIST=1;
+    public final static int TWO=2;
+    public final static int THREE=3;
+
 
     public AuthorityAdapter(Context context, ArrayList<AuthorityEntity> data) {
         this.context = context;
@@ -52,13 +56,13 @@ public class AuthorityAdapter extends RecyclerView.Adapter<AuthorityAdapter.Auth
         int number = position + 1;
         //根据位置设置不同序列号
         switch (number) {
-            case 1:
+            case FRIST:
                 holder.iv_number.setBackgroundResource(R.drawable.number1);
                 break;
-            case 2:
+            case TWO:
                 holder.iv_number.setBackgroundResource(R.drawable.number2);
                 break;
-            case 3:
+            case THREE:
                 holder.iv_number.setBackgroundResource(R.drawable.number3);
                 break;
 

@@ -203,7 +203,6 @@ public class ShadeActivity extends Activity {
                         setResourceOne(false, huawei_s1, R.drawable.huawei_mate9_image_2_1);
                         setResourceTwo(true, null, 0);
                         setResourceThree(true, null, 0);
-
                         break;
 
                     case 3://p8

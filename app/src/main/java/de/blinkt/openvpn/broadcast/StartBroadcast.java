@@ -8,10 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.aixiaoqi.socket.EventBusUtil;
 
@@ -28,6 +31,7 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
+import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 
@@ -37,15 +41,16 @@ import de.blinkt.openvpn.util.SharedUtils;
 public class StartBroadcast extends BroadcastReceiver implements InterfaceCallback{
 
 	private static final String TAG = "StartBroadcast";
+
 	BluetoothManager mBluetoothManager;
 	BluetoothAdapter mBluetoothAdapter;
 	private String deviceAddress;
 	private UartService mService;
+	//android.intent.action.ACTION_SHUTDOWN
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.w(TAG, "StartBroadcast receive action is " + intent.getAction());
 		if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-
 			initialize(context);
 			//检测蓝牙是否打开
 			if(!isBluetoothOpen()){

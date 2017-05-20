@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -50,9 +51,12 @@ public class DefinedToast implements IToast {
     }
 
     public DefinedToast(Context context) {
-
         mContext = context;
-        mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+
+
+        mWindowManager = (WindowManager) mContext.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+
+
         mParams = new WindowManager.LayoutParams();
         mParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         mParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -114,8 +118,6 @@ public class DefinedToast implements IToast {
     }
 
     /**
-     * 不能和{@link #setText(String)}一起使用，要么{@link #setView(View)} 要么{@link #setView(View)}
-     *
      * @param view 传入view
      * @return 自身对象
      */
@@ -133,8 +135,6 @@ public class DefinedToast implements IToast {
     }
 
     /**
-     * 不能和{@link #setView(View)}一起使用，要么{@link #setView(View)} 要么{@link #setView(View)}
-     *
      * @param text 字符串
      * @return 自身对象
      */
@@ -158,13 +158,15 @@ public class DefinedToast implements IToast {
 
     @Override
     public void show() {
-        Log.d("CommonTools", "show: ----------");
         // 1. 将本次需要显示的toast加入到队列中
         mQueue.offer(this);
 
         // 2. 如果队列还没有激活，就激活队列，依次展示队列中的toast
         if (0 == mAtomicInteger.get()) {
+
+            // Log.d("CommonTools", "show: ----------mAtomicInteger");
             mAtomicInteger.incrementAndGet();
+
             mHandler.post(mActivite);
         }
     }
@@ -192,18 +194,21 @@ public class DefinedToast implements IToast {
     }
 
     private void handleShow() {
+
         if (mView != null) {
             if (mView.getParent() != null) {
                 mWindowManager.removeView(mView);
             }
             try {
+                Log.d("handleShow", "handleShow: " + mView + ":::" + mParams);
                 mWindowManager.addView(mView, mParams);
-            } catch (Exception e) {
 
+            } catch (Exception e) {
+                Log.d("handleShow", "handleShow: " + e.getMessage());
             }
 
-        }else
-                mQueue.poll();
+        } else
+            mQueue.poll();
     }
 
     private void handleHide() {

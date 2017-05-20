@@ -34,7 +34,6 @@ public class ToastCompat implements IToast {
     ToastCompat(Context context, String text, int duration) {
 
         mmHandler = mHandler;
-        Log.d("ToastCompat", "ToastCompat: -----------");
         if (!OSJudgementUtil.isMIUI()) {
             mIToast = new DefinedToast(context).setText(text).setDuration(duration)
                     .setGravity(Gravity.BOTTOM, 0, CommonTools.dip2px(context, 64));
@@ -50,13 +49,7 @@ public class ToastCompat implements IToast {
         return new ToastCompat(context, text, duration);
     }
 
-    /**
-     * 使toast不在显示
-     */
-    public static void cancleMyToast() {
-        Log.d("cancel", "cancleMyToast: ");
-        mmHandler.sendEmptyMessage(0);
-    }
+
 
     @Override
     public IToast setGravity(int gravity, int xOffset, int yOffset) {
@@ -84,7 +77,6 @@ public class ToastCompat implements IToast {
     }
 
     /**
-     * 不能和{@link #setView(View)}一起使用，要么{@link #setView(View)} 要么{@link #setView(View)}
      *
      * @param text
      */
