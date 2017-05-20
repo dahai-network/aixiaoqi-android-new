@@ -24,7 +24,7 @@ public class PaymentTermFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.packagedetail_layout, null);
         tvContext = (TextView) view.findViewById(R.id.tv_context);
         String detail = SharedUtils.getInstance().readString(Constant.PAYTERMS_SIGN);
-        if (null != detail)
+        if (null != detail&&!detail.equals(""))
             tvContext.setText(detail);
         return view;
     }

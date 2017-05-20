@@ -249,7 +249,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				sinking.setPercent(0f);
 			}
 			if (!TextUtils.isEmpty(blueStatus)) {
-				conStatusTextView.setText(blueStatus);
+				conStatusTextView.setText(blueStatus);//初始化状态
 				if(getString(R.string.index_high_signal).equals(blueStatus)){
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
@@ -537,7 +537,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							//不让无设备dialog弹出
 							if (noDevicedialog != null)
 								noDevicedialog.getDialog().dismiss();
-
 							slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
 							break;
 						case Constant.RETURN_POWER:
@@ -623,6 +622,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (object.getStatus() == 1) {
 				stopAnim();
 				registerSimStatu.setVisibility(GONE);
+				conStatusTextView.setVisibility(GONE);
 				firmwareTextView.setText("");
 				percentTextView.setVisibility(GONE);
 				macTextView.setText("");

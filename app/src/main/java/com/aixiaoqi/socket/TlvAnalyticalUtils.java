@@ -1,17 +1,23 @@
 package com.aixiaoqi.socket;
 
+import android.content.Intent;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.LoginMainActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.DateUtils;
+import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
@@ -30,10 +36,27 @@ public class TlvAnalyticalUtils {
 		int tag = Integer.parseInt(tagString, 16);
 		String responeString = hexString.substring(6, 8);
 		int responeCode = getResponeCode(responeString,1);
-		if (responeCode == 41||responeCode == 39) {
+		if (responeCode == 53||responeCode == 39) {
 			//服务器错误注册失败
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SERVER_IS_ERROR);
 			return null;
+		}else if(responeCode==41){
+			if (ProMainActivity.sendYiZhengService != null){
+				ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "push service :\n" );
+				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			}
+		}else if(responeCode==21){
+			if (!CommonTools.isFastDoubleClick(1000)) {
+				EventBusUtil.cancelCallService();
+				if (ICSOpenVPNApplication.uartService != null)
+					ICSOpenVPNApplication.uartService.disconnect();
+				SharedUtils.getInstance().delete(Constant.IMEI);
+				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
+				Intent intent = new Intent(ICSOpenVPNApplication.getContext(), LoginMainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN, ICSOpenVPNApplication.getContext().getResources().getString(R.string.token_interrupt));
+				ICSOpenVPNApplication.getContext().startActivity(intent);
+			}
 		}
 
 		tag = tag & 127;

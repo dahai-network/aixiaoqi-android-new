@@ -159,8 +159,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
                     tvRedDot04.setVisibility(View.GONE);
                     intent.putExtra("flg", false);
                     break;
-
-
 			}
 			LocalBroadcastManager.getInstance(ProMainActivity.this).sendBroadcast(intent);
 		}
@@ -173,7 +171,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 	public Object getLastCustomNonConfigurationInstance() {
 		return super.getLastCustomNonConfigurationInstance();
 	}
-
+//绑定UartService服务
 	private ServiceConnection mServiceConnection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName className, IBinder rawBinder) {
 			mService = ((UartService.LocalBinder) rawBinder).getService();
@@ -250,13 +248,13 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			tvRedDot04.setVisibility(View.GONE);
 	}
 
-
+//初始化广播
 	private void initBrocast() {
 		LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(showRedDotReceiver, showRedDotIntentFilter());
 		if (bleMoveReceiver == null) {
 			bleMoveReceiver = new ReceiveBLEMoveReceiver();
 			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(bleMoveReceiver, makeGattUpdateIntentFilter());
-			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(updateIndexTitleReceiver, makeGattUpdateIntentFilter());
+//			LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(updateIndexTitleReceiver, makeGattUpdateIntentFilter());
 			registerReceiver(screenoffReceive, screenoffIntentFilter());
 			//打开蓝牙服务后开始搜索
 			searchBLE();
@@ -277,19 +275,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		} else {
 			skyUpgradeHttp();
 			BluetoothConstant.IS_BIND = true;
-			accountFragment.showDeviceSummarized(true);
-			EventBusUtil.showDevice(true);
-			String typeText = "";
-			String deviceType = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-			if (!TextUtils.isEmpty(deviceType)) {
-				//0是手环，1是钥匙扣
-				if (deviceType.contains(MyDeviceActivity.UNITOYS)) {
-					typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-				} else if (deviceType.contains(MyDeviceActivity.UNIBOX)) {
-					typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-				}
-				accountFragment.setSummarized(typeText, null, false);
-			}
 			blueToothOpen();
 		}
 	}
@@ -310,7 +295,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
 		return true;
 	}
-
+//实例化UartService
 	public void initServices() {
 
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
@@ -368,7 +353,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		intentFilter.addAction(MALL_SHOW_RED_DOT);
 		return intentFilter;
 	}
-
+//初始化Fragment
 	private void initFragment() {
 
 		if (indexFragment == null) {
@@ -509,7 +494,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		super.onStop();
 		isForeground = false;
 	}
-
+//ViewPager添加监听
 	private void setListener() {
 		new PageChangeListener(mViewPager) {
 			@Override
@@ -564,12 +549,12 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		}
 	}
 
-
+//销毁数据
 	@Override
 	protected void onDestroy() {
 
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(bleMoveReceiver);
-		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
+//		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(updateIndexTitleReceiver);
 		unregisterReceiver(screenoffReceive);
 		bleMoveReceiver = null;
 		radiogroup = null;
@@ -596,7 +581,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		EventBus.getDefault().unregister(this);
 		super.onDestroy();
 	}
-
+//解除绑定
 	private void unbindTcpService() {
 		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
 			unbindService(socketTcpConnection);
@@ -606,49 +591,30 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			}
 		}
 	}
-
+//重新赋值
 	private void destorySocketService() {
 		if (SocketConstant.REGISTER_STATUE_CODE != 0) {
 			SocketConstant.REGISTER_STATUE_CODE = 1;
 		}
 	}
-
+//网路请求
 	@Override
 	public void rightComplete(int cmdType, final CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
 			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
 			if (object.getStatus() == 1) {
 				if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
+					SharedUtils utils = SharedUtils.getInstance();
+
 					if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
 						deviceAddress = getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI();
 						if (deviceAddress != null) {
 							deviceAddress = deviceAddress.toUpperCase();
 							BluetoothConstant.IS_BIND = true;
 							skyUpgradeHttp();
-							accountFragment.showDeviceSummarized(true);
-							EventBusUtil.showDevice(true);
-						}
-						SharedUtils utils = SharedUtils.getInstance();
-
-						utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
-						//按MAC地址保存版本号
-						if (!TextUtils.isEmpty(deviceAddress))
 							utils.writeString(deviceAddress, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
-						//防止返回“”或者null
-						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
-						if (!TextUtils.isEmpty(deviceTypeStr)) {
-							int deviceType = Integer.parseInt(deviceTypeStr);
-							String typeText;
-							//0是手环，1是钥匙扣
-							if (deviceType == 0) {
-								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
-								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-							} else {
-								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
-								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-							}
-							accountFragment.setSummarized(typeText, null, false);
 						}
+
 						blueToothOpen();
 					}
 				}
@@ -732,7 +698,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			CheckConfirmedHttp http = (CheckConfirmedHttp) object;
 			if (http.getStatus() == 1) {
 				if (!http.getEntity().isIsConfirmed()) {
-//				if (http.getEntity().isIsConfirmed()) {
 					Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
 					startActivity(intent);
 				} else {
@@ -770,7 +735,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		}
 	}
 
-
+//控制扫描设备
 	private void scanLeDevice(final boolean enable) {
 		e("scanLeDevice");
 		if (enable) {
@@ -781,7 +746,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
 	}
 
-
+//扫描结果监听
 	private BluetoothAdapter.LeScanCallback mLeScanCallback =
 			new BluetoothAdapter.LeScanCallback() {
 				@Override
@@ -990,73 +955,69 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 	};
 
 
-	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {
-
-
-		@Override
-		public void onReceive(final Context context, Intent intent) {
-			final String action = intent.getAction();
-			if (action.equals(UartService.FINDED_SERVICE)) {
-				EventBusUtil.showDevice(true);
-			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-					EventBusUtil.showDevice(false);
-				}
-
-
-				i("被主动断掉连接！");
-				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
-			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
-				ArrayList<String> message = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
-				if (message != null && message.size() == 0 || !message.get(0).substring(0, 2).equals("55")) {
-					return;
-				}
-				//判断是否是分包（0x80的包）
-				if (message != null && message.size() == 0 || !message.get(0).substring(2, 4).equals("80")) {
-					return;
-				}
-				try {
-					String dataType = message.get(0).substring(6, 10);
-					switch (dataType) {
-						case RETURN_POWER:
-							break;
-						case Constant.SYSTEM_BASICE_INFO:
-							//返回基本信息就更新account的仪表盘栏
-
-							int powerText;
-							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16);
-							String typeText = "";
-							String bracelettype = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-							if (bracelettype != null) {
-								if (bracelettype.contains(MyDeviceActivity.UNITOYS)) {
-									typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-								} else if (bracelettype.contains(MyDeviceActivity.UNIBOX)) {
-									typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-
-								}
-							}
-							accountFragment.setSummarized(typeText, powerText + "", false);
-
-							break;
-						case Constant.RECEIVE_ELECTRICITY:
-							powerText = Integer.parseInt(message.get(0).substring(10, 12), 16);
-							accountFragment.setPowerPercent(powerText + "");
-							break;
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					return;
-				}
-			}
-
-		}
-	};
+//	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {
+//
+//
+//		@Override
+//		public void onReceive(final Context context, Intent intent) {
+//			final String action = intent.getAction();
+//			if (action.equals(UartService.FINDED_SERVICE)) {
+//				EventBusUtil.showDevice(true);
+//			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+//				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
+//					EventBusUtil.showDevice(false);
+//				}
+//				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
+//			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
+//				ArrayList<String> message = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
+//				if (message != null && message.size() == 0 || !message.get(0).substring(0, 2).equals("55")) {
+//					return;
+//				}
+//				//判断是否是分包（0x80的包）
+//				if (message != null && message.size() == 0 || !message.get(0).substring(2, 4).equals("80")) {
+//					return;
+//				}
+//				try {
+//					String dataType = message.get(0).substring(6, 10);
+//					switch (dataType) {
+//						case RETURN_POWER:
+//							break;
+//						case Constant.SYSTEM_BASICE_INFO:
+//							//返回基本信息就更新account的仪表盘栏
+//							int powerText;
+//							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16);
+//							String typeText = "";
+//							String bracelettype = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+//							if (bracelettype != null) {
+//								if (bracelettype.contains(MyDeviceActivity.UNITOYS)) {
+//									typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
+//								} else if (bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+//									typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
+//
+//								}
+//							}
+//							accountFragment.setSummarized(typeText, powerText + "", false);
+//
+//							break;
+//						case Constant.RECEIVE_ELECTRICITY:
+//							powerText = Integer.parseInt(message.get(0).substring(10, 12), 16);
+//							accountFragment.setPowerPercent(powerText + "");
+//							break;
+//					}
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//					return;
+//				}
+//			}
+//
+//		}
+//	};
 
 
 	private void requestPacket() {
 		getConfigInfo();
 	}
-
+//接收蓝牙是否开启
 	private BroadcastReceiver screenoffReceive = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {

@@ -270,13 +270,10 @@ public class SdkAndBluetoothDataInchange {
 		}
 		finalTemp = msg;
 		if (temp.contains("0x0000")) {
-			Log.e(TAG, "&&& server temp:" + temp);
 			sendMessage(temp);
 		} else {
-			Log.e(TAG, "SDK进入: sendToBluetoothAboutCardInfo:" + temp);
 			String[] messages = PacketeUtil.Separate(temp,Constant.READED_SIM_DATA);
 			for (int i = 0; i < messages.length; i++) {
-				Log.e(TAG, "&&& server  message: " + messages[i]);
 				sendMessage(messages[i]);
 			}
 		}

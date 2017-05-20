@@ -66,62 +66,14 @@
                 android:layout_below="@id/monthlyFeeLinearLayout"
                 android:layout_marginTop="36dp">
 
-                <RelativeLayout
-                    android:id="@+id/callTimeRelativeLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:paddingBottom="@dimen/padding_20dp"
-                    android:paddingLeft="@dimen/padding_15dp"
-                    android:paddingRight="@dimen/padding_15dp"
-                    android:paddingTop="@dimen/padding_20dp"
-                    >
-
-                    <TextView
-                        android:id="@+id/callTimeTitleTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/call_time_duration"
-                        android:textColor="@color/index_gray_text"
-                        android:textSize="16sp"/>
-
-<!--
-                    <TextView
-                        android:id="@+id/callTimeTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginTop="6dp"
-                        android:background="@null"
-                        android:text="无限通话"
-                        android:textColor="@color/index_black"
-                        android:textSize="16sp"/>
--->
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/callPacketRecyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/callTimeTitleTextView"
-                        android:layout_marginRight="@dimen/padding_15dp"
-                        android:layout_marginTop="@dimen/padding_15dp"/>
 
 
-                </RelativeLayout>
-
-                <View
-                    android:id="@+id/calltimeLine"
-                    style="@style/horizontal_line_margin_15dp"
-                    android:layout_below="@id/callTimeRelativeLayout"
-                    />
 
                 <RelativeLayout
                     android:id="@+id/serviceFeeRelativeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="84dp"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@+id/callTimeRelativeLayout"
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/padding_20dp"
@@ -147,15 +99,6 @@
                         android:textColor="@color/index_black"
                         android:textSize="16sp"/>
 
-                    <TextView
-                        android:id="@+id/originalPriceTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toEndOf="@+id/serviceFeeTextView"
-                        android:text="@string/origin_price"
-                        android:textColor="@color/color_f21f20"/>
 
                 </RelativeLayout>
 
@@ -166,10 +109,50 @@
                     />
 
                 <RelativeLayout
+                    android:id="@+id/callTimeRelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/serviceFeeRelativeLayout"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/padding_20dp"
+                    android:paddingLeft="@dimen/padding_15dp"
+                    android:paddingRight="@dimen/padding_15dp"
+                    android:paddingTop="@dimen/padding_20dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/callTimeTitleTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/call_time_duration"
+                        android:textColor="@color/index_gray_text"
+                        android:textSize="16sp"/>
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/callPacketRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/callTimeTitleTextView"
+                        android:layout_marginRight="@dimen/padding_15dp"
+                        android:layout_marginTop="@dimen/padding_15dp"/>
+
+
+                </RelativeLayout>
+
+
+                <View
+                    android:id="@+id/calltimeLine"
+                    style="@style/horizontal_line_margin_15dp"
+                    android:layout_below="@id/callTimeRelativeLayout"
+                    />
+
+                <RelativeLayout
                     android:id="@+id/buyMonthRelativeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/serviceFeeLine"
+                    android:layout_below="@id/callTimeRelativeLayout"
                     android:background="@color/white"
                     android:paddingBottom="@dimen/padding_20dp"
                     android:paddingLeft="@dimen/padding_15dp"

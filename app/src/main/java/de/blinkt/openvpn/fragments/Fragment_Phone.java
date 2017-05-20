@@ -69,11 +69,11 @@ import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
 
 
 public class Fragment_Phone extends Fragment implements InterfaceCallback, T9TelephoneDialpadView.OnT9TelephoneDialpadView,
-		RecyclerBaseAdapter.OnItemClickListener, QueryCompleteListener<ContactRecodeEntity>, DialogInterfaceTypeBase,T9TelephoneDialpadView.OnControlCallOptionListener,View.OnClickListener,View.OnKeyListener {
+		RecyclerBaseAdapter.OnItemClickListener, QueryCompleteListener<ContactRecodeEntity>, DialogInterfaceTypeBase, T9TelephoneDialpadView.OnControlCallOptionListener, View.OnClickListener, View.OnKeyListener {
 
 
 	RecyclerView rvContactRecode;
-	public  T9TelephoneDialpadView t9dialpadview;
+	public T9TelephoneDialpadView t9dialpadview;
 	public TextView dial_delete_btn;
 	TextView tv_no_permission;
 	RelativeLayout rl_no_permission;
@@ -82,7 +82,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	public SQLiteDatabase sqliteDB;
 	public DatabaseDAO dao;
 	ConnectedRecoderReceive connectedRecoderReceive;
-	ImageView  floatingActionButton;
+	ImageView floatingActionButton;
 
 
 	@Override
@@ -132,9 +132,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 				new DialogCanNoRemind(this, getActivity(), 2);
 			}
 		} else {
-
 			CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
-
 		}
 	}
 
@@ -160,7 +158,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()){
+		switch (v.getId()) {
 			case R.id.jump_permission:
 				new SetPermission(getActivity());
 				break;
@@ -201,7 +199,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 					}
 				}
 			});
-
 		}
 	}
 
@@ -209,6 +206,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	 * 跳转到权限设置界面
 	 */
 	private void searchContactRedocer() {
+		Log.e(TAG,"time="+System.currentTimeMillis());
 		AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, getActivity().getContentResolver(), false);
 		FindContactUtil.queryContactRecoderData(asyncQueryContactRecodeHandler);
 
@@ -225,6 +223,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 			rl_no_permission.setVisibility(View.GONE);
 			mAllList = mAllLists;
 			contactRecodeAdapter.addAll(mAllList);
+			Log.e(TAG,"time111="+System.currentTimeMillis());
 		}
 
 
@@ -332,6 +331,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	}
 
 	private String TAG = "Fragment_Phone";
+
 	//根据条件进行过滤
 	public Filter getFilter() {
 		Filter filter = new Filter() {
@@ -357,6 +357,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		};
 		return filter;
 	}
+
 	//搜索通话记录
 	private void searchContactRecoder(String str, List<ContactRecodeEntity> searchResultList) {
 		try {
@@ -371,6 +372,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 
 		}
 	}
+
 	//去重
 	public List<ContactRecodeEntity> removeDuplicate(List<ContactRecodeEntity> list) {
 		for (int i = 0; i < list.size() - 1; i++) {
@@ -465,14 +467,14 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
-		Log.e(TAG,"isVisibleToUser="+isVisibleToUser);
-		if(!isVisibleToUser){
+		Log.e(TAG, "isVisibleToUser=" + isVisibleToUser);
+		if (!isVisibleToUser) {
 			hindT9DiaView();
 		}
 	}
 
 	private void hindT9DiaView() {
-		if(t9dialpadview!=null)
+		if (t9dialpadview != null)
 			t9dialpadview.setVisibility(View.GONE);
 		EventBusUtil.optionView(true);
 	}
@@ -514,7 +516,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
 			if (keyCode == KeyEvent.KEYCODE_BACK) {  //表示按返回键 时的操作
-				if (t9dialpadview!=null&&t9dialpadview.getVisibility()==View.VISIBLE) {
+				if (t9dialpadview != null && t9dialpadview.getVisibility() == View.VISIBLE) {
 					hindT9DiaView();
 				} else {
 					return false;

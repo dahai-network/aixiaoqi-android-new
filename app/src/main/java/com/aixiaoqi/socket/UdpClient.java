@@ -37,7 +37,6 @@ public abstract class UdpClient implements Runnable {
 
 			if (socket == null) {
 				try {
-					Log.e(TAG,"UDPSOCKET CREATE!!!");
 					socket = new DatagramSocket(port);
 				}catch (Exception e){
 					exceptionPort();
@@ -101,7 +100,6 @@ public abstract class UdpClient implements Runnable {
 			byte[] data = msg.getBytes();
 			DatagramPacket sendSocket = new DatagramPacket(data, data.length, addr, sendPort);
 			exceptionPort();
-			Log.e("UDPSOCKET", "addr=" + addr.getHostAddress() + "\naddrname=" + addr.getHostName() + "\nsendPort=" + sendPort);
 			datagramSocket.send(sendSocket);
 		} catch (SocketException e) {
 			closeSendUdp();

@@ -97,10 +97,10 @@ public class ReceiveSocketService extends Service {
 		@Override
 		public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
 			String receiveData=HexStringExchangeBytesUtil.bytesToHexString(s, length);
+			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n"+receiveData);
 			if(receiveData.startsWith(SocketConstant.RECEIVE_CONNECTION)){
 				receiveConnectionTime=sendConnectionTime;
 				sendConnectionType="";
-
 			}
 			else if(receiveData.startsWith(SocketConstant.RECEIVE_PRE_DATA)){
 				if(REGISTER_STATUE_CODE!=3&&sendPreDataTime<10000000){
@@ -111,7 +111,6 @@ public class ReceiveSocketService extends Service {
 				sendPreDataType="";
 			}
 			TlvAnalyticalUtils.builderMessagePackageList(receiveData);
-			Log.e("Blue_Chanl", "接收数据 - onReceive2");
 			createHeartBeatPackage();
 		}
 
@@ -201,12 +200,12 @@ public class ReceiveSocketService extends Service {
 				sendPreDataTime=System.currentTimeMillis();
 			}
 		}
-		Log.e("sendMessage", s);
 		Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
 		if (tcpClient != null && tcpClient.getTransceiver() != null) {
 			Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
 			tcpClient.getTransceiver().send(s);
 		}
+		ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n"+s);
 	}
 	public void disconnect() {
 		CONNECT_STATUE = ACTIVE_DISCENNECT;//主动断开
@@ -268,13 +267,12 @@ public class ReceiveSocketService extends Service {
 
 	private void createHeartBeatPackage() {
 		Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
-		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && am == null) {
+		if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && (am == null||mJobScheduler==null)) {
 			count = count + 1;
             //5.0以上
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                Log.d("JobSchedulerService", "handleMessage: 发送心跳包1");
                 jobEvent();
-
             } else {
 				Intent intent = new Intent(ReceiveSocketService.this, AutoReceiver.class);
 				intent.setAction(HEARTBEAT_PACKET_TIMER);
@@ -320,10 +318,7 @@ public class ReceiveSocketService extends Service {
         if (SocketConstant.REGISTER_STATUE_CODE != 0) {
             SocketConstant.REGISTER_STATUE_CODE = 1;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (mJobScheduler != null)
-                mJobScheduler.cancelAll();
-        }
+
         super.onDestroy();
     }
 
@@ -332,6 +327,10 @@ public class ReceiveSocketService extends Service {
             am.cancel(sender);
             am = null;
         }
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if (mJobScheduler != null)
+				mJobScheduler.cancelAll();
+		}
     }
 
     CreateSocketLisener createSocketLisener;

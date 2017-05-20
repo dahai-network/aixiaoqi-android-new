@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.PacketDtailHttp;
 import de.blinkt.openvpn.util.CommonTools;
@@ -40,6 +42,13 @@ public class FreeWorryIntroActivity extends BaseNetActivity {
 		initSet();
 	}
 
+	public static void launch(Context context, String id) {
+		Intent intent = new Intent(context, FreeWorryIntroActivity.class);
+		intent.putExtra("id", id);
+		context.startActivity(intent);
+	}
+
+
 	private void initSet() {
 		hasLeftViewTitle(R.string.free_for_worry, 0);
 		if (confirmedPhoneNum == null) {
@@ -63,8 +72,8 @@ public class FreeWorryIntroActivity extends BaseNetActivity {
 				http = (PacketDtailHttp) object;
 				String titlePic = http.getPacketDtailEntity().getList().getDescTitlePic();
 				String descPic = http.getPacketDtailEntity().getList().getDescPic();
-				Glide.with(FreeWorryIntroActivity.this).load(titlePic).into(titleImageView);
-				Glide.with(FreeWorryIntroActivity.this).load(descPic).into(introContentImageView);
+				Glide.with(ICSOpenVPNApplication.getContext()).load(titlePic).into(titleImageView);
+				Glide.with(ICSOpenVPNApplication.getContext()).load(descPic).into(introContentImageView);
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
 			}

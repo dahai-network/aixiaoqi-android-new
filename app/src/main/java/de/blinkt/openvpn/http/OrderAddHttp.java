@@ -24,26 +24,23 @@ public class OrderAddHttp extends BaseHttp {
 
 	public OrderAddEntity getOrderEntity() {
 		return orderEntity;
-	}
+	}//PackageID, int Quantity, int PaymentMethod, boolean IsPayUserAmount
 
-	public OrderAddHttp(InterfaceCallback call, int cmdType_, String PackageID, int Quantity, int PaymentMethod, boolean IsPayUserAmount) {
-		super(call, cmdType_,HttpConfigUrl.CREATE_ORDER);
-		this.PackageID = PackageID;
-		this.Quantity = Quantity;
-		this.PaymentMethod = PaymentMethod;
-		this.IsPayUserAmount = IsPayUserAmount;
+	public OrderAddHttp(InterfaceCallback call, int cmdType_, String... params) {
+		super(call, cmdType_, POST_MODE, HttpConfigUrl.CREATE_ORDER, params);
 	}
 
 
 	@Override
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
-		params.put("PackageID", URLEncoder.encode(PackageID, "utf-8"));
-		params.put("Quantity", URLEncoder.encode(Quantity + "", "utf-8"));
-		params.put("PayUserAmount", URLEncoder.encode(0 + "", "utf-8"));
-		params.put("PaymentMethod", URLEncoder.encode(PaymentMethod + "", "utf-8"));
-		//是否使用余额支付，暂时不使用，所以是false,否则true
-		params.put("IsPayUserAmount", URLEncoder.encode(IsPayUserAmount + "", "utf-8"));
+		params.put("PackageID", URLEncoder.encode(valueParams[0], "utf-8"));
+		params.put("Quantity", URLEncoder.encode(valueParams[1], "utf-8"));
+		params.put("PaymentMethod", URLEncoder.encode(valueParams[2], "utf-8"));
+		if (valueParams.length > 3) {
+			params.put("MonthPackageFee", URLEncoder.encode(valueParams[3], "utf-8"));
+			params.put("PackageAttributeId", URLEncoder.encode(valueParams[4], "utf-8"));
+		}
 	}
 
 	@Override

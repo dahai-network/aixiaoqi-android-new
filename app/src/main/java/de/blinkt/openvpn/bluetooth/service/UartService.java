@@ -52,7 +52,7 @@ public class UartService extends Service implements Serializable {
 	private final static String TAG = UartService.class.getSimpleName();
 
 	private BluetoothManager mBluetoothManager;
-	private BluetoothAdapter mBluetoothAdapter;
+	public BluetoothAdapter mBluetoothAdapter;
 	private BluetoothGatt mBluetoothGatt;
 	public int mConnectionState = STATE_DISCONNECTED;
 
@@ -305,7 +305,6 @@ public class UartService extends Service implements Serializable {
 			return false;
 		}
 		address = address.toUpperCase();
-
 		final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 		if (device == null) {
 			Log.w(TAG, "Device not found.  Unable to connect.");
