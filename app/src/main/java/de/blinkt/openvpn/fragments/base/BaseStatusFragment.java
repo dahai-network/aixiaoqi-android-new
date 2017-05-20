@@ -168,7 +168,6 @@ public class BaseStatusFragment extends Fragment {
 				}
 				break;
 		}
-		Log.e("AccountFragment","bleStatus111="+bleStatus+"/StatueReason:"+entity.getRigsterStatueReason());
 		setBleStatus(bleStatus);
 	}
 	protected  void setBleStatus(String bleStatus){

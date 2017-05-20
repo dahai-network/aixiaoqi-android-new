@@ -29,10 +29,16 @@ import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.SMSAcivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.CellPhoneFragment;
 import de.blinkt.openvpn.fragments.SmsFragment;
+import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.CreateHttpFactory;
+import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
+import de.blinkt.openvpn.http.InterfaceCallback;
+import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
@@ -46,13 +52,17 @@ import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
  * 1) 默认用户会打开主界面
  * 2) 接收不到自定义消息
  */
-public class MyReceiver extends BroadcastReceiver {
+public class MyReceiver extends BroadcastReceiver implements InterfaceCallback{
 	private static final String TAG = "JPush";
 	private void connectGoip() {
 		if (ProMainActivity.sendYiZhengService != null){
 			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "push service :\n" );
 			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
+	}
+
+	private void getDeviceSimRegStatues() {
+		CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES);
 	}
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -74,16 +84,8 @@ public class MyReceiver extends BroadcastReceiver {
 			}else if("SMSSendResult".equals(type)){
 				processCustomMessage(context, bundle);
 			}else	if("EjoDVCloseLontTime" .equals(type)){
-				if (SocketConstant.REGISTER_STATUE_CODE == 3||SocketConstant.REGISTER_STATUE_CODE == 2) {
-					SocketConstant.REGISTER_STATUE_CODE = 2;
-					if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
-						//从预读取数据那里重新注册
-						EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.REG_STATUE_CHANGE);
-						connectGoip();
-					} else {
-						EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.RESTART_TCP);
-					}
-
+				if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+					getDeviceSimRegStatues();
 				}
 			}else if("ProductNew" .equals(type)){
 				String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
@@ -238,4 +240,32 @@ public class MyReceiver extends BroadcastReceiver {
 		mNotificationManager.notify(notifyId, mBuilder.build());
 	}
 
+
+	@Override
+	public void rightComplete(int cmdType, CommonHttp object) {
+		if (cmdType == HttpConfigUrl.COMTYPE_GET_DEVICE_SIM_REG_STATUES) {
+			GetDeviceSimRegStatuesHttp getDeviceSimRegStatuesHttp = (GetDeviceSimRegStatuesHttp) object;
+			if (getDeviceSimRegStatuesHttp.getStatus() == 1)
+				if (!getDeviceSimRegStatuesHttp.getSimRegStatue().getRegStatus().equals("1")) {
+					SocketConstant.REGISTER_STATUE_CODE = 2;
+					if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+						//从预读取数据那里重新注册
+						EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.REG_STATUE_CHANGE);
+						connectGoip();
+					} else {
+						EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.RESTART_TCP);
+					}
+				}
+		}
+	}
+
+	@Override
+	public void errorComplete(int cmdType, String errorMessage) {
+
+	}
+
+	@Override
+	public void noNet() {
+
+	}
 }

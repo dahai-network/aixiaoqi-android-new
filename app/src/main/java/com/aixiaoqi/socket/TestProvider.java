@@ -55,14 +55,10 @@ public class TestProvider {
 				iccidEntity.setImmsi(iccidArray1[1]);
 			}
 		}
-
 		if (TextUtils.isEmpty(iccidEntity.getImmsi())){
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.REGISTER_FAIL_IMSI_IS_NULL);
 			return;
 		}
-
-
-
 		Log.e("preDataSplit", "ICCID:" + iccidEntity.getIccid() + "\nIMMSI:" + iccidEntity.getImmsi());
 		createTcp();
 	}

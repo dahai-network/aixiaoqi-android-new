@@ -305,7 +305,6 @@ public class UartService extends Service implements Serializable {
 			return false;
 		}
 		address = address.toUpperCase();
-
 		final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 		if (device == null) {
 			Log.w(TAG, "Device not found.  Unable to connect.");

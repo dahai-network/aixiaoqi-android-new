@@ -277,19 +277,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		} else {
 			skyUpgradeHttp();
 			BluetoothConstant.IS_BIND = true;
-//			accountFragment.showDeviceSummarized(true);
-//			EventBusUtil.showDevice(true);
-//			String typeText = "";
-//			String deviceType = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-//			if (!TextUtils.isEmpty(deviceType)) {
-//				//0是手环，1是钥匙扣
-//				if (deviceType.contains(MyDeviceActivity.UNITOYS)) {
-//					typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-//				} else if (deviceType.contains(MyDeviceActivity.UNIBOX)) {
-//					typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-//				}
-//				accountFragment.setSummarized(typeText, null, false);
-//			}
 			blueToothOpen();
 		}
 	}
@@ -638,27 +625,9 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 							deviceAddress = deviceAddress.toUpperCase();
 							BluetoothConstant.IS_BIND = true;
 							skyUpgradeHttp();
-//							accountFragment.showDeviceSummarized(true);
-//							EventBusUtil.showDevice(true);
-							//按MAC地址保存版本号
 							utils.writeString(deviceAddress, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
-//							utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());
 						}
-						//防止返回“”或者null
-//						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
-//						if (!TextUtils.isEmpty(deviceTypeStr)) {
-//							int deviceType = Integer.parseInt(deviceTypeStr);
-//							String typeText;
-//							//0是手环，1是钥匙扣
-//							if (deviceType == 0) {
-//								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
-//								typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-//							} else {
-//								utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
-//								typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-//							}
-//							accountFragment.setSummarized(typeText, null, false);
-//						}
+
 						blueToothOpen();
 					}
 				}
@@ -742,7 +711,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			CheckConfirmedHttp http = (CheckConfirmedHttp) object;
 			if (http.getStatus() == 1) {
 				if (!http.getEntity().isIsConfirmed()) {
-//				if (http.getEntity().isIsConfirmed()) {
 					Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
 					startActivity(intent);
 				} else {
@@ -916,7 +884,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			public void create() {
 				TestProvider.isCreate = true;
 				CommonTools.delayTime(500);
-
 				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 			}
 

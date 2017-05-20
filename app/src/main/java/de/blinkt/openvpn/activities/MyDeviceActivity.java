@@ -253,8 +253,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				sinking.setPercent(0f);
 			}
 			if (!TextUtils.isEmpty(blueStatus)) {
-				conStatusTextView.setText(blueStatus);
-				if (getString(R.string.index_high_signal).equals(blueStatus)) {
+				conStatusTextView.setText(blueStatus);//初始化状态
+				if(getString(R.string.index_high_signal).equals(blueStatus)){
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 				} else {
