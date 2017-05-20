@@ -133,7 +133,7 @@ public class CommonTools {
 
             Thread.sleep(time);
         } catch (InterruptedException e) {
-
+			e.printStackTrace();
         }
     }
 

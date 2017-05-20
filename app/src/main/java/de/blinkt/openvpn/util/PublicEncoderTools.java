@@ -1,16 +1,6 @@
 package de.blinkt.openvpn.util;
 
-import android.util.Base64;
-
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 
 public class PublicEncoderTools {
@@ -38,7 +28,7 @@ public class PublicEncoderTools {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			resultString = bytesToHexString(md.digest(resultString.getBytes()));
 		} catch (Exception ex) {
-
+			ex.printStackTrace();
 		}
 		return resultString;
 	}

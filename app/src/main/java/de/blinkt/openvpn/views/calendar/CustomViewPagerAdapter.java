@@ -38,7 +38,7 @@ public class CustomViewPagerAdapter<V extends View> extends PagerAdapter {
 			((ViewPager) arg0).addView(views[arg1 % views.length], 0);
 		}
 		catch (Exception e){
-
+			e.printStackTrace();
 		}
 		return views[arg1 % views.length];
 	}

@@ -176,7 +176,7 @@ public class MyReceiver extends BroadcastReceiver implements InterfaceCallback{
 						msgIntent.putExtra(SMSAcivity.KEY_EXTRAS, extras);
 					}
 				} catch (JSONException e) {
-
+					e.printStackTrace();
 				}
 			}
 			context.sendBroadcast(msgIntent);

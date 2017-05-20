@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aixiaoqi.socket.SocketConstant;
 import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
@@ -52,8 +53,14 @@ public class FreeWorryIntroActivity extends BaseNetActivity {
 	private void initSet() {
 		hasLeftViewTitle(R.string.free_for_worry, 0);
 		if (confirmedPhoneNum == null) {
-			CommonTools.showShortToast(this, getString(R.string.please_regist_confirmed));
-			finish();
+			if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+				Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
+				startActivity(intent);
+				finish();
+			} else {
+				CommonTools.showShortToast(this, getString(R.string.please_regist_confirmed));
+				finish();
+			}
 		} else {
 			introTextView.setText(getString(R.string.phone_in_device) + confirmedPhoneNum);
 		}

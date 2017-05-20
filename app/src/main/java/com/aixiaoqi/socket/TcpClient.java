@@ -61,7 +61,7 @@ public abstract class TcpClient implements Runnable {
 
 			}
 		} catch (ConnectException e) {
-
+			e.printStackTrace();
 			this.onConnectFailed();
 		} catch (Exception e) {
 			e.printStackTrace();

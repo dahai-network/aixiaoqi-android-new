@@ -297,7 +297,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 						try {
 							onBackPressed();
 						}catch (Exception e){
-
+							e.printStackTrace();
 						}
 				}
 			}else if(CallPhoneService.reportFlag.equals(action)){

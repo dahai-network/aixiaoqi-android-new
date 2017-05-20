@@ -29,6 +29,7 @@ public final class OSJudgementUtil {
 				            properties.getProperty("ro.miui.internal.storage", null) != null;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return mIsMIUIOS;
 	}

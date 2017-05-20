@@ -7,18 +7,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
-
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -27,7 +18,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import cn.com.aixiaoqi.R;
+
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.util.PinYinConverNumber;
@@ -170,7 +161,7 @@ public class AsyncQueryContactHandler extends AsyncQueryHandler {
                 }
 
             }catch (Exception e){
-
+				e.printStackTrace();
             }finally {
                 try {
                     if(input!=null)
@@ -179,7 +170,7 @@ public class AsyncQueryContactHandler extends AsyncQueryHandler {
                         cursorCantacts.close();
                     }
                 }catch (Exception e){
-
+					e.printStackTrace();
                 }
 
             }

@@ -43,6 +43,7 @@ import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
 import de.blinkt.openvpn.activities.ImportantAuthorityActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
+import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.PackageCategoryActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
@@ -84,137 +85,138 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKSET;
  * A simple {@link Fragment} subclass.
  */
 public class AccountFragment extends BaseStatusFragment implements View.OnClickListener, InterfaceCallback, DialogInterfaceTypeBase {
-    @BindView(R.id.title)
-    TitleBar title;
-    @BindView(R.id.headImageView)
-    ImageView headImageView;
-    @BindView(R.id.accountNameTextView)
-    TextView accountNameTextView;
-    @BindView(R.id.accountPhoneTextView)
-    TextView accountPhoneTextView;
-    @BindView(R.id.rl_people_center)
-    RelativeLayout rlPeopleCenter;
-    @BindView(R.id.balanceTextView)
-    TextView balanceTextView;
-    @BindView(R.id.activateRelativeLayout)
-    RelativeLayout activateRelativeLayout;
-    @BindView(R.id.addDeviceRelativeLayout)
-    RelativeLayout addDeviceRelativeLayout;
-    @BindView(R.id.deviceSummarizedRelativeLayout)
-    RelativeLayout deviceSummarizedRelativeLayout;
-    @BindView(R.id.permission_set)
-    TextView tvPermissionSet;
-    @BindView(R.id.billtv)
-    TextView billTv;
-    @BindView(R.id.tv_setting)
-    TextView tvSetting;
-    @BindView(R.id.deviceNameTextView)
-    TextView deviceNameTextView;
-    @BindView(R.id.powerTextView)
-    TextView powerTextView;
-    @BindView(R.id.signalIconImageView)
-    ImageView signalIconImageView;
-    @BindView(R.id.operatorTextView)
-    TextView operatorTextView;
-    @BindView(R.id.rechargeTextView)
-    TextView rechargeTextView;
-    @BindView(R.id.unBindTextView)
-    TextView unBindTextView;
-    @BindView(R.id.noPacketRelativeLayout)
-    RelativeLayout noPacketRelativeLayout;
-    @BindView(R.id.PacketRelativeLayout)
-    RelativeLayout PacketRelativeLayout;
-    @BindView(R.id.add_or_activate_package)
-    TextView addOrActivatePackage;
-    @BindView(R.id.call_time)
-    TextView callTime;
-    @BindView(R.id.flow)
-    TextView flow;
-    @BindView(R.id.flow_count)
-    TextView flowCount;
-    @BindView(R.id.package_all_count)
-    TextView packageAllCount;
-    @BindView(R.id.accountScrollView)
-    ScrollView accountScrollView;
-    @BindView(R.id.serviceTextView)
-    TextView serviceTextView;
-    //bluetooth status蓝牙状态
-    private String TAG = "AccountFragment";
-    boolean hasPackage = false;
-    public static ImageView tvNewPackagetAction;
-    public static ImageView tvNewVersion;
-    private final static int SIGN_MSG_ONE = 1;
-    private final static int SIGN_MSG_TWO = 2;
-    private final static int SIGN_MSG_THREE = 3;
-    private final static int SIGN_MSG_FOUR = 4;
-    private final static int SIGN_MSG_FIVE = 5;
-    private final static int SIGN_MSG_SIX = 6;
+	@BindView(R.id.title)
+	TitleBar title;
+	@BindView(R.id.headImageView)
+	ImageView headImageView;
+	@BindView(R.id.accountNameTextView)
+	TextView accountNameTextView;
+	@BindView(R.id.accountPhoneTextView)
+	TextView accountPhoneTextView;
+	@BindView(R.id.rl_people_center)
+	RelativeLayout rlPeopleCenter;
+	@BindView(R.id.balanceTextView)
+	TextView balanceTextView;
+	@BindView(R.id.activateRelativeLayout)
+	RelativeLayout activateRelativeLayout;
+	@BindView(R.id.addDeviceRelativeLayout)
+	RelativeLayout addDeviceRelativeLayout;
+	@BindView(R.id.deviceSummarizedRelativeLayout)
+	RelativeLayout deviceSummarizedRelativeLayout;
+	@BindView(R.id.permission_set)
+	TextView tvPermissionSet;
+	@BindView(R.id.billtv)
+	TextView billTv;
+	@BindView(R.id.tv_setting)
+	TextView tvSetting;
+	@BindView(R.id.deviceNameTextView)
+	TextView deviceNameTextView;
+	@BindView(R.id.powerTextView)
+	TextView powerTextView;
+	@BindView(R.id.signalIconImageView)
+	ImageView signalIconImageView;
+	@BindView(R.id.operatorTextView)
+	TextView operatorTextView;
+	@BindView(R.id.rechargeTextView)
+	TextView rechargeTextView;
+	@BindView(R.id.unBindTextView)
+	TextView unBindTextView;
+	@BindView(R.id.noPacketRelativeLayout)
+	RelativeLayout noPacketRelativeLayout;
+	@BindView(R.id.PacketRelativeLayout)
+	RelativeLayout PacketRelativeLayout;
+	@BindView(R.id.add_or_activate_package)
+	TextView addOrActivatePackage;
+	@BindView(R.id.call_time)
+	TextView callTime;
+	@BindView(R.id.flow)
+	TextView flow;
+	@BindView(R.id.flow_count)
+	TextView flowCount;
+	@BindView(R.id.package_all_count)
+	TextView packageAllCount;
+	@BindView(R.id.accountScrollView)
+	ScrollView accountScrollView;
+	@BindView(R.id.serviceTextView)
+	TextView serviceTextView;
+	//bluetooth status蓝牙状态
+	private String TAG = "AccountFragment";
+	boolean hasPackage = false;
+	public static ImageView tvNewPackagetAction;
+	public static ImageView tvNewVersion;
+	private final static int SIGN_MSG_ONE = 1;
+	private final static int SIGN_MSG_TWO = 2;
+	private final static int SIGN_MSG_THREE = 3;
+	private final static int SIGN_MSG_FOUR = 4;
+	private final static int SIGN_MSG_FIVE = 5;
+	private final static int SIGN_MSG_SIX = 6;
+	private UsageRemainEntity.Used used;
 
-    public AccountFragment() {
-        // Required empty public constructor
-    }
+	public AccountFragment() {
+		// Required empty public constructor
+	}
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case SIGN_MSG_ONE:
-                    if (tvNewPackagetAction != null)
-                        tvNewPackagetAction.setVisibility(View.VISIBLE);
-                    break;
-                case SIGN_MSG_TWO:
-                    if (tvNewPackagetAction != null) {
-                        tvNewPackagetAction.setVisibility(View.GONE);
-                    }
-                    break;
-                case SIGN_MSG_THREE:
-                    if (tvNewVersion != null && !AppMode.getInstance().isClickAddDevice)
-                        tvNewVersion.setVisibility(View.VISIBLE);
-                    break;
-                case SIGN_MSG_FOUR:
-                    if (tvNewVersion != null)
-                        tvNewVersion.setVisibility(View.GONE);
-                    break;
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+				case SIGN_MSG_ONE:
+					if (tvNewPackagetAction != null)
+						tvNewPackagetAction.setVisibility(View.VISIBLE);
+					break;
+				case SIGN_MSG_TWO:
+					if (tvNewPackagetAction != null) {
+						tvNewPackagetAction.setVisibility(View.GONE);
+					}
+					break;
+				case SIGN_MSG_THREE:
+					if (tvNewVersion != null && !AppMode.getInstance().isClickAddDevice)
+						tvNewVersion.setVisibility(View.VISIBLE);
+					break;
+				case SIGN_MSG_FOUR:
+					if (tvNewVersion != null)
+						tvNewVersion.setVisibility(View.GONE);
+					break;
 
-            }
-            EventBus.getDefault().post(new ChangeViewStateEvent(msg.what));
-        }
-    };
+			}
+			EventBus.getDefault().post(new ChangeViewStateEvent(msg.what));
+		}
+	};
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Glide.get(getActivity()).clearMemory();
-        setLayoutId(R.layout.fragment_account);
-        View rootView = super.onCreateView(inflater, container,
-                savedInstanceState);
-        topProgressView.setWhiteBack(true);
-        ButterKnife.bind(this, rootView);
-        title.setTextTitle(getString(R.string.personal_center));
-        tvNewPackagetAction = (ImageView) rootView.findViewById(R.id.tv_new_packaget_action);
-        tvNewVersion = (ImageView) rootView.findViewById(R.id.tv_new_version);
-        //初始化状态
-        tvNewPackagetAction.setVisibility(View.GONE);
-        tvNewVersion.setVisibility(View.GONE);
-        //注册广播
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver, new IntentFilter("Notic"));
-        return rootView;
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		Glide.get(getActivity()).clearMemory();
+		setLayoutId(R.layout.fragment_account);
+		View rootView = super.onCreateView(inflater, container,
+				savedInstanceState);
+		topProgressView.setWhiteBack(true);
+		ButterKnife.bind(this, rootView);
+		title.setTextTitle(getString(R.string.personal_center));
+		tvNewPackagetAction = (ImageView) rootView.findViewById(R.id.tv_new_packaget_action);
+		tvNewVersion = (ImageView) rootView.findViewById(R.id.tv_new_version);
+		//初始化状态
+		tvNewPackagetAction.setVisibility(View.GONE);
+		tvNewVersion.setVisibility(View.GONE);
+		//注册广播
+		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver, new IntentFilter("Notic"));
+		return rootView;
+	}
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //获取数据，每次都重新获取一次以保持正确性。
-        getData();
-        getDeviceType();
-        getPackage();
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+		//获取数据，每次都重新获取一次以保持正确性。
+		getData();
+		getDeviceType();
+		getPackage();
+	}
 
 
-    private void getPackage() {
-        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
-    }
+	private void getPackage() {
+		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
+	}
 
 	private void getDeviceType() {
 		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))) {
@@ -236,21 +238,21 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		}
 	}
 
-    /**
-     * 设备布局
-     *
-     * @param isShow
-     */
-    //  @Override
-    public void showDeviceSummarized(boolean isShow) {
-        if (deviceSummarizedRelativeLayout != null) {
-            if (isShow) {
-                deviceSummarizedRelativeLayout.setVisibility(View.VISIBLE);
-            } else {
-                deviceSummarizedRelativeLayout.setVisibility(GONE);
-            }
-        }
-    }
+	/**
+	 * 设备布局
+	 *
+	 * @param isShow
+	 */
+	//  @Override
+	public void showDeviceSummarized(boolean isShow) {
+		if (deviceSummarizedRelativeLayout != null) {
+			if (isShow) {
+				deviceSummarizedRelativeLayout.setVisibility(View.VISIBLE);
+			} else {
+				deviceSummarizedRelativeLayout.setVisibility(GONE);
+			}
+		}
+	}
 
 //	public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
 //		try {
@@ -264,14 +266,15 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 //	}
 
 
-	private void showDeviceType(String deviceType){
+	private void showDeviceType(String deviceType) {
 		if (!TextUtils.isEmpty(deviceType))
 			deviceNameTextView.setText(deviceType);
 	}
+
 	//显示电量
 	public void setPowerPercent() {
-		Log.e(TAG,"PowerPercent="+SharedUtils.getInstance().readInt(Constant.BRACELETPOWER));
-		if (SharedUtils.getInstance().readInt(Constant.BRACELETPOWER)!=0)
+		Log.e(TAG, "PowerPercent=" + SharedUtils.getInstance().readInt(Constant.BRACELETPOWER));
+		if (SharedUtils.getInstance().readInt(Constant.BRACELETPOWER) != 0)
 			powerTextView.setText(SharedUtils.getInstance().readInt(Constant.BRACELETPOWER) + "%");
 	}
 
@@ -306,38 +309,38 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		}
 	}
 
-    private void getData() {
+	private void getData() {
 
-        if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.NICK_NAME)))
-            accountNameTextView.setText(SharedUtils.getInstance().readString(Constant.NICK_NAME));
-        Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).centerCrop().placeholder(R.drawable.default_head)
-                .transform(new GlideCircleTransform(ICSOpenVPNApplication.getContext(), 2, ICSOpenVPNApplication.getContext().getResources().getColor(R.color.white)))
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headImageView);
-        accountPhoneTextView.setText(SharedUtils.getInstance().readString(Constant.USER_NAME));
-        BalanceHttp http = new BalanceHttp(this, HttpConfigUrl.COMTYPE_GET_BALANCE);
-        new Thread(http).start();
+		if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.NICK_NAME)))
+			accountNameTextView.setText(SharedUtils.getInstance().readString(Constant.NICK_NAME));
+		Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).centerCrop().placeholder(R.drawable.default_head)
+				.transform(new GlideCircleTransform(ICSOpenVPNApplication.getContext(), 2, ICSOpenVPNApplication.getContext().getResources().getColor(R.color.white)))
+				.diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headImageView);
+		accountPhoneTextView.setText(SharedUtils.getInstance().readString(Constant.USER_NAME));
+		BalanceHttp http = new BalanceHttp(this, HttpConfigUrl.COMTYPE_GET_BALANCE);
+		new Thread(http).start();
 
-    }
+	}
 
-    private void showDialog() {
-        //不能按返回键，只能二选其一
-        DialogBalance cardRuleBreakDialog = new DialogBalance(this, getActivity(), R.layout.dialog_balance, 2);
-        cardRuleBreakDialog.setCanClickBack(false);
-        cardRuleBreakDialog.changeText(getResources().getString(R.string.are_you_sure_unbind), getResources().getString(R.string.sure));
-    }
+	private void showDialog() {
+		//不能按返回键，只能二选其一
+		DialogBalance cardRuleBreakDialog = new DialogBalance(this, getActivity(), R.layout.dialog_balance, 2);
+		cardRuleBreakDialog.setCanClickBack(false);
+		cardRuleBreakDialog.changeText(getResources().getString(R.string.are_you_sure_unbind), getResources().getString(R.string.sure));
+	}
 
 
-    @Override
-    public void dialogText(int type, String text) {
-        if (type == 2) {
-            if (!CommonTools.isFastDoubleClick(2000)) {
-                //断开连接
-                CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
-            }
-        }
-    }
+	@Override
+	public void dialogText(int type, String text) {
+		if (type == 2) {
+			if (!CommonTools.isFastDoubleClick(2000)) {
+				//断开连接
+				CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);
+			}
+		}
+	}
 
-    private boolean isClickAddDevice = false;
+	private boolean isClickAddDevice = false;
 
 	@OnClick({R.id.rechargeTextView,
 			R.id.activateRelativeLayout,
@@ -416,15 +419,15 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 			case R.id.serviceTextView:
 				if ("---".equals(serviceTextView.getText().toString())) {
 					intent = new Intent(getActivity(), FreeWorryPacketChoiceActivity.class);
-					startActivity(intent);
 				} else {
-					intent = activateClick();
+					MyOrderDetailActivity.launch(getActivity(), used.getServiceOrderId());
+					return;
 				}
 				break;
 		}
 		getActivity().startActivity(intent);
 
-    }
+	}
 
 	@NonNull
 	private Intent activateClick() {
@@ -458,8 +461,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	}
 
 
-    @Override
-    public void rightComplete(int cmdType, CommonHttp object) {
+	@Override
+	public void rightComplete(int cmdType, CommonHttp object) {
 
 		if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
 			BalanceHttp http = (BalanceHttp) object;
@@ -489,37 +492,37 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
 
-            if (object.getStatus() == 1) {
-                OrderUsageRemainHttp orderUsageRemainHttp = (OrderUsageRemainHttp) object;
-                UsageRemainEntity.Unactivated unactivated = orderUsageRemainHttp.getUsageRemainEntity().getUnactivated();
-                UsageRemainEntity.Used used = orderUsageRemainHttp.getUsageRemainEntity().getUsed();
-                if (used == null) {
-                    return;
-                }
-                if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
-                    if (!AppMode.getInstance().isClickPackage)
-                        mHandler.sendEmptyMessage(1);
-                    hasPackage = true;
-                    PacketRelativeLayout.setVisibility(View.GONE);
-                    noPacketRelativeLayout.setVisibility(View.VISIBLE);
-                    Drawable drawable = getResources().getDrawable(R.drawable.activate_device_account);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
-                    addOrActivatePackage.setText(getString(R.string.activate_packet));
-                } else if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
-                    mHandler.sendEmptyMessage(2);
-                    hasPackage = false;
-                    PacketRelativeLayout.setVisibility(View.GONE);
-                    noPacketRelativeLayout.setVisibility(View.VISIBLE);
-                    Drawable drawable = getResources().getDrawable(R.drawable.add_device);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
-                    addOrActivatePackage.setText(getString(R.string.add_package));
-                } else {//有套餐且激活了。
-                    hasPackage = true;
-                    PacketRelativeLayout.setVisibility(View.VISIBLE);
-                    noPacketRelativeLayout.setVisibility(View.GONE);
-                    callTime.setText(used.getTotalRemainingCallMinutes() + "分");
+			if (object.getStatus() == 1) {
+				OrderUsageRemainHttp orderUsageRemainHttp = (OrderUsageRemainHttp) object;
+				UsageRemainEntity.Unactivated unactivated = orderUsageRemainHttp.getUsageRemainEntity().getUnactivated();
+				used = orderUsageRemainHttp.getUsageRemainEntity().getUsed();
+				if (used == null) {
+					return;
+				}
+				if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
+					if (!AppMode.getInstance().isClickPackage)
+						mHandler.sendEmptyMessage(1);
+					hasPackage = true;
+					PacketRelativeLayout.setVisibility(View.GONE);
+					noPacketRelativeLayout.setVisibility(View.VISIBLE);
+					Drawable drawable = getResources().getDrawable(R.drawable.activate_device_account);
+					drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
+					addOrActivatePackage.setText(getString(R.string.activate_packet));
+				} else if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
+					mHandler.sendEmptyMessage(2);
+					hasPackage = false;
+					PacketRelativeLayout.setVisibility(View.GONE);
+					noPacketRelativeLayout.setVisibility(View.VISIBLE);
+					Drawable drawable = getResources().getDrawable(R.drawable.add_device);
+					drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
+					addOrActivatePackage.setText(getString(R.string.add_package));
+				} else {//有套餐且激活了。
+					hasPackage = true;
+					PacketRelativeLayout.setVisibility(View.VISIBLE);
+					noPacketRelativeLayout.setVisibility(View.GONE);
+					callTime.setText(used.getTotalRemainingCallMinutes() + "分");
 
 					//显示出有未激活套餐的提示
 					if (!"0".equals(unactivated.getTotalNumFlow()) && !AppMode.getInstance().isClickPackage) {
@@ -575,22 +578,22 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		}
 	}
 
-    @Override
-    public void errorComplete(int cmdType, String errorMessage) {
-        CommonTools.showShortToast(getActivity(), errorMessage);
-        isClickAddDevice = false;
-    }
+	@Override
+	public void errorComplete(int cmdType, String errorMessage) {
+		CommonTools.showShortToast(getActivity(), errorMessage);
+		isClickAddDevice = false;
+	}
 
-    @Override
-    public void noNet() {
-        isClickAddDevice = false;
-        CommonTools.showShortToast(getActivity(), getResources().getString(R.string.no_wifi));
-    }
+	@Override
+	public void noNet() {
+		isClickAddDevice = false;
+		CommonTools.showShortToast(getActivity(), getResources().getString(R.string.no_wifi));
+	}
 
 
 	@Override
 	protected void setBleStatus(String bleStatus) {
-		Log.i(TAG,"bleStatus="+bleStatus);
+		Log.i(TAG, "bleStatus=" + bleStatus);
 		if (isAdded()) {
 			if (getString(R.string.index_aixiaoqicard).equals(bleStatus)) {
 				operatorTextView.setText(getString(R.string.unitoy_card));
@@ -599,30 +602,30 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	}
 
 
-    public final String NoticSign = "flg";
+	public final String NoticSign = "flg";
 
-    public BroadcastReceiver mNoticBroadCastReciver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
+	public BroadcastReceiver mNoticBroadCastReciver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
 
-            boolean flg = intent.getBooleanExtra(NoticSign, false);
-            if (flg)
-                mHandler.sendEmptyMessage(3);
-            else
-                mHandler.sendEmptyMessage(4);
+			boolean flg = intent.getBooleanExtra(NoticSign, false);
+			if (flg)
+				mHandler.sendEmptyMessage(3);
+			else
+				mHandler.sendEmptyMessage(4);
 
-            Log.d(TAG, "onReceive: " + flg);
-        }
+			Log.d(TAG, "onReceive: " + flg);
+		}
 
-    };
+	};
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        AppMode.getInstance().isClickPackage = false;
-        AppMode.getInstance().isClickAddDevice = false;
-        tvNewVersion = null;
-        tvNewPackagetAction = null;
-    }
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		AppMode.getInstance().isClickPackage = false;
+		AppMode.getInstance().isClickAddDevice = false;
+		tvNewVersion = null;
+		tvNewPackagetAction = null;
+	}
 }

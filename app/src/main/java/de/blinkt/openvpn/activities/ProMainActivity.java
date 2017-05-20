@@ -84,6 +84,7 @@ import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.enentbus.OptionProMainActivityView;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.GrayService;
+import de.blinkt.openvpn.util.CheckAuthorityUtil;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.NetworkUtils;
@@ -95,70 +96,69 @@ import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
-import static de.blinkt.openvpn.constant.Constant.RETURN_POWER;
 
 
 public class ProMainActivity extends BaseNetActivity implements DialogInterfaceTypeBase {
 
-    public static ProMainActivity instance = null;
-    @BindView(R.id.radiogroup)
-    RadioGroup radiogroup;
-    @BindView(R.id.bottom_fragment)
-    FrameLayout bottomFragment;
-    private int REQUEST_LOCATION_PERMISSION = 3;
-    @BindView(R.id.mViewPager)
-    CustomViewPager mViewPager;
-    @BindView(R.id.rb_index)
-    MyRadioButton rbIndex;
-    @BindView(R.id.rb_phone)
-    MyRadioButton rbPhone;
-    @BindView(R.id.rb_address)
-    MyRadioButton rbAddress;
-    @BindView(R.id.rb_personal)
-    MyRadioButton rbPersonal;
+	public static ProMainActivity instance = null;
+	@BindView(R.id.radiogroup)
+	RadioGroup radiogroup;
+	@BindView(R.id.bottom_fragment)
+	FrameLayout bottomFragment;
+	private int REQUEST_LOCATION_PERMISSION = 3;
+	@BindView(R.id.mViewPager)
+	CustomViewPager mViewPager;
+	@BindView(R.id.rb_index)
+	MyRadioButton rbIndex;
+	@BindView(R.id.rb_phone)
+	MyRadioButton rbPhone;
+	@BindView(R.id.rb_address)
+	MyRadioButton rbAddress;
+	@BindView(R.id.rb_personal)
+	MyRadioButton rbPersonal;
 
-    @BindView(R.id.tv_red_dot_01)
-    TextView tvRedDot01;
-    @BindView(R.id.tv_red_dot_04)
-    TextView tvRedDot04;
-    private ReceiveBLEMoveReceiver bleMoveReceiver;
-    private UartService mService = null;
-    //进入主页后打开蓝牙设备搜索绑定过的设备
-    private BluetoothAdapter mBluetoothAdapter;
-    private int REQUEST_ENABLE_BT = 2;
-    private String deviceAddress = "";
-    ArrayList<Fragment> list = new ArrayList<>();
-    CellPhoneFragment cellPhoneFragment;
-    AccountFragment accountFragment;
-    AddressListFragment addressListFragment;
-    SportFragment sportFragment;
-    IndexFragment indexFragment;
-    Intent intentCallPhone;
-    public static boolean isForeground = false;
-    public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
-    //重连时间
-    private int RECONNECT_TIME = 180000;
-    SocketConnection socketUdpConnection;
-    SocketConnection socketTcpConnection;
-    public static boolean isStartSdk = false;
-    public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
-    public static SendYiZhengService sendYiZhengService = null;
-    public static String confirmedPhoneNum;
-    Intent intent = new Intent("Notic");
-    //红点控制
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    tvRedDot04.setVisibility(View.VISIBLE);
-                    intent.putExtra("flg", true);
-                    break;
-                case 2:
-                    tvRedDot04.setVisibility(View.GONE);
-                    intent.putExtra("flg", false);
-                    break;
+	@BindView(R.id.tv_red_dot_01)
+	TextView tvRedDot01;
+	@BindView(R.id.tv_red_dot_04)
+	TextView tvRedDot04;
+	private ReceiveBLEMoveReceiver bleMoveReceiver;
+	private UartService mService = null;
+	//进入主页后打开蓝牙设备搜索绑定过的设备
+	private BluetoothAdapter mBluetoothAdapter;
+	private int REQUEST_ENABLE_BT = 2;
+	private String deviceAddress = "";
+	ArrayList<Fragment> list = new ArrayList<>();
+	CellPhoneFragment cellPhoneFragment;
+	AccountFragment accountFragment;
+	AddressListFragment addressListFragment;
+	SportFragment sportFragment;
+	IndexFragment indexFragment;
+	Intent intentCallPhone;
+	public static boolean isForeground = false;
+	public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
+	//重连时间
+	private int RECONNECT_TIME = 180000;
+	SocketConnection socketUdpConnection;
+	SocketConnection socketTcpConnection;
+	public static boolean isStartSdk = false;
+	public static SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange = null;
+	public static SendYiZhengService sendYiZhengService = null;
+	public static String confirmedPhoneNum;
+	Intent intent = new Intent("Notic");
+	//红点控制
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+				case 1:
+					tvRedDot04.setVisibility(View.VISIBLE);
+					intent.putExtra("flg", true);
+					break;
+				case 2:
+					tvRedDot04.setVisibility(View.GONE);
+					intent.putExtra("flg", false);
+					break;
 			}
 			LocalBroadcastManager.getInstance(ProMainActivity.this).sendBroadcast(intent);
 		}
@@ -171,7 +171,8 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 	public Object getLastCustomNonConfigurationInstance() {
 		return super.getLastCustomNonConfigurationInstance();
 	}
-//绑定UartService服务
+
+	//绑定UartService服务
 	private ServiceConnection mServiceConnection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName className, IBinder rawBinder) {
 			mService = ((UartService.LocalBinder) rawBinder).getService();
@@ -196,11 +197,11 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pro_main);
 		ButterKnife.bind(this);
+		initSet();
 		initFragment();
 		initView();
 		setListener();
 		initServices();
-		initSet();
 		socketUdpConnection = new SocketConnection();
 		socketTcpConnection = new SocketConnection();
 		//注册eventbus，观察goip注册问题
@@ -225,6 +226,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			startActivity(intent);
 			SharedUtils.getInstance().writeString(Constant.RECOMMAND_DATE, todayStr);
 		}
+		CheckAuthorityUtil.checkPermissions(this, Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG);
 	}
 
 
@@ -248,7 +250,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			tvRedDot04.setVisibility(View.GONE);
 	}
 
-//初始化广播
+	//初始化广播
 	private void initBrocast() {
 		LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(showRedDotReceiver, showRedDotIntentFilter());
 		if (bleMoveReceiver == null) {
@@ -295,7 +297,8 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
 		return true;
 	}
-//实例化UartService
+
+	//实例化UartService
 	public void initServices() {
 
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
@@ -353,7 +356,8 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		intentFilter.addAction(MALL_SHOW_RED_DOT);
 		return intentFilter;
 	}
-//初始化Fragment
+
+	//初始化Fragment
 	private void initFragment() {
 
 		if (indexFragment == null) {
@@ -385,7 +389,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+
 		if (requestCode == REQUEST_ENABLE_BT) {
 			if (resultCode == Activity.RESULT_OK) {
 				CommonTools.showShortToast(this, "蓝牙已启动");
@@ -415,7 +419,12 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			} else {
 				CommonTools.showShortToast(this, getString(R.string.no_location_tips));
 			}
+		} else {
+			if (cellPhoneFragment != null) {
+				cellPhoneFragment.onActivityResult(requestCode, resultCode, data);
+			}
 		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	//如果蓝牙开启后，之前已绑定的设备会重新连接上
@@ -494,7 +503,8 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		super.onStop();
 		isForeground = false;
 	}
-//ViewPager添加监听
+
+	//ViewPager添加监听
 	private void setListener() {
 		new PageChangeListener(mViewPager) {
 			@Override
@@ -549,7 +559,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		}
 	}
 
-//销毁数据
+	//销毁数据
 	@Override
 	protected void onDestroy() {
 
@@ -581,7 +591,8 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		EventBus.getDefault().unregister(this);
 		super.onDestroy();
 	}
-//解除绑定
+
+	//解除绑定
 	private void unbindTcpService() {
 		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
 			unbindService(socketTcpConnection);
@@ -591,13 +602,15 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			}
 		}
 	}
-//重新赋值
+
+	//重新复制
 	private void destorySocketService() {
 		if (SocketConstant.REGISTER_STATUE_CODE != 0) {
 			SocketConstant.REGISTER_STATUE_CODE = 1;
 		}
 	}
-//网路请求
+
+	//网路请求
 	@Override
 	public void rightComplete(int cmdType, final CommonHttp object) {
 		if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
@@ -735,7 +748,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		}
 	}
 
-//控制扫描设备
+	//控制扫描设备
 	private void scanLeDevice(final boolean enable) {
 		e("scanLeDevice");
 		if (enable) {
@@ -746,7 +759,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
 	}
 
-//扫描结果监听
+	//扫描结果监听
 	private BluetoothAdapter.LeScanCallback mLeScanCallback =
 			new BluetoothAdapter.LeScanCallback() {
 				@Override
@@ -1017,7 +1030,8 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 	private void requestPacket() {
 		getConfigInfo();
 	}
-//接收蓝牙是否开启
+
+	//接收蓝牙是否开启
 	private BroadcastReceiver screenoffReceive = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {

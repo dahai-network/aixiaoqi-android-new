@@ -3,7 +3,6 @@ package de.blinkt.openvpn.http;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -219,7 +218,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			try {
 				file.createNewFile();
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
 		}
 		InputStream is = null;
@@ -259,6 +258,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 			try {
 				if (fos != null) fos.close();
 			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -496,6 +496,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 					if (certificate != null)
 						certificate.close();
 				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 
