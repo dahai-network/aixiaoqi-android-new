@@ -22,6 +22,7 @@ abstract public class SipEngineFactory {
 			theSipEngineFactory = (SipEngineFactory) lFactoryClass.newInstance();
 		}
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.err.println("cannot instanciate factory ["+factoryName+"]");
 		}
 		return theSipEngineFactory;

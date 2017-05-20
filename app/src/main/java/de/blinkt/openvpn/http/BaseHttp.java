@@ -69,7 +69,7 @@ public class BaseHttp extends CommonHttp {
 			try{
 				parseObject(response);
 			}catch (JsonSyntaxException e){
-
+				e.printStackTrace();
 			}
 		}
 		interfaceCallback.rightComplete(cmdType_, this);

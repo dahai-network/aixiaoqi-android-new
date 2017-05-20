@@ -62,7 +62,7 @@ public class BaseActivity extends CommenActivity {
 				try {
 					leftViewControl();
 				} catch (Exception e) {
-
+					e.printStackTrace();
                 }
 
             }

@@ -174,7 +174,7 @@ public class MyReceiver extends BroadcastReceiver {
 						msgIntent.putExtra(SMSAcivity.KEY_EXTRAS, extras);
 					}
 				} catch (JSONException e) {
-
+					e.printStackTrace();
 				}
 			}
 			context.sendBroadcast(msgIntent);

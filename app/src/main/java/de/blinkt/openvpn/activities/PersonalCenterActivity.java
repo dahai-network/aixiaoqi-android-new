@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,22 +27,19 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.widget.GlideCircleTransform;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.ModifyPersonInfoHttp;
 import de.blinkt.openvpn.http.UploadHeaderHttp;
+import de.blinkt.openvpn.util.CheckAuthorityUtil;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.UtilsImageProcess;
-
-
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.dialog.DialogPicker;
 import de.blinkt.openvpn.views.dialog.DialogSexAndHeaderAndMyPacket;
@@ -55,7 +53,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CHANGENAME;
 import static de.blinkt.openvpn.constant.UmengContant.CHANGESPORTTARGET;
 import static de.blinkt.openvpn.constant.UmengContant.CHANGEWEIGHT;
 
-public class PersonalCenterActivity extends BaseNetActivity implements  View.OnClickListener, DialogInterfaceTypeBase {
+public class PersonalCenterActivity extends BaseNetActivity implements View.OnClickListener, DialogInterfaceTypeBase {
 
 	@BindView(R.id.headImageView)
 	ImageView headImageView;
@@ -124,11 +122,11 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 			sexTextView.setText(sharedUtils.readString(Constant.GENDER).equals("0") ? getString(R.string.man) : getString(R.string.women));
 		}
 		if (!TextUtils.isEmpty(sharedUtils.readString(Constant.BRITHDAY))) {
-		String str=	sharedUtils.readString(Constant.BRITHDAY);
-			if(str.endsWith(getString(R.string.month)))
-			ageTextView.setText(str);
-			else{
-				ageTextView.setText(str+getString(R.string.month));
+			String str = sharedUtils.readString(Constant.BRITHDAY);
+			if (str.endsWith(getString(R.string.month)))
+				ageTextView.setText(str);
+			else {
+				ageTextView.setText(str + getString(R.string.month));
 			}
 		}
 		if (!TextUtils.isEmpty(sharedUtils.readString(Constant.HEIGHT))) {
@@ -171,9 +169,9 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 
 			case R.id.headImageView:
 				//友盟方法统计
+				CheckAuthorityUtil.checkPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
 				MobclickAgent.onEvent(this, CHANGEHEADER);
 				DialogSexAndHeaderAndMyPacket(PHEADER_PIC);
-
 				break;
 			case R.id.nameTableRow:
 				//友盟方法统计
@@ -184,7 +182,7 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 				} else {
 					name = nameTextView.getText().toString();
 				}
-				toActivity(new Intent(this,EditNameActivity.class).putExtra(IntentPutKeyConstant.REAL_NAME_EDIT,name).putExtra(IntentPutKeyConstant.EDIT_TYPE,IntentPutKeyConstant.EDIT_NICKNAME));
+				toActivity(new Intent(this, EditNameActivity.class).putExtra(IntentPutKeyConstant.REAL_NAME_EDIT, name).putExtra(IntentPutKeyConstant.EDIT_TYPE, IntentPutKeyConstant.EDIT_NICKNAME));
 				break;
 			case R.id.sexTableRow:
 				//友盟方法统计
@@ -197,7 +195,7 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 				dialogTime();
 				break;
 			case R.id.statureTableRow:
-                //友盟方法统计
+				//友盟方法统计
 				MobclickAgent.onEvent(this, CHANGEHEIGHT);
 				String height = sharedUtils.readString(Constant.HEIGHT);
 				int heightInt;
@@ -279,7 +277,7 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 					CommonTools.showShortToast(this, getString(R.string.more_current_time));
 					return;
 				}
-				ageTextView.setText(text.substring(0, 7).replace("-", getString(R.string.year))+getString(R.string.month));
+				ageTextView.setText(text.substring(0, 7).replace("-", getString(R.string.year)) + getString(R.string.month));
 				text = time + "";
 				break;
 			case PHEADER_PIC:
@@ -436,19 +434,19 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 							transform(new GlideCircleTransform(this)).into(headImageView);
 					uploadHeaderHttp(mImageCaptureUri.getPath());
 				} catch (IOException e) {
-					CommonTools.showShortToast(this,getString(R.string.update_fail));
+					CommonTools.showShortToast(this, getString(R.string.update_fail));
 					e.printStackTrace();
 				}
-			}else{
-				CommonTools.showShortToast(this,getString(R.string.update_fail));
+			} else {
+				CommonTools.showShortToast(this, getString(R.string.update_fail));
 			}
 		}
 
 	}
 
-	private void uploadHeaderHttp(String url){
+	private void uploadHeaderHttp(String url) {
 		showProgress(R.string.update_header);
-		createHttpRequest(HttpConfigUrl.COMTYPE_UPLOAD_HEADER,url);
+		createHttpRequest(HttpConfigUrl.COMTYPE_UPLOAD_HEADER, url);
 	}
 
 	/**
@@ -463,14 +461,14 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 		if (cmdType == HttpConfigUrl.COMTYPE_UPLOAD_HEADER) {
 
 			UploadHeaderHttp uploadHeaderHttp = (UploadHeaderHttp) object;
-			if(uploadHeaderHttp.getStatus()==1) {
+			if (uploadHeaderHttp.getStatus() == 1) {
 				dismissProgress();
 				SharedUtils sharedUtils = SharedUtils.getInstance();
 				sharedUtils.writeString(Constant.USER_HEAD, uploadHeaderHttp.getImageEntity().getUserHead());
 				Glide.with(ICSOpenVPNApplication.getContext()).load(uploadHeaderHttp.getImageEntity().getUserHead()).placeholder(R.drawable.default_head).
 						transform(new GlideCircleTransform(this)).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(headImageView);
-			}else{
-				CommonTools.showShortToast(this,getString(R.string.update_fail));
+			} else {
+				CommonTools.showShortToast(this, getString(R.string.update_fail));
 			}
 		} else {
 			ModifyPersonInfoHttp modifyPersonInfoHttp = (ModifyPersonInfoHttp) object;
@@ -503,8 +501,8 @@ public class PersonalCenterActivity extends BaseNetActivity implements  View.OnC
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		if (cmdType == HttpConfigUrl.COMTYPE_UPLOAD_HEADER) {
-			if(!TextUtils.isEmpty(errorMessage))
-			CommonTools.showShortToast(this,errorMessage);
+			if (!TextUtils.isEmpty(errorMessage))
+				CommonTools.showShortToast(this, errorMessage);
 		}
 	}
 

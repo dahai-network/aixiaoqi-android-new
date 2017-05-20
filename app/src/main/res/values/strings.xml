@@ -684,4 +684,5 @@
     <string name="please_regist_confirmed">请注册和验证手机！</string>
     <string name="phone_in_device">设备内号码：</string>
     <string name="buy_month">购买月份</string>
+    <string name="device_already_bind">设备已被绑定，请解绑重试</string>
 </resources>

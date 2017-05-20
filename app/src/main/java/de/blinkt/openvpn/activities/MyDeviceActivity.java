@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
@@ -55,6 +56,7 @@ import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.UIOperatorEntity;
 import de.blinkt.openvpn.model.WriteCardEntity;
 import de.blinkt.openvpn.service.DfuService;
+import de.blinkt.openvpn.util.CheckAuthorityUtil;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.MySinkingView;
@@ -191,27 +193,29 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	//空中升级,如果没有设备类型就不升级，如果有的话再去升级。
 	private void skyUpgradeHttp() {
 		Log.e(TAG, "skyUpgradeHttp");
+		CheckAuthorityUtil.checkPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
 		long beforeRequestTime = SharedUtils.getInstance().readLong(Constant.UPGRADE_INTERVAL);
 		if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
 		{
-			int DeviceType ;
+			int DeviceType;
 			String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(braceletname)) {
 				if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
 					//手环固件
 					DeviceType = 0;
-				} else if(braceletname.contains(MyDeviceActivity.UNIBOX)){
+				} else if (braceletname.contains(MyDeviceActivity.UNIBOX)) {
 					//钥匙扣固件
 					DeviceType = 1;
-				}else{
+				} else {
 					return;
 				}
-			}else{
+			} else {
 				return;
 			}
 			createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
 		}
 	}
+
 	//初始化设备界面与设备类型
 	private void initSet() {
 		Log.e(TAG, "initSet");
@@ -223,7 +227,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 			deviceNameTextView.setText(getString(R.string.unibox_key));
-		} else if(bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)){
+		} else if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)) {
 			alarmClockLinearLayout.setVisibility(View.VISIBLE);
 			messageRemindLinearLayout.setVisibility(View.VISIBLE);
 			findStatusLinearLayout.setVisibility(View.VISIBLE);
@@ -250,11 +254,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			if (!TextUtils.isEmpty(blueStatus)) {
 				conStatusTextView.setText(blueStatus);
-				if(getString(R.string.index_high_signal).equals(blueStatus)){
+				if (getString(R.string.index_high_signal).equals(blueStatus)) {
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
-				}else{
-					if(getString(R.string.index_no_signal).equals(blueStatus)){
+				} else {
+					if (getString(R.string.index_no_signal).equals(blueStatus)) {
 						startAnim();
 					}
 					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
@@ -267,11 +271,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
 
 //如果重连失败再进入我的设备就清空重连次数重新进入连接流程
-        boolean isConnectBlueTooth = mService.isConnectedBlueTooth();
-        if (!isConnectBlueTooth) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-        }
+		boolean isConnectBlueTooth = mService.isConnectedBlueTooth();
+		if (!isConnectBlueTooth) {
+			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+		}
 
 	}
 
@@ -327,15 +331,15 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				if (CommonTools.isFastDoubleClick(1000)) {
 					return;
 				}
-				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED){
+				if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
 					if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETVERSION)) && !isUpgrade) {
 						SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, 0);
 						skyUpgradeHttp();
 					} else if (isUpgrade) {
 						showSkyUpgrade();
 					}
-				}else{
-					CommonTools.showShortToast(this,getString(R.string.unconnection_device));
+				} else {
+					CommonTools.showShortToast(this, getString(R.string.unconnection_device));
 				}
 
 				break;
@@ -379,7 +383,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							connectGoip();
 						} else {
 							//如果TCP服务关闭了，则通知主界面重新开启
-							EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.RESTART_TCP);
+							EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.RESTART_TCP);
 						}
 
 					} else if (SocketConstant.REGISTER_STATUE_CODE == 3) {
@@ -411,17 +415,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 	private void connectGoip() {
 		if (ProMainActivity.sendYiZhengService != null) {
-			SocketConstant.REGISTER_STATUE_CODE=2;
+			SocketConstant.REGISTER_STATUE_CODE = 2;
 			conStatusTextView.setText(getString(R.string.index_registing));
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
-			EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.REGISTER_CHANGING);
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.REGISTER_CHANGING);
 			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
+
 	//解除绑定
 	private void registFail() {
 		Log.e(TAG, "registFail");
-		EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.REGISTER_FAIL_INITIATIVE);
+		EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
 	}
 
 	private void restartUartService() {
@@ -766,7 +771,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void showDialogUpgrade() {
 		Log.d(TAG, "showDialogUpgrade");
 		isUpgrade = true;
-		if (upgradeDialog != null){
+		if (upgradeDialog != null) {
 			dialogUpgrade.setProgressBar();
 			upgradeDialog.show();
 		}
@@ -795,7 +800,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	public void noNet() {
 		CommonTools.showShortToast(this, getString(R.string.no_wifi));
 	}
-
 
 
 	@Override
@@ -963,7 +967,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	//接收到到卡注册状态作出相应的操作
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(SimRegisterStatue entity) {
-		e("RigsterSimStatue="+entity.getRigsterSimStatue()+"\nrigsterStatueReason="+entity.getRigsterStatueReason()+"\nSocketConstant.REGISTER_STATUE_CODE ="+SocketConstant.REGISTER_STATUE_CODE );
+		e("RigsterSimStatue=" + entity.getRigsterSimStatue() + "\nrigsterStatueReason=" + entity.getRigsterStatueReason() + "\nSocketConstant.REGISTER_STATUE_CODE =" + SocketConstant.REGISTER_STATUE_CODE);
 		synchronized (MyDeviceActivity.this) {
 			conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 			switch (entity.getRigsterSimStatue()) {
@@ -1000,8 +1004,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 	}
 
-	private void registerFail(int failReason){
-		switch (failReason){
+	private void registerFail(int failReason) {
+		switch (failReason) {
 			case SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA:
 
 				break;
@@ -1017,8 +1021,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		}
 
 	}
-	private void registering(SimRegisterStatue entity){
-		switch (entity.getRigsterStatueReason()){
+
+	private void registering(SimRegisterStatue entity) {
+		switch (entity.getRigsterStatueReason()) {
 			case SocketConstant.UPDATE_PERCENT:
 				if (SocketConstant.REGISTER_STATUE_CODE != 3) {
 					percentTextView.setVisibility(View.VISIBLE);
@@ -1046,8 +1051,9 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				break;
 		}
 	}
-	private void unregister(int unregisterReason){
-		switch (unregisterReason){
+
+	private void unregister(int unregisterReason) {
+		switch (unregisterReason) {
 			case SocketConstant.AIXIAOQI_CARD:
 				if (noDevicedialog != null && noDevicedialog.getDialog() != null)
 					noDevicedialog.getDialog().dismiss();

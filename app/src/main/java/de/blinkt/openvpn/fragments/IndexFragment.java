@@ -191,7 +191,6 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 			case R.id.guiderImageView:
 				//友盟方法统计
 				Intent marketIntent1 = new Intent(getActivity(), OverseaGuideFeeActivity.class);
-
 				startActivity(marketIntent1);
 				break;
 		}

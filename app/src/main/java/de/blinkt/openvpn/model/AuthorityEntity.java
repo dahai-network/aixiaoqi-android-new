@@ -8,6 +8,7 @@ package de.blinkt.openvpn.model;
 public class AuthorityEntity {
 	private String title;
 	private String tip;
+	private boolean isCanClick = false;
 	private IntentEntity intentEntity;
 
 	public AuthorityEntity() {
@@ -23,6 +24,14 @@ public class AuthorityEntity {
 		this.title = title;
 		this.tip = tip;
 		this.intentEntity = intentEntity;
+	}
+
+	public boolean isCanClick() {
+		return isCanClick;
+	}
+
+	public void setCanClick(boolean canClick) {
+		isCanClick = canClick;
 	}
 
 	public String getTitle() {

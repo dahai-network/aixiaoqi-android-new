@@ -125,7 +125,6 @@
         <activity
             android:name="de.blinkt.openvpn.activities.ProMainActivity"
             android:label="@string/app"
-            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="de.blinkt.openvpn.activities.ContactActivity"
@@ -146,6 +145,7 @@
         <activity
             android:name="de.blinkt.openvpn.activities.LoginMainActivity"
             android:label="@string/app"
+            android:launchMode="singleTask"
             android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -426,8 +426,10 @@
         </activity>
         <activity android:name="de.blinkt.openvpn.activities.FreeWorryOrderDetailActivity">
         </activity>
-        <service android:name="de.blinkt.openvpn.service.JobSchedulerService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <service
+            android:name="de.blinkt.openvpn.service.JobSchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
     </application>
 

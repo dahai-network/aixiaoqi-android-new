@@ -131,6 +131,7 @@ public abstract class SocketTransceiver implements Runnable {
 					this.onReceive(addr, byteBuffer, temp);
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
 				// 连接被断开(被动)
 				runFlag = false;
 			}

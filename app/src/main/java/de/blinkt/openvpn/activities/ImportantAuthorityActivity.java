@@ -63,6 +63,12 @@ public class ImportantAuthorityActivity extends BaseActivity {
 			IntentWrapper.whiteListMatters(ProMainActivity.instance, "服务的持续运行");
 			finish();
 		}
+		data.get(0).setCanClick(true);
+		if (SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.IS_START_UP)) {
+			for (int i = 1; i < data.size(); i++) {
+				data.get(i).setCanClick(true);
+			}
+		}
 		return data;
 	}
 

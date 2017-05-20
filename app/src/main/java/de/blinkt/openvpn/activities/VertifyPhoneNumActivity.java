@@ -3,11 +3,9 @@ package de.blinkt.openvpn.activities;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,6 +16,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.CheckConfirmedHttp;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.ConfirmedHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
@@ -37,8 +36,8 @@ public class VertifyPhoneNumActivity extends BaseNetActivity {
 			checkIsConFirmed();
 		}
 	};
-	//单线程线程池
-	private ExecutorService pool = Executors.newFixedThreadPool(2);
+	private Thread overtimeThread;
+	private boolean isVertifying = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,24 +56,28 @@ public class VertifyPhoneNumActivity extends BaseNetActivity {
 		createHttpRequest(HttpConfigUrl.COMTYPE_CONFIRMED, phoneNumEditText.getText().toString(),
 				SharedUtils.getInstance().readString(Constant.ICCID));//服务器验证操作
 		showProgress(R.string.vertifying);
-		pool.execute(new Runnable() {
+		isVertifying = true;
+		overtimeThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				CommonTools.delayTime(6000);
+				CommonTools.delayTime(60000);
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						CommonTools.showShortToast(VertifyPhoneNumActivity.this, getString(R.string.vertify_success));
-						finish();
+						if (isVertifying) {
+							CommonTools.showShortToast(VertifyPhoneNumActivity.this, getString(R.string.vertify_overtime));
+							isVertifying = false;
+							dismissProgress();
+						}
 					}
 				});
 			}
 		});
+		overtimeThread.start();
 		checkIsConFirmed();
 	}
 
 	private void checkIsConFirmed() {
-
 		createHttpRequest(HttpConfigUrl.COMTYPE_CHECK_CONFIRMED, SharedUtils.getInstance().readString(Constant.ICCID));
 	}
 
@@ -84,21 +87,28 @@ public class VertifyPhoneNumActivity extends BaseNetActivity {
 			CheckConfirmedHttp http = (CheckConfirmedHttp) object;
 			if (http.getStatus() == 1) {
 				if (http.getEntity().isIsConfirmed()) {
+					isVertifying = false;
 					dismissProgress();
 					confirmedPhoneNum = http.getEntity().getTel();
-					CommonTools.showShortToast(this, getString(R.string.vertify_success));
+					CommonTools.showShortToast(VertifyPhoneNumActivity.this, getString(R.string.vertify_success));
 					finish();
 				} else {
-					pool.execute(new Thread(new Runnable() {
+					if (!isVertifying) return;
+					new Thread(new Thread(new Runnable() {
 						@Override
 						public void run() {
 							CommonTools.delayTime(3000);
 							handler.sendEmptyMessage(0);
 						}
-					}));
+					})).start();
 				}
 			} else {
 				CommonTools.showShortToast(this, http.getMsg());
+			}
+		} else if (cmdType == HttpConfigUrl.COMTYPE_CONFIRMED) {
+			ConfirmedHttp http = (ConfirmedHttp) object;
+			if (http.getStatus() == 1) {
+				Log.i(TAG, "验证成功！！！！");
 			}
 		}
 	}
@@ -106,7 +116,7 @@ public class VertifyPhoneNumActivity extends BaseNetActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		pool.shutdown();
-		pool = null;
+		if (overtimeThread != null)
+			overtimeThread.interrupt();
 	}
 }
