@@ -86,7 +86,6 @@ import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.service.GrayService;
 import de.blinkt.openvpn.util.CheckAuthorityUtil;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.PageChangeListener;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -219,19 +218,19 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			noLocationPermissionDialog.changeText(getResources().getString(R.string.no_location_permission), getResources().getString(R.string.sure));
 		}
 		//如果没有保存过推送每日推荐的日期，则为第一次推送,如果
-		String recommandStr = SharedUtils.getInstance().readString(Constant.RECOMMAND_DATE);
-		String todayStr = DateUtils.getCurrentDate();
-		Intent intent = new Intent(this, EveryDayRecomActivity.class);
-		if (recommandStr == null || !recommandStr.equals(todayStr)) {
-			startActivity(intent);
-			SharedUtils.getInstance().writeString(Constant.RECOMMAND_DATE, todayStr);
-		}
+//		String recommandStr = SharedUtils.getInstance().readString(Constant.RECOMMAND_DATE);
+//		String todayStr = DateUtils.getCurrentDate();
+//		Intent intent = new Intent(this, EveryDayRecomActivity.class);
+//		if (recommandStr == null || !recommandStr.equals(todayStr)) {
+//			startActivity(intent);
+//			SharedUtils.getInstance().writeString(Constant.RECOMMAND_DATE, todayStr);
+//		}
 		CheckAuthorityUtil.checkPermissions(this, Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG);
 	}
 
 
 	/**
-	 * \初始化界面
+	 * 初始化界面
 	 */
 	private void initView() {
 		radiogroup.check(R.id.rb_phone);

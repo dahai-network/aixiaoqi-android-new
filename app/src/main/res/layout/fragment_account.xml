@@ -214,7 +214,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding_15dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/serviceTitleTextView"
@@ -332,9 +333,9 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="15dp"
-                                    android:visibility="gone"
                                     android:text="@string/all_package_count"
-                                    android:textColor="@color/white"/>
+                                    android:textColor="@color/white"
+                                    android:visibility="gone"/>
 
                                 <TextView
                                     android:id="@+id/package_all_count"

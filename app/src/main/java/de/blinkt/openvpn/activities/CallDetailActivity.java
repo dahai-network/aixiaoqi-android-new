@@ -42,7 +42,6 @@ import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactRecodeHandler;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.QueryCompleteListener;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
-import de.blinkt.openvpn.views.dialog.DialogCanNoRemind;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
 
@@ -254,12 +253,12 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 			case R.id.dual_standby_king_tv:
 				if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 					//如果没有套餐那么就需要弹出提示框
-					if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
+//					if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
 						//拨打电话
 						simCellPhone();
-					} else {
-						new DialogCanNoRemind(this, this, 2);
-					}
+//					} else {
+//						new DialogCanNoRemind(this, this, 2);
+//					}
 				} else {
 					CommonTools.showShortToast(this, getString(R.string.sim_register_phone_tip));
 				}

@@ -42,7 +42,6 @@ import de.blinkt.openvpn.activities.CallPhoneNewActivity;
 import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
 import de.blinkt.openvpn.activities.ReceiveCallActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
-import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -56,14 +55,12 @@ import de.blinkt.openvpn.util.AssetsDatabaseManager;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DatabaseDAO;
 import de.blinkt.openvpn.util.SetPermission;
-import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactRecodeHandler;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.QueryCompleteListener;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 import de.blinkt.openvpn.views.T9TelephoneDialpadView;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
-import de.blinkt.openvpn.views.dialog.DialogCanNoRemind;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
@@ -127,12 +124,12 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		}
 		if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 			//如果没有套餐那么就需要弹出提示框
-			if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
+//			if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
 				//拨打电话
 				simCellPhone();
-			} else {
-				new DialogCanNoRemind(this, getActivity(), 2);
-			}
+//			} else {
+//				new DialogCanNoRemind(this, getActivity(), 2);
+//			}
 		} else {
 			CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
 		}
@@ -248,12 +245,12 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 				break;
 			default:
 				if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-					if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
+//					if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
 						//拨打电话
 						simCellPhone();
-					} else {
-						new DialogCanNoRemind(this, getActivity(), 2);
-					}
+//					} else {
+//						new DialogCanNoRemind(this, getActivity(), 2);
+//					}
 				} else {
 					CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
 				}
