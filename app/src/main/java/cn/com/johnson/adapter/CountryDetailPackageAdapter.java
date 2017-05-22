@@ -8,10 +8,15 @@ import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -25,39 +30,40 @@ import de.blinkt.openvpn.model.CountryPacketEntity;
 public class CountryDetailPackageAdapter extends RecyclerView.Adapter<CountryDetailPackageAdapter.ViewHolder> {
 
 
-    private List<CountryPacketEntity> data = new ArrayList<>();
-    private Context context;
-    private String countryPic;
+	private List<CountryPacketEntity> data = new ArrayList<>();
+	private Context context;
+	private String countryPic;
 
-    public CountryDetailPackageAdapter(Context context, List<CountryPacketEntity> data, String countryPic) {
-        this.data = data;
-        this.context = context;
-        this.countryPic = countryPic;
-    }
+	public CountryDetailPackageAdapter(Context context, List<CountryPacketEntity> data, String countryPic) {
+		this.data = data;
+		this.context = context;
+		this.countryPic = countryPic;
+	}
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder holder = new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_country_detail_package, parent, false));
-        return holder;
-    }
+	@Override
+	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		ViewHolder holder = new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_country_detail_package, parent, false));
+		return holder;
+	}
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.packageNameTextView.setText(data.get(position).getPackageName());
-        holder.flowTextView.setText(data.get(position).getFlow());
-        holder.priceTextView.setText("￥" + data.get(position).getPrice());
-        setSpan(holder.priceTextView, position);
+	@Override
+	public void onBindViewHolder(ViewHolder holder, int position) {
+		holder.packageNameTextView.setText(data.get(position).getPackageName());
+		holder.flowTextView.setText(data.get(position).getFlow());
+		holder.priceTextView.setText("￥" + data.get(position).getPrice());
+		setSpan(holder.priceTextView, position);
 
-        if (data.get(position).getPrice() >= 20)
-            holder.numberTextView.setBackgroundResource(R.drawable.flow_yellow);
-        else
-            holder.numberTextView.setBackgroundResource(R.drawable.flow_gree);
+//        if (data.get(position).getPrice() >= 20)
+//            holder.numberTextView.setBackgroundResource(R.drawable.flow_yellow);
+//        else
+		Glide.with(context).load(data.get(position).getPic()).into(holder.numberTextView);
+//            holder.numberTextView.setBackgroundResource(R.drawable.flow_gree);
 
 
-        holder.v_line.setVisibility(View.GONE);
+		holder.v_line.setVisibility(View.GONE);
 
        /* if (data.size() == position + 1) {
-            holder.v_line.setVisibility(View.VISIBLE);
+			holder.v_line.setVisibility(View.VISIBLE);
 
         } else {
             holder.v_line.setVisibility(View.GONE);
@@ -65,7 +71,7 @@ public class CountryDetailPackageAdapter extends RecyclerView.Adapter<CountryDet
         }*/
 
 	/*	switch (position % 5) {
-            case 1:
+			case 1:
 				holder.numberTextView.setBackgroundResource(R.drawable.country_packet_num1);
 				break;
 			case 2:
@@ -86,50 +92,50 @@ public class CountryDetailPackageAdapter extends RecyclerView.Adapter<CountryDet
 		} else {
 			holder.numberTextView.setText("0" + (position + 1));
 		}*/
-    }
+	}
 
-    //设置大小字体
-    public void setSpan(TextView textview, int position) {
-        Spannable WordtoSpan = new SpannableString(textview.getText().toString());
-        int intLength = String.valueOf((int) (data.get(position).getPrice())).length();
-        WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        WordtoSpan.setSpan(new AbsoluteSizeSpan(22, true), 1, intLength + 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), intLength + 2, textview.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        textview.setText(WordtoSpan, TextView.BufferType.SPANNABLE);
-    }
+	//设置大小字体
+	public void setSpan(TextView textview, int position) {
+		Spannable WordtoSpan = new SpannableString(textview.getText().toString());
+		int intLength = String.valueOf((int) (data.get(position).getPrice())).length();
+		WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		WordtoSpan.setSpan(new AbsoluteSizeSpan(22, true), 1, intLength + 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), intLength + 2, textview.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		textview.setText(WordtoSpan, TextView.BufferType.SPANNABLE);
+	}
 
-    @Override
-    public int getItemCount() {
-        if (data != null) {
-            return data.size();
-        }
-        return 0;
-    }
-
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.packageNameTextView)
-        TextView packageNameTextView;
-        @BindView(R.id.flowTextView)
-        TextView flowTextView;
-        @BindView(R.id.priceTextView)
-        TextView priceTextView;
-        @BindView(R.id.rootLinearLayout)
-        RelativeLayout rootLinearLayout;
-        @BindView(R.id.numberTextView)
-        TextView numberTextView;
-        @BindView(R.id.v_line)
-        View v_line;
+	@Override
+	public int getItemCount() {
+		if (data != null) {
+			return data.size();
+		}
+		return 0;
+	}
 
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
+	class ViewHolder extends RecyclerView.ViewHolder {
+		@BindView(R.id.packageNameTextView)
+		TextView packageNameTextView;
+		@BindView(R.id.flowTextView)
+		TextView flowTextView;
+		@BindView(R.id.priceTextView)
+		TextView priceTextView;
+		@BindView(R.id.rootLinearLayout)
+		RelativeLayout rootLinearLayout;
+		@BindView(R.id.numberTextView)
+		ImageView numberTextView;
+		@BindView(R.id.v_line)
+		View v_line;
 
-        @OnClick(R.id.rootLinearLayout)
-        public void onClick() {
-            PackageDetailActivity.launch(context, data.get(getAdapterPosition()).getID(), countryPic);
-        }
-    }
+
+		public ViewHolder(View itemView) {
+			super(itemView);
+			ButterKnife.bind(this, itemView);
+		}
+
+		@OnClick(R.id.rootLinearLayout)
+		public void onClick() {
+			PackageDetailActivity.launch(context, data.get(getAdapterPosition()).getID(), countryPic);
+		}
+	}
 }

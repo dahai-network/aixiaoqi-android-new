@@ -157,7 +157,7 @@ public class DateUtils {
 		localCalendar.setTimeInMillis(timeStamp);
 		int year = localCalendar.get(Calendar.YEAR);
 		if (!isSameYear(year)) {
-			String paramDate2Str = new SimpleDateFormat("yyyy年MM月dd", Locale.getDefault()).format(new Date(timeStamp));
+			String paramDate2Str = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.getDefault()).format(new Date(timeStamp));
 			return paramDate2Str;
 		}
 

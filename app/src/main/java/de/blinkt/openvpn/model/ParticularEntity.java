@@ -1,5 +1,7 @@
 package de.blinkt.openvpn.model;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class ParticularEntity implements Serializable {
 		this.list = list;
 	}
 
-	public static class ListBean {
+	public static class ListBean  {
 		private String ID;
 		private String Amount;
 		private String UserAmount;
@@ -139,6 +141,7 @@ public class ParticularEntity implements Serializable {
 					", IsHadDetail=" + IsHadDetail +
 					'}';
 		}
+
 	}
 
 	@Override
