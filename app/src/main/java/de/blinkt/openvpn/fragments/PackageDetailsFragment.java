@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +56,7 @@ public class PackageDetailsFragment extends BaseFragment {
      */
     private void setView() {
         detail= SharedUtils.getInstance().readString(Constant.DETAIL_SIGN);
-        if (null != detail) {
+        if (null != detail&&!detail.equals("")) {
             tvContext.setText(detail);
         } else {
             LocalBroadcastManager.getInstance(getActivity()).registerReceiver(new BroadcastReceiver() {

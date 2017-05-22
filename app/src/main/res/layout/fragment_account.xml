@@ -28,7 +28,7 @@
             <de.blinkt.openvpn.views.TopProgressView
                 android:id="@+id/top_view"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/padding_25dp"
+                android:layout_height="@dimen/padding_30dp"
                 android:visibility="gone"/>
 
             <ImageView
@@ -214,7 +214,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding_15dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/serviceTitleTextView"
@@ -226,8 +227,8 @@
 
                                 <TextView
                                     android:id="@+id/serviceTextView"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_below="@id/serviceTitleTextView"
                                     android:layout_marginTop="5dp"
                                     android:textColor="@color/white"
@@ -239,13 +240,15 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/padding_15dp"
                                 android:layout_marginTop="15dp"
-                                android:background="@drawable/vertical_dotted_line"/>
+                                android:background="@drawable/vertical_dotted_line"
+                                android:visibility="gone"/>
 
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding_15dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/call"
@@ -316,14 +319,14 @@
                                 android:layout_marginBottom="@dimen/padding_15dp"
                                 android:layout_marginTop="15dp"
                                 android:background="@drawable/vertical_dotted_line"
-                                android:visibility="gone"/>
+                                android:visibility="invisible"/>
 
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding_15dp"
                                 android:layout_weight="1"
-                                android:visibility="gone">
+                                android:visibility="invisible">
 
                                 <TextView
                                     android:id="@+id/all_package"
@@ -331,7 +334,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="15dp"
                                     android:text="@string/all_package_count"
-                                    android:textColor="@color/white"/>
+                                    android:textColor="@color/white"
+                                    android:visibility="gone"/>
 
                                 <TextView
                                     android:id="@+id/package_all_count"

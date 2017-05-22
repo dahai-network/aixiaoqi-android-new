@@ -26,7 +26,7 @@ public class JobSchedulerService extends JobService {
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case Constant.TYPE_ONE:
-                    Log.d("JobSchedulerService", "handleMessage: 发送心跳包");
+                    Log.d("Blue_Chanl", "handleMessage: 发送心跳包");
                     if (ProMainActivity.sendYiZhengService != null) {
                         ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
                     } else {

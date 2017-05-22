@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,6 +40,7 @@ import de.blinkt.openvpn.http.LoginHttp;
 import de.blinkt.openvpn.http.SecurityConfigHttp;
 import de.blinkt.openvpn.model.BasicConfigEntity;
 import de.blinkt.openvpn.model.LoginEntity;
+import de.blinkt.openvpn.util.CheckAuthorityUtil;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.ExditTextWatcher;
@@ -96,6 +98,7 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 		if (!TextUtils.isEmpty(otherDeviceLogin) && !sharedUtils.readBoolean(Constant.ISFIRSTIN, true)) {
 			CommonTools.showShortToast(this, otherDeviceLogin);
 		}
+
 	}
 
 	/**

@@ -5,73 +5,83 @@ package de.blinkt.openvpn.model;
  */
 
 public class UsageRemainEntity {
-    private Used Used;
-    private Unactivated Unactivated;
+	private Used Used;
+	private Unactivated Unactivated;
 
-    public UsageRemainEntity.Used getUsed() {
-        return Used;
-    }
+	public UsageRemainEntity.Used getUsed() {
+		return Used;
+	}
 
-    public void setUsed(UsageRemainEntity.Used used) {
-        Used = used;
-    }
+	public void setUsed(UsageRemainEntity.Used used) {
+		Used = used;
+	}
 
-    public UsageRemainEntity.Unactivated getUnactivated() {
-        return Unactivated;
-    }
+	public UsageRemainEntity.Unactivated getUnactivated() {
+		return Unactivated;
+	}
 
-    public void setUnactivated(UsageRemainEntity.Unactivated unactivated) {
-        Unactivated = unactivated;
-    }
+	public void setUnactivated(UsageRemainEntity.Unactivated unactivated) {
+		Unactivated = unactivated;
+	}
 
-   public class Used{
-        private String ServiceName;
-        private String TotalNum;
-        private String TotalNumFlow;
-        private String TotalRemainingCallMinutes;
+	public class Used {
+		private String ServiceName;
+		private String TotalNum;
+		private String ServiceOrderId;
+		private String TotalNumFlow;
+		private String TotalRemainingCallMinutes;
 
-	   public String getServiceName() {
-		   return ServiceName;
-	   }
+		public String getServiceOrderId() {
+			return ServiceOrderId;
+		}
 
-	   public void setServiceName(String serviceName) {
-		   ServiceName = serviceName;
-	   }
+		public void setServiceOrderId(String serviceOrderId) {
+			ServiceOrderId = serviceOrderId;
+		}
 
-	   public String getTotalNum() {
-            return TotalNum;
-        }
+		public String getServiceName() {
+			return ServiceName;
+		}
 
-        public void setTotalNum(String totalNum) {
-            TotalNum = totalNum;
-        }
+		public void setServiceName(String serviceName) {
+			ServiceName = serviceName;
+		}
 
-        public String getTotalNumFlow() {
-            return TotalNumFlow;
-        }
+		public String getTotalNum() {
+			return TotalNum;
+		}
 
-        public void setTotalNumFlow(String totalNumFlow) {
-            TotalNumFlow = totalNumFlow;
-        }
+		public void setTotalNum(String totalNum) {
+			TotalNum = totalNum;
+		}
 
-        public String getTotalRemainingCallMinutes() {
-            return TotalRemainingCallMinutes;
-        }
+		public String getTotalNumFlow() {
+			return TotalNumFlow;
+		}
 
-        public void setTotalRemainingCallMinutes(String totalRemainingCallMinutes) {
-            TotalRemainingCallMinutes = totalRemainingCallMinutes;
-        }
-    }
-    public class Unactivated{
-        private String TotalNumFlow;
+		public void setTotalNumFlow(String totalNumFlow) {
+			TotalNumFlow = totalNumFlow;
+		}
 
-        public String getTotalNumFlow() {
-            return TotalNumFlow;
-        }
+		public String getTotalRemainingCallMinutes() {
+			return TotalRemainingCallMinutes;
+		}
 
-        public void setTotalNumFlow(String totalNumFlow) {
-            TotalNumFlow = totalNumFlow;
-        }
-    }
+		public void setTotalRemainingCallMinutes(String totalRemainingCallMinutes) {
+			TotalRemainingCallMinutes = totalRemainingCallMinutes;
+		}
+	}
+
+	public class Unactivated {
+		private String TotalNumFlow;
+
+		public String getTotalNumFlow() {
+			return TotalNumFlow;
+		}
+
+		public void setTotalNumFlow(String totalNumFlow) {
+			TotalNumFlow = totalNumFlow;
+		}
+	}
 
 }

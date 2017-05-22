@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -149,7 +150,8 @@ public class PackageDetailActivity extends BaseNetActivity implements InterfaceC
                 SharedUtils.getInstance().writeString(Constant.DETAIL_SIGN, bean.getDetails());
                 SharedUtils.getInstance().writeString(Constant.FEATURES_SIGN, bean.getFeatures());
                 //使用广播进行数据交互
-               Intent intent = new Intent(Constant.LOCALBROADCAST_INTENT_DATA);
+                Log.d("PackageDetailActivity", "rightComplete:发送广播 ");
+                Intent intent = new Intent(Constant.LOCALBROADCAST_INTENT_DATA);
                 intent.putExtra(Constant.DETAIL_SIGN, bean.getDetails());
                 intent.putExtra(Constant.FEATURES_SIGN, bean.getFeatures());
                 LocalBroadcastManager.getInstance(PackageDetailActivity.this).sendBroadcast(intent);

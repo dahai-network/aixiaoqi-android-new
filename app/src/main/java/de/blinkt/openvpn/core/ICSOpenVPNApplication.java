@@ -342,7 +342,7 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 				}
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 
@@ -379,7 +379,7 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 			}
 			stack.clear();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 
@@ -394,7 +394,7 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 			}
 			stack.clear();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 
 	}
@@ -406,6 +406,7 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 		try {
 			finishAllActivity();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		System.exit(0);
 	}

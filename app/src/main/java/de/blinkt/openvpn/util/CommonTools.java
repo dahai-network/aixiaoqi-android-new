@@ -23,7 +23,7 @@ public class CommonTools {
     public static void showShortToast(Context context, String message) {
         if (!TextUtils.isEmpty(message) && context != null) {
             Log.d("CommonTools", "showShortToast: "+message+"\ncontext="+context);
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            ToastCompat.makeText(context,message,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -133,7 +133,7 @@ public class CommonTools {
 
             Thread.sleep(time);
         } catch (InterruptedException e) {
-
+			e.printStackTrace();
         }
     }
 

@@ -52,6 +52,10 @@ public class DialogCanNoRemind extends DialogBalance {
 				break;
 			case R.id.tv_rechange:
 				dialog.dismiss();
+				//如果我的设备传入的type则取消需要返回
+				if (remindCheckBox.isChecked()) {
+					SharedUtils.getInstance().writeString(Constant.DIALOG_NOREMIND_DATE, DateUtils.getCurrentDate());
+				}
 				dialogInterfaceTypeBase.dialogText(type, "");
 				break;
 		}

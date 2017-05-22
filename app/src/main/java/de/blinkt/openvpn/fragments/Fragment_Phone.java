@@ -6,9 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.ContentObserver;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.CallLog;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,7 +42,6 @@ import de.blinkt.openvpn.activities.CallPhoneNewActivity;
 import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
 import de.blinkt.openvpn.activities.ReceiveCallActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
-import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -53,14 +55,12 @@ import de.blinkt.openvpn.util.AssetsDatabaseManager;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DatabaseDAO;
 import de.blinkt.openvpn.util.SetPermission;
-import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactRecodeHandler;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.QueryCompleteListener;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 import de.blinkt.openvpn.views.T9TelephoneDialpadView;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
-import de.blinkt.openvpn.views.dialog.DialogCanNoRemind;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
@@ -81,8 +81,9 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	ContactRecodeAdapter contactRecodeAdapter;
 	public SQLiteDatabase sqliteDB;
 	public DatabaseDAO dao;
-	ConnectedRecoderReceive connectedRecoderReceive;
+	//	ConnectedRecoderReceive connectedRecoderReceive;
 	ImageView floatingActionButton;
+	public static int PERMISSION_SET = 1;
 
 
 	@Override
@@ -99,7 +100,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 			String FRAGMENTS_TAG = "Android:support:fragments";
 			savedInstanceState.remove(FRAGMENTS_TAG);
 		}
-
 		return rootView;
 	}
 
@@ -112,7 +112,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		rl_no_permission = (RelativeLayout) view.findViewById(R.id.rl_no_permission);
 		tv_no_permission.setText(String.format(getString(R.string.no_permission), getString(R.string.call_recoder)));
 		inited();
-
 	}
 
 	/***
@@ -125,12 +124,12 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		}
 		if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 			//如果没有套餐那么就需要弹出提示框
-			if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
+//			if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
 				//拨打电话
 				simCellPhone();
-			} else {
-				new DialogCanNoRemind(this, getActivity(), 2);
-			}
+//			} else {
+//				new DialogCanNoRemind(this, getActivity(), 2);
+//			}
 		} else {
 			CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
 		}
@@ -150,7 +149,8 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		getActivity().unregisterReceiver(connectedRecoderReceive);
+//		getActivity().unregisterReceiver(connectedRecoderReceive);
+		getActivity().getContentResolver().unregisterContentObserver(mCallLogObserver);
 		sqliteDB.close();
 		dao.closeDB();
 		t9dialpadview = null;
@@ -172,8 +172,8 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 	public void inited() {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(ReceiveCallActivity.UPDATE_CONTACT_REDORE);
-		connectedRecoderReceive = new ConnectedRecoderReceive();
-		getActivity().registerReceiver(connectedRecoderReceive, filter);
+//		connectedRecoderReceive = new ConnectedRecoderReceive();
+//		getActivity().registerReceiver(connectedRecoderReceive, filter);
 		initDB();
 		searchContactRedocer();
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -200,10 +200,11 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 				}
 			});
 		}
+		getActivity().getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI, true, mCallLogObserver);
 	}
 
 	/**
-	 * 跳转到权限设置界面
+	 * 搜索联系人，如果没有权限跳转到权限界面；
 	 */
 	private void searchContactRedocer() {
 		Log.e(TAG,"time="+System.currentTimeMillis());
@@ -226,7 +227,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 			Log.e(TAG,"time111="+System.currentTimeMillis());
 		}
 
-
 	}
 
 
@@ -245,12 +245,12 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 				break;
 			default:
 				if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-					if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
+//					if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
 						//拨打电话
 						simCellPhone();
-					} else {
-						new DialogCanNoRemind(this, getActivity(), 2);
-					}
+//					} else {
+//						new DialogCanNoRemind(this, getActivity(), 2);
+//					}
 				} else {
 					CommonTools.showShortToast(getActivity(), getString(R.string.sim_register_phone_tip));
 				}
@@ -369,7 +369,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 				}
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 
@@ -511,6 +511,12 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		}
 	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == PERMISSION_SET) {
+			searchContactRedocer();
+		}
+	}
 
 	@Override
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -526,4 +532,16 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
 		}
 		return false;
 	}
+
+	//通话记录改变刷新
+	// 当通话记录数据库发生更改时触发此操作
+	private ContentObserver mCallLogObserver = new ContentObserver(
+			new Handler()) {
+		@Override
+		public void onChange(boolean selfChange) {
+			// 当通话记录数据库发生更改时触发此操作
+			searchContactRedocer();
+		}
+
+	};
 }

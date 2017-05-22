@@ -84,7 +84,7 @@ public class DatabaseDAO {
 					result = true;
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}finally {
 			if(cursor!=null)
 			cursor.close();

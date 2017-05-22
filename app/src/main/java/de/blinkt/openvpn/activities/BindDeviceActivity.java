@@ -276,7 +276,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 											findDeviceHandler.postDelayed(new Runnable() {
 												@Override
 												public void run() {
-
 													//排序后连接操作
 													scanLeDevice(false);
 													if (deviceList.size() == 0 && !isStartFindDeviceDelay) {
@@ -284,6 +283,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 														finish();
 														return;
 													}
+
 													Collections.sort(deviceList, new Comparator<BluetoothModel>() {
 														@Override
 														public int compare(BluetoothModel lhs, BluetoothModel rhs) {
@@ -295,11 +295,10 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 														Log.i(TAG, "排序后：" + id);
 													}
 													try {
-														isBind(index);
+														isBind(0);
 													} catch (Exception e) {
-
+														e.printStackTrace();
 													}
-
 													isStartFindDeviceDelay = false;
 													deviceList.clear();
 												}
@@ -354,13 +353,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 				}
 			} else if (http.getStatus() == 1 && http.getIsBindEntity() != null && http.getIsBindEntity().getBindStatus() == 1) {
 				//如果设备被绑定过，则换设备进行绑定
-				index++;
-				if (index < deviceList.size() && deviceList.get(index).getRssi() < 75) {
-					isBind(index);
-				} else {
-					CommonTools.showShortToast(this, getString(R.string.no_can_connect_device));
-					finish();
-				}
+				CommonTools.showShortToast(this, getString(R.string.device_already_bind));
+				finish();
 			} else {
 				CommonTools.showShortToast(this, getString(R.string.service_is_error));
 				finish();

@@ -7,7 +7,7 @@
     <de.blinkt.openvpn.views.TitleBar
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/padding_50dp" />
+        android:layout_height="@dimen/padding_50dp"/>
 
     <ScrollView
         android:id="@+id/indexScrollView"
@@ -28,8 +28,8 @@
             <de.blinkt.openvpn.views.TopProgressView
                 android:id="@+id/top_view"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/padding_25dp"
-                android:visibility="gone" />
+                android:layout_height="@dimen/padding_30dp"
+                android:visibility="gone"/>
 
             <com.youth.banner.Banner
                 android:id="@+id/banner"
@@ -44,8 +44,10 @@
                 app:is_auto_play="true" />
 
 
-            <include layout="@layout/inland_package"
-               />
+            <include
+                layout="@layout/inland_package"
+                android:visibility="gone"
+                />
 
             <RelativeLayout
                 android:id="@+id/hotPacketLinearLayout"
@@ -62,7 +64,7 @@
                     android:layout_centerVertical="true"
                     android:paddingLeft="7.5dp"
                     android:text="@string/overseas_package"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/hotMessageMoreTextView"
@@ -75,12 +77,12 @@
                     android:paddingRight="7.5dp"
                     android:text="@string/more"
                     android:textColor="@color/index_gray_text"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <View
                     style="@style/horizontal_line_view"
                     android:layout_below="@id/hotMessageMoreTextView"
-                    android:layout_marginTop="11dp" />
+                    android:layout_marginTop="11dp"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -114,7 +116,7 @@
                     android:layout_centerVertical="true"
                     android:paddingLeft="7.5dp"
                     android:text="@string/hardware_product"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/hardWareMoreTextView"
@@ -128,12 +130,12 @@
                     android:text="@string/more"
                     android:textColor="@color/index_gray_text"
                     android:textSize="14sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <View
                     android:id="@+id/hardWareLine"
                     style="@style/horizontal_line_view"
-                    android:layout_alignParentBottom="true" />
+                    android:layout_alignParentBottom="true"/>
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
