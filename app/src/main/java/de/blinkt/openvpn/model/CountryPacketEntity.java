@@ -24,6 +24,15 @@ public class CountryPacketEntity implements Serializable {
 	private Object UT_Country;
 	private String PackageId;
 	private List<?> UT_Order;
+	private String Pic;
+
+	public String getPic() {
+		return Pic;
+	}
+
+	public void setPic(String pic) {
+		Pic = pic;
+	}
 
 	public String getPackageName() {
 		return PackageName;
