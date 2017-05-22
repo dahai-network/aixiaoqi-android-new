@@ -70,12 +70,12 @@ public class ContactUsActivity extends BaseActivity implements View.OnClickListe
                 if (!CommonTools.isFastDoubleClick(4000)) {
                     //友盟方法统计
                     MobclickAgent.onEvent(context, CLICKCONTACTOURUSEPHONE);
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        return;
+                    }
                     if (!getSimState()) {
                         Intent phoneIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getResources().getString(R.string.service_phone)));
-                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            return;
-                        }
                         startActivity(phoneIntent);
                     }
                 }
