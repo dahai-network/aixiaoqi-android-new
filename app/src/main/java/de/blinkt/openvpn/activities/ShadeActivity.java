@@ -25,11 +25,9 @@ public class ShadeActivity extends Activity {
     ImageView iv_03;
     ImageView hand;
     LinearLayout ll_root;
-
     private final static int ONE_STEP = 1;
     private final static int TWO_STEP = 2;
     private final static int THREE_STEP = 3;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +36,6 @@ public class ShadeActivity extends Activity {
         initView();
         initData();
         initEvent();
-
     }
 
     /**
@@ -58,23 +55,34 @@ public class ShadeActivity extends Activity {
      */
     private void initView() {
         ll_root = (LinearLayout) findViewById(R.id.ll_root);
-
         //第一列
         ll_01 = (LinearLayout) findViewById(R.id.ll_01);
         textView1 = (TextView) findViewById(R.id.textView1);
         iv_01 = (ImageView) findViewById(R.id.iv_01);
         hand = (ImageView) findViewById(R.id.iv_hand);
-
         //第二 列
         ll_02 = (LinearLayout) findViewById(R.id.ll_02);
         textView2 = (TextView) findViewById(R.id.textView2);
         iv_02 = (ImageView) findViewById(R.id.iv_02);
-
         //第三列
         ll_03 = (LinearLayout) findViewById(R.id.ll_03);
         iv_03 = (ImageView) findViewById(R.id.iv_03);
         textView3 = (TextView) findViewById(R.id.textView3);
 
+        setBackground();
+    }
+
+    /**
+     * 设置背景
+     */
+    public void setBackground()
+    {
+
+
+        if(Build.MANUFACTURER.toLowerCase().equals(Constant.SAMSUNG))
+                ll_root.setBackgroundResource(R.color.transparent_66A2A2A2);
+            else
+                ll_root.setBackgroundResource(R.color.transparent_00A2A2A2);
 
     }
 
@@ -82,7 +90,6 @@ public class ShadeActivity extends Activity {
      * 初始化数据
      */
     private void initData() {
-
         String phoneType = Build.MANUFACTURER.toLowerCase();
         int version = Build.VERSION.SDK_INT;
         switch (phoneType) {
@@ -121,7 +128,6 @@ public class ShadeActivity extends Activity {
                 setResourceOne(true, lenovn_s1, R.drawable.lenovo_image_1_0);
                 setResourceTwo(false, lenovn_s2, R.drawable.lenovo_image_1_1);
                 setResourceThree(false, lenovn_s3, R.drawable.lenovo_image_1_2);
-
                 break;
 
             case Constant.MEIZU:
@@ -129,7 +135,6 @@ public class ShadeActivity extends Activity {
                 String meizu_s2;
                 String meizu_s3;
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
-
                     case ONE_STEP://保持后台运行
                         meizu_s1 = getResources().getString(R.string.meizu_test_1_1);
                         meizu_s2 = getResources().getString(R.string.meizu_test_1_2);
@@ -157,7 +162,6 @@ public class ShadeActivity extends Activity {
             case Constant.SAMSUNG:
                 String samsung_s1;
                 String samsung_s2;
-
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
                     case ONE_STEP:
                         samsung_s1 = getResources().getString(R.string.samsung_test_1_1);
@@ -167,18 +171,13 @@ public class ShadeActivity extends Activity {
                         setResourceThree(true, null, 0);
                         break;
                     case TWO_STEP:
-
                         samsung_s1 = getResources().getString(R.string.samsung_test_2_1);
                         samsung_s2 = getResources().getString(R.string.samsung_test_2_2);
                         setResourceOne(true, samsung_s1, R.drawable.sansung_image_2_1);
                         setResourceTwo(false, samsung_s2, R.drawable.samsung_image_2_2);
                         setResourceThree(true, null, 0);
-
                         break;
-
                 }
-
-
                 break;
             case Constant.ONEPLUS:
                 String oneplus_s1 = getResources().getString(R.string.oneplus_test1);
@@ -257,10 +256,8 @@ public class ShadeActivity extends Activity {
 
                 break;
             case Constant.VIVO:
-
                 String vivo_test;
                 String vivo_test1;
-
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
                     case ONE_STEP:
                         vivo_test = getResources().getString(R.string.vivo_test_1_1);
