@@ -267,8 +267,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
 
 //如果重连失败再进入我的设备就清空重连次数重新进入连接流程
-        boolean isConnectBlueTooth = mService.isConnectedBlueTooth();
-        if (!isConnectBlueTooth) {
+        if (mService!=null&&! mService.isConnectedBlueTooth()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         }
@@ -294,8 +293,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			case REQUEST_ENABLE_BT:
 				if (resultCode == Activity.RESULT_OK) {
 					String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
-					boolean isConnectintBlueTooth = mService.isConnecttingBlueTooth();
-					if (mService != null && !isConnectintBlueTooth && !TextUtils.isEmpty(macStr)) {
+					if (mService != null && ! mService.isConnecttingBlueTooth() && !TextUtils.isEmpty(macStr)) {
 						retryTime = 0;
 						ReceiveBLEMoveReceiver.retryTime = 0;
 						mService.connect(macStr);

@@ -38,14 +38,12 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
     private EditText passwordEdit;
     private Button sendBtn;
     private Button sure_btn;
-    private CheckBox hindPswCheckBox;
+//    private CheckBox hindPswCheckBox;
     private LinearLayout getPswLinearLayout;
     private TextView textview_1;
     private TextView textview_2;
     private TextView textview_3;
 
-
-    private boolean isOpenHind = true;
     private CountDownTimer timer = new CountDownTimer(111000, 1000) {
         @Override
         public void onTick(long millisUntilFinished) {
@@ -87,9 +85,6 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
                 findViewById(R.id.verification_edit);
         passwordEdit = (EditText)
                 findViewById(R.id.passwordEdit);
-        // setPhoneNumberEditChangeLisener();
-        hindPswCheckBox = (CheckBox) findViewById(R.id.hindPswCheckBox);
-        hindPswCheckBox.setOnClickListener(this);
         sendBtn = (Button) findViewById(R.id.sendBtn);
         sendBtn.setOnClickListener(this);
         sure_btn = (Button) findViewById(R.id.sure_btn);
@@ -140,7 +135,6 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
         switch (v.getId()) {
 
             case R.id.sendBtn:
-
                 if (CheckUtil.isMobileNO(phoneNumberEdit.getText().toString().trim(), GetBackPswActivity.this)) {
                     //友盟方法统计
                     MobclickAgent.onEvent(this, CLICKFINDBACKSENDCODE);
@@ -168,19 +162,7 @@ public class GetBackPswActivity extends BaseNetActivity implements View.OnClickL
                     CommonTools.showShortToast(this, getResources().getString(R.string.null_verification));
                 }
                 break;
-            case R.id.hindPswCheckBox:
-                //友盟方法统计
-                MobclickAgent.onEvent(this, FINDBACKSHOWPASSWORD);
-                if (isOpenHind) {
-                    isOpenHind = false;
-                    //如果选中，显示密码
-                    passwordEdit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                } else {
-                    isOpenHind = true;
-                    //否则隐藏密码
-                    passwordEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                }
-                break;
+
             case R.id.getPswLinearLayout:
                 ViewUtil.hideSoftKeyboard(this);
                 break;

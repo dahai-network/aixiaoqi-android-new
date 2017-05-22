@@ -1,7 +1,5 @@
 package de.blinkt.openvpn.fragments;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,14 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.analytics.MobclickAgent;
-
+import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.HotPackageAdapter;
@@ -47,10 +42,9 @@ import de.blinkt.openvpn.http.GetProductHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.model.PacketEntity;
 import de.blinkt.openvpn.model.ProductEntity;
+import de.blinkt.openvpn.util.GlideImageLoader;
 import de.blinkt.openvpn.views.FullyRecylerView;
 import de.blinkt.openvpn.views.TitleBar;
-import de.blinkt.openvpn.views.bannerview.CycleViewPager;
-
 import static android.view.View.GONE;
 import static de.blinkt.openvpn.constant.HttpConfigUrl.COMTYPE_GET_PRODUCTS;
 import static de.blinkt.openvpn.constant.HttpConfigUrl.COMTYPE_PACKET_GET;
@@ -64,18 +58,11 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKHOTPACKAGEMORE;
 public class IndexFragment extends BaseStatusFragment implements View.OnClickListener, InterfaceCallback {
 
 	private String TAG = "IndexFragment";
-
-	private List<ImageView> pageViews;
 	private FullyRecylerView hotPackageRecyclerView;
-
 	private TextView hotMessageMoreTextView;
-
-	private CycleViewPager scrollViewPagerLayout;
 	private List<IndexBannerEntity> bannerData;
 	//图片加载类
-
 	public ScrollView indexScrollView;
-
 	private RelativeLayout hotPacketLinearLayout;
 	private RelativeLayout communicationRelativeLayout;
 	private RelativeLayout leftPacketRelativeLayout;
@@ -92,7 +79,7 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 	private ImageView guiderImageView;
 	private View view;
 	private TitleBar title;
-
+	Banner banner;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -101,8 +88,6 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
-
 		setLayoutId(R.layout.fragment_index);
 		view = super.onCreateView(inflater, container,
 				savedInstanceState);
@@ -123,7 +108,7 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 		indexScrollView = (ScrollView) view.findViewById(R.id.indexScrollView);
 		title = (TitleBar) view.findViewById(R.id.title);
 		title.setTextTitle(getString(R.string.shop));
-		scrollViewPagerLayout = (CycleViewPager) view.findViewById(R.id.scrollViewPagerLayout);
+		banner = (Banner) view.findViewById(R.id.banner);
 		hotMessageMoreTextView = (TextView) view.findViewById(R.id.hotMessageMoreTextView);
 		hardWareRecyclerView = (RecyclerView) view.findViewById(R.id.hardWareRecyclerView);
 		hotPacketLinearLayout = (RelativeLayout) view.findViewById(R.id.hotPacketLinearLayout);
@@ -139,7 +124,6 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 		rightPriceTextView = (TextView) view.findViewById(R.id.rightPriceTextView);
 		rightContentTextView = (TextView) view.findViewById(R.id.rightContentTextView);
 		rightExpiryDateTextView = (TextView) view.findViewById(R.id.rightExpiryDateTextView);
-
 	}
 
 
@@ -148,7 +132,6 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 	 */
 	private void addData() {
 		getIndexBanner();
-		pageViews = new ArrayList<>();
 		getCallPackage();
 		getHotPackage();
 		getHardWare();
@@ -198,60 +181,29 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		controlWheel(true);
-	}
 
 
-	@SuppressLint("NewApi")
-	private void initialize(List<IndexBannerEntity> infos) {
-		if (getActivity() == null) return;
-		// 将最后一个ImageView添加进来
-		pageViews.add(getImageView(getActivity(), infos.get(infos.size() - 1).getImage()));
-		for (int i = 0; i < infos.size(); i++) {
-			pageViews.add(getImageView(getActivity(), infos.get(i).getImage()));
+
+
+	private void initBanner(final List<IndexBannerEntity> infos) {
+		banner.startAutoPlay();
+		banner.setDelayTime(3000);
+		List<String> imageList = new ArrayList<>();
+		for (IndexBannerEntity indexBannerEntity : infos) {
+			imageList.add(indexBannerEntity.getImage());
 		}
-		// 将第一个ImageView添加进来
-		pageViews.add(getImageView(getActivity(), infos.get(0).getImage()));
-
-		// 设置循环，在调用setData方法前调用
-		scrollViewPagerLayout.setCycle(true);
-
-		// 在加载数据前设置是否循环
-		scrollViewPagerLayout.setData(pageViews, infos, mAdCycleViewListener);
-		//设置轮播
-		scrollViewPagerLayout.setWheel(true);
-		//设置圆点指示图标组居中显示，默认靠右
-		scrollViewPagerLayout.setIndicatorCenter();
-	}
-
-	public ImageView getImageView(Context context, String url) {
-		if (context != null) {
-			ImageView imageView = (ImageView) LayoutInflater.from(context).inflate(
-					R.layout.view_banner, null);
-			Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
-			return imageView;
-		}
-		return null;
-	}
-
-	private CycleViewPager.ImageCycleViewListener mAdCycleViewListener = new CycleViewPager.ImageCycleViewListener() {
-
-		@Override
-		public void onImageClick(IndexBannerEntity info, int position, View imageView) {
-			if (scrollViewPagerLayout.isCycle()) {
-				if (!TextUtils.isEmpty(info.getUrl())) {
+		banner.setImages(imageList).setImageLoader(new GlideImageLoader()).start();
+		banner.setOnBannerListener(new OnBannerListener() {
+			@Override
+			public void OnBannerClick(int position) {
+				if (!TextUtils.isEmpty(infos.get(position).getUrl())) {
 					//友盟方法统计
 					MobclickAgent.onEvent(getActivity(), CLICKBANNER);
-					WebViewActivity.launch(getActivity(), info.getUrl(), info.getTitle());
+					WebViewActivity.launch(getActivity(), infos.get(position).getUrl(), infos.get(position).getTitle());
 				}
 			}
-
-		}
-
-	};
+		});
+	}
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
@@ -259,7 +211,7 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 			BannerHttp http = (BannerHttp) object;
 			bannerData = http.getBannerList();
 			if (bannerData != null && bannerData.size() != 0) {
-				initialize(bannerData);
+				initBanner(bannerData);
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_HOT) {
 			GetHotHttp http = (GetHotHttp) object;
@@ -324,39 +276,26 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 	public void errorComplete(int cmdType, String errorMessage) {
 
 	}
-
 	@Override
 	public void noNet() {
 
 	}
-
-
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
 		//当页面跳出的时候停止轮播
-		if (scrollViewPagerLayout != null) {
-			if (isVisibleToUser) {
-				if (pageViews.size() >= 1) {
-					controlWheel(true);
-				}
-			} else {
-				controlWheel(false);
+		if(banner!=null){
+			if(isVisibleToUser){
+				banner.start();
+			}else{
+				banner.stopAutoPlay();
 			}
 		}
+
 	}
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		controlWheel(false);
-	}
 
-	private void controlWheel(boolean isWheel) {
-		Log.e("controlWheel", "isWheel:" + isWheel);
-		scrollViewPagerLayout.setCycle(isWheel);
-		scrollViewPagerLayout.setWheel(isWheel);
-	}
+
 
 
 }

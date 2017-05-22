@@ -567,6 +567,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 				SocketConnection.mReceiveDataframSocketService.stopSelf();
 			}
 		}
+		if(ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
 		unbindTcpService();
 		if (mService != null)
 			mService.stopSelf();
@@ -871,6 +872,9 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			public void create() {
 				TestProvider.isCreate = true;
 				CommonTools.delayTime(500);
+				if(ProMainActivity.sendYiZhengService==null){
+					ProMainActivity.sendYiZhengService=new SendYiZhengService();
+				}
 				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 			}
 

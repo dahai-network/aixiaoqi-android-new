@@ -362,6 +362,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											switch (messages.get(0).substring(12, 14)) {
 												//有卡并且上电失败，可能是无效卡/卡未插好/设备异常
 												case "00":
+													sendMessageToBlueTooth(Constant.RESTORATION);
 													SharedUtils.getInstance().delete(Constant.OPERATER);
 													break;
 												case "01":

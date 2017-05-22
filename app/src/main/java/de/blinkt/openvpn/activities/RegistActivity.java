@@ -55,10 +55,8 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
     private Button sendBtn;
     private Button regist_btn;
     private TextView agreementTextView;
-    private CheckBox hindPswCheckBox;
     private CheckBox allowCheckBox;
     private RelativeLayout registRelativeLayout;
-    private boolean isOpenHind = true;
     private CountDownTimer timer;
     private InputMethodManager manager = null;
     private static final int MSG_SET_ALIAS = 1001;
@@ -91,8 +89,6 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
         passwordEdit = (EditText)
                 findViewById(R.id.passwordEdit);
 
-        hindPswCheckBox = (CheckBox) findViewById(R.id.hindPswCheckBox);
-        hindPswCheckBox.setOnClickListener(this);
         allowCheckBox = (CheckBox) findViewById(R.id.allowCheckBox);
         agreementTextView = (TextView) findViewById(R.id.agreementTextView);
         registRelativeLayout = (RelativeLayout) findViewById(R.id.registRelativeLayout);
@@ -172,11 +168,8 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
                 if (CheckUtil.isMobileNO(phoneNum, RegistActivity.this)) {
                     //友盟方法统计
                     MobclickAgent.onEvent(this, CLICKREGISTERSENDCODE);
-
-
                     sendBtn.setEnabled(false);
                     sendBtn.setTextColor(ContextCompat.getColor(this, R.color.regist_send_sms_unenable));
-
                     createHttpRequest(HttpConfigUrl.COMTYPE_SEND_SMS, phoneNum, 1 + "");
                 }
                 break;
@@ -195,19 +188,6 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
                     CommonTools.showShortToast(this, getResources().getString(R.string.null_verification));
                 }
                 break;
-            case R.id.hindPswCheckBox:
-                //友盟方法统计
-                MobclickAgent.onEvent(this, REGISTERSHOWPASSWORD);
-                if (isOpenHind) {
-                    isOpenHind = false;
-                    //如果选中，显示密码
-                    passwordEdit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                } else {
-                    isOpenHind = true;
-                    //否则隐藏密码
-                    passwordEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                }
-                break;
             case R.id.agreementTextView:
                 //进入H5协议页面。
                 String url = SharedUtils.getInstance().readString(IntentPutKeyConstant.USER_AGREEMENT_URL);
@@ -218,9 +198,7 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
                 ViewUtil.hideSoftKeyboard(this);
                 break;
             case R.id.text_boottom_login:
-                Intent intent = new Intent();
-                intent.setClass(RegistActivity.this, LoginMainActivity.class);
-                startActivity(intent);
+                toActivity(LoginMainActivity.class);
                 finish();
 
                 break;
@@ -284,14 +262,8 @@ public class RegistActivity extends BaseNetActivity implements View.OnClickListe
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
 
-        Log.d("aixiaoqi___", "rightComplete: " +cmdType);
-
         if (cmdType == HttpConfigUrl.COMTYPE_SEND_SMS) {
-
             SendMsgHttp entity = (SendMsgHttp) object;
-
-            Log.d("aixiaoqi___", "rightComplete: " +entity.getData());
-
             if (entity.getStatus() == 1) {
                 sendBtn.setEnabled(false);
                 timer.start();
