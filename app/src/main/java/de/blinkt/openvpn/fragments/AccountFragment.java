@@ -142,15 +142,15 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	//bluetooth status蓝牙状态
 	private String TAG = "AccountFragment";
 	boolean hasPackage = false;
-	public static ImageView tvNewPackagetAction;
-	public static ImageView tvNewVersion;
+	public  ImageView tvNewPackagetAction;
+	public  ImageView tvNewVersion;
 	private final static int SIGN_MSG_ONE = 1;
 	private final static int SIGN_MSG_TWO = 2;
 	private final static int SIGN_MSG_THREE = 3;
 	private final static int SIGN_MSG_FOUR = 4;
-	private final static int SIGN_MSG_FIVE = 5;
-	private final static int SIGN_MSG_SIX = 6;
 	private UsageRemainEntity.Used used;
+   private boolean isNewVersion;
+	private boolean isNewPackage;
 
 	public AccountFragment() {
 		// Required empty public constructor
@@ -162,25 +162,32 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 			super.handleMessage(msg);
 			switch (msg.what) {
 				case SIGN_MSG_ONE:
-					if (tvNewPackagetAction != null)
+					if (tvNewPackagetAction != null){
 						tvNewPackagetAction.setVisibility(View.VISIBLE);
+						isNewPackage=true;
+					}
 					break;
 				case SIGN_MSG_TWO:
 					if (tvNewPackagetAction != null) {
 						tvNewPackagetAction.setVisibility(View.GONE);
+						isNewPackage=false;
 					}
 					break;
 				case SIGN_MSG_THREE:
-					if (tvNewVersion != null && !AppMode.getInstance().isClickAddDevice)
+					if (tvNewVersion != null && !AppMode.getInstance().isClickAddDevice){
 						tvNewVersion.setVisibility(View.VISIBLE);
+						isNewVersion=true;
+					}
 					break;
 				case SIGN_MSG_FOUR:
-					if (tvNewVersion != null)
+					if (tvNewVersion != null){
+						isNewVersion=false;
 						tvNewVersion.setVisibility(View.GONE);
+					}
 					break;
 
 			}
-			EventBus.getDefault().post(new ChangeViewStateEvent(msg.what));
+			EventBus.getDefault().post(new ChangeViewStateEvent(isNewVersion,isNewPackage));
 		}
 	};
 

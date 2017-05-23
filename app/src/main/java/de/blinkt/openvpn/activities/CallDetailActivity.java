@@ -20,6 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CallRecordAdapter;
 import cn.com.johnson.model.OnlyCallModel;
@@ -70,8 +71,8 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 	public static String PHONE_INFO = "phone_info";
 	@BindView(R.id.tip_record_tv)
 	TextView tipRecordTv;
-//    private ContactRecodeEntity phoneInfo;
-
+	//    private ContactRecodeEntity phoneInfo;
+	Unbinder unbinder;
 	private int page = 0;
 	AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler;
 	List<ContactRecodeEntity> list = new ArrayList<>();
@@ -81,7 +82,7 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_call_detail);
-		ButterKnife.bind(this);
+		unbinder=ButterKnife.bind(this);
 		initData();
 		initTitle();
 		initRecyclerView();
@@ -252,13 +253,7 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 				break;
 			case R.id.dual_standby_king_tv:
 				if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-					//如果没有套餐那么就需要弹出提示框
-//					if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER)) {
-						//拨打电话
-						simCellPhone();
-//					} else {
-//						new DialogCanNoRemind(this, this, 2);
-//					}
+					simCellPhone();
 				} else {
 					CommonTools.showShortToast(this, getString(R.string.sim_register_phone_tip));
 				}
@@ -339,13 +334,15 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 		}
 	}
 
-	IToast toast = null;
+
 
 	@Override
 	protected void onDestroy() {
 		if (blackListDBHelp != null)
 			blackListDBHelp.close();
-
+		if(unbinder!=null){
+			unbinder.unbind();
+		}
 		super.onDestroy();
 	}
 

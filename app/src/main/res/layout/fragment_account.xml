@@ -176,6 +176,7 @@
                         android:id="@+id/PacketRelativeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:visibility="gone"
                         android:background="@drawable/has_package">
 
                         <TextView
@@ -384,7 +385,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/padding_5dp"
                         android:background="@drawable/has_device"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/deviceNameTextView"

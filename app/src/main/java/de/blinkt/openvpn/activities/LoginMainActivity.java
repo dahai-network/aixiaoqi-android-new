@@ -105,7 +105,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 	 * 设置帐号密码记录过的数据
 	 */
 	private void setLoginData() {
-
 		long currentDate = System.currentTimeMillis();
 		long loginDate = sharedUtils.readLong("loginDate");
 		long DATEOF15 = 1296000000;
@@ -150,21 +149,8 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 
 	}
 
-	private String pswString;
-
 	private void setTextChangeLisener() {
-		pwdEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
-			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				if (actionId == EditorInfo.IME_ACTION_DONE) {
-					//处理事件
-					if (pswString.length() != 0)
-						login_btn.performClick();
-				}
-				return false;
-			}
-		});
 		setEditTextListener(pwdEdit,R.id.pwdEdit);
 		setEditTextListener(usernameEdit,R.id.usernameEdit);
 	}
@@ -175,7 +161,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 			public void textChanged(CharSequence s, int id) {
 				switch (id){
 					case R.id.pwdEdit:
-						pswString = s.toString();
 						if (s.length() != 0) {
 							pwdEdit.setGravity(Gravity.CENTER);
 							if (usernameEdit.getText().toString().length() != 0) {
@@ -360,7 +345,6 @@ public class LoginMainActivity extends BaseNetActivity implements View.OnClickLi
 					if (!usernameEdit.getText().toString().equals(sharedUtils.readString(Constant.TEL)) || !Constant.JPUSH_ALIAS_SUCCESS.equals(sharedUtils.readString(Constant.JPUSH_ALIAS))) {
 						setAlias();
 					}
-
 					createHttpRequestNoCache(HttpConfigUrl.COMTYPE_SECURITY_CONFIG);
 				}
 			} else {
