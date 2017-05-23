@@ -243,7 +243,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 	@Subscribe
 	public void checkRedIsShow(ChangeViewStateEvent event) {
 
-		if (AccountFragment.tvNewPackagetAction.getVisibility() == View.VISIBLE || AccountFragment.tvNewVersion.getVisibility() == View.VISIBLE)
+		if (event.isNewVersion()|| event.isNewPackage())
 			tvRedDot04.setVisibility(View.VISIBLE);
 		else
 			tvRedDot04.setVisibility(View.GONE);

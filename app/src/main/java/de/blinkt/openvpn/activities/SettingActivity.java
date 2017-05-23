@@ -27,6 +27,8 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import cn.qfishphone.sipengine.SipEngineCore;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.activities.Set.*;
+import de.blinkt.openvpn.activities.Set.ContactUsActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
