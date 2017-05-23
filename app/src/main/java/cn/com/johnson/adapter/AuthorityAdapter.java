@@ -76,28 +76,35 @@ public class AuthorityAdapter extends RecyclerView.Adapter<AuthorityAdapter.Auth
             @Override
             public void onClick(View view) {
                 if (!entity.isCanClick()) return;
-            /*	try {*/
-                Log.d("AuthorityAdapter", "onClick: "+entity.getintentEntity().getAuthorityIntent());
+                Log.d("AuthorityAdapter", "onClick: " + entity.getintentEntity().getAuthorityIntent());
+                if (entity.getintentEntity().getAuthorityIntent() != null) {
+                    try {
+                        context.startActivity(entity.getintentEntity().getAuthorityIntent());
+                    } catch (Exception e) {
+
+                        return;
+                    }
+                } else {
+                    CommonTools.showShortToast(context, "找不到该权限");
+                    return;
+                }
+
                 try {
 
-                    if (entity.getintentEntity().getAuthorityIntent() != null) {
-                        context.startActivity(entity.getintentEntity().getAuthorityIntent());
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                //当前位置保存
-                                PhoneAuthonCountEntity.getInstance().setPosition(position + 1);
-                                context.startActivity(entity.getintentEntity().getShadeIntent());
-                            }
-                        }, 500);
-                        if (data.size() > number) {
-                            data.get(number).setCanClick(true);
-                            CommonTools.delayTime(1500);
-                            notifyDataSetChanged();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //当前位置保存
+                            PhoneAuthonCountEntity.getInstance().setPosition(position + 1);
+                            context.startActivity(entity.getintentEntity().getShadeIntent());
                         }
+                    }, 500);
+                    if (data.size() > number) {
+                        data.get(number).setCanClick(true);
+                        CommonTools.delayTime(1500);
+                        notifyDataSetChanged();
+                    }
 
-                    } else
-                        CommonTools.showShortToast(context, "找不到该权限");
 
                 } catch (Exception e) {
 

@@ -1,6 +1,5 @@
 package de.blinkt.openvpn.model;
 
-import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 import java.io.Serializable;
 import java.util.List;
