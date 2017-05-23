@@ -642,7 +642,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 
 	@Override
 	public void onRefresh() {
-		pageNumber = 1;
+		pageNumber =pageNumber +1;
 		smsDetailHttp();
 	}
 
@@ -733,6 +733,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
 			SendSmsHttp sendSmsHttp = (SendSmsHttp) object;
 			SmsDetailEntity smsDetailEntity = smsDetailAdapter.getItem(smsDetailAdapter.getItemCount() - 1);
 			if (1 == sendSmsHttp.getStatus()) {
+				smsDetailEntity.setStatus(SEND_SUCCEED);
 				smsDetailEntity.setSMSID(sendSmsHttp.getSmsId());
 			} else {
 				smsDetailEntity.setStatus(SEND_FAIL);
