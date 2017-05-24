@@ -286,7 +286,7 @@ public class ReceiveSocketService extends Service {
 				sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
 				am = (AlarmManager) getSystemService(ALARM_SERVICE);
 				am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),TCP_HEART_TIME*1000, sender);
-                am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, TCP_HEART_TIME * 1000, sender);
+//                am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, TCP_HEART_TIME * 1000, sender);
             }
 
         }
