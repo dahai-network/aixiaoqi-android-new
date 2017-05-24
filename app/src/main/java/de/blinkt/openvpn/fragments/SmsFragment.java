@@ -108,7 +108,6 @@ public class SmsFragment extends Fragment implements XRecyclerView.LoadingListen
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (NOTIFY_RECEIVED_ACTION.equals(intent.getAction())) {
-
 				onRefresh();
 			} else if (DELTE_MESSAGE.equals(intent.getAction())) {
 				if (mAllTempLists != null && clickPosition != -1 && smsListAdapter != null) {
