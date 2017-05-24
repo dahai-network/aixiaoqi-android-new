@@ -88,7 +88,6 @@ public abstract class SocketTransceiver implements Runnable {
 			Log.e("toBLue", "发送字符串out1=" + (out != null));
 			if (out == null)
 				out = new DataOutputStream(this.socket.getOutputStream());
-			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() +"端口："+socket.getLocalPort()+" \nIP:"+socket.getLocalSocketAddress().toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 			Log.e("toBLue", "发送字符串IOException=" + e.getMessage());

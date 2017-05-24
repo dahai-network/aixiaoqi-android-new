@@ -41,16 +41,16 @@ public class SocketConstant {
 			, ""
 			//199,预读数据内容
 	};
-	public static String SESSION_ID = "00000000";
+	public static String SESSION_ID = "00000000";//会话ID
 	public static String SDK_TAG = "c7";
 	public static String SDK_VALUE = "";
 
 	public static String UPDATE_CONNECTION = "108a0500";
-	public static String CONNECTION = "108a0400";
-	public static String PRE_DATA = "108a9000";
-	public static String RECEIVE_CONNECTION = "108a8400";
-	public static String RECEIVE_PRE_DATA = "108a1000";
-	public static final String SESSION_ID_TEMP = "00000000";
+	public static String CONNECTION = "108a0400";//连接
+	public static String PRE_DATA = "108a9000";//读取数据
+	public static String RECEIVE_CONNECTION = "108a8400";//连接回来
+	public static String RECEIVE_PRE_DATA = "108a1000";//
+	public static final String SESSION_ID_TEMP = "00000000";//
 	public static String hostIP = "120.25.161.113";
 	public static int port = 20016;
 
