@@ -242,7 +242,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 	@Subscribe
 	public void checkRedIsShow(ChangeViewStateEvent event) {
 
-		if (event.isNewVersion()|| event.isNewPackage())
+		if (event.isNewVersion() || event.isNewPackage())
 			tvRedDot04.setVisibility(View.VISIBLE);
 		else
 			tvRedDot04.setVisibility(View.GONE);
@@ -575,8 +575,8 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 				SocketConnection.mReceiveDataframSocketService.stopSelf();
 			}
 		}
-		if(ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
-		unbindTcpService();
+		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
+			unbindTcpService();
 		if (mService != null)
 			mService.stopSelf();
 		mService = null;
@@ -710,8 +710,8 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			CheckConfirmedHttp http = (CheckConfirmedHttp) object;
 			if (http.getStatus() == 1) {
 				if (!http.getEntity().isIsConfirmed()) {
-					Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
-					startActivity(intent);
+//					Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
+//					startActivity(intent);
 				} else {
 					confirmedPhoneNum = http.getEntity().getTel();
 				}
@@ -883,8 +883,8 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			public void create() {
 				TestProvider.isCreate = true;
 				CommonTools.delayTime(500);
-				if(ProMainActivity.sendYiZhengService==null){
-					ProMainActivity.sendYiZhengService=new SendYiZhengService();
+				if (ProMainActivity.sendYiZhengService == null) {
+					ProMainActivity.sendYiZhengService = new SendYiZhengService();
 				}
 				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 			}

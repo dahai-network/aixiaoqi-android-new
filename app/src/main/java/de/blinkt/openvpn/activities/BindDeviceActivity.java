@@ -240,10 +240,14 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		deviceList.clear();
 		seekImageView.clearAnimation();
 		mHandler.removeCallbacks(showdialogRun);
-		errorThread.interrupt();
-		errorThread = null;
-		if (noDevicedialog != null)
+		if (errorThread != null) {
+			errorThread.interrupt();
+			errorThread = null;
+		}
+		if (noDevicedialog != null) {
 			noDevicedialog.getDialog().dismiss();
+			noDevicedialog = null;
+		}
 		EventBus.getDefault().unregister(this);
 	}
 
