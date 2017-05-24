@@ -1065,8 +1065,8 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				percentTextView.setVisibility(GONE);
 				break;
 			case SocketConstant.DISCOONECT_DEVICE:
-				conStatusTextView.setText(getString(R.string.index_connecting));
-				percentTextView.setVisibility(GONE);
+//				conStatusTextView.setText(getString(R.string.index_connecting));
+//				percentTextView.setVisibility(GONE);
 				break;
 			case SocketConstant.UN_INSERT_CARD:
 				conStatusTextView.setText(getString(R.string.index_un_insert_card));
