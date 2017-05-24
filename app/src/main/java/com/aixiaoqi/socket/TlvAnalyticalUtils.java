@@ -40,11 +40,13 @@ public class TlvAnalyticalUtils {
 			//服务器错误注册失败
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SERVER_IS_ERROR);
 			return null;
+			//会话ID不一样
 		}else if(responeCode==41||responeCode==22){
 			if (ProMainActivity.sendYiZhengService != null){
 				ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "push service :\n" );
 				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 			}
+			//过期
 		}else if(responeCode==21){
 			if (!CommonTools.isFastDoubleClick(1000)) {
 				EventBusUtil.cancelCallService();

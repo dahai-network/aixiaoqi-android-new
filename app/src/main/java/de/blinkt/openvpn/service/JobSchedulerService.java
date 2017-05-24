@@ -34,7 +34,6 @@ public class JobSchedulerService extends JobService {
                     }
                     break;
             }
-
             jobFinished((JobParameters) msg.obj, false);
             return true;
         }
