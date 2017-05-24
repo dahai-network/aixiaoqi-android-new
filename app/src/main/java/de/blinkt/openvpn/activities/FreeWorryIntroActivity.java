@@ -54,8 +54,8 @@ public class FreeWorryIntroActivity extends BaseNetActivity {
 		hasLeftViewTitle(R.string.free_for_worry, 0);
 		if (confirmedPhoneNum == null) {
 			if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-				Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
-				startActivity(intent);
+//				Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
+//				startActivity(intent);
 				finish();
 			} else {
 				CommonTools.showShortToast(this, getString(R.string.please_regist_confirmed));
