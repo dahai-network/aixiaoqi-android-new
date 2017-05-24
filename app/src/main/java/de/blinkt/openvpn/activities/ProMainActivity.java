@@ -115,7 +115,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 	MyRadioButton rbAddress;
 	@BindView(R.id.rb_personal)
 	MyRadioButton rbPersonal;
-
 	@BindView(R.id.tv_red_dot_01)
 	TextView tvRedDot01;
 	@BindView(R.id.tv_red_dot_04)
