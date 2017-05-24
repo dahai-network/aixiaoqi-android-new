@@ -43,6 +43,7 @@ import de.blinkt.openvpn.model.WriteCardEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
+import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static de.blinkt.openvpn.activities.ActivateActivity.FINISH_ACTIVITY;
