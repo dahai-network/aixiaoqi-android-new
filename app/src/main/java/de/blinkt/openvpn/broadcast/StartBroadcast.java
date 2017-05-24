@@ -43,27 +43,27 @@ public class StartBroadcast extends BroadcastReceiver  {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.w(TAG, "StartBroadcast receive action is " + intent.getAction());
-		if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-			initialize(context);
-			//检测蓝牙是否打开
-			if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.TOKEN))){
-				Log.i(TAG,"token is null");
-				return ;
-			}
-			else	if(!isBluetoothOpen()){
-				Log.i(TAG,"bluetooth is close");
-				return ;
-				//6.0以上的系统必须要开启定位。
-			}else if  (Build.VERSION.SDK_INT >= 23 && !NetworkUtils.isLocationOpen(context)) {
-				Log.i(TAG,"location is close");
-				return;
-			}else{
-				if (!ICSOpenVPNApplication.getInstance().isServiceRunning(SimRegisterFlowService.class.getName())) {
-					Intent intentSimRegisterFlow = new Intent(context, SimRegisterFlowService.class);
-					context.startService(intentSimRegisterFlow);
-				}
-			}
-		}
+//		if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+//			initialize(context);
+//			//检测蓝牙是否打开
+//			if(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.TOKEN))){
+//				Log.i(TAG,"token is null");
+//				return ;
+//			}
+//			else	if(!isBluetoothOpen()){
+//				Log.i(TAG,"bluetooth is close");
+//				return ;
+//				//6.0以上的系统必须要开启定位。
+//			}else if  (Build.VERSION.SDK_INT >= 23 && !NetworkUtils.isLocationOpen(context)) {
+//				Log.i(TAG,"location is close");
+//				return;
+//			}else{
+//				if (!ICSOpenVPNApplication.getInstance().isServiceRunning(SimRegisterFlowService.class.getName())) {
+//					Intent intentSimRegisterFlow = new Intent(context, SimRegisterFlowService.class);
+//					context.startService(intentSimRegisterFlow);
+//				}
+//			}
+//		}
 	}
 
 
