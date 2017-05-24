@@ -32,6 +32,7 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
@@ -440,9 +441,11 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 	}
 
 	private void activatePackage() {
-		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.OPERATER))
-				&& ICSOpenVPNApplication.uartService != null
-				&& ICSOpenVPNApplication.uartService.isConnectedBlueTooth()) {
+		String operator = SharedUtils.getInstance().readString(Constant.OPERATER);
+		UartService uartService = ICSOpenVPNApplication.uartService;
+		if (!TextUtils.isEmpty(operator)
+				&& uartService != null
+				&& uartService.isConnectedBlueTooth()) {
 			showDialog();
 			return;
 		}

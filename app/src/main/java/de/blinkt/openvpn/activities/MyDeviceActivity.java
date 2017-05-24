@@ -276,8 +276,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 		}
 		if (BaseStatusFragment.bleStatus != null) {
-			if(BaseStatusFragment.bleStatus.equals(getString(R.string.index_registing)))
-			{
+			if (BaseStatusFragment.bleStatus.equals(getString(R.string.index_registing))) {
 				startAnim();
 			}
 			conStatusTextView.setText(BaseStatusFragment.bleStatus);

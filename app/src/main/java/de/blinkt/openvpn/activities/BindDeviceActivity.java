@@ -242,6 +242,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		mHandler.removeCallbacks(showdialogRun);
 		errorThread.interrupt();
 		errorThread = null;
+		if (noDevicedialog != null)
+			noDevicedialog.getDialog().dismiss();
 		EventBus.getDefault().unregister(this);
 	}
 
@@ -344,10 +346,12 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 						mService.connect(deviceAddress);
 					}
 				} else {
-					//如果蓝牙服务没有打开去打开蓝牙设备
-					CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.connect_failure));
-					restartUartService();
-					finish();
+					if (!isFinishing()) {
+						//如果蓝牙服务没有打开去打开蓝牙设备
+						CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.connect_failure));
+						restartUartService();
+						finish();
+					}
 				}
 			} else if (http.getStatus() == 1 && http.getIsBindEntity() != null && http.getIsBindEntity().getBindStatus() == 1) {
 				//如果设备被绑定过，则换设备进行绑定
