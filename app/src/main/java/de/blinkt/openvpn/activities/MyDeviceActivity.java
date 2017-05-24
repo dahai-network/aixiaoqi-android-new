@@ -246,6 +246,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			if (percentInt != 0) {
 				percentTextView.setText(percentInt + "%");
 			}
+			//获取电量
 			int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
 			if (electricityInt != 0) {
 				sinking.setPercent(((float) electricityInt) / 100);
@@ -253,6 +254,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				sinking.setPercent(0f);
 			}
 			if (!TextUtils.isEmpty(blueStatus)) {
+
 				conStatusTextView.setText(blueStatus);//初始化状态
 				if (getString(R.string.index_high_signal).equals(blueStatus)) {
 					percentTextView.setVisibility(GONE);
