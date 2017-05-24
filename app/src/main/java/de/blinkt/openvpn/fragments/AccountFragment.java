@@ -142,14 +142,14 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	//bluetooth status蓝牙状态
 	private String TAG = "AccountFragment";
 	boolean hasPackage = false;
-	public  ImageView tvNewPackagetAction;
-	public  ImageView tvNewVersion;
+	public ImageView tvNewPackagetAction;
+	public ImageView tvNewVersion;
 	private final static int SIGN_MSG_ONE = 1;
 	private final static int SIGN_MSG_TWO = 2;
 	private final static int SIGN_MSG_THREE = 3;
 	private final static int SIGN_MSG_FOUR = 4;
 	private UsageRemainEntity.Used used;
-   private boolean isNewVersion;
+	private boolean isNewVersion;
 	private boolean isNewPackage;
 
 	public AccountFragment() {
@@ -162,32 +162,32 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 			super.handleMessage(msg);
 			switch (msg.what) {
 				case SIGN_MSG_ONE:
-					if (tvNewPackagetAction != null){
+					if (tvNewPackagetAction != null) {
 						tvNewPackagetAction.setVisibility(View.VISIBLE);
-						isNewPackage=true;
+						isNewPackage = true;
 					}
 					break;
 				case SIGN_MSG_TWO:
 					if (tvNewPackagetAction != null) {
 						tvNewPackagetAction.setVisibility(View.GONE);
-						isNewPackage=false;
+						isNewPackage = false;
 					}
 					break;
 				case SIGN_MSG_THREE:
-					if (tvNewVersion != null && !AppMode.getInstance().isClickAddDevice){
+					if (tvNewVersion != null && !AppMode.getInstance().isClickAddDevice) {
 						tvNewVersion.setVisibility(View.VISIBLE);
-						isNewVersion=true;
+						isNewVersion = true;
 					}
 					break;
 				case SIGN_MSG_FOUR:
-					if (tvNewVersion != null){
-						isNewVersion=false;
+					if (tvNewVersion != null) {
+						isNewVersion = false;
 						tvNewVersion.setVisibility(View.GONE);
 					}
 					break;
 
 			}
-			EventBus.getDefault().post(new ChangeViewStateEvent(isNewVersion,isNewPackage));
+			EventBus.getDefault().post(new ChangeViewStateEvent(isNewVersion, isNewPackage));
 		}
 	};
 
@@ -228,7 +228,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	private void getDeviceType() {
 		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))) {
 			CreateHttpFactory.instanceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
-			} else {
+		} else {
 			showDeviceSummarized(true);
 			String typeText = "";
 			String deviceType = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
@@ -462,7 +462,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		mHandler.sendEmptyMessage(4);
 		intent.putExtra(BRACELETTYPE, braceletName);
 		Log.e(TAG, "bleStatus" + bleStatus);
-		intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, bleStatus);
 		return intent;
 	}
 

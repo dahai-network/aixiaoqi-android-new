@@ -168,9 +168,11 @@ public class ActivateActivity extends BaseNetActivity implements View.OnClickLis
 				break;
 			case R.id.sureTextView:
 				if (!CommonTools.isFastDoubleClick(3000)) {
-					if (SharedUtils.getInstance().readString(Constant.OPERATER) == null
-							&& ICSOpenVPNApplication.uartService != null
-							&& ICSOpenVPNApplication.uartService.isConnectedBlueTooth()) {
+					String operator = SharedUtils.getInstance().readString(Constant.OPERATER);
+					UartService uartService = ICSOpenVPNApplication.uartService;
+					if (TextUtils.isEmpty(operator)
+							&& uartService != null
+							&& uartService.isConnectedBlueTooth()) {
 						//友盟方法统计
 						MobclickAgent.onEvent(context, CLICKACTIVEPACKAGE);
 						orderActivationHttp();

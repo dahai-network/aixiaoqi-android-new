@@ -47,6 +47,7 @@ import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.DownloadSkyUpgradePackageHttp;
 import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
@@ -127,7 +128,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_ENABLE_BT = 2;
-	public static final String BLUESTATUSFROMPROMAIN = "bluestatusfrompromain";
 	public static String BRACELETTYPE = "bracelettype";
 	public static String UNITOYS = "unitoys";
 	public static String UNIBOX = "unibox";
@@ -237,7 +237,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			deviceNameTextView.setText(getString(R.string.unitoy));
 		}
 //卡状态
-		String blueStatus = getIntent().getStringExtra(BLUESTATUSFROMPROMAIN);
+		String blueStatus = BaseStatusFragment.bleStatus;
 		RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
 		titleSet();
 		//初始化状态和电量
@@ -254,7 +254,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			}
 			if (!TextUtils.isEmpty(blueStatus)) {
 				conStatusTextView.setText(blueStatus);//初始化状态
-				if(getString(R.string.index_high_signal).equals(blueStatus)){
+				if (getString(R.string.index_high_signal).equals(blueStatus)) {
 					percentTextView.setVisibility(GONE);
 					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.select_contacct));
 				} else {
@@ -271,11 +271,17 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
 
 //如果重连失败再进入我的设备就清空重连次数重新进入连接流程
-        if (mService!=null&&! mService.isConnectedBlueTooth()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-        }
-
+		if (mService != null && !mService.isConnectedBlueTooth()) {
+			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+		}
+		if (BaseStatusFragment.bleStatus != null) {
+			if(BaseStatusFragment.bleStatus.equals(getString(R.string.index_registing)))
+			{
+				startAnim();
+			}
+			conStatusTextView.setText(BaseStatusFragment.bleStatus);
+		}
 	}
 
 	private void titleSet() {
@@ -297,7 +303,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			case REQUEST_ENABLE_BT:
 				if (resultCode == Activity.RESULT_OK) {
 					String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
-					if (mService != null && ! mService.isConnecttingBlueTooth() && !TextUtils.isEmpty(macStr)) {
+					if (mService != null && !mService.isConnecttingBlueTooth() && !TextUtils.isEmpty(macStr)) {
 						retryTime = 0;
 						ReceiveBLEMoveReceiver.retryTime = 0;
 						mService.connect(macStr);

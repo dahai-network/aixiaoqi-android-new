@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +22,6 @@ import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.CanClickEntity;
-import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
-import de.blinkt.openvpn.model.ShowDeviceEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StateChangeEntity;
 import de.blinkt.openvpn.util.NetworkUtils;
@@ -101,8 +98,6 @@ public class BaseStatusFragment extends Fragment {
 						if (braceletName != null) {
 							Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
 							intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
-							intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN,
-									ICSOpenVPNApplication.bleStatusEntity.getStatus());
 							startActivity(intent);
 						}
 					}
@@ -173,7 +168,7 @@ public class BaseStatusFragment extends Fragment {
 	protected  void setBleStatus(String bleStatus){
 
 	}
-	protected  String bleStatus;
+	public static String bleStatus;
 
 	private void showStatue(SimRegisterStatue entity){
 		switch (entity.getRigsterStatueReason()){

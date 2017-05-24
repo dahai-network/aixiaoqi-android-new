@@ -5,10 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.aixiaoqi.socket.EventBusUtil;
-
-import org.greenrobot.eventbus.EventBus;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -153,8 +149,8 @@ public class PaySuccessActivity extends BaseNetActivity implements InterfaceCall
 			} else {
 				//TODO 没有通知到设备界面
 				//如果是没有套餐，则通知我的设备界面更新状态并且停止转动
-				SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
-				EventBusUtil.changeConnectStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
+//				SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
+//				EventBusUtil.changeConnectStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
 			}
 		}
 	}

@@ -85,6 +85,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	//设备名称：类型不同名称不同，分别有【unitoys、unibox】
 	private String bluetoothName = Constant.UNITOYS;
 	private final int REQUEST_ENABLE_BT = 2;
+	private Thread errorThread;
 
 
 	@Override
@@ -139,20 +140,15 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 					setAnimation();
 					scanLeDevice(true);
 					//60秒后由于蓝牙不返回数据则自动退出
-					new Handler().postDelayed(new Runnable() {
+					errorThread = new Thread(new Runnable() {
 						@Override
 						public void run() {
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									if (mService != null && !mService.isConnectedBlueTooth()) {
-										CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.bind_error));
-										stopTextView.performClick();
-									}
-								}
-							});
+							if (mService != null && !mService.isConnectedBlueTooth() && !errorThread.isInterrupted()) {
+								CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.bind_error));
+								stopTextView.performClick();
+							}
 						}
-					}, 60000);
+					});
 				} else {
 					Log.d(TAG, "蓝牙未打开");
 					finish();
@@ -244,6 +240,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		deviceList.clear();
 		seekImageView.clearAnimation();
 		mHandler.removeCallbacks(showdialogRun);
+		errorThread.interrupt();
+		errorThread = null;
 		EventBus.getDefault().unregister(this);
 	}
 
@@ -383,7 +381,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 						public void run() {
 							Intent intent = new Intent(BindDeviceActivity.this, MyDeviceActivity.class);
 							intent.putExtra(MyDeviceActivity.BRACELETTYPE, bracelettype);
-//							intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
 							startActivity(intent);
 							finish();
 						}
@@ -473,7 +470,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 									Intent intent = new Intent(BindDeviceActivity.this, MyDeviceActivity.class);
 									String type = getIntent().getStringExtra(MyDeviceActivity.BRACELETTYPE);
 									intent.putExtra(MyDeviceActivity.BRACELETTYPE, type);
-									intent.putExtra(MyDeviceActivity.BLUESTATUSFROMPROMAIN, ICSOpenVPNApplication.bleStatusEntity.getStatus());
 									SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE, type);
 									startActivity(intent);
 									finish();
@@ -505,6 +501,5 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			}
 		}
 	}
-
 
 }

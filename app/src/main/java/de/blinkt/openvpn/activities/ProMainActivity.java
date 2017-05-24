@@ -795,7 +795,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 	public void onIsSuccessEntity(SimRegisterStatue entity) {
 		switch (entity.getRigsterSimStatue()) {
 			case SocketConstant.REGISTER_SUCCESS:
-				createHttpRequest(HttpConfigUrl.COMTYPE_CHECK_CONFIRMED, SharedUtils.getInstance().readString(Constant.ICCID));
+//				createHttpRequest(HttpConfigUrl.COMTYPE_CHECK_CONFIRMED, SharedUtils.getInstance().readString(Constant.ICCID));
 				break;
 			case SocketConstant.REGISTER_FAIL://注册失败
 				rigisterFail(entity.getRigsterStatueReason());

@@ -20,10 +20,6 @@ import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
 import com.tencent.bugly.beta.ui.UILifecycleListener;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -35,7 +31,6 @@ import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.exceptionlog.CrashHandler;
 import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactHandler;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
@@ -48,8 +43,6 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 	List<ContactBean> mAllList;
 	//接口通过空卡序列号返回的订单特定写卡数据
 	public static String cardData = null;
-	//蓝牙状态
-	public static ChangeConnectStatusEntity bleStatusEntity;
 
 	public static ICSOpenVPNApplication getInstance() {
 		return instance;
@@ -97,7 +90,6 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 //		}
 
 		initUpgrade();
-		EventBus.getDefault().register(this);
 		searchContact();
 	}
 
@@ -234,7 +226,6 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 			@Override
 			public void onDestroy(Context context, View view, UpgradeInfo upgradeInfo) {
 				Log.d(TAG, "onDestory");
-				EventBus.getDefault().unregister(this);
 			}
 		};
 
@@ -409,11 +400,6 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 			e.printStackTrace();
 		}
 		System.exit(0);
-	}
-
-	@Subscribe(threadMode = ThreadMode.MAIN)
-	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
-		bleStatusEntity = entity;
 	}
 
 }

@@ -97,6 +97,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	private int UPDATE_HISTORY_DATE = 1;
 	private int WRITE_CARD_COMPLETE = 2;
 	//    private int CHECK_SIGNAL = 3;
+	private int IS_NOT_UNI = 3;
 	//重连次数
 	public static int retryTime;
 	//	private String dataType;//发出数据以后需要把dataType重置为-1；
@@ -108,6 +109,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				updateHistoryDate();
 			} else if (msg.what == WRITE_CARD_COMPLETE) {
 				activationLocalCompletedHttp();
+			} else if (msg.what == IS_NOT_UNI) {
+				CommonTools.showShortToast(context, context.getString(R.string.bind_error));
 			}
 		}
 	};
@@ -407,7 +410,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										Log.i("Encryption", "返回加密数据：" + messages.get(0).toString());
 										if (!EncryptionUtil.isPassEncrypt(messages.get(0).toString().substring(10))) {
 											mService.disconnect();
-											CommonTools.showShortToast(context, context.getString(R.string.legitimate_tips));
+											handler.sendEmptyMessage(IS_NOT_UNI);
 										} else {
 											if (!BluetoothConstant.IS_BIND) {
 												BluetoothMessageCallBackEntity bEntity = new BluetoothMessageCallBackEntity();
@@ -683,7 +686,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				intent.setAction(MyOrderDetailActivity.FINISH_PROCESS);
 				LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 			} else {
-				CommonTools.showShortToast(ICSOpenVPNApplication.getContext()
+				CommonTools.showShortToast(context
 						, object.getMsg());
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO) {
@@ -696,7 +699,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		try {
-			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), errorMessage);
+			CommonTools.showShortToast(context, errorMessage);
 			Log.i("test", "http.getMsg:" + errorMessage);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -707,7 +710,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	@Override
 	public void noNet() {
 		try {
-			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), context.getResources().getString(R.string.no_wifi));
+			CommonTools.showShortToast(context, context.getResources().getString(R.string.no_wifi));
 			Intent intent = new Intent();
 			intent.setAction(MyOrderDetailActivity.FINISH_PROCESS_ONLY);
 			LocalBroadcastManager.getInstance(context).sendBroadcast(intent);

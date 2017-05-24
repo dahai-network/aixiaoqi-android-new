@@ -440,7 +440,7 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 	}
 
 	private void activatePackage() {
-		if (SharedUtils.getInstance().readString(Constant.OPERATER) != null
+		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.OPERATER))
 				&& ICSOpenVPNApplication.uartService != null
 				&& ICSOpenVPNApplication.uartService.isConnectedBlueTooth()) {
 			showDialog();

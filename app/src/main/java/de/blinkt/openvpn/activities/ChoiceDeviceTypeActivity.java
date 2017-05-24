@@ -12,7 +12,6 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.util.SharedUtils;
 
-import static de.blinkt.openvpn.activities.MyDeviceActivity.BLUESTATUSFROMPROMAIN;
 
 public class ChoiceDeviceTypeActivity extends BaseActivity {
 
