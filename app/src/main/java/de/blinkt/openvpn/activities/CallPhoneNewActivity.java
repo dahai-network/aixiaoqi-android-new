@@ -235,11 +235,13 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 			case R.id.cancelcallbtn:
 				//友盟方法统计
 				MobclickAgent.onEvent(this, CLICKCALLHANGUP);
+				if(CommonTools.isFastDoubleClick(1000)){
+					return;
+				}
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
 						if (ICSOpenVPNApplication.the_sipengineReceive != null) {
-							CommonTools.delayTime(500);
 							ICSOpenVPNApplication.the_sipengineReceive.Hangup();
 
 						}

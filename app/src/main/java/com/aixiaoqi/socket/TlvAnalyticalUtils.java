@@ -169,7 +169,12 @@ public class TlvAnalyticalUtils {
 								sendToBlue(preData[2]);
 
 							}
+
 							preData[8]=orData.replace("8a1000", "8a9000").substring(0,20);
+
+							for(int i=0;i<9;i++){
+								Log.e("TlvAnalyticalUtils","分离服务器发过来的数据"+preData[i]);
+							}
 						}else{
 							byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
 							sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
