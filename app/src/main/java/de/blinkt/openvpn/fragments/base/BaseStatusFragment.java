@@ -204,13 +204,13 @@ public class BaseStatusFragment extends Fragment {
 					}
 				}
 			});
-			int percentInt = (int) (percent / 1.6);
-			if (percentInt >= 100) {
-				percentInt = 98;
-			}
-			topProgressView.setProgress(percentInt);
-		}
 
+		}
+		int percentInt = (int) (percent / 1.6);
+		if (percentInt >= 100) {
+			percentInt = 98;
+		}
+		topProgressView.setProgress(percentInt);
 
 	}
 

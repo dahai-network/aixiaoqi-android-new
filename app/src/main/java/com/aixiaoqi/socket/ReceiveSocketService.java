@@ -286,7 +286,6 @@ public class ReceiveSocketService extends Service {
 				sender = PendingIntent.getBroadcast(ReceiveSocketService.this, 0, intent, 0);
 				am = (AlarmManager) getSystemService(ALARM_SERVICE);
 				am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),TCP_HEART_TIME*1000, sender);
-//                am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, TCP_HEART_TIME * 1000, sender);
             }
 
         }
@@ -315,7 +314,6 @@ public class ReceiveSocketService extends Service {
 			tcpClient.closeTimer();
 			tcpClient.disconnect();
 		}
-		Log.e(TAG, "tcpClient=null" + (tcpClient == null));
 		count = 0;
 		SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
 		cancelTimer();
