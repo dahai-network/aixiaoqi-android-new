@@ -1,8 +1,5 @@
 package de.blinkt.openvpn.activities;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.CallLog;
-import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,7 +26,6 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
-import de.blinkt.openvpn.push.PhoneReceiver;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.AssetsDatabaseManager;
 import de.blinkt.openvpn.util.DatabaseDAO;
@@ -63,22 +58,24 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	private ReceiveCallReceiver receiver;
 	public SQLiteDatabase sqliteDB;
 	public DatabaseDAO dao;
-	public static boolean isForeground=false;
-	public static void launch(Context context,String phoneNum)
-	{
-		Intent intent = new Intent(context,ReceiveCallActivity.class);
+	public static boolean isForeground = false;
+	private ScreenStatusReceiver mScreenStatusReceiver;
+
+	public static void launch(Context context, String phoneNum) {
+		Intent intent = new Intent(context, ReceiveCallActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-		intent.putExtra("phoneNum",phoneNum);
+		intent.putExtra("phoneNum", phoneNum);
 		context.startActivity(intent);
 	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 		setContentView(R.layout.activity_receive_call);
-		registerEndCallReceiver();
+		registerReceiver();
 		initViews();
 		setData();
 		addListener();
@@ -89,7 +86,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	@Override
 	protected void onResume() {
 		super.onResume();
-		isForeground=true;
+		isForeground = true;
 	}
 
 	private void initDB() {
@@ -99,96 +96,104 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 		dao = new DatabaseDAO(sqliteDB);
 	}
 
-	private  void searchArea(){
+	private void searchArea() {
 		String address;
-		String phoneNumStr =getPhoneNumber();
-		address= PhoneNumberZone.getAddress(dao,phoneNumStr);
-		if(!TextUtils.isEmpty(address))
+		String phoneNumStr = getPhoneNumber();
+		address = PhoneNumberZone.getAddress(dao, phoneNumStr);
+		if (!TextUtils.isEmpty(address))
 			addressText.setText(address);
 	}
 
-	private void registerEndCallReceiver() {
+	private void registerReceiver() {
 		receiver = new ReceiveCallReceiver();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(CallPhoneService.endFlag);
 		filter.addAction(CallPhoneService.reportFlag);
-		registerReceiver(receiver,filter);
+		registerReceiver(receiver, filter);
 		TipHelper.PlaySound(this);
 		TipHelper.PlayShock(this);
 		sipEngineCore = ICSOpenVPNApplication.the_sipengineReceive;
+
+		mScreenStatusReceiver = new ScreenStatusReceiver();
+		IntentFilter screenStatusIF = new IntentFilter();
+		screenStatusIF.addAction(Intent.ACTION_SCREEN_OFF);
+		registerReceiver(mScreenStatusReceiver, screenStatusIF);
 	}
 
 	private void setData() {
-		String phoneNumStr=getPhoneNumber();
-		String realName=getRealName();
-		if(!TextUtils.isEmpty(realName)){
+		String phoneNumStr = getPhoneNumber();
+		String realName = getRealName();
+		if (!TextUtils.isEmpty(realName)) {
 			nametxt.setText(realName);
-		}else{
+		} else {
 			nametxt.setText(phoneNumStr);
 		}
 	}
 
-	private String getRealName(){
-		String str=getPhoneNumber();
-		String realName=SearchConnectterHelper.getContactNameByPhoneNumber(this,str);
+	private String getRealName() {
+		String str = getPhoneNumber();
+		String realName = SearchConnectterHelper.getContactNameByPhoneNumber(this, str);
 		return realName;
 	}
 
-	private String getPhoneNumber(){
+	private String getPhoneNumber() {
 		String phoneNumStr = getIntent().getStringExtra("phoneNum");
-		if(phoneNumStr.startsWith("86")){
-			phoneNumStr=phoneNumStr.substring(2,phoneNumStr.length());
+		if (phoneNumStr.startsWith("86")) {
+			phoneNumStr = phoneNumStr.substring(2, phoneNumStr.length());
 		}
 		return phoneNumStr;
 	}
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		return true;
 	}
+
 	private void insertCallRecode(int type) {
-		ContactRecodeEntity contactRecodeEntity=new ContactRecodeEntity();
+		ContactRecodeEntity contactRecodeEntity = new ContactRecodeEntity();
 		String phoneNumStr = getPhoneNumber();
-		String realName=getRealName();
-		if(!TextUtils.isEmpty(realName)){
+		String realName = getRealName();
+		if (!TextUtils.isEmpty(realName)) {
 			contactRecodeEntity.setName(realName);
-		}else{
+		} else {
 			contactRecodeEntity.setName("");
 		}
-		long time=System.currentTimeMillis();
+		long time = System.currentTimeMillis();
 		contactRecodeEntity.setPhoneNumber(phoneNumStr);
 		contactRecodeEntity.setCallTime(time);
-		contactRecodeEntity.setData(DateUtils.getTimeStampString(time+""));
-		if(!TextUtils.isEmpty(addressText.getText()))
+		contactRecodeEntity.setData(DateUtils.getTimeStampString(time + ""));
+		if (!TextUtils.isEmpty(addressText.getText()))
 			contactRecodeEntity.setAddress(addressText.getText().toString());
 		contactRecodeEntity.setType(type);
-		if(type==CallLog.Calls.INCOMING_TYPE)
+		if (type == CallLog.Calls.INCOMING_TYPE)
 			contactRecodeEntity.setTypeString(Constant.CALL_INCOMING);
 		else {
 			contactRecodeEntity.setTypeString(Constant.CALL_MISSED);
 		}
 
-		FindContactUtil.addCallRecode(this,contactRecodeEntity);
-		if(!TextUtils.isEmpty(realName)){
+		FindContactUtil.addCallRecode(this, contactRecodeEntity);
+		if (!TextUtils.isEmpty(realName)) {
 			contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(realName));
-		}else{
+		} else {
 			contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(phoneNumStr));
 		}
 		Intent intent = new Intent();
-		intent.putExtra(IntentPutKeyConstant.CONTACT_RECODE_ENTITY,contactRecodeEntity);
+		intent.putExtra(IntentPutKeyConstant.CONTACT_RECODE_ENTITY, contactRecodeEntity);
 		intent.setAction(UPDATE_CONTACT_REDORE);
 		sendBroadcast(intent);
 	}
-	public static final String UPDATE_CONTACT_REDORE="update_contact_recoder";
+
+	public static final String UPDATE_CONTACT_REDORE = "update_contact_recoder";
+
 	private void initViews() {
-		nametxt = (TextView)findViewById(R.id.nametxt);
-		addressText = (TextView)findViewById(R.id.address_text);
-		timer = (Chronometer)findViewById(R.id.chronometer);
-		receiveBtn = (TextView)findViewById(R.id.receiveBtn);
-		cancelcallbtn = (TextView)findViewById(R.id.cancelcallbtn);
-		hangUpBtn = (TextView)findViewById(R.id.hangupbtn);
-		llControlVoide = (LinearLayout)findViewById(R.id.ll_control_voide);
-		calmTextView=(TextView) findViewById(R.id.calmTextView);
-		mtview=(TextView) findViewById(R.id.mtview);
+		nametxt = (TextView) findViewById(R.id.nametxt);
+		addressText = (TextView) findViewById(R.id.address_text);
+		timer = (Chronometer) findViewById(R.id.chronometer);
+		receiveBtn = (TextView) findViewById(R.id.receiveBtn);
+		cancelcallbtn = (TextView) findViewById(R.id.cancelcallbtn);
+		hangUpBtn = (TextView) findViewById(R.id.hangupbtn);
+		llControlVoide = (LinearLayout) findViewById(R.id.ll_control_voide);
+		calmTextView = (TextView) findViewById(R.id.calmTextView);
+		mtview = (TextView) findViewById(R.id.mtview);
 
 	}
 
@@ -202,8 +207,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 
 	@Override
 	public void onClick(View v) {
-		switch (v.getId())
-		{
+		switch (v.getId()) {
 			case R.id.receiveBtn:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKRECIVESURE);
@@ -223,7 +227,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 			case R.id.mtview:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKRECIVECONTROLVOIDE);
-				Boolean isselected=mtview.isSelected();
+				Boolean isselected = mtview.isSelected();
 				sipEngineCore.SetLoudspeakerStatus(!isselected);
 				mtview.setSelected(!isselected);
 				break;
@@ -254,10 +258,10 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	}
 
 	private void stopTimer() {
-		if(timer.isActivated()){
+		if (timer.isActivated()) {
 			timer.stop();
 			timer.setBase(SystemClock.elapsedRealtime());
-			timer=null;
+			timer = null;
 		}
 	}
 
@@ -272,62 +276,78 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 	@Override
 	protected void setDataParam(Intent intent) {
 		super.setDataParam(intent);
-		intent.putExtra("phoneNum",getIntent().getStringExtra("phoneNum"));
+		intent.putExtra("phoneNum", getIntent().getStringExtra("phoneNum"));
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		isForeground=false;
-		initNotify(nametxt.getText().toString(),getIntent().getStringExtra("phoneNum"));
+		isForeground = false;
+		initNotify(nametxt.getText().toString(), getIntent().getStringExtra("phoneNum"));
 	}
 
-	public class ReceiveCallReceiver extends BroadcastReceiver
-	{
+	public class ReceiveCallReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			String action=intent.getAction();
-			if(CallPhoneService.endFlag.equals(action)){
+			String action = intent.getAction();
+			if (CallPhoneService.endFlag.equals(action)) {
 
-				if(CallPhoneService.CALL_DIR==0){
+				if (CallPhoneService.CALL_DIR == 0) {
 					cancelNotify();
 					stopTimer();
-					if(!isDestroyed())
+					if (!isDestroyed())
 						try {
 							onBackPressed();
-						}catch (Exception e){
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 				}
-			}else if(CallPhoneService.reportFlag.equals(action)){
-				if(CallPhoneService.CALL_DIR==0){
-					long nativePtr=intent.getLongExtra("nativePtr",-1);
-					if(nativePtr>0){
+			} else if (CallPhoneService.reportFlag.equals(action)) {
+				if (CallPhoneService.CALL_DIR == 0) {
+					long nativePtr = intent.getLongExtra("nativePtr", -1);
+					if (nativePtr > 0) {
 						insertCallRecode(CallLog.Calls.MISSED_TYPE);
-					}else{
+					} else {
 						insertCallRecode(CallLog.Calls.INCOMING_TYPE);
 					}
 				}
 			}
 		}
+
 	}
+
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if(receiver!=null)
+		if (receiver != null)
 			unregisterReceiver(receiver);
-		receiver=null;
-		if(sipEngineCore!=null){
+		receiver = null;
+		if (sipEngineCore != null) {
 			sipEngineCore.MuteMic(true);
 			sipEngineCore.SetLoudspeakerStatus(true);
-			sipEngineCore=null;
+			sipEngineCore = null;
 		}
+		if (mScreenStatusReceiver != null)
+			unregisterReceiver(mScreenStatusReceiver);
 		cancelNotify();
 	}
 
 	private void cancelNotify() {
-		if(mNotificationManager!=null)
+		if (mNotificationManager != null)
 			mNotificationManager.cancel(notifyId);
 	}
+
+	class ScreenStatusReceiver extends BroadcastReceiver {
+		String SCREEN_OFF = "android.intent.action.SCREEN_OFF";
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (SCREEN_OFF.equals(intent.getAction())) {
+				TipHelper.stopSound();
+			}
+		}
+	}
+
 }

@@ -2,6 +2,7 @@ package cn.com.johnson.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,10 +49,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				Uri u = Uri.parse(bean.getUrl());
-//				Intent it = new Intent(Intent.ACTION_VIEW, u);
-//				context.startActivity(it);
-				WebViewActivity.launch(context, bean.getUrl(), bean.getTitle());
+				if (!TextUtils.isEmpty(bean.getUrl()))
+					WebViewActivity.launch(context, bean.getUrl(), bean.getTitle());
 			}
 		});
 	}
