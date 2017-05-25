@@ -21,13 +21,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.aixiaoqi.socket.SocketConstant;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.umeng.analytics.MobclickAgent;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,7 +33,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.RecyclerBaseAdapter;
 import cn.com.johnson.adapter.SmsDetailAdapter;
@@ -365,8 +362,6 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
             super.onBackPressed();
         }
     }
-
-
     private boolean isClick;
 
     @Override
