@@ -1,31 +1,16 @@
 package de.blinkt.openvpn.activities.Set;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.telephony.TelephonyManager;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.activities.Set.PresenterImpl.ContactUsPersenterImpl;
-import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.activities.Set.Presenter.ContactUsPersenter;
 
-import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTOURUSEEMAIL;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTOURUSEPHONE;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTOURUSEWEIXINHAO;
 
 /**
  * Created by Administrator on 2016/8/27.
@@ -40,7 +25,7 @@ public class ContactUsActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.weixinLinearLayout)
     TextView weixinLinearLayout;
     Unbinder unbinder;
-    private  ContactUsPersenterImpl contactUsPersenterImpl;
+    private ContactUsPersenter contactUsPersenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,19 +39,19 @@ public class ContactUsActivity extends BaseActivity implements View.OnClickListe
         emailLinearLayout.setOnClickListener(this);
         phoneLinearLayout.setOnClickListener(this);
         weixinLinearLayout.setOnClickListener(this);
-        contactUsPersenterImpl=new ContactUsPersenterImpl(this);
+        contactUsPersenter=new ContactUsPersenter(this);
     }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.emailLinearLayout:
-                contactUsPersenterImpl.clickEmail();
+                contactUsPersenter.clickEmail();
                 break;
             case R.id.phoneLinearLayout:
-                contactUsPersenterImpl.clickPhone();
+                contactUsPersenter.clickPhone();
                 break;
             case R.id.weixinLinearLayout:
-                contactUsPersenterImpl.clickWeiXin();
+                contactUsPersenter.clickWeiXin();
                 break;
         }
 
@@ -79,8 +64,8 @@ public class ContactUsActivity extends BaseActivity implements View.OnClickListe
         if(unbinder!=null){
             unbinder.unbind();
         }
-        if(contactUsPersenterImpl!=null){
-            contactUsPersenterImpl=null;
+        if(contactUsPersenter!=null){
+            contactUsPersenter=null;
         }
     }
 }

@@ -124,9 +124,9 @@ public class SdkAndBluetoothDataInchange {
 	}
 
 	private void registerGoip(ArrayList<String> messages) {
+
 		count=count+1;
 		if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
-
 			//判断是否是电信还是联通的卡
 			saveBluetoothData= PacketeUtil.Combination(messages);
 			String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);

@@ -575,7 +575,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 				SocketConnection.mReceiveDataframSocketService.stopSelf();
 			}
 		}
-		if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName()))
 			unbindTcpService();
 		if (mService != null)
 			mService.stopSelf();
@@ -802,12 +801,22 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			case SocketConstant.REGISTERING://注册中
 				registering(entity.getRigsterStatueReason());
 				break;
-
+			case SocketConstant.UNREGISTER:
+				unregisterSim(entity.getRigsterStatueReason());
 			default:
 
 				break;
 		}
 
+	}
+
+	private void unregisterSim(int unregisterReason){
+		switch (unregisterReason){
+			case SocketConstant.UN_INSERT_CARD:
+				unbindTcpService();
+				destorySocketService();
+				break;
+		}
 	}
 
 	private void rigisterFail(int failReason) {
@@ -825,6 +834,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		switch (registeringReason) {
 			case SocketConstant.START_TCP_FAIL:
 				unbindTcpService();
+				destorySocketService();
 				break;
 			case SocketConstant.TCP_DISCONNECT:
 				//更改为注册中
@@ -968,65 +978,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
 		}
 	};
-
-
-//	private BroadcastReceiver updateIndexTitleReceiver = new BroadcastReceiver() {
-//
-//
-//		@Override
-//		public void onReceive(final Context context, Intent intent) {
-//			final String action = intent.getAction();
-//			if (action.equals(UartService.FINDED_SERVICE)) {
-//				EventBusUtil.showDevice(true);
-//			} else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-//				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-//					EventBusUtil.showDevice(false);
-//				}
-//				//判断IMEI是否存在，如果不在了表明已解除绑定，否则就是未连接
-//			} else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
-//				ArrayList<String> message = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
-//				if (message != null && message.size() == 0 || !message.get(0).substring(0, 2).equals("55")) {
-//					return;
-//				}
-//				//判断是否是分包（0x80的包）
-//				if (message != null && message.size() == 0 || !message.get(0).substring(2, 4).equals("80")) {
-//					return;
-//				}
-//				try {
-//					String dataType = message.get(0).substring(6, 10);
-//					switch (dataType) {
-//						case RETURN_POWER:
-//							break;
-//						case Constant.SYSTEM_BASICE_INFO:
-//							//返回基本信息就更新account的仪表盘栏
-//							int powerText;
-//							powerText = Integer.parseInt(message.get(0).substring(14, 16), 16);
-//							String typeText = "";
-//							String bracelettype = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-//							if (bracelettype != null) {
-//								if (bracelettype.contains(MyDeviceActivity.UNITOYS)) {
-//									typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-//								} else if (bracelettype.contains(MyDeviceActivity.UNIBOX)) {
-//									typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-//
-//								}
-//							}
-//							accountFragment.setSummarized(typeText, powerText + "", false);
-//
-//							break;
-//						case Constant.RECEIVE_ELECTRICITY:
-//							powerText = Integer.parseInt(message.get(0).substring(10, 12), 16);
-//							accountFragment.setPowerPercent(powerText + "");
-//							break;
-//					}
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//					return;
-//				}
-//			}
-//
-//		}
-//	};
 
 
 	private void requestPacket() {

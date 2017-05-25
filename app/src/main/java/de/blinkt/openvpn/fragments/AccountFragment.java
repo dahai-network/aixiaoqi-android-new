@@ -261,18 +261,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		}
 	}
 
-//	public void setSummarized(String deviceType, String powerPercent, boolean isRegisted) {
-//		try {
-//
-//			showDeviceType(deviceType);
-//			setPowerPercent(powerPercent);
-//			setRegisted(isRegisted);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-
 	private void showDeviceType(String deviceType) {
 		if (!TextUtils.isEmpty(deviceType))
 			deviceNameTextView.setText(deviceType);
@@ -324,8 +312,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				.transform(new GlideCircleTransform(ICSOpenVPNApplication.getContext(), 2, ICSOpenVPNApplication.getContext().getResources().getColor(R.color.white)))
 				.diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headImageView);
 		accountPhoneTextView.setText(SharedUtils.getInstance().readString(Constant.USER_NAME));
-		BalanceHttp http = new BalanceHttp(this, HttpConfigUrl.COMTYPE_GET_BALANCE);
-		new Thread(http).start();
+        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_BALANCE);
 
 	}
 
@@ -475,115 +462,126 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 				balanceTextView.setText(ICSOpenVPNApplication.getInstance().getString(R.string.balance) + ": " + http.getBalanceEntity().getAmount()
 						+ ICSOpenVPNApplication.getInstance().getString(R.string.yuan));
 		} else if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
-			if (object.getStatus() == 1) {
-				SharedUtils.getInstance().delete(BRACELETPOWER);
-				SharedUtils.getInstance().delete(Constant.IMEI);
-				SharedUtils.getInstance().delete(BRACELETNAME);
-				SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
-				BluetoothConstant.IS_BIND = false;
-				//判断是否再次重连的标记
-				ICSOpenVPNApplication.isConnect = false;
-				ReceiveBLEMoveReceiver.isConnect = false;
-				// 解除绑定，注册失败不显示
-				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
-
-//				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
-				CommonTools.showShortToast(getActivity(), "已解绑设备");
-				ICSOpenVPNApplication.uartService.disconnect();
-				showDeviceSummarized(false);
-			} else {
-				CommonTools.showShortToast(getActivity(), object.getMsg());
-				Log.i(TAG, object.getMsg());
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
-
-			if (object.getStatus() == 1) {
-				OrderUsageRemainHttp orderUsageRemainHttp = (OrderUsageRemainHttp) object;
-				UsageRemainEntity.Unactivated unactivated = orderUsageRemainHttp.getUsageRemainEntity().getUnactivated();
-				used = orderUsageRemainHttp.getUsageRemainEntity().getUsed();
-				if (used == null) {
-					return;
-				}
-				if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
-					if (!AppMode.getInstance().isClickPackage)
-						mHandler.sendEmptyMessage(1);
-					hasPackage = true;
-					PacketRelativeLayout.setVisibility(View.GONE);
-					noPacketRelativeLayout.setVisibility(View.VISIBLE);
-					Drawable drawable = getResources().getDrawable(R.drawable.activate_device_account);
-					drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
-					addOrActivatePackage.setText(getString(R.string.activate_packet));
-				} else if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
-					mHandler.sendEmptyMessage(2);
-					hasPackage = false;
-					PacketRelativeLayout.setVisibility(View.GONE);
-					noPacketRelativeLayout.setVisibility(View.VISIBLE);
-					Drawable drawable = getResources().getDrawable(R.drawable.add_device);
-					drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-					addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
-					addOrActivatePackage.setText(getString(R.string.add_package));
-				} else {//有套餐且激活了。
-					hasPackage = true;
-					PacketRelativeLayout.setVisibility(View.VISIBLE);
-					noPacketRelativeLayout.setVisibility(View.GONE);
-					callTime.setText(used.getTotalRemainingCallMinutes() + "分");
-
-					//显示出有未激活套餐的提示
-					if (!"0".equals(unactivated.getTotalNumFlow()) && !AppMode.getInstance().isClickPackage) {
-						mHandler.sendEmptyMessage(1);
-					} else {
-						mHandler.sendEmptyMessage(2);
-					}
-					if ("0".equals(used.getTotalNumFlow())) {
-						flow.setText(getString(R.string.no_flow_count));
-						flowCount.setText(unactivated.getTotalNumFlow());
-					} else {
-						flow.setText(getString(R.string.flow_count));
-						flowCount.setText(used.getTotalNumFlow());
-					}
-					packageAllCount.setText(used.getTotalNum());
-					String serviceName = used.getServiceName();
-					if (!TextUtils.isEmpty(serviceName)) {
-						SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-						serviceTextView.setText(serviceName);
-					} else {
-						SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
-						serviceTextView.setText("---");
-					}
-				}
-			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
-			GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
-			if (object.getStatus() == 1) {
-				if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
-					showDeviceSummarized(!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI()));
-					if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
-						SharedUtils.getInstance().writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI());
-						String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
-						String typeText = "";
-						if ("0".equals(deviceTypeStr)) {
-							SharedUtils.getInstance().writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
-							typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-						} else if ("1".equals(deviceTypeStr)) {
-							typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-							SharedUtils.getInstance().writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
-						}
-						showDeviceType(typeText);
-						if (isClickAddDevice) {
-							Intent intent = null;
-							intent = toActivity(intent, SharedUtils.getInstance().readString(Constant.BRACELETNAME));
-							startActivity(intent);
-						}
-
-					}
-				}
-			}
+            unbindDevice(object);
+        } else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
+            showPackage(object);
+        } else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
+            getBindDeviceInfo(object);
 			isClickAddDevice = false;
 		}
 	}
 
-	@Override
+    private void getBindDeviceInfo(CommonHttp object) {
+        GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
+        if (object.getStatus() == 1) {
+            if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
+                showDeviceSummarized(!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI()));
+                if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
+                    SharedUtils.getInstance().writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI());
+                    String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
+                    String typeText = "";
+                    if ("0".equals(deviceTypeStr)) {
+                        SharedUtils.getInstance().writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
+                        typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
+                    } else if ("1".equals(deviceTypeStr)) {
+                        typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
+                        SharedUtils.getInstance().writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
+                    }
+                    showDeviceType(typeText);
+                    if (isClickAddDevice) {
+                        Intent intent = null;
+                        intent = toActivity(intent, SharedUtils.getInstance().readString(Constant.BRACELETNAME));
+                        startActivity(intent);
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void showPackage(CommonHttp object) {
+        if (object.getStatus() == 1) {
+            OrderUsageRemainHttp orderUsageRemainHttp = (OrderUsageRemainHttp) object;
+            UsageRemainEntity.Unactivated unactivated = orderUsageRemainHttp.getUsageRemainEntity().getUnactivated();
+            used = orderUsageRemainHttp.getUsageRemainEntity().getUsed();
+            if (used == null) {
+                return;
+            }
+            if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
+                if (!AppMode.getInstance().isClickPackage)
+                    mHandler.sendEmptyMessage(1);
+                hasPackage = true;
+                PacketRelativeLayout.setVisibility(View.GONE);
+                noPacketRelativeLayout.setVisibility(View.VISIBLE);
+                Drawable drawable = getResources().getDrawable(R.drawable.activate_device_account);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
+                addOrActivatePackage.setText(getString(R.string.activate_packet));
+            } else if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
+                mHandler.sendEmptyMessage(2);
+                hasPackage = false;
+                PacketRelativeLayout.setVisibility(View.GONE);
+                noPacketRelativeLayout.setVisibility(View.VISIBLE);
+                Drawable drawable = getResources().getDrawable(R.drawable.add_device);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                addOrActivatePackage.setCompoundDrawables(drawable, null, null, null);
+                addOrActivatePackage.setText(getString(R.string.add_package));
+            } else {//有套餐且激活了。
+                hasPackage = true;
+                PacketRelativeLayout.setVisibility(View.VISIBLE);
+                noPacketRelativeLayout.setVisibility(View.GONE);
+                callTime.setText(used.getTotalRemainingCallMinutes() + "分");
+
+                //显示出有未激活套餐的提示
+                if (!"0".equals(unactivated.getTotalNumFlow()) && !AppMode.getInstance().isClickPackage) {
+                    mHandler.sendEmptyMessage(1);
+                } else {
+                    mHandler.sendEmptyMessage(2);
+                }
+                if ("0".equals(used.getTotalNumFlow())) {
+                    flow.setText(getString(R.string.no_flow_count));
+                    flowCount.setText(unactivated.getTotalNumFlow());
+                } else {
+                    flow.setText(getString(R.string.flow_count));
+                    flowCount.setText(used.getTotalNumFlow());
+                }
+                packageAllCount.setText(used.getTotalNum());
+                String serviceName = used.getServiceName();
+                if (!TextUtils.isEmpty(serviceName)) {
+                    SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
+                    serviceTextView.setText(serviceName);
+                } else {
+                    SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
+                    serviceTextView.setText("---");
+                }
+            }
+        }
+    }
+
+    private void unbindDevice(CommonHttp object) {
+        if (object.getStatus() == 1) {
+            SharedUtils.getInstance().delete(BRACELETPOWER);
+            SharedUtils.getInstance().delete(Constant.IMEI);
+            SharedUtils.getInstance().delete(BRACELETNAME);
+            SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
+            BluetoothConstant.IS_BIND = false;
+            //判断是否再次重连的标记
+            ICSOpenVPNApplication.isConnect = false;
+            ReceiveBLEMoveReceiver.isConnect = false;
+            // 解除绑定，注册失败不显示
+            EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
+
+//				sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
+            CommonTools.showShortToast(getActivity(), "已解绑设备");
+            ICSOpenVPNApplication.uartService.disconnect();
+            showDeviceSummarized(false);
+        } else {
+            CommonTools.showShortToast(getActivity(), object.getMsg());
+            Log.i(TAG, object.getMsg());
+        }
+    }
+
+    @Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		CommonTools.showShortToast(getActivity(), errorMessage);
 		isClickAddDevice = false;

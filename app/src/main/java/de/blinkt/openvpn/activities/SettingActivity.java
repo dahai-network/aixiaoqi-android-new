@@ -29,6 +29,7 @@ import cn.qfishphone.sipengine.SipEngineCore;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.activities.Set.*;
 import de.blinkt.openvpn.activities.Set.ContactUsActivity;
+import de.blinkt.openvpn.activities.Set.UserFeedbackActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -59,7 +60,6 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 	TextView agreementUsTextView;
 	@BindView(R.id.ll_upgrade)
 	LinearLayout upgradeLl;
-
 	@BindView(R.id.appVersionTextView)
 	TextView appVersionTextView;
 	@BindView(R.id.exitBtn)
@@ -99,13 +99,12 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 			case R.id.agreementUsTextView:
 				String url = SharedUtils.getInstance().readString(IntentPutKeyConstant.USER_AGREEMENT_URL);
 				if (!TextUtils.isEmpty(url)) {
-					WebViewActivity.launch(SettingActivity.this, url, "用户许可及服务协议");
+					WebViewActivity.launch(this, url, "用户许可及服务协议");
 				}
 				break;
 			case R.id.ll_upgrade:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKVERSIONUPGRADE);
-
 				Beta.checkUpgrade();
 				break;
 			case R.id.exitBtn:
@@ -149,12 +148,12 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
-		exitOperate();
+
 	}
 
 	@Override
 	public void noNet() {
-		exitOperate();
+
 	}
 
 	/**
