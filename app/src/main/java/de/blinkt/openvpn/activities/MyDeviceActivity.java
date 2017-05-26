@@ -262,7 +262,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				} else {
 					if (getString(R.string.index_no_signal).equals(blueStatus)) {
 						startAnim();
-					}else{
+					} else {
 						percentTextView.setVisibility(GONE);
 					}
 					conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
@@ -614,8 +614,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		stopAnim();
 		isForeground = false;
 		DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
+		mBtAdapter = null;
 		isUpgrade = false;
 		registerSimStatu = null;
+		RegisterStatueAnim = null;
+		if (sinking != null)
+			sinking.clear();
 		sinking = null;
 		if (isDfuServiceRunning()) {
 			stopService(new Intent(this, DfuService.class));
@@ -626,7 +630,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		} catch (Exception ignore) {
 			Log.e(TAG, ignore.toString());
 		}
-
 	}
 
 	@Override

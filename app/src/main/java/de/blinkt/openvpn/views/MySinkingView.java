@@ -87,23 +87,24 @@ public class MySinkingView extends FrameLayout {
 	@Override
 	protected void dispatchDraw(Canvas canvas) {
 		super.dispatchDraw(canvas);
-		int width = getWidth();
-		int height = getHeight();
-		int halfWidth = width / 2;
-		int halfHeight = height / 2;
-		//裁剪成圆区域
-		Path path = new Path();
-		canvas.save();
-		path.reset();
-		canvas.clipPath(path);
-		path.addCircle(halfWidth, halfHeight, halfWidth, Path.Direction.CCW);
-		canvas.clipPath(path, Region.Op.UNION);
-
-		mPaint.setColor(ContextCompat.getColor(ICSOpenVPNApplication.getContext(), R.color.color_a4d9ff));
-		mPaint.setStyle(Style.FILL);
-		canvas.drawCircle(width / 2, height / 2, width / 2, mPaint);
-
 		if (mFlag == Status.RUNNING) {
+			int width = getWidth();
+			int height = getHeight();
+			int halfWidth = width / 2;
+			int halfHeight = height / 2;
+			//裁剪成圆区域
+			Path path = new Path();
+			canvas.save();
+			path.reset();
+			canvas.clipPath(path);
+			path.addCircle(halfWidth, halfHeight, halfWidth, Path.Direction.CCW);
+			canvas.clipPath(path, Region.Op.UNION);
+
+			mPaint.setColor(ContextCompat.getColor(ICSOpenVPNApplication.getContext(), R.color.color_a4d9ff));
+			mPaint.setStyle(Style.FILL);
+			canvas.drawCircle(width / 2, height / 2, width / 2, mPaint);
+
+
 			if (mScaledBitmap == null) {
 				mBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.wave2);
 				mScaledBitmap = Bitmap.createScaledBitmap(mBitmap, width, height, false);
@@ -149,4 +150,14 @@ public class MySinkingView extends FrameLayout {
 		RUNNING, NONE
 	}
 
+	public void clear() {
+		if (mBitmap != null) {
+			mBitmap.recycle();
+		}
+		if (mScaledBitmap != null) {
+			mScaledBitmap.recycle();
+		}
+		mBitmap = null;
+		mScaledBitmap = null;
+	}
 }
