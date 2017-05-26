@@ -20,6 +20,7 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.AppMode;
 import cn.jpush.android.api.JPushInterface;
@@ -64,12 +65,13 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 	Button exitBtn;
 	private SipEngineCore sipEngineCore;
 	private static final int MSG_SET_ALIAS = 1001;
+	Unbinder unbinder;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
-		ButterKnife.bind(this);
+		unbinder=ButterKnife.bind(this);
 		init();
 
 	}
@@ -254,8 +256,9 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		AppMode.getInstance().isClickAddDevice=false;
-		AppMode.getInstance().isClickPackage=false;
+		if(unbinder!=null){
+			unbinder.unbind();
+		}
 		if (handler != null && handler.getLooper() == Looper.getMainLooper()) {
 			handler.removeCallbacksAndMessages(null);
 		}

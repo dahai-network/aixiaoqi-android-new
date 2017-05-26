@@ -3,16 +3,18 @@ package de.blinkt.openvpn.activities.Set.PresenterImpl;
 import android.text.TextUtils;
 
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.NetModelBaseImpl;
 import de.blinkt.openvpn.activities.Set.ModelImpl.UserFeedbackModelImpl;
 import de.blinkt.openvpn.activities.Set.Presenter.UserFeedbackPersenter;
 import de.blinkt.openvpn.activities.Set.View.UserFeedbackView;
+import de.blinkt.openvpn.http.CommonHttp;
 
 
 /**
  * Created by Administrator on 2017/5/25 0025.
  */
 
-public class UserFeedbackPersenterImpl implements UserFeedbackPersenter,UserFeedbackModelImpl.OnLoadFinishListener {
+public class UserFeedbackPersenterImpl implements UserFeedbackPersenter,NetModelBaseImpl.OnLoadFinishListener {
     private UserFeedbackModelImpl userFeedbackModel;
     private UserFeedbackView userFeedbackView;
 
@@ -45,14 +47,23 @@ public class UserFeedbackPersenterImpl implements UserFeedbackPersenter,UserFeed
         userFeedbackView=null;
     }
 
+
+
     @Override
-    public void rightLoad() {
+    public void rightLoad(int cmdType, CommonHttp object) {
         userFeedbackView.finishView();
+        if(!TextUtils.isEmpty(object.getMsg()))
+            userFeedbackView.showToast(object.getMsg());
     }
 
     @Override
-    public void showResponeMessage(String responeMessage) {
-        if(!TextUtils.isEmpty(responeMessage))
-        userFeedbackView.showToast(responeMessage);
+    public void errorComplete(int cmdType, String errorMessage) {
+
     }
+
+    @Override
+    public void noNet() {
+
+    }
+
 }
