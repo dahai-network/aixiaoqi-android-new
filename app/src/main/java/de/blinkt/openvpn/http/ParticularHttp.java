@@ -17,6 +17,9 @@ public class ParticularHttp extends BaseHttp {
 	private ParticularEntity particularEntity;
 
 	public ParticularEntity getParticularEntity() {
+		if(particularEntity==null){
+			particularEntity=new ParticularEntity();
+		}
 		return particularEntity;
 	}
 

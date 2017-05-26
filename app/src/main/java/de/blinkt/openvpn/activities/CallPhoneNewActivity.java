@@ -243,6 +243,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 					public void run() {
 						if (ICSOpenVPNApplication.the_sipengineReceive != null) {
 							ICSOpenVPNApplication.the_sipengineReceive.Hangup();
+							finish();
 
 						}
 					}
@@ -365,6 +366,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 					cancelNotify();
 					stopTimer();
 					try {
+						if(!isFinishing())
 						onBackPressed();
 					} catch (Exception e) {
 						e.printStackTrace();

@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities;
+package de.blinkt.openvpn.activities.Set.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,10 +14,9 @@ import com.aixiaoqi.socket.EventBusUtil;
 import com.tencent.bugly.beta.Beta;
 import com.umeng.analytics.MobclickAgent;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.lang.ref.WeakReference;
 import java.util.Set;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -27,8 +26,8 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import cn.qfishphone.sipengine.SipEngineCore;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
-import de.blinkt.openvpn.activities.Set.*;
-import de.blinkt.openvpn.activities.Set.ui.*;
+import de.blinkt.openvpn.activities.LoginMainActivity;
+import de.blinkt.openvpn.activities.WebViewActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -93,7 +92,7 @@ public class SettingActivity extends BaseNetActivity implements InterfaceCallbac
 			case R.id.userFeedbackTextView:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKUSERFEEDBACKSEND);
-				toActivity(de.blinkt.openvpn.activities.Set.ui.UserFeedbackActivity.class);
+				toActivity(UserFeedbackActivity.class);
 				break;
 			case R.id.agreementUsTextView:
 				String url = SharedUtils.getInstance().readString(IntentPutKeyConstant.USER_AGREEMENT_URL);

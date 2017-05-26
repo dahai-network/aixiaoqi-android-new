@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities.Set;
+package de.blinkt.openvpn.activities.Set.ui;
 
 import android.os.Bundle;
 import android.view.View;

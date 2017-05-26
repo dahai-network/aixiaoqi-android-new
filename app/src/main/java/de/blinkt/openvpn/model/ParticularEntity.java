@@ -2,6 +2,7 @@ package de.blinkt.openvpn.model;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +36,9 @@ public class ParticularEntity implements Serializable {
 	}
 
 	public List<ListBean> getList() {
+		if(list==null){
+			list=new ArrayList<>();
+		}
 		return list;
 	}
 

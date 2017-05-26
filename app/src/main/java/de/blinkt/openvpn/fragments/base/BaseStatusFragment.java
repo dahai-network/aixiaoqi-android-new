@@ -89,7 +89,6 @@ public class BaseStatusFragment extends Fragment {
 	@Subscribe(threadMode = ThreadMode.MAIN)
 	public void canClickEntity(CanClickEntity entity) {
 		switch (entity.getJumpTo()) {
-
 			case CanClickEntity.JUMP_MYDEVICE:
 				topProgressView.showTopProgressView(getString(R.string.un_connect_tip), -1, new View.OnClickListener() {
 					@Override
@@ -174,13 +173,24 @@ public class BaseStatusFragment extends Fragment {
 		switch (entity.getRigsterStatueReason()){
 			case SocketConstant.UN_INSERT_CARD:
 				bleStatus=getString(R.string.index_un_insert_card);
-				topProgressGone();
+				if (checkNetWorkAndBlueIsOpen()){
+					topProgressGone();
+				}
 				break;
 			case SocketConstant.AIXIAOQI_CARD:
+				if (checkNetWorkAndBlueIsOpen()){
+					topProgressGone();
+				}
 				bleStatus=getString(R.string.index_aixiaoqicard);
 				break;
 			case SocketConstant.CONNECTING_DEVICE:
+				if (checkNetWorkAndBlueIsOpen()){
+					topProgressGone();
+				}
 				bleStatus=getString(R.string.index_connecting);
+				break;
+			case SocketConstant.DISCOONECT_DEVICE:
+				bleStatus=getString(R.string.index_unconnect);
 				break;
 		}
 

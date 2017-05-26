@@ -103,4 +103,5 @@ public class SocketConstant {
 	public static final int CONNECTING_DEVICE=304;//设备连接中
 	public static final int UNBIND_DEVICE=305;//未绑定设备
 	public static final int DISCOONECT_DEVICE=306;//断开连接
+	public static final int CONNECTING_SUCCESS=307;//连接成功
 }

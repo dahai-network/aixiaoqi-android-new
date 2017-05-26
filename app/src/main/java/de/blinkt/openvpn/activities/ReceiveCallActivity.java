@@ -296,7 +296,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 				if (CallPhoneService.CALL_DIR == 0) {
 					cancelNotify();
 					stopTimer();
-					if (!isDestroyed())
+					if (!isFinishing())
 						try {
 							onBackPressed();
 						} catch (Exception e) {
