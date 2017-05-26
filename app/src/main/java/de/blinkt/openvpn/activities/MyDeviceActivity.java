@@ -610,11 +610,13 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		Log.d(TAG, "onDestroy()");
 		stopAnim();
 		isForeground = false;
 		DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
-		Log.d(TAG, "onDestroy()");
 		isUpgrade = false;
+		registerSimStatu = null;
+		sinking = null;
 		if (isDfuServiceRunning()) {
 			stopService(new Intent(this, DfuService.class));
 		}
