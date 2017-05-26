@@ -449,7 +449,9 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
 	//扫描五秒后提示
 	private void connDeviceFiveSecond() {
-		mService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
+		String imeiStr = SharedUtils.getInstance().readString(Constant.IMEI);
+		if (!TextUtils.isEmpty(imeiStr))
+			mService.connect(imeiStr);
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -575,7 +577,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 				SocketConnection.mReceiveDataframSocketService.stopSelf();
 			}
 		}
-			unbindTcpService();
+		unbindTcpService();
 		if (mService != null)
 			mService.stopSelf();
 		mService = null;
@@ -810,8 +812,8 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 
 	}
 
-	private void unregisterSim(int unregisterReason){
-		switch (unregisterReason){
+	private void unregisterSim(int unregisterReason) {
+		switch (unregisterReason) {
 			case SocketConstant.UN_INSERT_CARD:
 				unbindTcpService();
 				destorySocketService();
