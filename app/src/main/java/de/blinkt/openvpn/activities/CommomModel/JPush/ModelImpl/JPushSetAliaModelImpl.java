@@ -3,6 +3,7 @@ package de.blinkt.openvpn.activities.CommomModel.JPush.ModelImpl;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
@@ -21,10 +22,14 @@ import de.blinkt.openvpn.util.SharedUtils;
 
 public class JPushSetAliaModelImpl implements JPushSetAliaModel {
     private static final int MSG_SET_ALIAS = 1001;
+    private JpushHandler handler ;
     @Override
     public void setJPushAlia(String jPushAlia) {
-
+        if(handler==null){
+            handler= new JpushHandler(mAliasCallback);
+        }
         handler.sendMessage(handler.obtainMessage(MSG_SET_ALIAS, jPushAlia));
+
     }
 
     private  class JpushHandler extends Handler {
@@ -44,6 +49,7 @@ public class JPushSetAliaModelImpl implements JPushSetAliaModel {
                     break;
                 default:
             }
+
         }
 
     }
@@ -77,5 +83,10 @@ public class JPushSetAliaModelImpl implements JPushSetAliaModel {
 
     };
 
-    private JpushHandler handler = new JpushHandler(mAliasCallback);
+    @Override
+    public void destoryHandler() {
+        if (handler != null && handler.getLooper() == Looper.getMainLooper()) {
+            handler.removeCallbacksAndMessages(null);
+        }
+    }
 }

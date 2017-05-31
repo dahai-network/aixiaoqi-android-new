@@ -7,7 +7,7 @@ import android.os.Environment;
  */
 public class Constant {
 
-	public static final boolean IS_DEBUG = false;
+	public static final boolean IS_DEBUG = true;
 	public static final boolean PRINT_LOGS = true;
 	public static final String UNITOYS = "unitoys";
 	public static final String UNIBOX = "unibox";
@@ -42,8 +42,6 @@ public class Constant {
 	public static final String IS_NEW_SIM_CARD = "is_new_sim_card";
 	public static final String VERSION_HEADER = "Version";
 	public static final String TERMINAL_HEADER = "Terminal";
-	public static final String PHONE_NUMBER_LIST = "phone_number_list";
-	public static final String RECOMMAND_DATE = "recommand_date";
 	public static final String DIALOG_NOREMIND_DATE = "dialog_noremind_date";
 	public static final String IS_NEED_UPGRADE_IN_HARDWARE = "is_need_upgrade_in_hardware";
 	//运营商

@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.NetModelBaseImpl;
 import de.blinkt.openvpn.activities.Set.ModelImpl.UserFeedbackModelImpl;
-import de.blinkt.openvpn.activities.Set.Presenter.UserFeedbackPersenter;
+import de.blinkt.openvpn.activities.Set.Presenter.UserFeedbackPresenter;
 import de.blinkt.openvpn.activities.Set.View.UserFeedbackView;
 import de.blinkt.openvpn.http.CommonHttp;
 
@@ -14,11 +14,11 @@ import de.blinkt.openvpn.http.CommonHttp;
  * Created by Administrator on 2017/5/25 0025.
  */
 
-public class UserFeedbackPersenterImpl implements UserFeedbackPersenter,NetModelBaseImpl.OnLoadFinishListener {
+public class UserFeedbackPresenterImpl implements UserFeedbackPresenter,NetModelBaseImpl.OnLoadFinishListener {
     private UserFeedbackModelImpl userFeedbackModel;
     private UserFeedbackView userFeedbackView;
 
-    public UserFeedbackPersenterImpl(UserFeedbackView userFeedbackView) {
+    public UserFeedbackPresenterImpl(UserFeedbackView userFeedbackView) {
         this.userFeedbackView = userFeedbackView;
         userFeedbackModel=new UserFeedbackModelImpl(this);
     }

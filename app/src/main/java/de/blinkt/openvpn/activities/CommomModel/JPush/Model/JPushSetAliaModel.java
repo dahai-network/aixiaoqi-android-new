@@ -6,4 +6,5 @@ package de.blinkt.openvpn.activities.CommomModel.JPush.Model;
 
 public interface JPushSetAliaModel {
     void setJPushAlia(String jPushAlia);
+    void destoryHandler();
 }

@@ -9,6 +9,8 @@ import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
 
+import static de.blinkt.openvpn.util.NetworkUtils.hasWiFi;
+
 /**
  * Created by Administrator on 2017/5/26 0026.
  * 有网络请求的Model基类
@@ -17,20 +19,15 @@ import de.blinkt.openvpn.util.NetworkUtils;
 
 public class NetModelBaseImpl implements InterfaceCallback{
 
-    OnLoadFinishListener onLoadFinishListener;
+   protected OnLoadFinishListener onLoadFinishListener;
     public NetModelBaseImpl(OnLoadFinishListener onLoadFinishListener){
         this.onLoadFinishListener=onLoadFinishListener;
     }
-
-
-
-    protected   boolean hasWiFi(){
-        if(!NetworkUtils.isNetworkAvailable(ICSOpenVPNApplication.getContext())){
-            CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), ICSOpenVPNApplication.getContext().getString(R.string.no_wifi));
-            return false;
-        }
-        return  true;
+    public NetModelBaseImpl(){
     }
+
+
+
 
     protected void createHttpRequest(int cmdType, String... params) {
         CreateHttpFactory.instanceHttp(this, cmdType, params);
@@ -43,6 +40,7 @@ public class NetModelBaseImpl implements InterfaceCallback{
 
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
+        if(onLoadFinishListener!=null)
         onLoadFinishListener.rightLoad(cmdType,object);
     }
 
@@ -55,6 +53,7 @@ public class NetModelBaseImpl implements InterfaceCallback{
 
     @Override
     public void noNet() {
+        if(onLoadFinishListener!=null)
         onLoadFinishListener.noNet();
     }
 

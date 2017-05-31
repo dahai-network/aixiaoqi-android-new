@@ -20,12 +20,15 @@
     <string name="verification_code">验证码：</string>
     <string name="input_verification">请输入验证码</string>
     <string name="regist">注册</string>
+    <string name="user_registing">注册中</string>
     <string name="login_user">登录账号</string>
     <string name="login_password">登录密码</string>
     <string name="find_password">找回密码</string>
     <string name="regist_success">注册成功</string>
     <string name="readed">我已阅读</string>
+    <string name="un_readed">未选中已阅读</string>
     <string name="agreement_mark">《用户许可及服务协议》</string>
+    <string name="has_account_go_login"><u>有账号，直接登录\n</u></string>
     <string name="login">登录</string>
     <string name="phone">电话</string>
     <string name="index">商城</string>

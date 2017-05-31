@@ -9,7 +9,7 @@ import de.blinkt.openvpn.http.InterfaceCallback;
  * Created by Administrator on 2017/5/25 0025.
  */
 
-public interface UserFeedbackPersenter   {
+public interface UserFeedbackPresenter {
 void requsetUserFeedback( );
     void onDestory();
 }

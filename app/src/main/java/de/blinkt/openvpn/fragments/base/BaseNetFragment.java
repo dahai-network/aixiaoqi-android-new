@@ -10,6 +10,8 @@ import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
 
+import static de.blinkt.openvpn.util.NetworkUtils.hasWiFi;
+
 /**
  * Created by Administrator on 2017/4/26 0026.
  */
@@ -43,13 +45,7 @@ public class BaseNetFragment extends Fragment implements InterfaceCallback {
         }
     }
 
-    private  boolean hasWiFi(){
-        if(!NetworkUtils.isNetworkAvailable(getActivity())){
-            CommonTools.showShortToast(getActivity(), getString(R.string.no_wifi));
-            return false;
-        }
-        return  true;
-    }
+
 
     protected void createHttpRequest(int cmdType, String... params) {
         CreateHttpFactory.instanceHttp(this, cmdType, params);

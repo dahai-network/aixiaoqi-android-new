@@ -5,9 +5,8 @@ package de.blinkt.openvpn.activities.Set.View;
  */
 
 public interface SetView {
-    void onDestory();
     void finishView();
-    void startActivity();
+    void startActivity(Class<?> activity);
     void showToast(int toastContentId);
     void showToast(String  toastContent);
 }

@@ -142,8 +142,9 @@
             android:name="de.blinkt.openvpn.activities.PackageCategoryActivity"
             android:label="@string/app"
             android:windowSoftInputMode="adjustPan"/>
+
         <activity
-            android:name="de.blinkt.openvpn.activities.LoginMainActivity"
+            android:name="de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity"
             android:label="@string/app"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Light.NoTitleBar">
@@ -155,7 +156,7 @@
                 <data android:scheme="wxff7e7ee82cd9afc4"/> <!-- 需修改 -->
             </intent-filter>
         </activity>
-        <activity android:name="de.blinkt.openvpn.activities.RegistActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.UserInfo.ui.RegistActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.StartUpHomePageActivity"/>
         <!--
         <receiver android:name="core.GetRestrictionReceiver">
@@ -170,7 +171,7 @@
         <activity
             android:name="de.blinkt.openvpn.activities.ReceiveCallActivity"
             android:launchMode="singleTop"/>
-        <activity android:name="de.blinkt.openvpn.activities.GetBackPswActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.UserInfo.ui.GetBackPswActivity"/>
         <activity
             android:name="de.blinkt.openvpn.activities.MyDeviceActivity"
             android:launchMode="singleTask"/>
@@ -181,7 +182,7 @@
             android:name="de.blinkt.openvpn.activities.BindDeviceActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar"/>
         <activity android:name="de.blinkt.openvpn.activities.MyOrderDetailActivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.SettingActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.Set.ui.SettingActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.PersonalCenterActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.Set.ui.UserFeedbackActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.PackageDetailActivity"/>

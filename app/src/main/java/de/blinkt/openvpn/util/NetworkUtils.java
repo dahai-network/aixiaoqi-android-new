@@ -8,6 +8,9 @@ import android.telephony.TelephonyManager;
 
 import java.util.List;
 
+import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+
 
 public class NetworkUtils {
 
@@ -39,7 +42,13 @@ public class NetworkUtils {
 	}
 
 
-
+	public static    boolean hasWiFi(){
+		if(!NetworkUtils.isNetworkAvailable(ICSOpenVPNApplication.getContext())){
+			CommonTools.showShortToast(ICSOpenVPNApplication.getContext(), ICSOpenVPNApplication.getContext().getString(R.string.no_wifi));
+			return false;
+		}
+		return  true;
+	}
 
 	/**
 	 * Gps是否打开

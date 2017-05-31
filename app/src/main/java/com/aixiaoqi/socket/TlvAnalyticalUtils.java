@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.LoginMainActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
+import de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
