@@ -27,7 +27,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.BaseEntry;
-import de.blinkt.openvpn.activities.LoginMainActivity;
+import de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -182,6 +182,11 @@ public abstract class CommonHttp implements Callback, Runnable {
 					EventBusUtil.cancelCallService();
 					if (ICSOpenVPNApplication.uartService != null)
 						ICSOpenVPNApplication.uartService.disconnect();
+					SharedUtils.getInstance().delete(Constant.TOKEN);
+					SharedUtils.getInstance().delete(Constant.PASSWORD);
+					SharedUtils.getInstance().delete(Constant.JPUSH_ALIAS);
+					SharedUtils.getInstance().delete(Constant.LOGIN_DATA);
+					SharedUtils.getInstance().delete(Constant.TEL);
 					SharedUtils.getInstance().delete(Constant.IMEI);
 					SharedUtils.getInstance().delete(Constant.BRACELETNAME);
 					Intent intent = new Intent(context_, LoginMainActivity.class);

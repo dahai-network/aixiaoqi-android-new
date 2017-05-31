@@ -116,6 +116,11 @@ public class CommenActivity extends FragmentActivity {
 		myProgressDialog.myShow();
 	}
 
+	public void showProgress(String message) {
+		myProgressDialog.setMyMessage(message);
+		myProgressDialog.myShow();
+	}
+
 	/**
 	 * 显示默认的进度条
 	 */

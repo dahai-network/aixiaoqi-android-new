@@ -24,9 +24,9 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTOURUSEWEIXINHA
  * Created by Administrator on 2017/5/22 0022.
  */
 
-public class ContactUsPersenter   {
+public class ContactUsPresenter {
     Context context;
-    public ContactUsPersenter(Context context ){
+    public ContactUsPresenter(Context context ){
         this.context=context;
     }
 

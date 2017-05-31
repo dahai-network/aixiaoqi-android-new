@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.AuthorityAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;

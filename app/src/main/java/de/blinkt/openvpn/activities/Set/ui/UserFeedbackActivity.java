@@ -10,7 +10,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.activities.Set.PresenterImpl.UserFeedbackPersenterImpl;
+import de.blinkt.openvpn.activities.Set.PresenterImpl.UserFeedbackPresenterImpl;
 import de.blinkt.openvpn.activities.Set.View.UserFeedbackView;
 import de.blinkt.openvpn.util.CommonTools;
 
@@ -19,7 +19,7 @@ public class UserFeedbackActivity extends BaseActivity implements UserFeedbackVi
 	EditText infoEditText;
 	@BindView(R.id.sendBtn)
 	Button sendBtn;
-	UserFeedbackPersenterImpl userFeedbackPersenter;
+	UserFeedbackPresenterImpl userFeedbackPersenter;
 	@Override
 	public void showToast(int toastContentId) {
 		CommonTools.showShortToast(this,getString(toastContentId));
@@ -46,7 +46,7 @@ public class UserFeedbackActivity extends BaseActivity implements UserFeedbackVi
 		setContentView(R.layout.activity_user_feedback);
 		ButterKnife.bind(this);
 		init();
-		userFeedbackPersenter=new UserFeedbackPersenterImpl(this);
+		userFeedbackPersenter=new UserFeedbackPresenterImpl(this);
 	}
 
 	private void init() {

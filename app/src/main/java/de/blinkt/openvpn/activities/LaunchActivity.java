@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.aixiaoqi.socket.SocketConstant;
 
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.UserInfo.ui.*;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -48,7 +49,7 @@ public class LaunchActivity extends BaseActivity {
 	}
 
 	private void toLogin() {
-		toActivity(LoginMainActivity.class);
+		toActivity(de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity.class);
 		finish();
 	}
 

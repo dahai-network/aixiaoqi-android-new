@@ -50,6 +50,7 @@ import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.Constant.NETWORK_CELL_PHONE;
 import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTDETAILCALL;
+import static de.blinkt.openvpn.util.NetworkUtils.hasWiFi;
 
 /**
  * Created by Administrator on 2017/4/6 0006.

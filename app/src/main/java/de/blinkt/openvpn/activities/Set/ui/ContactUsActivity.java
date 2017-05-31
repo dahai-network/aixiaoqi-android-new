@@ -9,7 +9,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.activities.Set.Presenter.ContactUsPersenter;
+import de.blinkt.openvpn.activities.Set.Presenter.ContactUsPresenter;
 
 
 /**
@@ -25,7 +25,7 @@ public class ContactUsActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.weixinLinearLayout)
     TextView weixinLinearLayout;
     Unbinder unbinder;
-    private ContactUsPersenter contactUsPersenter;
+    private ContactUsPresenter contactUsPersenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +39,7 @@ public class ContactUsActivity extends BaseActivity implements View.OnClickListe
         emailLinearLayout.setOnClickListener(this);
         phoneLinearLayout.setOnClickListener(this);
         weixinLinearLayout.setOnClickListener(this);
-        contactUsPersenter=new ContactUsPersenter(this);
+        contactUsPersenter=new ContactUsPresenter(this);
     }
     @Override
     public void onClick(View v) {

@@ -13,7 +13,7 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.views.TitleBar;
 
-public class BaseActivity extends CommenActivity {
+public class BaseActivity extends CommenActivity  {
 
     protected ActionBar actionBar;
     protected TitleBar titleBar;

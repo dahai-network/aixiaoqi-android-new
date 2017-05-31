@@ -293,8 +293,4 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 
 	}
 
-
-
-
-
 }
