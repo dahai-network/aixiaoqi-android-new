@@ -70,7 +70,7 @@ public class CommenActivity extends FragmentActivity {
 		}
 		//不需要的背景删掉
 		setRequestedOrientation(ActivityInfo
-        .SCREEN_ORIENTATION_PORTRAIT);
+				.SCREEN_ORIENTATION_PORTRAIT);
 		getWindow().setBackgroundDrawable(null);
 		application = (ICSOpenVPNApplication) getApplicationContext();
 		mContext = this;
@@ -158,5 +158,6 @@ public class CommenActivity extends FragmentActivity {
 		//释放config
 		config = null;
 		dismissProgress();
+		myProgressDialog = null;
 	}
 }
