@@ -124,6 +124,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
                     autoRunSet(entity);
                     Intent samsungLIntent = ICSOpenVPNApplication.getInstance().getPackageManager().getLaunchIntentForPackage("com.samsung.android.sm");
                     dataSave(samsungLIntent, data);
+
                     wifiSet(entity, data);
                 }
 
@@ -235,6 +236,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
         entity.setTitle(Constant.AUTO_RUN);
         entity.setTip(Constant.PERTECT_AIXIAOQI_RUN_NORMAL);
     }
+
 
     private void wifiSet(AuthorityEntity entity, ArrayList<AuthorityEntity> data) {
         entity.setTitle(Constant.KEEP_WLAN_CONNECT);

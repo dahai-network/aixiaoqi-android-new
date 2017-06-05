@@ -1,24 +1,22 @@
 package de.blinkt.openvpn.activities.Base;
 
+
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.NetworkUtils;
 
 import static de.blinkt.openvpn.util.NetworkUtils.hasWiFi;
 
 /**
- * Created by kim
  * on 2016/11/25 0025.
  */
-public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
+public abstract class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 
 	@Override
-	public void rightComplete(int cmdType, CommonHttp object) {
+	public abstract void rightComplete(int cmdType, CommonHttp object);
 
-	}
 
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
@@ -44,7 +42,7 @@ public class BaseNetActivity extends BaseActivity implements InterfaceCallback {
 
 
 
-	protected void createHttpRequest(int cmdType, String... params) {
+	public void createHttpRequest(int cmdType, String... params) {
 		CreateHttpFactory.instanceHttp(this, cmdType, params);
 	}
 	protected void createHttpRequestNoCache(int cmdType, String... params) {

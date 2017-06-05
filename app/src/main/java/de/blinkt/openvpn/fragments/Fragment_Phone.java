@@ -155,7 +155,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         dao.closeDB();
         t9dialpadview = null;
     }
-
+//未连上设备
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

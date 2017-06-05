@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.ActivateActivity;
+import de.blinkt.openvpn.activities.Set.ui.ActivateActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
@@ -45,7 +45,7 @@ import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
-import static de.blinkt.openvpn.activities.ActivateActivity.FINISH_ACTIVITY;
+import static de.blinkt.openvpn.activities.Set.ui.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.isUpgrade;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.AGREE_BIND;
@@ -111,6 +111,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			} else if (msg.what == IS_NOT_UNI) {
 				CommonTools.showShortToast(context, context.getString(R.string.bind_error));
 			}
+
 		}
 	};
 
@@ -134,7 +135,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					try {
 						Thread.sleep(100);
 						//8880021400
+
+						Log.d("Encryption", "send--run: "+APP_CONNECT +"--" +EncryptionUtil.random8Number());
+
 						sendMessageToBlueTooth(APP_CONNECT + EncryptionUtil.random8Number());//APP专属命令
+						//sendMessageToBlueTooth(APP_CONNECT +"0102030405060708");//APP专属命令
 //						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
 						Log.i(TAG, "发送了专属命令");
 						String braceletname = utils.readString(Constant.BRACELETNAME);
@@ -169,6 +174,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							EventBus.getDefault().post(entity);
 						}
 					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
@@ -344,6 +351,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										}
 										break;
 									case Constant.IS_INSERT_CARD:
+                                        //5580040c000102
+										Log.d(TAG, "run: "+messages.toString()+":"+messages.get(0).substring(10, 12));
 										Log.i(TAG, "接收数据：是否插卡：" + messages.toString());
 										if (messages.get(0).substring(10, 12).equals("00")) {
 											Log.i(TAG, "未插卡");
@@ -406,12 +415,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										}
 										break;
 									case Constant.APP_CONNECT_RECEIVE:
-										Log.i("Encryption", "返回加密数据：" + messages.get(0).toString());
+										Log.i("Encryption", "返回加密数据----：" + messages.get(0).toString());
 										if (!EncryptionUtil.isPassEncrypt(messages.get(0).toString().substring(10))) {
 											mService.disconnect();
 											handler.sendEmptyMessage(IS_NOT_UNI);
 										} else {
-											if (!CommonTools.isFastDoubleClick(100)&&!BluetoothConstant.IS_BIND) {
+											Log.i("Encryption", "run: "+BluetoothConstant.IS_BIND+"::"+CommonTools.isFastDoubleClick(100));
+											if (!CommonTools.isFastDoubleClick(50)&&!BluetoothConstant.IS_BIND) {
 												BluetoothMessageCallBackEntity bEntity = new BluetoothMessageCallBackEntity();
 												bEntity.setBlueType(BluetoothConstant.BLUE_BIND);
 												EventBus.getDefault().post(bEntity);

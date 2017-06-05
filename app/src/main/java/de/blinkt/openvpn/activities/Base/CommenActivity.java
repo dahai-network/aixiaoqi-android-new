@@ -26,7 +26,7 @@ public class CommenActivity extends FragmentActivity {
 	protected MyProgressDialog myProgressDialog;
 	protected ICSOpenVPNApplication application;
 	private Configuration config;
-	protected String TAG = getClass().getSimpleName().toString();
+	public String TAG = getClass().getSimpleName().toString();
 
 	protected boolean isAndroidTV() {
 		final UiModeManager uiModeManager = (UiModeManager) getSystemService(FragmentActivity.UI_MODE_SERVICE);

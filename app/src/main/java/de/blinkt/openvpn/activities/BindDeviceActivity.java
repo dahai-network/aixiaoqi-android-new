@@ -17,16 +17,13 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -75,7 +72,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	private Handler findDeviceHandler;
 	private List<BluetoothModel> deviceList;
 	private BluetoothAdapter mBluetoothAdapter;
-	private static final long SCAN_PERIOD = 20000; //120 seconds
+	private static final long SCAN_PERIOD = 20000; //20 seconds
 	private String deviceAddress = "";
 	SharedUtils utils = SharedUtils.getInstance();
 	private DialogBalance noDevicedialog;
@@ -126,7 +123,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		deviceList = new ArrayList<>();
 		mHandler = new Handler();
 		findDeviceHandler = new Handler();
-		//如果蓝牙没有打开提示用户带来蓝牙
+		//如果蓝牙没有打开提示用户打开蓝牙
 		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 		startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 	}
@@ -204,7 +201,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		if (enable) {
 			// Stops scanning after a pre-defined scan period.
 			mHandler.postDelayed(showdialogRun, SCAN_PERIOD);
-
 			mBluetoothAdapter.startLeScan(mLeScanCallback);
 
 		} else {
@@ -271,11 +267,14 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
 									if (device.getName().contains(bluetoothName)) {//过滤只需要的设备
+
+										Log.d(TAG, "run:find aixiaoqi "+device.getName());
 										BluetoothModel model = new BluetoothModel();
 										model.setAddress(device.getAddress());
 										model.setDiviceName(device.getName());
 										model.setRssi(rssi);
 										deviceList.add(model);
+
 										if (!isStartFindDeviceDelay) {
 											findDeviceHandler.postDelayed(new Runnable() {
 												@Override
@@ -318,9 +317,12 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			};
 	private int index = 0;
 
+	//判断是否绑定过
 	private void isBind(int index) {
 		deviceAddress = deviceList.get(index).getAddress();
 		utils.writeString(Constant.BRACELETNAME, deviceList.get(index).getDiviceName());
+
+		Log.e(TAG, "isBind: "+deviceAddress);
 		createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, deviceAddress);
 	}
 
@@ -340,16 +342,22 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	public void rightComplete(int cmdType, CommonHttp object) {
 		//判断是否绑定过，如果绑定过就不在绑定，换设备绑定，如果没有绑定过则开始绑定。
 		if (cmdType == HttpConfigUrl.COMTYPE_ISBIND_DEVICE) {
+
+			Log.d(TAG, "rightComplete: "+MyDeviceActivity.UNITOYS);
+			Log.d(TAG, "rightComplete: "+mService);
+
 			IsBindHttp http = (IsBindHttp) object;
 			if (http.getStatus() == 1 && http.getIsBindEntity() != null && http.getIsBindEntity().getBindStatus() == 0) {
 				if (mService != null) {
 					if (bluetoothName.contains(MyDeviceActivity.UNITOYS)) {
+
 						CreateHttpFactory.instanceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE
 								, deviceAddress, "0", 0 + "");
 					} else if (bluetoothName.contains(MyDeviceActivity.UNIBOX)) {
 						mService.connect(deviceAddress);
 					}
 				} else {
+
 					if (!isFinishing()) {
 						//如果蓝牙服务没有打开去打开蓝牙设备
 						CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.connect_failure));
@@ -369,7 +377,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			Log.i(TAG, "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
 			if (object.getStatus() == 1) {
 				utils.writeString(Constant.IMEI, deviceAddress);
-				SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE, bracelettype);
+				utils.writeString(MyDeviceActivity.BRACELETTYPE, bracelettype);
 				if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 					search_bluetooth.setText(getString(R.string.finded_unibox));
 				} else if (bluetoothName.contains(Constant.UNITOYS)) {

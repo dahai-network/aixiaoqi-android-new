@@ -38,7 +38,6 @@ import cn.com.johnson.model.AppMode;
 import cn.com.johnson.model.ChangeViewStateEvent;
 import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
-import de.blinkt.openvpn.activities.BalanceParticularsActivity;
 import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
 import de.blinkt.openvpn.activities.ImportantAuthorityActivity;
@@ -48,6 +47,7 @@ import de.blinkt.openvpn.activities.PackageCategoryActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
+import de.blinkt.openvpn.activities.Set.ui.BalanceParticularsActivity;
 import de.blinkt.openvpn.activities.Set.ui.SettingActivity;
 import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
@@ -276,6 +276,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	//控制注册信息
 	@Override
 	public void setRegisted(boolean isRegisted) {
+
 		if (isRegisted) {
 			signalIconImageView.setBackgroundResource(R.drawable.registed);
 			String operater = SharedUtils.getInstance().readString(Constant.OPERATER);

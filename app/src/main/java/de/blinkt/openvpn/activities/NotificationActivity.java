@@ -32,7 +32,6 @@ public class NotificationActivity extends CommenActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		// If this activity is the root activity of the task, the app is not running
 		if (isTaskRoot()) {
 			// Start the app before finishing
