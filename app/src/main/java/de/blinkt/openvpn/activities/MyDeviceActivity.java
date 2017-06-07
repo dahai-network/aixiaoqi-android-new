@@ -128,11 +128,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private String TAG = "MyDeviceActivity";
 	private BluetoothAdapter mBtAdapter = null;
 	private static final int REQUEST_ENABLE_BT = 2;
-	public static String BRACELETTYPE = "bracelettype";
-	public static String UNITOYS = "unitoys";
-	public static String UNIBOX = "unibox";
-
-	//	private SharedUtils utils = null;
+//	public static String BRACELETTYPE = "bracelettype";
 	private UartService mService = ICSOpenVPNApplication.uartService;
 	private String macAddressStr;
 	private int SCAN_PERIOD = 10000;//原本120000毫秒
@@ -200,10 +196,10 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 			int DeviceType;
 			String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(braceletname)) {
-				if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
+				if (braceletname.contains(Constant.UNITOYS)) {
 					//手环固件
 					DeviceType = 0;
-				} else if (braceletname.contains(MyDeviceActivity.UNIBOX)) {
+				} else if (braceletname.contains(Constant.UNIBOX)) {
 					//钥匙扣固件
 					DeviceType = 1;
 				} else {
@@ -220,14 +216,11 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void initSet() {
 		Log.e(TAG, "initSet");
 		actionBar.hide();
-		bracelettype = getIntent().getStringExtra(BRACELETTYPE);
+		bracelettype = getIntent().getStringExtra(Constant.BRACELETNAME);
 
-		if (SharedUtils.getInstance().readBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE)) {
-			setPoint();
-		}
-		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+		if (bracelettype != null && bracelettype.contains(Constant.UNIBOX)) {
 			deviceNameTextView.setText(getString(R.string.unibox_key));
-		} else if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)) {
+		} else if (bracelettype != null && bracelettype.contains(Constant.UNITOYS)) {
 			alarmClockLinearLayout.setVisibility(View.VISIBLE);
 			messageRemindLinearLayout.setVisibility(View.VISIBLE);
 			findStatusLinearLayout.setVisibility(View.VISIBLE);
@@ -274,17 +267,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 //显示固件版本
 		firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
 
-//如果重连失败再进入我的设备就清空重连次数重新进入连接流程
-		if (mService != null && !mService.isConnectedBlueTooth()) {
-			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-		}
-		if (BaseStatusFragment.bleStatus != null) {
-			if (BaseStatusFragment.bleStatus.equals(getString(R.string.index_registing))) {
-				startAnim();
-			}
-			conStatusTextView.setText(BaseStatusFragment.bleStatus);
-		}
 	}
 
 	private void titleSet() {
@@ -436,33 +418,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
 	}
 
-	private void restartUartService() {
-		Log.i(TAG, "restart Uart服务");
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				//关闭UartService服务
-				ServiceOperationEntity serviceOperationEntity = new ServiceOperationEntity();
-				serviceOperationEntity.setServiceName(UartService.class.getName());
-				serviceOperationEntity.setOperationType(ServiceOperationEntity.REMOVE_SERVICE);
-				EventBus.getDefault().post(serviceOperationEntity);
-				CommonTools.delayTime(200);
-				serviceOperationEntity.setOperationType(ServiceOperationEntity.CREATE_SERVICE);
-				EventBus.getDefault().post(serviceOperationEntity);
-			}
-		}).start();
-	}
-
-	private void clickFindBracelet() {
-		Log.e(TAG, "clickFindBracelet");
-		if (mBtAdapter != null) {
-			scanLeDevice(false);
-			Intent intent = new Intent(MyDeviceActivity.this, BindDeviceActivity.class);
-			intent.putExtra(BRACELETTYPE, getIntent().getStringExtra(BRACELETTYPE));
-			startActivity(intent);
-		}
-	}
-
 	private void serviceInit() {
 		Log.d(TAG, "serviceInit()");
 		LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
@@ -522,7 +477,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 					//多次重连无效后关闭蓝牙重启
 					if (!isUpgrade && isConnectOnce) {
 						showProgress(getString(R.string.reconnecting), true);
-
 					}
 				} else {
 					CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
@@ -548,7 +502,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							dismissProgress();
 							//不让无设备dialog弹出
 							if (noDevicedialog != null)
-								noDevicedialog.getDialog().dismiss();
+								noDevicedialog.dismiss();
 							slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
 							break;
 						case Constant.RETURN_POWER:
@@ -660,7 +614,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 				finish();
 			} else {
 				CommonTools.showShortToast(this, object.getMsg());
-				Log.i(TAG, object.getMsg());
 			}
 		} else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
 
@@ -678,7 +631,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 							setPoint();
 						} else {
 							CommonTools.showShortToast(this, getString(R.string.last_version));
-							SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, false);
 							firmwareTextView.setCompoundDrawables(null, null, null, null);
 						}
 					}
@@ -717,7 +669,6 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void setPoint() {
 		Drawable rightDrawable = getResources().getDrawable(R.drawable.unread_message);
 		rightDrawable.setBounds(0, 0, rightDrawable.getMinimumWidth(), rightDrawable.getMinimumHeight());
-		SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE, true);
 		firmwareTextView.setCompoundDrawables(null, null, rightDrawable, null);
 	}
 
@@ -731,7 +682,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
 		DialogTipUpgrade upgrade = new DialogTipUpgrade(this, this, R.layout.dialog_tip_upgrade, DOWNLOAD_SKY_UPGRADE);
 		String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-		if (braceletname != null && braceletname.contains(MyDeviceActivity.UNITOYS)) {
+		if (braceletname != null && braceletname.contains(Constant.UNITOYS)) {
 			upgrade.changeText(getString(R.string.dfu_upgrade), desc);
 		} else {
 			upgrade.changeText(getString(R.string.dfu_unibox_upgrade), desc);
@@ -960,18 +911,18 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 		scanLeDevice(false);
 		dismissProgress();
 		if (noDevicedialog != null) {
-			noDevicedialog.getDialog().dismiss();
+			noDevicedialog.dismiss();
 		} else {
 			//不能按返回键，只能二选其一
 			noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, NOT_YET_REARCH);
 		}
 		noDevicedialog.setCanClickBack(false);
-		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+		if (bracelettype != null && bracelettype.contains(Constant.UNIBOX)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
-		} else if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)) {
+		} else if (bracelettype != null && bracelettype.contains(Constant.UNITOYS)) {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
 		} else {
-			noDevicedialog.getDialog().dismiss();
+			noDevicedialog.dismiss();
 		}
 
 	}
@@ -1067,8 +1018,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	private void unregister(int unregisterReason) {
 		switch (unregisterReason) {
 			case SocketConstant.AIXIAOQI_CARD:
-				if (noDevicedialog != null && noDevicedialog.getDialog() != null)
-					noDevicedialog.getDialog().dismiss();
+					noDevicedialog.dismiss();
 				conStatusTextView.setText(getString(R.string.index_aixiaoqicard));
 				//重新上电清空
 				SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
@@ -1110,7 +1060,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 	//没卡弹对话框
 	private void showNoCardDialog() {
 		//不能按返回键，只能二选其一
-		if (cardRuleBreakDialog != null) cardRuleBreakDialog.getDialog().dismiss();
+		if (cardRuleBreakDialog != null) cardRuleBreakDialog.dismiss();
 		cardRuleBreakDialog = new DialogBalance(this, this, R.layout.dialog_balance, 3);
 		cardRuleBreakDialog.setCanClickBack(false);
 		cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));

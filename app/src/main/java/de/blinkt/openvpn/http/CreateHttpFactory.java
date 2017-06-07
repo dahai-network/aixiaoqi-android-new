@@ -217,6 +217,9 @@ public class CreateHttpFactory {
 			case HttpConfigUrl.COMTYPE_CREATE_ORDER://创建订单
 				startHttp(new OrderAddHttp(interfaceCallback, cmdType, params));
 				break;
+			case HttpConfigUrl.COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE://创建订单
+				startHttp(new DownloadSkyUpgradePackageHttp(interfaceCallback, cmdType,true,params));
+				break;
 		}
 	}
 

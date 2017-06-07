@@ -139,16 +139,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 						Log.i(TAG, "发送了专属命令");
 						String braceletname = utils.readString(Constant.BRACELETNAME);
 						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
-//							CommonTools.delayTime(100);
-//							sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
-//							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
-//							entity.setBlueType(BluetoothConstant.BLUE_BIND);
-//							EventBus.getDefault().post(entity);
+
 						} else {
 							Thread.sleep(200);
-							sendMessageToBlueTooth(ICCID_GET);
-							Thread.sleep(200);
 							sendMessageToBlueTooth(BASIC_MESSAGE);
+							Thread.sleep(200);
+							sendMessageToBlueTooth(ICCID_GET);
 							Log.i("toBLue", "连接成功");
 							//更新时间操作
 							sendMessageToBlueTooth(getBLETime());
@@ -274,7 +270,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										int DeviceType = 1;
 										String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 										if (!TextUtils.isEmpty(braceletname)) {
-											if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
+											if (braceletname.contains(Constant.UNITOYS)) {
 												DeviceType = 0;
 											} else {
 												DeviceType = 1;
@@ -648,15 +644,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	}
 
 
-//	//上传到服务器
-//	private void updateRealTimeStep(long currentTimeLong, int currentStepInt) {
-//		ReportRealtimeStepHttp http = new ReportRealtimeStepHttp(this, HttpConfigUrl.COMTYPE_SPORT_REPORT_REALTIME_STEP, currentStepInt, currentTimeLong);
-//		new Thread(http).start();
-//	}
-//
-//	private void updateMessage(final String finalMessage) {
-//
-//	}
+
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {

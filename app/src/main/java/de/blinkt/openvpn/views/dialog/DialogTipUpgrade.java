@@ -48,13 +48,9 @@ public class DialogTipUpgrade extends DialogBase implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-
+        dismiss();
         switch (v.getId()) {
-            case R.id.tv_cancel:
-                dialog.dismiss();
-                break;
             case R.id.tv_upgrade:
-                dialog.dismiss();
                 dialogInterfaceTypeBase.dialogText(type, "");
                 break;
         }

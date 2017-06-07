@@ -36,9 +36,6 @@ public class DialogBalance extends DialogBase implements View.OnClickListener {
 		titleTextView.setText(title);
 		tvRechange.setText(sureText);
 	}
-	public Dialog getDialog(){
-		return dialog;
-	}
 	public void setCanClickBack(boolean isCanClickBack) {
 		dialog.setCancelable(isCanClickBack);
 	}

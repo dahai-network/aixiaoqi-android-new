@@ -41,7 +41,7 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
-import de.blinkt.openvpn.model.BluetoothModel;
+import de.blinkt.openvpn.model.BluetoothEntity;
 import de.blinkt.openvpn.model.ServiceOperationEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -50,7 +50,6 @@ import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
-import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
 import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 
@@ -73,7 +72,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 
 	private Handler mHandler;
 	private Handler findDeviceHandler;
-	private List<BluetoothModel> deviceList;
+	private List<BluetoothEntity> deviceList;
 	private BluetoothAdapter mBluetoothAdapter;
 	private static final long SCAN_PERIOD = 20000; //120 seconds
 	private String deviceAddress = "";
@@ -81,7 +80,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	private DialogBalance noDevicedialog;
 	private String TAG = "BindDeviceActivity";
 	private UartService mService = ICSOpenVPNApplication.uartService;//
-	private String bracelettype;//手环类型
 	//设备名称：类型不同名称不同，分别有【unitoys、unibox】
 	private String bluetoothName = Constant.UNITOYS;
 	private final int REQUEST_ENABLE_BT = 2;
@@ -96,39 +94,33 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			finish();
 			return;
 		}
-
-		bracelettype = getIntent().getStringExtra(MyDeviceActivity.BRACELETTYPE);
-
 		final BluetoothManager bluetoothManager =
 				(BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
 		mBluetoothAdapter = bluetoothManager.getAdapter();
-
 		// Checks if Bluetooth is supported on the device.
 		if (mBluetoothAdapter == null) {
 			finish();
 			return;
 		}
+		//如果蓝牙没有打开提示用户带来蓝牙
+		if(!mBluetoothAdapter.isEnabled()){
+			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+		}
+		
 		setContentView(R.layout.activity_bind_device);
-		EventBus.getDefault().register(this);
 		ButterKnife.bind(this);
-
-		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
-			bluetoothName = Constant.UNIBOX;
+		EventBus.getDefault().register(this);
+		bluetoothName = getIntent().getStringExtra(Constant.BRACELETNAME);
+		if (bluetoothName != null && bluetoothName.contains(Constant.UNIBOX)) {
 			search_bluetooth.setText(getString(R.string.searching_unibox_strap));
 			tip_search.setText(getString(R.string.please_makesure_bind));
 			uniImageView.setBackgroundResource(R.drawable.pic_sdw);
-		} else if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNITOYS)) {
-			bluetoothName = Constant.UNITOYS;
-		} else {
-			finish();
 		}
-
 		deviceList = new ArrayList<>();
 		mHandler = new Handler();
 		findDeviceHandler = new Handler();
-		//如果蓝牙没有打开提示用户带来蓝牙
-		Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-		startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+
 	}
 
 	//蓝牙服务是否已经打开
@@ -175,8 +167,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 
 	//连接成功设备以后
 	private void afterConnDevice() {
-		if (bracelettype != null) {
-			if (bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+		if (bluetoothName != null) {
+			if (bluetoothName.contains(Constant.UNIBOX)) {
 				new Handler().postDelayed(new Runnable() {
 					@Override
 					public void run() {
@@ -204,7 +196,6 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		if (enable) {
 			// Stops scanning after a pre-defined scan period.
 			mHandler.postDelayed(showdialogRun, SCAN_PERIOD);
-
 			mBluetoothAdapter.startLeScan(mLeScanCallback);
 
 		} else {
@@ -217,7 +208,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	private void showDialog() {
 		//不能按返回键，只能二选其一
 		noDevicedialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
-		if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+		if (bluetoothName != null && bluetoothName.contains(Constant.UNIBOX)) {
 			noDevicedialog.changeText(getString(R.string.no_find_unibox), getResources().getString(R.string.retry));
 		} else {
 			noDevicedialog.changeText(getResources().getString(R.string.no_find_unitoys), getResources().getString(R.string.retry));
@@ -228,8 +219,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 	protected void onPause() {
 		super.onPause();
 		scanLeDevice(false);
-		if (noDevicedialog != null && noDevicedialog.getDialog() != null && noDevicedialog.getDialog().isShowing()) {
-			noDevicedialog.getDialog().dismiss();
+		if (noDevicedialog != null  && noDevicedialog.isShowing()) {
+			noDevicedialog.dismiss();
 		}
 	}
 
@@ -245,7 +236,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			errorThread = null;
 		}
 		if (noDevicedialog != null) {
-			noDevicedialog.getDialog().dismiss();
+			noDevicedialog.dismiss();
 			noDevicedialog = null;
 		}
 		EventBus.getDefault().unregister(this);
@@ -271,7 +262,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 									}
 									Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
 									if (device.getName().contains(bluetoothName)) {//过滤只需要的设备
-										BluetoothModel model = new BluetoothModel();
+										BluetoothEntity model = new BluetoothEntity();
 										model.setAddress(device.getAddress());
 										model.setDiviceName(device.getName());
 										model.setRssi(rssi);
@@ -288,9 +279,9 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 														return;
 													}
 
-													Collections.sort(deviceList, new Comparator<BluetoothModel>() {
+													Collections.sort(deviceList, new Comparator<BluetoothEntity>() {
 														@Override
-														public int compare(BluetoothModel lhs, BluetoothModel rhs) {
+														public int compare(BluetoothEntity lhs, BluetoothEntity rhs) {
 															return rhs.getRssi() - lhs.getRssi();
 														}
 													});
@@ -343,11 +334,12 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			IsBindHttp http = (IsBindHttp) object;
 			if (http.getStatus() == 1 && http.getIsBindEntity() != null && http.getIsBindEntity().getBindStatus() == 0) {
 				if (mService != null) {
-					if (bluetoothName.contains(MyDeviceActivity.UNITOYS)) {
+					if (bluetoothName.contains(Constant.UNITOYS)) {
 						CreateHttpFactory.instanceHttp(BindDeviceActivity.this, HttpConfigUrl.COMTYPE_BIND_DEVICE
 								, deviceAddress, "0", 0 + "");
-					} else if (bluetoothName.contains(MyDeviceActivity.UNIBOX)) {
+					} else if (bluetoothName.contains(Constant.UNIBOX)) {
 						mService.connect(deviceAddress);
+						SharedUtils.getInstance().writeString(Constant.BRACELETNAME, bluetoothName);
 					}
 				} else {
 					if (!isFinishing()) {
@@ -369,8 +361,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 			Log.i(TAG, "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
 			if (object.getStatus() == 1) {
 				utils.writeString(Constant.IMEI, deviceAddress);
-				SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE, bracelettype);
-				if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
+				SharedUtils.getInstance().writeString(Constant.BRACELETNAME, bluetoothName);
+				if (bluetoothName != null && bluetoothName.contains(Constant.UNIBOX)) {
 					search_bluetooth.setText(getString(R.string.finded_unibox));
 				} else if (bluetoothName.contains(Constant.UNITOYS)) {
 					search_bluetooth.setText(getString(R.string.finded_unitoy));
@@ -388,7 +380,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 						@Override
 						public void run() {
 							Intent intent = new Intent(BindDeviceActivity.this, MyDeviceActivity.class);
-							intent.putExtra(MyDeviceActivity.BRACELETTYPE, bracelettype);
+							intent.putExtra(Constant.BRACELETNAME, bluetoothName);
 							startActivity(intent);
 							finish();
 						}
@@ -469,16 +461,16 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 						//获取基本信息
 						sendMessageToBlueTooth(BASIC_MESSAGE);
 						CommonTools.delayTime(200);
-						sendMessageToBlueTooth(ICCID_GET);
+//						sendMessageToBlueTooth(ICCID_GET);
 						if (!bluetoothName.contains(Constant.UNIBOX)) {
 							runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
 									updateDeviceInfo();
 									Intent intent = new Intent(BindDeviceActivity.this, MyDeviceActivity.class);
-									String type = getIntent().getStringExtra(MyDeviceActivity.BRACELETTYPE);
-									intent.putExtra(MyDeviceActivity.BRACELETTYPE, type);
-									SharedUtils.getInstance().writeString(MyDeviceActivity.BRACELETTYPE, type);
+									String type = getIntent().getStringExtra(Constant.BRACELETNAME);
+									intent.putExtra(Constant.BRACELETNAME, type);
+									SharedUtils.getInstance().writeString(Constant.BRACELETNAME, type);
 									startActivity(intent);
 									finish();
 								}
@@ -500,8 +492,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		tip_search.setText(getString(R.string.finded_bracelet));
 		search_bluetooth.setText(getString(R.string.click_bracelet_sure_bind));
 		seekImageView.clearAnimation();
-		if (bracelettype != null) {
-			if (bracelettype.equals(MyDeviceActivity.UNIBOX)) {
+		if (bluetoothName != null) {
+			if (bluetoothName.equals(Constant.UNIBOX)) {
 				seekImageView.setBackgroundResource(R.drawable.seek_finish_pic);
 				findedImageView.setVisibility(View.VISIBLE);
 				Animation anim = AnimationUtils.loadAnimation(this, R.anim.anim_trans_seek_over);

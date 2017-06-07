@@ -175,11 +175,14 @@
         <activity
             android:name="de.blinkt.openvpn.activities.MyDeviceActivity"
             android:launchMode="singleTask"/>
+        <activity
+            android:name="de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity"
+            android:launchMode="singleTask"/>
         <activity android:name="de.blinkt.openvpn.activities.MyPackageActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.TipUserOptionActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.AlarmClockActivity"/>
         <activity
-            android:name="de.blinkt.openvpn.activities.BindDeviceActivity"
+            android:name="de.blinkt.openvpn.activities.Device.ui.BindDeviceActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar"/>
         <activity android:name="de.blinkt.openvpn.activities.MyOrderDetailActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.Set.ui.SettingActivity"/>

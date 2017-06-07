@@ -102,7 +102,6 @@ public class DialogUpgrade extends DialogBase {
 		public void onDfuCompleted(String deviceAddress) {
 			mTextPercentage.setText(R.string.dfu_status_completed);
 			//保存状态
-			SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE,false);
 			UIOperator(UIOperatorEntity.onCompelete);
 			noUpgrade();
 			// let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
@@ -183,7 +182,6 @@ public class DialogUpgrade extends DialogBase {
 		if (ICSOpenVPNApplication.uartService != null) {
 			CommonTools.delayTime(7000);
 			ICSOpenVPNApplication.uartService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
-
 		}
 
 	}

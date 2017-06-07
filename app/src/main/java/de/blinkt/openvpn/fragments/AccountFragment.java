@@ -70,7 +70,6 @@ import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static android.view.View.GONE;
-import static de.blinkt.openvpn.activities.MyDeviceActivity.BRACELETTYPE;
 import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
 import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBALANCE;
@@ -234,9 +233,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 			String deviceType = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 			if (!TextUtils.isEmpty(deviceType)) {
 				//0是手环，1是钥匙扣
-				if (deviceType.contains(MyDeviceActivity.UNITOYS)) {
+				if (deviceType.contains(Constant.UNITOYS)) {
 					typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-				} else if (deviceType.contains(MyDeviceActivity.UNIBOX)) {
+				} else if (deviceType.contains(Constant.UNIBOX)) {
 					typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
 				}
 				showDeviceType(typeText);
@@ -444,10 +443,10 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	}
 
 	private Intent toActivity(Intent intent, String braceletName) {
-		intent = new Intent(getActivity(), MyDeviceActivity.class);
+		intent = new Intent(getActivity(), de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity.class);
 		AppMode.getInstance().isClickAddDevice = true;
 		mHandler.sendEmptyMessage(4);
-		intent.putExtra(BRACELETTYPE, braceletName);
+		intent.putExtra(Constant.BRACELETNAME, braceletName);
 		Log.e(TAG, "bleStatus" + bleStatus);
 		return intent;
 	}
@@ -481,11 +480,11 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 					String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
 					String typeText = "";
 					if ("0".equals(deviceTypeStr)) {
-						SharedUtils.getInstance().writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
+						SharedUtils.getInstance().writeString(Constant.BRACELETNAME, Constant.UNITOYS);
 						typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
 					} else if ("1".equals(deviceTypeStr)) {
 						typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-						SharedUtils.getInstance().writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
+						SharedUtils.getInstance().writeString(Constant.BRACELETNAME, Constant.UNIBOX);
 					}
 					showDeviceType(typeText);
 					if (isClickAddDevice) {

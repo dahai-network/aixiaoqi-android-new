@@ -267,10 +267,8 @@ public class CallDetailActivity extends BaseNetActivity implements XRecyclerView
 
 				if (hasWiFi())
 					if (!isBlackList) {
-						e("isBlackList==" + isBlackList);
 						createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_ADD, contactBean.getPhoneNum());
 					} else {
-						e("isBlackList" + isBlackList);
 						createHttpRequest(HttpConfigUrl.COMTYPE_BLACK_LIST_DELETE, contactBean.getPhoneNum());
 					}
 				break;

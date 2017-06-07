@@ -275,9 +275,9 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
                         if (!TextUtils.isEmpty(deviceTypeStr)) {
                             int deviceType = Integer.parseInt(deviceTypeStr);
                             if (deviceType == 0) {
-                                utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNITOYS);
+                                utils.writeString(Constant.BRACELETNAME, Constant.UNITOYS);
                             } else {
-                                utils.writeString(Constant.BRACELETNAME, MyDeviceActivity.UNIBOX);
+                                utils.writeString(Constant.BRACELETNAME, Constant.UNIBOX);
                             }
                         }
                         initUartServices();

@@ -34,24 +34,6 @@
             android:background="@drawable/my_device_round"
             />
 
-        <ImageView
-            android:id="@+id/noConnectImageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/un_connect_blue"
-            android:visibility="gone"
-            />
-
-        <TextView
-            android:id="@+id/statueTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12.5dp"
-            android:text="@string/conn_bluetooth"
-            android:textColor="@color/login_bottom_line"
-            android:visibility="gone"
-            />
 
     </RelativeLayout>
 
@@ -278,6 +260,12 @@
                     android:drawablePadding="@dimen/padding_5dp"
                     android:textColor="@color/gray_text"
                     />
+                <ImageView
+                    android:id="@+id/version_upgrade_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_15dp"
+                    android:src="@drawable/unread_message"/>
             </LinearLayout>
 
             <View

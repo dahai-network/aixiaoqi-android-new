@@ -1020,7 +1020,7 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 		int DeviceType;
 		String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 		if (!TextUtils.isEmpty(braceletname)) {
-			if (braceletname.contains(MyDeviceActivity.UNITOYS)) {
+			if (braceletname.contains(Constant.UNITOYS)) {
 				DeviceType = 0;
 			} else {
 				DeviceType = 1;

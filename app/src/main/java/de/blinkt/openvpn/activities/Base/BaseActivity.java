@@ -11,6 +11,7 @@ import android.view.View;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.views.TitleBar;
 
 public class BaseActivity extends CommenActivity  {
@@ -104,6 +105,16 @@ public class BaseActivity extends CommenActivity  {
 	protected void onClickRightView() {
 
 	}
+
+	public void showToast(String showContent) {
+		CommonTools.showShortToast(this,showContent);
+	}
+
+	public void showToast(int showContentId) {
+		CommonTools.showShortToast(this,getString(showContentId));
+	}
+
+
 
 	@Override
 	protected void onDestroy() {

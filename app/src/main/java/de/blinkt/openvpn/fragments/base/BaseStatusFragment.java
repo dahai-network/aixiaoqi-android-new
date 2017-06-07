@@ -96,7 +96,7 @@ public class BaseStatusFragment extends Fragment {
 						String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 						if (braceletName != null) {
 							Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
-							intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
+							intent.putExtra(Constant.BRACELETNAME, braceletName);
 							startActivity(intent);
 						}
 					}
@@ -209,7 +209,7 @@ public class BaseStatusFragment extends Fragment {
 					String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
 					if (braceletName != null) {
 						Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
-						intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
+						intent.putExtra(Constant.BRACELETNAME, braceletName);
 						startActivity(intent);
 					}
 				}

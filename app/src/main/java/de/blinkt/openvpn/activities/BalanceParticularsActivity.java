@@ -100,8 +100,6 @@ public class BalanceParticularsActivity extends BaseNetActivity implements Inter
 	public void onRefresh() {
 		pageNumber = 1;
 		addData();
-
-
 	}
 
 	@Override

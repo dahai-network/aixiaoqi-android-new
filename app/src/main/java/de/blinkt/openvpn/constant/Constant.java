@@ -43,7 +43,6 @@ public class Constant {
 	public static final String VERSION_HEADER = "Version";
 	public static final String TERMINAL_HEADER = "Terminal";
 	public static final String DIALOG_NOREMIND_DATE = "dialog_noremind_date";
-	public static final String IS_NEED_UPGRADE_IN_HARDWARE = "is_need_upgrade_in_hardware";
 	//运营商
 	public static final String OPERATER = "operater";
 	public static final String CHINA_TELECOM = "China_Telecom";
@@ -64,15 +63,12 @@ public class Constant {
 	public static final String PARTNER = "partner";
 	public static final String EXPIRES = "expires";
 	public static final String SIGN = "sign";
-	public static final int INPUT_TEXT = 1;
-	public static final int DELETE_TEXT = 2;
 	public static final String CALL_INCOMING = "来电";
 	public static final String CALL_OUTGOING = "拨出";
 	public static final String CALL_MISSED = "未接";
-	//蓝牙指令
-	public static String UP_TO_POWER = "888003100001";//上电指令，没有详细卡信息以及BB332211BB
-	public static String UP_TO_POWER_DETAIL = "888003100002";//上电指令,只有详细卡信息以及BB665544BB
-	public static String UP_TO_POWER_NO_RESPONSE = "888003100003";//上电指令,返回BB998877BB，用于SDK使用的上下电命令
+
+	public static final  String UP_TO_POWER_DETAIL = "888003100002";//上电指令,只有详细卡信息以及BB665544BB
+	public static final  String UP_TO_POWER_NO_RESPONSE = "888003100003";//上电指令,返回BB998877BB，用于SDK使用的上下电命令
 	public static final String OFF_TO_POWER = "8880021100";//断电指令
 	public static final String REAL_TIME_STEPS = "AA010401AE ";//实时步数
 	public static final String HISTORICAL_STEPS = "8880020E00";//历史步数
@@ -89,7 +85,6 @@ public class Constant {
 	public static final String QQ_PUSH = "888003040004";//QQ推送到设备
 
 	public static final String APP_CONNECT = "88800a1400";//APP专属命令
-	//	public static final String APP_CONNECT = "8880021400";//APP专属命令
 	public static final String BIND_DEVICE = "8880020700";//绑定命令
 	public static final String BIND_SUCCESS = "888003080001";//绑定成功命令
 	public static final String BIND_FAIL = "888003080000";//绑定失败命令
