@@ -27,6 +27,10 @@ import de.blinkt.openvpn.util.SharedUtils;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVEPACKAGE;
 
+/**
+ * @author kim
+ * 激活套餐界面
+ */
 public class ActivateActivity extends BaseActivity implements View.OnClickListener, ActivateView {
 
     public static String FINISH_ACTIVITY = "finish_activity";
@@ -38,11 +42,14 @@ public class ActivateActivity extends BaseActivity implements View.OnClickListen
     public static String orderId;
     private UartService mService = ICSOpenVPNApplication.uartService;
     private ActivatePresenter activatePresenter;
+    private String effectTime;
+    private String dataTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activate);
+        ICSOpenVPNApplication.activateInstance=this;
         initView();
         initData();
         EventBus.getDefault().register(this);
@@ -100,8 +107,7 @@ public class ActivateActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
     }
-    private String effectTime;
-    private String dataTime;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveWriteCardIdEntity(WriteCardEntity entity) {
         String nullcardId = entity.getNullCardId();
@@ -141,8 +147,10 @@ public class ActivateActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void onDestroy() {
+        //释放资源
         activatePresenter.releaseResouce();
         EventBus.getDefault().unregister(this);
+        ICSOpenVPNApplication.activateInstance=null;
         super.onDestroy();
     }
 }

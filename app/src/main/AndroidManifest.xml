@@ -386,9 +386,9 @@
         <activity android:name="de.blinkt.openvpn.activities.SetAlarmActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.RepeatActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.LableActivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.BindRechargeCardActivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.CallPackageLlistActivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.CallTimeOrderDetailActitivy"/>
+        <activity android:name="de.blinkt.openvpn.activities.Set.ui.BindRechargeCardActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.Set.ui.CallPackageLlistActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.Set.ui.CallTimeOrderDetailActitivy"/>
         <activity android:name="de.blinkt.openvpn.activities.KingCardDetailActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.CallTimePacketDetailActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity"/>

@@ -27,6 +27,8 @@ import java.util.Stack;
 import cn.com.aixiaoqi.R;
 import cn.qfishphone.sipengine.SipEngineCore;
 import de.blinkt.openvpn.activities.ProMainActivity;
+import de.blinkt.openvpn.activities.Set.ui.ActivateActivity;
+import de.blinkt.openvpn.activities.Set.ui.BindRechargeCardActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.exceptionlog.CrashHandler;
@@ -41,6 +43,12 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 	private static ICSOpenVPNApplication instance;
 	private static final String TAG = "OnUILifecycleListener";
 	List<ContactBean> mAllList;
+    /**
+     * 记录当前的activity对象
+     */
+	public static  ActivateActivity activateInstance;
+
+    public static BindRechargeCardActivity bindRechargeCardInstance;
 	//接口通过空卡序列号返回的订单特定写卡数据
 	public static String cardData = null;
 

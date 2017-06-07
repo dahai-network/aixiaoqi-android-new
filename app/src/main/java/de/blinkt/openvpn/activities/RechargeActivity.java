@@ -38,6 +38,7 @@ import cn.com.aixiaoqi.R;
 import cn.com.aixiaoqi.wxapi.WXPayEntryActivity;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.activities.Set.ui.BindRechargeCardActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.CommonHttp;

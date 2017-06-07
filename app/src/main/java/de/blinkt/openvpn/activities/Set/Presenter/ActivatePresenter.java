@@ -16,7 +16,6 @@ import java.util.HashMap;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
-import de.blinkt.openvpn.activities.Base.CommenActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.OutsideFirstStepActivity;
 import de.blinkt.openvpn.activities.Set.Model.ActivateMode;
@@ -62,14 +61,22 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
     String dataTime;
     String effectTime;
     String orderId;
+    private ActivateActivity instance;
     private boolean isActivateSuccess = false;
+
+
 
     public ActivatePresenter(ActivateView activateView) {
         this.activateView = activateView;
         activateMode = new ActivateModeImpl();
         initActivateViewData();
-        LocalBroadcastManager.getInstance(this).registerReceiver(isWriteReceiver, setFilter());
-        LocalBroadcastManager.getInstance(this).registerReceiver(finishActivityReceiver, setFinishFilter());
+        if(ICSOpenVPNApplication.activateInstance!=null)
+        {
+            instance=ICSOpenVPNApplication.activateInstance;
+
+        }
+        LocalBroadcastManager.getInstance(instance).registerReceiver(isWriteReceiver, setFilter());
+        LocalBroadcastManager.getInstance(instance).registerReceiver(finishActivityReceiver, setFinishFilter());
     }
 
     /**
@@ -91,7 +98,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
                     && uartService != null
                     && uartService.isConnectedBlueTooth()) {
                 //友盟方法统计
-                MobclickAgent.onEvent(this, CLICKACTIVEPACKAGE);
+                MobclickAgent.onEvent(instance, CLICKACTIVEPACKAGE);
                 //激活套餐
                 isCanActivatePackage();
             } else {
@@ -105,7 +112,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
         dataTime = activateView.getDataTime();
         orderId = activateView.getOrderId();
         if (TextUtils.isEmpty(effectTime)) {
-            activateView.showToast(getString(R.string.effective_date_is_null));
+            activateView.showToast(instance.getString(R.string.effective_date_is_null));
             return;
         }
         activateMode.orderActivationHttp(orderId, dataTime, this);
@@ -121,20 +128,20 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
             if (!CommonTools.isFastDoubleClick(100))
                 activateMode.createHttpRequest(orderId, nullcardNumber, this);
         } else {
-            activateView.showToast(getString(R.string.no_nullcard_id));
+            activateView.showToast(instance.getString(R.string.no_nullcard_id));
         }
     }
 
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
-        Log.d(ActivatePresenter.this.TAG, "rightComplete: " + cmdType);
+        Log.d(TAG, "rightComplete: " + cmdType);
         if (cmdType == HttpConfigUrl.COMTYPE_ORDER_ACTIVATION) {
             OrderActivationHttp orderActivationHttp = (OrderActivationHttp) object;
             if (orderActivationHttp.getStatus() == 1) {
                 //是否测试卡位置：否，这是写卡！
                 IS_TEXT_SIM = false;
                 ReceiveBLEMoveReceiver.orderStatus = 4;
-                this.showProgress("正在激活", false);
+                instance.showProgress("正在激活", false);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -146,11 +153,11 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
                             e.printStackTrace();
                         }
                         if (!isActivateSuccess) {
-                            ActivatePresenter.this.runOnUiThread(new Runnable() {
+                            instance.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ActivatePresenter.this.dismissProgress();
-                                    activateView.showToast(getString(R.string.activate_fail));
+                                    instance.dismissProgress();
+                                    activateView.showToast(instance.getString(R.string.activate_fail));
                                 }
                             });
                         }
@@ -158,7 +165,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
                 }).start();
 
             } else {
-                Log.d(ActivatePresenter.this.TAG, "rightComplete: " + BaseStatusFragment.bleStatus);
+               Log.d(TAG, "rightComplete: " + BaseStatusFragment.bleStatus);
                 activateView.showToast(orderActivationHttp.getMsg());
                 sureTextView.setEnabled(true);
             }
@@ -169,7 +176,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
                     sendMessageSeparate(orderDataHttp.getOrderDataEntity().getData());
                 } else {
                     ICSOpenVPNApplication.cardData = orderDataHttp.getOrderDataEntity().getData();
-                    Log.i(ActivatePresenter.this.TAG, "卡数据：" + ICSOpenVPNApplication.cardData);
+                    Log.i(TAG, "卡数据：" + ICSOpenVPNApplication.cardData);
                     isGetnullCardid = false;
                     sendMessageSeparate(Constant.WRITE_SIM_FIRST);
                 }
@@ -208,7 +215,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
             SendCommandToBluetooth.sendMessageToBlueTooth(Constant.RESTORATION);
         } else if (type == 0) {
             if (System.currentTimeMillis() > DateUtils.getStringToDate(text + " 00:00:00") - 24 * 60 * 60 * 1000) {
-                activateView.showToast(getString(R.string.less_current_time));
+                activateView.showToast(instance.getString(R.string.less_current_time));
                 return;
             }
             dataTime = text;
@@ -216,7 +223,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
             String[] time = text.split("-");
             TextView payWayTextView = activateView.getPayWayTextView();
             if (payWayTextView != null)
-                payWayTextView.setText(time[0] + getString(R.string.year) + time[1] + getString(R.string.month) + time[2] + getString(R.string.daliy));
+                payWayTextView.setText(time[0] + instance.getString(R.string.year) + time[1] + instance.getString(R.string.month) + time[2] + instance.getString(R.string.daliy));
         }
     }
 
@@ -224,16 +231,16 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
      * 弹窗让用户选择时间
      */
     public void choiceTime() {
-        DialogYearMonthDayPicker dialogYearMonthDayPicker = new DialogYearMonthDayPicker(this, this, R.layout.picker_year_month_day_layout, 0);
-        dialogYearMonthDayPicker.changeText(getResources().getString(R.string.select_time) + "(" + this.getIntent().getStringExtra(IntentPutKeyConstant.COUNTRY_NAME) + ")");
+        DialogYearMonthDayPicker dialogYearMonthDayPicker = new DialogYearMonthDayPicker(this, instance, R.layout.picker_year_month_day_layout, 0);
+        dialogYearMonthDayPicker.changeText(instance.getResources().getString(R.string.select_time) + "(" + instance.getIntent().getStringExtra(IntentPutKeyConstant.COUNTRY_NAME) + ")");
 
     }
 
     public void showDialog() {
         //不能按返回键，只能二选其一
-        DialogBalance cardRuleBreakDialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
+        DialogBalance cardRuleBreakDialog = new DialogBalance(this, instance, R.layout.dialog_balance, 2);
         cardRuleBreakDialog.setCanClickBack(false);
-        cardRuleBreakDialog.changeText(getResources().getString(R.string.no_aixiaoqi_or_rule_break), getResources().getString(R.string.reset));
+        cardRuleBreakDialog.changeText(instance.getResources().getString(R.string.no_aixiaoqi_or_rule_break), instance.getResources().getString(R.string.reset));
     }
 
     //写卡成功关闭process
@@ -248,21 +255,21 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
                     HashMap<String, String> map = new HashMap<>();
                     map.put("statue", 0 + "");
                     //友盟方法统计
-                    MobclickAgent.onEvent(ActivatePresenter.this, CLICKACTIVECARD, map);
-                    activateView.showToast(getString(R.string.activate_fail));
+                    MobclickAgent.onEvent(instance, CLICKACTIVECARD, map);
+                    activateView.showToast(instance.getString(R.string.activate_fail));
 
                 } else {
                     Constant.isOutsideSecondStepClick = false;
                     Constant.isOutsideThirdStepClick = false;
-                    toActivity(new Intent(ActivatePresenter.this, OutsideFirstStepActivity.class)
+                    instance.toActivity(new Intent(instance, OutsideFirstStepActivity.class)
                             .putExtra(IntentPutKeyConstant.OUTSIDE, IntentPutKeyConstant.OUTSIDE)
-                            .putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, ActivatePresenter.this.getIntent().getBooleanExtra(IntentPutKeyConstant.IS_SUPPORT_4G, false))
+                            .putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, instance.getIntent().getBooleanExtra(IntentPutKeyConstant.IS_SUPPORT_4G, false))
                     );
                     isActivateSuccess = true;
                 }
                 dismissProgress();
                 //关闭界面
-                finish();
+                instance.finish();
 
             } else if (TextUtils.equals(intent.getAction(), MyOrderDetailActivity.FINISH_PROCESS_ONLY)) {
                 dismissProgress();
@@ -283,7 +290,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            finish();
+            instance.finish();
         }
     };
 
@@ -294,8 +301,8 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
     }
 
     public void releaseResouce() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(isWriteReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(finishActivityReceiver);
+        LocalBroadcastManager.getInstance(instance).unregisterReceiver(isWriteReceiver);
+        LocalBroadcastManager.getInstance(instance).unregisterReceiver(finishActivityReceiver);
 
     }
 }

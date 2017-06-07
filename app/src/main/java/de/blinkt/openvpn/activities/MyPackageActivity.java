@@ -16,6 +16,8 @@ import cn.com.johnson.adapter.OrderAdapter;
 import cn.com.johnson.model.BoughtPackageEntity;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Set.ui.BindRechargeCardActivity;
+import de.blinkt.openvpn.activities.Set.ui.CallPackageLlistActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.http.BoughtPacketHttp;
