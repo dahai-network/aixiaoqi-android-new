@@ -26,9 +26,11 @@ import java.util.Stack;
 
 import cn.com.aixiaoqi.R;
 import cn.qfishphone.sipengine.SipEngineCore;
+import de.blinkt.openvpn.activities.MyModules.ui.BindRechargeCardActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
-import de.blinkt.openvpn.activities.Set.ui.ActivateActivity;
-import de.blinkt.openvpn.activities.Set.ui.BindRechargeCardActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
+import de.blinkt.openvpn.activities.ShopModules.ui.CommitOrderActivity;
+import de.blinkt.openvpn.activities.ShopModules.ui.PackageDetailActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.exceptionlog.CrashHandler;
@@ -49,6 +51,12 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 	public static  ActivateActivity activateInstance;
 
     public static BindRechargeCardActivity bindRechargeCardInstance;
+
+    public static PackageDetailActivity packageDetailInstance;
+
+	public  static  CommitOrderActivity commitOrderActivity;
+
+
 	//接口通过空卡序列号返回的订单特定写卡数据
 	public static String cardData = null;
 

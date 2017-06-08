@@ -20,7 +20,7 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.HotPackageEntity;
 import cn.com.johnson.widget.GlideCircleTransform;
 import cn.com.johnson.widget.GlideRoundTransform;
-import de.blinkt.openvpn.activities.CountryPackageActivity;
+import de.blinkt.openvpn.activities.ShopModules.ui.CountryPackageActivity;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKHOTPACKAGE;
 

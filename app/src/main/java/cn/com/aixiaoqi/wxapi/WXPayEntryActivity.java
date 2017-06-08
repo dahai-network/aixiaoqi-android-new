@@ -12,9 +12,9 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import de.blinkt.openvpn.activities.Base.CommenActivity;
-import de.blinkt.openvpn.activities.CommitOrderActivity;
-import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.PaySuccessActivity;
+import de.blinkt.openvpn.activities.ShopModules.ui.CommitOrderActivity;
+import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 

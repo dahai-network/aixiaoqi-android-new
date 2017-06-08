@@ -15,13 +15,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.umeng.analytics.MobclickAgent;
-
 import java.util.List;
-
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.RechargeActivity;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ContactBean;
@@ -31,7 +29,6 @@ import de.blinkt.openvpn.util.PhoneFormatUtil;
 import de.blinkt.openvpn.util.PhoneNumberZone;
 import de.blinkt.openvpn.views.RoundImageView;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
-
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTDETAILEDIT;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDETELECONTACT;

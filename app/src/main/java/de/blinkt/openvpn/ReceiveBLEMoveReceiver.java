@@ -21,10 +21,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.Set.ui.ActivateActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
-import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
+import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
@@ -45,7 +45,7 @@ import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
-import static de.blinkt.openvpn.activities.Set.ui.ActivateActivity.FINISH_ACTIVITY;
+import static de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.isUpgrade;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.AGREE_BIND;

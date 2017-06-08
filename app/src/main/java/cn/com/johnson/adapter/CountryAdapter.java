@@ -18,7 +18,7 @@ import java.util.List;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.widget.GlideRoundTransform;
-import de.blinkt.openvpn.activities.CountryPackageActivity;
+import de.blinkt.openvpn.activities.ShopModules.ui.CountryPackageActivity;
 import de.blinkt.openvpn.model.PacketMarketEntity;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKZONEPACKAGEITEM;
