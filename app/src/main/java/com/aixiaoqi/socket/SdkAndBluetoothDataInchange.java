@@ -214,16 +214,6 @@ public class SdkAndBluetoothDataInchange {
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
 	public String formatByte(String number ,int type){
 		if(type==1){
 			if(number.length()%4==1){
@@ -286,8 +276,7 @@ public class SdkAndBluetoothDataInchange {
 			Log.e(TAG, "SIM发送上电数据（只有详细卡信息）");
 		} else {
 			if (mService != null) {
-				byte[] value = HexStringExchangeBytesUtil.hexStringToBytes(temp);
-				mService.writeRXCharacteristic(value);
+				SendCommandToBluetooth.sendMessageToBlueTooth(temp);
 			}
 		}
 	}

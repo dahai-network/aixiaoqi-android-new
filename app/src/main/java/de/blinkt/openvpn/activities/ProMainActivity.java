@@ -274,7 +274,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 			createHttpRequest(HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
 		} else {
 			skyUpgradeHttp();
-			BluetoothConstant.IS_BIND = true;
 			blueToothOpen();
 		}
 	}
@@ -623,7 +622,6 @@ public class ProMainActivity extends BaseNetActivity implements DialogInterfaceT
 						deviceAddress = getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI();
 						if (deviceAddress != null) {
 							deviceAddress = deviceAddress.toUpperCase();
-							BluetoothConstant.IS_BIND = true;
 							skyUpgradeHttp();
 							utils.writeString(deviceAddress, getBindDeviceHttp.getBlueToothDeviceEntityity().getVersion());
 						}

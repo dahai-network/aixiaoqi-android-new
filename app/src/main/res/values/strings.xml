@@ -149,7 +149,7 @@
 
 
     <string name="samsung_test_1_1">点击内存按钮</string>
-    <string name="samsung_test_1_2">点击自启动应用程序列表找到爱小器APP，打开对应开关</string>
+    <string name="samsung_test_1_2">点击自动运行应用程序列表找到爱小器APP，打开对应开关</string>
 
     <string name="samsung_test_2_1">点击上方更多按钮弹出小框，然后点击弹出框的高级设定选项</string>
     <string name="samsung_test_2_2">设置睡眠期间保持WLAN开启，选择始终连接</string>

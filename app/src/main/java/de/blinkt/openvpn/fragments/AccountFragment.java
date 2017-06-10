@@ -38,18 +38,16 @@ import cn.com.johnson.model.AppMode;
 import cn.com.johnson.model.ChangeViewStateEvent;
 import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
-import de.blinkt.openvpn.activities.BalanceParticularsActivity;
 import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
 import de.blinkt.openvpn.activities.ImportantAuthorityActivity;
-import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.PackageCategoryActivity;
 import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.RechargeActivity;
+import de.blinkt.openvpn.activities.Set.ui.BalanceParticularsActivity;
 import de.blinkt.openvpn.activities.Set.ui.SettingActivity;
-import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -275,6 +273,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 	//控制注册信息
 	@Override
 	public void setRegisted(boolean isRegisted) {
+
 		if (isRegisted) {
 			signalIconImageView.setBackgroundResource(R.drawable.registed);
 			String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
@@ -359,9 +358,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 //				}
 				//友盟方法统计
 				MobclickAgent.onEvent(getActivity(), CLICKMYDEVICE);
-				if (deviceSummarizedRelativeLayout.getVisibility() == View.GONE) {
-					BluetoothConstant.IS_BIND = false;
-				}
+
 				if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
 					intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
 				} else {
@@ -376,7 +373,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 						}
 						return;
 					}
-					intent = toActivity(intent, braceletName);
+					intent = toActivity(intent);
 				}
 				break;
 			case R.id.permission_set:
@@ -442,11 +439,10 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 		return intent;
 	}
 
-	private Intent toActivity(Intent intent, String braceletName) {
+	private Intent toActivity(Intent intent) {
 		intent = new Intent(getActivity(), de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity.class);
 		AppMode.getInstance().isClickAddDevice = true;
 		mHandler.sendEmptyMessage(4);
-		intent.putExtra(Constant.BRACELETNAME, braceletName);
 		Log.e(TAG, "bleStatus" + bleStatus);
 		return intent;
 	}
@@ -454,7 +450,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
 	@Override
 	public void rightComplete(int cmdType, CommonHttp object) {
-
 		if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
 			BalanceHttp http = (BalanceHttp) object;
 			if (http.getBalanceEntity() != null)
@@ -489,7 +484,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 					showDeviceType(typeText);
 					if (isClickAddDevice) {
 						Intent intent = null;
-						intent = toActivity(intent, SharedUtils.getInstance().readString(Constant.BRACELETNAME));
+						intent = toActivity(intent);
 						startActivity(intent);
 					}
 
@@ -563,13 +558,10 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 			SharedUtils.getInstance().delete(Constant.IMEI);
 			SharedUtils.getInstance().delete(BRACELETNAME);
 			SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
-			BluetoothConstant.IS_BIND = false;
 			//判断是否再次重连的标记
 			ICSOpenVPNApplication.isConnect = false;
-			ReceiveBLEMoveReceiver.isConnect = false;
 			// 解除绑定，注册失败不显示
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
-
 //			sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
 			CommonTools.showShortToast(getActivity(), "已解绑设备");
 			ICSOpenVPNApplication.uartService.disconnect();
@@ -621,6 +613,21 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
 	};
 
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		if(isVisibleToUser){
+			if(!AppMode.getInstance().isClickAddDevice&&SharedUtils.getInstance().readBoolean(Constant.HAS_DEVICE_NEED_UPGRADE)){
+				if(mHandler!=null){
+					mHandler.sendEmptyMessage(3);
+				}
+			}else{
+				if(mHandler!=null){
+					mHandler.sendEmptyMessage(4);
+				}
+			}
+		}
+	}
 
 	@Override
 	public void onDestroyView() {

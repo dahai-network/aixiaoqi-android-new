@@ -22,7 +22,7 @@ import org.json.JSONObject;
 
 import cn.com.aixiaoqi.R;
 import cn.jpush.android.api.JPushInterface;
-import de.blinkt.openvpn.activities.MyDeviceActivity;
+import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.SMSAcivity;
 import de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity;

@@ -1,21 +1,16 @@
 package de.blinkt.openvpn.service;
 
 import android.app.Service;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
 import com.aixiaoqi.socket.ReceiveDataframSocketService;
@@ -31,11 +26,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
-import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
-import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -45,7 +38,6 @@ import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
-import de.blinkt.openvpn.model.CanClickEntity;
 import de.blinkt.openvpn.model.CancelCallService;
 import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
@@ -81,7 +73,6 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
             CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
         }else{
             //有绑定过，则搜索设备，没有搜索到，就用通知栏的方式提示用户
-            BluetoothConstant.IS_BIND = true;
             //搜索到设备，则连接设备。
             initUartServices();
             connectOperate();
@@ -263,7 +254,6 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
                         deviceAddress = getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI();
                         if (deviceAddress != null) {
                             deviceAddress = deviceAddress.toUpperCase();
-                            BluetoothConstant.IS_BIND = true;
                         }
                         SharedUtils utils = SharedUtils.getInstance();
                         utils.writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI().toUpperCase());

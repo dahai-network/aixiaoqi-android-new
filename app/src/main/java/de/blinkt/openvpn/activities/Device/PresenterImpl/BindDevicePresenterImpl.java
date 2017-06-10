@@ -1,10 +1,8 @@
 package de.blinkt.openvpn.activities.Device.PresenterImpl;
 
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -18,7 +16,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.CommomModel.BlueTooth.BlueToothModel;
 import de.blinkt.openvpn.activities.Device.ModelImpl.BindDeviceModelImpl;
 import de.blinkt.openvpn.activities.Device.ModelImpl.IsBindDeviceModelImpl;
 import de.blinkt.openvpn.activities.Device.ModelImpl.UpdateDeviceInfoModelImpl;
@@ -100,6 +97,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                         if (bindDeviceView.getDeviceName().contains(Constant.UNITOYS)) {
                             requestBindDevice("0");
                         } else if (bindDeviceView.getDeviceName().contains(Constant.UNIBOX)) {
+                            Log.e("deviceAddress","deviceAddress="+deviceAddress);
                             bindDeviceView.connect(deviceAddress);//
                         }
                     } else {
@@ -133,7 +131,6 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                     bindDeviceView.setFindedImageView(View.GONE);
                     bindDeviceView.tipSearchText(R.string.can_use);
                     bindDeviceView.SetUniImageViewBackground(R.drawable.bind_finish);
-                    BluetoothConstant.IS_BIND = true;
                     //更新时间操作
                     sendMessageToBlueTooth(getBLETime());
                     //获取基本信息
@@ -215,6 +212,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
     private void isBind(int index) {
 
         deviceAddress=deviceList.get(index).getAddress();
+        SharedUtils.getInstance().writeString(Constant.BRACELETNAME,deviceList.get(index).getDiviceName());
         Log.i(TAG, "deviceAddress=" + deviceAddress);
         requestIsBindDevice();
     }
@@ -231,7 +229,8 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
         public void run() {
             if (ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.mConnectionState != UartService.STATE_CONNECTED && !isStartFindDeviceDelay) {
                 bindDeviceView.scanLeDevice(false);
-                bindDeviceView.showNotSearchDeviceDialog();
+                if(TextUtils.isEmpty(deviceAddress))
+                    bindDeviceView.showNotSearchDeviceDialog();
             }
         }
     };
@@ -242,15 +241,10 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
     public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
         String type = entity.getBlueType();
         if (BluetoothConstant.BLUE_BIND_SUCCESS.equals(type)) {
-            if (entity.isSuccess()) {
-                Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + deviceAddress + ",版本号：" + SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
-                if (bindDeviceView.getDeviceName().contains(Constant.UNIBOX)) {
-                    requestBindDevice("1");
-                }
-            } else {
-                bindDeviceView.finishView();
+            Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + deviceAddress + ",版本号：" + SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
+            if (bindDeviceView.getDeviceName().contains(Constant.UNIBOX)) {
+                requestBindDevice("1");
             }
-
         } else if (BluetoothConstant.BLUE_BIND.equals(type)) {
             bindDeviceView.afterConnDevice();
         }

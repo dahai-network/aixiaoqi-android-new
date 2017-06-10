@@ -173,9 +173,6 @@
             android:launchMode="singleTop"/>
         <activity android:name="de.blinkt.openvpn.activities.UserInfo.ui.GetBackPswActivity"/>
         <activity
-            android:name="de.blinkt.openvpn.activities.MyDeviceActivity"
-            android:launchMode="singleTask"/>
-        <activity
             android:name="de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity"
             android:launchMode="singleTask"/>
         <activity android:name="de.blinkt.openvpn.activities.MyPackageActivity"/>
@@ -211,6 +208,7 @@
         <activity android:name="de.blinkt.openvpn.activities.CommitOrderActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.RechargeActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.NotificationActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.Set.ui.BalanceParticularsActivity"/>
 
         <receiver android:name=".AppRegister">
             <intent-filter>
@@ -319,7 +317,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="de.blinkt.openvpn.activities.BalanceParticularsActivity"/>
         <!-- de.blinkt.openvpn.activities.LaunchActivity -->
         <!--  -->
         <activity
@@ -334,7 +331,7 @@
             </intent-filter>
         </activity>
         <activity android:name="de.blinkt.openvpn.activities.PaySuccessActivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.ActivateActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.Set.ui.ActivateActivity"/>
 
         <service
             android:name="de.blinkt.openvpn.bluetooth.service.UartService"

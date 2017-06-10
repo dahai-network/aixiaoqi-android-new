@@ -21,8 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.ActivateActivity;
-import de.blinkt.openvpn.activities.MyDeviceActivity;
+import de.blinkt.openvpn.activities.Set.ui.ActivateActivity;
 import de.blinkt.openvpn.activities.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
@@ -45,14 +44,13 @@ import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
-import static de.blinkt.openvpn.activities.ActivateActivity.FINISH_ACTIVITY;
-import static de.blinkt.openvpn.activities.MyDeviceActivity.isUpgrade;
+import static de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity.isUpgrade;
+import static de.blinkt.openvpn.activities.Set.ui.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.AGREE_BIND;
 import static de.blinkt.openvpn.constant.Constant.APP_CONNECT;
 import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
 import static de.blinkt.openvpn.constant.Constant.BIND_DEVICE;
-import static de.blinkt.openvpn.constant.Constant.BIND_FAIL;
 import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
@@ -73,7 +71,7 @@ import static de.blinkt.openvpn.util.CommonTools.getBLETime;
  * Created by Administrator on 2016/10/5.
  */
 
-public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements InterfaceCallback, DialogInterfaceTypeBase {
+public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements InterfaceCallback {
 
 	private UartService mService = null;
 	private Context context;
@@ -85,8 +83,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //	private ArrayList<String> messages = new ArrayList<>();
 	//写卡状态（订单状态 ，0是没有写卡，1是写卡成功，4是写卡失败）
 	public static int orderStatus = 0;
-	private Thread sendStepThread;
-	public static boolean isConnect = false;
 	//是否打开了历史步数服务
 	private boolean isOpenStepService = false;
 	//复位命令存储
@@ -95,7 +91,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	public static String nullCardId = null;
 	private int UPDATE_HISTORY_DATE = 1;
 	private int WRITE_CARD_COMPLETE = 2;
-	//    private int CHECK_SIGNAL = 3;
 	private int IS_NOT_UNI = 3;
 	//重连次数
 	public static int retryTime;
@@ -111,6 +106,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			} else if (msg.what == IS_NOT_UNI) {
 				CommonTools.showShortToast(context, context.getString(R.string.bind_error));
 			}
+
 		}
 	};
 
@@ -118,6 +114,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
 			EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.DISCOONECT_DEVICE);
 		}
+		EventBusUtil.blueConnStatue(UartService.STATE_DISCONNECTED);
 	}
 
 	public void onReceive(final Context context, Intent intent) {
@@ -128,60 +125,28 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			Log.d(TAG, "UART_CONNECT_MSG");
 			IS_TEXT_SIM = false;
 
-			sendStepThread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(100);
+						CommonTools.delayTime(100);
 						//8880021400
+						Log.d("Encryption", "send--run: "+APP_CONNECT +"--" +EncryptionUtil.random8Number());
 						sendMessageToBlueTooth(APP_CONNECT + EncryptionUtil.random8Number());//APP专属命令
-//						sendMessageToBlueTooth(APP_CONNECT);//APP专属命令
 						Log.i(TAG, "发送了专属命令");
 						String braceletname = utils.readString(Constant.BRACELETNAME);
-						if (!BluetoothConstant.IS_BIND && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
+						if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
 
 						} else {
-							Thread.sleep(200);
+							CommonTools.delayTime(200);
 							sendMessageToBlueTooth(BASIC_MESSAGE);
-							Thread.sleep(200);
+							CommonTools.delayTime(200);
 							sendMessageToBlueTooth(ICCID_GET);
 							Log.i("toBLue", "连接成功");
 							//更新时间操作
 							sendMessageToBlueTooth(getBLETime());
-//							CommonTools.delayTime(500);
-//							sendMessageToBlueTooth(UP_TO_POWER);
 						}
 
-						Thread.sleep(20000);
-						if (!isConnect && action.equals(UartService.ACTION_GATT_CONNECTED)
-								&& TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-							sendMessageToBlueTooth(BIND_FAIL);
-							//连接|标记请出
-							isConnect = false;
-							mService.disconnect();
-							BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
-							entity.setBlueType(BluetoothConstant.BLUE_BIND_SUCCESS);
-							entity.setSuccess(false);
-							EventBus.getDefault().post(entity);
-						}
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-
-
-			//五秒内不可以再次启动
-			if (!CommonTools.isFastDoubleClick(5000) && !isUpgrade) {
-				sendStepThread.start();
-			}
 		}
 
-		if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-			isConnect = false;
+		else	if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 			nullCardId = null;
-			if (sendStepThread != null && !sendStepThread.isInterrupted())
-				sendStepThread.interrupt();
 			//如果保存的IMEI没有的话，那么就是在MyDevice里面，在Mydevice里面会有连接操作
 			if (retryTime < 20 && ICSOpenVPNApplication.isConnect) {
 				new Thread(new Runnable() {
@@ -189,9 +154,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					public void run() {
 						Log.d(TAG, "IMEI=" + TextUtils.isEmpty(utils.readString(Constant.IMEI)) + "\nisConnect=" + ICSOpenVPNApplication.isConnect);
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-							if (isUpgrade) {
-								return;
-							}
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
 							// 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
 							EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
@@ -207,11 +169,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			}
 		}
 
-		if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+		else	if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+			EventBusUtil.blueConnStatue(UartService.STATE_CONNECTED);
 			ICSOpenVPNApplication.isConnect = true;
 		}
 
-		if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
+		else	if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
 			mService.enableTXNotification();
 			//如果版本号小于android N
 			if (Build.VERSION.SDK_INT < 24) {
@@ -219,7 +182,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 				Log.i(TAG, "ensureServiceChangedEnabled:" + isSuccess);
 			}
 		}
-		if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
+		else	if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 			final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
 			if (messages.size() == 0) {
 				return;
@@ -255,13 +218,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										CommonTools.delayTime(500);
 										//android 标记，给蓝牙设备标记是否是android设备用的
 										SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
-										isConnect = true;
-										if (sendStepThread != null)
-											sendStepThread = null;
-										BluetoothMessageCallBackEntity entity = new BluetoothMessageCallBackEntity();
-										entity.setBlueType(BluetoothConstant.BLUE_BIND_SUCCESS);
-										entity.setSuccess(true);
-										EventBus.getDefault().post(entity);
+										EventBusUtil.bingDeviceStep(BluetoothConstant.BLUE_BIND_SUCCESS);
 										break;
 									//基本信息获取
 									case Constant.SYSTEM_BASICE_INFO:
@@ -280,6 +237,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 										SharedUtils.getInstance().writeInt(Constant.BRACELETTYPEINT, DeviceType);
 										SharedUtils.getInstance().writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(14, 16), 16));
 										SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, deviceVesion);
+										EventBusUtil.blueReturnData(Constant.SYSTEM_BASICE_INFO,"","");
 										//如果本地保存的版本号与设备中的版本号不一致则更新版本号
 										if (!SharedUtils.getInstance().readString(SharedUtils.getInstance().readString(Constant.IMEI)).equals(deviceVesion)) {
 											updateDeviceInfo();
@@ -300,9 +258,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 												if (nullCardId != null) {
 													Log.i(TAG, "nullcardid上电返回");
 													//发送旧卡空卡序列号
-													WriteCardEntity writeCardEntity = new WriteCardEntity();
-													writeCardEntity.setNullCardId(nullCardId);
-													EventBus.getDefault().post(writeCardEntity);
+													writeCard();
 												} else {
 													Log.i(TAG, "发送" + Constant.WRITE_SIM_FIRST);
 													sendMessageSeparate(Constant.WRITE_SIM_FIRST, Constant.WRITE_SIM_DATA);
@@ -310,9 +266,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											} else {
 												if (nullCardId != null) {
 													//发送旧卡空卡序列号
-													WriteCardEntity writeCardEntity = new WriteCardEntity();
-													writeCardEntity.setNullCardId(nullCardId);
-													EventBus.getDefault().post(writeCardEntity);
+													writeCard();
 												}
 											}
 
@@ -324,6 +278,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 											}
 											EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.UN_INSERT_CARD);
 										}
+
 										break;
 									case Constant.READ_SIM_DATA:
 										Log.i(TAG, "发送给SDK");
@@ -340,6 +295,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										}
 										break;
 									case Constant.IS_INSERT_CARD:
+										//5580040c000102
+										Log.d(TAG, "run: "+messages.toString()+":"+messages.get(0).substring(10, 12));
 										Log.i(TAG, "接收数据：是否插卡：" + messages.toString());
 										if (messages.get(0).substring(10, 12).equals("00")) {
 											Log.i(TAG, "未插卡");
@@ -365,16 +322,19 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 													break;
 												case "01":
 													Log.i(TAG, "移动卡！");
+													registFlowPath();
 													SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_MOBILE);
 													//卡类型是运营商则开始注册
 													break;
 												case "02":
 													Log.i(TAG, "联通卡！");
+													registFlowPath();
 													SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_UNICOM);
 													//卡类型是运营商则开始注册
 													break;
 												case "03":
 													Log.i(TAG, "电信卡！");
+													registFlowPath();
 													SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_TELECOM);
 													//卡类型是运营商则开始注册
 													break;
@@ -393,24 +353,19 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									case Constant.ICCID_BLUE_VALUE:
 										String Iccid = PacketeUtil.Combination(messages);
 										Log.e("ICCID_BLUE_VALUE", Iccid);
-
 										SharedUtils.getInstance().writeString(Constant.ICCID, Iccid);
 										SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(Iccid);
 										delayTime(50);
-										if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.OPERATER))) {
-											registFlowPath();
-										}
 										break;
 									case Constant.APP_CONNECT_RECEIVE:
-										Log.i("Encryption", "返回加密数据：" + messages.get(0).toString());
+										Log.i("Encryption", "返回加密数据----：" + messages.get(0).toString());
 										if (!EncryptionUtil.isPassEncrypt(messages.get(0).toString().substring(10))) {
 											mService.disconnect();
 											handler.sendEmptyMessage(IS_NOT_UNI);
 										} else {
-											if (!CommonTools.isFastDoubleClick(100)&&!BluetoothConstant.IS_BIND) {
-												BluetoothMessageCallBackEntity bEntity = new BluetoothMessageCallBackEntity();
-												bEntity.setBlueType(BluetoothConstant.BLUE_BIND);
-												EventBus.getDefault().post(bEntity);
+											Log.i("Encryption", "run: "+(TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))) +"::"+CommonTools.isFastDoubleClick(100));
+											if (!CommonTools.isFastDoubleClick(50)&&TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
+												EventBusUtil.bingDeviceStep(BluetoothConstant.BLUE_BIND);
 												sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
 											}
 										}
@@ -428,11 +383,16 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		}
 		if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)) {
 			mService.disconnect();
-			mService.close();
 //			 mReceiveSocketService.closeThread();
 		}
 
 
+	}
+
+	private void writeCard() {
+		WriteCardEntity writeCardEntity = new WriteCardEntity();
+		writeCardEntity.setNullCardId(nullCardId);
+		EventBus.getDefault().post(writeCardEntity);
 	}
 
 
@@ -512,9 +472,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 							isGetnullCardid = false;
 							lastSendMessageStr = "";
 							//发送空卡序列号
-							WriteCardEntity entity = new WriteCardEntity();
-							entity.setNullCardId(nullCardId);
-							EventBus.getDefault().post(entity);
+							writeCard();
 							//获取完空卡序列号后获取步数
 							sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
 							EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.AIXIAOQI_CARD);
@@ -594,12 +552,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		IS_TEXT_SIM = true;
 		isGetnullCardid = false;
 	}
-
-	public String reverse(String str) {
-		StringBuilder builder = new StringBuilder(str);
-		return builder.reverse().toString();
-	}
-
 
 	private void activationLocalCompletedHttp() {
 		if (MyOrderDetailActivity.OrderID != null) {
@@ -706,9 +658,4 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		}
 	}
 
-
-	@Override
-	public void dialogText(int type, String text) {
-
-	}
 }

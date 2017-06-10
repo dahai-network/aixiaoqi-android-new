@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.UserInfo.PresenterImpl.RegisterPresenterImpl;
@@ -25,12 +26,13 @@ import de.blinkt.openvpn.activities.UserInfo.View.RegisterView;
 import de.blinkt.openvpn.activities.WebViewActivity;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.ViewUtil;
 
-public class RegistActivity extends BaseNetActivity implements RegisterView {
+public class RegistActivity extends BaseActivity implements RegisterView {
 
     @BindView(R.id.logo)
     ImageView logo;
@@ -225,4 +227,6 @@ public class RegistActivity extends BaseNetActivity implements RegisterView {
             unbinder.unbind();
         }
     }
+
+
 }

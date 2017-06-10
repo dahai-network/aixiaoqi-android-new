@@ -2,13 +2,14 @@ package com.aixiaoqi.socket;
 
 import org.greenrobot.eventbus.EventBus;
 
+import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.CanClickEntity;
 import de.blinkt.openvpn.model.CancelCallService;
-import de.blinkt.openvpn.model.ChangeConnectStatusEntity;
 import de.blinkt.openvpn.model.GetTokenRes;
-import de.blinkt.openvpn.model.ShowDeviceEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StateChangeEntity;
+import de.blinkt.openvpn.model.enentbus.BlueConnStatue;
+import de.blinkt.openvpn.model.enentbus.BlueReturnData;
 import de.blinkt.openvpn.model.enentbus.OptionCellPhoneFragmentView;
 import de.blinkt.openvpn.model.enentbus.OptionProMainActivityView;
 
@@ -58,29 +59,28 @@ public class EventBusUtil {
         entity.setIsopen(isopen);
         EventBus.getDefault().post(entity);
     }
-    public static void changeConnectStatus(String status, int statusDrawableInt) {
-        ChangeConnectStatusEntity entity = new ChangeConnectStatusEntity();
-        entity.setStatus(status);
-        entity.setStatusDrawableInt(statusDrawableInt);
-        EventBus.getDefault().post(entity);
-    }
 
-    public static void showDevice(boolean showDevice) {
-        ShowDeviceEntity entity = new ShowDeviceEntity();
-        entity.setShowDevice(showDevice);
-        EventBus.getDefault().post(entity);
-    }
+    /**
+     * 当退出登录或者挤下线的时候，取消关闭电话服务
+     */
     public static void cancelCallService( ) {
         CancelCallService entity = new CancelCallService();
         EventBus.getDefault().post(entity);
     }
 
+    /**
+     * 能够点击头部
+     * @param jumpTo
+     */
     public static void canClickEntity(String jumpTo ) {
         CanClickEntity entity = new CanClickEntity();
         entity.setJumpTo(jumpTo);
         EventBus.getDefault().post(entity);
     }
 
+    /**
+     * 如果创建电话服务因为网络问题失败，则等有网络以后重新获取
+     */
     public static void getTokenRes() {
         GetTokenRes entity = new GetTokenRes();
         EventBus.getDefault().post(entity);
@@ -97,4 +97,31 @@ public class EventBusUtil {
         entity.setTextChange(textChange);
         EventBus.getDefault().post(entity);
     }
+
+    public static void blueConnStatue(int connStatue){
+        BlueConnStatue blueConnStatue=new BlueConnStatue();
+        blueConnStatue.setConnStatue(connStatue);
+        EventBus.getDefault().post(blueConnStatue);
+    }
+
+    /**
+     *
+     * @param dataType
+     * @param responeStatue
+     * @param valideData
+     */
+    public  static void blueReturnData(String dataType,String responeStatue,String valideData){
+        BlueReturnData blueReturnData=new BlueReturnData();
+        blueReturnData.setDataType(dataType);
+        blueReturnData.setResponeStatue(responeStatue);
+        blueReturnData.setValideData(valideData);
+        EventBus.getDefault().post(blueReturnData);
+    }
+    public  static void bingDeviceStep(String bindStatue){
+        BluetoothMessageCallBackEntity bluetoothMessageCallBackEntity=new BluetoothMessageCallBackEntity();
+        bluetoothMessageCallBackEntity.setBlueType(bindStatue);
+        EventBus.getDefault().post(bluetoothMessageCallBackEntity);
+    }
+
+
 }

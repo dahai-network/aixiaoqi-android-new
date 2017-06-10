@@ -3,6 +3,7 @@ package de.blinkt.openvpn.util;
 import android.util.Log;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
@@ -14,13 +15,13 @@ import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 public class EncryptionUtil {
 
 	//随机数字符串用于加密算法
-	public static String random8NumberString;
+	//public static String random8NumberString;
 	//共享密钥
 	private static byte[] tribleKey = {(byte) 122, (byte) 59, (byte) 89, (byte) 100, (byte) 202, (byte) 142, (byte) 157, (byte) 242,
 			(byte) 23, (byte) 43, (byte) 109, (byte) 72, (byte) 1, (byte) 57, (byte) 252, (byte) 136};
 
 	public static boolean isPassEncrypt(String receiveBlueEncrypt) {
-		String result = random8NumberString;
+		String result = SharedUtils.getInstance().readString("random8NumberString");
 		try {
 			result = TribleDESencrypt(result);
 		} catch (Exception e) {
@@ -60,8 +61,9 @@ public class EncryptionUtil {
 			Log.i("Encryption", "随机数：" + randomNum);
 			builder.append(randomNum);
 		}
-		random8NumberString = builder.toString();
-		Log.i("Encryption", "随机数总：" + random8NumberString);
+	//	random8NumberString = builder.toString();
+		SharedUtils.getInstance().writeString("random8NumberString",builder.toString());
+		//Log.i("Encryption", "随机数总：" + random8NumberString);
 		return builder.toString();
 	}
 
@@ -87,6 +89,7 @@ public class EncryptionUtil {
 
 	// 3DES加密方法
 	public static String TribleDESencrypt(String encryptString) throws Exception {
+
 		SecretKeySpec key = new SecretKeySpec(tribleKey, "DESede");
 
 		Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");

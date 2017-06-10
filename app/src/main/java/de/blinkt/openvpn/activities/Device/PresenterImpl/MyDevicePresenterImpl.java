@@ -1,5 +1,7 @@
 package de.blinkt.openvpn.activities.Device.PresenterImpl;
 
+import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +32,7 @@ import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
 import de.blinkt.openvpn.activities.NetPresenterBaseImpl;
 import de.blinkt.openvpn.activities.Device.Presenter.MyDevicePresenter;
 import de.blinkt.openvpn.activities.ProMainActivity;
+import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -41,7 +44,10 @@ import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.UIOperatorEntity;
 import de.blinkt.openvpn.model.WriteCardEntity;
+import de.blinkt.openvpn.model.enentbus.BlueConnStatue;
+import de.blinkt.openvpn.model.enentbus.BlueReturnData;
 import de.blinkt.openvpn.service.DfuService;
+import de.blinkt.openvpn.util.CheckAuthorityUtil;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
@@ -86,7 +92,14 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
 
     @Override
     public void requestSkyUpgrade() {
-        skyUpgradeModel.skyUpgrade();
+
+        CheckAuthorityUtil.checkPermissions((Activity) context, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+        long beforeRequestTime = SharedUtils.getInstance().readLong(Constant.UPGRADE_INTERVAL);
+        if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
+        {
+            skyUpgradeModel.skyUpgrade();
+        }
+
     }
 
     @Override
@@ -114,8 +127,12 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
             if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
                 MyDeviceActivity.isUpgrade = true;
                 SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);
+                ICSOpenVPNApplication.isConnect=false;
                 SendCommandToBluetooth.sendMessageToBlueTooth(SKY_UPGRADE_ORDER);
+                myDeviceView.startAnim();
                 myDeviceView.showUpgradeDialog();
+                CommonTools.delayTime(1000);
+                skyUpgradeScan();
             } else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
                 myDeviceView.showToast(R.string.download_upgrade_package_fail);
             }
@@ -160,6 +177,10 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         }
     }
 
+    //如没有没插卡检测插卡并且提示用户重启手环。
+    //如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
+    //如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
+    //如果重连失败再进入我的设备就清空重连次数重新进入连接流程
     public void refreshStatue(){
         if (!CommonTools.isFastDoubleClick(3000)) {
             //如果激活卡成功后，刷新按钮点击需要将标记激活
@@ -168,11 +189,9 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
             MyDeviceActivity.percentInt = 0;
             IS_TEXT_SIM = false;
             //TODO 处理异常
-            //如没有没插卡检测插卡并且提示用户重启手环。
-            //如果网络请求失败或者无套餐，刷新则从请求网络开始。如果上电不成功，读不到手环数据，还没有获取到预读取数据或者获取预读取数据错误，则重新开始注册。
-            //如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
+
             myDeviceView.startAnim();
-            //如果重连失败再进入我的设备就清空重连次数重新进入连接流程
+
             String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
             String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
             if (ICSOpenVPNApplication.uartService != null && !ICSOpenVPNApplication.uartService.isConnectedBlueTooth() && !TextUtils.isEmpty(macStr)) {
@@ -202,6 +221,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
 
     @Override
     public void errorComplete(int cmdType, String errorMessage) {
+
         if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
             SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
         }
@@ -320,6 +340,9 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
                 myDeviceView.setConStatueText(R.string.index_un_insert_card);
                 myDeviceView.percentTextViewVisible(GONE);
                 myDeviceView.registerSimStatuVisible(VISIBLE);
+                myDeviceView.showNoCardDialog();
+                SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
+                myDeviceView.stopAnim();
                 break;
 
 
@@ -330,18 +353,52 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
     public void receiveWriteCardIdEntity(WriteCardEntity entity) {
         myDeviceView.stopAnim();
     }
+    //通过eventbus接收从蓝牙那边传回来的数据，并进行相应的操作
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    private void blueReturnData(BlueReturnData blueReturnData){
+        e("blueReturnData:" + blueReturnData );
+        switch (blueReturnData.getDataType()){
+            case Constant.SYSTEM_BASICE_INFO:
+                myDeviceView.setDeviceVersionText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
+                myDeviceView.dismissProgress();
+                myDeviceView.setElectricityPercent(((float) Integer.parseInt(SharedUtils.getInstance().readString(Constant.BRACELETPOWER)))/100);
+                break;
+        }
+    }
+    //实时监测连接状态，并进行相应的操作
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    private void blueConnStatue(BlueConnStatue blueConnStatue){
+        Log.e(TAG,"blueConnStatue="+blueConnStatue.getConnStatue());
+        switch (blueConnStatue.getConnStatue()){
+            case UartService.STATE_DISCONNECTED:
+                myDeviceView.stopAnim();
+                //多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
+                // 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
+                if (!MyDeviceActivity.isUpgrade) {
+                    myDeviceView.showProgress(R.string.reconnecting, true);
+                }
+                myDeviceView.percentTextViewVisible(GONE);
+                break;
+            case UartService.STATE_CONNECTED:
+                myDeviceView.dismissProgress();
+                requestSkyUpgrade();
+                break;
+        }
 
+    }
     //升级状态提示
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程
     public void onUIOperatorEntity(UIOperatorEntity entity) {
+        startDfuCount = 0;
         if (entity.getType() == UIOperatorEntity.onError) {
             myDeviceView.showToast(R.string.update_fail_retry);
         } else if (entity.getType() == UIOperatorEntity.onCompelete) {
             myDeviceView.showToast(R.string.dfu_status_completed);
+            myDeviceView.showOrHideVersionUpgradeHotDot(GONE);
         }
     }
 
-
+    private  int startDfuCount=0;
 
     public    void findDevices(BluetoothDevice device, int rssi, byte[] scanRecord) {
         if (device.getName() == null) {
@@ -352,12 +409,14 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
             Log.e(TAG, "device:" + device.getName() + "mac:" + device.getAddress());
             if (ICSOpenVPNApplication.uartService != null) {
                 myDeviceView.scanLeDevice(false);
-                Log.i(TAG, "startDfuCount:" + MyDeviceActivity.startDfuCount);
-                if (MyDeviceActivity.startDfuCount == 0) {
-                    Log.i(TAG, "startDfuCount:" + MyDeviceActivity.startDfuCount);
-                    MyDeviceActivity.startDfuCount++;
-                    CommonTools.delayTime(1000);
-                    uploadToBlueTooth(device.getName(), device.getAddress());//升级服务会自动去连接
+                Log.i(TAG, "startDfuCount:" + startDfuCount);
+                synchronized (this){
+                    if (startDfuCount == 0) {
+                        Log.i(TAG, "startDfuCount:" + startDfuCount);
+                        startDfuCount++;
+                        CommonTools.delayTime(1000);
+                        uploadToBlueTooth(device.getName(), device.getAddress());//升级服务会自动去连接
+                    }
                 }
             }
         } else if (!MyDeviceActivity.isUpgrade && SharedUtils.getInstance().readString(Constant.IMEI)!= null && SharedUtils.getInstance().readString(Constant.IMEI).equalsIgnoreCase(device.getAddress())) {
@@ -374,6 +433,13 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         return ICSOpenVPNApplication.getInstance().isServiceRunning(DfuService.class.getName());
     }
 
+    private void skyUpgradeScan(){
+        startDfuCount = 0;
+        myDeviceView.scanLeDevice(true);
+    }
+
+
+    //空中升级
     private void uploadToBlueTooth(String deviceName, String deviceAddress) {
         Log.e(TAG, "uploadToBlueTooth");
         if (isDfuServiceRunning()) {
@@ -393,10 +459,6 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         }
 
     }
-
-
-
-
 
 
     @Override

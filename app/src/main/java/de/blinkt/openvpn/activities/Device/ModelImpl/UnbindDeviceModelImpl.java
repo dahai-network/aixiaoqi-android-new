@@ -39,10 +39,8 @@ public class UnbindDeviceModelImpl extends NetModelBaseImpl implements UnbindeDe
            SharedUtils.getInstance().delete(Constant.IMEI);
            SharedUtils.getInstance().delete(BRACELETNAME);
            SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
-           BluetoothConstant.IS_BIND = false;
            //判断是否再次重连的标记
            ICSOpenVPNApplication.isConnect = false;
-           ReceiveBLEMoveReceiver.isConnect = false;
            // 解除绑定，注册失败不显示
            EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
            ICSOpenVPNApplication.uartService.disconnect();

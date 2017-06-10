@@ -32,6 +32,7 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.activities.Set.ui.ActivateActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
@@ -86,10 +87,8 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 	TextView orderTimeTextView;
 	@BindView(R.id.payWayTextView)
 	TextView payWayTextView;
-
 	@BindView(R.id.allPriceTextView)
 	TextView allPriceTextView;
-
 	@BindView(R.id.cancelOrderButton)
 	TextView cancelOrderButton;
 	@BindView(R.id.retryTextView)

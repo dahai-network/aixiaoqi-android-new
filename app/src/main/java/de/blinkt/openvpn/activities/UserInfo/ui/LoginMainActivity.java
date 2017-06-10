@@ -26,12 +26,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.UserInfo.PresenterImpl.LoginPresenterImpl;
 import de.blinkt.openvpn.activities.UserInfo.View.LoginView;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
+import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -44,7 +46,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKLOGINREGISTER;
 /**
  * Created by wzj on 2016/6/3.
  */
-public class LoginMainActivity extends BaseNetActivity implements LoginView, View.OnClickListener {
+public class LoginMainActivity extends BaseActivity implements LoginView, View.OnClickListener {
     @BindView(R.id.usernameEdit)
     EditText usernameEdit;
     @BindView(R.id.pwdEdit)
@@ -243,6 +245,7 @@ public class LoginMainActivity extends BaseNetActivity implements LoginView, Vie
                 break;
         }
     }
+
 
 }
 

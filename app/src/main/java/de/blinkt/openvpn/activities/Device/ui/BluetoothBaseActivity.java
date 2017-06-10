@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
@@ -65,7 +66,7 @@ public abstract  class BluetoothBaseActivity extends BaseActivity {
         }
 
     }
-abstract  void findDevices(BluetoothDevice device,int rssi,byte[] scanRecord);;
+    abstract  void findDevices(BluetoothDevice device,int rssi,byte[] scanRecord);;
 
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
@@ -84,7 +85,10 @@ abstract  void findDevices(BluetoothDevice device,int rssi,byte[] scanRecord);;
             };
 
     public void connect(String macAddress){
-        if(mService!=null&&mService.isConnectedBlueTooth()){
+        if(mService!=null){
+            if(mService.mBluetoothAdapter==null){
+                mService.initialize();
+            }
             mService.connect(macAddress);
         }
     }

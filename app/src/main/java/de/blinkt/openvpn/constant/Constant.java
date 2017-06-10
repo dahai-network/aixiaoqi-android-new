@@ -243,6 +243,8 @@ public class Constant {
 	public static boolean isOutsideSecondStepClick = false;
 	public static boolean isOutsideThirdStepClick = false;
 
+
+	public static final String HAS_DEVICE_NEED_UPGRADE="has_device_need_upgrade";
 	/**
 	 * 定时器类型
 	 */

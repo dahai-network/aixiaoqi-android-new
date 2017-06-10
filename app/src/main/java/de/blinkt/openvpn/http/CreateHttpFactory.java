@@ -1,5 +1,8 @@
 package de.blinkt.openvpn.http;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 
 
@@ -223,8 +226,12 @@ public class CreateHttpFactory {
 		}
 	}
 
+	static  ExecutorService cachedThreadPool;
 	private static void startHttp(BaseHttp baseHttp) {
-		new Thread(baseHttp).start();
+		if(cachedThreadPool==null){
+            cachedThreadPool = Executors.newCachedThreadPool();
+		}
+        cachedThreadPool.execute(baseHttp);
 	}
 
 }

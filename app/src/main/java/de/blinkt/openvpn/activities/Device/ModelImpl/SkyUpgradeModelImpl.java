@@ -19,6 +19,9 @@ public class SkyUpgradeModelImpl extends NetModelBaseImpl implements SkyUpgradeM
     }
     @Override
     public void skyUpgrade( ) {
+        if(SharedUtils.getInstance().readBoolean(Constant.HAS_DEVICE_NEED_UPGRADE)){
+            return ;
+        }
         int DeviceType;
         String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
         if (!TextUtils.isEmpty(braceletname)) {

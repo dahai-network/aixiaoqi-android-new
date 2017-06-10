@@ -26,13 +26,13 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import de.blinkt.openvpn.activities.Base.CommenActivity;
+import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
 
 
 public class NotificationActivity extends CommenActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		// If this activity is the root activity of the task, the app is not running
 		if (isTaskRoot()) {
 			// Start the app before finishing

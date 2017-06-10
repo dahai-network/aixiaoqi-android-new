@@ -36,7 +36,7 @@ public class BluetoothEntity {
 
 	@Override
 	public String toString() {
-		return "BlueToothModel{" +
+		return "BluetoothEntity{" +
 				"address='" + address + '\'' +
 				", rssi=" + rssi +
 				", diviceName='" + diviceName + '\'' +

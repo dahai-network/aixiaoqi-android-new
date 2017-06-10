@@ -95,11 +95,16 @@ public class SocketConstant {
 	public static final int REGISTER_CHANGING=205;//重新注册，注册中
 	public static final int UPDATE_PERCENT=206;//更改进度条
 	public static final int VAILD_CARD=207;//有效卡，注册中
-
+	/**
+	 * 未注册
+	 */
 	public static final int UNREGISTER=3;//未注册
 	public static final int UN_INSERT_CARD=301;//未插卡，未注册
 	public static final int AIXIAOQI_CARD=302;//爱小器卡，未注册
 	public static final int BLUETOOTH_CLOSE=303;//蓝牙未打开，未注册
+	/**
+	 * 设备连接中
+	 */
 	public static final int CONNECTING_DEVICE=304;//设备连接中
 	public static final int UNBIND_DEVICE=305;//未绑定设备
 	public static final int DISCOONECT_DEVICE=306;//断开连接

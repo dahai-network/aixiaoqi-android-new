@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -13,35 +12,18 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.Base.BaseNetActivity;
-import de.blinkt.openvpn.activities.CommomModel.BlueTooth.BlueToothModel;
 import de.blinkt.openvpn.activities.Device.PresenterImpl.BindDevicePresenterImpl;
 import de.blinkt.openvpn.activities.Device.View.BindDeviceView;
-import de.blinkt.openvpn.activities.MyDeviceActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.http.CreateHttpFactory;
-import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
-import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
-
-import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
-import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
-import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
-import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 
 public class BindDeviceActivity extends BluetoothBaseActivity implements BindDeviceView, DialogInterfaceTypeBase {
@@ -58,10 +40,9 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 	ImageView seekImageView;
 	@BindView(R.id.uniImageView)
 	ImageView uniImageView;
-	private String deviceAddress = "";
 	SharedUtils utils = SharedUtils.getInstance();
 	private DialogBalance noDevicedialog;
-	private String TAG = "BindDeviceActivity";
+
 	private UartService mService = ICSOpenVPNApplication.uartService;//
 	//设备名称：类型不同名称不同，分别有【unitoys、unibox】
 	private String bluetoothName = Constant.UNITOYS;
@@ -139,9 +120,6 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 		if (bluetoothName != null && bluetoothName.contains(Constant.UNIBOX)) {
 			initUnibox();
 		}
-
-
-
 	}
 
 	@Override
@@ -169,7 +147,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-			case BlueToothModel.REQUEST_ENABLE_BT:
+			case REQUEST_ENABLE_BT:
 				if (resultCode == Activity.RESULT_OK) {
 					setAnimation();
 					scanLeDevice(true);
@@ -267,8 +245,6 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 			stopTextView.performClick();
 		}
 	}
-
-
 
 	//连接设备成功，提示用户绑定
 	private void showIsBindLayout() {

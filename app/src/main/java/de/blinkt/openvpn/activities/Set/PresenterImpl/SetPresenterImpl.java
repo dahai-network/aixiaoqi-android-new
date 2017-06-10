@@ -87,7 +87,9 @@ public class SetPresenterImpl extends NetPresenterBaseImpl implements SetPresent
         EventBusUtil.cancelCallService();
         Intent intent = new Intent();
         intent.setAction(SportFragment.CLEARSPORTDATA);
+        ICSOpenVPNApplication.isConnect=false;
         ICSOpenVPNApplication.uartService.disconnect();
+
         ICSOpenVPNApplication.getInstance().sendBroadcast(intent);
         setView.finishView();
         setView.startActivity(LoginMainActivity.class);

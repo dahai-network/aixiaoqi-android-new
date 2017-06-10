@@ -3,34 +3,9 @@ package de.blinkt.openvpn.broadcast;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Build;
-import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.util.Log;
-
-import com.aixiaoqi.socket.EventBusUtil;
-
-import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
-import de.blinkt.openvpn.activities.MyDeviceActivity;
-import de.blinkt.openvpn.activities.ProMainActivity;
-import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.constant.BluetoothConstant;
-import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.constant.HttpConfigUrl;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.CreateHttpFactory;
-import de.blinkt.openvpn.http.GetBindDeviceHttp;
-import de.blinkt.openvpn.http.InterfaceCallback;
-import de.blinkt.openvpn.service.SimRegisterFlowService;
-import de.blinkt.openvpn.util.NetworkUtils;
-import de.blinkt.openvpn.util.SharedUtils;
 
 /**
  * 自启动

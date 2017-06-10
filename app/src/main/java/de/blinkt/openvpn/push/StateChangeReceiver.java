@@ -102,8 +102,6 @@ public class StateChangeReceiver extends BroadcastReceiver {
 				} else {
 					EventBusUtil.simStateChange(StateChangeEntity.BLUETOOTH_STATE,false);
 				}
-
-
 				break;
 		}
 	}

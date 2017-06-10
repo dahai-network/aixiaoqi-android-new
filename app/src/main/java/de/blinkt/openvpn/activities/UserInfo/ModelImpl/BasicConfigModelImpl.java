@@ -1,5 +1,7 @@
 package de.blinkt.openvpn.activities.UserInfo.ModelImpl;
 
+import android.text.TextUtils;
+
 import de.blinkt.openvpn.activities.NetModelBaseImpl;
 import de.blinkt.openvpn.activities.UserInfo.Model.BasicConfigModel;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -17,8 +19,9 @@ public class BasicConfigModelImpl extends NetModelBaseImpl implements BasicConfi
 
     @Override
     public void requestBasicConfig() {
-        createHttpRequestNoCache(HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG);
-
+        if (TextUtils.isEmpty(SharedUtils.getInstance().readString(IntentPutKeyConstant.USER_AGREEMENT_URL))) {
+            createHttpRequest(HttpConfigUrl.COMTYPE_GET_BASIC_CONFIG);
+        }
     }
 
     @Override

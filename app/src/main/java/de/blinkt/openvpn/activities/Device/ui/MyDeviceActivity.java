@@ -1,19 +1,12 @@
 package de.blinkt.openvpn.activities.Device.ui;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,47 +16,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.aixiaoqi.socket.EventBusUtil;
-import com.aixiaoqi.socket.ReceiveSocketService;
-import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.io.File;
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.AlarmClockActivity;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.activities.Device.PresenterImpl.MyDevicePresenterImpl;
 import de.blinkt.openvpn.activities.Device.View.MyDeviceView;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.TipUserOptionsActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
-import de.blinkt.openvpn.constant.BluetoothConstant;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.constant.HttpConfigUrl;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
-import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.DownloadSkyUpgradePackageHttp;
-import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
-import de.blinkt.openvpn.http.SkyUpgradeHttp;
-import de.blinkt.openvpn.model.SimRegisterStatue;
-import de.blinkt.openvpn.model.UIOperatorEntity;
-import de.blinkt.openvpn.model.WriteCardEntity;
-import de.blinkt.openvpn.service.DfuService;
-import de.blinkt.openvpn.util.CheckAuthorityUtil;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.MySinkingView;
@@ -73,24 +39,14 @@ import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.dialog.DialogTipUpgrade;
 import de.blinkt.openvpn.views.dialog.DialogUpgrade;
 import no.nordicsemi.android.dfu.DfuProgressListener;
-import no.nordicsemi.android.dfu.DfuServiceInitiator;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
-
 import static android.view.View.GONE;
 import static cn.com.aixiaoqi.R.id.register_sim_statue;
 import static cn.com.aixiaoqi.R.string.device;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
-import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
-import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
 import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.Constant.FIND_DEVICE;
-import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
-import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
-import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RESTORATION;
-import static de.blinkt.openvpn.constant.Constant.SKY_UPGRADE_ORDER;
-import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER_NO_RESPONSE;
-import static de.blinkt.openvpn.constant.UmengContant.CLICKBINDDEVICE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKDEVICEUPGRADE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUNBINDDEVICE;
 
@@ -143,7 +99,7 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
     //写卡进度
     public static int percentInt;
     //手环类型
-   private String braceletname;
+    private String braceletname;
 
     public static boolean isUpgrade = false;
     public static final int DOWNLOAD_SKY_UPGRADE = 5;
@@ -154,31 +110,25 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_device);
         ButterKnife.bind(this);
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
-            finish();
-            return;
-        }
-        initSet();
-        serviceInit();
-        initDialogUpgrade();
         myDevicePresenter=new MyDevicePresenterImpl(this,this);
-
+        initSet();
+        initDialogUpgrade();
     }
 
     @Override
     public void startAnim() {
         if (!registerSimStatu.isEnabled()) return;
-        registerSimStatu.setEnabled(false);
-        RegisterStatueAnim.reset();
-        registerSimStatu.clearAnimation();
-        registerSimStatu.setBackgroundResource(R.drawable.registering);
+        clearAnim(false);
         registerSimStatu.startAnimation(RegisterStatueAnim);
     }
 
     @Override
     public void stopAnim() {
-        registerSimStatu.setEnabled(true);
+        clearAnim(true);
+    }
+
+    private void clearAnim(boolean enabled) {
+        registerSimStatu.setEnabled(enabled);
         RegisterStatueAnim.reset();
         registerSimStatu.clearAnimation();
         registerSimStatu.setBackgroundResource(R.drawable.registering);
@@ -186,12 +136,12 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
 
     @Override
     public void showToast(String showContent) {
-      super.showToast(showContent);
+        super.showToast(showContent);
     }
 
     @Override
     public void showToast(int showContentId) {
-       super.showToast(showContentId);
+        super.showToast(showContentId);
     }
 
     @Override
@@ -252,7 +202,6 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         }
         if(upgrade==null){
             upgrade = new DialogTipUpgrade(this, this, R.layout.dialog_tip_upgrade, DOWNLOAD_SKY_UPGRADE);
-
             if (braceletname != null && braceletname.contains(Constant.UNITOYS)) {
                 upgrade.changeText(getString(R.string.dfu_upgrade), upgradeContent);
             } else {
@@ -267,24 +216,20 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
     DfuProgressListener mDfuProgressListener;
     //空中升级,如果没有设备类型就不升级，如果有的话再去升级。
     private void skyUpgradeHttp() {
-        CheckAuthorityUtil.checkPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
-        long beforeRequestTime = SharedUtils.getInstance().readLong(Constant.UPGRADE_INTERVAL);
-        if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
-        {
-            myDevicePresenter.requestSkyUpgrade();
-        }
+        myDevicePresenter.requestSkyUpgrade();
     }
 
     //初始化设备界面与设备类型
     private void initSet() {
         actionBar.hide();
         braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-
         if (braceletname != null && braceletname.contains(Constant.UNIBOX)) {
             deviceNameTextView.setText(getString(R.string.unibox_key));
         } else if (braceletname != null && braceletname.contains(Constant.UNITOYS)) {
             initUnitoy();
         }
+        macAddressStr = SharedUtils.getInstance().readString(Constant.IMEI);
+        macTextView.setText(macAddressStr);
         RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
         titleSet();
         //初始化状态和电量
@@ -293,14 +238,18 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
             initData();
         }
 //显示固件版本
-        firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
-
+        setDeviceVersionText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
     }
 
     private void initData() {
         String blueStatus = BaseStatusFragment.bleStatus;
         int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
         sinking.setPercent(((float) electricityInt) / 100);
+        initSimStatue(blueStatus);
+        skyUpgradeHttp();
+    }
+
+    private void initSimStatue(String blueStatus) {
         if (!TextUtils.isEmpty(blueStatus)) {
             conStatusTextView.setText(blueStatus);//初始化状态
             if (getString(R.string.index_high_signal).equals(blueStatus)) {
@@ -319,7 +268,6 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
             }
 
         }
-        skyUpgradeHttp();
     }
 
     private void initUnitoy() {
@@ -342,7 +290,6 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
             }
         });
         title.setBackground(R.color.color_0F93FE);
-
     }
 
     @Override
@@ -354,7 +301,6 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
                     if (mService != null && !mService.isConnecttingBlueTooth() && !TextUtils.isEmpty(macStr)) {
                         ReceiveBLEMoveReceiver.retryTime = 0;
                         mService.connect(macStr);
-                        Log.i(TAG, "重连重新触发");
                     }
                 } else {
                     Log.d(TAG, "蓝牙未打开");
@@ -394,25 +340,21 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
                 break;
             case R.id.findStatusLinearLayout://查找设备
                 if (!CommonTools.isFastDoubleClick(3000)) {
-                            SendCommandToBluetooth.sendMessageToBlueTooth(FIND_DEVICE);
+                    SendCommandToBluetooth.sendMessageToBlueTooth(FIND_DEVICE);
                 }
                 break;
             case register_sim_statue:
-               myDevicePresenter.refreshStatue();
+                myDevicePresenter.refreshStatue();
                 break;
-
-
             case R.id.alarmClockLinearLayout:
                 //当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
                 registerSimStatu.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(MyDeviceActivity.this, AlarmClockActivity.class);
-                startActivity(intent);
+                toActivity(AlarmClockActivity.class);
                 break;
             case R.id.messageRemindLinearLayout:
                 //当解绑设备，registerSimStatu会被隐藏，再寻找设备的时候需要再显示出来
                 registerSimStatu.setVisibility(View.VISIBLE);
-                Intent remindIntent = new Intent(MyDeviceActivity.this, TipUserOptionsActivity.class);
-                startActivity(remindIntent);
+                toActivity(TipUserOptionsActivity.class);
                 break;
         }
     }
@@ -422,111 +364,32 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         return conStatusTextView.getText().toString().trim();
     }
 
-    private void serviceInit() {
-        Log.d(TAG, "serviceInit()");
-        LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
+
+    @Override
+    public void setDeviceVersionText(String version) {
+        if(!TextUtils.isEmpty(version))
+            firmwareTextView.setText(version);
     }
 
-
-    private static IntentFilter makeGattUpdateIntentFilter() {
-        final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
-        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
-        return intentFilter;
+    @Override
+    public void setElectricityPercent(float electricityFlost) {
+        slowSetPercent(electricityFlost);
     }
 
-    public static int startDfuCount = 0;
-    private Thread connectThread;
-    private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
+    @Override
+    public void dismissProgress() {
+        super.dismissProgress();
+    }
 
-
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(UartService.STATE_CONNECTED)) {
-                //TODO 连接成功，操作问题
-                //测试代码
-                dismissProgress();
-                skyUpgradeHttp();
-            }
-
-         else   if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-                if (mService != null) {
-                    if (!ICSOpenVPNApplication.isConnect) {
-                        CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
-                        stopAnim();
-                        return;
-                    }
-                    connectThread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
-                            // 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
-                            CommonTools.delayTime(1000);
-                            if (isUpgrade) {
-                                Log.e(TAG, "空中升级重连");
-                                startDfuCount = 0;
-                                scanLeDevice(true);
-                            }
-                        }
-                    });
-                    connectThread.start();
-                    percentTextView.setVisibility(GONE);
-                    //多次重连无效后关闭蓝牙重启
-                    if (!isUpgrade) {
-                        showProgress(getString(R.string.reconnecting), true);
-                    }
-                } else {
-                    CommonTools.showShortToast(MyDeviceActivity.this, "已断开");
-                }
-            }
-            if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
-
-                final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
-                try {
-                    if (messages == null || messages.size() == 0 || !messages.get(0).substring(0, 2).equals("55")) {
-                        return;
-                    }
-                    //判断是否是分包（0x80的包）
-                    if (messages == null || messages.size() == 0 || !messages.get(0).substring(2, 4).equals("80")) {
-                        return;
-                    }
-                    String dataType = messages.get(0).substring(6, 10);
-                    switch (dataType) {
-                        case Constant.SYSTEM_BASICE_INFO:
-                            String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
-                            if (!TextUtils.isEmpty(deviceVesion))
-                                firmwareTextView.setText(deviceVesion);
-                            dismissProgress();
-
-                            slowSetPercent(((float) Integer.parseInt(messages.get(0).substring(14, 16), 16)) / 100);
-                            break;
-                        case Constant.RETURN_POWER:
-                            if (messages.get(0).substring(10, 12).equals("03")) {
-
-                            } else if (messages.get(0).substring(10, 12).equals("13")) {
-                                //百分比TextView设置为0
-                                showNoCardDialog();
-                                SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
-                                stopAnim();
-                            }
-                            break;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return;
-                }
-            }
-
-        }
-    };
-
+    @Override
+    public void showProgress(int progressContent, boolean isCanCancel) {
+        super.showProgress(getString(progressContent),isCanCancel);
+    }
+    //显示电量
     private void setView() {
         dismissProgress();
         int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
-        macAddressStr = SharedUtils.getInstance().readString(Constant.IMEI);
-        macTextView.setText(macAddressStr);
+
         sinking.setPercent(((float) electricityInt) / 100);
     }
 
@@ -552,22 +415,16 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         super.onDestroy();
         Log.d(TAG, "onDestroy()");
         stopAnim();
+        if (sinking != null)
+            sinking.clear();
+        sinking = null;
         isForeground = false;
         DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
         mBluetoothAdapter = null;
         isUpgrade = false;
         registerSimStatu = null;
         RegisterStatueAnim = null;
-        if (sinking != null)
-            sinking.clear();
-        sinking = null;
-
-        try {
-            LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).unregisterReceiver(UARTStatusChangeReceiver);
-
-        } catch (Exception ignore) {
-            Log.e(TAG, ignore.toString());
-        }
+        myDevicePresenter.onDestory();
     }
 
     private void showSkyUpgrade() {
@@ -578,7 +435,7 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
 
     Dialog upgradeDialog;
     DialogUpgrade dialogUpgrade;
-
+    //初始化空中升级对话框
     private void initDialogUpgrade() {
         Log.d(TAG, "initDialogUpgrade");
         dialogUpgrade = new DialogUpgrade(this, this, R.layout.dialog_upgrade, 3);
@@ -586,7 +443,7 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         mDfuProgressListener = dialogUpgrade.getDfuProgressListener();
         hideDialogUpgrade();
     }
-
+    //显示空中升级对话框
     private void showDialogUpgrade() {
         Log.d(TAG, "showDialogUpgrade");
         isUpgrade = true;
@@ -595,19 +452,19 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
             upgradeDialog.show();
         }
     }
-
+    //隐藏空中升级对话框
     private void hideDialogUpgrade() {
         if (upgradeDialog != null)
             upgradeDialog.dismiss();
     }
-
+    //下载空中升级包
     private void downloadSkyUpgradePackageHttp(String path) {
         myDevicePresenter.requestDownloadUpgradePackage(path);
     }
 
     @Override
     public void dialogText(int type, String text) {
-     if (type == 3) {
+        if (type == 3) {
             SendCommandToBluetooth.sendMessageToBlueTooth(RESTORATION);
         } else if (type == DOWNLOAD_SKY_UPGRADE) {
             if (!TextUtils.isEmpty(myDevicePresenter.url)) {
@@ -621,25 +478,29 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
             onBackPressed();
         }
     }
-
-    private void slowSetPercent(final float percent) {
+    //显示电量
+    private void slowSetPercent( float percent) {
         sinking.setPercent(percent);
     }
+    //扫描设备
     @Override
     public void scanLeDevice(boolean enable) {
         super.scanLeDevice(enable);
     }
 
+    //连接设备
     @Override
     public void connect(String macAddress) {
         super.connect(macAddress);
     }
 
+    //查到的设备
     @Override
     protected   void findDevices(BluetoothDevice device, int rssi, byte[] scanRecord) {
         myDevicePresenter.findDevices(device,rssi,scanRecord);
     }
 
+    //提示用户确定解除绑定
     private void showUnBindDialog() {
         //不能按返回键，只能二选其一
         DialogBalance cardRuleBreakDialog = new DialogBalance(this, this, R.layout.dialog_balance, UNBIND);
@@ -648,7 +509,8 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
     }
 
     //没卡弹对话框
-    private void showNoCardDialog() {
+    @Override
+    public void showNoCardDialog() {
         //不能按返回键，只能二选其一
         if (cardRuleBreakDialog != null) cardRuleBreakDialog.show();
         if(cardRuleBreakDialog==null){
@@ -657,4 +519,5 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
             cardRuleBreakDialog.changeText(getResources().getString(R.string.no_card_or_rule_break), getResources().getString(R.string.reset));
         }
     }
+
 }

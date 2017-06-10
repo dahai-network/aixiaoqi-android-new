@@ -1,14 +1,21 @@
 package de.blinkt.openvpn.activities.Set.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.tencent.bugly.beta.Beta;
 import com.umeng.analytics.MobclickAgent;
+
+import java.lang.ref.WeakReference;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,13 +27,23 @@ import de.blinkt.openvpn.activities.Set.Presenter.SetPresenter;
 import de.blinkt.openvpn.activities.Set.PresenterImpl.SetPresenterImpl;
 import de.blinkt.openvpn.activities.Set.View.SetView;
 import de.blinkt.openvpn.activities.WebViewActivity;
+import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.fragments.SportFragment;
+import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.ExitHttp;
+import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCONTACTOUR;
+import static de.blinkt.openvpn.constant.UmengContant.CLICKEXITLOGIN;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKUSERFEEDBACKSEND;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKVERSIONUPGRADE;
 

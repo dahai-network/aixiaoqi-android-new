@@ -67,8 +67,7 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 	//蓝牙Service
 	public static UartService uartService;
 
-	//判断是否再次重连的标记
-
+	//判断是否再次重连的标记,如果不是主动断开则重新连接，如果是主动断开则不需要连接
 	public static boolean isConnect;
 
 	public void showMsg(String message) {
