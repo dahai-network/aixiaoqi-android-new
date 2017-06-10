@@ -21,9 +21,9 @@ public class CommonTools {
      * @param message
      */
     public static void showShortToast(Context context, String message) {
+        Log.d("CommonTools", "showShortToast: " + message + "\ncontext=" + context);
         if (!TextUtils.isEmpty(message) && context != null) {
-            Log.d("CommonTools", "showShortToast: "+message+"\ncontext="+context);
-            ToastCompat.makeText(context,message,Toast.LENGTH_SHORT).show();
+            ToastCompat.makeText(context, message, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -98,8 +98,8 @@ public class CommonTools {
     }
 
     public static void clearLastClickTime() {
-        if(lastClickTime!=0)
-        lastClickTime = 0;
+        if (lastClickTime != 0)
+            lastClickTime = 0;
     }
 
     /**
@@ -133,7 +133,7 @@ public class CommonTools {
 
             Thread.sleep(time);
         } catch (InterruptedException e) {
-			e.printStackTrace();
+            e.printStackTrace();
         }
     }
 

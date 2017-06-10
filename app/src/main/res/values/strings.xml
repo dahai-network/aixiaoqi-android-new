@@ -486,6 +486,7 @@
     <string name="sure_and_use">绑定并使用</string>
     <string name="input_compelete_password">请输入16位完整卡密码</string>
     <string name="communication_packet">通话套餐</string>
+    <string name="double_click">不要重复点击</string>
 
 
     <!--众筹选号信息-->

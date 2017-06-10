@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.Set.ui.ActivateActivity;
-import de.blinkt.openvpn.activities.MyOrderDetailActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
 import de.blinkt.openvpn.activities.ProMainActivity;
+import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
@@ -45,7 +45,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 import static de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity.isUpgrade;
-import static de.blinkt.openvpn.activities.Set.ui.ActivateActivity.FINISH_ACTIVITY;
+import static de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.AGREE_BIND;
 import static de.blinkt.openvpn.constant.Constant.APP_CONNECT;
@@ -295,7 +295,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										}
 										break;
 									case Constant.IS_INSERT_CARD:
-										//5580040c000102
+                                        //5580040c000102
 										Log.d(TAG, "run: "+messages.toString()+":"+messages.get(0).substring(10, 12));
 										Log.i(TAG, "接收数据：是否插卡：" + messages.toString());
 										if (messages.get(0).substring(10, 12).equals("00")) {

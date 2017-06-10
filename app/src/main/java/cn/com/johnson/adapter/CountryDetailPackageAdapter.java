@@ -21,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.PackageDetailActivity;
+import de.blinkt.openvpn.activities.ShopModules.ui.PackageDetailActivity;
 import de.blinkt.openvpn.model.CountryPacketEntity;
 
 /**
@@ -52,46 +52,9 @@ public class CountryDetailPackageAdapter extends RecyclerView.Adapter<CountryDet
 		holder.flowTextView.setText(data.get(position).getFlow());
 		holder.priceTextView.setText("￥" + data.get(position).getPrice());
 		setSpan(holder.priceTextView, position);
-
-//        if (data.get(position).getPrice() >= 20)
-//            holder.numberTextView.setBackgroundResource(R.drawable.flow_yellow);
-//        else
 		Glide.with(context).load(data.get(position).getPic()).into(holder.numberTextView);
-//            holder.numberTextView.setBackgroundResource(R.drawable.flow_gree);
-
-
 		holder.v_line.setVisibility(View.GONE);
 
-       /* if (data.size() == position + 1) {
-			holder.v_line.setVisibility(View.VISIBLE);
-
-        } else {
-            holder.v_line.setVisibility(View.GONE);
-
-        }*/
-
-	/*	switch (position % 5) {
-			case 1:
-				holder.numberTextView.setBackgroundResource(R.drawable.country_packet_num1);
-				break;
-			case 2:
-				holder.numberTextView.setBackgroundResource(R.drawable.country_packet_num2);
-				break;
-			case 3:
-				holder.numberTextView.setBackgroundResource(R.drawable.country_packet_num3);
-				break;
-			case 4:
-				holder.numberTextView.setBackgroundResource(R.drawable.country_packet_num4);
-				break;
-			case 0:
-				holder.numberTextView.setBackgroundResource(R.drawable.country_packet_num5);
-				break;
-		}*/
-    /*	if (position > 9) {
-            holder.numberTextView.setText((position + 1) + "");
-		} else {
-			holder.numberTextView.setText("0" + (position + 1));
-		}*/
 	}
 
 	//设置大小字体

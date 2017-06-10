@@ -26,8 +26,8 @@ import cn.com.johnson.adapter.ProductsAdapter;
 import cn.com.johnson.model.HotPackageEntity;
 import cn.com.johnson.model.IndexBannerEntity;
 import de.blinkt.openvpn.activities.CallTimePacketDetailActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.PackageMarketActivity;
 import de.blinkt.openvpn.activities.OverseaGuideFeeActivity;
-import de.blinkt.openvpn.activities.PackageMarketActivity;
 import de.blinkt.openvpn.activities.WebViewActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -166,6 +166,7 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 		switch (v.getId()) {
 			case R.id.hotMessageMoreTextView:
 				//友盟方法统计
+				Log.d(TAG, "onClick:hotMessageMoreTextView ");
 				MobclickAgent.onEvent(getActivity(), CLICKHOTPACKAGEMORE);
 				Intent marketIntent = new Intent(getActivity(), PackageMarketActivity.class);
 				marketIntent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.HIDDEN);
@@ -221,6 +222,7 @@ public class IndexFragment extends BaseStatusFragment implements View.OnClickLis
 				hotPackageRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 				hotPackageRecyclerView.setAdapter(new HotPackageAdapter(hotList, getActivity(), true));
 				flowPackageLinearLayout.addView(hotPackageRecyclerView);
+
 			} else {
 				hotPacketLinearLayout.setVisibility(GONE);
 			}
