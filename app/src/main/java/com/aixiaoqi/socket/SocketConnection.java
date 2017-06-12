@@ -5,8 +5,10 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+
+import static de.blinkt.openvpn.activities.Device.PresenterImpl.ProMainPresenterImpl.sdkAndBluetoothDataInchange;
+
 
 /**
  * Created by Administrator on 2017/1/6 0006.
@@ -26,7 +28,7 @@ public class SocketConnection implements ServiceConnection {
             Log.i(TAG,"ReceiveDataframSocketService打开");
             if(ICSOpenVPNApplication.uartService!=null){
 
-               ProMainActivity.sdkAndBluetoothDataInchange.initReceiveDataframSocketService(mReceiveDataframSocketService, ICSOpenVPNApplication.uartService);
+               sdkAndBluetoothDataInchange.initReceiveDataframSocketService(mReceiveDataframSocketService, ICSOpenVPNApplication.uartService);
             }
         }else if(service instanceof ReceiveSocketService.LocalBinder ){
             Log.i(TAG,"ReceiveSocketService打开");

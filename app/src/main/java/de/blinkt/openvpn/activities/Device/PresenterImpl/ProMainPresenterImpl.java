@@ -57,6 +57,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
     SkyUpgradeModelImpl skyUpgradeModel;
     RegisterBroadcastModelImpl registerBroadcastModel;
     private int requestCount = 0;
+ public static   SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange;
     public  ProMainPresenterImpl(ProMainView proMainView,Context context){
         this.proMainView=proMainView;
         this.context=context;
@@ -75,6 +76,9 @@ public void registerBlueChangeBroadcast(){
     registerBroadcastModel.registerBlueChangeBroadcast(context);
 }
 
+public  void registerReceiveBroadcast(){
+    registerBroadcastModel.registerReceiveBLEMoveReceiverBroadcast(context);
+}
     @Override
     public void requestGetBasicConfig() {
         basicConfigModel.requestBasicConfig();
@@ -103,6 +107,7 @@ public void registerBlueChangeBroadcast(){
                 if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
                     if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
                         requestSkyUpdate();
+                        proMainView.blueToothOpen();
                     }
                 }
             }
@@ -118,7 +123,10 @@ public void registerBlueChangeBroadcast(){
                         @Override
                         public void run() {
                             e("开启线程=");
-                            SdkAndBluetoothDataInchange.isHasPreData = false;
+                            if (sdkAndBluetoothDataInchange == null) {
+                                sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
+                            }
+                            sdkAndBluetoothDataInchange.isHasPreData = false;
                             if (!TextUtils.isEmpty(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6])) {
                                 DBHelp dbHelp = new DBHelp(context);
                                 PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
@@ -259,6 +267,7 @@ public void registerBlueChangeBroadcast(){
         hasPreDataRegisterImpl.unbindTcpService();
         noPreDataRegisterModel.unbindUdpService();
         registerBroadcastModel.unregisterBlueChangeBroadcast(context);
+        registerBroadcastModel.unregisterReceiveBLEMoveReceiverBroadcast(context);
         proMainView.stopCallPhoneService();
     }
 }

@@ -20,7 +20,7 @@ import de.blinkt.openvpn.http.ConfirmedHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
-import static de.blinkt.openvpn.activities.ProMainActivity.confirmedPhoneNum;
+//import static de.blinkt.openvpn.activities.ProMainActivity.confirmedPhoneNum;
 
 public class VertifyPhoneNumActivity extends BaseNetActivity {
 
@@ -89,7 +89,7 @@ public class VertifyPhoneNumActivity extends BaseNetActivity {
 				if (http.getEntity().isIsConfirmed()) {
 					isVertifying = false;
 					dismissProgress();
-					confirmedPhoneNum = http.getEntity().getTel();
+//					confirmedPhoneNum = http.getEntity().getTel();
 					CommonTools.showShortToast(VertifyPhoneNumActivity.this, getString(R.string.vertify_success));
 					finish();
 				} else {

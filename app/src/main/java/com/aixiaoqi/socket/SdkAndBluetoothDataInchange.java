@@ -3,20 +3,17 @@ package com.aixiaoqi.socket;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
-import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.util.CommonTools;
+
+import static de.blinkt.openvpn.activities.Device.ModelImpl.NoPreDataRegisterModelImpl.isStartSdk;
 
 /**
  * Created by Administrator on 2017/1/5 0005.
@@ -71,7 +68,7 @@ public class SdkAndBluetoothDataInchange {
 				PERCENT=PERCENT+1;
 				eventPercent(PERCENT);
 				registerGoip(messages);
-			}else if(ProMainActivity.isStartSdk) {
+			}else if(isStartSdk) {
 				int percent = Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag()) ? "-1" : mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length() - 4, mReceiveDataframSocketService.getSorcketTag().length() - 1));
 				eventPercent(percent);
 				isReceiveBluetoothData = true;

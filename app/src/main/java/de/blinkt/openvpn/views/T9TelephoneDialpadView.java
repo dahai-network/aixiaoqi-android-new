@@ -2,7 +2,6 @@ package de.blinkt.openvpn.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,11 +19,7 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
-import org.w3c.dom.Text;
-
 import cn.com.aixiaoqi.R;
-import cn.com.johnson.model.AppMode;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.util.ViewUtil;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKKEYCALLPHONE;

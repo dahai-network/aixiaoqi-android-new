@@ -6,10 +6,8 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.ReceiveSocketService;
@@ -31,7 +29,6 @@ import de.blinkt.openvpn.activities.Device.View.MyDeviceView;
 import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
 import de.blinkt.openvpn.activities.NetPresenterBaseImpl;
 import de.blinkt.openvpn.activities.Device.Presenter.MyDevicePresenter;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
@@ -56,6 +53,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
+import static de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterImpl.sendYiZhengService;
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
@@ -168,12 +166,12 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
     }
 
     private void connectGoip() {
-        if (ProMainActivity.sendYiZhengService != null) {
+        if (sendYiZhengService != null) {
             SocketConstant.REGISTER_STATUE_CODE = 2;
             myDeviceView.setConStatueText(R.string.index_registing);
             myDeviceView.setConStatueBackground(R.color.gray_text);
             EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.REGISTER_CHANGING);
-            ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+            sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
         }
     }
 

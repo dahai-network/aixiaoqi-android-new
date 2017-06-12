@@ -26,7 +26,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
@@ -204,7 +203,7 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
 
     private void registerSimPreData() {
         if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {
-            ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+            sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
         } else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {
             SocketConnection.mReceiveSocketService.disconnect();
             startTcp();
@@ -220,7 +219,7 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
             public void create() {
                 TestProvider.isCreate = true;
                 CommonTools.delayTime(500);
-                ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+               sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
             }
 
         });
@@ -292,7 +291,7 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
                                 sendYiZhengService = new SendYiZhengService();
                             }
                             if (!TextUtils.isEmpty(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6])) {
-                                DBHelp dbHelp = new DBHelp(ProMainActivity.instance);
+                                DBHelp dbHelp = new DBHelp(SimRegisterFlowService.this);
                                 PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
                                 if (preReadEntity != null) {
                                     SdkAndBluetoothDataInchange.isHasPreData = true;

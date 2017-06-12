@@ -22,7 +22,6 @@ import java.util.HashMap;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
@@ -36,15 +35,13 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.HistoryStepHttp;
 import de.blinkt.openvpn.http.InterfaceCallback;
-import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.SportStepEntity;
 import de.blinkt.openvpn.model.WriteCardEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
-import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
-import static de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity.isUpgrade;
+import static de.blinkt.openvpn.activities.Device.PresenterImpl.ProMainPresenterImpl.sdkAndBluetoothDataInchange;
 import static de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.AGREE_BIND;
@@ -111,6 +108,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 	};
 
 	private void gattDisconnect() {
+		if(mService!=null){
+			mService.disconnect();
+		}
 		if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
 			EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.DISCOONECT_DEVICE);
 		}
@@ -177,10 +177,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		else	if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
 			mService.enableTXNotification();
 			//如果版本号小于android N
-			if (Build.VERSION.SDK_INT < 24) {
-				boolean isSuccess = mService.ensureServiceChangedEnabled();
-				Log.i(TAG, "ensureServiceChangedEnabled:" + isSuccess);
-			}
 		}
 		else	if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 			final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
@@ -283,7 +279,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 									case Constant.READ_SIM_DATA:
 										Log.i(TAG, "发送给SDK");
 										if (IS_TEXT_SIM) {
-											ProMainActivity.sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
+											sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
 										}
 										break;
 									case RECEIVE_CARD_MSG:

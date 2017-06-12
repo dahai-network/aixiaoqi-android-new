@@ -27,7 +27,7 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
     private int bindtime = 0;
 private Context context;
     SocketConnection socketTcpConnection;
-    SendYiZhengService  sendYiZhengService;
+  public  static SendYiZhengService  sendYiZhengService;
     public HasPreDataRegisterImpl(Context context){
         this.context=context;
         if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {

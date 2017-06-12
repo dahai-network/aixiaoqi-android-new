@@ -123,7 +123,7 @@
             android:permission="android.permission.RECORD_AUDIO"
             android:windowSoftInputMode="stateHidden"/>
         <activity
-            android:name="de.blinkt.openvpn.activities.ProMainActivity"
+            android:name="de.blinkt.openvpn.activities.Device.ui.ProMainActivity"
             android:label="@string/app"
             android:windowSoftInputMode="adjustPan"/>
         <activity

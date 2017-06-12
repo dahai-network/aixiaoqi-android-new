@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
@@ -21,6 +20,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
+import static de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterImpl.sendYiZhengService;
 
 /**
  * TLV的解析
@@ -42,9 +42,9 @@ public class TlvAnalyticalUtils {
 			return null;
 			//会话ID不一样
 		}else if(responeCode==41||responeCode==22){
-			if (ProMainActivity.sendYiZhengService != null){
+			if (sendYiZhengService != null){
 				ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "push service :\n" );
-				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+				sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 			}
 			//过期
 		}else if(responeCode==21){
@@ -284,10 +284,10 @@ public class TlvAnalyticalUtils {
 		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
 		stringBuilder.replace(6, 8, "00");
 		sendToSdkLisener.sendServer(stringBuilder.toString());
-		if (ProMainActivity.sendYiZhengService != null){
+		if (sendYiZhengService != null){
 //			CommonTools.delayTime(2000);
 			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
-			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
 

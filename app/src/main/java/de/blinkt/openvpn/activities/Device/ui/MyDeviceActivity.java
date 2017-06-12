@@ -191,7 +191,7 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
 
     @Override
     public void setConStatueBackground(int colorId) {
-        conStatusTextView.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
+        conStatusTextView.setTextColor(ContextCompat.getColor(this, colorId));
     }
 
     DialogTipUpgrade upgrade;
@@ -414,6 +414,7 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy()");
+        myDevicePresenter.onDestory();
         stopAnim();
         if (sinking != null)
             sinking.clear();
@@ -424,7 +425,7 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         isUpgrade = false;
         registerSimStatu = null;
         RegisterStatueAnim = null;
-        myDevicePresenter.onDestory();
+
     }
 
     private void showSkyUpgrade() {

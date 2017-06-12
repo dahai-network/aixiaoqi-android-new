@@ -7,12 +7,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.aixiaoqi.socket.SocketConstant;
 
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.constant.Constant;
+
+import static de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterImpl.sendYiZhengService;
 
 /**
  * Created by kim
@@ -27,8 +27,8 @@ public class JobSchedulerService extends JobService {
             switch (msg.what) {
                 case Constant.TYPE_ONE:
                     Log.d("Blue_Chanl", "handleMessage: 发送心跳包");
-                    if (ProMainActivity.sendYiZhengService != null) {
-                        ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
+                    if (sendYiZhengService != null) {
+                        sendYiZhengService.sendGoip(SocketConstant.UPDATE_CONNECTION);
                     } else {
                         Log.e("JobSchedulerService", "AutoReceiver 异常！");
                     }

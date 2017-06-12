@@ -27,6 +27,7 @@ import android.os.Bundle;
 
 import de.blinkt.openvpn.activities.Base.CommenActivity;
 import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
+import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
 
 
 public class NotificationActivity extends CommenActivity {

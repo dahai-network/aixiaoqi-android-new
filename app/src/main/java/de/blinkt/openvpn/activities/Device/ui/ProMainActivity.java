@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.v13.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -27,7 +28,6 @@ import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import com.aixiaoqi.socket.EventBusUtil;
-import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConstant;
 import java.util.ArrayList;
 import butterknife.BindView;
@@ -94,8 +94,7 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 	public static boolean isForeground = false;
 	public static final String MALL_SHOW_RED_DOT = "mall_show_red_dot";
 	//重连时间
-	private int RECONNECT_TIME = 10000;
-	public static SendYiZhengService sendYiZhengService = null;
+	private int RECONNECT_TIME = 180000;
 	ProMainPresenterImpl proMainPresenter;
 	//位置权限提示DIALOG
 	private DialogBalance noLocationPermissionDialog;
@@ -123,10 +122,11 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 	//绑定UartService服务
 	private ServiceConnection mServiceConnection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName className, IBinder rawBinder) {
+			d("onServiceConnected mService= " + mService);
 			mService = ((UartService.LocalBinder) rawBinder).getService();
 			//存在Application供全局使用
 			ICSOpenVPNApplication.uartService = mService;
-			d("onServiceConnected mService= " + mService);
+
 			if (!mService.initialize()) {
 				finish();
 			}
@@ -134,6 +134,7 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 
 		}
 		public void onServiceDisconnected(ComponentName classname) {
+			d("onServiceDisconnected mService= " + mService);
 			mService = null;
 		}
 	};
@@ -145,8 +146,8 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 		setContentView(R.layout.activity_pro_main);
 		ButterKnife.bind(this);
 		initServices();
-		initBrocast();
 		proMainPresenter=new ProMainPresenterImpl(this,this);
+		initBrocast();
 		initSet();
 		initFragment();
 		initView();
@@ -163,14 +164,6 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 			noLocationPermissionDialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
 			noLocationPermissionDialog.changeText(getResources().getString(R.string.no_location_permission), getResources().getString(R.string.sure));
 		}
-		//如果没有保存过推送每日推荐的日期，则为第一次推送,如果
-//		String recommandStr = SharedUtils.getInstance().readString(Constant.RECOMMAND_DATE);
-//		String todayStr = DateUtils.getCurrentDate();
-//		Intent intent = new Intent(this, EveryDayRecomActivity.class);
-//		if (recommandStr == null || !recommandStr.equals(todayStr)) {
-//			startActivity(intent);
-//			SharedUtils.getInstance().writeString(Constant.RECOMMAND_DATE, todayStr);
-//		}
 		CheckAuthorityUtil.checkPermissions(this, Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG);
 	}
 
@@ -187,6 +180,7 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 		//打开蓝牙服务后开始搜索
 		LocalBroadcastManager.getInstance(ProMainActivity.this).registerReceiver(showRedDotReceiver, showRedDotIntentFilter());
 		proMainPresenter.registerBlueChangeBroadcast();
+		proMainPresenter.registerReceiveBroadcast();
 	}
 
 	/**
@@ -197,11 +191,11 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 	 * 4.扫描到设备则连接上，没扫描到十秒后自动断开。关闭所有与之相关的东西
 	 */
 	private void searchBLE() {
-		blueToothOpen();
 		if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))) {
 			proMainPresenter.requestGetBindDeviceInfo();
 		} else {
 			skyUpgradeHttp();
+			blueToothOpen();
 		}
 	}
 
@@ -228,6 +222,10 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 			i("开启UartService");
 			Intent bindIntent = new Intent(this, UartService.class);
 			bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+		}else{
+			if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && !TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))&&mService!=null&&mService.isDisconnectedBlueTooth()) {
+				blueToothOpen();
+			}
 		}
 		//启动常驻服务
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(GrayService.class.getName())) {
@@ -313,35 +311,38 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 	//如果蓝牙开启后，之前已绑定的设备会重新连接上
 	//30秒钟内没有连接成功则提示用户，可能设备不在周边
 	private void connectOperate() {
+		if(mService == null||!mService.initialize()){
+			return;
+		}
+		final String imeiStr = SharedUtils.getInstance().readString(Constant.IMEI);
+		if(TextUtils.isEmpty(imeiStr)){
+			return;
+		}
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if(mService == null||!mService.initialize()){
-					return;
-				}
-				new Handler().postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						if (mService != null && !mService.isConnectedBlueTooth()) {
-							EventBusUtil.canClickEntity(CanClickEntity.JUMP_MYDEVICE);
-						}
-					}
-				}, 30000);
+
 				while (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED) {
-					connDeviceFiveSecond();
+					connDeviceFiveSecond(imeiStr);
 					CommonTools.delayTime(RECONNECT_TIME);
 				}
-
 			}
 		}).start();
+
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				if (mService != null && !mService.isConnectedBlueTooth()) {
+					EventBusUtil.canClickEntity(CanClickEntity.JUMP_MYDEVICE);
+				}
+			}
+		}, 30000);
 	}
 
 	//如果没有连上，每隔10秒重连一次
-	private void connDeviceFiveSecond() {
-		String imeiStr = SharedUtils.getInstance().readString(Constant.IMEI);
-		if (!TextUtils.isEmpty(imeiStr))
+	private void connDeviceFiveSecond(String imeiStr) {
 			mService.connect(imeiStr);
-		EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
+			EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
 	}
 
 	@Override

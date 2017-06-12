@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.aixiaoqi.socket.SocketConstant;
 
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
 import de.blinkt.openvpn.activities.UserInfo.ui.*;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
