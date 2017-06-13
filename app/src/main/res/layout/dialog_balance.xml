@@ -27,22 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_rechange"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="@dimen/padding_40dp"
-            android:textSize="@dimen/little_16"
-            android:gravity="center"
-            android:textColor="@color/aggreement"
-            android:text="@string/rechange"
-            />
-
-        <View
-            android:background="@color/light_gray"
-            android:layout_width="1px"
-            android:layout_height="@dimen/padding_40dp"
-            />
 
         <TextView
             android:id="@+id/tv_cancel"
@@ -53,6 +37,22 @@
             android:gravity="center"
             android:textColor="@color/aggreement"
             android:text="@string/cancel"
+            />
+        <View
+            android:background="@color/light_gray"
+            android:layout_width="1px"
+            android:layout_height="@dimen/padding_40dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_rechange"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/padding_40dp"
+            android:textSize="@dimen/little_16"
+            android:gravity="center"
+            android:textColor="@color/aggreement"
+            android:text="@string/rechange"
             />
     </LinearLayout>
 

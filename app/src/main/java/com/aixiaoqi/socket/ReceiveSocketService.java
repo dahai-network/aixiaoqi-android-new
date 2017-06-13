@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.service.JobSchedulerService;
@@ -35,6 +34,7 @@ import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static com.aixiaoqi.socket.SocketConstant.TRAN_DATA_TO_SDK;
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.TCP_HEART_TIME;
 import static com.aixiaoqi.socket.TlvAnalyticalUtils.sendToSdkLisener;
+import static de.blinkt.openvpn.activities.Device.PresenterImpl.ProMainPresenterImpl.sdkAndBluetoothDataInchange;
 
 /**
  * Created by Administrator on 2016/12/30 0030.
@@ -313,8 +313,8 @@ public class ReceiveSocketService extends Service {
     @Override
     public void onDestroy() {
         Log.e(TAG, "onDestroy()");
-        if (ProMainActivity.sdkAndBluetoothDataInchange != null)
-            ProMainActivity.sdkAndBluetoothDataInchange.closeReceviceBlueData();
+        if (sdkAndBluetoothDataInchange != null)
+            sdkAndBluetoothDataInchange.closeReceviceBlueData();
         if (tcpClient != null) {
             tcpClient.closeTimer();
             tcpClient.disconnect();

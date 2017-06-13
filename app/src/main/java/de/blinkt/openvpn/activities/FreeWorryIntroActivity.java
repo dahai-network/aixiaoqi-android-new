@@ -21,7 +21,7 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.PacketDtailHttp;
 import de.blinkt.openvpn.util.CommonTools;
 
-import static de.blinkt.openvpn.activities.ProMainActivity.confirmedPhoneNum;
+
 
 public class FreeWorryIntroActivity extends BaseNetActivity {
 
@@ -52,18 +52,18 @@ public class FreeWorryIntroActivity extends BaseNetActivity {
 
 	private void initSet() {
 		hasLeftViewTitle(R.string.free_for_worry, 0);
-		if (confirmedPhoneNum == null) {
-			if (SocketConstant.REGISTER_STATUE_CODE == 3) {
-//				Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
-//				startActivity(intent);
-				finish();
-			} else {
-				CommonTools.showShortToast(this, getString(R.string.please_regist_confirmed));
-				finish();
-			}
-		} else {
-			introTextView.setText(getString(R.string.phone_in_device) + confirmedPhoneNum);
-		}
+//		if (confirmedPhoneNum == null) {
+//			if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+////				Intent intent = new Intent(this, VertifyPhoneNumActivity.class);
+////				startActivity(intent);
+//				finish();
+//			} else {
+//				CommonTools.showShortToast(this, getString(R.string.please_regist_confirmed));
+//				finish();
+//			}
+//		} else {
+//			introTextView.setText(getString(R.string.phone_in_device) + confirmedPhoneNum);
+//		}
 		addData();
 	}
 

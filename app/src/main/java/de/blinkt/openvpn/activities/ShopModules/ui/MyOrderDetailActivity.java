@@ -489,7 +489,6 @@ public class MyOrderDetailActivity extends BaseNetActivity implements InterfaceC
 					}
 				}).start();
 			}
-//					}
 		}
 	}
 

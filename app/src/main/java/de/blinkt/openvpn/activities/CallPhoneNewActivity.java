@@ -1,8 +1,5 @@
 package de.blinkt.openvpn.activities;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +10,6 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.CallLog;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -32,7 +28,6 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
-import de.blinkt.openvpn.push.PhoneReceiver;
 import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;

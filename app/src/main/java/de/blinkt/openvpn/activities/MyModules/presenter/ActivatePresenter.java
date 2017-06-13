@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -142,30 +143,19 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
                 IS_TEXT_SIM = false;
                 ReceiveBLEMoveReceiver.orderStatus = 4;
                 instance.showProgress("正在激活", false);
-                new Thread(new Runnable() {
+                isGetnullCardid = true;
+                SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_NO_RESPONSE);
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            isGetnullCardid = true;
-                            SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_NO_RESPONSE);
-                            Thread.sleep(20000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                         if (!isActivateSuccess) {
-                            instance.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    instance.dismissProgress();
-                                    activateView.showToast(instance.getString(R.string.activate_fail));
-                                }
-                            });
+                            instance.dismissProgress();
+                            activateView.showToast(instance.getString(R.string.activate_fail));
                         }
                     }
-                }).start();
-
+                },20000);
             } else {
-               Log.d(TAG, "rightComplete: " + BaseStatusFragment.bleStatus);
+                Log.d(TAG, "rightComplete: " + BaseStatusFragment.bleStatus);
                 activateView.showToast(orderActivationHttp.getMsg());
                 sureTextView.setEnabled(true);
             }
@@ -206,7 +196,6 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
                 dismissProgress();
             }
         }
-
     }
 
     @Override

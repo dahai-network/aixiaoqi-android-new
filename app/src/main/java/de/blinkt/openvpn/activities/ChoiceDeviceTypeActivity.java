@@ -10,6 +10,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Device.ui.*;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.util.SharedUtils;
 
 
@@ -36,18 +38,18 @@ public class ChoiceDeviceTypeActivity extends BaseActivity {
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.aixiaoqi1RelativeLayout:
-				toMyDevice(MyDeviceActivity.UNITOYS);
+				toMyDevice(Constant.UNITOYS);
 				break;
 			case R.id.uniboxRelativeLayout:
-				toMyDevice(MyDeviceActivity.UNIBOX);
+				toMyDevice(Constant.UNIBOX);
 				break;
 
 		}
 	}
 
-	private void toMyDevice(String type) {
-		Intent intent = new Intent(this, BindDeviceActivity.class);
-		intent.putExtra(MyDeviceActivity.BRACELETTYPE, type);
+	private void toMyDevice(String deviceName) {
+		Intent intent = new Intent(this, de.blinkt.openvpn.activities.Device.ui.BindDeviceActivity.class);
+		intent.putExtra(Constant.BRACELETNAME, deviceName);
 		startActivity(intent);
 		finish();
 	}

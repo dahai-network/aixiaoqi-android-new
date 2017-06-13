@@ -160,16 +160,24 @@
                         android:layout_height="match_parent"
                         android:background="@color/white">
 
+
+
                         <TextView
                             android:id="@+id/add_or_activate_package"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:drawableLeft="@drawable/activate_device_account"
-                            android:drawablePadding="@dimen/padding_10dp"
                             android:text="@string/activate_packet"
                             android:textColor="@color/gray_text"/>
 
+                        <ImageView
+                            android:id="@+id/add_or_activate_package_iv"
+                            android:layout_width="wrap_content"
+                            android:paddingRight="@dimen/padding_10dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_toLeftOf="@id/add_or_activate_package"
+                            android:src="@drawable/activate_device_account"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -368,14 +376,20 @@
                         android:background="@color/white">
 
                         <TextView
+                            android:id="@+id/add_device_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:drawableLeft="@drawable/add_device"
                             android:drawablePadding="@dimen/padding_10dp"
                             android:text="@string/add_device"
                             android:textColor="@color/gray_text"/>
-
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:paddingRight="@dimen/padding_10dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_toLeftOf="@id/add_device_tv"
+                            android:src="@drawable/add_device"/>
 
                     </RelativeLayout>
 

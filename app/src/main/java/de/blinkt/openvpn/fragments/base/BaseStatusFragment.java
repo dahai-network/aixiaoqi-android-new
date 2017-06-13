@@ -18,7 +18,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.MyDeviceActivity;
+import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.CanClickEntity;
@@ -93,17 +93,21 @@ public class BaseStatusFragment extends Fragment {
 				topProgressView.showTopProgressView(getString(R.string.un_connect_tip), -1, new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-						if (braceletName != null) {
-							Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
-							intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
-							startActivity(intent);
-						}
+						toMyDeviceActivity();
 					}
 				});
 				break;
 		}
 
+	}
+
+	private void toMyDeviceActivity() {
+		String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+		if (braceletName != null) {
+            Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
+            intent.putExtra(Constant.BRACELETNAME, braceletName);
+            startActivity(intent);
+        }
 	}
 
 	public void topProgressGone() {
@@ -119,22 +123,6 @@ public class BaseStatusFragment extends Fragment {
 
     }*/
 
-//	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
-//	public void showDevice(ShowDeviceEntity entity) {
-//		if (!entity.isShowDevice()) {
-//			setRegisted(false);
-//			if (!ICSOpenVPNApplication.isConnect)
-//				topProgressGone();
-//		}
-//	}
-
-	//	@Subscribe(threadMode = ThreadMode.MAIN)
-//	public void receiveConnectStatus(ChangeConnectStatusEntity entity) {
-//		//如果拔掉卡就让进度条消失
-//		if (getString(R.string.index_un_insert_card).equals(entity.getStatus())) {
-//
-//		}
-//	}
 	//接收到到卡注册状态作出相应的操作
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(SimRegisterStatue entity) {
@@ -206,12 +194,7 @@ public class BaseStatusFragment extends Fragment {
 			topProgressView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-					if (braceletName != null) {
-						Intent intent = new Intent(getActivity(), MyDeviceActivity.class);
-						intent.putExtra(MyDeviceActivity.BRACELETTYPE, braceletName);
-						startActivity(intent);
-					}
+					toMyDeviceActivity();
 				}
 			});
 

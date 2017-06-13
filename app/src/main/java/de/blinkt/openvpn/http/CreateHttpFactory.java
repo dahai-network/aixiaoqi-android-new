@@ -1,5 +1,8 @@
 package de.blinkt.openvpn.http;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 
 
@@ -217,11 +220,18 @@ public class CreateHttpFactory {
 			case HttpConfigUrl.COMTYPE_CREATE_ORDER://创建订单
 				startHttp(new OrderAddHttp(interfaceCallback, cmdType, params));
 				break;
+			case HttpConfigUrl.COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE://创建订单
+				startHttp(new DownloadSkyUpgradePackageHttp(interfaceCallback, cmdType,true,params));
+				break;
 		}
 	}
 
+	static  ExecutorService cachedThreadPool;
 	private static void startHttp(BaseHttp baseHttp) {
-		new Thread(baseHttp).start();
+		if(cachedThreadPool==null){
+            cachedThreadPool = Executors.newCachedThreadPool();
+		}
+        cachedThreadPool.execute(baseHttp);
 	}
 
 }

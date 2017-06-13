@@ -12,11 +12,11 @@ public class DownloadSkyUpgradePackageHttp extends BaseHttp{
     }
 
     private String downloadStatues;
-    public DownloadSkyUpgradePackageHttp(InterfaceCallback interfaceCallback, int cmdType_, boolean isDownload,String downloadPath ){
+    public DownloadSkyUpgradePackageHttp(InterfaceCallback interfaceCallback, int cmdType_, boolean isDownload,String... downloadPath ){
        super(interfaceCallback,cmdType_);
         isCreateHashMap=false;
         this.isDownload=isDownload;
-        this.downloadPath=downloadPath;
+        this.downloadPath=downloadPath[0];
 
     }
     @Override

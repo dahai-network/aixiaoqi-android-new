@@ -21,8 +21,7 @@ public class BindDeviceHttp extends BaseHttp {
 	protected void BuildParams() throws Exception {
 		super.BuildParams();
 		params.put("IMEI", URLEncoder.encode(valueParams[0], "utf-8"));
-		params.put("Version", URLEncoder.encode(valueParams[1], "utf-8"));
-		params.put("DeviceType", URLEncoder.encode(valueParams[2]+"", "utf-8"));
+		params.put("DeviceType", URLEncoder.encode(valueParams[1]+"", "utf-8"));
 	}
 
 }

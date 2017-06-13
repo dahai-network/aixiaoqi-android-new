@@ -11,11 +11,10 @@ import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConstant;
 
-import org.greenrobot.eventbus.EventBus;
-
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.StateChangeEntity;
+
+import static de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterImpl.sendYiZhengService;
 
 
 /**
@@ -28,10 +27,10 @@ public class StateChangeReceiver extends BroadcastReceiver {
 	private final String BLUETOOTH_CHANGE = "android.bluetooth.adapter.action.STATE_CHANGED";
 
 	private void connectGoip() {
-		if (ProMainActivity.sendYiZhengService != null) {
+		if (sendYiZhengService != null) {
 			//网络状态改变，比如从3G变为2G等网络的改变。
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING,SocketConstant.REG_STATUE_CHANGE);
-			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
 
@@ -102,8 +101,6 @@ public class StateChangeReceiver extends BroadcastReceiver {
 				} else {
 					EventBusUtil.simStateChange(StateChangeEntity.BLUETOOTH_STATE,false);
 				}
-
-
 				break;
 		}
 	}

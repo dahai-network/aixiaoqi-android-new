@@ -123,7 +123,7 @@
             android:permission="android.permission.RECORD_AUDIO"
             android:windowSoftInputMode="stateHidden"/>
         <activity
-            android:name="de.blinkt.openvpn.activities.ProMainActivity"
+            android:name="de.blinkt.openvpn.activities.Device.ui.ProMainActivity"
             android:label="@string/app"
             android:windowSoftInputMode="adjustPan"/>
         <activity
@@ -173,13 +173,13 @@
             android:launchMode="singleTop"/>
         <activity android:name="de.blinkt.openvpn.activities.UserInfo.ui.GetBackPswActivity"/>
         <activity
-            android:name="de.blinkt.openvpn.activities.MyDeviceActivity"
+            android:name="de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity"
             android:launchMode="singleTask"/>
         <activity android:name="de.blinkt.openvpn.activities.MyModules.ui.MyPackageActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.TipUserOptionActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.AlarmClockActivity"/>
         <activity
-            android:name="de.blinkt.openvpn.activities.BindDeviceActivity"
+            android:name="de.blinkt.openvpn.activities.Device.ui.BindDeviceActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar"/>
         <activity android:name="de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.Set.ui.SettingActivity"/>

@@ -22,8 +22,8 @@ import org.json.JSONObject;
 
 import cn.com.aixiaoqi.R;
 import cn.jpush.android.api.JPushInterface;
-import de.blinkt.openvpn.activities.MyDeviceActivity;
-import de.blinkt.openvpn.activities.ProMainActivity;
+import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
+import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
 import de.blinkt.openvpn.activities.SMSAcivity;
 import de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
@@ -40,6 +40,7 @@ import de.blinkt.openvpn.util.DateUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 
+import static de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterImpl.sendYiZhengService;
 
 
 /**
@@ -52,9 +53,9 @@ import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 public class MyReceiver extends BroadcastReceiver implements InterfaceCallback{
 	private static final String TAG = "JPush";
 	private void connectGoip() {
-		if (ProMainActivity.sendYiZhengService != null){
+		if (sendYiZhengService != null){
 			ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "push service :\n" );
-			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
 

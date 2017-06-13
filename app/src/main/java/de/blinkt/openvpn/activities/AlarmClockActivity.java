@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.AlarmClockAdapter;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;

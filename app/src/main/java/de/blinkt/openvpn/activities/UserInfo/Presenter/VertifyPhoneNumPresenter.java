@@ -18,7 +18,6 @@ import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.ConfirmedHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
-import static de.blinkt.openvpn.activities.ProMainActivity.confirmedPhoneNum;
 
 /**
  * Created by kim
@@ -76,7 +75,7 @@ public class VertifyPhoneNumPresenter extends BaseNetActivity {
     private void checkIsConFirmed(String ICCID) {
         createHttpRequest(HttpConfigUrl.COMTYPE_CHECK_CONFIRMED, ICCID);
     }
-
+    String confirmedPhoneNum;
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
         if (cmdType == HttpConfigUrl.COMTYPE_CHECK_CONFIRMED) {
@@ -85,6 +84,7 @@ public class VertifyPhoneNumPresenter extends BaseNetActivity {
                 if (http.getEntity().isIsConfirmed()) {
                     isVertifying = false;
                     dismissProgress();
+
                     confirmedPhoneNum = http.getEntity().getTel();
                     vertifyPhoneNumView.showToast(instance.getString(R.string.vertify_success));
                     instance.finish();

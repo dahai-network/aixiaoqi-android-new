@@ -35,6 +35,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.w3c.dom.Text;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +58,8 @@ public class UartService extends Service implements Serializable {
     private BluetoothGatt mBluetoothGatt;
     public int mConnectionState = STATE_DISCONNECTED;
 
-    private static final int STATE_DISCONNECTED = 0;//断开
-    private static final int STATE_CONNECTING = 1;//正在连接
+    public static final int STATE_DISCONNECTED = 0;//断开
+    public static final int STATE_CONNECTING = 1;//正在连接
     public static final int STATE_CONNECTED = 2;//已经连接
 
 
@@ -95,42 +97,44 @@ public class UartService extends Service implements Serializable {
     //蓝牙回调
     ArrayList<String> messages;
     private boolean isWholeDataPackage = false;//怕最后一个包搞混了
+
+    //蓝牙回调,有三种状态，连接成功，连接失败，蓝牙发回数据，发现服务
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         //监听蓝牙连接状态
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-            String intentAction;
+            Log.e(TAG,"status="+status);
+            String intentAction="";
+                if ((newState == BluetoothProfile.STATE_CONNECTED) && (status == BluetoothGatt.GATT_SUCCESS)) {
+                    intentAction = ACTION_GATT_CONNECTED;
+                    mConnectionState = STATE_CONNECTED;
+                    Log.i(TAG, "Connected to GATT server.");
+                    // Attempts to discover services after successful connection.
+                    boolean isFindServiceSuccess = mBluetoothGatt.discoverServices();
+                    Log.i(TAG, "Attempting to start service discovery:" + isFindServiceSuccess);
+                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                    intentAction = ACTION_GATT_DISCONNECTED;
+                    mConnectionState = STATE_DISCONNECTED;
+                    Log.i(TAG, "Disconnected from GATT server.");
+                }
 
-            if ((newState == BluetoothProfile.STATE_CONNECTED) && (status == BluetoothGatt.GATT_SUCCESS)) {
-
-                intentAction = ACTION_GATT_CONNECTED;
-                mConnectionState = STATE_CONNECTED;
+            if(!TextUtils.isEmpty(intentAction))
                 broadcastUpdate(intentAction);
-                Log.i(TAG, "Connected to GATT server.");
-                // Attempts to discover services after successful connection.
-                boolean isFindServiceSuccess = mBluetoothGatt.discoverServices();
-                Log.i(TAG, "Attempting to start service discovery:" + isFindServiceSuccess);
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                intentAction = ACTION_GATT_DISCONNECTED;
-                mConnectionState = STATE_DISCONNECTED;
-                Log.i(TAG, "Disconnected from GATT server.");
-                broadcastUpdate(intentAction);
-            }
         }
 
-        //监听搜索蓝牙设备
+        //发现蓝牙服务
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-           if (status == BluetoothGatt.GATT_SUCCESS) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.w(TAG, "mBluetoothGatt = " + mBluetoothGatt);
 //				BluetoothGattServices = mBluetoothGatt.getServices();
 //				Log.e("getService", "mBluetoothGatt size = " + BluetoothGattServices.size());
                 enableTXNotification();
                 //如果版本号小于android N
-              /*  if (Build.VERSION.SDK_INT < 24) {
-                  //  boolean isSuccess = ensureServiceChangedEnabled();
-                   // Log.i(TAG, "ensureServiceChangedEnabled:" + isSuccess);
-                }*/
+//                if (Build.VERSION.SDK_INT < 24) {
+//                    boolean isSuccess = ensureServiceChangedEnabled();
+//                    Log.i(TAG, "ensureServiceChangedEnabled:" + isSuccess);
+//                }
             } else {
                 Log.w(TAG, "onServicesDiscovered received: " + status);
             }
@@ -141,7 +145,9 @@ public class UartService extends Service implements Serializable {
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
-            broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+            }
         }
 
         @Override
@@ -151,7 +157,7 @@ public class UartService extends Service implements Serializable {
         }
     };
 
-    //发送广播
+    //发送广播，不带蓝牙发送过来的数据
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
         LocalBroadcastManager.getInstance(ICSOpenVPNApplication.getContext()).sendBroadcast(intent);
@@ -159,7 +165,7 @@ public class UartService extends Service implements Serializable {
 
     //	private String dataType="";
 //	private String messageFromBlueTooth;
-    //发送广播
+    //发送广播，处理蓝牙发送过来的数据，并把数据广播出去
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
@@ -169,6 +175,7 @@ public class UartService extends Service implements Serializable {
             byte[] txValue = characteristic.getValue();
             int lengthData = (txValue[1] & 0x7f) + 1;
             int dataStatue = txValue[1] & 0x80;
+
 
             String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(characteristic.getValue());
             Log.e("UartService--", messageFromBlueTooth+"-lengthData="+lengthData+"--dataStatue="+dataStatue);
@@ -207,16 +214,12 @@ public class UartService extends Service implements Serializable {
                 }
 
             }
-//			intent.putExtra(EXTRA_DATA, messageFromBlueTooth);
-//			if(messages.size()==0){
-//				return;
-//			}
-
         }
 
 
     }
 
+    //排序
     private void sortMessage() {
 
         if (messages.size() > 1) {
@@ -277,7 +280,6 @@ public class UartService extends Service implements Serializable {
             mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null) {
                 Log.e(TAG, "Unable to initialize BluetoothManager.");
-
                 return false;
             }
         }
@@ -302,7 +304,8 @@ public class UartService extends Service implements Serializable {
      */
     //通过mac地址连接设备
     public boolean connect(String address) {
-        if (mBluetoothAdapter == null || address == null) {
+        Log.e(TAG,"mBluetoothAdapter="+(mBluetoothAdapter == null)+"address="+address);
+        if (mBluetoothAdapter == null || TextUtils.isEmpty(address)) {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
             return false;
         }
@@ -318,9 +321,11 @@ public class UartService extends Service implements Serializable {
         }
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
-        mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
-        Log.d(TAG, "Trying to create a new connection." + mBluetoothGatt);
         mConnectionState = STATE_CONNECTING;
+        Log.d(TAG, "Trying to create a new connection." + mBluetoothGatt);
+        mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
+
+
         return true;
     }
 
@@ -332,6 +337,7 @@ public class UartService extends Service implements Serializable {
      */
     //断开连接
     public void disconnect() {
+        Log.e(TAG,"disconnect");
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return;
@@ -347,7 +353,7 @@ public class UartService extends Service implements Serializable {
      * After using a given BLE device, the app must call this method to ensure resources are
      * released properly.
      */
-
+//关闭连接，并指空
     public void close() {
         if (mBluetoothGatt == null) {
             return;
@@ -429,25 +435,23 @@ public class UartService extends Service implements Serializable {
      * @return <code>true</code> when the request has been sent, <code>false</code> when the device is not bonded, does not have the Generic Attribute service, the GA service does not have
      * the Service Changed characteristic or this characteristic does not have the CCCD.
      */
-    public boolean ensureServiceChangedEnabled() {
-        final BluetoothGatt gatt = mBluetoothGatt;
-        if (gatt == null)
-            return false;
-
-        // The Service Changed indications have sense only on bonded devices
-        final BluetoothDevice device = gatt.getDevice();
-        if (device.getBondState() != BluetoothDevice.BOND_BONDED)
-            return false;
-
-        final BluetoothGattService gaService = gatt.getService(GENERIC_ATTRIBUTE_SERVICE);
-        if (gaService == null)
-            return false;
-
-        final BluetoothGattCharacteristic scCharacteristic = gaService.getCharacteristic(SERVICE_CHANGED_CHARACTERISTIC);
-        boolean  fla=scCharacteristic != null;
-        Log.d("ensure", "ensureServiceChangedEnabled: "+fla);
-        return scCharacteristic != null;
-    }
+//    public boolean ensureServiceChangedEnabled() {
+//        final BluetoothGatt gatt = mBluetoothGatt;
+//        if (gatt == null)
+//            return false;
+//
+//        // The Service Changed indications have sense only on bonded devices
+//        final BluetoothDevice device = gatt.getDevice();
+//        if (device.getBondState() != BluetoothDevice.BOND_BONDED)
+//            return false;
+//
+//        final BluetoothGattService gaService = gatt.getService(GENERIC_ATTRIBUTE_SERVICE);
+//        if (gaService == null)
+//            return false;
+//
+//        BluetoothGattCharacteristic scCharacteristic = gaService.getCharacteristic(SERVICE_CHANGED_CHARACTERISTIC);
+//        return scCharacteristic != null;
+//    }
 
     //用于某个接收的UUID写入mBluetoothGatt的监听callback里面。在onCharacteristicChanged()会产生响应
     public void setDescriptor(BluetoothGattService rxService, UUID uuid) {
@@ -556,7 +560,7 @@ public class UartService extends Service implements Serializable {
 
         return mBluetoothGatt.getServices();
     }
-
+    //蓝牙是否开启
     public boolean isOpenBlueTooth() {
         if (mBluetoothAdapter != null) {
             if (mBluetoothAdapter.isEnabled()) {
@@ -565,13 +569,17 @@ public class UartService extends Service implements Serializable {
         }
         return false;
     }
-
+    //正在连接中
     public boolean isConnecttingBlueTooth() {
         return mConnectionState == STATE_CONNECTING;
     }
-
+    //已连接
     public boolean isConnectedBlueTooth() {
         return mConnectionState == STATE_CONNECTED;
+    }
+    //已断开
+    public boolean isDisconnectedBlueTooth() {
+        return mConnectionState == STATE_DISCONNECTED;
     }
 
     /**

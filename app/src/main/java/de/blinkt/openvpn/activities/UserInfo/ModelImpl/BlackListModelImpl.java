@@ -1,9 +1,6 @@
 package de.blinkt.openvpn.activities.UserInfo.ModelImpl;
 
-import android.content.Intent;
-
 import de.blinkt.openvpn.activities.NetModelBaseImpl;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.UserInfo.Model.BlackListModel;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;

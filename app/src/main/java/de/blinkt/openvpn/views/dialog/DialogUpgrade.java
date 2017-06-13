@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.EventBus;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.MyDeviceActivity;
+import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.UIOperatorEntity;
@@ -75,14 +74,12 @@ public class DialogUpgrade extends DialogBase {
 		@Override
 		public void onDfuProcessStarting(String deviceAddress) {
 			mProgressBar.setIndeterminate(true);
-
 			mTextPercentage.setText(R.string.dfu_status_starting);
 		}
 
 		@Override
 		public void onEnablingDfuMode(String deviceAddress) {
 			mProgressBar.setIndeterminate(true);
-
 			mTextPercentage.setText(R.string.dfu_status_switching_to_dfu);
 		}
 
@@ -101,10 +98,11 @@ public class DialogUpgrade extends DialogBase {
 		@Override
 		public void onDfuCompleted(String deviceAddress) {
 			mTextPercentage.setText(R.string.dfu_status_completed);
-			//保存状态
-			SharedUtils.getInstance().writeBoolean(Constant.IS_NEED_UPGRADE_IN_HARDWARE,false);
-			UIOperator(UIOperatorEntity.onCompelete);
 			noUpgrade();
+			SharedUtils.getInstance().writeBoolean(Constant.HAS_DEVICE_NEED_UPGRADE,false);
+			//保存状态
+			UIOperator(UIOperatorEntity.onCompelete);
+
 			// let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
 			new Handler().postDelayed(new Runnable() {
 				@Override
@@ -176,14 +174,12 @@ public class DialogUpgrade extends DialogBase {
 
 	private void noUpgrade() {
 		MyDeviceActivity.isUpgrade = false;
-		MyDeviceActivity.startDfuCount = 0;
 		mProgressBar.setProgress(0);
 		dialog.dismiss();
 		mTextPercentage.setText(R.string.dfu_status_starting);
 		if (ICSOpenVPNApplication.uartService != null) {
 			CommonTools.delayTime(7000);
 			ICSOpenVPNApplication.uartService.connect(SharedUtils.getInstance().readString(Constant.IMEI));
-
 		}
 
 	}

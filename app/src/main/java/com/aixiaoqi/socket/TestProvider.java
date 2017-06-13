@@ -3,7 +3,6 @@ package com.aixiaoqi.socket;
 import android.text.TextUtils;
 import android.util.Log;
 
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -12,6 +11,7 @@ import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.util.SharedUtils;
 
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
+import static de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterImpl.sendYiZhengService;
 
 
 public class TestProvider {
@@ -75,7 +75,7 @@ public class TestProvider {
 			isIccid = true;
 			savePreData();
 			if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {
-				ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+				sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 			} else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {
 				SocketConnection.mReceiveSocketService.disconnect();
 				connectTcp();
@@ -88,9 +88,9 @@ public class TestProvider {
 	}
 
 	private static void connectTcp() {
-		ProMainActivity.sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
+		sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
 		if (isCreate && isIccid) {
-			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
 
@@ -118,7 +118,7 @@ public class TestProvider {
 			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preDataEntity.getLenString();
 		} else if (SocketConstant.EN_APPEVT_SIMDATA.equals(preDataEntity.getEvtIndex())) {
 			SocketConstant.SDK_VALUE = hex;
-			ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.PRE_DATA);
+			sendYiZhengService.sendGoip(SocketConstant.PRE_DATA);
 		}
 	}
 
@@ -129,7 +129,7 @@ public class TestProvider {
 				isCreate = true;
 				Log.e("preDataSplit", "isCreate" + isCreate + "isIccid" + isIccid);
 				if (isCreate && isIccid) {
-					ProMainActivity.sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+					sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 				}
 			}
 
@@ -137,7 +137,7 @@ public class TestProvider {
 	}
 
 	public static void clearData() {
-		ProMainActivity.sendYiZhengService = null;
+		sendYiZhengService = null;
 		isCreate = false;
 		isIccid = false;
 	}

@@ -2,10 +2,7 @@ package de.blinkt.openvpn.activities.UserInfo.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -18,22 +15,17 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
-import java.lang.ref.WeakReference;
-import java.util.Set;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.activities.Base.BaseNetActivity;
-import de.blinkt.openvpn.activities.ProMainActivity;
+import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
 import de.blinkt.openvpn.activities.UserInfo.PresenterImpl.LoginPresenterImpl;
 import de.blinkt.openvpn.activities.UserInfo.View.LoginView;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
-import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.SharedUtils;

@@ -51,4 +51,18 @@ abstract public class DialogBase{
             e.printStackTrace();
         }
     }
+
+    public  void show(){
+        if(dialog!=null)
+        dialog.show();
+    }
+    public void dismiss(){
+        if(dialog!=null)
+        dialog.dismiss();
+    }
+    public boolean isShowing(){
+        if(dialog!=null)
+            return  dialog.isShowing();
+        return false;
+    }
 }

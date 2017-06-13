@@ -38,15 +38,15 @@ public class PackageCategoryActivity extends BaseActivity {
 	ViewPager mViewPager;
 
 	/**
-	 * 用户选择的新闻分类列表
+	 *
 	 */
 	private ArrayList<String> userChannelList = new ArrayList<String>();
 	/**
-	 * 当前选中的栏目
+	 *
 	 */
 	private int columnSelectIndex = 0;
 	/**
-	 * 屏幕宽度
+	 *
 	 */
 	private int mScreenWidth = 0;
 	/**
@@ -174,7 +174,6 @@ public class PackageCategoryActivity extends BaseActivity {
 			boolean ischeck;
 			if (j == tab_postion) {
 				ischeck = true;
-//                checkView.setCompoundDrawables(null, null, null, drawable);
 				if (checkView.getChildAt(1) instanceof ImageView) {
 					checkView.getChildAt(1).setVisibility(View.VISIBLE);
 				}
@@ -183,7 +182,6 @@ public class PackageCategoryActivity extends BaseActivity {
 				if (checkView.getChildAt(1) instanceof ImageView) {
 					checkView.getChildAt(1).setVisibility(View.INVISIBLE);
 				}
-//                checkView.setCompoundDrawables(null, null, null, null);
 			}
 			checkView.setSelected(ischeck);
 		}
@@ -195,14 +193,12 @@ public class PackageCategoryActivity extends BaseActivity {
 		if (isDestory) {
 			onBackPressed();
 		}
-		e("onSaveInstanceState");
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 
 		super.onSaveInstanceState(outState);
-		e("onSaveInstanceState111111111");
 		if (isDestory) {
 			onBackPressed();
 		}
@@ -217,7 +213,6 @@ public class PackageCategoryActivity extends BaseActivity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		e("onStop");
 	}
 
 	public boolean isDestory;
@@ -225,7 +220,6 @@ public class PackageCategoryActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		e("onDestroy");
 		isDestory = true;
 	}
 

@@ -5,7 +5,7 @@ package de.blinkt.openvpn.model;
  * 保存蓝牙地址，信号
  */
 
-public class BluetoothModel {
+public class BluetoothEntity {
 	private String address;
 	private int rssi;
 	private String diviceName;
@@ -36,7 +36,7 @@ public class BluetoothModel {
 
 	@Override
 	public String toString() {
-		return "BlueToothModel{" +
+		return "BluetoothEntity{" +
 				"address='" + address + '\'' +
 				", rssi=" + rssi +
 				", diviceName='" + diviceName + '\'' +

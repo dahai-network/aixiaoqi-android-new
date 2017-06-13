@@ -14,24 +14,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
 import com.tencent.bugly.beta.ui.UILifecycleListener;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import cn.com.aixiaoqi.R;
 import cn.qfishphone.sipengine.SipEngineCore;
-import de.blinkt.openvpn.activities.MyModules.presenter.ImportantAuthorityPresenter;
+import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.BindRechargeCardActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.ImportantAuthorityActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.RechargeActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.ShadeActivity;
-import de.blinkt.openvpn.activities.ProMainActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.CommitOrderActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.PackageDetailActivity;
@@ -99,8 +95,7 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 	//蓝牙Service
 	public static UartService uartService;
 
-	//判断是否再次重连的标记
-
+	//判断是否再次重连的标记,如果不是主动断开则重新连接，如果是主动断开则不需要连接
 	public static boolean isConnect;
 
 	public void showMsg(String message) {
