@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities;
+package de.blinkt.openvpn.activities.MyModules.ui;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;

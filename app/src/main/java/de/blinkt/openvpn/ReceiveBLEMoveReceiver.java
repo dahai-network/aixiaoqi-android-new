@@ -9,17 +9,13 @@ import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
 import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
-
 import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
 import de.blinkt.openvpn.activities.MyDeviceActivity;
@@ -44,7 +40,6 @@ import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
-
 import static de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.activities.MyDeviceActivity.isUpgrade;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
@@ -121,6 +116,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		}
 	}
 
+	/**
+	 * 接受广播
+	 * @param context
+	 * @param intent
+	 */
 	public void onReceive(final Context context, Intent intent) {
 		this.context = context;
 		final String action = intent.getAction();
@@ -128,14 +128,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		if (action.equals(UartService.FINDED_SERVICE)) {
 			Log.d(TAG, "UART_CONNECT_MSG");
 			IS_TEXT_SIM = false;
-
 			sendStepThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					try {
 						Thread.sleep(100);
 						//8880021400
-
 						Log.d("Encryption", "send--run: "+APP_CONNECT +"--" +EncryptionUtil.random8Number());
 
 						sendMessageToBlueTooth(APP_CONNECT + EncryptionUtil.random8Number());//APP专属命令
@@ -200,7 +198,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 					public void run() {
 						Log.d(TAG, "IMEI=" + TextUtils.isEmpty(utils.readString(Constant.IMEI)) + "\nisConnect=" + ICSOpenVPNApplication.isConnect);
 						if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-							if (isUpgrade) {
+
+                            Log.d(TAG, "run:isUpgrade= "+isUpgrade);
+                            if (isUpgrade) {
 								return;
 							}
 							//多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
@@ -263,6 +263,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 									case AGREE_BIND:
 										//绑定流程成功命令
+										Log.d(TAG, "接收到同意绑定指令 ");
 										CommonTools.delayTime(500);
 										//android 标记，给蓝牙设备标记是否是android设备用的
 										SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
@@ -425,6 +426,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 												BluetoothMessageCallBackEntity bEntity = new BluetoothMessageCallBackEntity();
 												bEntity.setBlueType(BluetoothConstant.BLUE_BIND);
 												EventBus.getDefault().post(bEntity);
+												Log.d(TAG, "发送绑定命令run: "+BIND_DEVICE);
 												sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
 											}
 										}

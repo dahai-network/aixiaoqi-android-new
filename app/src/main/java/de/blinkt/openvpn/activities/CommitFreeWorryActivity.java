@@ -42,6 +42,7 @@ import cn.com.aixiaoqi.R;
 import cn.com.aixiaoqi.wxapi.WXPayEntryActivity;
 import cn.com.johnson.adapter.CommitFreeWorryAdapter;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.PaySuccessActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;

@@ -92,7 +92,7 @@ public class PackageMarketPresenter extends BaseNetActivity {
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
 
-        if (cmdType == HttpConfigUrl.COMTYPE_PACKET_MARKET) {
+       if (cmdType == HttpConfigUrl.COMTYPE_PACKET_MARKET) {
             PacketMarketHttp http = (PacketMarketHttp) object;
             characterParser = CharacterParser.getInstance();
             List<List<PacketMarketEntity>> data = http.getPacketMarketEntityList();

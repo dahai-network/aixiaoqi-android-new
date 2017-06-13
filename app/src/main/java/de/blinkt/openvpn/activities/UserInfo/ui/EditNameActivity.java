@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities;
+package de.blinkt.openvpn.activities.UserInfo.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,31 +6,39 @@ import android.text.TextUtils;
 import android.widget.EditText;
 
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.activities.UserInfo.Presenter.EditNamePresenter;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.ModifyPersonInfoHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 
 /**
- * Created by Administrator on 2016/9/28 0028.
+ * Created by kim
+ * on 2016/9/28 0028.
  */
-public class EditNameActivity extends BaseNetActivity {
+public class EditNameActivity extends BaseActivity {
     EditText etNickName;
     String name;
     int type;
+    EditNamePresenter editNamePresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_name);
+        ICSOpenVPNApplication.editNameActivity=this;
         name=getIntent().getStringExtra(IntentPutKeyConstant.REAL_NAME_EDIT);
         type=getIntent().getIntExtra(IntentPutKeyConstant.EDIT_TYPE,-1);
         initTitle();
         initView();
         initData();
+
+        editNamePresenter = new EditNamePresenter();
 
     }
 
@@ -74,9 +82,8 @@ public class EditNameActivity extends BaseNetActivity {
             return;
         }
         if(type==IntentPutKeyConstant.EDIT_NICKNAME){
-            ModifyPersonInfoHttp modifyPersonInfoHttp=new ModifyPersonInfoHttp(this);
-            modifyPersonInfoHttp.setNickName(realName, HttpConfigUrl.COMTYPE_POST_MODIFY_NICK);
-            new Thread(modifyPersonInfoHttp).start();
+
+            editNamePresenter.setNickName(realName);
 
         }   else if(type==IntentPutKeyConstant.EDIT_USER_NAME){
             Intent realNameIntent=   new Intent();
@@ -91,8 +98,13 @@ public class EditNameActivity extends BaseNetActivity {
         }
     }
 
-
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ICSOpenVPNApplication.editNameActivity=null;
+    }
+
+/*  @Override
     public void rightComplete(int cmdType, CommonHttp object) {
         if(cmdType==HttpConfigUrl.COMTYPE_POST_MODIFY_NICK){
             ModifyPersonInfoHttp modifyPersonInfoHttp=(ModifyPersonInfoHttp)object;
@@ -105,6 +117,6 @@ public class EditNameActivity extends BaseNetActivity {
             }
         }
 
-    }
+    }*/
 
 }

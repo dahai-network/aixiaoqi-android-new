@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities;
+package de.blinkt.openvpn.activities.MyModules.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,8 +16,8 @@ import cn.com.johnson.adapter.OrderAdapter;
 import cn.com.johnson.model.BoughtPackageEntity;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.activities.MyModules.ui.BindRechargeCardActivity;
-import de.blinkt.openvpn.activities.MyModules.ui.PackageMarketActivity;
+import de.blinkt.openvpn.activities.MyModules.presenter.MyPackagePresenter;
+import de.blinkt.openvpn.activities.MyModules.view.MyPackageView;
 import de.blinkt.openvpn.activities.Set.ui.CallPackageLlistActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -31,11 +31,10 @@ import de.blinkt.openvpn.views.dialog.DialogSexAndHeaderAndMyPacket;
 import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
 
 
-
 /**
  * 订单列表，用于显示购买过的套餐
  */
-public class MyPackageActivity extends BaseActivity implements XRecyclerView.LoadingListener, InterfaceCallback, DialogInterfaceTypeBase {
+public class MyPackageActivity extends BaseActivity implements XRecyclerView.LoadingListener, DialogInterfaceTypeBase,MyPackageView {
 	public static final int BOTTOM_LIST = 1;
 	@BindView(R.id.orderListRecylerView)
 	XRecyclerView orderListRecylerView;
@@ -54,31 +53,33 @@ public class MyPackageActivity extends BaseActivity implements XRecyclerView.Loa
 	private String TAG = "MyPackageActivity";
 	private int pageNumber = 1;
 	private LinearLayoutManager manager;
-
+	MyPackagePresenter myPackagePresenter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_package);
 		ButterKnife.bind(this);
 		init();
+
+
 	}
 
 	//初始化
 	private void init() {
 		hasAllViewTitle(R.string.order_list, R.drawable.order_list_add, 0, true);
-        //hasLeftViewTitle(R.string.order_list, 0);
 		manager = new LinearLayoutManager(this);
 		orderListRecylerView.setLayoutManager(manager);
 		orderListRecylerView.setArrowImageView(R.drawable.iconfont_downgrey);
 		orderListRecylerView.setLoadingListener(this);
 		orderAdapter = new OrderAdapter(MyPackageActivity.this, R.layout.item_order);
 		orderListRecylerView.setAdapter(orderAdapter);
+		myPackagePresenter = new MyPackagePresenter(this);
 		onRefresh();
 	}
 
 	//加入数据
 	private void addData() {
-		CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, pageNumber+"", Constant.PAGESIZE+"","-1");
+		myPackagePresenter.getOrderData(pageNumber, Constant.PAGESIZE,-1);
 	}
 
 	@Override
@@ -109,55 +110,6 @@ public class MyPackageActivity extends BaseActivity implements XRecyclerView.Loa
 	@Override
 	protected void onClickRightView() {
 		DialogSexAndHeaderAndMyPacket(BOTTOM_LIST);
-	}
-
-	@Override
-	public void rightComplete(int cmdType, CommonHttp object) {
-		if (cmdType == HttpConfigUrl.COMTYPE_GET_ORDER) {
-			orderListRecylerView.loadMoreComplete();
-			orderListRecylerView.refreshComplete();
-			BoughtPacketHttp http = (BoughtPacketHttp) object;
-			BoughtPackageEntity bean = http.getBoughtPackageEntity();
-			if (bean != null) {
-				if (bean.getList().size() != 0) {
-					//有数据则显示
-					NoNetRelativeLayout.setVisibility(View.GONE);
-					orderListRecylerView.setVisibility(View.VISIBLE);
-					if (pageNumber == 1) {
-						//页码为1且没有数据，则显示无数据页面
-						if (bean.getList().size() < Constant.PAGESIZE) {
-							orderAdapter.addAll(bean.getList());
-							orderListRecylerView.noMoreLoading();
-						} else {
-							orderAdapter.addAll(bean.getList());
-						}
-
-					} else {
-						orderAdapter.add(bean.getList());
-					}
-				} else {
-					if (pageNumber == 1) {
-						orderListRecylerView.setVisibility(View.GONE);
-						NodataRelativeLayout.setVisibility(View.VISIBLE);
-						noDataTextView.setText(getResources().getString(R.string.no_order));
-					}
-					orderListRecylerView.noMoreLoading();
-				}
-			}
-		}
-		orderAdapter.notifyDataSetChanged();
-	}
-
-
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
-		CommonTools.showShortToast(this, errorMessage);
-	}
-
-	@Override
-	public void noNet() {
-		orderListRecylerView.setVisibility(View.GONE);
-		NoNetRelativeLayout.setVisibility(View.VISIBLE);
 	}
 
 	private void DialogSexAndHeaderAndMyPacket(int type) {
@@ -192,5 +144,37 @@ public class MyPackageActivity extends BaseActivity implements XRecyclerView.Loa
 				BindRechargeCardActivity.launch(MyPackageActivity.this, BindRechargeCardActivity.GIFT);
 				break;
 		}
+	}
+
+	@Override
+	public XRecyclerView getOrderListRecylerView() {
+		return orderListRecylerView;
+	}
+
+	@Override
+	public RelativeLayout getNoNetRelativeLayout() {
+		return NoNetRelativeLayout;
+	}
+
+	@Override
+	public OrderAdapter getOrderAdapter() {
+		return orderAdapter;
+	}
+
+	@Override
+	public RelativeLayout getNodataRelativeLayout() {
+		return NodataRelativeLayout;
+	}
+
+	@Override
+	public TextView getNoDataTextView() {
+		return noDataTextView;
+	}
+
+	@Override
+	public void showToast(String msg) {
+
+		CommonTools.showShortToast(MyPackageActivity.this,msg);
+
 	}
 }

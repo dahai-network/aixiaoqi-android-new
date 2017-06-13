@@ -134,6 +134,8 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 		switch (requestCode) {
 			case REQUEST_ENABLE_BT:
 				if (resultCode == Activity.RESULT_OK) {
+					Log.d(TAG, "onActivityResult: //60秒后由于蓝牙不返回数据则自动退出");
+
 					setAnimation();
 					scanLeDevice(true);
 					//60秒后由于蓝牙不返回数据则自动退出
@@ -141,6 +143,7 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 						@Override
 						public void run() {
 							if (mService != null && !mService.isConnectedBlueTooth() && !errorThread.isInterrupted()) {
+								Log.d(TAG, "run: 60秒后由于蓝牙不返回数据则自动退出");
 								CommonTools.showShortToast(BindDeviceActivity.this, getString(R.string.bind_error));
 								stopTextView.performClick();
 							}
@@ -373,17 +376,19 @@ public class BindDeviceActivity extends BaseNetActivity implements DialogInterfa
 				CommonTools.showShortToast(this, getString(R.string.service_is_error));
 				finish();
 			}
-		} else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
+		} else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {//绑定成功
+
 			Log.i(TAG, "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
 			if (object.getStatus() == 1) {
+				//保存deviceAddress,bracelettype
 				utils.writeString(Constant.IMEI, deviceAddress);
 				utils.writeString(MyDeviceActivity.BRACELETTYPE, bracelettype);
+
 				if (bracelettype != null && bracelettype.contains(MyDeviceActivity.UNIBOX)) {
 					search_bluetooth.setText(getString(R.string.finded_unibox));
 				} else if (bluetoothName.contains(Constant.UNITOYS)) {
 					search_bluetooth.setText(getString(R.string.finded_unitoy));
 				}
-				Log.i("test", "保存设备名成功");
 				if (bluetoothName.contains(Constant.UNITOYS)) {
 					mService.connect(deviceAddress);
 				} else {

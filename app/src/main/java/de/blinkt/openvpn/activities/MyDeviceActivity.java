@@ -171,7 +171,12 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
 
     //停止动画
     public void stopAnim() {
-        registerSimStatu.setEnabled(true);
+        try {
+            registerSimStatu.setEnabled(true);
+        } catch (Exception e) {
+
+        }
+        //registerSimStatu.setEnabled(true);
         RegisterStatueAnim.reset();
         registerSimStatu.clearAnimation();
         registerSimStatu.setBackgroundResource(R.drawable.registering);
@@ -238,7 +243,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
             messageRemindView.setVisibility(View.VISIBLE);
             deviceNameTextView.setText(getString(R.string.unitoy));
         }
-//卡状态
+        //卡状态
         String blueStatus = BaseStatusFragment.bleStatus;
         RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
         titleSet();
@@ -273,7 +278,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
             }
             skyUpgradeHttp();
         }
-//显示固件版本
+        //显示固件版本
         firmwareTextView.setText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
 
 //如果重连失败再进入我的设备就清空重连次数重新进入连接流程
@@ -675,7 +680,7 @@ public class MyDeviceActivity extends BaseNetActivity implements DialogInterface
             if (skyUpgradeHttp.getStatus() == 1) {
                 if (skyUpgradeHttp.getUpgradeEntity() != null) {
                     String versionStr = SharedUtils.getInstance().readString(Constant.BRACELETVERSION);
-                    if (versionStr != null) {
+                    if (versionStr != null && versionStr != " ") {
                         if (skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(versionStr)) {
                             url = skyUpgradeHttp.getUpgradeEntity().getUrl();
 
