@@ -125,23 +125,23 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			Log.d(TAG, "UART_CONNECT_MSG");
 			IS_TEXT_SIM = false;
 
-						CommonTools.delayTime(100);
-						//8880021400
-						Log.d("Encryption", "send--run: "+APP_CONNECT +"--" +EncryptionUtil.random8Number());
-						sendMessageToBlueTooth(APP_CONNECT + EncryptionUtil.random8Number());//APP专属命令
-						Log.i(TAG, "发送了专属命令");
-						String braceletname = utils.readString(Constant.BRACELETNAME);
-						if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
+			CommonTools.delayTime(100);
+			//8880021400
+			Log.d("Encryption", "send--run: "+APP_CONNECT +"--" +EncryptionUtil.random8Number());
+			sendMessageToBlueTooth(APP_CONNECT + EncryptionUtil.random8Number());//APP专属命令
+			Log.i(TAG, "发送了专属命令");
+			String braceletname = utils.readString(Constant.BRACELETNAME);
+			if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
 
-						} else {
-							CommonTools.delayTime(200);
-							sendMessageToBlueTooth(BASIC_MESSAGE);
-							CommonTools.delayTime(200);
-							sendMessageToBlueTooth(ICCID_GET);
-							Log.i("toBLue", "连接成功");
-							//更新时间操作
-							sendMessageToBlueTooth(getBLETime());
-						}
+			} else {
+				CommonTools.delayTime(200);
+				sendMessageToBlueTooth(BASIC_MESSAGE);
+				CommonTools.delayTime(200);
+				sendMessageToBlueTooth(ICCID_GET);
+				Log.i("toBLue", "连接成功");
+				//更新时间操作
+				sendMessageToBlueTooth(getBLETime());
+			}
 
 		}
 
@@ -291,7 +291,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //										}
 										break;
 									case Constant.IS_INSERT_CARD:
-                                        //5580040c000102
+										//5580040c000102
 										Log.d(TAG, "run: "+messages.toString()+":"+messages.get(0).substring(10, 12));
 										Log.i(TAG, "接收数据：是否插卡：" + messages.toString());
 										if (messages.get(0).substring(10, 12).equals("00")) {
@@ -393,6 +393,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
 
 	private void sendMessageSeparate(final String message, final String type) {
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

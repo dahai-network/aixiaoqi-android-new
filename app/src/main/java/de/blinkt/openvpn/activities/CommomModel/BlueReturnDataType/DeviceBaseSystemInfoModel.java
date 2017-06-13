@@ -8,6 +8,7 @@ import com.aixiaoqi.socket.EventBusUtil;
 import java.util.ArrayList;
 
 import de.blinkt.openvpn.Logger;
+import de.blinkt.openvpn.activities.Device.ModelImpl.UpdateDeviceInfoModelImpl;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.util.SharedUtils;
 
@@ -15,7 +16,7 @@ import de.blinkt.openvpn.util.SharedUtils;
  * Created by Administrator on 2017/6/9 0009.
  */
 
-public class DeviceBaseSystemInfo extends Logger{
+public class DeviceBaseSystemInfoModel extends Logger{
     void returnBaseSystemInfo(ArrayList<String> messages){
         String deviceVesion = Integer.parseInt(messages.get(0).substring(10, 12), 16) + "." + Integer.parseInt(messages.get(0).substring(12, 14), 16);
         Log.i(TAG, "版本号:" + deviceVesion);
@@ -33,5 +34,6 @@ public class DeviceBaseSystemInfo extends Logger{
         SharedUtils.getInstance().writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(14, 16), 16));
         SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, deviceVesion);
         EventBusUtil.blueReturnData(Constant.SYSTEM_BASICE_INFO,"","");
+        new UpdateDeviceInfoModelImpl().updateDeviceInfo();
     }
 }

@@ -117,6 +117,11 @@ public class EventBusUtil {
         blueReturnData.setValideData(valideData);
         EventBus.getDefault().post(blueReturnData);
     }
+
+    /**
+     *
+     * @param bindStatue 绑定状态参数，是成功的还是失败的。
+     */
     public  static void bingDeviceStep(String bindStatue){
         BluetoothMessageCallBackEntity bluetoothMessageCallBackEntity=new BluetoothMessageCallBackEntity();
         bluetoothMessageCallBackEntity.setBlueType(bindStatue);

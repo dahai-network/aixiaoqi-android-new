@@ -147,7 +147,6 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
         } else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO) {
             if (object.getStatus() == 1) {
                 bindDeviceView.finishView();
-                SharedUtils.getInstance().writeString(deviceAddress, SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
             }
         }
     }

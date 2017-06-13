@@ -347,10 +347,6 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveWriteCardIdEntity(WriteCardEntity entity) {
-        myDeviceView.stopAnim();
-    }
     //通过eventbus接收从蓝牙那边传回来的数据，并进行相应的操作
     @Subscribe(threadMode = ThreadMode.MAIN)
     private void blueReturnData(BlueReturnData blueReturnData){

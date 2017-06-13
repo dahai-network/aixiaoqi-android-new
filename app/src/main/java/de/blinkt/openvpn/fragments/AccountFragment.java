@@ -207,7 +207,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         tvNewPackagetAction.setVisibility(View.GONE);
         tvNewVersion.setVisibility(View.GONE);
         //注册广播
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNoticBroadCastReciver, new IntentFilter("Notic"));
+
         return rootView;
     }
 
@@ -507,14 +507,14 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
             }
             if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
                 if (!AppMode.getInstance().isClickPackage)
-                    mHandler.sendEmptyMessage(1);
+                    mHandler.sendEmptyMessage(SIGN_MSG_ONE);
                 hasPackage = true;
                 PacketRelativeLayout.setVisibility(View.GONE);
                 noPacketRelativeLayout.setVisibility(View.VISIBLE);
                 addOrActivatePackageIv.setImageResource(R.drawable.activate_device_account);
                 addOrActivatePackage.setText(getString(R.string.activate_packet));
             } else if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
-                mHandler.sendEmptyMessage(2);
+                mHandler.sendEmptyMessage(SIGN_MSG_TWO);
                 hasPackage = false;
                 PacketRelativeLayout.setVisibility(View.GONE);
                 noPacketRelativeLayout.setVisibility(View.VISIBLE);
@@ -528,9 +528,9 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
                 //显示出有未激活套餐的提示
                 if (!"0".equals(unactivated.getTotalNumFlow()) && !AppMode.getInstance().isClickPackage) {
-                    mHandler.sendEmptyMessage(1);
+                    mHandler.sendEmptyMessage(SIGN_MSG_ONE);
                 } else {
-                    mHandler.sendEmptyMessage(2);
+                    mHandler.sendEmptyMessage(SIGN_MSG_TWO);
                 }
                 if ("0".equals(used.getTotalNumFlow())) {
                     flow.setText(getString(R.string.no_flow_count));
@@ -562,7 +562,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
             ICSOpenVPNApplication.isConnect = false;
             // 解除绑定，注册失败不显示
             EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
-//			sendEventBusChangeBluetoothStatus(getString(R.string.index_unbind));
             CommonTools.showShortToast(getActivity(), "已解绑设备");
             ICSOpenVPNApplication.uartService.disconnect();
             showDeviceSummarized(false);
@@ -595,35 +594,17 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         }
     }
 
-
-    public final String NoticSign = "flg";
-
-    public BroadcastReceiver mNoticBroadCastReciver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            boolean flg = intent.getBooleanExtra(NoticSign, false);
-            if (flg)
-                mHandler.sendEmptyMessage(3);
-            else
-                mHandler.sendEmptyMessage(4);
-
-            Log.d(TAG, "onReceive: " + flg);
-        }
-
-    };
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             if (!AppMode.getInstance().isClickAddDevice && SharedUtils.getInstance().readBoolean(Constant.HAS_DEVICE_NEED_UPGRADE)) {
                 if (mHandler != null) {
-                    mHandler.sendEmptyMessage(3);
+                    mHandler.sendEmptyMessage(SIGN_MSG_THREE);
                 }
             } else {
                 if (mHandler != null) {
-                    mHandler.sendEmptyMessage(4);
+                    mHandler.sendEmptyMessage(SIGN_MSG_FOUR);
                 }
             }
         }
