@@ -22,4 +22,9 @@ public class NetPresenterBaseImpl extends Logger implements NetModelBaseImpl.OnL
     public void noNet() {
 
     }
+
+    public  void onDestroy(){
+
+    }
+
 }

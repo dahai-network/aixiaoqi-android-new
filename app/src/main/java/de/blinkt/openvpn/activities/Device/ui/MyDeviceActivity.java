@@ -41,6 +41,7 @@ import de.blinkt.openvpn.views.dialog.DialogUpgrade;
 import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static cn.com.aixiaoqi.R.id.register_sim_statue;
 import static cn.com.aixiaoqi.R.string.device;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
@@ -246,7 +247,9 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
         sinking.setPercent(((float) electricityInt) / 100);
         initSimStatue(blueStatus);
-        skyUpgradeHttp();
+        if(SharedUtils.getInstance().readBoolean(Constant.HAS_DEVICE_NEED_UPGRADE)){
+            showOrHideVersionUpgradeHotDot(VISIBLE);
+        }
     }
 
     private void initSimStatue(String blueStatus) {
@@ -328,7 +331,6 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
                 }
                 if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
                     if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETVERSION)) && !isUpgrade) {
-                        SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, 0);
                         skyUpgradeHttp();
                     } else if (isUpgrade) {
                         showSkyUpgrade();

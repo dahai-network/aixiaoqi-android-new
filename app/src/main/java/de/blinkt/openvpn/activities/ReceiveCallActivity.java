@@ -176,13 +176,7 @@ public class ReceiveCallActivity extends BaseSensorActivity implements View.OnCl
 		} else {
 			contactRecodeEntity.setFormattedNumber(PinYinConverNumber.getInstance().getNameNum(phoneNumStr));
 		}
-		Intent intent = new Intent();
-		intent.putExtra(IntentPutKeyConstant.CONTACT_RECODE_ENTITY, contactRecodeEntity);
-		intent.setAction(UPDATE_CONTACT_REDORE);
-		sendBroadcast(intent);
 	}
-
-	public static final String UPDATE_CONTACT_REDORE = "update_contact_recoder";
 
 	private void initViews() {
 		nametxt = (TextView) findViewById(R.id.nametxt);

@@ -1,17 +1,12 @@
-package de.blinkt.openvpn.fragments;
+package de.blinkt.openvpn.fragments.ProMainTabFragment.ui;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -268,7 +263,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
     //显示电量
     public void setPowerPercent() {
-        Log.e(TAG, "PowerPercent=" + SharedUtils.getInstance().readInt(Constant.BRACELETPOWER));
         if (SharedUtils.getInstance().readInt(Constant.BRACELETPOWER) != 0)
             powerTextView.setText(SharedUtils.getInstance().readInt(Constant.BRACELETPOWER) + "%");
     }
@@ -292,13 +286,11 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     case Constant.CHINA_UNICOM:
                         operatorTextView.setText(getString(R.string.china_unicom));
                         break;
-
                 }
             }
         } else {
             if (signalIconImageView != null)
                 signalIconImageView.setBackgroundResource(R.drawable.unregist);
-
             if (operatorTextView != null) {
                 operatorTextView.setText("----");
             }

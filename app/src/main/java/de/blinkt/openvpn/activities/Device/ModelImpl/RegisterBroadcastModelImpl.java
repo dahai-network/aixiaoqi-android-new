@@ -15,6 +15,7 @@ import de.blinkt.openvpn.activities.Device.Model.RegisterBroadcastModel;
 import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.fragments.ProMainTabFragment.ui.SmsFragment;
 
 /**
  * Created by Administrator on 2017/6/9 0009.
@@ -23,6 +24,7 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 public class RegisterBroadcastModelImpl implements RegisterBroadcastModel{
     ReceiveBLEMoveReceiver bleMoveReceiver;
 
+    //注册蓝牙数据接收广播
     @Override
     public void registerReceiveBLEMoveReceiverBroadcast(Context context) {
         if (bleMoveReceiver == null) {
@@ -41,17 +43,17 @@ public class RegisterBroadcastModelImpl implements RegisterBroadcastModel{
         return intentFilter;
     }
 
-
+//取消注册蓝牙数据接收广播
     @Override
     public void unregisterBlueChangeBroadcast(Context context) {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(bleMoveReceiver);
     }
-
+//注册蓝牙状态发生变化广播
     @Override
     public void registerBlueChangeBroadcast(Context context) {
         LocalBroadcastManager.getInstance(context).registerReceiver(screenoffReceive, screenoffIntentFilter());
     }
-
+//取消注册蓝牙状态发生变化广播
     @Override
     public void unregisterReceiveBLEMoveReceiverBroadcast(Context context) {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(screenoffReceive);
@@ -80,9 +82,12 @@ public class RegisterBroadcastModelImpl implements RegisterBroadcastModel{
             }
         }
     };
-    private static IntentFilter screenoffIntentFilter() {
+    private  IntentFilter screenoffIntentFilter() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         return intentFilter;
     }
+
+
+
 }

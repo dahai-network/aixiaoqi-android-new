@@ -43,8 +43,8 @@ import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.AccountFragment;
 import de.blinkt.openvpn.fragments.AddressListFragment;
-import de.blinkt.openvpn.fragments.CellPhoneFragment;
-import de.blinkt.openvpn.fragments.IndexFragment;
+import de.blinkt.openvpn.fragments.ProMainTabFragment.ui.CellPhoneFragment;
+import de.blinkt.openvpn.fragments.ProMainTabFragment.ui.IndexFragment;
 import de.blinkt.openvpn.fragments.SportFragment;
 import de.blinkt.openvpn.model.CanClickEntity;
 import de.blinkt.openvpn.service.CallPhoneService;
@@ -321,7 +321,6 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-
 				while (mService != null && mService.mConnectionState != UartService.STATE_CONNECTED) {
 					connDeviceFiveSecond(imeiStr);
 					CommonTools.delayTime(RECONNECT_TIME);

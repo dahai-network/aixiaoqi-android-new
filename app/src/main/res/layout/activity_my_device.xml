@@ -264,7 +264,7 @@
                     android:id="@+id/version_upgrade_tip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_15dp"
+                    android:layout_marginBottom="@dimen/padding_5dp"
                     android:visibility="gone"
                     android:src="@drawable/unread_message"/>
             </LinearLayout>
