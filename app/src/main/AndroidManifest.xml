@@ -114,7 +114,7 @@
             android:value="${UMENG_CHANNEL_VALUE}"/>
 
         <activity android:name="de.blinkt.openvpn.activities.SMSAcivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.EditNameActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.UserInfo.ui.EditNameActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.WebViewActivity"/>
         <activity
             android:name="de.blinkt.openvpn.activities.CallPhoneNewActivity"
@@ -175,7 +175,7 @@
         <activity
             android:name="de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity"
             android:launchMode="singleTask"/>
-        <activity android:name="de.blinkt.openvpn.activities.MyPackageActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.MyModules.ui.MyPackageActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.TipUserOptionActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.AlarmClockActivity"/>
         <activity
@@ -329,7 +329,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="de.blinkt.openvpn.activities.PaySuccessActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.MyModules.ui.PaySuccessActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity"/>
 
         <service
@@ -393,9 +393,9 @@
         <activity android:name="de.blinkt.openvpn.activities.CallTimePacketDetailActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.TipUserOptionsActivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.ImportantAuthorityActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.MyModules.ui.ImportantAuthorityActivity"/>
         <activity
-            android:name="de.blinkt.openvpn.activities.ShadeActivity"
+            android:name="de.blinkt.openvpn.activities.MyModules.ui.ShadeActivity"
             android:launchMode="singleInstance"
             android:theme="@style/translucent"/>
 
@@ -421,10 +421,10 @@
         <activity android:name="de.blinkt.openvpn.activities.CommitFreeWorryActivity">
         </activity>
         <activity
-            android:name="de.blinkt.openvpn.activities.VertifyPhoneNumActivity"
+            android:name="de.blinkt.openvpn.activities.UserInfo.ui.VertifyPhoneNumActivity"
             android:launchMode="singleTask">
         </activity>
-        <activity android:name="de.blinkt.openvpn.activities.MonthlyOrderActivity">
+        <activity android:name="de.blinkt.openvpn.activities.MyModules.ui.MonthlyOrderActivity">
         </activity>
         <activity android:name="de.blinkt.openvpn.activities.FreeWorryOrderDetailActivity">
         </activity>

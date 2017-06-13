@@ -170,6 +170,7 @@ public class UartService extends Service implements Serializable {
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
 
+        //读
         if (TX_CHAR_UUID1.equals(characteristic.getUuid())) {
             byte[] txValue = characteristic.getValue();
             int lengthData = (txValue[1] & 0x7f) + 1;
@@ -177,7 +178,8 @@ public class UartService extends Service implements Serializable {
 
 
             String messageFromBlueTooth = HexStringExchangeBytesUtil.bytesToHexString(characteristic.getValue());
-            Log.e("UartService", messageFromBlueTooth);
+            Log.e("UartService--", messageFromBlueTooth+"-lengthData="+lengthData+"--dataStatue="+dataStatue);
+            // 55800a1400127fc3f633dd8741
             if (lengthData == 1 && dataStatue == 0x80) {
                 //TODO 单包处理
 //				messages.add(messageFromBlueTooth);
@@ -502,9 +504,9 @@ public class UartService extends Service implements Serializable {
                 RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
             }
 
-            showMessage("mBluetoothGatt null" + mBluetoothGatt);
+            showMessage("mBluetoothGatt ---" + mBluetoothGatt);
             if (RxService == null) {
-                showMessage("Rx service not found!");
+                showMessage("-----Rx service not found!");
                 broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
                 return false;
             }

@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.MyPackageActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.MyPackageActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.util.DialogUtils;
 

@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities;
+package de.blinkt.openvpn.activities.MyModules.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +9,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
+import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
-import de.blinkt.openvpn.activities.MyModules.ui.PackageMarketActivity;
+import de.blinkt.openvpn.activities.CallTimePacketDetailActivity;
+import de.blinkt.openvpn.activities.MyModules.presenter.PaySuccessPresenter;
+import de.blinkt.openvpn.activities.MyModules.view.PaySuccessView;
 import de.blinkt.openvpn.activities.Set.ui.CallPackageLlistActivity;
 import de.blinkt.openvpn.activities.Set.ui.CallTimeOrderDetailActitivy;
 import de.blinkt.openvpn.activities.ShopModules.ui.CountryPackageActivity;
@@ -27,7 +30,7 @@ import de.blinkt.openvpn.util.SharedUtils;
 
 import static de.blinkt.openvpn.constant.Constant.UP_TO_POWER_NO_RESPONSE;
 
-public class PaySuccessActivity extends BaseNetActivity implements InterfaceCallback {
+public class PaySuccessActivity extends BaseActivity {
 
 	@BindView(R.id.completeTextView)
 	TextView completeTextView;
@@ -65,7 +68,7 @@ public class PaySuccessActivity extends BaseNetActivity implements InterfaceCall
 		ButterKnife.bind(this);
 		initSet();
 	}
-
+	PaySuccessPresenter paySuccessPresenter;
 	private void initSet() {
 
 		Intent getIntent = getIntent();
@@ -90,10 +93,13 @@ public class PaySuccessActivity extends BaseNetActivity implements InterfaceCall
 		} else if (paywayString == OFFICIAL_GIFTS) {
 			payWayTextView.setText(getResources().getString(R.string.official_gifts));
 		}
+
+		paySuccessPresenter = new PaySuccessPresenter(new PaySuccessView());
 		//支付成功即检测是否有套餐，有套餐则开始上电
 		if (type == BUY_CALL_TIME) {
 			//当有通话套餐的时候才允许注册操作
-			createHttpRequest(HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
+			//createHttpRequest(HttpConfigUrl.COMTYPE_CHECK_IS_HAVE_PACKET, "3");
+			paySuccessPresenter.isHavePacket("3");
 		}
 		moneyTextView.setText("￥" + getIntent.getStringExtra("money"));
 	}
@@ -140,36 +146,6 @@ public class PaySuccessActivity extends BaseNetActivity implements InterfaceCall
 		}
 	}
 
-	@Override
-	public void rightComplete(int cmdType, CommonHttp object) {
-		if (object.getStatus() == 1) {
-			IsHavePacketHttp isHavePacketHttp = (IsHavePacketHttp) object;
-			IsHavePacketEntity entity = isHavePacketHttp.getOrderDataEntity();
-			if (entity.getUsed() == 1) {
-				//如果之前无套餐的状态，就上电
-				if (!SharedUtils.getInstance().readBoolean(Constant.ISHAVEORDER, false)) {
-					SendCommandToBluetooth.sendMessageToBlueTooth(UP_TO_POWER_NO_RESPONSE);
-				}
-				//标记新状态
-				SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-			} else {
-				//TODO 没有通知到设备界面
-				//如果是没有套餐，则通知我的设备界面更新状态并且停止转动
-//				SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
-//				EventBusUtil.changeConnectStatus(getString(R.string.index_no_packet), R.drawable.index_no_packet);
-			}
-		}
-	}
 
 
-
-	@Override
-	public void errorComplete(int cmdType, String errorMessage) {
-
-	}
-
-	@Override
-	public void noNet() {
-
-	}
 }

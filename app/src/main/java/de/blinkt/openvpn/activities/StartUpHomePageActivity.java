@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.OutsideAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.ImportantAuthorityActivity;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.util.PageChangeListener;
 

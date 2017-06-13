@@ -14,23 +14,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
 import com.tencent.bugly.beta.ui.UILifecycleListener;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import cn.com.aixiaoqi.R;
 import cn.qfishphone.sipengine.SipEngineCore;
 import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.BindRechargeCardActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.ImportantAuthorityActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.RechargeActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.ShadeActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.CommitOrderActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.PackageDetailActivity;
+import de.blinkt.openvpn.activities.UserInfo.ui.EditNameActivity;
+import de.blinkt.openvpn.activities.UserInfo.ui.VertifyPhoneNumActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.exceptionlog.CrashHandler;
@@ -55,6 +57,16 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
     public static PackageDetailActivity packageDetailInstance;
 
 	public  static  CommitOrderActivity commitOrderActivity;
+
+	public static RechargeActivity  rechargeActivity;
+
+	public static ShadeActivity shadeActivity;
+
+	public static VertifyPhoneNumActivity vertifyPhoneNumActivity;
+
+	public static ImportantAuthorityActivity importantAuthorityActivity;
+
+	public static EditNameActivity editNameActivity;
 
 
 	//接口通过空卡序列号返回的订单特定写卡数据

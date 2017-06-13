@@ -1,87 +1,39 @@
-package de.blinkt.openvpn.activities;
+package de.blinkt.openvpn.activities.MyModules.presenter;
 
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import cn.com.aixiaoqi.R;
-import cn.com.johnson.adapter.AuthorityAdapter;
-import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
-import de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.ImportantAuthorityActivity;
+import de.blinkt.openvpn.activities.MyModules.ui.ShadeActivity;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.AuthorityEntity;
 import de.blinkt.openvpn.model.IntentEntity;
-import de.blinkt.openvpn.util.IntentWrapper;
-import de.blinkt.openvpn.util.SharedUtils;
 
-public class ImportantAuthorityActivity extends BaseActivity {
+/**
+ * Created by kim
+ * on 2017/6/9.
+ */
 
-    @BindView(R.id.authorityRecyclerView)
-    RecyclerView authorityRecyclerView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_important_authority);
-        ButterKnife.bind(this);
-        initSet();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (!SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.IS_START_UP)) {
-            SharedUtils.getInstance().writeBoolean(IntentPutKeyConstant.IS_START_UP, true);
-            toActivity(LoginMainActivity.class);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    private void initSet() {
-        hasLeftViewTitle(R.string.important_autohrity, 0);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        authorityRecyclerView.setLayoutManager(layoutManager);
-        AuthorityAdapter adapter = new AuthorityAdapter(this, getPhoneTypeEntity());
-        authorityRecyclerView.setAdapter(adapter);
-    }
-
-    public ArrayList<AuthorityEntity> getPhoneTypeEntity() {
-        ArrayList<AuthorityEntity> data = new ArrayList<>();
-        setPhoneTypeEntity(data);
-        if (data.size() == 0) {
-            IntentWrapper.whiteListMatters(ProMainActivity.instance, "服务的持续运行");
-            finish();
-        }
-        data.get(0).setCanClick(true);
-
-        if (SharedUtils.getInstance().readBoolean(IntentPutKeyConstant.IS_START_UP)) {
-            for (int i = 1; i < data.size(); i++) {
-                data.get(i).setCanClick(true);
-            }
-        }
-        return data;
-    }
+public class ImportantAuthorityPresenter {
 
     AuthorityEntity entity;
     Intent shadeIntent;
+    private ImportantAuthorityActivity instance;
+
+    public ImportantAuthorityPresenter() {
+        instance = ICSOpenVPNApplication.importantAuthorityActivity;
+    }
 
     public void setPhoneTypeEntity(ArrayList<AuthorityEntity> data) {
         int version = Build.VERSION.SDK_INT;
         entity = new AuthorityEntity();
-        shadeIntent = new Intent(this, ShadeActivity.class);
+        shadeIntent = new Intent(instance, ShadeActivity.class);
         String phoneType = Build.MANUFACTURER.toLowerCase();
         Log.d("setPhoneTypeEntity", "phoneType: " + phoneType);
 
@@ -208,21 +160,6 @@ public class ImportantAuthorityActivity extends BaseActivity {
         }
     }
 
-    /**
-     * @param intent 需要跳转的Intent
-     * @param data   容器
-     */
-    public void dataSave(Intent intent, ArrayList<AuthorityEntity> data) {
-        if (intent != null) {
-            try {
-                entity.setintentEntity(new IntentEntity(intent, shadeIntent));
-                data.add(new AuthorityEntity(entity));
-            } catch (Exception e) {
-
-            }
-        }
-    }
-
     private void appPertectSet(AuthorityEntity entity) {
         entity.setTitle(Constant.APP_PERTECT);
         entity.setTip(Constant.PHONE_NO_OMIT);
@@ -300,4 +237,18 @@ public class ImportantAuthorityActivity extends BaseActivity {
         dataSave(intent, data);
     }
 
+    /**
+     * @param intent 需要跳转的Intent
+     * @param data   容器
+     */
+    public void dataSave(Intent intent, ArrayList<AuthorityEntity> data) {
+        if (intent != null) {
+            try {
+                entity.setintentEntity(new IntentEntity(intent, shadeIntent));
+                data.add(new AuthorityEntity(entity));
+            } catch (Exception e) {
+
+            }
+        }
+    }
 }

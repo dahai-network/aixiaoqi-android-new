@@ -117,6 +117,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 		EventBusUtil.blueConnStatue(UartService.STATE_DISCONNECTED);
 	}
 
+	/**
+	 * 接受广播
+	 * @param context
+	 * @param intent
+	 */
 	public void onReceive(final Context context, Intent intent) {
 		this.context = context;
 		final String action = intent.getAction();
