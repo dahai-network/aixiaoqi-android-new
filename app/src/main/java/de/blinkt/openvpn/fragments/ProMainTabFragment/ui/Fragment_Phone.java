@@ -38,7 +38,6 @@ import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl.PhoneRedocerPresenterImpl;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.View.PhoneView;
 import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
 import de.blinkt.openvpn.http.OnlyCallHttp;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
@@ -180,11 +179,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         }
         getActivity().getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI, true, mCallLogObserver);
     }
-
-    private void requestTimeHttp() {
-
-    }
-
     @Override
     public void onAddDialCharacter(String addCharacter) {
         // TODO Auto-generated method stub

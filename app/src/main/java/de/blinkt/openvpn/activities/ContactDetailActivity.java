@@ -175,18 +175,9 @@ public class ContactDetailActivity extends BaseActivity implements View.OnClickL
 				break;
 		}
 	}
-
-
-
-
-
-
 	private void setListener() {
 		deletePhone.setOnClickListener(this);
 	}
-
-
-
 	@Override
 	protected void onClickRightView() {
 		//友盟方法统计
@@ -198,24 +189,20 @@ public class ContactDetailActivity extends BaseActivity implements View.OnClickL
 		intent.putExtra("finishActivityOnSaveCompleted", true);
 		startActivity(intent);
 	}
-
 	@Override
 	protected void onStop() {
 		super.onStop();
 		sqliteDB.close();
 		dao.closeDB();
 	}
-
 	static ContactChangeDataListener contactChangeDataLis;
 
 	public static void setNotifyFragmentDataListener(ContactChangeDataListener contactChangeDataListener) {
 		contactChangeDataLis = contactChangeDataListener;
 	}
-
 	public interface ContactChangeDataListener {
 		void contactChangeData(int contactId);
 	}
-
 	private void deleteDialog() {
 		new AlertDialog.Builder(this)//设置对话框标题
 				.setMessage(getString(R.string.delete_contact_hide))//设置显示的内容
@@ -241,9 +228,6 @@ public class ContactDetailActivity extends BaseActivity implements View.OnClickL
 
 		}).show();
 	}
-
-
-
 
 	@Override
 	public void dialogText(int type, String text) {

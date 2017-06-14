@@ -34,7 +34,6 @@ public class GetBindDeviceInfoModelImpl extends NetModelBaseImpl implements GetB
             if (object.getStatus() == 1) {
                 if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
                     SharedUtils utils = SharedUtils.getInstance();
-
                     if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
                      String   deviceAddress = getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI();
                         if (!TextUtils.isEmpty(deviceAddress)) {

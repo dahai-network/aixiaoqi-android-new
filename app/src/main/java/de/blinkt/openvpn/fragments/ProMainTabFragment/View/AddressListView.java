@@ -5,4 +5,5 @@ package de.blinkt.openvpn.fragments.ProMainTabFragment.View;
  */
 
 public interface AddressListView {
+    void rlNoPermission(int isVisible);
 }
