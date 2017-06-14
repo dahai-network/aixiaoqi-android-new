@@ -71,9 +71,9 @@ public class CallTimeOrderDetailPresenter extends BaseNetActivity {
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
         if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID) {
-            dismissProgress();
+            instance.dismissProgress();
             if (object.getStatus() == 1) {
-                dismissProgress();
+                instance.dismissProgress();
                 if (!isCreateView) {
                    // createViews();
                     EventBus.getDefault().post(new CallTime_CreatViewEvent(true));

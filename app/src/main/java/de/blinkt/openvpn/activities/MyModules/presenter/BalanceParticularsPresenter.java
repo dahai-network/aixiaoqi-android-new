@@ -61,7 +61,6 @@ public class BalanceParticularsPresenter extends BaseNetActivity {
      */
     public void addData() {
         pageNumber = balanceParticularsView.getPageNumber();
-
         balanceParticularsMode.getAccountData(balanceParticularsView.getPageNumber(), Constant.PAGESIZE, this);
 
     }

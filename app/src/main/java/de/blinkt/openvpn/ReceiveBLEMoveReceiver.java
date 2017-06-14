@@ -136,10 +136,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 			sendMessageToBlueTooth(APP_CONNECT + EncryptionUtil.random8Number());//APP专属命令
 			Log.i(TAG, "发送了专属命令");
 			String braceletname = utils.readString(Constant.BRACELETNAME);
+
 			if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
 
 			} else {
 				CommonTools.delayTime(200);
+				//获取蓝牙基本信息
 				sendMessageToBlueTooth(BASIC_MESSAGE);
 				CommonTools.delayTime(200);
 				sendMessageToBlueTooth(ICCID_GET);

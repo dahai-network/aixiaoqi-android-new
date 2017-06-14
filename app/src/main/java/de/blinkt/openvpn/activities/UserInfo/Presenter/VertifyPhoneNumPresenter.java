@@ -49,7 +49,8 @@ public class VertifyPhoneNumPresenter extends BaseNetActivity {
 
         vertifyPhoneNumModel.confirmedICCID(phoneNumber, SharedUtils.getInstance().readString(Constant.ICCID), this);
         //服务器验证操作
-        showProgress(R.string.vertifying);
+
+        instance.showProgress(R.string.vertifying);
         isVertifying = true;
         overtimeThread = new Thread(new Runnable() {
             @Override
@@ -61,7 +62,7 @@ public class VertifyPhoneNumPresenter extends BaseNetActivity {
                         if (isVertifying) {
                             vertifyPhoneNumView.showToast(instance.getString(R.string.vertify_overtime));
                             isVertifying = false;
-                            dismissProgress();
+                            instance.dismissProgress();
                         }
                     }
                 });
@@ -83,8 +84,7 @@ public class VertifyPhoneNumPresenter extends BaseNetActivity {
             if (http.getStatus() == 1) {
                 if (http.getEntity().isIsConfirmed()) {
                     isVertifying = false;
-                    dismissProgress();
-
+                    instance.dismissProgress();
                     confirmedPhoneNum = http.getEntity().getTel();
                     vertifyPhoneNumView.showToast(instance.getString(R.string.vertify_success));
                     instance.finish();
