@@ -184,7 +184,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
     @Override
     public void noNet() {
         sureTextView.setEnabled(true);
-        dismissProgress();
+        instance.dismissProgress();
     }
 
     private void sendMessageSeparate(final String message) {
@@ -193,7 +193,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
         int length = messages.length;
         for (int i = 0; i < length; i++) {
             if (!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])) {
-                dismissProgress();
+                instance.dismissProgress();
             }
         }
     }
@@ -237,7 +237,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
         @Override
         public void onReceive(Context context, Intent intent) {
             if (TextUtils.equals(intent.getAction(), MyOrderDetailActivity.CARD_RULE_BREAK)) {
-                dismissProgress();
+                instance.dismissProgress();
                 showDialog();
             } else if (TextUtils.equals(intent.getAction(), MyOrderDetailActivity.FINISH_PROCESS)) {
                 if (ReceiveBLEMoveReceiver.orderStatus == 4) {
@@ -256,12 +256,12 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
                     );
                     isActivateSuccess = true;
                 }
-                dismissProgress();
+                instance.dismissProgress();
                 //关闭界面
                 instance.finish();
 
             } else if (TextUtils.equals(intent.getAction(), MyOrderDetailActivity.FINISH_PROCESS_ONLY)) {
-                dismissProgress();
+                instance.dismissProgress();
             }
         }
     };

@@ -49,6 +49,7 @@ import de.blinkt.openvpn.activities.PackageCategoryActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.Set.ui.SettingActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
+import de.blinkt.openvpn.activities.UserInfo.ui.VertifyPhoneNumActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -380,7 +381,8 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 }
                 break;
             case R.id.permission_set:
-                intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
+               intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
+                //intent = new Intent(getActivity(), VertifyPhoneNumActivity.class);
                 break;
             case R.id.tv_setting:
                 //友盟方法统计
