@@ -90,14 +90,8 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
 
     @Override
     public void requestSkyUpgrade() {
-
         CheckAuthorityUtil.checkPermissions((Activity) context, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
-        long beforeRequestTime = SharedUtils.getInstance().readLong(Constant.UPGRADE_INTERVAL);
-        if (beforeRequestTime == 0L || System.currentTimeMillis() - beforeRequestTime > 216000000)//一小时以后再询问
-        {
-            skyUpgradeModel.skyUpgrade();
-        }
-
+        skyUpgradeModel.skyUpgrade();
     }
 
     @Override
@@ -137,7 +131,6 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
 
         }else if(cmdType==HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA){
             SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
-            SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
             if (skyUpgradeHttp.getStatus() == 1) {
                 if (skyUpgradeHttp.getUpgradeEntity() != null) {
                     String versionStr = SharedUtils.getInstance().readString(Constant.BRACELETVERSION);
@@ -215,14 +208,6 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         }
 
 
-    }
-
-    @Override
-    public void errorComplete(int cmdType, String errorMessage) {
-
-        if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
-            SharedUtils.getInstance().writeLong(Constant.UPGRADE_INTERVAL, System.currentTimeMillis());
-        }
     }
 
     @Override
@@ -375,10 +360,8 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
                 break;
             case UartService.STATE_CONNECTED:
                 myDeviceView.dismissProgress();
-                requestSkyUpgrade();
                 break;
         }
-
     }
     //升级状态提示
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程

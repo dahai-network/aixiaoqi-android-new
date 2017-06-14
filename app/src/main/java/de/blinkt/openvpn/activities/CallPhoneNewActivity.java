@@ -345,10 +345,6 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements View.OnC
 		contactRecodeEntity.setType(CallLog.Calls.OUTGOING_TYPE);
 		contactRecodeEntity.setTypeString(Constant.CALL_OUTGOING);
 		FindContactUtil.addCallRecode(this, contactRecodeEntity);
-		Intent intent = new Intent();
-		intent.putExtra(IntentPutKeyConstant.CONTACT_RECODE_ENTITY, contactRecodeEntity);
-		intent.setAction(ReceiveCallActivity.UPDATE_CONTACT_REDORE);
-		sendBroadcast(intent);
 	}
 
 	class ConnectedReceive extends BroadcastReceiver {

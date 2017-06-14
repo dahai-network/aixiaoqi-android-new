@@ -15,7 +15,7 @@ import android.util.Log;
 
 import java.util.List;
 
-import static de.blinkt.openvpn.fragments.Fragment_Phone.PERMISSION_SET;
+import static de.blinkt.openvpn.fragments.ProMainTabFragment.ui.Fragment_Phone.PERMISSION_SET;
 
 /**
  * Created by Administrator on 2017/4/28 0028.

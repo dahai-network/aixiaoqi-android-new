@@ -41,7 +41,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.fragments.SmsFragment;
+import de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl.SmsPresenterImpl;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.SendRetryForErrorHttp;
@@ -751,7 +751,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
                 smsDetailAdapter.notifyDataSetChanged();
 //				} else {
                 if (smsDetailAdapter.getItemCount() == 0) {
-                    Intent msgIntent = new Intent(SmsFragment.DELTE_MESSAGE);
+                    Intent msgIntent = new Intent(SmsPresenterImpl.DELTE_MESSAGE);
                     sendBroadcast(msgIntent);
                     finish();
                 }
@@ -778,7 +778,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
             }
             smsDetailAdapter.notifyDataSetChanged();
             if (smsDetailAdapter.getItemCount() == 0) {
-                Intent msgIntent = new Intent(SmsFragment.DELTE_MESSAGE);
+                Intent msgIntent = new Intent(SmsPresenterImpl.DELTE_MESSAGE);
                 sendBroadcast(msgIntent);
                 finish();
             }
@@ -834,9 +834,7 @@ public class SMSAcivity extends BaseNetActivity implements View.OnClickListener,
      * 更新SmsFragment的View
      */
     public void updateView() {
-        Intent intent = new Intent(SmsFragment.UPDATE_MESSAGE);
+        Intent intent = new Intent(SmsPresenterImpl.UPDATE_MESSAGE);
         sendBroadcast(intent);
-
-
     }
 }

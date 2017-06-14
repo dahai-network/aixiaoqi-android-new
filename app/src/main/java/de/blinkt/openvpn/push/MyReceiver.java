@@ -31,7 +31,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.fragments.SmsFragment;
+import de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl.SmsPresenterImpl;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.GetDeviceSimRegStatuesHttp;
@@ -182,7 +182,7 @@ public class MyReceiver extends BroadcastReceiver implements InterfaceCallback{
 	}
 
 	private void processCustomNotify(Context context) {
-			Intent msgIntent = new Intent(SmsFragment.NOTIFY_RECEIVED_ACTION);
+			Intent msgIntent = new Intent(SmsPresenterImpl.NOTIFY_RECEIVED_ACTION);
 			context.sendBroadcast(msgIntent);
 	}
 	NotificationManager	mNotificationManager;

@@ -48,8 +48,6 @@ public class Constant {
 	public static final String CHINA_TELECOM = "China_Telecom";
 	public static final String CHINA_MOBILE = "China_Mobile";
 	public static final String CHINA_UNICOM = "China_Unicom";
-	//更新请求的时间间隔（一小时提示一次升级）
-	public static final String UPGRADE_INTERVAL = "upgrade_interval";
 	//极光推送标签
 	public static final String JPUSH_ALIAS = "jpush_alias";
 	public static final String JPUSH_ALIAS_SUCCESS = "success";

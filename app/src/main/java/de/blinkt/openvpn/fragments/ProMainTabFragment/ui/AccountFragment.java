@@ -1,17 +1,12 @@
-package de.blinkt.openvpn.fragments;
+package de.blinkt.openvpn.fragments.ProMainTabFragment.ui;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,15 +36,14 @@ import cn.com.johnson.widget.GlideCircleTransform;
 import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
 import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
+import de.blinkt.openvpn.activities.ImportantAuthorityActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.BalanceParticularsActivity;
-import de.blinkt.openvpn.activities.MyModules.ui.ImportantAuthorityActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.PackageMarketActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.RechargeActivity;
 import de.blinkt.openvpn.activities.PackageCategoryActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.Set.ui.SettingActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
-import de.blinkt.openvpn.activities.UserInfo.ui.VertifyPhoneNumActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -269,7 +263,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
 
     //显示电量
     public void setPowerPercent() {
-        Log.e(TAG, "PowerPercent=" + SharedUtils.getInstance().readInt(Constant.BRACELETPOWER));
         if (SharedUtils.getInstance().readInt(Constant.BRACELETPOWER) != 0)
             powerTextView.setText(SharedUtils.getInstance().readInt(Constant.BRACELETPOWER) + "%");
     }
@@ -293,13 +286,11 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     case Constant.CHINA_UNICOM:
                         operatorTextView.setText(getString(R.string.china_unicom));
                         break;
-
                 }
             }
         } else {
             if (signalIconImageView != null)
                 signalIconImageView.setBackgroundResource(R.drawable.unregist);
-
             if (operatorTextView != null) {
                 operatorTextView.setText("----");
             }
@@ -381,8 +372,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 }
                 break;
             case R.id.permission_set:
-               intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
-                //intent = new Intent(getActivity(), VertifyPhoneNumActivity.class);
+                intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
                 break;
             case R.id.tv_setting:
                 //友盟方法统计

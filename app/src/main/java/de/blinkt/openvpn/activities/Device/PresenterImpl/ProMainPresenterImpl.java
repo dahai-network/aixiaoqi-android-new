@@ -57,7 +57,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
     SkyUpgradeModelImpl skyUpgradeModel;
     RegisterBroadcastModelImpl registerBroadcastModel;
     private int requestCount = 0;
- public static   SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange;
+    public static   SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange;
     public  ProMainPresenterImpl(ProMainView proMainView,Context context){
         this.proMainView=proMainView;
         this.context=context;
@@ -72,13 +72,13 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
 
     }
 
-public void registerBlueChangeBroadcast(){
-    registerBroadcastModel.registerBlueChangeBroadcast(context);
-}
+    public void registerBlueChangeBroadcast(){
+        registerBroadcastModel.registerBlueChangeBroadcast(context);
+    }
 
-public  void registerReceiveBroadcast(){
-    registerBroadcastModel.registerReceiveBLEMoveReceiverBroadcast(context);
-}
+    public  void registerReceiveBroadcast(){
+        registerBroadcastModel.registerReceiveBLEMoveReceiverBroadcast(context);
+    }
     @Override
     public void requestGetBasicConfig() {
         basicConfigModel.requestBasicConfig();
@@ -91,6 +91,7 @@ public  void registerReceiveBroadcast(){
 
     @Override
     public void requestGetSecurityConfig() {
+        e("requestGetSecurityConfig");
         getSecurityConfigModel.getSecurityConfig();
     }
 
@@ -106,7 +107,12 @@ public  void registerReceiveBroadcast(){
                 GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
                 if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
                     if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
-                        requestSkyUpdate();
+                        if(!SharedUtils.getInstance().readBoolean(Constant.HAS_DEVICE_NEED_UPGRADE)){
+                            requestSkyUpdate();
+                        }else{
+                            proMainView.showHotDot(View.VISIBLE);
+                        }
+
                         proMainView.blueToothOpen();
                     }
                 }
@@ -146,13 +152,8 @@ public  void registerReceiveBroadcast(){
                 }
             }
         }else if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
-            SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
-            if (skyUpgradeHttp.getStatus() == 1) {
-                String braceletVersion = SharedUtils.getInstance().readString(Constant.BRACELETVERSION);
-                if (!TextUtils.isEmpty(braceletVersion) && skyUpgradeHttp.getUpgradeEntity().getVersion() > Float.parseFloat(braceletVersion)) {
-                    proMainView.showHotDot(View.VISIBLE);
-                    SharedUtils.getInstance().writeBoolean(Constant.HAS_DEVICE_NEED_UPGRADE,true);
-                }
+            if (object.getStatus() == 1) {
+                proMainView.showHotDot(View.VISIBLE);
             }
         }
     }
@@ -192,6 +193,7 @@ public  void registerReceiveBroadcast(){
      */
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程
     public void onIsSuccessEntity(SimRegisterStatue entity) {
+        e("getRigsterSimStatue="+entity.getRigsterSimStatue()+"\ngetRigsterStatueReason="+entity.getRigsterStatueReason());
         switch (entity.getRigsterSimStatue()) {
             case SocketConstant.REGISTER_SUCCESS:
                 break;
@@ -204,7 +206,6 @@ public  void registerReceiveBroadcast(){
             case SocketConstant.UNREGISTER:
                 unregisterSim(entity.getRigsterStatueReason());
             default:
-
                 break;
         }
 
@@ -251,7 +252,7 @@ public  void registerReceiveBroadcast(){
                 hasPreDataRegisterImpl.startTcpSocket();
                 break;
             case SocketConstant.VAILD_CARD:
-               requestGetSecurityConfig();
+                requestGetSecurityConfig();
                 break;
         }
     }

@@ -25,13 +25,13 @@ import de.blinkt.openvpn.util.SharedUtils;
 
 public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
     private int bindtime = 0;
-private Context context;
+    private Context context;
     SocketConnection socketTcpConnection;
-  public  static SendYiZhengService  sendYiZhengService;
+    public  static SendYiZhengService  sendYiZhengService;
     public HasPreDataRegisterImpl(Context context){
         this.context=context;
         if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
-        socketTcpConnection = new SocketConnection();
+            socketTcpConnection = new SocketConnection();
         }
         if(sendYiZhengService==null){
             sendYiZhengService=new SendYiZhengService();
@@ -104,7 +104,8 @@ private Context context;
 
     public void unbindTcpService() {
         if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
-            context.unbindService(socketTcpConnection);
+            if(context!=null&&socketTcpConnection!=null)
+                context.unbindService(socketTcpConnection);
             if (SocketConnection.mReceiveSocketService != null) {
                 SocketConnection.mReceiveSocketService.stopSelf();
                 SocketConnection.mReceiveSocketService = null;

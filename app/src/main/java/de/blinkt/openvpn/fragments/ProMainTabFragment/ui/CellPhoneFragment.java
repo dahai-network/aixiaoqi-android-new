@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.fragments;
+package de.blinkt.openvpn.fragments.ProMainTabFragment.ui;
 
 /**
  * Created by Administrator on 2016/9/8 0008.
@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.CellPhoneFragmentPagerAdapter;
+
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.model.enentbus.OptionCellPhoneFragmentView;
 import de.blinkt.openvpn.util.PageChangeListener;
@@ -76,7 +77,6 @@ public class CellPhoneFragment extends BaseStatusFragment {
                 operation_rg.check(cell_phone_rb.getId());
                 ClickPhone();
             }
-
         }
         EventBusUtil.optionView(true);
         if (fragmentPhone != null && fragmentPhone.t9dialpadview != null)
