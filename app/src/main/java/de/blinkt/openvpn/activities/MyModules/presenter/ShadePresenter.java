@@ -112,16 +112,13 @@ public class ShadePresenter {
             case Constant.MEIZU:
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
                     case ONE_STEP://保持后台运行
-                        Log.d("ShadePresenter", "adjustDifferentPhoneView: ");
+                       Log.d("ShadePresenter", "adjustDifferentPhoneView: "+ids.length );
                         ids[0] = R.string.meizu_test_1_1;
-                        Log.d("ShadePresenter", "adjustDifferentPhoneView: 1"+ids.length);
                         ids[1] = R.string.meizu_test_1_2;
-                        Log.d("ShadePresenter", "adjustDifferentPhoneView: 2"+ids.length);
                         ids[2] = R.string.meizu_test_1_3;
-                        Log.d("ShadePresenter", "adjustDifferentPhoneView: 3"+ids.length);
 
                         text = getText(ids);
-                        Log.d("ShadePresenter", "adjustDifferentPhoneView:  text[0]=" + text[0]+" text[1]="+ text[1] +" text[2]="+ text[2]);
+                      //  Log.d("ShadePresenter", "adjustDifferentPhoneView:  text[0]=" + text[0]+" text[1]="+ text[1] +" text[2]="+ text[2]);
                         setResourceOne(true, text[0], R.drawable.meizu_image_1_1);
                         setResourceTwo(false, text[1], R.drawable.meizu_image_1_2);
                         setResourceThree(false, text[2], R.drawable.meizu_image_1_3);
