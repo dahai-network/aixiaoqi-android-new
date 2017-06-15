@@ -123,6 +123,11 @@ public class ActivateActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
+    public String getEffectTime() {
+        return effectTime;
+    }
+
+    @Override
     public TextView getSureTextView() {
         return sureTextView;
     }

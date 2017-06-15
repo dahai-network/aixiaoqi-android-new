@@ -128,6 +128,7 @@ public class PackageDetailActivity extends BaseActivity implements PackageDetail
     }
 
     private void addData() {
+
         packageDetailPresenter.getPackageDetailData(getIntent().getStringExtra("id"));
     }
 

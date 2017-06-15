@@ -238,8 +238,7 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
      */
     private void payForBalance() {
         Log.d("CommitOrderPresenter--", "payForBalance: ");
-      /*  BalanceGetPayIdHttp http = new BalanceGetPayIdHttp(this, HttpConfigUrl.COMTYPE_BALANCE_GETPAYID, orderEntity.getOrder().getOrderID());
-        new Thread(http).start();*/
+
       createHttpRequest(HttpConfigUrl.COMTYPE_BALANCE_GETPAYID,orderEntity.getOrder().getOrderID());
     }
 

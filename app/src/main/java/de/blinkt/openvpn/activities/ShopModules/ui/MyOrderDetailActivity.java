@@ -378,6 +378,7 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
         if (isWriteReceiver != null)
             LocalBroadcastManager.getInstance(this).unregisterReceiver(isWriteReceiver);
         EventBus.getDefault().unregister(this);
+        myOrderDetailPresenter.relaseResource();
         super.onDestroy();
     }
 

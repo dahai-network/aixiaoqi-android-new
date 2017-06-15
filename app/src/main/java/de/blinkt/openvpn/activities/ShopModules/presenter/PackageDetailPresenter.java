@@ -19,6 +19,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.umeng.analytics.MobclickAgent;
 
+import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.activities.ShopModules.model.PackageDetailModel;
 import de.blinkt.openvpn.activities.ShopModules.modelImpl.PackageDetailImpl;
@@ -58,6 +59,7 @@ public class PackageDetailPresenter extends BaseNetActivity {
 
 
     public void getPackageDetailData(String id) {
+        instance.showProgress(R.string.loading_data);
         packageDetailModel.getPacketDetail(id, this);
     }
 
@@ -95,6 +97,7 @@ public class PackageDetailPresenter extends BaseNetActivity {
             } else {
                 instance.showToast(object.getMsg());
             }
+            instance.dismissProgress();
     }
 
     public void buyPackageButtonEvent() {

@@ -4,6 +4,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.com.johnson.adapter.ParticularAdapter;
+import de.blinkt.openvpn.http.ParticularHttp;
 import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
 
 /**
@@ -12,18 +13,12 @@ import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
  */
 
 public interface BalanceParticularsView {
-
-    XRecyclerView getParticularsRecyclerView();
-
-    RelativeLayout getNoNetRelativeLayout();
-
-    int getPageNumber();
-
-    ParticularAdapter getParticularAdapter();
-
-    RelativeLayout getNodataRelativeLayout();
-
-    TextView getNoDataTextView();
+    /**
+     * 加载成功界面
+     * @param http
+     */
+    void loadSuccessView(ParticularHttp http);
+    void loadNoNetView();
 
     void showToast(String msg);
 

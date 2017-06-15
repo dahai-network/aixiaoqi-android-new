@@ -139,7 +139,7 @@
             android:label="@string/app"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name="de.blinkt.openvpn.activities.PackageCategoryActivity"
+            android:name="de.blinkt.openvpn.activities.MyModules.ui.PackageCategoryActivity"
             android:label="@string/app"
             android:windowSoftInputMode="adjustPan"/>
 

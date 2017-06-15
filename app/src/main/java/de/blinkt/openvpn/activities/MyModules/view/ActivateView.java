@@ -14,6 +14,7 @@ public interface ActivateView {
     String getOrderId();
 
     String getDataTime();
+    String getEffectTime();
 
     TextView getSureTextView();
 

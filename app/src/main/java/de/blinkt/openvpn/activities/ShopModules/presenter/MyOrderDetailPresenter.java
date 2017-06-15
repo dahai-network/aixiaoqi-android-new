@@ -1,5 +1,8 @@
 package de.blinkt.openvpn.activities.ShopModules.presenter;
 
+import android.os.Handler;
+import android.provider.Settings;
+import android.provider.Telephony;
 import android.util.Log;
 
 import cn.com.aixiaoqi.R;
@@ -30,6 +33,9 @@ public class MyOrderDetailPresenter extends BaseNetActivity {
     private MyOrderDetailView myOrderDetailView;
     private MyOrderDetailModel myOrderDetailModel;
     private MyOrderDetailActivity instance;
+    boolean flg=true;//判断网络是否超时
+    private Handler mHandler = new Handler() {
+    };
 
 
     public MyOrderDetailPresenter(MyOrderDetailView myOrderDetailView) {
@@ -37,13 +43,24 @@ public class MyOrderDetailPresenter extends BaseNetActivity {
         myOrderDetailModel = new MyOrderDetailImple();
         instance = ICSOpenVPNApplication.myOrderDetailActivity;
     }
-
+    Runnable runnable;
     public void addData(String id) {
         Log.d("MyOrderDetailPresenter", "addData: ");
         instance.showDefaultProgress();
-        Log.d("MyOrderDetailPresenter", "addData:id= "+id);
+        Log.d("MyOrderDetailPresenter", "addData:id= " + id);
         myOrderDetailModel.getUserPacketById(id, this);
-        
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                if(flg){
+                    instance.dismissProgress();
+                    instance.showToast("网络超时，获取套餐详情信息失败");
+                    flg=false;
+                }
+
+            }
+        };
+        mHandler.postDelayed(runnable, 10000);
 
     }
 
@@ -84,7 +101,7 @@ public class MyOrderDetailPresenter extends BaseNetActivity {
                     sendMessageSeparate(orderDataHttp.getOrderDataEntity().getData());
                 } else {
                     ICSOpenVPNApplication.cardData = orderDataHttp.getOrderDataEntity().getData();
-                    Log.i(TAG, "卡数据：" + ICSOpenVPNApplication.cardData);
+                    Log.i("MyOrderDetailPresenter", "卡数据：" + ICSOpenVPNApplication.cardData);
                     ReceiveBLEMoveReceiver.isGetnullCardid = false;
                     sendMessageSeparate(Constant.WRITE_SIM_FIRST);
                 }
@@ -93,6 +110,7 @@ public class MyOrderDetailPresenter extends BaseNetActivity {
             }
         }
         instance.dismissProgress();
+        flg=false;
     }
 
     private void sendMessageSeparate(final String message) {
@@ -109,12 +127,19 @@ public class MyOrderDetailPresenter extends BaseNetActivity {
 
     @Override
     public void errorComplete(int cmdType, String errorMessage) {
-        Log.d("errorComplete", "errorComplete: "+errorMessage);
+        Log.d("errorComplete", "errorComplete: " + errorMessage);
         instance.showToast(errorMessage);
+        flg=false;
     }
 
     @Override
     public void noNet() {
         myOrderDetailView.noNetShowView();
+        flg=false;
+    }
+
+    public void relaseResource(){
+
+        mHandler.removeCallbacks(runnable);
     }
 }

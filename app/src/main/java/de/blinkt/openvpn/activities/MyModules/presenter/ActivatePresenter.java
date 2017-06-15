@@ -84,7 +84,9 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
      * 初始化数据
      */
     private void initActivateViewData() {
+
         sureTextView = activateView.getSureTextView();
+        effectTime=activateView.getEffectTime();
 
     }
 
@@ -112,6 +114,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
     public void isCanActivatePackage() {
         dataTime = activateView.getDataTime();
         orderId = activateView.getOrderId();
+        Log.d(TAG, "isCanActivatePackage: "+effectTime);
         if (TextUtils.isEmpty(effectTime)) {
             activateView.showToast(instance.getString(R.string.effective_date_is_null));
             return;
@@ -203,12 +206,14 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
         if (type == 2) {
             SendCommandToBluetooth.sendMessageToBlueTooth(Constant.RESTORATION);
         } else if (type == 0) {
-            if (System.currentTimeMillis() > DateUtils.getStringToDate(text + " 00:00:00") - 24 * 60 * 60 * 1000) {
+            // - 24 * 60 * 60 * 1000
+            if (System.currentTimeMillis() >= DateUtils.getStringToDate(text + " 00:00:00")) {
                 activateView.showToast(instance.getString(R.string.less_current_time));
                 return;
             }
             dataTime = text;
             effectTime = DateUtils.getStringToDate(text + " 00:00:00") / 1000 + "";
+            Log.d("ActivatePresenter", "dialogText: "+effectTime+":text="+text);
             String[] time = text.split("-");
             TextView payWayTextView = activateView.getPayWayTextView();
             if (payWayTextView != null)
