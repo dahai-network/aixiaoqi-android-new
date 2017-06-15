@@ -423,11 +423,7 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         sinking = null;
         isForeground = false;
         DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
-        mBluetoothAdapter = null;
         isUpgrade = false;
-        registerSimStatu = null;
-        RegisterStatueAnim = null;
-
     }
 
     private void showSkyUpgrade() {

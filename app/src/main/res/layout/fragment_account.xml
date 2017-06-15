@@ -306,6 +306,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="5dp"
                                     android:layout_marginTop="20dp"
+                                    android:visibility="gone"
                                     android:layout_toRightOf="@+id/flow"
                                     android:src="@drawable/my_red_dot"/>
 
@@ -418,6 +419,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/padding_5dp"
                             android:layout_marginTop="@dimen/padding_18dp"
+                            android:visibility="gone"
                             android:layout_toRightOf="@+id/deviceNameTextView"
                             android:src="@drawable/my_red_dot"/>
 

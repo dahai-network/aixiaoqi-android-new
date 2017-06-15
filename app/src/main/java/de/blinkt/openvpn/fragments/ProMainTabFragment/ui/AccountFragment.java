@@ -16,15 +16,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import com.aixiaoqi.socket.EventBusUtil;
-import com.aixiaoqi.socket.SocketConstant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.analytics.MobclickAgent;
-
 import org.greenrobot.eventbus.EventBus;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -48,24 +43,16 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl.AccountPresenterImpl;
+import de.blinkt.openvpn.fragments.ProMainTabFragment.View.AccountView;
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
-import de.blinkt.openvpn.http.BalanceHttp;
-import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.CreateHttpFactory;
-import de.blinkt.openvpn.http.GetBindDeviceHttp;
-import de.blinkt.openvpn.http.InterfaceCallback;
-import de.blinkt.openvpn.http.OrderUsageRemainHttp;
 import de.blinkt.openvpn.model.UsageRemainEntity;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
-
 import static android.view.View.GONE;
-import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
-import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKBALANCE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKENTERPERSONCENTER;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKMYDEVICE;
@@ -77,7 +64,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKSET;
  * 我的界面
  * A simple {@link Fragment} subclass.
  */
-public class AccountFragment extends BaseStatusFragment implements View.OnClickListener, InterfaceCallback, DialogInterfaceTypeBase {
+public class AccountFragment extends BaseStatusFragment implements AccountView, DialogInterfaceTypeBase {
     @BindView(R.id.title)
     TitleBar title;
     @BindView(R.id.headImageView)
@@ -134,23 +121,20 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     TextView serviceTextView;
     @BindView(R.id.add_or_activate_package_iv)
     ImageView addOrActivatePackageIv;
+    @BindView(R.id.tv_new_packaget_action)
+    ImageView tvNewPackagetAction;
+    @BindView(R.id.tv_new_version)
+    ImageView tvNewVersion;
     //bluetooth status蓝牙状态
     private String TAG = "AccountFragment";
-    boolean hasPackage = false;
-    public ImageView tvNewPackagetAction;
-    public ImageView tvNewVersion;
     private final static int SIGN_MSG_ONE = 1;
     private final static int SIGN_MSG_TWO = 2;
     private final static int SIGN_MSG_THREE = 3;
     private final static int SIGN_MSG_FOUR = 4;
-    private UsageRemainEntity.Used used;
     private boolean isNewVersion;
     private boolean isNewPackage;
+    AccountPresenterImpl accountPresenterImpl;
     Unbinder unbinder;
-    public AccountFragment() {
-        // Required empty public constructor
-    }
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -158,34 +142,110 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
             switch (msg.what) {
                 case SIGN_MSG_ONE:
                     if (tvNewPackagetAction != null) {
-                        tvNewPackagetAction.setVisibility(View.VISIBLE);
-                        isNewPackage = true;
+                        setNewPackage(true);
                     }
                     break;
                 case SIGN_MSG_TWO:
                     if (tvNewPackagetAction != null) {
-                        tvNewPackagetAction.setVisibility(View.GONE);
-                        isNewPackage = false;
+                        setNewPackage(false);
                     }
                     break;
                 case SIGN_MSG_THREE:
                     if (tvNewVersion != null && !AppMode.getInstance().isClickAddDevice) {
-                        tvNewVersion.setVisibility(View.VISIBLE);
-                        isNewVersion = true;
+                        setNewVersion(true);
                     }
                     break;
                 case SIGN_MSG_FOUR:
                     if (tvNewVersion != null) {
-                        isNewVersion = false;
-                        tvNewVersion.setVisibility(View.GONE);
+                        setNewVersion(false);
                     }
                     break;
-
             }
             EventBus.getDefault().post(new ChangeViewStateEvent(isNewVersion, isNewPackage));
         }
     };
 
+    @Override
+    public void setServiceText(String textContent) {
+        serviceTextView.setText(textContent);
+    }
+
+    @Override
+    public void showPackage(int hasPackageVisible, int noPackageVisible) {
+        PacketRelativeLayout.setVisibility(hasPackageVisible);
+        noPacketRelativeLayout.setVisibility(noPackageVisible);
+    }
+
+    @Override
+    public void addOrActivatePackageIvAndText(int drawableId, int textId) {
+        addOrActivatePackageIv.setImageResource(drawableId);
+        addOrActivatePackage.setText(getString(textId));
+    }
+
+    @Override
+    public void updateRedDot(int isVisiable) {
+        mHandler.sendEmptyMessage(isVisiable);
+    }
+
+    @Override
+    public void activatePackage(int activateStatue, String activateCount) {
+        flow.setText(getString(activateStatue));
+        flowCount.setText(activateCount);
+    }
+
+    @Override
+    public void packageAllCount(String allCount) {
+        packageAllCount.setText(allCount);
+    }
+
+    @Override
+    public void callTime(String time) {
+        callTime.setText(time);
+    }
+
+    @Override
+    public void toActivity() {
+        Intent intent = null;
+        intent = getIntent(intent);
+        startActivity(intent);
+    }
+
+    @Override
+    public void setBalanceText(float balanceCount) {
+        balanceTextView.setText(ICSOpenVPNApplication.getInstance().getString(R.string.balance) + ": " + balanceCount
+                + ICSOpenVPNApplication.getInstance().getString(R.string.yuan));
+    }
+
+    @Override
+    public void showToast(String toastContent) {
+        CommonTools.showShortToast(getActivity(),toastContent);
+    }
+
+    @Override
+    public void showToast(int toastId) {
+        CommonTools.showShortToast(getActivity(),getString(toastId));
+    }
+    /**
+     * 设备布局
+     *
+     * @param isShow
+     */
+    @Override
+    public void showDeviceSummarized(boolean isShow) {
+                if (deviceSummarizedRelativeLayout != null) {
+            deviceSummarizedRelativeLayout.setVisibility(isShow?View.VISIBLE:GONE);
+        }
+    }
+
+    private void setNewPackage(boolean isNewPackage){
+        this.isNewPackage=isNewPackage;
+        tvNewPackagetAction.setVisibility(isNewPackage?View.VISIBLE:GONE);
+    }
+
+    private void setNewVersion(boolean isNewVersion){
+        this.isNewVersion=isNewVersion;
+        tvNewVersion.setVisibility(isNewVersion?View.VISIBLE:GONE);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -193,16 +253,10 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         setLayoutId(R.layout.fragment_account);
         View rootView = super.onCreateView(inflater, container,
                 savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
         topProgressView.setWhiteBack(true);
-        unbinder= ButterKnife.bind(this, rootView);
+        accountPresenterImpl=new AccountPresenterImpl(this);
         title.setTextTitle(getString(R.string.personal_center));
-        tvNewPackagetAction = (ImageView) rootView.findViewById(R.id.tv_new_packaget_action);
-        tvNewVersion = (ImageView) rootView.findViewById(R.id.tv_new_version);
-        //初始化状态
-        tvNewPackagetAction.setVisibility(View.GONE);
-        tvNewVersion.setVisibility(View.GONE);
-        //注册广播
-
         return rootView;
     }
 
@@ -211,51 +265,33 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         super.onResume();
         //获取数据，每次都重新获取一次以保持正确性。
         getData();
+        accountPresenterImpl.requestUserPackage();
         getDeviceType();
-        getPackage();
+
     }
-
-
-    private void getPackage() {
-        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING);
-    }
-
     private void getDeviceType() {
         if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))) {
-            CreateHttpFactory.instanceHttp(AccountFragment.this, HttpConfigUrl.COMTYPE_GET_BIND_DEVICE);
+            accountPresenterImpl.requestGetBindInfo();
         } else {
             showDeviceSummarized(true);
-            String typeText = "";
-            String deviceType = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-            if (!TextUtils.isEmpty(deviceType)) {
-                //0是手环，1是钥匙扣
-                if (deviceType.contains(Constant.UNITOYS)) {
-                    typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-                } else if (deviceType.contains(Constant.UNIBOX)) {
-                    typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-                }
-                showDeviceType(typeText);
-            }
+            setDeviceType();
             setPowerPercent();
         }
     }
-
-    /**
-     * 设备布局
-     *
-     * @param isShow
-     */
-    //  @Override
-    public void showDeviceSummarized(boolean isShow) {
-        if (deviceSummarizedRelativeLayout != null) {
-            if (isShow) {
-                deviceSummarizedRelativeLayout.setVisibility(View.VISIBLE);
-            } else {
-                deviceSummarizedRelativeLayout.setVisibility(GONE);
+    @Override
+    public void setDeviceType() {
+        String deviceType = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
+        String typeText = "";
+        if (!TextUtils.isEmpty(deviceType)) {
+            //0是手环，1是钥匙扣
+            if (deviceType.contains(Constant.UNITOYS)) {
+                typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
+            } else if (deviceType.contains(Constant.UNIBOX)) {
+                typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
             }
+            showDeviceType(typeText);
         }
     }
-
     private void showDeviceType(String deviceType) {
         if (!TextUtils.isEmpty(deviceType))
             deviceNameTextView.setText(deviceType);
@@ -286,11 +322,13 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                     case Constant.CHINA_UNICOM:
                         operatorTextView.setText(getString(R.string.china_unicom));
                         break;
+
                 }
             }
         } else {
             if (signalIconImageView != null)
                 signalIconImageView.setBackgroundResource(R.drawable.unregist);
+
             if (operatorTextView != null) {
                 operatorTextView.setText("----");
             }
@@ -298,14 +336,13 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     }
 
     private void getData() {
-
         if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.NICK_NAME)))
             accountNameTextView.setText(SharedUtils.getInstance().readString(Constant.NICK_NAME));
         Glide.with(ICSOpenVPNApplication.getContext()).load(SharedUtils.getInstance().readString(Constant.USER_HEAD)).centerCrop().placeholder(R.drawable.default_head)
                 .transform(new GlideCircleTransform(ICSOpenVPNApplication.getContext(), 2, ICSOpenVPNApplication.getContext().getResources().getColor(R.color.white)))
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(headImageView);
         accountPhoneTextView.setText(SharedUtils.getInstance().readString(Constant.USER_NAME));
-        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_BALANCE);//余额
+        accountPresenterImpl.requestBalance(); //余额
 
     }
 
@@ -316,18 +353,15 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         cardRuleBreakDialog.changeText(getResources().getString(R.string.are_you_sure_unbind), getResources().getString(R.string.sure));
     }
 
-
     @Override
     public void dialogText(int type, String text) {
         if (type == 2) {
             if (!CommonTools.isFastDoubleClick(2000)) {
                 //断开连接
-                CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_UN_BIND_DEVICE);//解除绑定
+                accountPresenterImpl.requestUnbindDevice();//解除绑定
             }
         }
     }
-
-    private boolean isClickAddDevice = false;
 
     @OnClick({R.id.rechargeTextView,
             R.id.activateRelativeLayout,
@@ -348,24 +382,16 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 intent = activateClick();
                 break;
             case R.id.addDeviceRelativeLayout:
-//				if (CommonTools.isFastDoubleClick(1000)) {
-//					return;
-//				}
+                if (CommonTools.isFastDoubleClick(1000)) {
+                    return;
+                }
                 //友盟方法统计
                 MobclickAgent.onEvent(getActivity(), CLICKMYDEVICE);
 
                 if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
                     intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
                 } else {
-                    String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
-                    //如果设备名没有就设置成爱小器钥匙扣
-                    if (TextUtils.isEmpty(braceletName)) {
-                        if (NetworkUtils.isNetworkAvailable(getActivity())) {
-                            isClickAddDevice = true;
-                            getDeviceType();
-                        } else {
-                            CommonTools.showShortToast(getActivity(), getActivity().getString(R.string.no_wifi));
-                        }
+                    if(!accountPresenterImpl.canClick()){
                         return;
                     }
                     intent = getIntent(intent);
@@ -405,7 +431,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 if ("---".equals(serviceTextView.getText().toString())) {
                     intent = new Intent(getActivity(), FreeWorryPacketChoiceActivity.class);
                 } else {
-                    MyOrderDetailActivity.launch(getActivity(), used.getServiceOrderId());
+                    MyOrderDetailActivity.launch(getActivity(), accountPresenterImpl.getServiceOrderId());
                     return;
                 }
                 break;
@@ -418,7 +444,7 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
     private Intent activateClick() {
         Intent intent;//友盟方法统计
         MobclickAgent.onEvent(getActivity(), CLICKMYPACKAGE);
-        if (!hasPackage) {
+        if (!accountPresenterImpl.isHasPackage()) {
             intent = new Intent(getActivity(), PackageMarketActivity.class);
             intent.putExtra(IntentPutKeyConstant.CONTROL_CALL_PACKAGE, Constant.HIDDEN);
         } else {
@@ -427,7 +453,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
                 mHandler.sendEmptyMessage(SIGN_MSG_TWO);
             }
         }
-
         //记录点击状态
         AppMode.getInstance().isClickPackage = true;
         return intent;
@@ -440,140 +465,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         Log.e(TAG, "bleStatus" + bleStatus);
         return intent;
     }
-
-
-    @Override
-    public void rightComplete(int cmdType, CommonHttp object) {
-        if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
-            BalanceHttp http = (BalanceHttp) object;
-            if (http.getBalanceEntity() != null)
-                balanceTextView.setText(ICSOpenVPNApplication.getInstance().getString(R.string.balance) + ": " + http.getBalanceEntity().getAmount()
-                        + ICSOpenVPNApplication.getInstance().getString(R.string.yuan));
-        } else if (cmdType == HttpConfigUrl.COMTYPE_UN_BIND_DEVICE) {
-            unbindDevice(object);
-        } else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
-            showPackage(object);
-        } else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
-            getBindDeviceInfo(object);
-            isClickAddDevice = false;
-        }
-    }
-
-    private void getBindDeviceInfo(CommonHttp object) {
-        GetBindDeviceHttp getBindDeviceHttp = (GetBindDeviceHttp) object;
-        if (object.getStatus() == 1) {
-            if (getBindDeviceHttp.getBlueToothDeviceEntityity() != null) {
-                showDeviceSummarized(!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI()));
-                if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
-                    SharedUtils.getInstance().writeString(Constant.IMEI, getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI());
-                    String deviceTypeStr = getBindDeviceHttp.getBlueToothDeviceEntityity().getDeviceType();
-                    String typeText = "";
-                    if ("0".equals(deviceTypeStr)) {
-                        SharedUtils.getInstance().writeString(Constant.BRACELETNAME, Constant.UNITOYS);
-                        typeText = getString(R.string.device) + ": " + getString(R.string.unitoy);
-                    } else if ("1".equals(deviceTypeStr)) {
-                        typeText = getString(R.string.device) + ": " + getString(R.string.unibox_key);
-                        SharedUtils.getInstance().writeString(Constant.BRACELETNAME, Constant.UNIBOX);
-                    }
-                    showDeviceType(typeText);
-                    if (isClickAddDevice) {
-                        Intent intent = null;
-                        intent = getIntent(intent);
-                        startActivity(intent);
-                    }
-
-                }
-            }
-        }
-    }
-
-    //显示套餐
-    private void showPackage(CommonHttp object) {
-        if (object.getStatus() == 1) {
-            OrderUsageRemainHttp orderUsageRemainHttp = (OrderUsageRemainHttp) object;
-            UsageRemainEntity.Unactivated unactivated = orderUsageRemainHttp.getUsageRemainEntity().getUnactivated();
-            used = orderUsageRemainHttp.getUsageRemainEntity().getUsed();
-            if (used == null) {
-                return;
-            }
-            if ("0".equals(used.getTotalNum()) && !"0".equals(unactivated.getTotalNumFlow()) && "0".equals(used.getTotalNumFlow())) {//有套餐，未激活
-                if (!AppMode.getInstance().isClickPackage)
-                    mHandler.sendEmptyMessage(SIGN_MSG_ONE);
-                hasPackage = true;
-                PacketRelativeLayout.setVisibility(View.GONE);
-                noPacketRelativeLayout.setVisibility(View.VISIBLE);
-                addOrActivatePackageIv.setImageResource(R.drawable.activate_device_account);
-                addOrActivatePackage.setText(getString(R.string.activate_packet));
-            } else if ("0".equals(used.getTotalNum()) && "0".equals(unactivated.getTotalNumFlow())) {//无套餐显示
-                mHandler.sendEmptyMessage(SIGN_MSG_TWO);
-                hasPackage = false;
-                PacketRelativeLayout.setVisibility(View.GONE);
-                noPacketRelativeLayout.setVisibility(View.VISIBLE);
-                addOrActivatePackageIv.setImageResource(R.drawable.add_device);
-                addOrActivatePackage.setText(getString(R.string.add_package));
-            } else {//有套餐且激活了。
-                hasPackage = true;
-                PacketRelativeLayout.setVisibility(View.VISIBLE);
-                noPacketRelativeLayout.setVisibility(View.GONE);
-                callTime.setText(used.getTotalRemainingCallMinutes() + "分");
-
-                //显示出有未激活套餐的提示
-                if (!"0".equals(unactivated.getTotalNumFlow()) && !AppMode.getInstance().isClickPackage) {
-                    mHandler.sendEmptyMessage(SIGN_MSG_ONE);
-                } else {
-                    mHandler.sendEmptyMessage(SIGN_MSG_TWO);
-                }
-                if ("0".equals(used.getTotalNumFlow())) {
-                    flow.setText(getString(R.string.no_flow_count));
-                    flowCount.setText(unactivated.getTotalNumFlow());
-                } else {
-                    flow.setText(getString(R.string.flow_count));
-                    flowCount.setText(used.getTotalNumFlow());
-                }
-                packageAllCount.setText(used.getTotalNum());
-                String serviceName = used.getServiceName();
-                if (!TextUtils.isEmpty(serviceName)) {
-                    SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, true);
-                    serviceTextView.setText(serviceName);
-                } else {
-                    SharedUtils.getInstance().writeBoolean(Constant.ISHAVEORDER, false);
-                    serviceTextView.setText("---");
-                }
-            }
-        }
-    }
-
-    private void unbindDevice(CommonHttp object) {
-        if (object.getStatus() == 1) {
-            SharedUtils.getInstance().delete(BRACELETPOWER);
-            SharedUtils.getInstance().delete(Constant.IMEI);
-            SharedUtils.getInstance().delete(BRACELETNAME);
-            SharedUtils.getInstance().delete(Constant.BRACELETVERSION);
-            //判断是否再次重连的标记
-            ICSOpenVPNApplication.isConnect = false;
-            // 解除绑定，注册失败不显示
-            EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
-            CommonTools.showShortToast(getActivity(), "已解绑设备");
-            ICSOpenVPNApplication.uartService.disconnect();
-            showDeviceSummarized(false);
-        } else {
-            CommonTools.showShortToast(getActivity(), object.getMsg());
-            Log.i(TAG, object.getMsg());
-        }
-    }
-
-    @Override
-    public void errorComplete(int cmdType, String errorMessage) {
-        CommonTools.showShortToast(getActivity(), errorMessage);
-        isClickAddDevice = false;
-    }
-
-    @Override
-    public void noNet() {
-        isClickAddDevice = false;
-        CommonTools.showShortToast(getActivity(), getResources().getString(R.string.no_wifi));
-    }
-
 
     @Override
     protected void setBleStatus(String bleStatus) {
@@ -590,14 +481,16 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             if (!AppMode.getInstance().isClickAddDevice && SharedUtils.getInstance().readBoolean(Constant.HAS_DEVICE_NEED_UPGRADE)) {
-                if (mHandler != null) {
-                    mHandler.sendEmptyMessage(SIGN_MSG_THREE);
-                }
+                updateVersionRedDot(SIGN_MSG_THREE);
             } else {
-                if (mHandler != null) {
-                    mHandler.sendEmptyMessage(SIGN_MSG_FOUR);
-                }
+                updateVersionRedDot(SIGN_MSG_FOUR);
             }
+        }
+    }
+
+    private void updateVersionRedDot(int signMsgThree) {
+        if (mHandler != null) {
+            mHandler.sendEmptyMessage(signMsgThree);
         }
     }
 
@@ -606,8 +499,6 @@ public class AccountFragment extends BaseStatusFragment implements View.OnClickL
         super.onDestroyView();
         AppMode.getInstance().isClickPackage = false;
         AppMode.getInstance().isClickAddDevice = false;
-        tvNewVersion = null;
-        tvNewPackagetAction = null;
         unbinder.unbind();
     }
 }
