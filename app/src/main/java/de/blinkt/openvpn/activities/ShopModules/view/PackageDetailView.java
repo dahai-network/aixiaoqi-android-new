@@ -1,9 +1,13 @@
 package de.blinkt.openvpn.activities.ShopModules.view;
 
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import de.blinkt.openvpn.http.PacketDtailHttp;
+import de.blinkt.openvpn.model.PacketDtailEntity;
 
 /**
  * Created by kim
@@ -12,10 +16,15 @@ import android.widget.TextView;
 
 public interface PackageDetailView {
 
-    RelativeLayout getNoNetRelativeLayout();
-    ScrollView getDetailScrollView();
-    TextView getPackageNameTextView();
-    TextView getPriceTextView();
-    ImageView getPackageDetailImageView();
-    void showToast(String msg);
+    /**
+     * 加载成功显示界面
+     *
+     * @param bean
+     * @param http
+     */
+    void loadSuccessShowView(PacketDtailEntity.ListBean bean, PacketDtailHttp http);
+
+    void loadSuccessAndSetImage(Bitmap resource, int height);
+
+    void noNetShowView();
 }

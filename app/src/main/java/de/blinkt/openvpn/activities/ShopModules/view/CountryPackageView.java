@@ -1,24 +1,15 @@
 package de.blinkt.openvpn.activities.ShopModules.view;
 
-import android.support.v7.widget.RecyclerView;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import java.util.List;
+import de.blinkt.openvpn.http.CountryPacketHttp;
+import de.blinkt.openvpn.model.CountryPacketEntity;
 
 /**
- * Created by Administrator on 2017/6/7.
+ * Created by kim
+ * on 2017/6/7.
  */
 
 public interface CountryPackageView {
-
-    String getCountryId();
-
-    RelativeLayout getNoNetRelativeLayout();
-
-    RecyclerView getPackageDetailRecyclerView();
-
-    TextView getNodataTextView();
-
-    String getCountryPic();
-    ImageView getPackageImageView();
+    void loadSuccessShowView(List<CountryPacketEntity> bean, CountryPacketHttp http);
+    void noNetShowView();
 }

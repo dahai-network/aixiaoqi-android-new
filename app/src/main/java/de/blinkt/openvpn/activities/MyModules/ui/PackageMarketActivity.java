@@ -45,6 +45,8 @@ public class PackageMarketActivity extends BaseActivity implements PackageMarket
     RelativeLayout rightPacketRelativeLayout;
     RelativeLayout communicationRelativeLayout;
 
+    public int count=200;
+
     private PackageMarketPresenter packageMarketPresenter;
 
     @Override
@@ -96,7 +98,7 @@ public class PackageMarketActivity extends BaseActivity implements PackageMarket
     //模拟数据
     private void initData() {
         //全部展示国家套餐，200个
-        packageMarketPresenter.getPackageMarket(200+"");
+        packageMarketPresenter.getPackageMarket(count+"");
     }
 
     @OnClick(R.id.retryTextView)

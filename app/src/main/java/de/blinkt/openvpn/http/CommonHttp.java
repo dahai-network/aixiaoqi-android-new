@@ -166,15 +166,17 @@ public abstract class CommonHttp implements Callback, Runnable {
 			}
 			String responseBody = response.body().string();
 
-			Gson gson = new Gson();
+            Log.d("CommonHttp", "onResponse: "+responseBody);
+
+            Gson gson = new Gson();
 			BaseEntry baseEntry = gson.fromJson(responseBody, BaseEntry.class);
 
 			status = baseEntry.getStatus();
 			msg = baseEntry.getMsg();
 			data = baseEntry.getData();
 			if (status == 1) {
-
-				right(gson.toJson(baseEntry.getData()));
+               // Log.d(TAG, "onResponse: "+gson.toJson(baseEntry.getData());
+                right(gson.toJson(baseEntry.getData()));
 			} else if (status == -999) {
 //				ICSOpenVPNApplication.getInstance().finishAllActivity();
 				//token过期
@@ -279,7 +281,8 @@ public abstract class CommonHttp implements Callback, Runnable {
 	}
 
 	private void error(final String message) {
-		mHandler.post(new Runnable() {
+        Log.d("errorComplete", "error: "+message);
+        mHandler.post(new Runnable() {
 			@Override
 			public void run() {
 				errorResult(message);
@@ -298,6 +301,8 @@ public abstract class CommonHttp implements Callback, Runnable {
 
 	@Override
 	public void onFailure(Call call, IOException e) {
+        Log.d("CommonHttp", "onFailure: e="+e.getMessage());
+
 		if (!NetworkUtils.isNetworkAvailable(context_)) {
 			noNetShow();
 			return;
@@ -319,8 +324,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 //				File file = context_.getCacheDir();
 				File cacheFile = new File(context_.getCacheDir(), CACHE_FILE);
 				Cache cache = new Cache(cacheFile, 1024 * 1024 * 5); //5Mb
-				client = new OkHttpClient().newBuilder().connectTimeout(15, TimeUnit.SECONDS)
-						.readTimeout(20, TimeUnit.SECONDS)
+				client = new OkHttpClient().newBuilder().connectTimeout(10, TimeUnit.SECONDS)
 						.readTimeout(20, TimeUnit.SECONDS)
 						.retryOnConnectionFailure(true)
 						.addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)

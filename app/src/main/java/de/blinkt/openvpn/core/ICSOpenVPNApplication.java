@@ -30,6 +30,7 @@ import de.blinkt.openvpn.activities.MyModules.ui.RechargeActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.ShadeActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.CommitOrderActivity;
+import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.PackageDetailActivity;
 import de.blinkt.openvpn.activities.UserInfo.ui.EditNameActivity;
 import de.blinkt.openvpn.activities.UserInfo.ui.VertifyPhoneNumActivity;
@@ -67,6 +68,7 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
 	public static ImportantAuthorityActivity importantAuthorityActivity;
 
 	public static EditNameActivity editNameActivity;
+	public static MyOrderDetailActivity myOrderDetailActivity;
 
 
 	//接口通过空卡序列号返回的订单特定写卡数据

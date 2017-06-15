@@ -1,5 +1,7 @@
 package de.blinkt.openvpn.http;
 
+import android.util.Log;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -101,6 +103,7 @@ public class CreateHttpFactory {
 				startHttp(new GetDeviceSimRegStatuesHttp(interfaceCallback, cmdType));
 				break;
 			case HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID://通过id查询订单
+				Log.d("CreateHttpFactory", "instanceHttp: ");
 				startHttp(new GetOrderByIdHttp(interfaceCallback, cmdType, params));
 				break;
 			case HttpConfigUrl.COMTYPE_PACKET_GET://获取包

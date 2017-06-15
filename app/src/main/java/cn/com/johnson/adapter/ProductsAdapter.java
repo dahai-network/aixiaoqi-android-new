@@ -46,6 +46,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 		if (bean.getPrice() != 0) {
 			holder.productPriceTextView.setText("￥ " + bean.getPrice());
 		}
+
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

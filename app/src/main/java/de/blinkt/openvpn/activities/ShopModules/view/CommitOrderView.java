@@ -11,10 +11,12 @@ import android.widget.TextView;
 public interface CommitOrderView {
 
     CheckBox getAliPayCheckBox();
-
     CheckBox getWeixinPayCheckBox();
 
-    TextView getSureTextView();
-
+    /**
+     * 支付显示的界面
+     */
+    void playShowView();
+    void resetCountPresenter();
     void showToast(String msg);
 }

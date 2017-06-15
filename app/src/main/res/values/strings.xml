@@ -215,6 +215,7 @@
     <string name="please_close_to_the_phone">当设备震动时，请点击确认绑定</string>
     <string name="please_makesure_bind">当设备亮灯闪烁时，请点击确认绑定</string>
     <string name="package_market">套餐超市</string>
+    <string name="loading_data">正在加载中。。</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 
