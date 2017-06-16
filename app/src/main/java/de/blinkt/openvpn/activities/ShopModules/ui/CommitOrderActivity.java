@@ -166,45 +166,37 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
         setSpan(addUpTextView);
     }
 
+    private void setCheck(boolean weixinCheckBox,boolean aliCheckBox,boolean balanceCheckBox, boolean isAliPay){
+        weixinPayCheckBox.setChecked(weixinCheckBox);
+        aliPayCheckBox.setChecked(aliCheckBox);
+        isAliPayClick = isAliPay;
+        balancePayCheckBox.setChecked(balanceCheckBox);
+    }
+
     @OnClick({R.id.addImageView, R.id.reduceImageView, R.id.weixinPayLienarLayout, R.id.aliPayLienarLayout, R.id.sureTextView, R.id.balancePayLienarLayout})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.addImageView:
                 if (packetCount < Constant.LIMIT_COUNT) {
                     buyDaysTextView.setText("" + (++packetCount));
-                    totalPriceTextView.setText("￥" + bean.getPrice() * packetCount);
-                    addUpTextView.setText("￥" + bean.getPrice() * packetCount);
-                    setSpan(addUpTextView);
-                    checkBalance();
+                    packCount();
                 }
                 break;
             case R.id.reduceImageView:
                 //数量限制在30个
                 if (packetCount > 1) {
                     buyDaysTextView.setText("" + (--packetCount));
-                    totalPriceTextView.setText("￥" + bean.getPrice() * packetCount);
-                    addUpTextView.setText("￥" + bean.getPrice() * packetCount);
-                    setSpan(addUpTextView);
-                    checkBalance();
+                    packCount();
                 }
                 break;
             case R.id.balancePayLienarLayout:
-                weixinPayCheckBox.setChecked(false);
-                aliPayCheckBox.setChecked(false);
-                isAliPayClick = false;
-                balancePayCheckBox.setChecked(true);
+                setCheck(false,false,true,false);
                 break;
             case R.id.weixinPayLienarLayout:
-                balancePayCheckBox.setChecked(false);
-                aliPayCheckBox.setChecked(false);
-                isAliPayClick = false;
-                weixinPayCheckBox.setChecked(true);
+                setCheck(true,false,false,false);
                 break;
             case R.id.aliPayLienarLayout:
-                balancePayCheckBox.setChecked(false);
-                weixinPayCheckBox.setChecked(false);
-                isAliPayClick = true;
-                aliPayCheckBox.setChecked(true);
+                setCheck(false,true,false,true);
                 break;
             case R.id.sureTextView:
                 HashMap<String, String> map = new HashMap<>();
@@ -234,6 +226,13 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
                 }
                 break;
         }
+    }
+
+    private void packCount() {
+        totalPriceTextView.setText("￥" + bean.getPrice() * packetCount);
+        addUpTextView.setText("￥" + bean.getPrice() * packetCount);
+        setSpan(addUpTextView);
+        checkBalance();
     }
 
     private boolean isWXAppInstalledAndSupported() {
@@ -271,34 +270,29 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
             return;
         }
         if (bean.getPrice() * packetCount < balanceFloat) {
-            balanceTextView.setText(getResources().getString(R.string.balance_pay) + "(剩余￥" + balanceFloat + ")");
-            balanceTextView.setEnabled(true);
             setBalanceSpan(balanceTextView, balanceFloat);
-            balancePayCheckBox.setVisibility(View.VISIBLE);
             balancePayCheckBox.setChecked(true);
-            balancePayLienarLayout.setEnabled(true);
             aliPayCheckBox.setChecked(false);
+            setBalanceCheckBox(getResources().getString(R.string.balance_pay) + "(剩余￥" + balanceFloat + ")",true,View.VISIBLE,true);
         } else {
             balancePayCheckBox.setChecked(false);
-            balanceTextView.setEnabled(false);
-            balancePayCheckBox.setVisibility(View.GONE);
-            balanceTextView.setText(getResources().getString(R.string.not_enough_balance));
-            balancePayLienarLayout.setEnabled(false);
+            setBalanceCheckBox(getResources().getString(R.string.not_enough_balance),false,View.GONE,false);
             aliPayCheckBox.setChecked(true);
         }
     }
 
+    private void setBalanceCheckBox(String balanceText,boolean  balanceTextViewEnable,int isVisible,boolean balancePayLienarLayoutEnable){
+        balanceTextView.setText(balanceText);
+        balanceTextView.setEnabled(balanceTextViewEnable);
+        balancePayCheckBox.setVisibility(isVisible);
+        balancePayLienarLayout.setEnabled(balancePayLienarLayoutEnable);
+    }
+
     private void showBalanceCheckBox() {
         if (bean.getPrice() * packetCount < balanceFloat) {
-            balanceTextView.setText(getResources().getString(R.string.balance_pay) + "(剩余￥" + balanceFloat + ")");
-            balanceTextView.setEnabled(true);
-            balancePayCheckBox.setVisibility(View.VISIBLE);
-            balancePayLienarLayout.setEnabled(true);
+            setBalanceCheckBox(getResources().getString(R.string.balance_pay) + "(剩余￥" + balanceFloat + ")",true,View.VISIBLE,true);
         } else {
-            balanceTextView.setEnabled(false);
-            balancePayCheckBox.setVisibility(View.GONE);
-            balanceTextView.setText(getResources().getString(R.string.not_enough_balance));
-            balancePayLienarLayout.setEnabled(false);
+            setBalanceCheckBox(getResources().getString(R.string.not_enough_balance),false,View.GONE,false);
         }
     }
 
