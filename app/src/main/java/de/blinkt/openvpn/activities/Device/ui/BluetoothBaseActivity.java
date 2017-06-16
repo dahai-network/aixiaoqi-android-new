@@ -1,6 +1,5 @@
 package de.blinkt.openvpn.activities.Device.ui;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -9,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
-
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -88,6 +86,7 @@ public abstract  class BluetoothBaseActivity extends BaseActivity {
         if(mService!=null){
             if(mService.mBluetoothAdapter==null){
                 mService.initialize();
+                Log.d(TAG, "BluetoothBaseActivity ->connect: "+mService.mBluetoothAdapter);
             }
             mService.connect(macAddress);
         }

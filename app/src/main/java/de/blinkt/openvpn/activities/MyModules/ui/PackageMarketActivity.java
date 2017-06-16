@@ -19,7 +19,9 @@ import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.views.addHeaderAndFooterRecyclerView.WrapRecyclerView;
 
-
+/**
+ * 套餐超市
+ */
 public class PackageMarketActivity extends BaseActivity implements PackageMarketView{
 
     public static PackageMarketActivity activity;

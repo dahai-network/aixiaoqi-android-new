@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 public class CreateFiles {
 
    // String filenameTemp =  + "/hhaudio" + ".txt";
-    String filenameTemp = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi_log/";
+    String filenameTemp = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi_log.txt";
 
     //向已创建的文件中写入数据
     public void print(String str) {

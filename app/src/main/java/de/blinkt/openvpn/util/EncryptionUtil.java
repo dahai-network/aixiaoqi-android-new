@@ -21,11 +21,18 @@ public class EncryptionUtil {
             (byte) 23, (byte) 43, (byte) 109, (byte) 72, (byte) 1, (byte) 57, (byte) 252, (byte) 136};
     static CreateFiles createFiles;
 
-    public static boolean isPassEncrypt(String receiveBlueEncrypt) {
-        String result = SharedUtils.getInstance().readString("random8NumberString");
+    /**
+     *
+     * @param receiveBlueEncrypt 接受到蓝牙加密的数据
+     * @param result 自己传进去的随机数
+     * @return
+     */
+    public static boolean isPassEncrypt(String receiveBlueEncrypt,String result) {
+        //String result = SharedUtils.getInstance().readString("random8NumberString");
         Log.d("Encryption", "随机数: " + result);
-
-        createFiles = new CreateFiles();
+        if(createFiles==null) {
+            createFiles = new CreateFiles();
+        }
         createFiles.print("随机数" + result);
         try {
             result = TribleDESencrypt(result);
@@ -70,9 +77,7 @@ public class EncryptionUtil {
             Log.i("Encryption", "随机数：" + randomNum);
             builder.append(randomNum);
         }
-        //	random8NumberString = builder.toString();
-        SharedUtils.getInstance().writeString("random8NumberString", builder.toString());
-        //Log.i("Encryption", "随机数总：" + random8NumberString);
+
         return builder.toString();
     }
 
