@@ -83,10 +83,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 //	private ArrayList<String> messages = new ArrayList<>();
     //写卡状态（订单状态 ，0是没有写卡，1是写卡成功，4是写卡失败）
     public static int orderStatus = 0;
-    //是否打开了历史步数服务
-    private boolean isOpenStepService = false;
-    //复位命令存储
-    private String resetOrderStr = null;
     //是否获取空卡序列号，如果是则发送到广播与服务器进行处理后发给蓝牙设备
     public static String nullCardId = null;
     private int UPDATE_HISTORY_DATE = 1;
