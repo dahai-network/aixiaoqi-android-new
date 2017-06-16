@@ -1,34 +1,32 @@
-package de.blinkt.openvpn.fragments;
+package de.blinkt.openvpn.fragments.PackageFragment.ui;
 
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.OrderAdapter;
 import cn.com.johnson.model.BoughtPackageEntity;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.constant.HttpConfigUrl;
-import de.blinkt.openvpn.http.BoughtPacketHttp;
-import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.CreateHttpFactory;
-import de.blinkt.openvpn.http.InterfaceCallback;
+import de.blinkt.openvpn.fragments.PackageFragment.presenter.PackageCategoryPresenter;
+import de.blinkt.openvpn.fragments.PackageFragment.view.PackageCategoryView;
 import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
 
 /**
- * Created by Administrator on 2017/4/10 0010.
+ * Created by kim
+ * on 2017/4/10 0010.
  */
 
-public class PackageCategoryFragment extends Fragment implements XRecyclerView.LoadingListener, InterfaceCallback {
+public class PackageCategoryFragment extends Fragment implements XRecyclerView.LoadingListener, PackageCategoryView {
     Activity activity;
     String channel_id;
     @BindView(R.id.activite_rv)
@@ -42,8 +40,8 @@ public class PackageCategoryFragment extends Fragment implements XRecyclerView.L
     @BindView(R.id.NodataRelativeLayout)
     RelativeLayout NodataRelativeLayout;
     OrderAdapter orderAdapter;
-    LinearLayoutManager  manager;
-
+    LinearLayoutManager manager;
+    PackageCategoryPresenter packageCategoryPresenter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -51,7 +49,6 @@ public class PackageCategoryFragment extends Fragment implements XRecyclerView.L
         channel_id = args != null ? args.getString("id") : "";
         super.onCreate(savedInstanceState);
     }
-
     @Override
     public void onAttach(Activity activity) {
         // TODO Auto-generated method stub
@@ -66,6 +63,7 @@ public class PackageCategoryFragment extends Fragment implements XRecyclerView.L
         // TODO Auto-generated method stub
         View rootView = inflater.inflate(R.layout.fragment_package_category, container, false);
         ButterKnife.bind(this, rootView);
+        packageCategoryPresenter = new PackageCategoryPresenter(this);
         initView();
         return rootView;
     }
@@ -77,26 +75,23 @@ public class PackageCategoryFragment extends Fragment implements XRecyclerView.L
         activiteRv.setLoadingListener(this);
         orderAdapter = new OrderAdapter(getActivity(), R.layout.item_order);
         activiteRv.setAdapter(orderAdapter);
-        onRefresh();
+        addData(false);
     }
-
     int page = 1;
-
     @Override
     public void onRefresh() {
         activiteRv.canMoreLoading();
         page = 1;
-        addData();
+        addData(true);
     }
-
     @Override
     public void onLoadMore() {
         page++;
-        addData();
+        addData(true);
     }
-
-    private void addData() {
-        CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_GET_ORDER, page + "", Constant.PAGESIZE + "", "-1", channel_id);
+    public void addData(boolean isLoadMore) {
+        Log.d("PackageCategoryFragment", "addData: ");
+        packageCategoryPresenter.addData(page, Constant.PAGESIZE, -1, channel_id,isLoadMore);
     }
 
     @Override
@@ -105,50 +100,45 @@ public class PackageCategoryFragment extends Fragment implements XRecyclerView.L
     }
 
     @Override
-    public void rightComplete(int cmdType, CommonHttp object) {
-        if (cmdType == HttpConfigUrl.COMTYPE_GET_ORDER) {
-            activiteRv.loadMoreComplete();
-            activiteRv.refreshComplete();
-            BoughtPacketHttp http = (BoughtPacketHttp) object;
-            BoughtPackageEntity bean = http.getBoughtPackageEntity();
-            if (bean != null) {
-                if (bean.getList().size() != 0) {
-                    //有数据则显示
-                    NoNetRelativeLayout.setVisibility(View.GONE);
-                    activiteRv.setVisibility(View.VISIBLE);
-                    if (page == 1) {
-                        //页码为1且没有数据，则显示无数据页面
-                        if (bean.getList().size() < Constant.PAGESIZE) {
-                            orderAdapter.addAll(bean.getList());
-                            activiteRv.noMoreLoading();
-                        } else {
-                            orderAdapter.addAll(bean.getList());
-                        }
+    public void loadSuccessView(BoughtPackageEntity bean) {
 
+        activiteRv.loadMoreComplete();
+        activiteRv.refreshComplete();
+
+        if (bean != null) {
+            if (bean.getList().size() != 0) {
+                //有数据则显示
+                NoNetRelativeLayout.setVisibility(View.GONE);
+                activiteRv.setVisibility(View.VISIBLE);
+                if (page == 1) {
+                    //页码为1且没有数据，则显示无数据页面
+                    if (bean.getList().size() < Constant.PAGESIZE) {
+                        orderAdapter.addAll(bean.getList());
+                        activiteRv.noMoreLoading();
                     } else {
-                        orderAdapter.add(bean.getList());
+                        orderAdapter.addAll(bean.getList());
                     }
+
                 } else {
-                    if (page == 1) {
-                        activiteRv.setVisibility(View.GONE);
-                        NodataRelativeLayout.setVisibility(View.VISIBLE);
-                        if(getActivity()!=null)
-                        noDataTextView.setText(getActivity().getResources().getString(R.string.no_order));
-                    }
-                    activiteRv.noMoreLoading();
+                    orderAdapter.add(bean.getList());
                 }
+            } else {
+                if (page == 1) {
+                    activiteRv.setVisibility(View.GONE);
+                    NodataRelativeLayout.setVisibility(View.VISIBLE);
+                    if (getActivity() != null)
+                        noDataTextView.setText(getActivity().getResources().getString(R.string.no_order));
+                }
+                activiteRv.noMoreLoading();
             }
         }
         orderAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void errorComplete(int cmdType, String errorMessage) {
-
-    }
 
     @Override
-    public void noNet() {
-
+    public void onDestroy() {
+        super.onDestroy();
+        packageCategoryPresenter.releaseResource();
     }
 }

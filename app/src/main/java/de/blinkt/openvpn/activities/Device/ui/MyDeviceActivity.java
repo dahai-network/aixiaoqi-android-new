@@ -31,6 +31,7 @@ import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.CreateFiles;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.MySinkingView;
 import de.blinkt.openvpn.views.TitleBar;
@@ -106,6 +107,7 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
     public static final int DOWNLOAD_SKY_UPGRADE = 5;
     public static final int UNBIND = 7;
     MyDevicePresenterImpl myDevicePresenter;
+    //createFiles
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

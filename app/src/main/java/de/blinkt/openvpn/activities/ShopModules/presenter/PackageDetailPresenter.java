@@ -19,6 +19,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.umeng.analytics.MobclickAgent;
 
+import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.activities.ShopModules.model.PackageDetailModel;
 import de.blinkt.openvpn.activities.ShopModules.modelImpl.PackageDetailImpl;
@@ -47,32 +48,18 @@ public class PackageDetailPresenter extends BaseNetActivity {
     private PackageDetailModel packageDetailModel;
     private PackageDetailView packageDetailView;
     private PackageDetailActivity instance;
-    ScrollView detailScrollView;
-    RelativeLayout NoNetRelativeLayout;
-    TextView packageNameTextView;
-    TextView priceTextView;
-    ImageView packageDetailImageView;
+
 
     public PackageDetailPresenter(PackageDetailView packageDetailView) {
         this.packageDetailView = packageDetailView;
         packageDetailModel = new PackageDetailImpl();
         instance = ICSOpenVPNApplication.packageDetailInstance;
-         initControlView();
 
     }
 
-    /**
-     * 初始化控件
-     */
-    private void initControlView() {
-        detailScrollView = packageDetailView.getDetailScrollView();
-        NoNetRelativeLayout = packageDetailView.getNoNetRelativeLayout();
-        packageNameTextView = packageDetailView.getPackageNameTextView();
-        priceTextView = packageDetailView.getPriceTextView();
-        packageDetailImageView = packageDetailView.getPackageDetailImageView();
-    }
 
     public void getPackageDetailData(String id) {
+        instance.showProgress(R.string.loading_data);
         packageDetailModel.getPacketDetail(id, this);
     }
 
@@ -83,10 +70,8 @@ public class PackageDetailPresenter extends BaseNetActivity {
         PacketDtailHttp http = (PacketDtailHttp) object;
         if (cmdType == HttpConfigUrl.COMTYPE_PACKET_DETAIL)
             if (http.getStatus() == 1) {
-                NoNetRelativeLayout.setVisibility(View.GONE);
-                detailScrollView.setVisibility(View.VISIBLE);
                 bean = http.getPacketDtailEntity().getList();
-                packageNameTextView.setText(bean.getPackageName());
+                packageDetailView.loadSuccessShowView(bean, http);
                 //进行本地缓存
                 SharedUtils.getInstance().writeString(Constant.DETAIL_SIGN, bean.getDetails());
                 SharedUtils.getInstance().writeString(Constant.FEATURES_SIGN, bean.getFeatures());
@@ -96,8 +81,8 @@ public class PackageDetailPresenter extends BaseNetActivity {
                 intent.putExtra(Constant.DETAIL_SIGN, bean.getDetails());
                 intent.putExtra(Constant.FEATURES_SIGN, bean.getFeatures());
                 LocalBroadcastManager.getInstance(instance).sendBroadcast(intent);
-                priceTextView.setText("￥" + bean.getPrice());
-                setSpan(priceTextView);
+
+
                 String countryPic = instance.getIntent().getStringExtra("countryPic");
                 if (countryPic == null)
                     Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getPic()).asBitmap().into(new SimpleTarget<Bitmap>() {
@@ -106,25 +91,13 @@ public class PackageDetailPresenter extends BaseNetActivity {
                             int imageWidth = resource.getWidth();
                             int imageHeight = resource.getHeight();
                             int height = CommonTools.getScreenWidth(instance) * imageHeight / imageWidth;
-                            ViewGroup.LayoutParams para = packageDetailImageView.getLayoutParams();
-                            para.height = height;
-                            packageDetailImageView.setLayoutParams(para);
-                            packageDetailImageView.setImageBitmap(resource);
+                            packageDetailView.loadSuccessAndSetImage(resource, height);
                         }
                     });
             } else {
-                packageDetailView.showToast(object.getMsg());
+                instance.showToast(object.getMsg());
             }
-    }
-
-    //设置大小字体
-    public void setSpan(TextView textview) {
-        Spannable WordtoSpan = new SpannableString(textview.getText().toString());
-        int intLength = String.valueOf((int) (bean.getPrice())).length();
-        WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        WordtoSpan.setSpan(new AbsoluteSizeSpan(22, true), 1, intLength + 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), intLength + 2, textview.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        textview.setText(WordtoSpan, TextView.BufferType.SPANNABLE);
+            instance.dismissProgress();
     }
 
     public void buyPackageButtonEvent() {
@@ -137,12 +110,11 @@ public class PackageDetailPresenter extends BaseNetActivity {
 
     @Override
     public void errorComplete(int cmdType, String errorMessage) {
-        packageDetailView.showToast(errorMessage);
+        instance.showToast(errorMessage);
     }
 
     @Override
     public void noNet() {
-        NoNetRelativeLayout.setVisibility(View.VISIBLE);
-        detailScrollView.setVisibility(View.GONE);
+        packageDetailView.noNetShowView();
     }
 }

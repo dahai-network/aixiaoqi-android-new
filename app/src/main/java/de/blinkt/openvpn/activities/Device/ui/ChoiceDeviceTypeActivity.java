@@ -11,6 +11,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.Device.ui.BindDeviceActivity;
 import de.blinkt.openvpn.constant.Constant;
 
 
@@ -48,7 +49,7 @@ Unbinder unbinder;
 	}
 
 	private void toMyDevice(String deviceName) {
-		Intent intent = new Intent(this, de.blinkt.openvpn.activities.Device.ui.BindDeviceActivity.class);
+		Intent intent = new Intent(this, BindDeviceActivity.class);
 		intent.putExtra(Constant.BRACELETNAME, deviceName);
 		startActivity(intent);
 		finish();

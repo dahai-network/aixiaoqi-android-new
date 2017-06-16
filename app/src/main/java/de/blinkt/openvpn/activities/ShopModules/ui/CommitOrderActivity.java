@@ -7,17 +7,21 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
+
 import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,6 +36,7 @@ import de.blinkt.openvpn.http.OrderAddHttp;
 import de.blinkt.openvpn.model.PacketDtailEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
+
 import static de.blinkt.openvpn.constant.UmengContant.CLICKSUREPAGMENT;
 
 /**
@@ -106,10 +111,7 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
         ButterKnife.bind(this);
         initSet();
         commitOrderPresenter = new CommitOrderPresenter(this) {
-            @Override
-            public void resetCountPresenter() {
-                resetCount();
-            }
+
             @Override
             public void getBalance(BalanceHttp http) {
                 balanceFloat = http.getBalanceEntity().getAmount();
@@ -213,7 +215,7 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
                         map.put("type", WEIXIN_PAY_METHOD + "");
                         //友盟方法统计
                         MobclickAgent.onEvent(this, CLICKSUREPAGMENT, map);
-                        commitOrderPresenter.commitOrder(bean.getPackageId(),packetCount+"",WEIXIN_PAY_METHOD+"");
+                        commitOrderPresenter.commitOrder(bean.getPackageId(), packetCount + "", WEIXIN_PAY_METHOD + "");
                     } else {
                         CommonTools.showShortToast(this, getResources().getString(R.string.no_weixin_yet));
                         sureTextView.setEnabled(true);
@@ -222,16 +224,18 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
                     map.put("type", ALI_PAY_METHOD + "");
                     //友盟方法统计
                     MobclickAgent.onEvent(this, CLICKSUREPAGMENT, map);
-                    commitOrderPresenter.commitOrder(bean.getPackageId(),packetCount+"",ALI_PAY_METHOD+"");
+                    commitOrderPresenter.commitOrder(bean.getPackageId(), packetCount + "", ALI_PAY_METHOD + "");
                 } else {
+                    Log.d("CommitOrderActivity", "sureTextView: "+bean.getPackageId()+""+packetCount );
                     map.put("type", BALANCE_PAY_METHOD + "");
                     //友盟方法统计
                     MobclickAgent.onEvent(this, CLICKSUREPAGMENT, map);
-                    commitOrderPresenter.commitOrder(bean.getPackageId(),packetCount+"",BALANCE_PAY_METHOD+"");
+                    commitOrderPresenter.commitOrder(bean.getPackageId(), packetCount + "", BALANCE_PAY_METHOD + "");
                 }
                 break;
         }
     }
+
     private boolean isWXAppInstalledAndSupported() {
         IWXAPI msgApi = WXAPIFactory.createWXAPI(this, null);
         msgApi.registerApp(Constant.WEIXIN_APPID);
@@ -297,25 +301,35 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
             balancePayLienarLayout.setEnabled(false);
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         commitOrderPresenter.releaseResouce();
     }
+
     @Override
     public CheckBox getAliPayCheckBox() {
         return aliPayCheckBox;
     }
+
     @Override
     public CheckBox getWeixinPayCheckBox() {
         return weixinPayCheckBox;
     }
+
     @Override
-    public TextView getSureTextView() {
-        return sureTextView;
+    public void playShowView() {
+        sureTextView.setEnabled(true);
     }
+
+    @Override
+    public void resetCountPresenter() {
+        resetCount();
+    }
+
     @Override
     public void showToast(String msg) {
-        CommonTools.showShortToast(CommitOrderActivity.this,msg);
+        CommonTools.showShortToast(CommitOrderActivity.this, msg);
     }
 }

@@ -52,9 +52,7 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
     private CommitOrderMode commitOrderMode;
     private CommitOrderView commitOrderView;
     private CommitOrderActivity instance;
-    public CheckBox aliPayCheckBox;
-    TextView sureTextView;
-    CheckBox weixinPayCheckBox;
+
 
     private static final int SDK_PAY_FLAG = 1;
     private Handler mHandler = new Handler() {
@@ -73,14 +71,13 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                         commitOrderView.showToast("支付成功");
                         MyOrderDetailActivity.launch(instance, orderEntity.getOrder().getOrderID());
-                        sureTextView.setEnabled(true);
-                        resetCountPresenter();
+                        commitOrderView.resetCountPresenter();
                         instance.finish();
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         commitOrderView.showToast("支付失败");
-                        sureTextView.setEnabled(true);
                     }
+                    commitOrderView.playShowView();
                     break;
                 }
                 default:
@@ -97,12 +94,14 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
         initControlView();
     }
 
+    CheckBox aliPayCheckBox;
+    CheckBox weixinPayCheckBox;
+
     /**
      * 初始化控件
      */
     private void initControlView() {
         aliPayCheckBox = commitOrderView.getAliPayCheckBox();
-        sureTextView = commitOrderView.getSureTextView();
         weixinPayCheckBox = commitOrderView.getWeixinPayCheckBox();
     }
 
@@ -114,14 +113,17 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
      * @param playMethod
      */
     public void commitOrder(String packageId, String packetCount, String playMethod) {
+        instance.showProgress(R.string.loading_data);
         commitOrderMode.commitOrder(packageId, packetCount, playMethod, this);
     }
 
     OrderAddEntity orderEntity;
+
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
-
+        Log.d("CommitOrderPresenter", "rightComplete: "+cmdType);
         if (cmdType == HttpConfigUrl.COMTYPE_CREATE_ORDER) {
+            Log.d("CommitOrderPresenter", "rightComplete: --------------2");
             if (object.getStatus() == 1) {
                 OrderAddHttp http = (OrderAddHttp) object;
                 orderEntity = http.getOrderEntity();
@@ -132,6 +134,7 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
                     //向微信支付
                     payForWeixin();
                 } else {
+                    Log.d("CommitOrderPresenter", "rightComplete: --------------3");
                     payForBalance();
                 }
 
@@ -161,9 +164,10 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
             }
 
         } else if (cmdType == HttpConfigUrl.COMTYPE_BALANCE_GETPAYID) {
-            sureTextView.setEnabled(true);
+            commitOrderView.playShowView();
+            Log.d("CommitOrderPresenter", "rightComplete:status "+object.getStatus());
             if (object.getStatus() == 1) {
-                resetCountPresenter();
+                commitOrderView.resetCountPresenter();
                 MyOrderDetailActivity.launch(instance, orderEntity.getOrder().getOrderID());
                 ICSOpenVPNApplication.getInstance().finishOtherActivity();
             }
@@ -171,18 +175,19 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
             BalanceHttp http = (BalanceHttp) object;
             getBalance(http);
         }
+        instance.dismissProgress();
     }
 
     @Override
     public void errorComplete(int cmdType, String errorMessage) {
-        CommonTools.showShortToast(instance, errorMessage);
-        sureTextView.setEnabled(true);
+        commitOrderView.showToast(errorMessage);
+        commitOrderView.playShowView();
+
     }
 
     @Override
     public void noNet() {
-        CommonTools.showShortToast(instance, "请检查您的网络设置！");
-        sureTextView.setEnabled(true);
+        commitOrderView.playShowView();
     }
 
     public void checkNetBalance() {
@@ -201,9 +206,8 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
         editor.putString("orderAmount", orderEntity.getOrder().getTotalPrice() + "");
         editor.commit();
         createHttpRequest(HttpConfigUrl.COMTYPE_WEIXIN_GETPAYID, orderEntity.getOrder().getOrderNum());
-        sureTextView.setEnabled(true);
+        commitOrderView.playShowView();
     }
-
     /**
      * 支付宝支付
      */
@@ -213,7 +217,6 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
         String orderParam = OrderInfoUtil2_0.buildOrderParam(params);
         String sign = OrderInfoUtil2_0.getSign(params, RSA_PRIVATE);
         final String orderInfo = orderParam + "&" + sign;
-
         Runnable payRunnable = new Runnable() {
 
             @Override
@@ -227,17 +230,16 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
                 mHandler.sendMessage(msg);
             }
         };
-
         Thread payThread = new Thread(payRunnable);
         payThread.start();
     }
-
     /**
      * 余额支付
      */
     private void payForBalance() {
-        BalanceGetPayIdHttp http = new BalanceGetPayIdHttp(this, HttpConfigUrl.COMTYPE_BALANCE_GETPAYID, orderEntity.getOrder().getOrderID());
-        new Thread(http).start();
+        Log.d("CommitOrderPresenter--", "payForBalance: ");
+
+      createHttpRequest(HttpConfigUrl.COMTYPE_BALANCE_GETPAYID,orderEntity.getOrder().getOrderID());
     }
 
     public void releaseResouce() {
@@ -247,9 +249,6 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
         mHandler = null;
 
     }
-
-    public abstract void resetCountPresenter();
-
     public abstract void getBalance(BalanceHttp http);
 
 

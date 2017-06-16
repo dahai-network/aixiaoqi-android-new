@@ -18,6 +18,7 @@ public abstract class BaseNetActivity extends BaseActivity implements InterfaceC
 	public abstract void rightComplete(int cmdType, CommonHttp object);
 
 
+
 	@Override
 	public void errorComplete(int cmdType, String errorMessage) {
 		dismissProgress();
@@ -30,7 +31,7 @@ public abstract class BaseNetActivity extends BaseActivity implements InterfaceC
 	}
 
 	protected void createHttpRequest(int cmdType) {
-
+		showProgress(R.string.loading_data);
 		CreateHttpFactory.instanceHttp(this, cmdType);
 	}
 

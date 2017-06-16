@@ -63,7 +63,7 @@ public class BaseHttp extends CommonHttp {
 
 	@Override
 	protected void parseResult(String response) {
-		Log.e(TAG, "JSON 日志：" + response);
+		Log.e(TAG, "JSON--- 日志：" + response);
 		if (!TextUtils.isEmpty(response)) {
 
 			try{
@@ -72,7 +72,10 @@ public class BaseHttp extends CommonHttp {
 				e.printStackTrace();
 			}
 		}
+
 		interfaceCallback.rightComplete(cmdType_, this);
+		Log.e(TAG, "parseResult: "+interfaceCallback);
+
 	}
 
 	@Override

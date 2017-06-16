@@ -39,6 +39,8 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.factory.FragmentFactory;
+import de.blinkt.openvpn.http.PacketDtailHttp;
+import de.blinkt.openvpn.model.PacketDtailEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.PagerSlidingTabStripExtends;
@@ -126,6 +128,7 @@ public class PackageDetailActivity extends BaseActivity implements PackageDetail
     }
 
     private void addData() {
+
         packageDetailPresenter.getPackageDetailData(getIntent().getStringExtra("id"));
     }
 
@@ -143,34 +146,32 @@ public class PackageDetailActivity extends BaseActivity implements PackageDetail
     }
 
     @Override
-    public RelativeLayout getNoNetRelativeLayout() {
-        return NoNetRelativeLayout;
-    }
-
-    @Override
-    public ScrollView getDetailScrollView() {
-        return detailScrollView;
-    }
-
-    @Override
-    public TextView getPackageNameTextView() {
-        return packageNameTextView;
-    }
-
-    @Override
-    public TextView getPriceTextView() {
-        return priceTextView;
-    }
-
-    @Override
-    public ImageView getPackageDetailImageView() {
-        return packageDetailImageView;
-    }
-
-    @Override
     public void showToast(String msg) {
         CommonTools.showShortToast(PackageDetailActivity.this, msg);
 
+    }
+
+    @Override
+    public void loadSuccessShowView(PacketDtailEntity.ListBean bean, PacketDtailHttp http) {
+        NoNetRelativeLayout.setVisibility(View.GONE);
+        detailScrollView.setVisibility(View.VISIBLE);
+        packageNameTextView.setText(bean.getPackageName());
+        priceTextView.setText("￥" + bean.getPrice());
+        setSpan(priceTextView, bean.getPrice());
+    }
+
+    @Override
+    public void loadSuccessAndSetImage(Bitmap resource, int height) {
+        ViewGroup.LayoutParams para = packageDetailImageView.getLayoutParams();
+        para.height = height;
+        packageDetailImageView.setLayoutParams(para);
+        packageDetailImageView.setImageBitmap(resource);
+    }
+
+    @Override
+    public void noNetShowView() {
+        NoNetRelativeLayout.setVisibility(View.VISIBLE);
+        detailScrollView.setVisibility(View.GONE);
     }
 
     /**
@@ -216,7 +217,6 @@ public class PackageDetailActivity extends BaseActivity implements PackageDetail
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             // TODO Auto-generated method stub
-
             super.destroyItem(container, position, object);
         }
     }
@@ -226,6 +226,7 @@ public class PackageDetailActivity extends BaseActivity implements PackageDetail
         super.onDestroy();
         clearSPData();
     }
+
     /**
      * 清除sp里面的数据
      */
@@ -234,6 +235,17 @@ public class PackageDetailActivity extends BaseActivity implements PackageDetail
         SharedUtils.getInstance().delete(Constant.FEATURES_SIGN);
         SharedUtils.getInstance().delete(Constant.PAYTERMS_SIGN);
     }
+
+    //设置大小字体
+    public void setSpan(TextView textview, double price) {
+        Spannable WordtoSpan = new SpannableString(textview.getText().toString());
+        int intLength = String.valueOf((int) (price)).length();
+        WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        WordtoSpan.setSpan(new AbsoluteSizeSpan(22, true), 1, intLength + 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), intLength + 2, textview.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textview.setText(WordtoSpan, TextView.BufferType.SPANNABLE);
+    }
+
     /**
      * 设置该PagerSlidingTabStrip的样式
      */

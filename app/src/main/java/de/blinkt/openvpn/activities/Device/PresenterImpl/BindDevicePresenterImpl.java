@@ -165,7 +165,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
         if(findDeviceHandler==null){
             findDeviceHandler=new Handler();
         }
-        Log.i("test", "find the device:" + device.getName() + ",rssi :" + rssi);
+        Log.i("BindDevicePresenterImpl", "find the device:" + device.getName() + ",rssi :" + rssi);
         if (device.getName().contains(bindDeviceView.getDeviceName())) {//过滤只需要的设备
             BluetoothEntity model = new BluetoothEntity();
             model.setAddress(device.getAddress());

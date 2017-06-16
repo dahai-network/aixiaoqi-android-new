@@ -74,6 +74,7 @@ public class PackageMarketPresenter extends BaseNetActivity {
      */
     public void getPackgeData(String packageNumber,String pageSize,String category)
     {
+        instance.showProgress(R.string.loading_data);
         packageMarketModel.getPackageData(packageNumber,pageSize,category,this);
 
     }
@@ -84,6 +85,7 @@ public class PackageMarketPresenter extends BaseNetActivity {
      */
     public void getPackageMarket(String pageSize)
     {
+        instance.showProgress(R.string.loading_data);
         packageMarketModel.getPackageMarketData(pageSize,this);
 
     }
@@ -136,12 +138,13 @@ public class PackageMarketPresenter extends BaseNetActivity {
                 communicationRelativeLayout.setVisibility(View.GONE);
             }
         }
+        instance.dismissProgress();
 
     }
 
     @Override
     public void errorComplete(int cmdType, String errorMessage) {
-        CommonTools.showShortToast(this, errorMessage);
+        packageMarketView.showToast(errorMessage);
     }
 
     @Override

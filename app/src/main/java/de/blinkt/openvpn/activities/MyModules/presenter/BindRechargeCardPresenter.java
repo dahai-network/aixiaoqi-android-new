@@ -47,12 +47,11 @@ public class BindRechargeCardPresenter extends BaseNetActivity {
         Log.d(TAG, "bindRechargeOrGift: " + cardPsw.length() + "--bindType=" + bindType);
 
         if (cardPsw.length() != 0) {
-            if(bindType == RECHARGE) {
+            instance.showProgress(R.string.loading_data);
+            if (bindType == RECHARGE) {
                 CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_BIND_RECHARGE_CARD, cardPsw);
-            }
-            else
-            {
-                CreateHttpFactory.instanceHttp(this,HttpConfigUrl.COMTYPE_BIND_GIFT,cardPsw);
+            } else {
+                CreateHttpFactory.instanceHttp(this, HttpConfigUrl.COMTYPE_BIND_GIFT, cardPsw);
             }
         } else {
             bindRechargeCardView.showToast(instance.getResources().getString(R.string.input_compelete_password));
@@ -70,7 +69,7 @@ public class BindRechargeCardPresenter extends BaseNetActivity {
     public void rightComplete(int cmdType, CommonHttp object) {
 
         Log.d(TAG, "rightComplete: " + cmdType + ":::" + object.getMsg());
-      if (cmdType == HttpConfigUrl.COMTYPE_BIND_RECHARGE_CARD) {
+        if (cmdType == HttpConfigUrl.COMTYPE_BIND_RECHARGE_CARD) {
 
             if (object.getStatus() == 1) {
                 bindRechargeCardView.showToast(instance.getResources().getString(R.string.recharge_success));
@@ -94,6 +93,7 @@ public class BindRechargeCardPresenter extends BaseNetActivity {
 
             }
         }
+        instance.dismissProgress();
     }
 
 }

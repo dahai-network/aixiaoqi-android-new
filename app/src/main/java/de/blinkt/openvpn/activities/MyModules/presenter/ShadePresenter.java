@@ -2,6 +2,7 @@ package de.blinkt.openvpn.activities.MyModules.presenter;
 
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,7 +31,7 @@ public class ShadePresenter {
     public ShadePresenter(ShadeView shadeView) {
         this.shadeView = shadeView;
         instance = ICSOpenVPNApplication.shadeActivity;
-        ids = new int[2];
+        ids = new int[3];
         initControlView();
 
     }
@@ -111,11 +112,13 @@ public class ShadePresenter {
             case Constant.MEIZU:
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
                     case ONE_STEP://保持后台运行
-
+                       Log.d("ShadePresenter", "adjustDifferentPhoneView: "+ids.length );
                         ids[0] = R.string.meizu_test_1_1;
                         ids[1] = R.string.meizu_test_1_2;
                         ids[2] = R.string.meizu_test_1_3;
+
                         text = getText(ids);
+                      //  Log.d("ShadePresenter", "adjustDifferentPhoneView:  text[0]=" + text[0]+" text[1]="+ text[1] +" text[2]="+ text[2]);
                         setResourceOne(true, text[0], R.drawable.meizu_image_1_1);
                         setResourceTwo(false, text[1], R.drawable.meizu_image_1_2);
                         setResourceThree(false, text[2], R.drawable.meizu_image_1_3);
@@ -394,7 +397,7 @@ public class ShadePresenter {
      * @return 返回文本信息
      */
     public String[] getText(int[] ids) {
-        String[] strings = new String[2];
+        String[] strings = new String[3];
         if (ids.length > 0) {
             for (int i = 0; i < ids.length; i++) {
                 if (ids[i] != 0)

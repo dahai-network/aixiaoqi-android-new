@@ -19,7 +19,9 @@ import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.views.addHeaderAndFooterRecyclerView.WrapRecyclerView;
 
-
+/**
+ * 套餐超市
+ */
 public class PackageMarketActivity extends BaseActivity implements PackageMarketView{
 
     public static PackageMarketActivity activity;
@@ -44,6 +46,8 @@ public class PackageMarketActivity extends BaseActivity implements PackageMarket
     TextView rightExpiryDateTextView;
     RelativeLayout rightPacketRelativeLayout;
     RelativeLayout communicationRelativeLayout;
+
+    public int count=200;
 
     private PackageMarketPresenter packageMarketPresenter;
 
@@ -96,7 +100,7 @@ public class PackageMarketActivity extends BaseActivity implements PackageMarket
     //模拟数据
     private void initData() {
         //全部展示国家套餐，200个
-        packageMarketPresenter.getPackageMarket(200+"");
+        packageMarketPresenter.getPackageMarket(count+"");
     }
 
     @OnClick(R.id.retryTextView)

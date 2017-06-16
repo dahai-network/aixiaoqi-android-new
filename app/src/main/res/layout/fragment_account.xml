@@ -161,7 +161,6 @@
                         android:background="@color/white">
 
 
-
                         <TextView
                             android:id="@+id/add_or_activate_package"
                             android:layout_width="wrap_content"

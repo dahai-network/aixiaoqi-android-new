@@ -117,6 +117,7 @@ public class RechargePresenter extends BaseNetActivity {
                 rechargeMode.rechargeModeBalance(moneyAmount + "", playWay + "", this);
             } else {
                 nextBtn.setEnabled(true);
+                instance.dismissProgress();
                 rechargeView.showToast(instance.getResources().getString(R.string.input_money_0));
             }
         } else {

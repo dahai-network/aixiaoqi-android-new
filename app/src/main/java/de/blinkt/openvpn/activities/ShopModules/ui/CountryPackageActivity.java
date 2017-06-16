@@ -13,18 +13,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
+import cn.com.johnson.adapter.CountryDetailPackageAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.ShopModules.presenter.CountryPackagePresenter;
 import de.blinkt.openvpn.activities.ShopModules.view.CountryPackageView;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.http.CountryPacketHttp;
+import de.blinkt.openvpn.model.CountryPacketEntity;
 import de.blinkt.openvpn.util.CommonTools;
+
+import static android.view.View.GONE;
 
 /**
  * 国家套餐界面
@@ -59,7 +68,7 @@ public class CountryPackageActivity extends BaseActivity implements CountryPacka
         Log.i(TAG, "onCreate: CountryPackageActivity");
         ButterKnife.bind(this);
         initSet();
-        countryPackagePresenter=new CountryPackagePresenter(this);
+        countryPackagePresenter = new CountryPackagePresenter(this);
         addData();
     }
 
@@ -103,7 +112,7 @@ public class CountryPackageActivity extends BaseActivity implements CountryPacka
     String countryId;
     private void addData() {
         countryId = getIntent().getStringExtra("id");
-        countryPackagePresenter.addCountryPackageData();
+        countryPackagePresenter.addCountryPackageData(countryId);
     }
 
     @OnClick(R.id.retryTextView)
@@ -112,32 +121,22 @@ public class CountryPackageActivity extends BaseActivity implements CountryPacka
     }
 
     @Override
-    public String getCountryId() {
-        return countryId;
+    public void loadSuccessShowView(List<CountryPacketEntity> bean, CountryPacketHttp http) {
+        if (bean.size() != 0) {
+            NoNetRelativeLayout.setVisibility(GONE);
+            packageDetailRecyclerView.setVisibility(View.VISIBLE);
+            packageDetailRecyclerView.setAdapter(new CountryDetailPackageAdapter(this, http.getCountryPacketList(), countryPic));
+        } else {
+            packageDetailRecyclerView.setVisibility(View.GONE);
+            nodataTextView.setVisibility(View.VISIBLE);
+        }
+    }
+    @Override
+    public void noNetShowView() {
+        NoNetRelativeLayout.setVisibility(View.VISIBLE);
+        packageDetailRecyclerView.setVisibility(GONE);
+        packageImageView.setVisibility(GONE);
     }
 
-    @Override
-    public RelativeLayout getNoNetRelativeLayout() {
-        return NoNetRelativeLayout;
-    }
 
-    @Override
-    public RecyclerView getPackageDetailRecyclerView() {
-        return packageDetailRecyclerView;
-    }
-
-    @Override
-    public TextView getNodataTextView() {
-        return nodataTextView;
-    }
-
-    @Override
-    public String getCountryPic() {
-        return countryPic;
-    }
-
-    @Override
-    public ImageView getPackageImageView() {
-        return packageImageView;
-    }
 }

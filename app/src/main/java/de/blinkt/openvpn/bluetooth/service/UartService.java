@@ -301,6 +301,10 @@ public class UartService extends Service implements Serializable {
      */
     //通过mac地址连接设备
     public boolean connect(String address) {
+
+        checkBleDevice();
+
+        Log.d(TAG, "connect: 开始连接");
         if (mBluetoothAdapter == null || address == null) {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
             return false;
@@ -318,9 +322,26 @@ public class UartService extends Service implements Serializable {
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
-        Log.d(TAG, "Trying to create a new connection." + mBluetoothGatt);
+        // boolean connect = mBluetoothGatt.connect();
+        // Log.d(TAG, "Trying to create a new connection." + mBluetoothGatt+connect);
+
         mConnectionState = STATE_CONNECTING;
         return true;
+    }
+
+    /**
+     * 检查蓝牙是否开启
+     */
+    public void checkBleDevice() {
+        if (mBluetoothAdapter != null) {
+            if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                enableBtIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ICSOpenVPNApplication.getContext().startActivity(enableBtIntent);
+            }
+        } else {
+            Log.i("blueTooth", "该手机不支持蓝牙");
+        }
     }
 
     /**
@@ -332,7 +353,7 @@ public class UartService extends Service implements Serializable {
     //断开连接
     public void disconnect() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
+            Log.w(TAG, "主动断开BluetoothAdapter not initialized");
             return;
         }
         mBluetoothGatt.disconnect();

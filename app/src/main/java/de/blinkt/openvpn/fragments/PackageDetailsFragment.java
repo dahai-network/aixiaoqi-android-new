@@ -38,7 +38,8 @@ public class PackageDetailsFragment extends BaseFragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            tvContext.setText(detail);
+            if (tvContext != null)
+                tvContext.setText(detail);
         }
     };
 
@@ -51,18 +52,19 @@ public class PackageDetailsFragment extends BaseFragment {
         setView();
         return view;
     }
+
     /**
      * 设置界面
      */
     private void setView() {
-        detail= SharedUtils.getInstance().readString(Constant.DETAIL_SIGN);
-        if (null != detail&&!detail.equals("")) {
+        detail = SharedUtils.getInstance().readString(Constant.DETAIL_SIGN);
+        if (null != detail && !detail.equals("")) {
             tvContext.setText(detail);
         } else {
             LocalBroadcastManager.getInstance(getActivity()).registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                   detail = intent.getStringExtra(Constant.DETAIL_SIGN);
+                    detail = intent.getStringExtra(Constant.DETAIL_SIGN);
                     if (detail != null) {
                         mHandler.sendEmptyMessage(0);
                     }

@@ -62,6 +62,7 @@ public class IndexPresenterImpl extends NetPresenterBaseImpl implements IndexPre
             GetHotHttp http = (GetHotHttp) object;
             List<HotPackageEntity> hotList = http.getHotPackageEntityList();
             indexView.initHotPackage(hotList);
+
         } else if (cmdType == COMTYPE_GET_PRODUCTS) {
             GetProductHttp http = (GetProductHttp) object;
             List<ProductEntity> bean = http.getProductEntity();
