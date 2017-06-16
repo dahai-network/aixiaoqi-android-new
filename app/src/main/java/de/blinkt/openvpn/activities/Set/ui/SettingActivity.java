@@ -123,7 +123,11 @@ public class SettingActivity extends BaseActivity implements SetView,DialogInter
 			case R.id.ll_upgrade:
 				//友盟方法统计
 				MobclickAgent.onEvent(context, CLICKVERSIONUPGRADE);
+				if(!Constant.IS_DEBUG){
 				Beta.checkUpgrade();
+				}else{
+					CommonTools.showShortToast(this,"测试环境不支持升级，请在正式环境下测试");
+				}
 				break;
 			case R.id.exitBtn:
 				showDialog();
