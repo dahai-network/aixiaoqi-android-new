@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities;
+package de.blinkt.openvpn.activities.Device.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,11 +8,11 @@ import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.activities.Device.ui.*;
 import de.blinkt.openvpn.constant.Constant;
-import de.blinkt.openvpn.util.SharedUtils;
+
 
 
 public class ChoiceDeviceTypeActivity extends BaseActivity {
@@ -21,12 +21,12 @@ public class ChoiceDeviceTypeActivity extends BaseActivity {
 	RelativeLayout aixiaoqi1RelativeLayout;
 	@BindView(R.id.uniboxRelativeLayout)
 	RelativeLayout uniboxRelativeLayout;
-
+Unbinder unbinder;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_choice_device_type);
-		ButterKnife.bind(this);
+		unbinder=ButterKnife.bind(this);
 		init();
 	}
 
@@ -52,5 +52,11 @@ public class ChoiceDeviceTypeActivity extends BaseActivity {
 		intent.putExtra(Constant.BRACELETNAME, deviceName);
 		startActivity(intent);
 		finish();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unbinder.unbind();
 	}
 }

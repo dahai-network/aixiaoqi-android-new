@@ -28,6 +28,4 @@ public class PaymentTermFragment extends BaseFragment {
             tvContext.setText(detail);
         return view;
     }
-
-
 }

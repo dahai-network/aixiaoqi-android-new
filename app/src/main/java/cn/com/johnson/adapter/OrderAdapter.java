@@ -26,7 +26,7 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.BoughtPackageEntity;
 import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
-import de.blinkt.openvpn.activities.OutsideFirstStepActivity;
+import de.blinkt.openvpn.activities.SetFlowCard.OutsideFirstStepActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;

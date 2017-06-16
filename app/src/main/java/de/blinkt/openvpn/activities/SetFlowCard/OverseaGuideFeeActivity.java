@@ -1,26 +1,16 @@
-package de.blinkt.openvpn.activities;
+package de.blinkt.openvpn.activities.SetFlowCard;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.OutsideAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
-
 
 
 public class OverseaGuideFeeActivity extends BaseActivity  {

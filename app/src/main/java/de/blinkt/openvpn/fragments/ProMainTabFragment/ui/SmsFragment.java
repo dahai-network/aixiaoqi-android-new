@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.SMSAcivity;
+import de.blinkt.openvpn.activities.SimOption.ui.SMSAcivity;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl.SmsPresenterImpl;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.View.SmsView;
 import de.blinkt.openvpn.util.CommonTools;

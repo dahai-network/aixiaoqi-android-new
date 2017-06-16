@@ -1,9 +1,7 @@
 package de.blinkt.openvpn.fragments.ProMainTabFragment.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,27 +10,15 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
-import cn.com.johnson.adapter.ContactAdapter;
-import de.blinkt.openvpn.activities.CallDetailActivity;
-import de.blinkt.openvpn.activities.ContactDetailActivity;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl.AddressPresenterImpl;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.View.AddressListView;
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
-import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.util.ExditTextWatcher;
 import de.blinkt.openvpn.util.SetPermission;
-import de.blinkt.openvpn.util.pinyin.CharacterParser;
-import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactHandler;
-import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.TopProgressView;
 import de.blinkt.openvpn.views.contact.SideBar;
@@ -99,6 +85,8 @@ public class AddressListFragment extends BaseStatusFragment implements AddressLi
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        if(mSideBar!=null)
+            mUserDialog.setText("");
         if (isVisibleToUser) {
             addressPresenter.visibleFragment();
         }
@@ -121,7 +109,6 @@ public class AddressListFragment extends BaseStatusFragment implements AddressLi
                 if (position != -1) {
                     mRecyclerView.scrollToPosition(position);
                 }
-
             }
         });
     }

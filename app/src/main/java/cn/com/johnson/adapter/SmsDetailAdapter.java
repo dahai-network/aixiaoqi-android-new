@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.SMSAcivity;
+import de.blinkt.openvpn.activities.SimOption.PresenterImpl.SmsDetailPresenterImpl;
 import de.blinkt.openvpn.model.SmsDetailEntity;
 import de.blinkt.openvpn.util.DateUtils;
 
@@ -38,10 +38,10 @@ public class SmsDetailAdapter extends RecyclerBaseAdapter<RecyclerView.ViewHolde
 			((RightViewHolder) holder).rightSmsTv.setText(smsDetailEntity.getSMSContent());
 			((RightViewHolder) holder).showTimeTv.setText(DateUtils.getTimeStampDetailString(smsDetailEntity.getSMSTime()));
 			((RightViewHolder) holder).deleteSmsDetailCheckBox.setChecked(smsDetailEntity.isCheck());
-			if (SMSAcivity.SEND_PROGRESSING.equals(smsDetailEntity.getStatus())) {
+			if (SmsDetailPresenterImpl.SEND_PROGRESSING.equals(smsDetailEntity.getStatus())) {
 				((RightViewHolder) holder).sendErrorIv.setVisibility(View.GONE);
 				((RightViewHolder) holder).sendingPb.setVisibility(View.VISIBLE);
-			} else if (SMSAcivity.SEND_SUCCEED.equals(smsDetailEntity.getStatus())) {
+			} else if (SmsDetailPresenterImpl.SEND_SUCCEED.equals(smsDetailEntity.getStatus())) {
 				((RightViewHolder) holder).sendErrorIv.setVisibility(View.GONE);
 				((RightViewHolder) holder).sendingPb.setVisibility(View.GONE);
 			} else {

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.Window;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -33,6 +34,7 @@ public class BaseSensorActivity extends CommenActivity implements SensorEventLis
 	protected  int notifyId = 100;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		addSensorSet();
 	}

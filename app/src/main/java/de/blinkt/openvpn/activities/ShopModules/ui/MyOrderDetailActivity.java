@@ -35,7 +35,7 @@ import de.blinkt.openvpn.activities.Base.BaseNetActivity;
 import de.blinkt.openvpn.activities.CallTimePacketDetailActivity;
 import de.blinkt.openvpn.activities.FreeWorryIntroActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
-import de.blinkt.openvpn.activities.OutsideFirstStepActivity;
+import de.blinkt.openvpn.activities.SetFlowCard.OutsideFirstStepActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;

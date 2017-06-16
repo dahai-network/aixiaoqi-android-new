@@ -18,7 +18,7 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.RecyclerBaseAdapter;
 import cn.com.johnson.adapter.SmsListAdapter;
 import de.blinkt.openvpn.activities.NetPresenterBaseImpl;
-import de.blinkt.openvpn.activities.SMSAcivity;
+import de.blinkt.openvpn.activities.SimOption.ui.SMSAcivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
@@ -27,14 +27,10 @@ import de.blinkt.openvpn.fragments.ProMainTabFragment.ModelImpl.SmsDeleteByTelsM
 import de.blinkt.openvpn.fragments.ProMainTabFragment.ModelImpl.SmsListModelImpl;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.Presenter.SmsPresenter;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.View.SmsView;
-import de.blinkt.openvpn.fragments.ProMainTabFragment.ui.SmsFragment;
 import de.blinkt.openvpn.http.CommonHttp;
-import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.SMSListHttp;
 import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.model.SmsEntity;
-import de.blinkt.openvpn.model.SmsIdsEntity;
-import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.User;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKSMSITEM;

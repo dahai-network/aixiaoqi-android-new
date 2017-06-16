@@ -28,7 +28,7 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.AppMode;
 import cn.com.johnson.model.ChangeViewStateEvent;
 import cn.com.johnson.widget.GlideCircleTransform;
-import de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity;
+import de.blinkt.openvpn.activities.Device.ui.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
 import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.BalanceParticularsActivity;

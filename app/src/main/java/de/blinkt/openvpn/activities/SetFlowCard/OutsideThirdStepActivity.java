@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities;
+package de.blinkt.openvpn.activities.SetFlowCard;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;

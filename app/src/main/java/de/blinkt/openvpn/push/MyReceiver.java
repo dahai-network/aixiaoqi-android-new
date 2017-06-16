@@ -24,7 +24,8 @@ import cn.com.aixiaoqi.R;
 import cn.jpush.android.api.JPushInterface;
 import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
 import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
-import de.blinkt.openvpn.activities.SMSAcivity;
+import de.blinkt.openvpn.activities.SimOption.PresenterImpl.SmsDetailPresenterImpl;
+import de.blinkt.openvpn.activities.SimOption.ui.SMSAcivity;
 import de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
@@ -165,13 +166,13 @@ public class MyReceiver extends BroadcastReceiver implements InterfaceCallback{
 		if (SMSAcivity.isForeground) {
 			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
 			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-			Intent msgIntent = new Intent(SMSAcivity.MESSAGE_RECEIVED_ACTION);
-			msgIntent.putExtra(SMSAcivity.KEY_MESSAGE, message);
+			Intent msgIntent = new Intent(SmsDetailPresenterImpl.MESSAGE_RECEIVED_ACTION);
+			msgIntent.putExtra(SmsDetailPresenterImpl.KEY_MESSAGE, message);
 			if (!TextUtils.isEmpty(extras)) {
 				try {
 					JSONObject extraJson = new JSONObject(extras);
 					if ( extraJson.length() > 0) {
-						msgIntent.putExtra(SMSAcivity.KEY_EXTRAS, extras);
+						msgIntent.putExtra(SmsDetailPresenterImpl.KEY_EXTRAS, extras);
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

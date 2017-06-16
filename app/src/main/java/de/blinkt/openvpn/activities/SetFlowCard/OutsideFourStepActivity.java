@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities;
+package de.blinkt.openvpn.activities.SetFlowCard;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -11,7 +11,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.activities.LaunchActivity;
 
 /**
  * Created by Administrator on 2017/4/19 0019.

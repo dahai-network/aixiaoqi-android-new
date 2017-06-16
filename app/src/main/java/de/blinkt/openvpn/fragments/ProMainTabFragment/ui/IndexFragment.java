@@ -29,7 +29,7 @@ import cn.com.johnson.adapter.ProductsAdapter;
 import cn.com.johnson.model.HotPackageEntity;
 import cn.com.johnson.model.IndexBannerEntity;
 import de.blinkt.openvpn.activities.MyModules.ui.PackageMarketActivity;
-import de.blinkt.openvpn.activities.OverseaGuideFeeActivity;
+import de.blinkt.openvpn.activities.SetFlowCard.OverseaGuideFeeActivity;
 import de.blinkt.openvpn.activities.WebViewActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;

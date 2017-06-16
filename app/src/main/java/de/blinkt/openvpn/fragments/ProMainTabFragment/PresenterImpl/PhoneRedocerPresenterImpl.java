@@ -14,7 +14,8 @@ import java.util.List;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.ContactRecodeAdapter;
 import cn.com.johnson.adapter.RecyclerBaseAdapter;
-import de.blinkt.openvpn.activities.CallDetailActivity;
+import de.blinkt.openvpn.activities.SimOption.PresenterImpl.CallDetailPresenterImpl;
+import de.blinkt.openvpn.activities.SimOption.ui.CallDetailActivity;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.ModelImpl.NumberDbModelImpl;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.View.PhoneView;
@@ -63,7 +64,7 @@ public class PhoneRedocerPresenterImpl  implements RecyclerBaseAdapter.OnItemCli
         switch (view.getId()) {
             case R.id.iv_arrow:
                 Intent intent = new Intent(context, CallDetailActivity.class);
-                intent.putExtra(CallDetailActivity.PHONE_INFO, contactRecodeEntity);
+                intent.putExtra(CallDetailPresenterImpl.PHONE_INFO, contactRecodeEntity);
                 phoneView.toCallDetailActivity(contactRecodeEntity );
                 break;
             default:

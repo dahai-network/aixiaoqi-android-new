@@ -43,14 +43,12 @@ public class ProductFeatureFragment extends BaseFragment {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-
                 features = intent.getStringExtra(Constant.FEATURES_SIGN);
                 if (features != null) {
                     mHandler.sendEmptyMessage(0);
                 }
             }
         }, new IntentFilter(Constant.LOCALBROADCAST_INTENT_DATA));
-
         return view;
     }
 

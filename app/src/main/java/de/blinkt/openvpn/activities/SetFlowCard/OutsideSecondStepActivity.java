@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.activities;
+package de.blinkt.openvpn.activities.SetFlowCard;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -17,7 +17,6 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
 
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;

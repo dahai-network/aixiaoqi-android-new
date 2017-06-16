@@ -113,11 +113,11 @@
             android:name="wandoujia"
             android:value="${UMENG_CHANNEL_VALUE}"/>
 
-        <activity android:name="de.blinkt.openvpn.activities.SMSAcivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.SimOption.ui.SMSAcivity"/>
         <activity android:name="de.blinkt.openvpn.activities.UserInfo.ui.EditNameActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.WebViewActivity"/>
         <activity
-            android:name="de.blinkt.openvpn.activities.CallPhoneNewActivity"
+            android:name="de.blinkt.openvpn.activities.SimOption.ui.CallPhoneNewActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:permission="android.permission.RECORD_AUDIO"
@@ -127,11 +127,7 @@
             android:label="@string/app"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name="de.blinkt.openvpn.activities.ContactActivity"
-            android:label="@string/app"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name="de.blinkt.openvpn.activities.CallDetailActivity"
+            android:name="de.blinkt.openvpn.activities.SimOption.ui.CallDetailActivity"
             android:label="@string/app"
             android:windowSoftInputMode="adjustPan"/>
         <activity
@@ -169,7 +165,7 @@
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:theme="@android:style/Theme.Translucent"/>
         <activity
-            android:name="de.blinkt.openvpn.activities.ReceiveCallActivity"
+            android:name="de.blinkt.openvpn.activities.SimOption.ui.ReceiveCallActivity"
             android:launchMode="singleTop"/>
         <activity android:name="de.blinkt.openvpn.activities.UserInfo.ui.GetBackPswActivity"/>
         <activity
@@ -188,9 +184,13 @@
         <activity android:name="de.blinkt.openvpn.activities.ShopModules.ui.PackageDetailActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.MyModules.ui.PackageMarketActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.Set.ui.ContactUsActivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.OverseaGuideFeeActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.SetFlowCard.OverseaGuideFeeActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.ShopModules.ui.CommitOrderActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.ShopModules.ui.CountryPackageActivity"/>
+        <activity
+            android:name="de.blinkt.openvpn.activities.SimOption.ui.ContactActivity"
+            android:label="@string/app"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
@@ -351,11 +351,10 @@
             android:exported="false"
             android:persistent="true"/>
 
-        <activity android:name="de.blinkt.openvpn.activities.OutsideFirstStepActivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.OutsideSecondStepActivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.OutsideThirdStepActivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.OutsideFourStepActivity"/>
-
+        <activity android:name="de.blinkt.openvpn.activities.SetFlowCard.OutsideFirstStepActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.SetFlowCard.OutsideSecondStepActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.SetFlowCard.OutsideThirdStepActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.SetFlowCard.OutsideFourStepActivity"/>
         <service
             android:name="de.blinkt.openvpn.service.NotificationMonitor"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
@@ -391,7 +390,7 @@
         <activity android:name="de.blinkt.openvpn.activities.Set.ui.CallTimeOrderDetailActitivy"/>
         <activity android:name="de.blinkt.openvpn.activities.KingCardDetailActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.CallTimePacketDetailActivity"/>
-        <activity android:name="de.blinkt.openvpn.activities.ChoiceDeviceTypeActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.Device.ui.ChoiceDeviceTypeActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.TipUserOptionsActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.MyModules.ui.ImportantAuthorityActivity"/>
         <activity

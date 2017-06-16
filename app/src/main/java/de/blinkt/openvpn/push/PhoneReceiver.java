@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import de.blinkt.openvpn.activities.CallPhoneNewActivity;
-import de.blinkt.openvpn.activities.ReceiveCallActivity;
+import de.blinkt.openvpn.activities.SimOption.ui.CallPhoneNewActivity;
+import de.blinkt.openvpn.activities.SimOption.ui.ReceiveCallActivity;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 
 /**

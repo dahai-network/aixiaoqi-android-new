@@ -29,10 +29,11 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.OnlyCallModel;
-import de.blinkt.openvpn.activities.CallDetailActivity;
-import de.blinkt.openvpn.activities.CallPhoneNewActivity;
 import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.RechargeActivity;
+import de.blinkt.openvpn.activities.SimOption.PresenterImpl.CallDetailPresenterImpl;
+import de.blinkt.openvpn.activities.SimOption.ui.CallDetailActivity;
+import de.blinkt.openvpn.activities.SimOption.ui.CallPhoneNewActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl.PhoneRedocerPresenterImpl;
@@ -87,7 +88,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     public void toCallDetailActivity(ContactRecodeEntity contactRecodeEntity) {
         this.contactRecodeEntity=contactRecodeEntity;
         Intent intent = new Intent(getActivity(), CallDetailActivity.class);
-        intent.putExtra(CallDetailActivity.PHONE_INFO, contactRecodeEntity);
+        intent.putExtra(CallDetailPresenterImpl.PHONE_INFO, contactRecodeEntity);
         startActivity(intent);
     }
 

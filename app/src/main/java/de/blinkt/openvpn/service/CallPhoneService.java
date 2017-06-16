@@ -22,12 +22,11 @@ import cn.com.johnson.model.SecurityConfig;
 import cn.qfishphone.sipengine.SipEngineCore;
 import cn.qfishphone.sipengine.SipEngineEventListener;
 import cn.qfishphone.sipengine.SipEngineFactory;
-import de.blinkt.openvpn.activities.ReceiveCallActivity;
+import de.blinkt.openvpn.activities.SimOption.ui.ReceiveCallActivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
-import de.blinkt.openvpn.database.BlackListDBHelp;
 import de.blinkt.openvpn.http.CheckTokenHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
@@ -124,7 +123,11 @@ public class CallPhoneService extends Service implements SipEngineEventListener,
 		if (CallDir != 0) {
 			if(!User.isBlackList(peer_caller.substring(2,peer_caller.length()))) {
 				CALL_DIR = 0;
-				ReceiveCallActivity.launch(CallPhoneService.this, peer_caller);
+				Intent intent = new Intent(this, ReceiveCallActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+				intent.putExtra("phoneNum", peer_caller);
+				startActivity(intent);
 				SendCommandToBluetooth.sendMessageToBlueTooth(Constant.COMING_TEL_PUSH);//发送给手环电话设备通知
 			}else{
 				ICSOpenVPNApplication.the_sipengineReceive.Hangup();
