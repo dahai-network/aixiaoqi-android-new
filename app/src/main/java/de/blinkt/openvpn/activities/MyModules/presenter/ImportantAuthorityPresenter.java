@@ -120,7 +120,7 @@ public class ImportantAuthorityPresenter {
                 }
                 break;
             //oppo
-            case Constant.OPPO:
+           case Constant.OPPO:
                 if (version > Build.VERSION_CODES.KITKAT) {
                     //关闭后台冻结
                     ShutDownBackground(entity);
@@ -157,6 +157,20 @@ public class ImportantAuthorityPresenter {
                 //wife
                 wifiSet(entity, data);
                 break;
+            default:
+                //保持后台运行
+                keepStandbySet(entity);
+                handleData(Constant.MEIZU_PACKAGENAME_KEEPSTAND, Constant.MEIZU_PACKAGE_KEEPSTAND, data);
+
+                //自启动
+                autoRunSet(entity);
+                Intent meizuIntent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
+                meizuIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                meizuIntent.putExtra("packageName", ICSOpenVPNApplication.getInstance().getPackageName());
+                dataSave(meizuIntent, data);
+//wife
+                wifiSet(entity, data);
+
         }
     }
 

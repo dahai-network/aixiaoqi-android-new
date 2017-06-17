@@ -3,6 +3,8 @@ package de.blinkt.openvpn.activities.MyModules.ui;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+
 import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +60,7 @@ public class ImportantAuthorityActivity extends BaseActivity {
         ArrayList<AuthorityEntity> data = new ArrayList<>();
         importantAuthorityPresenter.setPhoneTypeEntity(data);
         if (data.size() == 0) {
+            //Log.d(TAG, "getPhoneTypeEntity: "+IntentWrapper);
             IntentWrapper.whiteListMatters(ProMainActivity.instance, "服务的持续运行");
             finish();
         }

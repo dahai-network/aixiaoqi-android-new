@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,11 +20,15 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Device.PresenterImpl.BindDevicePresenterImpl;
 import de.blinkt.openvpn.activities.Device.View.BindDeviceView;
 import de.blinkt.openvpn.bluetooth.service.UartService;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+
+import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
+import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
 
 
 public class BindDeviceActivity extends BluetoothBaseActivity implements BindDeviceView, DialogInterfaceTypeBase {
@@ -46,6 +51,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 	private UartService mService = ICSOpenVPNApplication.uartService;//
 	//设备名称：类型不同名称不同，分别有【unitoys、unibox】
 	private String bluetoothName = Constant.UNITOYS;
+	private Handler mHandler=new Handler(){};
 
 	BindDevicePresenterImpl bindDevicePresenter;
 
@@ -230,8 +236,12 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 	//停止绑定，清除设备信息
 	@OnClick(R.id.stopTextView)
 	public void onClick() {
+        Log.d(TAG, "onClick: 停止绑定");
+        //发送绑定失败
+        SendCommandToBluetooth.sendMessageToBlueTooth(Constant.BIND_FAIL);
 		scanLeDevice(false);
-		mService.disconnect();
+        mService.disconnect();
+
 		ICSOpenVPNApplication.isConnect = false;
 		utils.delete(Constant.IMEI);
 		utils.delete(Constant.BRACELETNAME);

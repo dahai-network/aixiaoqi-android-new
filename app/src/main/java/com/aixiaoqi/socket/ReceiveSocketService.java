@@ -112,6 +112,7 @@ public class ReceiveSocketService extends Service {
                 sendPreDataType = "";
             }
             TlvAnalyticalUtils.builderMessagePackageList(receiveData);
+            Log.d(TAG, "onReceive: ---------------");
             createHeartBeatPackage();
         }
 
