@@ -231,8 +231,6 @@ public class PersonalCenterActivity extends BaseNetActivity implements View.OnCl
 				}
 				dialogPicker(SPORT_TARGET, targetInt);
 				break;
-
-
 		}
 	}
 

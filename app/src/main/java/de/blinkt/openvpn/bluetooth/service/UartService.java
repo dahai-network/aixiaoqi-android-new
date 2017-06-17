@@ -276,7 +276,6 @@ public class UartService extends Service implements Serializable {
             mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null) {
                 Log.e(TAG, "Unable to initialize BluetoothManager.");
-
                 return false;
             }
         }

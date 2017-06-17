@@ -137,12 +137,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
         final String action = intent.getAction();
         mService = ICSOpenVPNApplication.uartService;
         if (action.equals(UartService.FINDED_SERVICE)) {
-            Log.d(TAG, "UART_CONNECT_MSG");
             IS_TEXT_SIM = false;
-
             CommonTools.delayTime(100);
             //8880021400
-
             String random8NumberString=EncryptionUtil.random8Number();
             Log.d("Encryption", "send--run: " + APP_CONNECT + "--" + random8NumberString);
 
@@ -171,7 +168,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
         } else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 
             nullCardId = null;
-
             //如果保存的IMEI没有的话，那么就是在MyDevice里面，在Mydevice里面会有连接操作
             Log.d(TAG, "onReceive: retryTime=" + retryTime + "---ICSOpenVPNApplication.isConnect=" + ICSOpenVPNApplication.isConnect);
             if (retryTime < 20 && ICSOpenVPNApplication.isConnect) {
@@ -221,7 +217,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
                 @Override
                 public void run() {
                     try {
-
                         Log.d(TAG, "run: 接受数据");
                         String firstPackage = messages.get(0).substring(0, 2);
                         String dataType = messages.get(0).substring(6, 10);
