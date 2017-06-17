@@ -64,16 +64,19 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
 
     @Override
     public void requestBindDevice(String deviceType) {
+        if(bindDeviceModel!=null)
         bindDeviceModel.bindDevice(deviceAddress,deviceType);
     }
 
     @Override
     public void requestIsBindDevice() {
+        if(isBindDeviceModel!=null)
         isBindDeviceModel.isBindDevice(deviceAddress);
     }
 
     @Override
     public void requestUpdateDeviceInfo() {
+        if(updateDeviceInfoModel!=null)
         updateDeviceInfoModel.updateDeviceInfo();
     }
 

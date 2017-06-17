@@ -79,9 +79,6 @@ public class MessagePackageEntity implements Serializable{
         this.hexStringMessageHeader = hexStringMessageHeader;
     }
 
-    public MessagePackageEntity() {
-    }
-
     private String AddZero(int  length){
         String    hexStringLength=Integer.toHexString(length/2);
         int byteCount=hexStringLength.length();

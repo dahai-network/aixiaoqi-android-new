@@ -27,7 +27,10 @@ import static de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterIm
  */
 public class TlvAnalyticalUtils {
 
-
+	public static boolean isRegisterSucceed = false;
+	public static long registerOrTime;
+	private static long lastClickTime;
+	private static int count = 0;
 	public static MessagePackageEntity builderMessagePackage(String hexString) {
 		Log.e("TlvAnalyticalUtils", hexString);
 		int position = 0;
@@ -118,63 +121,19 @@ public class TlvAnalyticalUtils {
 			position = position + value.length();
 			int typeParams = Integer.parseInt(_hexTag, 16);
 			if (tag == 4) {
-				if (typeParams == 160) {
-					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
-					SocketConstant.REGISTER_REMOTE_ADDRESS = value.substring(value.indexOf("_") + 1, value.lastIndexOf("."));
-					SocketConstant.REGISTER_ROMOTE_PORT = value.substring(value.lastIndexOf(".") + 1, value.length());
-
-				}else if(typeParams==101){
-					TCP_HEART_TIME=Integer.parseInt(value,16);
-					TCP_HEART_TIME=TCP_HEART_TIME/2-30;
-					Log.e("TlvAnalytical","TCP_HEART_TIME"+TCP_HEART_TIME+"\nvalue"+value+"\ntag"+tag);
-				}
+				value = getConnectResultString(tag, value, typeParams);
 			} else if (tag == 16) {
 				if (typeParams == 1) {
 					tempTag = value;
 					if ("01".equals(value)) {
 						orData = orData.replace("8a1000", "8a9000");
 					}
-
 				}
 				if ("00".equals(tempTag)) {
 					if (typeParams == 199) {
 						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_NO_RESPONSE);
 						if(SdkAndBluetoothDataInchange.isHasPreData) {
-							if(preData==null){
-								preData= new String[9];
-							}
-							String messageSeq = value.substring(0, 4);
-							preData[0]=messageSeq;
-							String preNumber = value.substring(14, 16);
-							preData[1]=preNumber;
-							int responeCode = getResponeCode(preNumber,1);
-							preData(value, preData);
-							String valideData = value.substring(32, value.length());
-							preData[6]=valideData;
-							int preCode=getResponeCode(preData[2].substring(preData[2].length()-4,preData[2].length()),2);
-							if(responeCode==0&&preCode==0){
-								getOrderNumber(0);
-								sendToBlue(preData[6]);
-							}else if(responeCode==0&&preCode!=0){
-								for(int i=0;i<4;i++){
-									int	responeC=getResponeCode(preData[i+2].substring(preData[i+2].length()-4,preData[i+2].length()),2);
-									if(responeC==0){
-										break;
-									}
-									getOrderNumber(i+1);
-								}
-								sendToBlue(preData[2]);
-							}else{
-								getOrderNumber(responeCode);
-								sendToBlue(preData[2]);
-
-							}
-
-							preData[8]=orData.replace("8a1000", "8a9000").substring(0,20);
-
-							for(int i=0;i<9;i++){
-								Log.e("TlvAnalyticalUtils","分离服务器发过来的数据"+preData[i]);
-							}
+							hasPreData(orData, value);
 						}else{
 							byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
 							sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
@@ -201,39 +160,99 @@ public class TlvAnalyticalUtils {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
 				}
 			} else if (tag == 15) {
-				if (System.currentTimeMillis() - lastClickTime > 365 * 24 * 60 * 60 * 1000L || isFast(5 * 60 * 1000)) {
-					if (!isFast(5 * 60 * 1000)) {
-						isFast(5 * 60 * 1000);
-					}
-					count++;
-				} else {
-					count = 0;
-				}
-				if (count <= 3) {
-					REGISTER_STATUE_CODE = 2;
-					reRegistering(orData, tag);
-				}
+				disConnect(orData, tag);
 			} else if (tag == 5) {
-				if (typeParams == 162) {
-					if (Integer.parseInt(value, 16) == 3) {
-						if(SdkAndBluetoothDataInchange.isHasPreData){
-							SdkAndBluetoothDataInchange.PERCENT=0;
-						}
-						REGISTER_STATUE_CODE = 3;
-						EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_SUCCESS);
-						registerOrTime = System.currentTimeMillis();
-						isRegisterSucceed = true;
-					} else if (Integer.parseInt(value, 16) > 4) {
-						REGISTER_STATUE_CODE = 2;
-						EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SERVER_IS_ERROR);
-					}
-				}
+				simStatue(value, typeParams);
 			}
 
 			tlvs.add(new TlvEntity(_hexTag, vl + "", value));
 		}
 		return tlvs;
 	}
+
+	private static void hasPreData(String orData, String value) {
+		if(preData==null){
+            preData= new String[9];
+        }
+		String messageSeq = value.substring(0, 4);
+		preData[0]=messageSeq;
+		String preNumber = value.substring(14, 16);
+		preData[1]=preNumber;
+		int responeCode = getResponeCode(preNumber,1);
+		preData(value, preData);
+		String valideData = value.substring(32, value.length());
+		preData[6]=valideData;
+		int preCode=getResponeCode(preData[2].substring(preData[2].length()-4,preData[2].length()),2);
+		if(responeCode==0&&preCode==0){
+            getOrderNumber(0);
+            sendToBlue(preData[6]);
+        }else if(responeCode==0&&preCode!=0){
+            for(int i=0;i<4;i++){
+                int	responeC=getResponeCode(preData[i+2].substring(preData[i+2].length()-4,preData[i+2].length()),2);
+                if(responeC==0){
+                    break;
+                }
+                getOrderNumber(i+1);
+            }
+            sendToBlue(preData[2]);
+        }else{
+            getOrderNumber(responeCode);
+            sendToBlue(preData[2]);
+
+        }
+
+		preData[8]=orData.replace("8a1000", "8a9000").substring(0,20);
+		for(int i=0;i<9;i++){
+            Log.e("TlvAnalyticalUtils","分离服务器发过来的数据"+preData[i]);
+        }
+	}
+
+	private static void simStatue(String value, int typeParams) {
+		if (typeParams == 162) {
+            if (Integer.parseInt(value, 16) == 3) {
+                if(SdkAndBluetoothDataInchange.isHasPreData){
+                    SdkAndBluetoothDataInchange.PERCENT=0;
+                }
+                REGISTER_STATUE_CODE = 3;
+                EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_SUCCESS);
+                registerOrTime = System.currentTimeMillis();
+                isRegisterSucceed = true;
+            } else if (Integer.parseInt(value, 16) > 4) {
+                REGISTER_STATUE_CODE = 2;
+                EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SERVER_IS_ERROR);
+            }
+        }
+	}
+
+	private static void disConnect(String orData, int tag) {
+		if (System.currentTimeMillis() - lastClickTime > 365 * 24 * 60 * 60 * 1000L || isFast(5 * 60 * 1000)) {
+            if (!isFast(5 * 60 * 1000)) {
+                isFast(5 * 60 * 1000);
+            }
+            count++;
+        } else {
+            count = 0;
+        }
+		if (count <= 3) {
+            REGISTER_STATUE_CODE = 2;
+            reRegistering(orData, tag);
+        }
+	}
+
+	private static String getConnectResultString(int tag, String value, int typeParams) {
+		if (typeParams == 160) {
+            value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
+            SocketConstant.REGISTER_REMOTE_ADDRESS = value.substring(value.indexOf("_") + 1, value.lastIndexOf("."));
+            SocketConstant.REGISTER_ROMOTE_PORT = value.substring(value.lastIndexOf(".") + 1, value.length());
+
+        }else if(typeParams==101){
+            TCP_HEART_TIME=Integer.parseInt(value,16);
+            TCP_HEART_TIME=TCP_HEART_TIME/2-30;
+            Log.e("TlvAnalytical","TCP_HEART_TIME"+TCP_HEART_TIME+"\nvalue"+value+"\ntag"+tag);
+        }
+		return value;
+	}
+
 	public static int TCP_HEART_TIME;
 	private static void getOrderNumber(int responeCode) {
 		if(preData[6].startsWith("a088")){
@@ -262,7 +281,6 @@ public class TlvAnalyticalUtils {
 		}
 	}
 
-
 	public static void sendToBlue(String value){
 		Log.e("TlvAnalyticalUtils","发送给蓝牙的数据"+value);
 		String[] messages = PacketeUtil.Separate(value,Constant.READED_SIM_DATA);
@@ -290,11 +308,6 @@ public class TlvAnalyticalUtils {
 			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
-
-	public static boolean isRegisterSucceed = false;
-	public static long registerOrTime;
-	private static long lastClickTime;
-	private static int count = 0;
 
 	public static boolean isFast(int maxTime) {
 		long time = System.currentTimeMillis();

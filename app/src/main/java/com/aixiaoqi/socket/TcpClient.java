@@ -87,6 +87,8 @@ public abstract class TcpClient implements Runnable {
 	}
 
 	private void connectSocket() throws IOException {
+//		SocketConstant.hostIP="192.168.1.133";
+//		SocketConstant.port=5090;
 		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
 		Socket socket = new Socket();
 		//TCP保活

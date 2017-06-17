@@ -21,7 +21,9 @@ public class SocketConstant {
 			, Integer.toHexString(192)//SIM卡卡号，number
 			, Integer.toHexString(193)//SIM卡余额
 			, Integer.toHexString(198)//预读数据压缩前的长度
-			, Integer.toHexString(199)};//预读数据内容
+			, Integer.toHexString(199)
+	};//预读数据内容
+	public static int [] CONNECT_VARIABLE_POSITION={11,12,15,16};
 	public static String[] CONNENCT_VALUE = {"01",//01，请求GoIp模块的值
 			"b4"//101,链接存活时间
 			, "01"//107,是否请求预读数据
@@ -39,8 +41,13 @@ public class SocketConstant {
 			, "00"//193,SIM卡余额
 			, "15f1"//198,预读数据压缩前的长度
 			, ""
+
 			//199,预读数据内容
 	};
+
+
+
+
 	public static String SESSION_ID = "00000000";//会话ID
 	public static String SDK_TAG = "c7";
 	public static String SDK_VALUE = "";
@@ -53,8 +60,6 @@ public class SocketConstant {
 	public static final String SESSION_ID_TEMP = "00000000";//
 	public static String hostIP = "120.25.161.113";
 	public static int port = 20016;
-
-
 	//SDK读取状态
 	public static final String EN_APPEVT_NONE = "00";
 	public static final String EN_APPEVT_SETSIMTYPE = "01";

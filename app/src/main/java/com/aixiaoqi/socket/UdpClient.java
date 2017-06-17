@@ -29,7 +29,6 @@ public abstract class UdpClient implements Runnable {
 	private String sendAddress = "127.0.0.1";
 	public static String tag = null;
 	private int port = 4567;
-	private String TAG = "UdpClient";
 
 	@Override
 	public void run() {

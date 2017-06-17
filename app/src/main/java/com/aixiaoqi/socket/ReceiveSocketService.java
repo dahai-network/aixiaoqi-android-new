@@ -159,10 +159,9 @@ public class ReceiveSocketService extends Service {
                         if (!TextUtils.isEmpty(sendConnectionType)) {
                             if (receiveConnectionTime < sendConnectionTime) {
                                 receiveConnectionTime = System.currentTimeMillis();
-                                if (receiveConnectionTime - sendConnectionTime > 30 * 1000) {
+                                if (receiveConnectionTime - sendConnectionTime >=30 * 1000) {
                                     //重新创建连接
                                     if (!TextUtils.isEmpty(sendConnectionContent)) {
-
                                         sendMessage(sendConnectionContent);
                                     }
                                 }

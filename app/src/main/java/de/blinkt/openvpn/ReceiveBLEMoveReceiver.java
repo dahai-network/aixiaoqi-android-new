@@ -281,7 +281,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
                                             if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
                                                 EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.REGISTERING);
                                             }
-
                                             if (!IS_TEXT_SIM && isGetnullCardid) {
                                                 //空卡ID是否不为空，若不为空则
                                                 if (nullCardId != null) {
@@ -373,7 +372,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
                                                     EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.AIXIAOQI_CARD);
                                                     break;
                                             }
-
                                             if (SocketConstant.REGISTER_STATUE_CODE != 0) {
                                                 SocketConstant.REGISTER_STATUE_CODE = 1;
                                             }
@@ -383,11 +381,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
                                         String Iccid = PacketeUtil.Combination(messages);
                                         Log.e("ICCID_BLUE_VALUE", Iccid);
                                         SharedUtils.getInstance().writeString(Constant.ICCID, Iccid);
-                                        SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(Iccid);
+                                        SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]] = RadixAsciiChange.convertStringToHex(Iccid);
                                         delayTime(50);
                                         break;
                                     case Constant.APP_CONNECT_RECEIVE:
-
                                         Log.i("Encryption", "返回加密数据----：" + messages.get(0).toString());
                                         String random8NumberString = SharedUtils.getInstance().readString("random8NumberString");
                                         Log.i("Encryption", "判断是否加密一致：" + EncryptionUtil.isPassEncrypt(messages.get(0).toString().substring(10), random8NumberString));
@@ -418,8 +415,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
             mService.disconnect();
 //			 mReceiveSocketService.closeThread();
         }
-
-
     }
 
     private void writeCard() {
