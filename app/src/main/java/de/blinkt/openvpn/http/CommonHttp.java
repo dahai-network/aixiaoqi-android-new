@@ -409,6 +409,7 @@ public abstract class CommonHttp implements Callback, Runnable {
             call = client.newCall(request);
             try {
                 call.enqueue(this);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

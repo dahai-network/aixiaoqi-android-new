@@ -356,6 +356,7 @@ public class UartService extends Service implements Serializable {
             Log.w(TAG, "主动断开BluetoothAdapter not initialized");
             return;
         }
+
         mBluetoothGatt.disconnect();
         mConnectionState = STATE_DISCONNECTED;
         broadcastUpdate(ACTION_GATT_DISCONNECTED);
@@ -501,7 +502,7 @@ public class UartService extends Service implements Serializable {
      * @return
      */
     public boolean writeRXCharacteristic(byte[] value) {
-        Log.d("Blue_Chanl", "writeRXCharacteristic: " + value);
+        Log.d("Blue_Chanl", "writeRXCharacteristic: " + value.toString());
         try {
             //如果mBluetoothGatt为空，意味着连接中断，所以不允许继续传输数据
             if (mBluetoothGatt == null) {
