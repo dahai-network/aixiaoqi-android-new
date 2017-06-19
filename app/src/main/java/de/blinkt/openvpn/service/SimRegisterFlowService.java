@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.aixiaoqi.socket.JNIUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
@@ -124,6 +125,7 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
         public void onServiceConnected(ComponentName className, IBinder rawBinder) {
             ICSOpenVPNApplication.uartService=  mService = ((UartService.LocalBinder) rawBinder).getService();
             //存在Application供全局使用
+            Log.d("SimRegisterFlowService", "onServiceConnected: 初始化广播");
             initBrocast();
         }
 

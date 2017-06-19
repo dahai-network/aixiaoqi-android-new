@@ -92,6 +92,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
     //重连次数
     public static int retryTime;
 
+
     CreateFiles createFiles;
     int i = 0;
     //	private String dataType;//发出数据以后需要把dataType重置为-1；
@@ -137,20 +138,24 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
         final String action = intent.getAction();
         mService = ICSOpenVPNApplication.uartService;
         if (action.equals(UartService.FINDED_SERVICE)) {
+            Constant.sendAppInS++;
             IS_TEXT_SIM = false;
             CommonTools.delayTime(100);
             //8880021400
-            String random8NumberString=EncryptionUtil.random8Number();
+            synchronized (ReceiveBLEMoveReceiver.class){}
+            String random8NumberString = EncryptionUtil.random8Number();
             Log.d("Encryption", "send--run: " + APP_CONNECT + "--" + random8NumberString);
+                sendMessageToBlueTooth(APP_CONNECT + random8NumberString);//APP专属命令
 
-            sendMessageToBlueTooth(APP_CONNECT + random8NumberString);//APP专属命令
-
+            // Toast.makeText(context,"发送专属命令random8NumberString",Toast.LENGTH_SHORT).show();
             //随机数进行保存
             SharedUtils.getInstance().writeString("random8NumberString", random8NumberString);
             //把日志保存到本地文件中
             createFiles.print("发送指令=" + APP_CONNECT + random8NumberString + "----随机数" + random8NumberString);
             Log.i(TAG, "发送了专属命令");
+
             String braceletname = utils.readString(Constant.BRACELETNAME);
+
 
             if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
 
@@ -170,36 +175,35 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
             nullCardId = null;
             //如果保存的IMEI没有的话，那么就是在MyDevice里面，在Mydevice里面会有连接操作
             Log.d(TAG, "onReceive: retryTime=" + retryTime + "---ICSOpenVPNApplication.isConnect=" + ICSOpenVPNApplication.isConnect);
-            if (retryTime < 20 && ICSOpenVPNApplication.isConnect) {
-                new Thread(new Runnable() {
+           if (ICSOpenVPNApplication.isConnect) {
+
+               if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+                   //多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
+                   // 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
+                   EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
+                   mService.connect(utils.readString(Constant.IMEI));
+                      } else {
+                            Log.d(TAG, "UART_DISCONNECT_MSG");
+                        }
+
+              /*  new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Log.d(TAG, "IMEI=" + TextUtils.isEmpty(utils.readString(Constant.IMEI)) + "\nisConnect=" + ICSOpenVPNApplication.isConnect);
-                        if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+                        if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {*/
                             //多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
                             // 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
-                            EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
-                            mService.connect(utils.readString(Constant.IMEI));
-                            i++;
-                            if (i >= 3) {
-                                handler.sendEmptyMessage(CONNET_FAIL);
-                                return;
-                            }
-                        } else {
+                            /*EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
+                            mService.connect(utils.readString(Constant.IMEI));*/
+                      /*  } else {
                             Log.d(TAG, "UART_DISCONNECT_MSG");
-                        }
-                    }
-                }).start();
-                retryTime++;
+                        }*/
+                   // }
+              /*  }).start();*/
+               // retryTime++;
             } else {
                 gattDisconnect();
-                Log.d(TAG, "IMEI: " + utils.readString(Constant.IMEI));
-                if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-                    i++;
-                    if (i >= 3)
-                        handler.sendEmptyMessage(CONNET_FAIL);
 
-                }
             }
         } else if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
             EventBusUtil.blueConnStatue(UartService.STATE_CONNECTED);
@@ -386,14 +390,18 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
                                         if (!EncryptionUtil.isPassEncrypt(messages.get(0).toString().substring(10), random8NumberString)) {
                                             mService.disconnect();
                                             handler.sendEmptyMessage(IS_NOT_UNI);
+
                                         } else {
+
                                             Log.i("Encryption", "IMEI是否为空: " + (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))));
                                             if (!CommonTools.isFastDoubleClick(50) && TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
                                                 EventBusUtil.bingDeviceStep(BluetoothConstant.BLUE_BIND);
                                                 Log.d("Encryption", "run: 发送绑定命令");
+
                                                 sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
                                             }
                                         }
+                                        SharedUtils.getInstance().delete("random8NumberString");
                                         break;
                                     default:
                                         break;

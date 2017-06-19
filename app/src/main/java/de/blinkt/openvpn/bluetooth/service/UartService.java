@@ -54,7 +54,7 @@ public class UartService extends Service implements Serializable {
     private BluetoothManager mBluetoothManager;
     public BluetoothAdapter mBluetoothAdapter;
     private BluetoothGatt mBluetoothGatt;
-    public int mConnectionState = STATE_DISCONNECTED;
+    public static int mConnectionState = 0;
 
     public static final int STATE_DISCONNECTED = 0;//断开
     private static final int STATE_CONNECTING = 1;//正在连接

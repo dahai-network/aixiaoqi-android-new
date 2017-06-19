@@ -63,7 +63,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/countryImageView"
                     android:text="@string/no_data_show"
-                    android:textColor="@color/order_detail_orange"
+                    android:textColor="@color/color_f62a2a"
                     />
 
 

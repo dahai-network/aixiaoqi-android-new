@@ -14,6 +14,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.model.AuthorityEntity;
 import de.blinkt.openvpn.model.IntentEntity;
+import de.blinkt.openvpn.util.CreateFiles;
 
 /**
  * Created by kim
@@ -25,9 +26,12 @@ public class ImportantAuthorityPresenter {
     AuthorityEntity entity;
     Intent shadeIntent;
     private ImportantAuthorityActivity instance;
+    CreateFiles createFiles;
 
     public ImportantAuthorityPresenter() {
         instance = ICSOpenVPNApplication.importantAuthorityActivity;
+        if (createFiles == null)
+            createFiles = new CreateFiles("aixiaoqi_author");
     }
 
     public void setPhoneTypeEntity(ArrayList<AuthorityEntity> data) {
@@ -35,7 +39,8 @@ public class ImportantAuthorityPresenter {
         entity = new AuthorityEntity();
         shadeIntent = new Intent(instance, ShadeActivity.class);
         String phoneType = Build.MANUFACTURER.toLowerCase();
-        Log.d("setPhoneTypeEntity", "phoneType: " + phoneType);
+        Log.d("setPhoneTypeEntity", "phoneType=: " + phoneType);
+        createFiles.print("phoneType"+phoneType);
 
         switch (phoneType) {
             case Constant.LEMOBILE:
@@ -120,7 +125,7 @@ public class ImportantAuthorityPresenter {
                 }
                 break;
             //oppo
-           case Constant.OPPO:
+            case Constant.OPPO:
                 if (version > Build.VERSION_CODES.KITKAT) {
                     //关闭后台冻结
                     ShutDownBackground(entity);
