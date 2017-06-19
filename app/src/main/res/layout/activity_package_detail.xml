@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/packageNameTextView"
                         android:layout_marginTop="1dp"
-                        android:textColor="@color/order_detail_orange"
+                        android:textColor="@color/color_f62a2a"
                         android:textSize="12sp"
                         tools:text="$15" />
 

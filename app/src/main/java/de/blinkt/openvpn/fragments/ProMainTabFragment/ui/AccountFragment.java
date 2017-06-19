@@ -265,7 +265,7 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
         getData();
         accountPresenterImpl.requestUserPackage();
         getDeviceType();
-        if(bleStatus.equals(getString(R.string.index_high_signal))){
+        if(getString(R.string.index_high_signal).equals(bleStatus)){
             setRegisted(true);
         }else{
             setRegisted(false);
