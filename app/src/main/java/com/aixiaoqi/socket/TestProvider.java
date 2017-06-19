@@ -21,9 +21,7 @@ public class TestProvider {
 
 
 	public static void getCardInfo(String info) {
-
 		String indexString = info.substring(2, 4);
-
 		if (null == info) {
 			return;
 		}
@@ -35,13 +33,9 @@ public class TestProvider {
 			iccidDataSplit(info);
 		}
 	}
-
 	public static boolean isCreate = false;
 	public static boolean isIccid = false;
-
-
 	private static void iccidDataSplit(String item) {
-
 		iccidEntity.setChnString(item.substring(0, 2));
 		iccidEntity.setEvtIndex(item.substring(2, 4));
 		iccidEntity.setLenString(item.substring(4, 8));
@@ -64,8 +58,8 @@ public class TestProvider {
 	}
 
 	private static void createTcp() {
-		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
-		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[1]] = RadixAsciiChange.convertStringToHex(iccidEntity.getImmsi());
+		SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]] = RadixAsciiChange.convertStringToHex(iccidEntity.getIccid());
 		String token = SharedUtils.getInstance().readString(Constant.TOKEN);
 		if (TextUtils.isEmpty(token)) {
 			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.TOKEN_IS_NULL);
@@ -97,10 +91,10 @@ public class TestProvider {
 	private static void savePreData() {
 		DBHelp db = new DBHelp(ICSOpenVPNApplication.getContext());
 		PreReadEntity preReadEntity = new PreReadEntity();
-		preReadEntity.setIccid(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
-		preReadEntity.setImsi(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
-		preReadEntity.setPreReadData(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1]);
-		preReadEntity.setDataLength(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2]);
+		preReadEntity.setIccid(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]]);
+		preReadEntity.setImsi(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[1]]);
+		preReadEntity.setPreReadData(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[3]]);
+		preReadEntity.setDataLength(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[2]]);
 		db.insertPreData(preReadEntity);
 	}
 
@@ -114,8 +108,8 @@ public class TestProvider {
 		String hex = preDataEntity.getPreDataString();
 		Log.e("preDataSplit", "evt:" + preDataEntity.getEvtIndex() + "\nchn:" + preDataEntity.getChnString() + "\nlen:" + preDataEntity.getLenString() + "\npreData:" + preDataEntity.getPreDataString());
 		if (SocketConstant.EN_APPEVT_PRDATA.equals(preDataEntity.getEvtIndex())) {
-			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = hex;
-			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preDataEntity.getLenString();
+			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[3]] = hex;
+			SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[2]] = preDataEntity.getLenString();
 		} else if (SocketConstant.EN_APPEVT_SIMDATA.equals(preDataEntity.getEvtIndex())) {
 			SocketConstant.SDK_VALUE = hex;
 			sendYiZhengService.sendGoip(SocketConstant.PRE_DATA);

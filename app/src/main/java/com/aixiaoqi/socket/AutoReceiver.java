@@ -16,7 +16,6 @@ import static de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterIm
 public class AutoReceiver extends BroadcastReceiver {
 
 	private String TAG = "AutoReceiver";
-
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 
@@ -29,7 +28,6 @@ public class AutoReceiver extends BroadcastReceiver {
 					} else {
 						Log.e(TAG, "AutoReceiver 异常！");
 					}
-
 				}
 			}).start();
 		}

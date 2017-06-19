@@ -133,9 +133,9 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                                 sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
                             }
                             sdkAndBluetoothDataInchange.isHasPreData = false;
-                            if (!TextUtils.isEmpty(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6])) {
+                            if (!TextUtils.isEmpty(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]])) {
                                 DBHelp dbHelp = new DBHelp(context);
-                                PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
+                                PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]]);
                                 if (preReadEntity != null) {
                                     hasPreDataRegisterImpl.initPreData(preReadEntity);
                                     hasPreDataRegisterImpl.registerSimPreData();

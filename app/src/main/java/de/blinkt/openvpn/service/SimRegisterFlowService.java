@@ -195,10 +195,10 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
     private void initPre(PreReadEntity preReadEntity) {
         SocketConstant.REGISTER_STATUE_CODE = 2;
         SocketConstant.CONNENCT_VALUE[3] = RadixAsciiChange.convertStringToHex(SharedUtils.getInstance().readString(Constant.TOKEN));
-        SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 1] = preReadEntity.getPreReadData();
-        SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 2] = preReadEntity.getDataLength();
-        SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5] = preReadEntity.getImsi();
-        SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6] = preReadEntity.getIccid();
+        SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[3]] = preReadEntity.getPreReadData();
+        SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[2]] = preReadEntity.getDataLength();
+        SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[1]] = preReadEntity.getImsi();
+        SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]] = preReadEntity.getIccid();
     }
 
     private void registerSimPreData() {
@@ -290,9 +290,9 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
                             if (sendYiZhengService == null) {
                                 sendYiZhengService = new SendYiZhengService();
                             }
-                            if (!TextUtils.isEmpty(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6])) {
+                            if (!TextUtils.isEmpty(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]])) {
                                 DBHelp dbHelp = new DBHelp(SimRegisterFlowService.this);
-                                PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 6]);
+                                PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]]);
                                 if (preReadEntity != null) {
                                     SdkAndBluetoothDataInchange.isHasPreData = true;
                                     SdkAndBluetoothDataInchange.PERCENT = 0;

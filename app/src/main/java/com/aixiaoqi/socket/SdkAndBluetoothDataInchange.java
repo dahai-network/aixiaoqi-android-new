@@ -126,7 +126,7 @@ public class SdkAndBluetoothDataInchange {
 		if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
 			//判断是否是电信还是联通的卡
 			saveBluetoothData= PacketeUtil.Combination(messages);
-			String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
+			String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[1]]);
 			if (telType(imsi)==CUCC_OR_CMCC){//移动和联通
 				TlvAnalyticalUtils.sendToBlue("a0c000000c");
 			}else if( telType(imsi)==TELECOM){//电信
@@ -151,7 +151,7 @@ public class SdkAndBluetoothDataInchange {
 			if(TlvAnalyticalUtils.preData[6].startsWith("a088")){
 				String number=formatByte(Integer.toHexString(value.length()/2+1+saveBluetoothData.length()/2),1);
 				String subNumber=formatByte(Integer.toHexString(value.length()/2+1),2);
-				String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNENCT_VALUE.length - 5]);
+				String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[1]]);
 				Log.e("TlvAnalyticalUtils","imsi="+imsi);
 				if (telType(imsi)==CUCC_OR_CMCC){
 					toServerMessage=TlvAnalyticalUtils.preData[0]+number+subNumber+"a0c000000c"+saveBluetoothData+"c0"+value;

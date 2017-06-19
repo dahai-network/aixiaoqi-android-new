@@ -71,11 +71,12 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener {
 	private void connection(List<TlvEntity> yiZhengTlvList) {
 		for (int i = 0; i < SocketConstant.CONNENCT_TAG.length; i++) {
 			TlvEntity yiZhengTlv = new TlvEntity(SocketConstant.CONNENCT_TAG[i], SocketConstant.CONNENCT_VALUE[i]);
+			TlvEntity yiZhengTlv1 = new TlvEntity("c9", "02");
 			yiZhengTlvList.add(yiZhengTlv);
+			yiZhengTlvList.add(yiZhengTlv1);
 			Log.e("connection", "Tag" + SocketConstant.CONNENCT_TAG[i] + "\nvalue=" + SocketConstant.CONNENCT_VALUE[i]);
 		}
 	}
-
 
 	@Override
 	public void send(byte evnindex, int length, byte[] bytes) {

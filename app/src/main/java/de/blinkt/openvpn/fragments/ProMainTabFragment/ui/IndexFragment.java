@@ -2,6 +2,7 @@ package de.blinkt.openvpn.fragments.ProMainTabFragment.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -103,6 +104,7 @@ Unbinder unbinder;
         init();
         return view;
     }
+
 
     private void init() {
         title.setTextTitle(getString(R.string.shop));

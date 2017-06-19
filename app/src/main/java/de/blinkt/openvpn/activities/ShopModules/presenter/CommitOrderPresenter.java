@@ -93,7 +93,6 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
         instance = ICSOpenVPNApplication.commitOrderActivity;
         initControlView();
     }
-
     CheckBox aliPayCheckBox;
     CheckBox weixinPayCheckBox;
 
