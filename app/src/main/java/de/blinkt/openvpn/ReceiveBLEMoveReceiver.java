@@ -101,11 +101,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
             Log.d(TAG, "UART_CONNECT_MSG");
             IS_TEXT_SIM = false;
             CommonTools.delayTime(100);
-            String random8NumberString=EncryptionUtil.random8Number();
+            String random8NumberString=ICSOpenVPNApplication.random8NumberString;
             Log.d("Encryption", "send--run: " + APP_CONNECT + "--" + random8NumberString);
             sendMessageToBlueTooth(APP_CONNECT + random8NumberString);//APP专属命令
-            //随机数进行保存
-            SharedUtils.getInstance().writeString("random8NumberString", random8NumberString);
+
             //把日志保存到本地文件中
             createFiles.print("发送指令=" + APP_CONNECT + random8NumberString + "----随机数" + random8NumberString);
             Log.i(TAG, "发送了专属命令");

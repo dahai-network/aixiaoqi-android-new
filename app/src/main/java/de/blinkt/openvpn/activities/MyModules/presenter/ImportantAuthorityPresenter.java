@@ -163,11 +163,11 @@ public class ImportantAuthorityPresenter {
                 wifiSet(entity, data);
                 break;
 
-            //乐视2手机
+          /*  //乐视2手机
             //letv
             case Constant.LETV:
                 wifiSet(entity, data);
-                break;
+                break;*/
             default:
                 //保持后台运行
                 keepStandbySet(entity);
