@@ -148,10 +148,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
 
             sendMessageToBlueTooth(APP_CONNECT + ICSOpenVPNApplication.random8NumberString);//APP专属命令
 
-
-            // Toast.makeText(context,"发送专属命令random8NumberString",Toast.LENGTH_SHORT).show();
-
-
             //把日志保存到本地文件中
             createFiles.print("发送指令=" + APP_CONNECT + ICSOpenVPNApplication.random8NumberString + "----随机数" + ICSOpenVPNApplication.random8NumberString);
             Log.i(TAG, "发送了专属命令");
@@ -162,10 +158,11 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver implements Interfa
             if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
 
             } else {
-                CommonTools.delayTime(200);
+               CommonTools.delayTime(200);
                 //获取蓝牙基本信息
-                sendMessageToBlueTooth(BASIC_MESSAGE);
+              sendMessageToBlueTooth(BASIC_MESSAGE);
                 CommonTools.delayTime(200);
+                Log.d(TAG, "onReceive: 获取ICCID_GET");
                 sendMessageToBlueTooth(ICCID_GET);
                 Log.i("toBLue", "连接成功");
                 //更新时间操作
