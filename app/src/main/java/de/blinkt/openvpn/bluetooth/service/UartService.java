@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
 
@@ -102,7 +103,6 @@ public class UartService extends Service implements Serializable {
             String intentAction;
 
             if ((newState == BluetoothProfile.STATE_CONNECTED) && (status == BluetoothGatt.GATT_SUCCESS)) {
-
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
                 broadcastUpdate(intentAction);
@@ -112,6 +112,7 @@ public class UartService extends Service implements Serializable {
                 Log.i(TAG, "Attempting to start service discovery:" + isFindServiceSuccess);
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
+                Constant.sendAppInS=0;
                 mConnectionState = STATE_DISCONNECTED;
                 Log.i(TAG, "Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
