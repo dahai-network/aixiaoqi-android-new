@@ -70,6 +70,7 @@ public class ShadePresenter {
     public void adjustDifferentPhoneView() {
         String phoneType = Build.MANUFACTURER.toLowerCase();
         int version = Build.VERSION.SDK_INT;
+        Log.d("phone", "adjustDifferentPhoneView: "+phoneType);
         switch (phoneType) {
             case Constant.LEMOBILE:
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
@@ -206,10 +207,8 @@ public class ShadePresenter {
                             setResourceOne(true, text[0], R.drawable.huawei_mate9_image_3_1);
                             setResourceTwo(false, text[1], R.drawable.huawei_mate9_image_3_2);
                             setResourceThree(true, null, 0);
-
                         }
                         break;
-
                 }
                 break;
             case Constant.GIONEE:
@@ -340,6 +339,10 @@ public class ShadePresenter {
 
                         break;
                 }
+                break;
+
+            case  Constant.LETV:
+
                 break;
         }
 

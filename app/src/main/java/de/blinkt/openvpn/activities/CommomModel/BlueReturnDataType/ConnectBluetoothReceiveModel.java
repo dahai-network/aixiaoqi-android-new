@@ -42,8 +42,9 @@ public class ConnectBluetoothReceiveModel {
         }
     };
     public  void appConnectReceive(ArrayList<String> messages) {
+
         Log.i("Encryption", "返回加密数据----：" + messages.get(0).toString());
-        String random8NumberString = SharedUtils.getInstance().readString("random8NumberString");
+        String random8NumberString = ICSOpenVPNApplication.random8NumberString;
         Log.i("Encryption", "判断是否加密一致：" + EncryptionUtil.isPassEncrypt(messages.get(0).toString().substring(10), random8NumberString));
         if (!EncryptionUtil.isPassEncrypt(messages.get(0).toString().substring(10), random8NumberString)) {
             if(ICSOpenVPNApplication.uartService!=null)

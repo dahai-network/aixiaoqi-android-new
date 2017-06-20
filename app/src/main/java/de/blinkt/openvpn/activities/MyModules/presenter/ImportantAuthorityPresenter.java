@@ -40,7 +40,7 @@ public class ImportantAuthorityPresenter {
         shadeIntent = new Intent(instance, ShadeActivity.class);
         String phoneType = Build.MANUFACTURER.toLowerCase();
         Log.d("setPhoneTypeEntity", "phoneType=: " + phoneType);
-        createFiles.print("phoneType"+phoneType);
+        createFiles.print("phoneType" + phoneType);
 
         switch (phoneType) {
             case Constant.LEMOBILE:
@@ -77,7 +77,7 @@ public class ImportantAuthorityPresenter {
                     wifiSet(entity, data);
                 }
                 break;
-            case Constant.SAMSUNG:
+          case Constant.SAMSUNG:
                 if (version > Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     autoRunSet(entity);
                     Intent samsungLIntent = ICSOpenVPNApplication.getInstance().getPackageManager().getLaunchIntentForPackage("com.samsung.android.sm");
@@ -160,6 +160,12 @@ public class ImportantAuthorityPresenter {
                 xiaomiIntent.addCategory(Intent.CATEGORY_DEFAULT);
                 dataSave(xiaomiIntent, data);
                 //wife
+                wifiSet(entity, data);
+                break;
+
+            //乐视2手机
+            //letv
+            case Constant.LETV:
                 wifiSet(entity, data);
                 break;
             default:

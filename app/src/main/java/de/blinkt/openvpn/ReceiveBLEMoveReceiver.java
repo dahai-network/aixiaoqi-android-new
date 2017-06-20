@@ -40,14 +40,11 @@ import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessag
 import static de.blinkt.openvpn.constant.Constant.AGREE_BIND;
 import static de.blinkt.openvpn.constant.Constant.APP_CONNECT;
 import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
-import static de.blinkt.openvpn.constant.Constant.BIND_DEVICE;
 import static de.blinkt.openvpn.constant.Constant.BIND_SUCCESS;
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
-import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_CARD_MSG;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_ELECTRICITY;
-import static de.blinkt.openvpn.util.CommonTools.delayTime;
 import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 
 /**
@@ -96,7 +93,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
     public void onReceive(final Context context, Intent intent) {
         if (createFiles == null)
             createFiles = new CreateFiles();
-
+        if(connectBluetoothReceiveModel==null)
+            connectBluetoothReceiveModel=new ConnectBluetoothReceiveModel(context);
         final String action = intent.getAction();
         mService = ICSOpenVPNApplication.uartService;
         if (action.equals(UartService.FINDED_SERVICE)) {
@@ -120,6 +118,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                 //获取蓝牙基本信息
                 sendMessageToBlueTooth(BASIC_MESSAGE);
                 CommonTools.delayTime(200);
+                Log.d(TAG, "onReceive: 获取ICCID_GET");
                 sendMessageToBlueTooth(ICCID_GET);
                 Log.i("toBLue", "连接成功");
                 //更新时间操作
@@ -180,6 +179,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                             }
                         }
                         Log.e("Blue_Chanl", "dataType：" + dataType);
+                        Log.e("Blue_Chanl", "firstPackage：" + firstPackage);
                         switch (firstPackage) {
                             case "55":
                                 switch (dataType) {
@@ -232,8 +232,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                         simDataInfoModel.setIccid(messages);
                                         break;
                                     case Constant.APP_CONNECT_RECEIVE:
-                                        if(connectBluetoothReceiveModel==null)
-                                         connectBluetoothReceiveModel=new ConnectBluetoothReceiveModel(context);
+                                        Log.d(TAG, "run: 接收到专属命令返回");
                                         connectBluetoothReceiveModel.appConnectReceive(messages);
                                         break;
                                     default:

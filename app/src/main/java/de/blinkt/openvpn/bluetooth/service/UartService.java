@@ -36,6 +36,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -493,6 +494,7 @@ public class UartService extends Service implements Serializable {
 //		mBluetoothGatt.readDescriptor(descriptor);
         mBluetoothGatt.writeDescriptor(descriptor);
         //找到设备后正式连接上
+        Log.d(TAG, "setDescriptor: 找到该服务");
         broadcastUpdate(FINDED_SERVICE);
     }
 
@@ -502,7 +504,15 @@ public class UartService extends Service implements Serializable {
      * @return
      */
     public boolean writeRXCharacteristic(byte[] value) {
-        Log.d("Blue_Chanl", "writeRXCharacteristic: " + value.toString());
+
+        String res = null;
+        try {
+            res = new String(value,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        Log.d("Blue_Chanl", "writeRXCharacteristic: " + res);
+
         try {
             //如果mBluetoothGatt为空，意味着连接中断，所以不允许继续传输数据
             if (mBluetoothGatt == null) {
@@ -541,7 +551,7 @@ public class UartService extends Service implements Serializable {
             }
             //向特征值设置数据
             RxChar.setValue(value);
-            Log.d(TAG, "writeRXCharacteristic: " + value);
+            Log.d(TAG, "writeRXCharacteristic: " + res);
             //返回的状态
             boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
             Log.e("Blue_Chanl", "write TXchar - status=" + status + "----" + mConnectionState);

@@ -279,6 +279,7 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
             GetHostAndPortHttp http = (GetHostAndPortHttp) object;
             if (http.getStatus() == 1) {
                 requestCount = 0;
+                
                 if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
                     SocketConstant.hostIP = http.getGetHostAndPortEntity().getVswServer().getIp();
                     SocketConstant.port = http.getGetHostAndPortEntity().getVswServer().getPort();

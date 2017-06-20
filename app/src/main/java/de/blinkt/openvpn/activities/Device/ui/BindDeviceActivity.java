@@ -238,7 +238,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 	public void onClick() {
         Log.d(TAG, "onClick: 停止绑定");
         //发送绑定失败
-        SendCommandToBluetooth.sendMessageToBlueTooth(Constant.BIND_FAIL);
+       // SendCommandToBluetooth.sendMessageToBlueTooth(Constant.BIND_FAIL);
 		scanLeDevice(false);
         mService.disconnect();
 
