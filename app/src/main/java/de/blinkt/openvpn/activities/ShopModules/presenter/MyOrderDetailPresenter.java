@@ -8,6 +8,7 @@ import android.util.Log;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.WriteCardFlowModel;
 import de.blinkt.openvpn.activities.ShopModules.model.MyOrderDetailModel;
 import de.blinkt.openvpn.activities.ShopModules.modelImpl.MyOrderDetailImple;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
@@ -115,7 +116,7 @@ public class MyOrderDetailPresenter extends BaseNetActivity {
 
     private void sendMessageSeparate(final String message) {
         String[] messages = PacketeUtil.Separate(message, "1300");
-        ReceiveBLEMoveReceiver.lastSendMessageStr = message;
+        WriteCardFlowModel.lastSendMessageStr = message;
         int length = messages.length;
         for (int i = 0; i < length; i++) {
             if (!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])) {

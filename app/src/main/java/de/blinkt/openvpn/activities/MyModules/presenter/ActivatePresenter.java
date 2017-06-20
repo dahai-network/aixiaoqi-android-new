@@ -17,6 +17,7 @@ import java.util.HashMap;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseNetActivity;
+import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.WriteCardFlowModel;
 import de.blinkt.openvpn.activities.MyModules.model.ActivateMode;
 import de.blinkt.openvpn.activities.MyModules.modelImple.ActivateModeImpl;
 import de.blinkt.openvpn.activities.MyModules.view.ActivateView;
@@ -42,7 +43,6 @@ import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.dialog.DialogYearMonthDayPicker;
 
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
-import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.lastSendMessageStr;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVEPACKAGE;
@@ -192,7 +192,7 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
 
     private void sendMessageSeparate(final String message) {
         String[] messages = PacketeUtil.Separate(message, "1300");
-        lastSendMessageStr = message;
+        WriteCardFlowModel.lastSendMessageStr = message;
         int length = messages.length;
         for (int i = 0; i < length; i++) {
             if (!SendCommandToBluetooth.sendMessageToBlueTooth(messages[i])) {

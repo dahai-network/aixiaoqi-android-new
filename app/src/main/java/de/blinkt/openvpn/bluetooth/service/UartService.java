@@ -494,6 +494,7 @@ public class UartService extends Service implements Serializable {
 //		mBluetoothGatt.readDescriptor(descriptor);
         mBluetoothGatt.writeDescriptor(descriptor);
         //找到设备后正式连接上
+        Log.d(TAG, "setDescriptor: 找到该服务");
         broadcastUpdate(FINDED_SERVICE);
     }
 
