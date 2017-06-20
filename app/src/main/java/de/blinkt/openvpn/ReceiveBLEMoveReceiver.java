@@ -3,8 +3,10 @@ package de.blinkt.openvpn;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -55,34 +57,24 @@ import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
 
     private UartService mService = null;
-    private Context context;
+    
     private String TAG = "ReceiveBLEMoveReceiver";
     private String mStrSimCmdPacket;
     //分包存储ArrayList
-//	private ArrayList<String> messages = new ArrayList<>();
     //写卡状态（订单状态 ，0是没有写卡，1是写卡成功，4是写卡失败）
     public static int orderStatus = 0;
     //是否获取空卡序列号，如果是则发送到广播与服务器进行处理后发给蓝牙设备
     public static String nullCardId = null;
-    private int IS_NOT_UNI = 3;
-    private int CONNET_FAIL = 4;
     //重连次数
     public static int retryTime;
-    WriteCardFlowModel writeCardFlowModel;
-    CreateFiles createFiles;
-    int i = 0;
-    //	private String dataType;//发出数据以后需要把dataType重置为-1；
-    private Handler handler = new Handler() {
-        @Override
-        public void dispatchMessage(Message msg) {
-            if (msg.what == IS_NOT_UNI) {
-                CommonTools.showShortToast(context, context.getString(R.string.bind_error));
-            } else if (msg.what == CONNET_FAIL) {
-                ToastCompat.makeText(context, "请检查设备是否连接了其他手机", Toast.LENGTH_SHORT).show();
-            }
 
-        }
-    };
+    CreateFiles createFiles;
+    ConnectBluetoothReceiveModel connectBluetoothReceiveModel;
+    DeviceBaseSystemInfoModel deviceBaseSystemInfoModel;
+    SimDataInfoModel simDataInfoModel;
+    WriteCardFlowModel writeCardFlowModel;
+    SharedUtils utils = SharedUtils.getInstance();
+    public static boolean isGetnullCardid = false;//是否获取空卡数据
 
     private void gattDisconnect() {
         if (mService != null) {
@@ -102,7 +94,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
      * @param intent
      */
     public void onReceive(final Context context, Intent intent) {
-        this.context = context;
         if (createFiles == null)
             createFiles = new CreateFiles();
 
@@ -156,11 +147,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                             // 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
                             EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
                             mService.connect(utils.readString(Constant.IMEI));
-                            i++;
-                            if (i >= 3) {
-                                handler.sendEmptyMessage(CONNET_FAIL);
-                                return;
-                            }
+
                         } else {
                             Log.d(TAG, "UART_DISCONNECT_MSG");
                         }
@@ -168,14 +155,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                 }).start();
                 retryTime++;
             } else {
-                gattDisconnect();
-                Log.d(TAG, "IMEI: " + utils.readString(Constant.IMEI));
-                if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-                    i++;
-                    if (i >= 3)
-                        handler.sendEmptyMessage(CONNET_FAIL);
-
-                }
+                 gattDisconnect();
+                retryTime=0;
             }
         } else if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
             EventBusUtil.blueConnStatue(UartService.STATE_CONNECTED);
@@ -284,11 +265,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
             simDataInfoModel=new SimDataInfoModel();
         }
     }
-    ConnectBluetoothReceiveModel connectBluetoothReceiveModel;
-    DeviceBaseSystemInfoModel deviceBaseSystemInfoModel;
-    SimDataInfoModel simDataInfoModel;
-    SharedUtils utils = SharedUtils.getInstance();
-    public static boolean isGetnullCardid = false;//是否获取空卡数据
+
     private void initWriteCardFlowModel(Context context) {
         if(writeCardFlowModel==null){
             writeCardFlowModel=new WriteCardFlowModel(context);

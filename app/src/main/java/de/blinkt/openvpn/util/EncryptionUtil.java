@@ -29,7 +29,7 @@ public class EncryptionUtil {
      */
     public static boolean isPassEncrypt(String receiveBlueEncrypt,String result) {
         //String result = SharedUtils.getInstance().readString("random8NumberString");
-        Log.d("Encryption", "随机数: " + result);
+       //Log.d("Encryption", "随机数: " + result);
         if(createFiles==null) {
             createFiles = new CreateFiles();
         }
@@ -74,7 +74,7 @@ public class EncryptionUtil {
             if (randomNum.length() == 1) {
                 randomNum = "0" + randomNum;
             }
-            Log.i("Encryption", "随机数：" + randomNum);
+           // Log.i("Encryption", "随机数：" + randomNum);
             builder.append(randomNum);
         }
 

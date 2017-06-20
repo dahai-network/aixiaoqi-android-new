@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorf_F5F5F5"
-    tools:context="de.blinkt.openvpn.activities.CountryPackageActivity">
+    tools:context="de.blinkt.openvpn.activities.ShopModules.ui.CountryPackageActivity">
 
     <include layout="@layout/view_no_net"/>
 

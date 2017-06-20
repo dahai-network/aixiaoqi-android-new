@@ -196,6 +196,7 @@ public class Constant {
 	 * 手机厂商硬件名
 	 */
 	public static final String LEMOBILE = "lemobile";//乐视
+	public static final String LETV="letv";
 	public static final String LENOVO = "lenovo";//联想
 	public static final String MEIZU = "meizu";//魅族
 	public static final String SAMSUNG = "samsung";//三星
@@ -247,8 +248,12 @@ public class Constant {
 	 * 定时器类型
 	 */
 	public final static int TYPE_ONE = 1;
-
-
+	/**
+	 * 监听接受到连接成功的广播
+	 */
+	 public  static  int sendAppInS=0;
+	//记录蓝牙连接时，发送专属命令的次数，防止多次发送
+	public int sendCount = 0;
 	/**
 	 * 乐视手机
 	 */

@@ -165,7 +165,8 @@ public class AlarmClockActivity extends BaseNetActivity implements AlarmClockAda
 
 	}
 
-	private void bluetoothIsOpen() {
+	private void bluetoothIsOpen()
+	{
 		openBluetoothTv.setVisibility(View.GONE);
 		bluetoothTv.setVisibility(View.GONE);
 		llLoadPush.setVisibility(View.VISIBLE);

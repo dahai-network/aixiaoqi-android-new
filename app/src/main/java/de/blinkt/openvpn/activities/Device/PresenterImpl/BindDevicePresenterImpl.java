@@ -32,6 +32,7 @@ import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothEntity;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.CreateFiles;
 import de.blinkt.openvpn.util.SharedUtils;
 
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
@@ -53,19 +54,25 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
 
     private static final long SCAN_PERIOD = 20000;
     private List<BluetoothEntity> deviceList;
+    CreateFiles createFiles;
 
-    public BindDevicePresenterImpl(BindDeviceView bindDeviceView ){
-        this.bindDeviceView=bindDeviceView;
-        bindDeviceModel=new BindDeviceModelImpl(this);
-        isBindDeviceModel=new IsBindDeviceModelImpl(this);
-        updateDeviceInfoModel=new UpdateDeviceInfoModelImpl(this);
+    public BindDevicePresenterImpl(BindDeviceView bindDeviceView) {
+        this.bindDeviceView = bindDeviceView;
+        bindDeviceModel = new BindDeviceModelImpl(this);
+        isBindDeviceModel = new IsBindDeviceModelImpl(this);
+        updateDeviceInfoModel = new UpdateDeviceInfoModelImpl(this);
         EventBus.getDefault().register(this);
+//创建记录日志对象
+        if (createFiles == null) {
+            createFiles = new CreateFiles();
+        }
     }
 
     @Override
     public void requestBindDevice(String deviceType) {
         if(bindDeviceModel!=null)
         bindDeviceModel.bindDevice(deviceAddress,deviceType);
+        bindDeviceModel.bindDevice(deviceAddress, deviceType);
     }
 
     @Override
@@ -94,13 +101,16 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
         //判断是否绑定过，如果绑定过就不在绑定，换设备绑定，如果没有绑定过则开始绑定。
         if (cmdType == HttpConfigUrl.COMTYPE_ISBIND_DEVICE) {
             IsBindHttp http = (IsBindHttp) object;
+            //记录当前日志
+            createFiles.print("监听是否绑定服务器返回的值" + http.getIsBindEntity().getBindStatus() + "");
+
             if (http.getStatus() == 1 && http.getIsBindEntity() != null) {
-                if( http.getIsBindEntity().getBindStatus() == 0){
+                if (http.getIsBindEntity().getBindStatus() == 0) {
                     if (ICSOpenVPNApplication.uartService != null) {
                         if (bindDeviceView.getDeviceName().contains(Constant.UNITOYS)) {
                             requestBindDevice("0");
                         } else if (bindDeviceView.getDeviceName().contains(Constant.UNIBOX)) {
-                            Log.e("deviceAddress","deviceAddress="+deviceAddress);
+                            Log.e("deviceAddress", "deviceAddress=" + deviceAddress);
                             bindDeviceView.connect(deviceAddress);//
                         }
                     } else {
@@ -108,11 +118,13 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                         bindDeviceView.showToast(R.string.connect_failure);
                         bindDeviceView.finishView();
                     }
-                }else if(http.getIsBindEntity().getBindStatus() == 1){
+                } else if (http.getIsBindEntity().getBindStatus() == 1) {
+                    //记录当前日志
+                    createFiles.print("设备已绑定" +"address="+deviceAddress+"--状态="+ http.getIsBindEntity().getBindStatus() + "");
                     bindDeviceView.showToast(R.string.device_already_bind);
                     bindDeviceView.finishView();
                 }
-            }  else {
+            } else {
                 bindDeviceView.showToast(R.string.service_is_error);
                 bindDeviceView.finishView();
             }
@@ -153,6 +165,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
             }
         }
     }
+
     private boolean isStartFindDeviceDelay;
 
     //把搜索到的蓝牙设备保存到list中然后进行排序
@@ -161,12 +174,12 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
             return;
         }
 
-        if(deviceList==null){
-            deviceList=new ArrayList<>();
+        if (deviceList == null) {
+            deviceList = new ArrayList<>();
         }
 
-        if(findDeviceHandler==null){
-            findDeviceHandler=new Handler();
+        if (findDeviceHandler == null) {
+            findDeviceHandler = new Handler();
         }
         Log.i("BindDevicePresenterImpl", "find the device:" + device.getName() + ",rssi :" + rssi);
         if (device.getName().contains(bindDeviceView.getDeviceName())) {//过滤只需要的设备
@@ -210,20 +223,22 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
             }
         }
     }
+
     String deviceAddress;
+
     private void isBind(int index) {
 
-        deviceAddress=deviceList.get(index).getAddress();
-        SharedUtils.getInstance().writeString(Constant.BRACELETNAME,deviceList.get(index).getDiviceName());
+        deviceAddress = deviceList.get(index).getAddress();
+        SharedUtils.getInstance().writeString(Constant.BRACELETNAME, deviceList.get(index).getDiviceName());
         Log.i(TAG, "deviceAddress=" + deviceAddress);
         requestIsBindDevice();
     }
 
     public void scanNotFindDevice() {
-        if(mHandler==null){
-            mHandler=new Handler();
+        if (mHandler == null) {
+            mHandler = new Handler();
         }
-        mHandler.postDelayed(showdialogRun,SCAN_PERIOD);
+        mHandler.postDelayed(showdialogRun, SCAN_PERIOD);
     }
 
     Runnable showdialogRun = new Runnable() {
@@ -231,12 +246,11 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
         public void run() {
             if (ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.mConnectionState != UartService.STATE_CONNECTED && !isStartFindDeviceDelay) {
                 bindDeviceView.scanLeDevice(false);
-                if(TextUtils.isEmpty(deviceAddress))
+                if (TextUtils.isEmpty(deviceAddress))
                     bindDeviceView.showNotSearchDeviceDialog();
             }
         }
     };
-
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程
@@ -255,21 +269,21 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
 
     @Override
     public void onDestory() {
-        if(bindDeviceModel!=null){
-            bindDeviceModel=null;
+        if (bindDeviceModel != null) {
+            bindDeviceModel = null;
         }
-        if(isBindDeviceModel!=null){
-            isBindDeviceModel=null;
+        if (isBindDeviceModel != null) {
+            isBindDeviceModel = null;
         }
-        if(updateDeviceInfoModel!=null){
-            updateDeviceInfoModel=null;
+        if (updateDeviceInfoModel != null) {
+            updateDeviceInfoModel = null;
         }
-        if(mHandler!=null){
+        if (mHandler != null) {
             mHandler.removeCallbacks(showdialogRun);
-            mHandler=null;
+            mHandler = null;
         }
-        if(findDeviceHandler!=null){
-            findDeviceHandler=null;
+        if (findDeviceHandler != null) {
+            findDeviceHandler = null;
         }
         EventBus.getDefault().unregister(this);
     }

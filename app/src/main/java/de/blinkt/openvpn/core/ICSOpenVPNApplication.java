@@ -53,6 +53,7 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
     private static ICSOpenVPNApplication instance;
     private static final String TAG = "OnUILifecycleListener";
     List<ContactBean> mAllList;
+    public static  String random8NumberString="0102030405060708";
     /**
      * 记录当前的activity对象
      */

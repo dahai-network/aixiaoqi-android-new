@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
+import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
 
@@ -54,7 +55,7 @@ public class UartService extends Service implements Serializable {
     private BluetoothManager mBluetoothManager;
     public BluetoothAdapter mBluetoothAdapter;
     private BluetoothGatt mBluetoothGatt;
-    public int mConnectionState = STATE_DISCONNECTED;
+    public static int mConnectionState = 0;
 
     public static final int STATE_DISCONNECTED = 0;//断开
     private static final int STATE_CONNECTING = 1;//正在连接
@@ -102,7 +103,6 @@ public class UartService extends Service implements Serializable {
             String intentAction;
 
             if ((newState == BluetoothProfile.STATE_CONNECTED) && (status == BluetoothGatt.GATT_SUCCESS)) {
-
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
                 broadcastUpdate(intentAction);
@@ -112,6 +112,7 @@ public class UartService extends Service implements Serializable {
                 Log.i(TAG, "Attempting to start service discovery:" + isFindServiceSuccess);
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
+                Constant.sendAppInS=0;
                 mConnectionState = STATE_DISCONNECTED;
                 Log.i(TAG, "Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
@@ -276,7 +277,6 @@ public class UartService extends Service implements Serializable {
             mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null) {
                 Log.e(TAG, "Unable to initialize BluetoothManager.");
-
                 return false;
             }
         }

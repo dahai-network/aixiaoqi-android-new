@@ -147,6 +147,7 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
         dateTextView.setText("最晚激活日期：" + DateUtils.getAdd180DayDate());
         Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getLogoPic()).into(countryImageView);
         setSpan(addUpTextView);
+        setSpan(priceTextView);
     }
 
     @Override
@@ -253,12 +254,6 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
         textview.setText(WordtoSpan, TextView.BufferType.SPANNABLE);
     }
 
-    //设置余额span
-    private void setBalanceSpan(TextView balanceTextView, float balanceFloat) {
-        Spannable WordtoSpan = new SpannableString(balanceTextView.getText().toString());
-        WordtoSpan.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.order_detail_orange)), 7, 8 + (balanceFloat + "").length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        balanceTextView.setText(WordtoSpan, TextView.BufferType.SPANNABLE);
-    }
 
     private void checkBalance() {
         if (weixinPayCheckBox.isChecked()) {
@@ -270,7 +265,8 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
             return;
         }
         if (bean.getPrice() * packetCount < balanceFloat) {
-            setBalanceSpan(balanceTextView, balanceFloat);
+            //setBalanceSpan(balanceTextView, balanceFloat);
+            //setSpan(balanceTextView);
             balancePayCheckBox.setChecked(true);
             aliPayCheckBox.setChecked(false);
             setBalanceCheckBox(getResources().getString(R.string.balance_pay) + "(剩余￥" + balanceFloat + ")",true,View.VISIBLE,true);

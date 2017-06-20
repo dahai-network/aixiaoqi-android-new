@@ -13,8 +13,12 @@ import java.text.SimpleDateFormat;
 
 public class CreateFiles {
 
-   // String filenameTemp =  + "/hhaudio" + ".txt";
     String filenameTemp = Environment.getExternalStorageDirectory().getPath() + "/aixiaoqi_log.txt";
+    public CreateFiles(String name){
+        filenameTemp = Environment.getExternalStorageDirectory().getPath() + "/"+name+".txt";
+    }
+    public CreateFiles(){
+    }
 
     //向已创建的文件中写入数据
     public void print(String str) {

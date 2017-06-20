@@ -54,7 +54,7 @@
             android:layout_below="@id/dateTextView"
             android:layout_marginLeft="@dimen/padding_4dp"
             android:layout_toRightOf="@id/countryImageView"
-            android:textColor="@color/order_detail_orange"
+            android:textColor="@color/color_f62a2a"
             android:textSize="15sp"
 
             />
