@@ -23,16 +23,11 @@ public class TlvEntity implements Serializable{
         this.hexStringValue = hexStringValue;
     }
 
+    //获取value的长度
     protected String getValueLength(String hexStringValue) {
-        String hexStringLength;
-        if((hexStringValue.length()/2)<127){
-            hexStringLength=AddZero(hexStringValue.length()/2);
-        }else{
-            hexStringLength=AddZero(hexStringValue.length()/2);
-            hexStringLength=Integer.toHexString((Integer.parseInt(hexStringLength,16)|0x8000));
-        }
-        return hexStringLength;
+        return getValueLength(hexStringValue.length()/2);
     }
+
     protected String getValueLength(int length) {
         String hexStringLength;
         if(length<127){
@@ -43,7 +38,7 @@ public class TlvEntity implements Serializable{
         }
         return hexStringLength;
     }
-
+    //补零
     private String AddZero(int  length){
         String    hexStringLength=Integer.toHexString(length);
         if(hexStringLength.length()%2!=0){

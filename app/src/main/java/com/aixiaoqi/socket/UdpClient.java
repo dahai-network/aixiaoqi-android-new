@@ -26,9 +26,9 @@ public abstract class UdpClient implements Runnable {
 	DatagramSocket datagramSocket;
 	DatagramSocket socket;
 	private int sendPort;
-	private String sendAddress = "127.0.0.1";
+	private String sendAddress = "127.0.0.1";//因为是向so库发送IP，所以就是本地的地址。
 	public static String tag = null;
-	private int port = 4567;
+	private int port = 4567;//端口号是有so那段固定的。
 
 	@Override
 	public void run() {
@@ -44,11 +44,11 @@ public abstract class UdpClient implements Runnable {
 			byte data[] = new byte[1024];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			while (flag) {
-				socket.receive(packet);
-				sendPort = packet.getPort();
-				String receiveMsg = new String(packet.getData(), 0, packet.getLength());
+				socket.receive(packet);//获取数据包
+				sendPort = packet.getPort();//获取端口号
+				String receiveMsg = new String(packet.getData(), 0, packet.getLength());//收到的信息
 				Log.e("receiveMsg","receiveMsg="+receiveMsg);
-				String tag = receiveMsg.substring(0, 7);
+				String tag = receiveMsg.substring(0, 7);//获取标签
 				//如果这次的标签与上次一样则选择过滤，如果不一样就把从SDK那里发过来的数据发个蓝牙
 				if (SocketConstant.REGISTER_STATUE_CODE == 0) {
 					SocketConstant.REGISTER_STATUE_CODE = 1;
@@ -56,11 +56,8 @@ public abstract class UdpClient implements Runnable {
 
 				if (!tag.equals(getSorcketTag())) {
 					setSorketTag(tag);
-					sendToBluetoothMsg(receiveMsg);
+					sendToBluetoothMsg(receiveMsg);//把从so库获取的卡命令发给蓝牙
 				}
-			}
-			if (socket != null) {
-				closeReceiveSocket();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -84,6 +81,7 @@ public abstract class UdpClient implements Runnable {
 
 	public abstract void sendToBluetoothMsg(String msg);
 
+
 	public void start() {
 		flag = true;
 		new Thread(this).start();
@@ -97,26 +95,22 @@ public abstract class UdpClient implements Runnable {
 			}
 			InetAddress addr = InetAddress.getByName(sendAddress);
 			byte[] data = msg.getBytes();
-			DatagramPacket sendSocket = new DatagramPacket(data, data.length, addr, sendPort);
+			DatagramPacket sendSocket = new DatagramPacket(data, data.length, addr, sendPort);//根据端口号和地址发送信息给so库
 			exceptionPort();
 			datagramSocket.send(sendSocket);
 		} catch (SocketException e) {
-			closeSendUdp();
 			e.printStackTrace();
 		} catch (UnknownHostException e) {
-			closeSendUdp();
 			e.printStackTrace();
 		} catch (IOException e) {
-			closeSendUdp();
 			e.printStackTrace();
 		}
 	}
 
+//处理当端口号被占用的情况，当端口号被占用，只有杀死进程，端口号才能释放，否则创建UDP会失败。
 	private void exceptionPort() {
 		if(sendPort==0){
 			Intent intent = new Intent(ICSOpenVPNApplication.getContext().getApplicationContext(), LaunchActivity.class);
-
-
 			PendingIntent restartIntent = PendingIntent.getActivity(
 					ICSOpenVPNApplication.getContext().getApplicationContext().getApplicationContext(), 0, intent,
 					PendingIntent.FLAG_UPDATE_CURRENT);
@@ -129,20 +123,24 @@ public abstract class UdpClient implements Runnable {
 		}
 	}
 
-	private void closeSendUdp() {
-		if (datagramSocket != null) {
-			datagramSocket.disconnect();
-			datagramSocket.close();
-			datagramSocket = null;
-		}
-	}
 
 
+//断开连接，因为端口号跟进程捆绑在一起，
+// 而我们没有另外搞一个子线程，
+// 因此进程没有关闭的情况下最好不要主动断开。
+// 否则，当换卡且没有注册过的时候，就会抛出端口号被占用的情况。
 	public void disconnect() {
 		if (datagramSocket != null) {
 			flag = false;
 			closeReceiveSocket();
 			closeSendUdp();
+		}
+	}
+	private void closeSendUdp() {
+		if (datagramSocket != null) {
+			datagramSocket.disconnect();
+			datagramSocket.close();
+			datagramSocket = null;
 		}
 	}
 }

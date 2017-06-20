@@ -13,13 +13,20 @@ import de.blinkt.openvpn.util.SharedUtils;
 import static com.aixiaoqi.socket.SocketConstant.REGISTER_STATUE_CODE;
 import static de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterImpl.sendYiZhengService;
 
+/**
+ * 预读取数据不是一次全发过来的，是分批次发过来的。一部分内容是ICCID，IMMSI
+ * 另一部分是卡的预读取长度和卡的预读取数据
+ */
+
 
 public class TestProvider {
 
 	static PreDataEntity preDataEntity = new PreDataEntity();
 	static IccidEntity iccidEntity = new IccidEntity();
+	public static boolean isCreate = false;//标记TCP是否创建成功
+	public static boolean isIccid = false;//标记是否获取到了ICCID
 
-
+	//获取预读取数据。
 	public static void getCardInfo(String info) {
 		String indexString = info.substring(2, 4);
 		if (null == info) {
@@ -33,8 +40,8 @@ public class TestProvider {
 			iccidDataSplit(info);
 		}
 	}
-	public static boolean isCreate = false;
-	public static boolean isIccid = false;
+
+	//ICCID和IMMSI进行分离
 	private static void iccidDataSplit(String item) {
 		iccidEntity.setChnString(item.substring(0, 2));
 		iccidEntity.setEvtIndex(item.substring(2, 4));
@@ -87,7 +94,7 @@ public class TestProvider {
 			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
-
+	//获取到卡的预读数据，保存到数据库中
 	private static void savePreData() {
 		DBHelp db = new DBHelp(ICSOpenVPNApplication.getContext());
 		PreReadEntity preReadEntity = new PreReadEntity();
@@ -97,9 +104,8 @@ public class TestProvider {
 		preReadEntity.setDataLength(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[2]]);
 		db.insertPreData(preReadEntity);
 	}
-
+	//预读数据分离
 	private static void preDataSplit(String item) {
-
 		createTcpSucceedAndConnectionGOIP();
 		preDataEntity.setChnString(item.substring(0, 2));
 		preDataEntity.setEvtIndex(item.substring(2, 4));
@@ -115,7 +121,7 @@ public class TestProvider {
 			sendYiZhengService.sendGoip(SocketConstant.PRE_DATA);
 		}
 	}
-
+	//创建tcp
 	private static void createTcpSucceedAndConnectionGOIP() {
 		SocketConnection.mReceiveSocketService.setListener(new ReceiveSocketService.CreateSocketLisener() {
 			@Override
@@ -130,6 +136,7 @@ public class TestProvider {
 		});
 	}
 
+	//清除数据
 	public static void clearData() {
 		sendYiZhengService = null;
 		isCreate = false;

@@ -11,10 +11,10 @@ import java.util.ArrayList;
  */
 public class PacketeUtil {
 
-	//分包
+
 	private static final int startLength = 15 * 2;
 	private static final int onrPackageLength = 17 * 2;
-
+	//分包
 	public static String[] Separate(String message, String type) {
 		String[] packets;
 		if (message.length() / 2 <= 15) {

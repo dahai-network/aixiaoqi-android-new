@@ -27,11 +27,10 @@ import static de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterIm
  */
 public class TlvAnalyticalUtils {
 
-	public static boolean isRegisterSucceed = false;
 	public static long registerOrTime;
 	private static long lastClickTime;
 	private static int count = 0;
-	public static MessagePackageEntity builderMessagePackage(String hexString) {
+	private static MessagePackageEntity builderMessagePackage(String hexString) {
 		Log.e("TlvAnalyticalUtils", hexString);
 		int position = 0;
 		String responeHeader = hexString.substring(position, position + 8);
@@ -39,30 +38,7 @@ public class TlvAnalyticalUtils {
 		int tag = Integer.parseInt(tagString, 16);
 		String responeString = hexString.substring(6, 8);
 		int responeCode = getResponeCode(responeString,1);
-		if (responeCode == 53||responeCode == 39) {
-			//服务器错误注册失败
-			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SERVER_IS_ERROR);
-			return null;
-			//会话ID不一样
-		}else if(responeCode==41||responeCode==22){
-			if (sendYiZhengService != null){
-				ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "push service :\n" );
-				sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-			}
-			//过期
-		}else if(responeCode==21){
-			if (!CommonTools.isFastDoubleClick(1000)) {
-				EventBusUtil.cancelCallService();
-				if (ICSOpenVPNApplication.uartService != null)
-					ICSOpenVPNApplication.uartService.disconnect();
-				SharedUtils.getInstance().delete(Constant.IMEI);
-				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
-				Intent intent = new Intent(ICSOpenVPNApplication.getContext(), LoginMainActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN, ICSOpenVPNApplication.getContext().getResources().getString(R.string.token_interrupt));
-				ICSOpenVPNApplication.getContext().startActivity(intent);
-			}
-		}
+		if (dealRespone(responeCode)) return null;
 
 		tag = tag & 127;
 		position = position + 8;
@@ -84,10 +60,36 @@ public class TlvAnalyticalUtils {
 		position = position + 4;
 		List<TlvEntity> list = builderTlvList(hexString, hexString.substring(position, hexString.length()), tag);
 		MessagePackageEntity messagePackageEntity = new MessagePackageEntity(list, sessionId, hexStringMessageNumber, hexStringDatalength, responeHeader);
-
 		return messagePackageEntity;
 	}
 
+	private static boolean dealRespone(int responeCode) {
+		if (responeCode == 53||responeCode == 39) {
+			//服务器错误注册失败
+			EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SERVER_IS_ERROR);
+			return true;
+			//会话ID不一样
+		}else if(responeCode==41||responeCode==22){
+			if (sendYiZhengService != null){
+				ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "push service :\n" );
+				sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+			}
+			//过期
+		}else if(responeCode==21){
+			if (!CommonTools.isFastDoubleClick(1000)) {
+				EventBusUtil.cancelCallService();
+				if (ICSOpenVPNApplication.uartService != null)
+					ICSOpenVPNApplication.uartService.disconnect();
+				SharedUtils.getInstance().delete(Constant.IMEI);
+				SharedUtils.getInstance().delete(Constant.BRACELETNAME);
+				Intent intent = new Intent(ICSOpenVPNApplication.getContext(), LoginMainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra(IntentPutKeyConstant.OTHER_DEVICE_LOGIN, ICSOpenVPNApplication.getContext().getResources().getString(R.string.token_interrupt));
+				ICSOpenVPNApplication.getContext().startActivity(intent);
+			}
+		}
+		return false;
+	}
 
 	public static void builderMessagePackageList(String hexString) {
 		String dataLength = hexString.substring(20, 24);
@@ -140,21 +142,9 @@ public class TlvAnalyticalUtils {
 						}
 					}
 				} else if (typeParams == 199) {
-//					if (REGISTER_STATUE_CODE == 2) {//第一次是010101的时候不去复位SDK,第二次的时候才对SDK进行复位
 					if(!SdkAndBluetoothDataInchange.isHasPreData)
 						sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
-//					}
-
-					String rpValue = "000100163b9f94801fc78031e073fe211b573786609b30800119";
-					StringBuilder stringBuilder = new StringBuilder();
-					stringBuilder.append(rpValue);
-					if (rpValue.length() < vl * 2) {
-						for (int i = rpValue.length(); i < vl * 2; i++) {
-							stringBuilder.append("0");
-						}
-					}
-					orData = orData.replace(value, stringBuilder.toString());
-					sendToSdkLisener.sendServer(orData);
+					orData = dealDataAddZeroSendServer(orData, vl, value);
 				}
 				if (value.length() >= 2) {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
@@ -170,10 +160,26 @@ public class TlvAnalyticalUtils {
 		return tlvs;
 	}
 
+	//处理数据，发送给服务器
+	private static String dealDataAddZeroSendServer(String orData, int vl, String value) {
+		String rpValue = "000100163b9f94801fc78031e073fe211b573786609b30800119";
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(rpValue);
+		if (rpValue.length() < vl * 2) {
+			for (int i = rpValue.length(); i < vl * 2; i++) {
+				stringBuilder.append("0");
+			}
+		}
+		orData = orData.replace(value, stringBuilder.toString());
+		sendToSdkLisener.sendServer(orData);
+		return orData;
+	}
+
+	//根据服务器发过来的数据获取卡数据
 	private static void hasPreData(String orData, String value) {
 		if(preData==null){
-            preData= new String[9];
-        }
+			preData= new String[9];
+		}
 		String messageSeq = value.substring(0, 4);
 		preData[0]=messageSeq;
 		String preNumber = value.substring(14, 16);
@@ -184,72 +190,71 @@ public class TlvAnalyticalUtils {
 		preData[6]=valideData;
 		int preCode=getResponeCode(preData[2].substring(preData[2].length()-4,preData[2].length()),2);
 		if(responeCode==0&&preCode==0){
-            getOrderNumber(0);
-            sendToBlue(preData[6]);
-        }else if(responeCode==0&&preCode!=0){
-            for(int i=0;i<4;i++){
-                int	responeC=getResponeCode(preData[i+2].substring(preData[i+2].length()-4,preData[i+2].length()),2);
-                if(responeC==0){
-                    break;
-                }
-                getOrderNumber(i+1);
-            }
-            sendToBlue(preData[2]);
-        }else{
-            getOrderNumber(responeCode);
-            sendToBlue(preData[2]);
-
-        }
-
+			getOrderNumber(0);
+			SendCommandToBluetooth.sendToBlue(preData[6],Constant.READED_SIM_DATA);
+		}else if(responeCode==0&&preCode!=0){
+			for(int i=0;i<4;i++){
+				int	responeC=getResponeCode(preData[i+2].substring(preData[i+2].length()-4,preData[i+2].length()),2);
+				if(responeC==0){
+					break;
+				}
+				getOrderNumber(i+1);
+			}
+			SendCommandToBluetooth.sendToBlue(preData[2],Constant.READED_SIM_DATA);
+		}else{
+			getOrderNumber(responeCode);
+			SendCommandToBluetooth.sendToBlue(preData[2],Constant.READED_SIM_DATA);
+		}
 		preData[8]=orData.replace("8a1000", "8a9000").substring(0,20);
 		for(int i=0;i<9;i++){
-            Log.e("TlvAnalyticalUtils","分离服务器发过来的数据"+preData[i]);
-        }
+			Log.e("TlvAnalyticalUtils","分离服务器发过来的数据"+preData[i]);
+		}
 	}
 
+	//sim卡注册状态
 	private static void simStatue(String value, int typeParams) {
 		if (typeParams == 162) {
-            if (Integer.parseInt(value, 16) == 3) {
-                if(SdkAndBluetoothDataInchange.isHasPreData){
-                    SdkAndBluetoothDataInchange.PERCENT=0;
-                }
-                REGISTER_STATUE_CODE = 3;
-                EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_SUCCESS);
-                registerOrTime = System.currentTimeMillis();
-                isRegisterSucceed = true;
-            } else if (Integer.parseInt(value, 16) > 4) {
-                REGISTER_STATUE_CODE = 2;
-                EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SERVER_IS_ERROR);
-            }
-        }
+			if (Integer.parseInt(value, 16) == 3) {
+				if(SdkAndBluetoothDataInchange.isHasPreData){
+					SdkAndBluetoothDataInchange.PERCENT=0;
+				}
+				REGISTER_STATUE_CODE = 3;
+				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_SUCCESS);
+				registerOrTime = System.currentTimeMillis();
+			} else if (Integer.parseInt(value, 16) > 4) {
+				REGISTER_STATUE_CODE = 2;
+				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SERVER_IS_ERROR);
+			}
+		}
 	}
 
+	//服务器断开连接，发送0f过来，5分钟之内只重连三次，不无限重连。
 	private static void disConnect(String orData, int tag) {
 		if (System.currentTimeMillis() - lastClickTime > 365 * 24 * 60 * 60 * 1000L || isFast(5 * 60 * 1000)) {
-            if (!isFast(5 * 60 * 1000)) {
-                isFast(5 * 60 * 1000);
-            }
-            count++;
-        } else {
-            count = 0;
-        }
+			if (!isFast(5 * 60 * 1000)) {
+				isFast(5 * 60 * 1000);
+			}
+			count++;
+		} else {
+			count = 0;
+		}
 		if (count <= 3) {
-            REGISTER_STATUE_CODE = 2;
-            reRegistering(orData, tag);
-        }
+			REGISTER_STATUE_CODE = 2;
+			reRegistering(orData, tag);
+		}
 	}
 
 	private static String getConnectResultString(int tag, String value, int typeParams) {
 		if (typeParams == 160) {
-            value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
-            SocketConstant.REGISTER_REMOTE_ADDRESS = value.substring(value.indexOf("_") + 1, value.lastIndexOf("."));
-            SocketConstant.REGISTER_ROMOTE_PORT = value.substring(value.lastIndexOf(".") + 1, value.length());
+			value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
+			SocketConstant.REGISTER_REMOTE_ADDRESS = value.substring(value.indexOf("_") + 1, value.lastIndexOf("."));
+			SocketConstant.REGISTER_ROMOTE_PORT = value.substring(value.lastIndexOf(".") + 1, value.length());
 
-        }else if(typeParams==101){
-            TCP_HEART_TIME=Integer.parseInt(value,16);
-            TCP_HEART_TIME=TCP_HEART_TIME/2-30;
-            Log.e("TlvAnalytical","TCP_HEART_TIME"+TCP_HEART_TIME+"\nvalue"+value+"\ntag"+tag);
-        }
+		}else if(typeParams==101){
+			TCP_HEART_TIME=Integer.parseInt(value,16);
+			TCP_HEART_TIME=TCP_HEART_TIME/2-30;
+			Log.e("TlvAnalytical","TCP_HEART_TIME"+TCP_HEART_TIME+"\nvalue"+value+"\ntag"+tag);
+		}
 		return value;
 	}
 
@@ -263,7 +268,7 @@ public class TlvAnalyticalUtils {
 
 	}
 
-	public static int getResponeCode(String preNumber,int type) {
+	private static int getResponeCode(String preNumber,int type) {
 		int responeCode = Integer.parseInt(preNumber, 16);
 		if(type==1)
 			responeCode = responeCode & 127;
@@ -281,16 +286,6 @@ public class TlvAnalyticalUtils {
 		}
 	}
 
-	public static void sendToBlue(String value){
-		Log.e("TlvAnalyticalUtils","发送给蓝牙的数据"+value);
-		String[] messages = PacketeUtil.Separate(value,Constant.READED_SIM_DATA);
-		for (int i = 0; i < messages.length; i++) {
-			byte[] valueData = HexStringExchangeBytesUtil.hexStringToBytes(messages[i]);
-			ICSOpenVPNApplication.uartService.writeRXCharacteristic(valueData);
-
-		}
-	}
-
 	/**
 	 * 注册中不成功再次注册
 	 */
@@ -303,13 +298,13 @@ public class TlvAnalyticalUtils {
 		stringBuilder.replace(6, 8, "00");
 		sendToSdkLisener.sendServer(stringBuilder.toString());
 		if (sendYiZhengService != null){
-//			CommonTools.delayTime(2000);
+			CommonTools.delayTime(2000);
 			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
 			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
 	}
 
-	public static boolean isFast(int maxTime) {
+	private static boolean isFast(int maxTime) {
 		long time = System.currentTimeMillis();
 		long timeD = time - lastClickTime;
 		if (0 < timeD && timeD < maxTime) {
@@ -325,11 +320,9 @@ public class TlvAnalyticalUtils {
 		sendToSdkLisener = listener;
 	}
 
-
 	public interface SendToSdkLisener {
-		void send(byte evnindex, int length, byte[] bytes);
-
-		void sendServer(String hexString);
+		void send(byte evnindex, int length, byte[] bytes);//发送给so库
+		void sendServer(String hexString);//发送给服务器
 
 	}
 
@@ -360,7 +353,6 @@ public class TlvAnalyticalUtils {
 	}
 
 	public static void clearData() {
-		isRegisterSucceed = false;
 		registerOrTime = 0;
 		lastClickTime = 0;
 		count = 0;

@@ -77,7 +77,8 @@ public abstract class SocketTransceiver implements Runnable {
 	}
 
 	/**
-	 * 发送字符串
+	 *创建数据流如果创建失败，则断开连接
+	 * 创建成功，则开始发送字符串
 	 *
 	 * @param s 字符串
 	 * @return 发送成功返回true
@@ -110,6 +111,7 @@ public abstract class SocketTransceiver implements Runnable {
 	}
 
 	/**
+	 * 接受数据流，
 	 * 监听Socket接收的数据(新线程中运行)
 	 */
 	@Override

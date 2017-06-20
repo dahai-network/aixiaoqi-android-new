@@ -30,7 +30,6 @@ public class DeviceBaseSystemInfoModel extends Logger{
                 DeviceType = 1;
             }
         }
-
         SharedUtils.getInstance().writeInt(Constant.BRACELETTYPEINT, DeviceType);
         SharedUtils.getInstance().writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(14, 16), 16));
         SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, deviceVesion);

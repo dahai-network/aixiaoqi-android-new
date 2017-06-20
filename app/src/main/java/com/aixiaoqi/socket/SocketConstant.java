@@ -5,6 +5,7 @@ package com.aixiaoqi.socket;
  */
 public class SocketConstant {
 
+	//创建连接的标签TAG
 	public static String[] CONNENCT_TAG = {"01",//请求GoIp模块
 			Integer.toHexString(101),//链接存活时间
 			Integer.toHexString(107),//是否请求预读数据
@@ -23,7 +24,9 @@ public class SocketConstant {
 			, Integer.toHexString(198)//预读数据压缩前的长度
 			, Integer.toHexString(199)
 	};//预读数据内容
+	//创建连接的标签内容会变动的下标
 	public static int [] CONNECT_VARIABLE_POSITION={11,12,15,16};
+	//创建连接的value
 	public static String[] CONNENCT_VALUE = {"01",//01，请求GoIp模块的值
 			"b4"//101,链接存活时间
 			, "01"//107,是否请求预读数据
@@ -42,7 +45,6 @@ public class SocketConstant {
 			, "15f1"//198,预读数据压缩前的长度
 			, ""
 
-			//199,预读数据内容
 	};
 
 

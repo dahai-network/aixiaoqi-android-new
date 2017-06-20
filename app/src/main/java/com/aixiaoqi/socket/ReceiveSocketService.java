@@ -81,10 +81,13 @@ public class ReceiveSocketService extends Service {
         public void onConnect(SocketTransceiver transceiver) {
             Log.i("Blue_Chanl", "正在注册GOIP");
             SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
-            createSocketLisener.create();
+            if (SocketConstant.REGISTER_STATUE_CODE != 3 || System.currentTimeMillis() - TlvAnalyticalUtils.registerOrTime > 60 * 1000) {//防止不停断了重连的回调到界面发起创建连接
+                TlvAnalyticalUtils.registerOrTime = System.currentTimeMillis();
+                createSocketLisener.create();
+            }
             CONNECT_STATUE = CONNECT_SUCCEED;
         }
-
+        //连接失败，主动断开的不再去重连
         @Override
         public void onConnectFailed() {
             if (CONNECT_STATUE == ACTIVE_DISCENNECT) {
@@ -95,7 +98,7 @@ public class ReceiveSocketService extends Service {
             CONNECT_STATUE = CONNECT_FAIL;
         }
 
-
+        //接收从服务器发送过来的数据，收到数据以后清理数据不在重新发送这条数据。
         @Override
         public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
             String receiveData = HexStringExchangeBytesUtil.bytesToHexString(s, length);
@@ -116,6 +119,7 @@ public class ReceiveSocketService extends Service {
             createHeartBeatPackage();
         }
 
+        //断开，如果是主动断开连接不在重连
         @Override
         public void onDisconnect(SocketTransceiver transceiver) {
             if (CONNECT_STATUE == ACTIVE_DISCENNECT) {
@@ -172,7 +176,7 @@ public class ReceiveSocketService extends Service {
                             if (REGISTER_STATUE_CODE != 3) {
                                 if (receivePreDataTime < sendPreDataTime) {
                                     receivePreDataTime = System.currentTimeMillis();
-                                    if (receivePreDataTime - sendPreDataTime > 30 * 1000) {
+                                    if (receivePreDataTime - sendPreDataTime >= 30 * 1000) {
                                         //重新发送预读取数据
                                         if (!TextUtils.isEmpty(sendPreDataContent)) {
                                             sendMessage(sendPreDataContent);
@@ -274,6 +278,7 @@ public class ReceiveSocketService extends Service {
         }
     }
 
+    //创建心跳包
     private void createHeartBeatPackage() {
         Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
         if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && (am == null || mJobScheduler == null)) {
@@ -306,6 +311,7 @@ public class ReceiveSocketService extends Service {
         }
     }
 
+    //重新连接
     private void reConnect() {
         initSocket();
     }
@@ -332,6 +338,7 @@ public class ReceiveSocketService extends Service {
         super.onDestroy();
     }
 
+    //取消定时器
     private void cancelTimer() {
         if (am != null) {
             am.cancel(sender);
@@ -344,7 +351,7 @@ public class ReceiveSocketService extends Service {
     }
 
     CreateSocketLisener createSocketLisener;
-
+//设置创建成功以后，回调到界面创建跟服务器之间的连接
     public void setListener(CreateSocketLisener listener) {
         this.createSocketLisener = listener;
     }

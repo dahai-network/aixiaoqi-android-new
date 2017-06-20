@@ -57,7 +57,7 @@ import static de.blinkt.openvpn.util.CommonTools.getBLETime;
 public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
 
     private UartService mService = null;
-    
+
     private String TAG = "ReceiveBLEMoveReceiver";
     private String mStrSimCmdPacket;
     //分包存储ArrayList
@@ -102,15 +102,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
         if (action.equals(UartService.FINDED_SERVICE)) {
             Log.d(TAG, "UART_CONNECT_MSG");
             IS_TEXT_SIM = false;
-
             CommonTools.delayTime(100);
-            //8880021400
-
             String random8NumberString=EncryptionUtil.random8Number();
             Log.d("Encryption", "send--run: " + APP_CONNECT + "--" + random8NumberString);
-
             sendMessageToBlueTooth(APP_CONNECT + random8NumberString);//APP专属命令
-
             //随机数进行保存
             SharedUtils.getInstance().writeString("random8NumberString", random8NumberString);
             //把日志保存到本地文件中
@@ -132,9 +127,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
             }
 
         } else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-
             nullCardId = null;
-
             //如果保存的IMEI没有的话，那么就是在MyDevice里面，在Mydevice里面会有连接操作
             Log.d(TAG, "onReceive: retryTime=" + retryTime + "---ICSOpenVPNApplication.isConnect=" + ICSOpenVPNApplication.isConnect);
             if (retryTime < 20 && ICSOpenVPNApplication.isConnect) {

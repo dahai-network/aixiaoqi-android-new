@@ -4,16 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
-
 import java.util.ArrayList;
-
 import de.blinkt.openvpn.Logger;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
 import de.blinkt.openvpn.constant.Constant;
-
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.isGetnullCardid;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;

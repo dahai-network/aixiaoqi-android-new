@@ -1,19 +1,15 @@
 package de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType;
 
 import android.util.Log;
-
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
 import com.aixiaoqi.socket.SocketConstant;
-
 import java.util.ArrayList;
-
 import de.blinkt.openvpn.Logger;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.util.SharedUtils;
-
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;

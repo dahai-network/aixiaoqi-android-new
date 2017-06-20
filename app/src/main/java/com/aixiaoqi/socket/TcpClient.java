@@ -35,6 +35,9 @@ public abstract class TcpClient implements Runnable {
 	 */
 	public void connect() {
 		Log.e("connectSocket", "connect");
+		if(taskSocket!=null&&timerSocket!=null){
+			closeTimer();
+		}
 		new Thread(this).start();
 	}
 
@@ -42,6 +45,8 @@ public abstract class TcpClient implements Runnable {
 	private TimerTask taskSocket;
 	private int socketStartCount = 0;
 
+	//每五分钟检测一次TCP是否连接成功。如果没有连接成功则重新去连接。
+	//如果是用户自己解除绑定，或者退出登录，则停止定时器。
 	@Override
 	public void run() {
 		try {
@@ -86,9 +91,8 @@ public abstract class TcpClient implements Runnable {
 		};
 	}
 
+	//创建连接
 	private void connectSocket() throws IOException {
-//		SocketConstant.hostIP="192.168.1.133";
-//		SocketConstant.port=5090;
 		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
 		Socket socket = new Socket();
 		//TCP保活
@@ -96,10 +100,8 @@ public abstract class TcpClient implements Runnable {
 		socket.connect(address, 30000);
 		socket.setTcpNoDelay(true);
 		transceiver = new SocketTransceiver(socket) {
-
 			@Override
 			public void onReceive(InetAddress addr, byte[] s, int length) {
-
 				TcpClient.this.onReceive(this, s, length);
 			}
 
@@ -111,10 +113,7 @@ public abstract class TcpClient implements Runnable {
 		};
 		transceiver.start();
 		connect = true;
-		if (SocketConstant.REGISTER_STATUE_CODE != 3 || System.currentTimeMillis() - TlvAnalyticalUtils.registerOrTime > 60 * 1000) {
-			TlvAnalyticalUtils.registerOrTime = System.currentTimeMillis();
-			this.onConnect(transceiver);
-		}
+		this.onConnect(transceiver);
 	}
 
 	/**
@@ -129,6 +128,7 @@ public abstract class TcpClient implements Runnable {
 		}
 	}
 
+	//关闭定时器
 	public void closeTimer() {
 		connect = false;
 		socketStartCount = 0;

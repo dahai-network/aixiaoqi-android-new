@@ -128,20 +128,19 @@ public class SdkAndBluetoothDataInchange {
 			saveBluetoothData= PacketeUtil.Combination(messages);
 			String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[1]]);
 			if (telType(imsi)==CUCC_OR_CMCC){//移动和联通
-				TlvAnalyticalUtils.sendToBlue("a0c000000c");
+				SendCommandToBluetooth.sendToBlue("a0c000000c",Constant.READED_SIM_DATA);
 			}else if( telType(imsi)==TELECOM){//电信
-				TlvAnalyticalUtils.sendToBlue("a0c0000003");
+				SendCommandToBluetooth.sendToBlue("a0c0000003",Constant.READED_SIM_DATA);
 			}
 
 		}else if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&!TlvAnalyticalUtils.preData[6].startsWith("a088")){
-			TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[6]);
+			SendCommandToBluetooth.sendToBlue(TlvAnalyticalUtils.preData[6],Constant.READED_SIM_DATA);
 		}else if(count+1<Integer.parseInt(TlvAnalyticalUtils.preData[7])){
 			if(count+2==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
-				TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[6]);
+				SendCommandToBluetooth.sendToBlue(TlvAnalyticalUtils.preData[6],Constant.READED_SIM_DATA);
 				return;
 			}
-			TlvAnalyticalUtils.sendToBlue(TlvAnalyticalUtils.preData[count+2]);
-
+			SendCommandToBluetooth.sendToBlue(TlvAnalyticalUtils.preData[count+2],Constant.READED_SIM_DATA);
 		}else{
 			// 组数据
 			SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);

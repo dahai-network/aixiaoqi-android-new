@@ -18,6 +18,7 @@ import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
 import de.blinkt.openvpn.activities.NetPresenterBaseImpl;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -79,11 +80,7 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
             @Override
             public void run() {
                 lastSendMessageStr = message;
-                String[] messages = PacketeUtil.Separate(message, type);
-                int length = messages.length;
-                for (int i = 0; i < length; i++) {
-                    sendMessageToBlueTooth(messages[i]);
-                }
+                SendCommandToBluetooth.sendToBlue(message,type);
             }
         }).start();
     }
