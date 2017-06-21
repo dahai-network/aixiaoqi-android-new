@@ -3,26 +3,16 @@ package de.blinkt.openvpn;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
-
 import java.util.ArrayList;
-
-import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.ConnectBluetoothReceiveModel;
 import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.DeviceBaseSystemInfoModel;
 import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.PowerOnModel;
 import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.SimDataInfoModel;
 import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.WriteCardFlowModel;
-import de.blinkt.openvpn.activities.Device.ModelImpl.UpdateDeviceInfoModelImpl;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
@@ -31,10 +21,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.CreateFiles;
-import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
-import de.blinkt.openvpn.util.ToastCompat;
-
 import static de.blinkt.openvpn.activities.Device.PresenterImpl.ProMainPresenterImpl.sdkAndBluetoothDataInchange;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.AGREE_BIND;
@@ -165,7 +152,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                 @Override
                 public void run() {
                     try {
-
                         Log.d(TAG, "run: 接受数据");
                         String firstPackage = messages.get(0).substring(0, 2);
                         String dataType = messages.get(0).substring(6, 10);

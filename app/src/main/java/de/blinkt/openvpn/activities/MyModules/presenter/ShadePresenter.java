@@ -14,6 +14,7 @@ import de.blinkt.openvpn.activities.MyModules.ui.ShadeActivity;
 import de.blinkt.openvpn.activities.MyModules.view.ShadeView;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+
 /**
  * Created by kim
  * on 2017/6/8.
@@ -70,7 +71,7 @@ public class ShadePresenter {
     public void adjustDifferentPhoneView() {
         String phoneType = Build.MANUFACTURER.toLowerCase();
         int version = Build.VERSION.SDK_INT;
-        Log.d("phone", "adjustDifferentPhoneView: "+phoneType);
+        Log.d("phone", "adjustDifferentPhoneView: " + phoneType);
         switch (phoneType) {
             case Constant.LEMOBILE:
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
@@ -113,13 +114,13 @@ public class ShadePresenter {
             case Constant.MEIZU:
                 switch (PhoneAuthonCountEntity.getInstance().getPosition()) {
                     case ONE_STEP://保持后台运行
-                       Log.d("ShadePresenter", "adjustDifferentPhoneView: "+ids.length );
+                        Log.d("ShadePresenter", "adjustDifferentPhoneView: " + ids.length);
                         ids[0] = R.string.meizu_test_1_1;
                         ids[1] = R.string.meizu_test_1_2;
                         ids[2] = R.string.meizu_test_1_3;
 
                         text = getText(ids);
-                      //  Log.d("ShadePresenter", "adjustDifferentPhoneView:  text[0]=" + text[0]+" text[1]="+ text[1] +" text[2]="+ text[2]);
+                        //  Log.d("ShadePresenter", "adjustDifferentPhoneView:  text[0]=" + text[0]+" text[1]="+ text[1] +" text[2]="+ text[2]);
                         setResourceOne(true, text[0], R.drawable.meizu_image_1_1);
                         setResourceTwo(false, text[1], R.drawable.meizu_image_1_2);
                         setResourceThree(false, text[2], R.drawable.meizu_image_1_3);
@@ -341,8 +342,14 @@ public class ShadePresenter {
                 }
                 break;
 
-            case  Constant.LETV:
-
+            case Constant.LETV:
+                ids[0] = R.string.letv_test_1_1;
+                ids[1] = R.string.letv_test_1_2;
+                ids[2] = R.string.letv_test_1_3;
+                text = getText(ids);
+                setResourceOne(true, text[0], R.drawable.letv_image_1_1);
+                setResourceTwo(false, text[1], R.drawable.letv_image_1_2);
+                setResourceThree(false, text[2], R.drawable.letv_image_1_3);
                 break;
         }
 

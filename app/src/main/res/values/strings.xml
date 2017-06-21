@@ -97,6 +97,11 @@
 
     <string name="xiaomi_test3">在自启中，把爱小器开关打开</string>
 
+    <!--letv-->
+    <string name="letv_test_1_1">打开wlan界面在下面有个更多按钮</string>
+    <string name="letv_test_1_2">点击更多按钮会出现高级设置并点击</string>
+    <string name="letv_test_1_3">点击在休眠状态下保持WLAN连接，选择始终</string>
+
     <!--mate9 -->
     <string name="huawei_mate9_test_1_1">找到爱小器APP，打开开关</string>
 
