@@ -113,6 +113,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         if(cmdType==HttpConfigUrl.COMTYPE_UN_BIND_DEVICE){
             myDeviceView.showToast(object.getMsg());
             if(object.getStatus()==1){
+                SharedUtils.getInstance().writeBoolean(Constant.HAS_DEVICE_NEED_UPGRADE,false);
                 registFail();
                 myDeviceView.clearData();
                 myDeviceView.finishView();

@@ -88,6 +88,7 @@ public class LoginPresenterImpl extends NetPresenterBaseImpl implements LoginPre
         if (cmdType == HttpConfigUrl.COMTYPE_LOGIN) {
             if (object.getStatus() == 1) {
                 requestSecurityConfig();
+                SharedUtils.getInstance().writeBoolean(Constant.HAS_DEVICE_NEED_UPGRADE,false);
                 if (!loginView.getUserPhone().equals(SharedUtils.getInstance().readString(Constant.TEL)) || !Constant.JPUSH_ALIAS_SUCCESS.equals(SharedUtils.getInstance().readString(Constant.JPUSH_ALIAS))) {
                     jPushSetAliaModel.setJPushAlia("aixiaoqi" + SharedUtils.getInstance().readString(Constant.TOKEN));
                 }
