@@ -511,7 +511,7 @@ public class UartService extends Service implements Serializable {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        Log.d("Blue_Chanl", "writeRXCharacteristic: " + res);
+       // Log.d("Blue_Chanl", "writeRXCharacteristic: " + res);
 
         try {
             //如果mBluetoothGatt为空，意味着连接中断，所以不允许继续传输数据

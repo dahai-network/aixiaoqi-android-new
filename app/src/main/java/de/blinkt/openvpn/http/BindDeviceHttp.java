@@ -1,7 +1,5 @@
 package de.blinkt.openvpn.http;
 
-import android.util.Log;
-
 import java.net.URLEncoder;
 
 import de.blinkt.openvpn.constant.HttpConfigUrl;
