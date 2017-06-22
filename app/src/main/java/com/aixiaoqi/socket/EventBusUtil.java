@@ -53,10 +53,9 @@ public class EventBusUtil {
         EventBus.getDefault().post(entity);
     }
     //网络状态改变
-    public static void simStateChange(String registerType,boolean isopen) {
+    public static void simStateChange(String registerType ) {
         StateChangeEntity entity = new StateChangeEntity();
         entity.setStateType(registerType);
-        entity.setIsopen(isopen);
         EventBus.getDefault().post(entity);
     }
 

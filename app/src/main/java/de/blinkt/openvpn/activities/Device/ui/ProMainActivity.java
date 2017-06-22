@@ -35,6 +35,7 @@ import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.FragmentAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.CommomModel.JPush.ModelImpl.JPushSetAliaModelImpl;
 import de.blinkt.openvpn.activities.Device.PresenterImpl.ProMainPresenterImpl;
 import de.blinkt.openvpn.activities.Device.View.ProMainView;
 import de.blinkt.openvpn.bluetooth.service.UartService;
@@ -144,6 +145,9 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 		instance = this;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pro_main);
+		if(!Constant.JPUSH_ALIAS_SUCCESS.equals(SharedUtils.getInstance().readString(Constant.JPUSH_ALIAS))){
+			new JPushSetAliaModelImpl().setJPushAlia("aixiaoqi" + SharedUtils.getInstance().readString(Constant.TOKEN));
+		}
 		ButterKnife.bind(this);
 		initServices();
 		proMainPresenter=new ProMainPresenterImpl(this,this);

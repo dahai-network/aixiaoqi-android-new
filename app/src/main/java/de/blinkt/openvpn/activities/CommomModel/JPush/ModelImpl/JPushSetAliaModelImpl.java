@@ -63,8 +63,12 @@ public class JPushSetAliaModelImpl implements JPushSetAliaModel {
 
             switch (code) {
                 case 0:
-                    sharedUtils.writeString(Constant.JPUSH_ALIAS,
-                            Constant.JPUSH_ALIAS_SUCCESS);
+                    if(TextUtils.isEmpty(alias)){
+                        sharedUtils.delete(Constant.JPUSH_ALIAS);
+                    }else{
+                        sharedUtils.writeString(Constant.JPUSH_ALIAS,
+                                Constant.JPUSH_ALIAS_SUCCESS);
+                    }
                     break;
 
                 case 6002:
@@ -72,15 +76,9 @@ public class JPushSetAliaModelImpl implements JPushSetAliaModel {
                         handler.sendMessageDelayed(handler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
                     }
                     break;
-
                 default:
-
-
             }
-
-
         }
-
     };
 
     @Override

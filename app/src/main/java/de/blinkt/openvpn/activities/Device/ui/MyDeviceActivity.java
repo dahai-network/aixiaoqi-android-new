@@ -164,6 +164,8 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         firmwareTextView.setText("");
         percentTextView.setText("");
         macTextView.setText("");
+        SharedUtils.getInstance().delete(Constant.IMEI);
+        SharedUtils.getInstance().delete(Constant.BRACELETNAME);
     }
 
     @Override

@@ -1,7 +1,11 @@
 package de.blinkt.openvpn.fragments.base;
 
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,7 +39,8 @@ import de.blinkt.openvpn.views.TopProgressView;
 public class BaseStatusFragment extends Fragment {
 	private int id;
 	protected TopProgressView topProgressView;
-
+	private BluetoothManager mBluetoothManager;
+	protected BluetoothAdapter mBluetoothAdapter;
 	protected void setLayoutId(int id) {
 		this.id = id;
 	}
@@ -50,33 +55,52 @@ public class BaseStatusFragment extends Fragment {
 		EventBus.getDefault().register(this);
 		return rootView;
 	}
+
+
+	public boolean initialize() {
+		// For API level 18 and above, get a reference to BluetoothAdapter through
+		// BluetoothManager.
+
+		if (! ICSOpenVPNApplication.getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {//蓝牙不支持低功耗蓝牙
+			return false;
+		}
+		if (mBluetoothManager == null) {
+			mBluetoothManager = (BluetoothManager) ICSOpenVPNApplication.getContext().getSystemService(Context.BLUETOOTH_SERVICE);
+			if (mBluetoothManager == null) {
+				return false;
+			}
+		}
+		mBluetoothAdapter = mBluetoothManager.getAdapter();
+
+		if (mBluetoothAdapter == null) {
+			return false;
+		}
+		return true;
+	}
 	//接收到到卡注册状态作出相应的操作
 	@Subscribe(threadMode = ThreadMode.MAIN)
 	public void receiveStateChangeEntity(StateChangeEntity entity) {
 		switch (entity.getStateType()) {
 			case StateChangeEntity.BLUETOOTH_STATE:
-				if (entity.isopen() && getString(R.string.bluetooth_unopen).equals(topProgressView.getContent())) {
-					if (checkNetWorkAndBlueIsOpen()) {
+					if (checkBlueIsOpen()) {
 						topProgressView.setVisibility(View.GONE);
 						//有蓝牙了重新连接
 						String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
-						if (!TextUtils.isEmpty(macStr) && ICSOpenVPNApplication.uartService != null) {
+						if (!TextUtils.isEmpty(macStr) && ICSOpenVPNApplication.uartService != null&&ICSOpenVPNApplication.uartService.isDisconnectedBlueTooth()) {
 							ICSOpenVPNApplication.uartService.connect(macStr);
 						}
-					}
 				} else {
 					topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
 				}
 				break;
 			case StateChangeEntity.NET_STATE:
-				if (entity.isopen() && getString(R.string.no_wifi).equals(topProgressView.getContent())) {
-					if (checkNetWorkAndBlueIsOpen()) {
+					if (checkNetWork()) {
 						topProgressView.setVisibility(View.GONE);
 						if (ICSOpenVPNApplication.the_sipengineReceive == null) {
 							EventBusUtil.getTokenRes();
 						}
 					}
-				} else {
+				 else {
 					topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
 					setRegisted(false);
 				}
@@ -119,9 +143,7 @@ public class BaseStatusFragment extends Fragment {
 
 	}
 
-   /* public void showDeviceSummarized(boolean isRegister){
 
-    }*/
 
 	//接收到到卡注册状态作出相应的操作
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
@@ -137,6 +159,10 @@ public class BaseStatusFragment extends Fragment {
 				bleStatus=getString(R.string.index_regist_fail);
 				setRegisted(false);
 				topProgressGone();
+				if(entity.getRigsterStatueReason()==SocketConstant.REGISTER_FAIL_INITIATIVE){
+					bleStatus=getString(R.string.remove_bind);
+				}
+
 				break;
 			case SocketConstant.UNREGISTER://未注册
 				showStatue(entity);
@@ -157,24 +183,25 @@ public class BaseStatusFragment extends Fragment {
 	}
 	public static String bleStatus;
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(initialize())
+		checkBlueIsOpen();
+	}
+
 	private void showStatue(SimRegisterStatue entity){
 		switch (entity.getRigsterStatueReason()){
 			case SocketConstant.UN_INSERT_CARD:
 				bleStatus=getString(R.string.index_un_insert_card);
-				if (checkNetWorkAndBlueIsOpen()){
-					topProgressGone();
-				}
+
 				break;
 			case SocketConstant.AIXIAOQI_CARD:
-				if (checkNetWorkAndBlueIsOpen()){
-					topProgressGone();
-				}
+
 				bleStatus=getString(R.string.index_aixiaoqicard);
 				break;
 			case SocketConstant.CONNECTING_DEVICE:
-				if (checkNetWorkAndBlueIsOpen()){
-					topProgressGone();
-				}
+
 				bleStatus=getString(R.string.index_connecting);
 				break;
 			case SocketConstant.DISCOONECT_DEVICE:
@@ -185,8 +212,6 @@ public class BaseStatusFragment extends Fragment {
 	}
 
 	private void 	registeringReason(SimRegisterStatue entity){
-//		switch (entity.getRigsterSimStatue()){
-//			case SocketConstant.UP:
 		double percent = entity.getProgressCount();
 		if (topProgressView.getVisibility() != View.VISIBLE && SocketConstant.REGISTER_STATUE_CODE != 3) {
 			topProgressView.setVisibility(View.VISIBLE);
@@ -197,21 +222,28 @@ public class BaseStatusFragment extends Fragment {
 					toMyDeviceActivity();
 				}
 			});
-
 		}
-		int percentInt = (int) (percent / 1.6);
-		if (percentInt >= 100) {
-			percentInt = 98;
+		 MyDeviceActivity.percentInt = (int) (percent / 1.6);
+		if ( MyDeviceActivity.percentInt >= 100) {
+			MyDeviceActivity.percentInt = 98;
 		}
-		topProgressView.setProgress(percentInt);
+		topProgressView.setProgress( MyDeviceActivity.percentInt);
 
 	}
 
-	private boolean checkNetWorkAndBlueIsOpen() {
+	private boolean checkNetWork() {
 		if (!NetworkUtils.isNetworkAvailable(getActivity())) {
 			topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
 			return false;
-		} else if (!ICSOpenVPNApplication.uartService.isOpenBlueTooth()) {
+		}
+		return true;
+	}
+
+	private boolean checkBlueIsOpen() {
+		if(!checkNetWork()){
+			return false;
+		}
+	if (!mBluetoothAdapter.isEnabled()) {
 			topProgressView.showTopProgressView(getString(R.string.bluetooth_unopen), -1, null);
 			return false;
 		}
@@ -223,10 +255,6 @@ public class BaseStatusFragment extends Fragment {
 		if (!NetworkUtils.isNetworkAvailable(getActivity())) {
 			topProgressView.showTopProgressView(getString(R.string.no_wifi), -1, null);
 		}
-	}
-
-	protected void setTopViewBackground(int colorId) {
-		topProgressView.setBackgroundResource(colorId);
 	}
 
 	@Override

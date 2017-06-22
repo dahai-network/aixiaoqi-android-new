@@ -89,6 +89,7 @@ public class AccountPresenterImpl extends NetPresenterBaseImpl implements Accoun
                 if(getBindDeviceHttp.getBlueToothDeviceEntityity()==null||TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())){
                     if(isClickAddDevice)
                     accountView.toActivity();
+                    accountView.showDeviceSummarized(false);
                 }else{
                     getBindDeviceInfo(object);
                 }

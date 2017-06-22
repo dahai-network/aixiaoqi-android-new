@@ -24,7 +24,7 @@ public class BaseActivity extends CommenActivity  {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initActionBar();
-		ICSOpenVPNApplication.getRefWatcher().watch(this);
+//		ICSOpenVPNApplication.getRefWatcher().watch(this);
 	}
 
 	private void initActionBar() {

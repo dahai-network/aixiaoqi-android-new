@@ -89,7 +89,7 @@ public class LoginPresenterImpl extends NetPresenterBaseImpl implements LoginPre
             if (object.getStatus() == 1) {
                 requestSecurityConfig();
                 if (!loginView.getUserPhone().equals(SharedUtils.getInstance().readString(Constant.TEL)) || !Constant.JPUSH_ALIAS_SUCCESS.equals(SharedUtils.getInstance().readString(Constant.JPUSH_ALIAS))) {
-                    jPushSetAliaModel.setJPushAlia("aixiaoqi" + SharedUtils.getInstance().readString(Constant.USER_NAME));
+                    jPushSetAliaModel.setJPushAlia("aixiaoqi" + SharedUtils.getInstance().readString(Constant.TOKEN));
                 }
             }else{
                 loginView.showToast(object.getMsg());

@@ -54,7 +54,7 @@ public class StateChangeReceiver extends BroadcastReceiver {
 			case CONNECT_CHANGE:
 				ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 				NetworkInfo ni = cm.getActiveNetworkInfo();
-				if (ni != null && ni.isConnectedOrConnecting()) {
+				if (ni != null ) {
 					switch (ni.getType()) {
 						case ConnectivityManager.TYPE_WIFI:
 							restartConnect();
@@ -90,17 +90,11 @@ public class StateChangeReceiver extends BroadcastReceiver {
 							break;
 					}
 
-					EventBusUtil.simStateChange(StateChangeEntity.NET_STATE,true);
-				} else {
-					EventBusUtil.simStateChange(StateChangeEntity.NET_STATE,false);
 				}
+				EventBusUtil.simStateChange(StateChangeEntity.NET_STATE);
 				break;
 			case BLUETOOTH_CHANGE:
-				if (ICSOpenVPNApplication.uartService != null && ICSOpenVPNApplication.uartService.isOpenBlueTooth()) {
-					EventBusUtil.simStateChange(StateChangeEntity.BLUETOOTH_STATE,true);
-				} else {
-					EventBusUtil.simStateChange(StateChangeEntity.BLUETOOTH_STATE,false);
-				}
+					EventBusUtil.simStateChange(StateChangeEntity.BLUETOOTH_STATE);
 				break;
 		}
 	}

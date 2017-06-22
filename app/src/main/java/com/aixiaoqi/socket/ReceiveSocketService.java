@@ -57,7 +57,7 @@ public class ReceiveSocketService extends Service {
     private long sendPreDataTime;
     private String sendConnectionType;
     private String sendPreDataType;
-    private String sendConnectionContent;
+    private String sendConnectionContent;//记录发送的内容，以免发送失败，重新发送的
     private String sendPreDataContent;
 
     @Override
@@ -82,6 +82,7 @@ public class ReceiveSocketService extends Service {
             Log.i("Blue_Chanl", "正在注册GOIP");
             SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
             createSocketLisener.create();
+            contactFailCount = 0;
             CONNECT_STATUE = CONNECT_SUCCEED;
         }
         //连接失败，主动断开的不再去重连
@@ -147,29 +148,30 @@ public class ReceiveSocketService extends Service {
                 reConnect();
                 contactFailCount++;
             } else {
-                EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.TCP_DISCONNECT);
-                contactFailCount = 0;
+                EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.NO_NET_ERROR);
             }
         }
 
     }
 
+
     //断开连接，如果注册成功，需要重新注册，并且改变注册状态
     private void disConnectReconnect() {
+
+        clearResendTimer();
         CommonTools.delayTime(5000);
         if (tcpClient != null && !tcpClient.isConnected()) {
             if (REGISTER_STATUE_CODE == 3) {
                 REGISTER_STATUE_CODE = 2;
-                EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.TCP_DISCONNECT);
             }
             if (!SdkAndBluetoothDataInchange.isHasPreData)
                 sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
             recordStringLog(DateUtils.getCurrentDateForFileDetail() + "restart connect :\n");
+            contactFailCount = 1;
             reConnect();
-            contactFailCount++;
         }
     }
-
+//向服务器发送信息
     public void sendMessage(String s) {
         resendMessageTimer();
         if (s.startsWith(SocketConstant.CONNECTION)) {
@@ -195,10 +197,9 @@ public class ReceiveSocketService extends Service {
 
     private int resendConnectionCount=0;
     private int resendPreDataCount=0;
-
+//重新发送信息
     private void resendMessageTimer() {
-        if(resendCount
-                ==0){
+        if(resendCount ==0){
             resendCount++;
             if (tcpResendTimer == null) {
                 tcpResendTimer = new Timer();
@@ -257,6 +258,7 @@ public class ReceiveSocketService extends Service {
     }
 
     private int resendCount;
+    //取消重新发送闹钟
     private void clearResendTimer() {
         if(tcpResendTimer!=null){
             tcpResendTimer.cancel();
@@ -366,11 +368,9 @@ public class ReceiveSocketService extends Service {
         clearResendTimer();
         TlvAnalyticalUtils.clearData();
         TestProvider.clearData();
-
         if (SocketConstant.REGISTER_STATUE_CODE != 0) {
             SocketConstant.REGISTER_STATUE_CODE = 1;
         }
-
         super.onDestroy();
     }
 

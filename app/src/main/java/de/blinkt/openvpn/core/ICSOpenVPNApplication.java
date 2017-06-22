@@ -15,8 +15,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
@@ -114,14 +112,14 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    private RefWatcher mRefWatcher;
+//    private RefWatcher mRefWatcher;
     @Override
     public void onCreate() {
         super.onCreate();
 
         instance = this;
          //mRefWatcher = Constant.IS_DEBUG ?  LeakCanary.install(this) : RefWatcher.DISABLED;
-         mRefWatcher = Constant.IS_DEBUG ?  RefWatcher.DISABLED : RefWatcher.DISABLED;
+//         mRefWatcher = Constant.IS_DEBUG ?  RefWatcher.DISABLED : RefWatcher.DISABLED;
         CommonHttp.setContext(getApplicationContext());
 //		if (Constant.IS_DEBUG) {
         CrashHandler crashHandler = CrashHandler.getInstance();
@@ -131,9 +129,9 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
         initUpgrade();
         searchContact();
     }
-    public static RefWatcher getRefWatcher() {
-        return getInstance().mRefWatcher;
-    }
+//    public static RefWatcher getRefWatcher() {
+//        return getInstance().mRefWatcher;
+//    }
     private void searchContact() {
         AsyncQueryContactHandler asyncQueryHandler = new AsyncQueryContactHandler(this, getContentResolver());
         FindContactUtil.queryContactData(asyncQueryHandler);

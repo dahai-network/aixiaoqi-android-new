@@ -104,12 +104,16 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         unbindDeviceModel.unbindDevice();
     }
 
-
+    private void registFail() {
+        Log.e(TAG, "registFail");
+        EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
+    }
     @Override
     public void rightLoad(int cmdType, CommonHttp object) {
         if(cmdType==HttpConfigUrl.COMTYPE_UN_BIND_DEVICE){
             myDeviceView.showToast(object.getMsg());
             if(object.getStatus()==1){
+                registFail();
                 myDeviceView.clearData();
                 myDeviceView.finishView();
             }
@@ -270,6 +274,11 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
 
                 break;
             case SocketConstant.NO_NET:
+                myDeviceView.showToast(R.string.no_wifi);
+                break;
+            case SocketConstant.NO_NET_ERROR:
+                myDeviceView.showToast(R.string.no_wifi);
+                myDeviceView.setConStatueText(R.string.no_net_error);
                 break;
         }
 

@@ -44,7 +44,7 @@ public class SettingActivity extends BaseActivity implements SetView,DialogInter
 	@BindView(R.id.exitBtn)
 	Button exitBtn;
 	Unbinder unbinder;
-	SetPresenter setPersenter;
+	SetPresenterImpl setPersenter;
 	@Override
 	public void showToast(String toastContent) {
 		if(!TextUtils.isEmpty(toastContent))

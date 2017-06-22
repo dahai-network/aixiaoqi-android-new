@@ -91,7 +91,7 @@ public abstract class SocketTransceiver implements Runnable {
 				out = new DataOutputStream(this.socket.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
-			Log.e("toBLue", "发送字符串IOException=" + e.getMessage());
+			Log.e("toBLue", "创建数据IOException=" + e.getMessage());
 			runFlag = false;
 			this.onDisconnect(addr);
 			return false;
@@ -99,10 +99,16 @@ public abstract class SocketTransceiver implements Runnable {
 		if (out != null) {
 			try {
 				Log.e("toBLue", "发送字符串");
+				if(!socket.isClosed()&&socket.isOutputShutdown()){
 				out.write(HexStringExchangeBytesUtil.hexStringToBytes(s));
 				out.flush();
-				return true;
+					return true;
+				}else{
+					this.onDisconnect(addr);
+					return false;
+				}
 			} catch (Exception e) {
+				Log.e("toBLue", "发送字符串IOException=" + e.getMessage());
 				e.printStackTrace();
 				this.onDisconnect(addr);
 			}
