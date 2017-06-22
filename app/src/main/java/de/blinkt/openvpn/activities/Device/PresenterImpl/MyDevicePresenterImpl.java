@@ -269,6 +269,8 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
             case SocketConstant.SERVER_IS_ERROR:
 
                 break;
+            case SocketConstant.NO_NET:
+                break;
         }
 
     }

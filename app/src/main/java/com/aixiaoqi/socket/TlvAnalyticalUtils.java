@@ -27,7 +27,6 @@ import static de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterIm
  */
 public class TlvAnalyticalUtils {
 
-	public static long registerOrTime;
 	private static long lastClickTime;
 	private static int count = 0;
 	private static MessagePackageEntity builderMessagePackage(String hexString) {
@@ -220,7 +219,6 @@ public class TlvAnalyticalUtils {
 				}
 				REGISTER_STATUE_CODE = 3;
 				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_SUCCESS);
-				registerOrTime = System.currentTimeMillis();
 			} else if (Integer.parseInt(value, 16) > 4) {
 				REGISTER_STATUE_CODE = 2;
 				EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.SERVER_IS_ERROR);
@@ -353,7 +351,6 @@ public class TlvAnalyticalUtils {
 	}
 
 	public static void clearData() {
-		registerOrTime = 0;
 		lastClickTime = 0;
 		count = 0;
 	}

@@ -29,22 +29,15 @@ public class PowerOnModel extends Logger{
                 EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.REGISTERING);
             }
             initWriteCardFlowModel(context);
-            if (!IS_TEXT_SIM && isGetnullCardid) {
-                //空卡ID是否不为空，若不为空则
-                if (nullCardId != null) {
-                    Log.i(TAG, "nullcardid上电返回");
-                    //发送旧卡空卡序列号
-
-                    writeCardFlowModel.writeCard();
-                } else {
+            //空卡ID是否不为空，若不为空则
+            if (nullCardId != null) {
+                Log.i(TAG, "nullcardid上电返回");
+                //发送旧卡空卡序列号
+                writeCardFlowModel.writeCard();
+            }
+            if (!IS_TEXT_SIM && isGetnullCardid&&nullCardId == null) {
                     Log.i(TAG, "发送" + Constant.WRITE_SIM_FIRST);
                     writeCardFlowModel.sendMessageSeparate(Constant.WRITE_SIM_FIRST, Constant.WRITE_SIM_DATA);
-                }
-            } else {
-                if (nullCardId != null) {
-                    //发送旧卡空卡序列号
-                    writeCardFlowModel.writeCard();
-                }
             }
 
         } else if (messages.get(0).substring(10, 12).equals("13")) {

@@ -1,5 +1,7 @@
 package de.blinkt.openvpn.fragments.ProMainTabFragment.View;
 
+import android.content.Intent;
+
 import de.blinkt.openvpn.activities.CommomView.Toast;
 
 /**
@@ -17,5 +19,6 @@ public interface AccountView  extends Toast{
     void activatePackage(int activateStatue,String activateCount);
     void packageAllCount(String allCount);
     void callTime(String time);
-    void toActivity();
+    void toMyDeviceActivity();
+    void toActivity( );
 }

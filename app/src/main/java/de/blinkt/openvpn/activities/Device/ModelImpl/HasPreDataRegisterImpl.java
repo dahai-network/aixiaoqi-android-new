@@ -3,6 +3,7 @@ package de.blinkt.openvpn.activities.Device.ModelImpl;
 import android.content.Context;
 import android.content.Intent;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SdkAndBluetoothDataInchange;
@@ -51,18 +52,18 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
 
     @Override
     public void registerSimPreData() {
-        if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {
+        if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {//TCP已经创建成功了
             sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-        } else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {
+        } else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {//如果是连接失败且没有销毁，则断开在重新创建连接
             SocketConnection.mReceiveSocketService.disconnect();
             startTcp();
-        } else {
+        } else {//创建连接
             startTcp();
         }
     }
 
     private void startTcp() {
-        startSocketService();
+        startSocketService();//开始绑定
         startTcpSocket();
         SocketConnection.mReceiveSocketService.setListener(new ReceiveSocketService.CreateSocketLisener() {
             @Override
@@ -94,6 +95,7 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
         if (SocketConnection.mReceiveSocketService == null) {
             CommonTools.delayTime(1000);
             if (bindtime > 15) {
+                EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.BIND_TCP_SERIVCE_FAIL);
                 return;
             }
             bindtime++;

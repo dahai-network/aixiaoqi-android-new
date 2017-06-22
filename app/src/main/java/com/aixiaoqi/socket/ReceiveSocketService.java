@@ -51,8 +51,8 @@ public class ReceiveSocketService extends Service {
     private static String TAG = "ReceiveSocketService";
     Timer tcpResendTimer;
     TimerTask tcpResendTimerTask;
-    private long receiveConnectionTime;
-    private long receivePreDataTime;
+    private boolean isReceiveConnection;
+    private boolean isReceivePreData;
     private long sendConnectionTime;
     private long sendPreDataTime;
     private String sendConnectionType;
@@ -81,125 +81,105 @@ public class ReceiveSocketService extends Service {
         public void onConnect(SocketTransceiver transceiver) {
             Log.i("Blue_Chanl", "正在注册GOIP");
             SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
-            if (SocketConstant.REGISTER_STATUE_CODE != 3 || System.currentTimeMillis() - TlvAnalyticalUtils.registerOrTime > 60 * 1000) {//防止不停断了重连的回调到界面发起创建连接
-                TlvAnalyticalUtils.registerOrTime = System.currentTimeMillis();
-                createSocketLisener.create();
-            }
+            createSocketLisener.create();
             CONNECT_STATUE = CONNECT_SUCCEED;
         }
         //连接失败，主动断开的不再去重连
         @Override
         public void onConnectFailed() {
-            if (CONNECT_STATUE == ACTIVE_DISCENNECT) {
-                return;
-            }
+
+            if (activeDis()) return;
             Log.e("Blue_Chanl", "onConnectFailed");
             connectFailReconnect();
-            CONNECT_STATUE = CONNECT_FAIL;
+
         }
 
         //接收从服务器发送过来的数据，收到数据以后清理数据不在重新发送这条数据。
         @Override
         public void onReceive(SocketTransceiver transceiver, byte[] s, int length) {
-            String receiveData = HexStringExchangeBytesUtil.bytesToHexString(s, length);
-            ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n" + receiveData);
-            if (receiveData.startsWith(SocketConstant.RECEIVE_CONNECTION)) {
-                receiveConnectionTime = sendConnectionTime;
-                sendConnectionType = "";
-            } else if (receiveData.startsWith(SocketConstant.RECEIVE_PRE_DATA)) {
-                if (REGISTER_STATUE_CODE != 3 && sendPreDataTime < 10000000) {
-                    receivePreDataTime = sendPreDataTime;
-                } else {
-                    receivePreDataTime = 0;
-                }
-                sendPreDataType = "";
-            }
-            TlvAnalyticalUtils.builderMessagePackageList(receiveData);
-            Log.d(TAG, "onReceive: ---------------");
-            createHeartBeatPackage();
+            receiveServiceData(s, length);
         }
 
         //断开，如果是主动断开连接不在重连
         @Override
         public void onDisconnect(SocketTransceiver transceiver) {
-            if (CONNECT_STATUE == ACTIVE_DISCENNECT) {
+
+            if (activeDis())
                 return;
-            }
             Log.e("Blue_Chanl", "断开连接 - onDisconnect");
-            CONNECT_STATUE = CONNECT_FAIL;
             disConnectReconnect();
         }
     };
 
+    private boolean activeDis() {
+        if (CONNECT_STATUE == ACTIVE_DISCENNECT) {
+            return true;
+        }
+        CONNECT_STATUE = CONNECT_FAIL;
+        return false;
+    }
+
+    private void receiveServiceData(byte[] s, int length) {
+        String receiveData = HexStringExchangeBytesUtil.bytesToHexString(s, length);
+        ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n" + receiveData);
+        if (receiveData.startsWith(SocketConstant.RECEIVE_CONNECTION)) {
+            isReceiveConnection =true;
+            sendConnectionType = "";
+        } else if (receiveData.startsWith(SocketConstant.RECEIVE_PRE_DATA)) {
+            isReceivePreData =true;
+            sendPreDataType = "";
+        }
+        TlvAnalyticalUtils.builderMessagePackageList(receiveData);
+        Log.d(TAG, "onReceive: ---------------");
+        createHeartBeatPackage();
+    }
+
     //首次创建连接失败，重试三次还不成功，则断开连接，并且提示注册失败。
     private void connectFailReconnect() {
         ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "connect fail:\n");
-        if (!isDisconnect) {
-            CommonTools.delayTime(15000);
-            if (tcpClient != null && !tcpClient.isConnected()) {
-                if (REGISTER_STATUE_CODE == 3) {
-                    REGISTER_STATUE_CODE = 2;
-                    EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.TCP_DISCONNECT);
-                }
-                if (contactFailCount <= 3) {
-                    reConnect();
-                    contactFailCount++;
-                } else {
-                    contactFailCount = 0;
-                }
+        CommonTools.delayTime(15000);
+        if (tcpClient != null && !tcpClient.isConnected()) {
+            if (REGISTER_STATUE_CODE == 3) {
+                REGISTER_STATUE_CODE = 2;
+
             }
+            if (contactFailCount <= 3) {
+                reConnect();
+                contactFailCount++;
+            } else {
+                EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.TCP_DISCONNECT);
+                contactFailCount = 0;
+            }
+        }
+
+    }
+
+    //断开连接，如果注册成功，需要重新注册，并且改变注册状态
+    private void disConnectReconnect() {
+        CommonTools.delayTime(5000);
+        if (tcpClient != null && !tcpClient.isConnected()) {
+            if (REGISTER_STATUE_CODE == 3) {
+                REGISTER_STATUE_CODE = 2;
+                EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.TCP_DISCONNECT);
+            }
+            if (!SdkAndBluetoothDataInchange.isHasPreData)
+                sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
+            recordStringLog(DateUtils.getCurrentDateForFileDetail() + "restart connect :\n");
+            reConnect();
+            contactFailCount++;
         }
     }
 
-
     public void sendMessage(String s) {
-        if (tcpResendTimer == null) {
-            tcpResendTimer = new Timer();
-            tcpResendTimerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    Log.e(TAG, "coming");
-                    if (CONNECT_STATUE == CONNECT_SUCCEED) {
-                        Log.e(TAG, "sendConnectionType=" + sendConnectionType);
-                        if (!TextUtils.isEmpty(sendConnectionType)) {
-                            if (receiveConnectionTime < sendConnectionTime) {
-                                receiveConnectionTime = System.currentTimeMillis();
-                                if (receiveConnectionTime - sendConnectionTime >=30 * 1000) {
-                                    //重新创建连接
-                                    if (!TextUtils.isEmpty(sendConnectionContent)) {
-                                        sendMessage(sendConnectionContent);
-                                    }
-                                }
-                            }
-                        }
-                        if (!TextUtils.isEmpty(sendPreDataType)) {
-                            if (REGISTER_STATUE_CODE != 3) {
-                                if (receivePreDataTime < sendPreDataTime) {
-                                    receivePreDataTime = System.currentTimeMillis();
-                                    if (receivePreDataTime - sendPreDataTime >= 30 * 1000) {
-                                        //重新发送预读取数据
-                                        if (!TextUtils.isEmpty(sendPreDataContent)) {
-                                            sendMessage(sendPreDataContent);
-                                        }
-                                    }
-                                }
-                            } else {
-                                sendPreDataContent = "";
-                                receivePreDataTime = 0;
-                            }
-                        }
-                    }
-                }
-            };
-            tcpResendTimer.schedule(tcpResendTimerTask, 30 * 1000, 30 * 1000);
-        }
-
+        resendMessageTimer();
         if (s.startsWith(SocketConstant.CONNECTION)) {
             sendConnectionType = SocketConstant.CONNECTION;
             sendConnectionContent = s;
+            isReceiveConnection=false;
             sendConnectionTime = System.currentTimeMillis();
         } else if (s.startsWith(SocketConstant.PRE_DATA)) {
             if (REGISTER_STATUE_CODE != 3) {
+                isReceiveConnection=false;
                 sendPreDataType = SocketConstant.PRE_DATA;
                 sendPreDataContent = s;
                 sendPreDataTime = System.currentTimeMillis();
@@ -213,31 +193,87 @@ public class ReceiveSocketService extends Service {
         ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n" + s);
     }
 
-    public void disconnect() {
-        CONNECT_STATUE = ACTIVE_DISCENNECT;//主动断开
-        cancelTimer();
-        tcpClient.disconnect();
-    }
+    private int resendConnectionCount=0;
+    private int resendPreDataCount=0;
 
-
-    private boolean isDisconnect = false;
-
-    //断开连接，如果注册成功，需要重新注册，并且改变注册状态
-    private void disConnectReconnect() {
-        isDisconnect = true;
-        CommonTools.delayTime(5000);
-        if (tcpClient != null && !tcpClient.isConnected()) {
-            if (REGISTER_STATUE_CODE == 3) {
-                REGISTER_STATUE_CODE = 2;
-                EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.TCP_DISCONNECT);
+    private void resendMessageTimer() {
+        if(resendCount
+                ==0){
+            resendCount++;
+            if (tcpResendTimer == null) {
+                tcpResendTimer = new Timer();
             }
-            if (!SdkAndBluetoothDataInchange.isHasPreData)
-                sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_CMD_SIMCLR), 0, HexStringExchangeBytesUtil.hexStringToBytes(TRAN_DATA_TO_SDK));
-            recordStringLog(DateUtils.getCurrentDateForFileDetail() + "restart connect :\n");
-            reConnect();
+            if(tcpResendTimerTask==null)
+                tcpResendTimerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        Log.e(TAG, "coming");
+                        if (CONNECT_STATUE == CONNECT_SUCCEED) {
+                            Log.e(TAG, "sendConnectionType=" + sendConnectionType);
+                            if (!TextUtils.isEmpty(sendConnectionType)) {
+                                if (System.currentTimeMillis() - sendConnectionTime >=30 * 1000&&!isReceiveConnection&&resendConnectionCount<3) {
+                                    //重新创建连接
+                                    if (!TextUtils.isEmpty(sendConnectionContent)) {
+                                        sendMessage(sendConnectionContent);
+                                        resendConnectionCount++;
+                                    }
+                                }else{
+                                    //关闭定时器
+                                    clearResendTimer();
+                                    //把resendConnectionCount重置为零
+                                    resendConnectionCount=0;
+                                    //EventBus 通知界面提示网络异常
+                                    EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NO_NET_ERROR);
+                                }
+                            }
+                            if (!TextUtils.isEmpty(sendPreDataType)) {
+                                if (REGISTER_STATUE_CODE != 3) {
+                                    if (System.currentTimeMillis() - sendPreDataTime >= 30 * 1000&&!isReceivePreData&&resendPreDataCount<3) {
+                                        //重新发送预读取数据
+                                        if (!TextUtils.isEmpty(sendPreDataContent)) {
+                                            sendMessage(sendPreDataContent);
+                                            resendPreDataCount++;
+                                        }
+                                    }else{
+                                        //关闭定时器
+                                        clearResendTimer();
+                                        //把resendPreDataCount重置为零
+                                        resendPreDataCount=0;
+                                        //EventBus 通知界面提示网络异常
+                                        EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NO_NET_ERROR);
+                                    }
+                                } else {
+                                    sendPreDataContent = "";
+                                    isReceivePreData = true;
+                                }
+                            }
+                        }
+                    }
+                };
+
+            tcpResendTimer.schedule(tcpResendTimerTask, 30 * 1000, 30 * 1000);
+
         }
     }
 
+    private int resendCount;
+    private void clearResendTimer() {
+        if(tcpResendTimer!=null){
+            tcpResendTimer.cancel();
+            tcpResendTimer=null;
+        }
+        if(tcpResendTimerTask!=null){
+            tcpResendTimerTask.cancel();
+            tcpResendTimerTask=null;
+        }
+        resendCount=0;
+    }
+    public void disconnect() {
+        CONNECT_STATUE = ACTIVE_DISCENNECT;//主动断开
+        cancelTimer();
+        clearResendTimer();
+        tcpClient.disconnect();
+    }
     /**
      * 打开日志文件并写入日志
      *
@@ -322,12 +358,12 @@ public class ReceiveSocketService extends Service {
         if (sdkAndBluetoothDataInchange != null)
             sdkAndBluetoothDataInchange.closeReceviceBlueData();
         if (tcpClient != null) {
-            tcpClient.closeTimer();
             tcpClient.disconnect();
         }
         count = 0;
         SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
         cancelTimer();
+        clearResendTimer();
         TlvAnalyticalUtils.clearData();
         TestProvider.clearData();
 
@@ -351,7 +387,7 @@ public class ReceiveSocketService extends Service {
     }
 
     CreateSocketLisener createSocketLisener;
-//设置创建成功以后，回调到界面创建跟服务器之间的连接
+    //设置创建成功以后，回调到界面创建跟服务器之间的连接
     public void setListener(CreateSocketLisener listener) {
         this.createSocketLisener = listener;
     }

@@ -17,7 +17,6 @@ import de.blinkt.openvpn.activities.CommomModel.BlueHttpModelImpl.OrderActivatio
 import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
 import de.blinkt.openvpn.activities.NetPresenterBaseImpl;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
-import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
@@ -31,7 +30,6 @@ import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.nullCardId;
 import static de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity.FINISH_ACTIVITY;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.GET_NULLCARDID;
-import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR;
 import static de.blinkt.openvpn.constant.Constant.RECEIVE_NULL_CARD_CHAR2;
@@ -114,8 +112,6 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
                 if (mStrSimCmdPacket.contains(GET_NULLCARDID)) {
                     if (isGetnullCardid)
                         sendMessageSeparate(Constant.WRITE_SIM_STEP_THREE, Constant.WRITE_SIM_DATA);
-                } else {
-                    registFlowPath();
                 }
                 break;
             //获取空卡序列号第三部
@@ -159,8 +155,6 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
                         sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
                         isGetnullCardid = false;
                         return;
-                    } else {
-                        registFlowPath();
                     }
                 }
 //				//最后发送信息复位
@@ -257,10 +251,4 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
         }
     }
 
-    private void registFlowPath() {
-        Log.i("Bluetooth", "进入注册流程");
-        EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.VAILD_CARD);
-        IS_TEXT_SIM = true;
-        isGetnullCardid = false;
-    }
 }

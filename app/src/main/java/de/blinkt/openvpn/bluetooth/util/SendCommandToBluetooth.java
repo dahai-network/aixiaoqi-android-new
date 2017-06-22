@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.bluetooth.util;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import de.blinkt.openvpn.bluetooth.service.UartService;
@@ -34,6 +35,9 @@ public class SendCommandToBluetooth {
 //发送多包给蓝牙
     public static void sendToBlue(String value,String type){
         Log.e("TlvAnalyticalUtils","发送给蓝牙的数据"+value);
+        if(TextUtils.isEmpty(value)){
+            return;
+        }
         String[] messages = PacketeUtil.Separate(value, type);
         for (int i = 0; i < messages.length; i++) {
             byte[] valueData = HexStringExchangeBytesUtil.hexStringToBytes(messages[i]);

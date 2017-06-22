@@ -41,9 +41,8 @@ public class SimDataInfoModel extends Logger{
             SocketConstant.SIM_TYPE = Integer.parseInt(messages.get(0).substring(12, 14));
             ReceiveBLEMoveReceiver.nullCardId = null;
 
-            switch (messages.get(0).substring(12, 14)) {
-                //有卡并且上电失败，可能是无效卡/卡未插好/设备异常
-                case "00":
+            switch (messages.get(0).substring(12, 14)){
+                case "00"://有卡并且上电失败，可能是无效卡/卡未插好/设备异常 重启钥匙扣
                     sendMessageToBlueTooth(Constant.RESTORATION);
                     SharedUtils.getInstance().delete(Constant.OPERATER);
                     break;
@@ -82,7 +81,7 @@ public class SimDataInfoModel extends Logger{
         SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]] = RadixAsciiChange.convertStringToHex(Iccid);
     }
 
-    private void registFlowPath() {
+    private void registFlowPath(){
         Log.i("Bluetooth", "进入注册流程");
         EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.VAILD_CARD);
         IS_TEXT_SIM = true;

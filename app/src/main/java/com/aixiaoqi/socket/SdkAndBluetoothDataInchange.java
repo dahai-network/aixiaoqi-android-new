@@ -24,12 +24,17 @@ public class SdkAndBluetoothDataInchange {
 	ReceiveDataframSocketService mReceiveDataframSocketService;
 	private String saveBluetoothData;
 	long getSendBlueToothTime;
-	private int countMessage = 0;
+	private int countMessage = 0;//阻止多次进入定时器
 	private int notCanReceiveBluetoothDataCount = 0;
 	private String finalTemp;//保存上一次发给蓝牙的数据，以免出错，需要重发
 	private boolean isReceiveBluetoothData = true;//判断5s内是否接收完成，没有完成则重新发送
 	public int count = 0;
-	public static int PERCENT=0;
+	public static int PERCENT=0;//定义为静态变量的目的是为了下次注册的时候清零
+	private String socketTag = "0";
+	private String mStrSimPowerOnPacket = "";
+	Timer timerMessage ;
+	TimerTask timerTaskMessage ;
+	private String hasPreResendToBlue="";//保存有预读取数据的信息
 	public void initReceiveDataframSocketService(ReceiveDataframSocketService receiveDataframSocketService, UartService mService) {
 		receiveDataframSocketService.setListener(new ReceiveDataframSocketService.MessageOutLisener() {
 													 @Override
@@ -37,9 +42,7 @@ public class SdkAndBluetoothDataInchange {
 														 //SDK接收到消息发送给蓝牙消息的方法
 														 //TODO
 														 Log.e(TAG, "&&& server temp:" + msg);
-
 														 sendToBluetoothAboutCardInfo(msg);
-
 													 }
 
 												 }
@@ -50,11 +53,6 @@ public class SdkAndBluetoothDataInchange {
 		this.mService = mService;
 	}
 
-	private String socketTag = "0";
-	private String mStrSimPowerOnPacket = "";
-	Timer timerMessage ;
-	TimerTask timerTaskMessage ;
-
 	private void notifyRegisterFail() {
 		//重试三次发出给蓝牙的指令没有收到蓝牙那边的回应。
 		EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
@@ -63,7 +61,9 @@ public class SdkAndBluetoothDataInchange {
 	public void sendToSDKAboutBluetoothInfo(ArrayList<String> messages) {
 
 		synchronized (this){
-
+			isReceiveBluetoothData = true;
+			notCanReceiveBluetoothDataCount = 0;
+			startTimer();
 			if(isHasPreData){
 				PERCENT=PERCENT+1;
 				eventPercent(PERCENT);
@@ -71,8 +71,6 @@ public class SdkAndBluetoothDataInchange {
 			}else if(isStartSdk) {
 				int percent = Integer.parseInt(TextUtils.isEmpty(mReceiveDataframSocketService.getSorcketTag()) ? "-1" : mReceiveDataframSocketService.getSorcketTag().substring(mReceiveDataframSocketService.getSorcketTag().length() - 4, mReceiveDataframSocketService.getSorcketTag().length() - 1));
 				eventPercent(percent);
-				isReceiveBluetoothData = true;
-				notCanReceiveBluetoothDataCount = 0;
 				mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
 				socketTag = mReceiveDataframSocketService.getSorcketTag();
 				Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
@@ -97,9 +95,13 @@ public class SdkAndBluetoothDataInchange {
 					public void run() {
 
 						if (SocketConstant.REGISTER_STATUE_CODE != 3) {
-							if (System.currentTimeMillis() - getSendBlueToothTime > 5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
+							if (System.currentTimeMillis() - getSendBlueToothTime >=5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
 								Log.e("timer", "接收不到蓝牙数据");
-								sendToBluetoothAboutCardInfo(finalTemp);
+								if(isHasPreData){
+									SendCommandToBluetooth.sendToBlue(hasPreResendToBlue,Constant.READED_SIM_DATA);
+								}else{
+									sendToBluetoothAboutCardInfo(finalTemp);
+								}
 								notCanReceiveBluetoothDataCount++;
 							}else if(notCanReceiveBluetoothDataCount>=3){
 								Log.e("timer", "注册失败");
@@ -112,7 +114,6 @@ public class SdkAndBluetoothDataInchange {
 				};
 			}
 			timerMessage.schedule(timerTaskMessage, 5000, 5000);
-
 		}
 	}
 	//注册进度变化通知
@@ -126,21 +127,28 @@ public class SdkAndBluetoothDataInchange {
 		if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
 			//判断是否是电信还是联通的卡
 			saveBluetoothData= PacketeUtil.Combination(messages);
+			sendBluetoothFlag();
 			String imsi=	RadixAsciiChange.convertHexToString(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[1]]);
 			if (telType(imsi)==CUCC_OR_CMCC){//移动和联通
 				SendCommandToBluetooth.sendToBlue("a0c000000c",Constant.READED_SIM_DATA);
+				hasPreResendToBlue="a0c000000c";
 			}else if( telType(imsi)==TELECOM){//电信
 				SendCommandToBluetooth.sendToBlue("a0c0000003",Constant.READED_SIM_DATA);
+				hasPreResendToBlue="a0c0000003";
 			}
-
 		}else if(count+1==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&!TlvAnalyticalUtils.preData[6].startsWith("a088")){
 			SendCommandToBluetooth.sendToBlue(TlvAnalyticalUtils.preData[6],Constant.READED_SIM_DATA);
+			hasPreResendToBlue=TlvAnalyticalUtils.preData[6];
+			sendBluetoothFlag();
 		}else if(count+1<Integer.parseInt(TlvAnalyticalUtils.preData[7])){
+			sendBluetoothFlag();
 			if(count+2==Integer.parseInt(TlvAnalyticalUtils.preData[7])&&TlvAnalyticalUtils.preData[6].startsWith("a088")){
 				SendCommandToBluetooth.sendToBlue(TlvAnalyticalUtils.preData[6],Constant.READED_SIM_DATA);
+				hasPreResendToBlue=TlvAnalyticalUtils.preData[6];
 				return;
 			}
 			SendCommandToBluetooth.sendToBlue(TlvAnalyticalUtils.preData[count+2],Constant.READED_SIM_DATA);
+			hasPreResendToBlue=TlvAnalyticalUtils.preData[count+2];
 		}else{
 			// 组数据
 			SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);
@@ -176,6 +184,11 @@ public class SdkAndBluetoothDataInchange {
 
 		}
 
+	}
+
+	private void sendBluetoothFlag() {
+		getSendBlueToothTime=System.currentTimeMillis();
+		isReceiveBluetoothData = false;
 	}
 
 

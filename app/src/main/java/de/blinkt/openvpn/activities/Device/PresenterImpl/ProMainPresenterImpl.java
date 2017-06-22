@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SdkAndBluetoothDataInchange;
 import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConstant;
@@ -12,6 +13,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.ChangeViewStateEvent;
 import de.blinkt.openvpn.activities.Device.ModelImpl.GetBindDeviceInfoModelImpl;
 import de.blinkt.openvpn.activities.Device.ModelImpl.GetSecurityConfigModelImpl;
@@ -37,6 +39,7 @@ import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.enentbus.OptionProMainActivityView;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
 
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
@@ -56,7 +59,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
     GetSecurityConfigModelImpl getSecurityConfigModel;
     SkyUpgradeModelImpl skyUpgradeModel;
     RegisterBroadcastModelImpl registerBroadcastModel;
-    private int requestCount = 0;
+    private int requestCount = 0;//判断是否有网，重发三次如果还没有网络，就注册失败
     public static   SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange;
     public  ProMainPresenterImpl(ProMainView proMainView,Context context){
         this.proMainView=proMainView;
@@ -134,18 +137,24 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                             }
                             sdkAndBluetoothDataInchange.isHasPreData = false;
                             if (!TextUtils.isEmpty(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]])) {
+                                getIccidCount=0;
                                 DBHelp dbHelp = new DBHelp(context);
                                 PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]]);
                                 if (preReadEntity != null) {
                                     hasPreDataRegisterImpl.initPreData(preReadEntity);
                                     hasPreDataRegisterImpl.registerSimPreData();
                                 } else {
-                                    hasPreDataRegisterImpl.startSocketService();
-                                    noPreDataRegisterModel.noPreDataStartSDKSimRegister();
+                                    noPreDataRegister();
                                 }
                             } else {
                                 CommonTools.delayTime(2000);
-                                SendCommandToBluetooth.sendMessageToBlueTooth(ICCID_GET);
+                                if(getIccidCount<3){
+                                    SendCommandToBluetooth.sendMessageToBlueTooth(ICCID_GET);
+                                    getIccidCount++;
+                                }else{
+                                    getIccidCount=0;
+                                    noPreDataRegister();
+                                }
                             }
                         }
                     }).start();
@@ -158,12 +167,22 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
         }
     }
 
+    private void noPreDataRegister() {
+        hasPreDataRegisterImpl.startSocketService();
+        noPreDataRegisterModel.noPreDataStartSDKSimRegister();
+    }
+
+    private int getIccidCount=0;//统计请求不到ICCID的次数，如果大于3次就不在请求ICCID,直接启动UDP进行注册。如果请求到了或者直接启动udp去注册亦或换卡了，则重新置零。
+
     @Override
     public void errorComplete(int cmdType, String errorMessage) {
         if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
             if (requestCount < 3) {
                 requestCount++;
-                requestGetBasicConfig();
+                requestGetSecurityConfig();
+            }else{
+                requestCount=0;
+                EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NO_NET);
             }
         }
     }
@@ -204,6 +223,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                 registering(entity.getRigsterStatueReason());
                 break;
             case SocketConstant.UNREGISTER:
+                getIccidCount=0;
                 unregisterSim(entity.getRigsterStatueReason());
             default:
                 break;
@@ -252,10 +272,34 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                 hasPreDataRegisterImpl.startTcpSocket();
                 break;
             case SocketConstant.VAILD_CARD:
-                requestGetSecurityConfig();
+                getPortAndIp();
                 break;
         }
     }
+
+
+    private void getPortAndIp() {
+        if(requestCount>3){
+            proMainView.showToast(R.string.no_wifi);
+            EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NO_NET);
+            return;
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(NetworkUtils.isNetworkAvailable(context)){
+                    requestGetSecurityConfig();
+                }else{
+                    CommonTools.delayTime(2000);
+                    requestCount++;
+                    getPortAndIp();
+                }
+            }
+        }).start();
+
+    }
+
+
     //重新赋值
     private void destorySocketService() {
         if (SocketConstant.REGISTER_STATUE_CODE != 0) {

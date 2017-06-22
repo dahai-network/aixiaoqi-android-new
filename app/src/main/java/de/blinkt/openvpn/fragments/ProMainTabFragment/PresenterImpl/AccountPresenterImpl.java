@@ -25,6 +25,7 @@ import de.blinkt.openvpn.http.BalanceHttp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.OrderUsageRemainHttp;
+import de.blinkt.openvpn.model.BlueToothDeviceEntity;
 import de.blinkt.openvpn.model.UsageRemainEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
@@ -83,7 +84,16 @@ public class AccountPresenterImpl extends NetPresenterBaseImpl implements Accoun
         }else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
             showPackage(object);
         } else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
-            getBindDeviceInfo(object);
+            if(object.getStatus()==1){
+           GetBindDeviceHttp getBindDeviceHttp=(GetBindDeviceHttp)     object;
+                if(getBindDeviceHttp.getBlueToothDeviceEntityity()==null||TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())){
+                    if(isClickAddDevice)
+                    accountView.toActivity();
+                }else{
+                    getBindDeviceInfo(object);
+                }
+            }
+
             isClickAddDevice = false;
         }
     }
@@ -99,7 +109,7 @@ public class AccountPresenterImpl extends NetPresenterBaseImpl implements Accoun
     public boolean canClick(){
         String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
         //如果设备名没有就设置成爱小器钥匙扣
-        if (TextUtils.isEmpty(braceletName)) {
+        if (TextUtils.isEmpty(braceletName)||TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
             if (NetworkUtils.isNetworkAvailable(ICSOpenVPNApplication.getContext())) {
                 isClickAddDevice = true;
                 requestGetBindInfo();
@@ -119,7 +129,7 @@ public class AccountPresenterImpl extends NetPresenterBaseImpl implements Accoun
                 if (!TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())) {
                     if (isClickAddDevice) {
                         accountView.setDeviceType();
-                        accountView.toActivity();
+                        accountView.toMyDeviceActivity();
                     }
 
                 }

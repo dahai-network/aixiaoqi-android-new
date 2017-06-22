@@ -93,6 +93,9 @@ public class SocketConstant {
 	public static final int SERVER_IS_ERROR = 105;//服务端出错，注册失败
 	public static final int NOT_CAN_RECEVIE_BLUETOOTH_DATA = 106;//收不到蓝牙发过来的数据，注册失败
 	public static final int SDK_SEND_IS_NULL = 107;//sdk发过来的数据是空的
+	public static final int NO_NET=108;//没有网络
+	public static final int BIND_TCP_SERIVCE_FAIL=109;//绑定失败
+	public static final int NO_NET_ERROR=110;//网络异常
 
 	public static final int REGISTERING= 2;//注册中
 	public static final int START_TCP_FAIL = 201;//开启TCP失败，显示注册中

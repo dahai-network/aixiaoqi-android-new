@@ -24,7 +24,6 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener {
 		if (TlvAnalyticalUtils.sendToSdkLisener == null) {
 			TlvAnalyticalUtils.setListener(this);
 		}
-
 	}
 
 	public int count = 0;

@@ -35,60 +35,26 @@ public abstract class TcpClient implements Runnable {
 	 */
 	public void connect() {
 		Log.e("connectSocket", "connect");
-		if(taskSocket!=null&&timerSocket!=null){
-			closeTimer();
-		}
 		new Thread(this).start();
 	}
 
-	private Timer timerSocket;
-	private TimerTask taskSocket;
-	private int socketStartCount = 0;
 
-	//每五分钟检测一次TCP是否连接成功。如果没有连接成功则重新去连接。
-	//如果是用户自己解除绑定，或者退出登录，则停止定时器。
 	@Override
 	public void run() {
 		try {
 			Log.e("initSocket", "socket start");
 			if (!connect) {
-				if (socketStartCount == 0) {
-					if (timerSocket == null) {
-						timerSocket = new Timer();
-					}
-					if (taskSocket == null) {
-						timerTask();
-					}
-					timerSocket.schedule(taskSocket, 5 * 60 * 1000, 5 * 60 * 1000);
-				}
-				socketStartCount++;
 				connectSocket();
-
 			}
 		} catch (ConnectException e) {
+			connect = false;
 			e.printStackTrace();
 			this.onConnectFailed();
 		} catch (Exception e) {
 			e.printStackTrace();
+			connect = false;
 			this.onConnectFailed();
 		}
-	}
-
-	private void timerTask() {
-		taskSocket = new TimerTask() {
-			@Override
-			public void run() {
-				Log.e("Blue_Chanl", "执行了定时器任务，connect=" + connect);
-				if (!connect) {
-					try {
-						connectSocket();
-					} catch (Exception e) {
-						e.printStackTrace();
-						TcpClient.this.onConnectFailed();
-					}
-				}
-			}
-		};
 	}
 
 	//创建连接
@@ -128,20 +94,6 @@ public abstract class TcpClient implements Runnable {
 		}
 	}
 
-	//关闭定时器
-	public void closeTimer() {
-		connect = false;
-		socketStartCount = 0;
-		if (timerSocket != null) {
-			timerSocket.cancel();
-			timerSocket = null;
-		}
-		if (taskSocket != null) {
-			taskSocket.cancel();
-			taskSocket = null;
-		}
-
-	}
 	/**
 	 * 判断是否连接
 	 *

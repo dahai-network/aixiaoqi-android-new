@@ -202,9 +202,15 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
     }
 
     @Override
-    public void toActivity() {
+    public void toMyDeviceActivity() {
         Intent intent = null;
         intent = getIntent(intent);
+        startActivity(intent);
+    }
+
+    @Override
+    public void toActivity( ) {
+        Intent intent=new Intent(getActivity(),ChoiceDeviceTypeActivity.class);
         startActivity(intent);
     }
 
@@ -391,14 +397,11 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
                 //友盟方法统计
                 MobclickAgent.onEvent(getActivity(), CLICKMYDEVICE);
 
-                if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-                    intent = new Intent(getActivity(), ChoiceDeviceTypeActivity.class);
-                } else {
+
                     if(!accountPresenterImpl.canClick()){
                         return;
                     }
                     intent = getIntent(intent);
-                }
                 break;
             case R.id.permission_set:
                 intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
