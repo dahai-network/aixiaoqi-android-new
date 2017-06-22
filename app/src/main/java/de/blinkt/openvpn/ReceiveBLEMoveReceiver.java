@@ -21,6 +21,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.CreateFiles;
+import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 import static de.blinkt.openvpn.activities.Device.PresenterImpl.ProMainPresenterImpl.sdkAndBluetoothDataInchange;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
@@ -88,7 +89,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
             Log.d(TAG, "UART_CONNECT_MSG");
             IS_TEXT_SIM = false;
             CommonTools.delayTime(100);
+
+            if(ICSOpenVPNApplication.random8NumberString==null){
+                ICSOpenVPNApplication.random8NumberString= EncryptionUtil.random8Number();
+            }
+
             String random8NumberString=ICSOpenVPNApplication.random8NumberString;
+
             Log.d("Encryption", "send--run: " + APP_CONNECT + "--" + random8NumberString);
             sendMessageToBlueTooth(APP_CONNECT + random8NumberString);//APP专属命令
 

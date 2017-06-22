@@ -129,7 +129,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                 bindDeviceView.finishView();
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
-            Log.i(TAG, "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
+            Log.i("BindDevicePresenterImpl", "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
             if (object.getStatus() == 1) {
                 SharedUtils.getInstance().writeString(Constant.IMEI, deviceAddress);
                 SharedUtils.getInstance().writeString(Constant.BRACELETNAME, bindDeviceView.getDeviceName());
@@ -156,6 +156,9 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                 requestUpdateDeviceInfo();
 
             } else {
+               if(object.getStatus()==1301)
+                   return;
+                
                 bindDeviceView.showToast(object.getMsg());
             }
 //			finish();
@@ -199,7 +202,6 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                             bindDeviceView.finishView();
                             return;
                         }
-
                         Collections.sort(deviceList, new Comparator<BluetoothEntity>() {
                             @Override
                             public int compare(BluetoothEntity lhs, BluetoothEntity rhs) {
@@ -257,7 +259,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
     public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
         String type = entity.getBlueType();
         if (BluetoothConstant.BLUE_BIND_SUCCESS.equals(type)) {
-            Log.i(TAG, "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + deviceAddress + ",版本号：" + SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
+            Log.i("BindDevicePresenterImpl", "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + deviceAddress + ",版本号：" + SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
             if (bindDeviceView.getDeviceName().contains(Constant.UNIBOX)) {
                 requestBindDevice("1");
             }

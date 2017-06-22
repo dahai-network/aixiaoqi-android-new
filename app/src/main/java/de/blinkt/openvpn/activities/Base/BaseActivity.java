@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.views.TitleBar;
@@ -24,7 +23,7 @@ public class BaseActivity extends CommenActivity  {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initActionBar();
-		ICSOpenVPNApplication.getRefWatcher().watch(this);
+		//ICSOpenVPNApplication.getRefWatcher().watch(this);
 	}
 
 	private void initActionBar() {
