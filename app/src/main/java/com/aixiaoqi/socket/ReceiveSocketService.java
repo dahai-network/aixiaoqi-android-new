@@ -73,6 +73,7 @@ public class ReceiveSocketService extends Service {
 
 
     public void initSocket() {
+        Log.e("Blue_Chanl", "initSocket");
         tcpClient.connect();
     }
 
@@ -357,6 +358,7 @@ public class ReceiveSocketService extends Service {
     @Override
     public void onDestroy() {
         Log.e(TAG, "onDestroy()");
+        CONNECT_STATUE = ACTIVE_DISCENNECT;
         if (sdkAndBluetoothDataInchange != null)
             sdkAndBluetoothDataInchange.closeReceviceBlueData();
         if (tcpClient != null) {

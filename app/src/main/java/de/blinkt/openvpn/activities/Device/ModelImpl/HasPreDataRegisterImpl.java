@@ -2,6 +2,7 @@ package de.blinkt.openvpn.activities.Device.ModelImpl;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
@@ -34,9 +35,7 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
         if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
             socketTcpConnection = new SocketConnection();
         }
-        if(sendYiZhengService==null){
-            sendYiZhengService=new SendYiZhengService();
-        }
+        initSendYiZhengService();
     }
     @Override
     public void initPreData(PreReadEntity preReadEntity) {
@@ -53,11 +52,14 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
     @Override
     public void registerSimPreData() {
         if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {//TCP已经创建成功了
+            Log.e("registerSimPreData","TCP正常"+SocketConnection.mReceiveSocketService.CONNECT_STATUE);
             sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
         } else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {//如果是连接失败且没有销毁，则断开在重新创建连接
+            Log.e("registerSimPreData","TCP关闭再重启"+SocketConnection.mReceiveSocketService.CONNECT_STATUE);
             SocketConnection.mReceiveSocketService.disconnect();
             startTcp();
         } else {//创建连接
+            Log.e("registerSimPreData","TCP重启");
             startTcp();
         }
     }
@@ -78,17 +80,26 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
 
     public void startSocketService() {
         if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
+            Log.e("registerSimPreData","initReceiveSocketService");
             Intent receiveSdkIntent = new Intent(context, ReceiveSocketService.class);
             context.bindService(receiveSdkIntent, socketTcpConnection, Context.BIND_AUTO_CREATE);
         }
     }
 
     public void startTcpSocket() {
+        Log.e("registerSimPreData","initReceiveSocketService"+(sendYiZhengService != null)+"mReceiveSocketService=="+(SocketConnection.mReceiveSocketService != null));
+        initSendYiZhengService();
         if (sendYiZhengService != null && SocketConnection.mReceiveSocketService != null) {
             sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
             return;
         }
         bindTcpSucceed();
+    }
+
+    private void initSendYiZhengService() {
+        if(sendYiZhengService==null){
+            sendYiZhengService=new SendYiZhengService();
+        }
     }
 
     private void bindTcpSucceed() {
@@ -108,6 +119,7 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
         if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
             if(context!=null&&socketTcpConnection!=null)
                 context.unbindService(socketTcpConnection);
+            Log.e("registerSimPreData","unbindReceiveSocketService");
             if (SocketConnection.mReceiveSocketService != null) {
                 SocketConnection.mReceiveSocketService.stopSelf();
                 SocketConnection.mReceiveSocketService = null;
