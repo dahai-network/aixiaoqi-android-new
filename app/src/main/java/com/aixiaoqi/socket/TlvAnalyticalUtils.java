@@ -295,8 +295,8 @@ public class TlvAnalyticalUtils {
 		stringBuilder.replace(4, 6, Integer.toHexString(tag | 0x80));
 		stringBuilder.replace(6, 8, "00");
 		sendToSdkLisener.sendServer(stringBuilder.toString());
+		CommonTools.delayTime(2000);
 		if (sendYiZhengService != null){
-			CommonTools.delayTime(2000);
 			SocketConstant.SESSION_ID=SocketConstant.SESSION_ID_TEMP;
 			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
 		}
