@@ -1,6 +1,7 @@
 package de.blinkt.openvpn.fragments.ProMainTabFragment.ui;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +20,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.umeng.analytics.MobclickAgent;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -39,6 +46,7 @@ import de.blinkt.openvpn.activities.MyModules.ui.RechargeActivity;
 import de.blinkt.openvpn.activities.PersonalCenterActivity;
 import de.blinkt.openvpn.activities.Set.ui.SettingActivity;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
+import de.blinkt.openvpn.activities.StartUpHomePageActivity;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -390,6 +398,7 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
 
     public void onClick(View v) {
         Intent intent = null;
+        boolean flg=false;
         switch (v.getId()) {
             case R.id.activateRelativeLayout:
                 intent = activateClick();
@@ -406,7 +415,8 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
                     intent = getIntent(intent);
                 break;
             case R.id.permission_set:
-                intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
+                requestSomePermission();
+                flg=true;
                 break;
             case R.id.tv_setting:
                 //友盟方法统计
@@ -444,9 +454,46 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
                 }
                 break;
         }
-        getActivity().startActivity(intent);
+if(!flg){
+    getActivity().startActivity(intent);
+}
+
 
     }
+
+    private void requestSomePermission() {
+        // 先判断是否有权限。
+        if (!AndPermission.hasPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                ) {
+            // 申请权限。
+            AndPermission.with(AccountFragment.this)
+                    .requestCode(100)
+                    .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .send();
+        }else{
+            Intent  intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
+            getActivity().startActivity(intent);
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // 只需要调用这一句，其它的交给AndPermission吧，最后一个参数是PermissionListener。
+        AndPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, listener);
+    }
+    private PermissionListener listener = new PermissionListener() {
+        @Override
+        public void onSucceed(int requestCode, List<String> grantPermissions) {
+            Intent intent = new Intent(getActivity(), ImportantAuthorityActivity.class);
+            getActivity().startActivity(intent);
+        }
+
+        @Override
+        public void onFailed(int requestCode, List<String> deniedPermissions) {
+            CommonTools.showShortToast(getActivity(),"权限申请失败,请打开此权限，否则app不能正常运行");
+        }
+    };
 
     @NonNull
     private Intent activateClick() {

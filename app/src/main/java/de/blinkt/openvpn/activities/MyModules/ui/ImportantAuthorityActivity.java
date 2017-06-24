@@ -3,8 +3,6 @@ package de.blinkt.openvpn.activities.MyModules.ui;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-
 import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +30,6 @@ public class ImportantAuthorityActivity extends BaseActivity {
         setContentView(R.layout.activity_important_authority);
         ICSOpenVPNApplication.importantAuthorityActivity = this;
         ButterKnife.bind(this);
-
         importantAuthorityPresenter = new ImportantAuthorityPresenter();
         initSet();
     }

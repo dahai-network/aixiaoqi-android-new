@@ -158,7 +158,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
             } else {
                if(object.getStatus()==1301)
                    return;
-                
+
                 bindDeviceView.showToast(object.getMsg());
             }
 //			finish();
