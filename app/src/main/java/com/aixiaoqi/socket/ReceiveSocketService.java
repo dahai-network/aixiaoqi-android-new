@@ -253,9 +253,10 @@ public class ReceiveSocketService extends Service {
                                         clearResendTimer();
                                         //EventBus 通知界面提示网络异常
                                         EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NO_NET_ERROR);
-                                            //把resendPreDataCount重置为零
-                                            resendPreDataCount=0;
+
                                         }
+                                        //把resendPreDataCount重置为零
+                                        resendPreDataCount=0;
                                     }
                                 } else {
                                     sendPreDataContent = "";
