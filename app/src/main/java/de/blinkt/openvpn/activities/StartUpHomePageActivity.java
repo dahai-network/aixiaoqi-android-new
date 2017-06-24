@@ -117,6 +117,7 @@ public class StartUpHomePageActivity extends BaseActivity implements  View.OnCli
 			case R.id.experience_iv:
 				//申请权限
 					requestSomePermission();
+
 					break;
 		}
 	}
