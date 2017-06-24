@@ -16,6 +16,7 @@ import com.umeng.analytics.MobclickAgent;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.views.MyProgressDialog;
 
 /**
@@ -65,6 +66,7 @@ public class CommenActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		CommonTools.clearLastClickTime();
 		if (isAndroidTV()) {
 			requestWindowFeature(Window.FEATURE_OPTIONS_PANEL);
 		}

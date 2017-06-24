@@ -65,24 +65,7 @@ public class CommonTools {
      * @param context
      * @return
      */
-    public static int getStatusBarHeight(Context context) {
-        Class<?> c;
-        Object obj;
-        java.lang.reflect.Field field;
-        int x;
-        int statusBarHeight = 0;
-        try {
-            c = Class.forName("com.android.internal.R$dimen");
-            obj = c.newInstance();
-            field = c.getField("status_bar_height");
-            x = Integer.parseInt(field.get(obj).toString());
-            statusBarHeight = context.getResources().getDimensionPixelSize(x);
-            return statusBarHeight;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return statusBarHeight;
-    }
+
 
     public static long lastClickTime;
 

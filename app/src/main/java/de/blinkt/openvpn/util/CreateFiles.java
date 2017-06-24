@@ -33,7 +33,6 @@ public class CreateFiles {
             // 创建FileWriter对象，用来写入字符流
             bw = new BufferedWriter(fw); // 将缓冲对文件的输出
             String myreadline = datetime + "---" + str;
-
             bw.write(myreadline + "\n"); // 写入文件
             bw.newLine();
             bw.flush(); // 刷新该流的缓冲

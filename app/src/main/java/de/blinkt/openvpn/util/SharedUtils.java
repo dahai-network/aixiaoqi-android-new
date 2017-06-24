@@ -43,31 +43,6 @@ public class SharedUtils {
 		mSharedPreferences = context.getSharedPreferences(DATA, Context.MODE_PRIVATE);
 	}
 
-	// 写入数据
-	public void write(Map<String, Object> map) {
-		if (mSharedPreferences != null) {
-			Editor editor = mSharedPreferences.edit();
-			Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
-			while (iterator.hasNext()) {
-				Entry<String, Object> entry = iterator.next();
-				String key=	entry.getKey();
-				Object obj = entry.getValue();
-				if (obj instanceof String) {
-					editor.putString(key, obj.toString());
-				} else if (obj instanceof Integer) {
-					editor.putInt(key, Integer.parseInt(obj.toString()));
-				} else if (obj instanceof Boolean) {
-					editor.putBoolean(key, Boolean.getBoolean(obj.toString()));
-				} else if (obj instanceof Float) {
-					editor.putFloat(key, Float.parseFloat(obj.toString()));
-				} else if (obj instanceof Long) {
-					editor.putLong(key, Long.parseLong(obj.toString()));
-				}
-			}
-			editor.commit();
-		}
-	}
-
 	/**
 	 * 清除shared
 	 */
@@ -108,13 +83,7 @@ public class SharedUtils {
 			editor.commit();
 		}
 	}
-	public void writeSetString(String key, Set<String> value) {
-		if (mSharedPreferences != null) {
-			Editor editor = mSharedPreferences.edit();
-			editor.putStringSet(key, value);
-			editor.commit();
-		}
-	}
+
 	public void delete(String key) {
 		try {
 			if (mSharedPreferences != null) {
@@ -133,12 +102,7 @@ public class SharedUtils {
 		}
 		return mSharedPreferences.getString(key, "");
 	}
-	public Set<String> getStringSet(String key) {
-		if (mSharedPreferences == null || !mSharedPreferences.contains(key)) {
-			return null;
-		}
-		return mSharedPreferences.getStringSet(key,null);
-	}
+
 	public String readString(String key,String value) {
 		if (mSharedPreferences == null || !mSharedPreferences.contains(key)) {
 			return null;
@@ -167,10 +131,4 @@ public class SharedUtils {
 		return !(mSharedPreferences == null || !mSharedPreferences.contains(key))&&mSharedPreferences.getBoolean(key, flag);
 	}
 
-	public Float readFloat(String key) {
-		if (mSharedPreferences == null || !mSharedPreferences.contains(key)) {
-			return null;
-		}
-		return mSharedPreferences.getFloat(key, 0f);
-	}
 }

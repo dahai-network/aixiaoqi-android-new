@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.service.JobSchedulerService;
@@ -172,8 +173,13 @@ public class ReceiveSocketService extends Service {
             reConnect();
         }
     }
-//向服务器发送信息
+    //向服务器发送信息
     public void sendMessage(String s) {
+        //当与设备断开连接，就不再发送创建连接。因为重新连接的时候还会发送创建连接，发送这条数据没有意义。是为了防止客户端与服务器不断创建与断开的问题
+        ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n" + "UartService.STATE_DISCONNECTED="+( UartService.mConnectionState==UartService.STATE_DISCONNECTED));
+        if(s.startsWith(SocketConstant.CONNECTION)&& UartService.mConnectionState==UartService.STATE_DISCONNECTED){
+            return;
+        }
         resendMessageTimer();
         if (s.startsWith(SocketConstant.CONNECTION)) {
             sendConnectionType = SocketConstant.CONNECTION;
@@ -198,7 +204,7 @@ public class ReceiveSocketService extends Service {
 
     private int resendConnectionCount=0;
     private int resendPreDataCount=0;
-//重新发送信息
+    //重新发送信息
     private void resendMessageTimer() {
         if(resendCount ==0){
             resendCount++;
