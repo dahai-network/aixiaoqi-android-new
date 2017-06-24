@@ -1,6 +1,10 @@
 package de.blinkt.openvpn.activities;
 
+import android.Manifest;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +12,18 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.OutsideAdapter;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.MyModules.ui.ImportantAuthorityActivity;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
+import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.PageChangeListener;
 
 
@@ -106,12 +115,47 @@ public class StartUpHomePageActivity extends BaseActivity implements  View.OnCli
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.experience_iv:
-				toActivity(ImportantAuthorityActivity.class);
-				finish();
-				break;
+				//申请权限
+					requestSomePermission();
+					break;
 		}
 	}
 
+	private void requestSomePermission() {
+		// 先判断是否有权限。
+		if (!AndPermission.hasPermission(StartUpHomePageActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+				) {
+			// 申请权限。
+			AndPermission.with(StartUpHomePageActivity.this)
+					.requestCode(100)
+					.permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+					.send();
+		}else{
+			toActivity(ImportantAuthorityActivity.class);
+			finish();
+		}
+
+
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		// 只需要调用这一句，其它的交给AndPermission吧，最后一个参数是PermissionListener。
+		AndPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, listener);
+	}
+	private PermissionListener listener = new PermissionListener() {
+
+		@Override
+		public void onSucceed(int requestCode, List<String> grantPermissions) {
+			toActivity(ImportantAuthorityActivity.class);
+			finish();
+		}
+
+		@Override
+		public void onFailed(int requestCode, List<String> deniedPermissions) {
+			CommonTools.showShortToast(StartUpHomePageActivity.this,"权限申请失败,请打开此权限，否则app不能正常运行");
+		}
+	};
 
 
 	private void setImageBackground(int selectItems) {
@@ -124,6 +168,5 @@ public class StartUpHomePageActivity extends BaseActivity implements  View.OnCli
 			}
 		}
 	}
-
 
 }
