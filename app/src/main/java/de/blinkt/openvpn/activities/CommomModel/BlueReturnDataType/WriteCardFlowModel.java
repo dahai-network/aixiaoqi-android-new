@@ -130,6 +130,7 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
                             if (Integer.valueOf(nullCardId.substring(8, 16)) >= 301) {
                                 Log.i(TAG, "这是新卡");
                                 SharedUtils.getInstance().writeBoolean(Constant.IS_NEW_SIM_CARD, true);
+                                writeCard();
                             } else {
                                 Log.i(TAG, "这是旧卡");
                                 SharedUtils.getInstance().writeBoolean(Constant.IS_NEW_SIM_CARD, false);
@@ -137,7 +138,7 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
                             isGetnullCardid = false;
                             lastSendMessageStr = "";
                             //发送空卡序列号
-                            writeCard();
+
                             //获取完空卡序列号后获取步数
 //                            sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
                             EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.AIXIAOQI_CARD);
