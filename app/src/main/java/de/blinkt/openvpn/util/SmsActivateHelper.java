@@ -9,18 +9,17 @@ package de.blinkt.openvpn.util;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 
-import java.io.PrintStream;
 import java.lang.reflect.Method;
 
-public class SmsHelper
+public class SmsActivateHelper
 {
     private static final char[] bcdLookup = { 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 97, 98, 99, 100, 101, 102 };
-    private static SmsHelper instance;
+    private static SmsActivateHelper instance;
     private Method _updateMessageOnIcc = null;
     private Class<?> mClass = null;
     private SmsManager mSmsManager = null;
 
-    private SmsHelper()
+    private SmsActivateHelper()
     {
         try
         {
@@ -79,13 +78,13 @@ public class SmsHelper
         return localStringBuffer.toString();
     }
 
-    public static SmsHelper getInstance()
+    public static SmsActivateHelper getInstance()
     {
         try
         {
             if (instance == null)
-                instance = new SmsHelper();
-            SmsHelper localSmsHelper = instance;
+                instance = new SmsActivateHelper();
+            SmsActivateHelper localSmsHelper = instance;
             return localSmsHelper;
         }
         finally

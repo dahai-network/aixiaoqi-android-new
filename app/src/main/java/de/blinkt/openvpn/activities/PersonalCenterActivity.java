@@ -86,7 +86,14 @@ public class PersonalCenterActivity extends BaseNetActivity implements View.OnCl
 	LinearLayout motionTargetTableRow;
 	@BindView(R.id.BMITextView)
 	TextView BMITextView;
-
+	public static final int PHEADER_PIC = 0;
+	public static final int NICK_NAME = 1;
+	public static final int GENDLER = 2;
+	public static final int BIRTHDAY = 3;
+	public static final int HEIGHT = 4;
+	public static final int WEIGHT = 5;
+	public static final int SPORT_TARGET = 6;
+	public static final int SEX = 7;
 	/* 头像文件 */
 	private static final String IMAGE_FILE_NAME = "temp_head_image.jpg";
 
@@ -154,14 +161,7 @@ public class PersonalCenterActivity extends BaseNetActivity implements View.OnCl
 		}
 	}
 
-	public static final int PHEADER_PIC = 0;
-	public static final int NICK_NAME = 1;
-	public static final int GENDLER = 2;
-	public static final int BIRTHDAY = 3;
-	public static final int HEIGHT = 4;
-	public static final int WEIGHT = 5;
-	public static final int SPORT_TARGET = 6;
-	public static final int SEX = 7;
+
 
 	@OnClick({R.id.headImageView, R.id.nameTableRow, R.id.sexTableRow, R.id.ageTableRow, R.id.statureTableRow, R.id.weightTableRow, R.id.motionTargetTableRow})
 	public void onClick(View view) {

@@ -19,7 +19,9 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener {
 	}
 
 	public void initSocket(ReceiveSocketService receiveSocketService) {
+		if(mReceiveSocketService==null)
 		mReceiveSocketService = receiveSocketService;
+
 		receiveSocketService.initSocket();
 		if (TlvAnalyticalUtils.sendToSdkLisener == null) {
 			TlvAnalyticalUtils.setListener(this);

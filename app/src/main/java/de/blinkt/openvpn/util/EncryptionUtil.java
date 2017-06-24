@@ -54,16 +54,7 @@ public class EncryptionUtil {
         return false;
     }
 
-    public static byte[] getMacBytes(String mac) {
-        byte[] macBytes = new byte[6];
-        String[] strArr = mac.split(":");
 
-        for (int i = 0; i < strArr.length; i++) {
-            int value = Integer.parseInt(strArr[i], 16);
-            macBytes[i] = (byte) value;
-        }
-        return macBytes;
-    }
 
     //随机15位数字输出
     public static String random8Number() {

@@ -83,10 +83,8 @@ public class RepeatActivity extends BaseActivity {
 	}
 
 	private void daysSet() {
-		ArrayList<String> repeatDayList = new ArrayList<>();
-		repeatDayList = getIntent().getStringArrayListExtra("repeatDay");
+		ArrayList<String> repeatDayList = getIntent().getStringArrayListExtra("repeatDay");
 		if (repeatDayList.size() != 0) {
-
 			for (String iString : repeatDayList) {
 				int jday = Integer.parseInt(iString);
 				switch (jday) {

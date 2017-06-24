@@ -243,7 +243,7 @@ public class Constant {
 	public static boolean isOutsideThirdStepClick = false;
 
 
-	public static final String HAS_DEVICE_NEED_UPGRADE="has_device_need_upgrade";
+	public static final String HAS_DEVICE_NEED_UPGRADE="has_device_need_upgrade";//有升级包，如果有升级包就保存为true，没有就为false。解除绑定和重新登录都要置为false
 	/**
 	 * 定时器类型
 	 */

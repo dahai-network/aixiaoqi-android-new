@@ -697,4 +697,7 @@
     <string name="buy_month">购买月份</string>
     <string name="device_already_bind">设备已被绑定，请解绑重试</string>
     <string name="download_upgrade_package_fail">升级包下载失败，请检测网络是否正常呢</string>
+    
+    <string name="money_type">￥</string>
+    <string name="original_price">原价:</string>
 </resources>

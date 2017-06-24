@@ -2,11 +2,12 @@ package de.blinkt.openvpn.activities.ShopModules.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -90,6 +91,8 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
     LinearLayout balancePayLienarLayout;
     @BindView(R.id.pricell)
     LinearLayout pricell;
+    @BindView(R.id.orderOriginalPriceTextView)
+    TextView orderOriginalPriceTextView;
     private PacketDtailEntity.ListBean bean;
     private int packetCount = 1;
     private int BALANCE_PAY_METHOD = 3;
@@ -145,6 +148,13 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
         totalPriceTextView.setText("￥" + bean.getPrice());
         addUpTextView.setText("￥" + bean.getPrice());
         dateTextView.setText("最晚激活日期：" + DateUtils.getAdd180DayDate());
+        if(TextUtils.isEmpty(bean.getOriginalPrice())){
+            orderOriginalPriceTextView.setVisibility(View.GONE);
+        }else{
+            orderOriginalPriceTextView.setVisibility(View.VISIBLE);
+            orderOriginalPriceTextView.setText(getString(R.string.original_price)+getString(R.string.money_type)+bean.getOriginalPrice());
+            orderOriginalPriceTextView.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
+        }
         Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getLogoPic()).into(countryImageView);
         setSpan(addUpTextView);
         setSpan(priceTextView);
@@ -167,7 +177,7 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
         setSpan(addUpTextView);
     }
 
-    private void setCheck(boolean weixinCheckBox,boolean aliCheckBox,boolean balanceCheckBox, boolean isAliPay){
+    private void setCheck(boolean weixinCheckBox, boolean aliCheckBox, boolean balanceCheckBox, boolean isAliPay) {
         weixinPayCheckBox.setChecked(weixinCheckBox);
         aliPayCheckBox.setChecked(aliCheckBox);
         isAliPayClick = isAliPay;
@@ -191,13 +201,13 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
                 }
                 break;
             case R.id.balancePayLienarLayout:
-                setCheck(false,false,true,false);
+                setCheck(false, false, true, false);
                 break;
             case R.id.weixinPayLienarLayout:
-                setCheck(true,false,false,false);
+                setCheck(true, false, false, false);
                 break;
             case R.id.aliPayLienarLayout:
-                setCheck(false,true,false,true);
+                setCheck(false, true, false, true);
                 break;
             case R.id.sureTextView:
                 HashMap<String, String> map = new HashMap<>();
@@ -219,7 +229,7 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
                     MobclickAgent.onEvent(this, CLICKSUREPAGMENT, map);
                     commitOrderPresenter.commitOrder(bean.getPackageId(), packetCount + "", ALI_PAY_METHOD + "");
                 } else {
-                    Log.d("CommitOrderActivity", "sureTextView: "+bean.getPackageId()+""+packetCount );
+                    Log.d("CommitOrderActivity", "sureTextView: " + bean.getPackageId() + "" + packetCount);
                     map.put("type", BALANCE_PAY_METHOD + "");
                     //友盟方法统计
                     MobclickAgent.onEvent(this, CLICKSUREPAGMENT, map);
@@ -269,15 +279,15 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
             //setSpan(balanceTextView);
             balancePayCheckBox.setChecked(true);
             aliPayCheckBox.setChecked(false);
-            setBalanceCheckBox(getResources().getString(R.string.balance_pay) + "(剩余￥" + balanceFloat + ")",true,View.VISIBLE,true);
+            setBalanceCheckBox(getResources().getString(R.string.balance_pay) + "(剩余￥" + balanceFloat + ")", true, View.VISIBLE, true);
         } else {
             balancePayCheckBox.setChecked(false);
-            setBalanceCheckBox(getResources().getString(R.string.not_enough_balance),false,View.GONE,false);
+            setBalanceCheckBox(getResources().getString(R.string.not_enough_balance), false, View.GONE, false);
             aliPayCheckBox.setChecked(true);
         }
     }
 
-    private void setBalanceCheckBox(String balanceText,boolean  balanceTextViewEnable,int isVisible,boolean balancePayLienarLayoutEnable){
+    private void setBalanceCheckBox(String balanceText, boolean balanceTextViewEnable, int isVisible, boolean balancePayLienarLayoutEnable) {
         balanceTextView.setText(balanceText);
         balanceTextView.setEnabled(balanceTextViewEnable);
         balancePayCheckBox.setVisibility(isVisible);
@@ -286,9 +296,9 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
 
     private void showBalanceCheckBox() {
         if (bean.getPrice() * packetCount < balanceFloat) {
-            setBalanceCheckBox(getResources().getString(R.string.balance_pay) + "(剩余￥" + balanceFloat + ")",true,View.VISIBLE,true);
+            setBalanceCheckBox(getResources().getString(R.string.balance_pay) + "(剩余￥" + balanceFloat + ")", true, View.VISIBLE, true);
         } else {
-            setBalanceCheckBox(getResources().getString(R.string.not_enough_balance),false,View.GONE,false);
+            setBalanceCheckBox(getResources().getString(R.string.not_enough_balance), false, View.GONE, false);
         }
     }
 

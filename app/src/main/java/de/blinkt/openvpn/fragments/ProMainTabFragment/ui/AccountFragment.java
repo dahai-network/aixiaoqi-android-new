@@ -211,8 +211,7 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
 
     @Override
     public void toMyDeviceActivity() {
-        Intent intent = null;
-        intent = getIntent(intent);
+        Intent intent = getIntent();
         startActivity(intent);
     }
 
@@ -412,7 +411,7 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
                     if(!accountPresenterImpl.canClick()){
                         return;
                     }
-                    intent = getIntent(intent);
+                    intent = getIntent();
                 break;
             case R.id.permission_set:
                 requestSomePermission();
@@ -513,8 +512,8 @@ if(!flg){
         return intent;
     }
 
-    private Intent getIntent(Intent intent) {
-        intent = new Intent(getActivity(), MyDeviceActivity.class);
+    private Intent getIntent( ) {
+     Intent  intent = new Intent(getActivity(), MyDeviceActivity.class);
         AppMode.getInstance().isClickAddDevice = true;
         mHandler.sendEmptyMessage(SIGN_MSG_FOUR);
         Log.e(TAG, "bleStatus" + bleStatus);

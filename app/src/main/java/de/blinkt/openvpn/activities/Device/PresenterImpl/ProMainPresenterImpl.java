@@ -141,9 +141,11 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                                 DBHelp dbHelp = new DBHelp(context);
                                 PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]]);
                                 if (preReadEntity != null) {
+                                    e("有预读取数据=");
                                     hasPreDataRegisterImpl.initPreData(preReadEntity);
                                     hasPreDataRegisterImpl.registerSimPreData();
                                 } else {
+                                    e("没有预读取数据=");
                                     noPreDataRegister();
                                 }
                             } else {

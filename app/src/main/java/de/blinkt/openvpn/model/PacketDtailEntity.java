@@ -57,7 +57,6 @@ public class PacketDtailEntity implements Serializable {
 		private String DescTitlePic;
 		private String DescPic;
 		private String OriginalPrice;
-
 		public String getDescTitlePic() {
 			return DescTitlePic;
 		}

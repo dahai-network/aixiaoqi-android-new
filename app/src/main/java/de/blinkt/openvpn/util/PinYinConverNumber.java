@@ -8,8 +8,6 @@ import de.blinkt.openvpn.util.pinyin.CharacterParser;
 public class PinYinConverNumber {
 	private static PinYinConverNumber instance;
 	private static CharacterParser characterParser;
-	private String TAG = "PinYinConverNumber";
-
 	private PinYinConverNumber() {
 
 	}

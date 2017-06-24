@@ -1,9 +1,11 @@
 package cn.com.johnson.adapter;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,10 +52,18 @@ public class CountryDetailPackageAdapter extends RecyclerView.Adapter<CountryDet
 	public void onBindViewHolder(ViewHolder holder, int position) {
 		holder.packageNameTextView.setText(data.get(position).getPackageName());
 		holder.flowTextView.setText(data.get(position).getFlow());
-		holder.priceTextView.setText("￥" + data.get(position).getPrice());
+		holder.priceTextView.setText(context.getString(R.string.money_type)+ data.get(position).getPrice());
 		setSpan(holder.priceTextView, position);
 		Glide.with(context).load(data.get(position).getPic()).into(holder.numberTextView);
 		holder.v_line.setVisibility(View.GONE);
+		if(TextUtils.isEmpty(data.get(position).getOriginalPrice())){
+			holder.originalPriceTextView.setVisibility(View.GONE);
+		}else{
+			holder.originalPriceTextView.setVisibility(View.VISIBLE);
+			holder.originalPriceTextView.setText(context.getString(R.string.original_price)+context.getString(R.string.money_type)+data.get(position).getOriginalPrice());
+			holder.originalPriceTextView.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
+
+		}
 
 	}
 
@@ -83,6 +93,8 @@ public class CountryDetailPackageAdapter extends RecyclerView.Adapter<CountryDet
 		TextView flowTextView;
 		@BindView(R.id.priceTextView)
 		TextView priceTextView;
+		@BindView(R.id.originalPriceTextView)
+		TextView originalPriceTextView;
 		@BindView(R.id.rootLinearLayout)
 		RelativeLayout rootLinearLayout;
 		@BindView(R.id.numberTextView)

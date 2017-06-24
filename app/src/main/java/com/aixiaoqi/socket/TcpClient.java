@@ -42,7 +42,7 @@ public abstract class TcpClient implements Runnable {
 	@Override
 	public void run() {
 		try {
-			Log.e("initSocket", "socket start");
+			Log.e("initSocket", "socket start="+connect);
 			if (!connect) {
 				connectSocket();
 			}

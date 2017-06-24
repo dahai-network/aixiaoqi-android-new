@@ -68,12 +68,7 @@ public class ActivateActivity extends BaseActivity implements View.OnClickListen
         connectStatusTextView = (TextView) findViewById(R.id.connectStatusTextView);
 
         //判断设备是否连接成功
-        if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
-            connectStatusTextView.setText(getResources().getString(R.string.connect_success));
-        } else {
-            connectStatusTextView.setText(getResources().getString(R.string.activate_unconnected));
-        }
-
+        connectStatusTextView.setText(getResources().getString(mService != null && mService.mConnectionState == UartService.STATE_CONNECTED?R.string.connect_success:R.string.activate_unconnected));
     }
     private void addListener() {
         expireDaysTextView.setOnClickListener(this);

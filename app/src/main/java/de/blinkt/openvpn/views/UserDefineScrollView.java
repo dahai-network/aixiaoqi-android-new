@@ -75,11 +75,9 @@ public class UserDefineScrollView extends ScrollView {
 	 */
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
-
 		if (contentView == null) {
 			return super.dispatchTouchEvent(ev);
 		}
-
 		// 手指是否移动到了当前ScrollView控件之外
 		boolean isTouchOutOfScrollView = ev.getY() >= this.getHeight() || ev.getY() <= 0;
 

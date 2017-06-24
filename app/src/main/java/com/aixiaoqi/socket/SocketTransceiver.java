@@ -99,11 +99,12 @@ public abstract class SocketTransceiver implements Runnable {
 		if (out != null) {
 			try {
 				Log.e("toBLue", "发送字符串");
-				if(!socket.isClosed()&&socket.isOutputShutdown()){
+				if(!socket.isClosed()&&!socket.isOutputShutdown()){
 				out.write(HexStringExchangeBytesUtil.hexStringToBytes(s));
 				out.flush();
 					return true;
 				}else{
+					Log.e("toBLue", "发送字符串 socket.isClosed");
 					this.onDisconnect(addr);
 					return false;
 				}

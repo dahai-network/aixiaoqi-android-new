@@ -67,11 +67,23 @@
             android:textColor="@color/color_f62a2a"
             android:textSize="22.5sp"/>
 
+        <TextView
+            android:id="@+id/originalPriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/padding_15dp"
+            android:layout_toRightOf="@id/priceTextView"
+            android:layout_alignBaseline="@id/priceTextView"
+            android:textColor="@color/color_BFBFBF"
+           />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+
             android:layout_marginRight="@dimen/padding_15dp"
             android:background="@drawable/arrow"/>
     </RelativeLayout>

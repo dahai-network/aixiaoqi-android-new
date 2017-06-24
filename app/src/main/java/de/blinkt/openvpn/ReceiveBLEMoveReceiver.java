@@ -86,63 +86,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
         final String action = intent.getAction();
         mService = ICSOpenVPNApplication.uartService;
         if (action.equals(UartService.FINDED_SERVICE)) {
-            Log.d(TAG, "UART_CONNECT_MSG");
-            IS_TEXT_SIM = false;
-            CommonTools.delayTime(100);
-
-            if(ICSOpenVPNApplication.random8NumberString==null){
-                ICSOpenVPNApplication.random8NumberString= EncryptionUtil.random8Number();
-            }
-
-            String random8NumberString=ICSOpenVPNApplication.random8NumberString;
-
-            Log.d("Encryption", "send--run: " + APP_CONNECT + "--" + random8NumberString);
-            sendMessageToBlueTooth(APP_CONNECT + random8NumberString);//APP专属命令
-
-            //把日志保存到本地文件中
-            createFiles.print("发送指令=" + APP_CONNECT + random8NumberString + "----随机数" + random8NumberString);
-            Log.i(TAG, "发送了专属命令");
-            String braceletname = utils.readString(Constant.BRACELETNAME);
-
-            if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
-
-            } else {
-                CommonTools.delayTime(200);
-                //获取蓝牙基本信息
-                sendMessageToBlueTooth(BASIC_MESSAGE);
-                CommonTools.delayTime(200);
-                Log.d(TAG, "onReceive: 获取ICCID_GET");
-                sendMessageToBlueTooth(ICCID_GET);
-                Log.i("toBLue", "连接成功");
-                //更新时间操作
-                sendMessageToBlueTooth(getBLETime());
-            }
+            findBlueService();
 
         } else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
-            nullCardId = null;
-            //如果保存的IMEI没有的话，那么就是在MyDevice里面，在Mydevice里面会有连接操作
-            Log.d(TAG, "onReceive: retryTime=" + retryTime + "---ICSOpenVPNApplication.isConnect=" + ICSOpenVPNApplication.isConnect);
-            if (retryTime < 20 && ICSOpenVPNApplication.isConnect) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "IMEI=" + TextUtils.isEmpty(utils.readString(Constant.IMEI)) + "\nisConnect=" + ICSOpenVPNApplication.isConnect);
-                        if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
-                            //多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
-                            // 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
-                            EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
-                            mService.connect(utils.readString(Constant.IMEI));
-
-                        } else {
-                            Log.d(TAG, "UART_DISCONNECT_MSG");
-                        }
-                    }
-                }).start();
-                retryTime++;
-            } else {
-                 gattDisconnect();
-                retryTime=0;
-            }
+            disconnectedOption();
         } else if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
             EventBusUtil.blueConnStatue(UartService.STATE_CONNECTED);
             ICSOpenVPNApplication.isConnect = true;
@@ -241,6 +188,67 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
         if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)) {
             mService.disconnect();
 //			 mReceiveSocketService.closeThread();
+        }
+    }
+
+    private void disconnectedOption() {
+        nullCardId = null;
+        //如果保存的IMEI没有的话，那么就是在MyDevice里面，在Mydevice里面会有连接操作
+        Log.d(TAG, "onReceive: retryTime=" + retryTime + "---ICSOpenVPNApplication.isConnect=" + ICSOpenVPNApplication.isConnect);
+        if (retryTime < 20 && ICSOpenVPNApplication.isConnect) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(TAG, "IMEI=" + TextUtils.isEmpty(utils.readString(Constant.IMEI)) + "\nisConnect=" + ICSOpenVPNApplication.isConnect);
+                    if (!TextUtils.isEmpty(utils.readString(Constant.IMEI))) {
+                        //多次扫描蓝牙，在华为荣耀，魅族M3 NOTE 中有的机型，会发现多次断开–扫描–断开–扫描…
+                        // 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
+                        EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
+                        mService.connect(utils.readString(Constant.IMEI));
+
+                    } else {
+                        Log.d(TAG, "UART_DISCONNECT_MSG");
+                    }
+                }
+            }).start();
+            retryTime++;
+        } else {
+             gattDisconnect();
+            retryTime=0;
+        }
+    }
+
+    private void findBlueService() {
+        Log.d(TAG, "UART_CONNECT_MSG");
+        IS_TEXT_SIM = false;
+        CommonTools.delayTime(100);
+
+        if(ICSOpenVPNApplication.random8NumberString==null){
+            ICSOpenVPNApplication.random8NumberString= EncryptionUtil.random8Number();
+        }
+
+        String random8NumberString=ICSOpenVPNApplication.random8NumberString;
+
+        Log.d("Encryption", "send--run: " + APP_CONNECT + "--" + random8NumberString);
+        sendMessageToBlueTooth(APP_CONNECT + random8NumberString);//APP专属命令
+
+        //把日志保存到本地文件中
+        createFiles.print("发送指令=" + APP_CONNECT + random8NumberString + "----随机数" + random8NumberString);
+        Log.i(TAG, "发送了专属命令");
+        String braceletname = utils.readString(Constant.BRACELETNAME);
+
+        if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
+
+        } else {
+            CommonTools.delayTime(200);
+            //获取蓝牙基本信息
+            sendMessageToBlueTooth(BASIC_MESSAGE);
+            CommonTools.delayTime(200);
+            Log.d(TAG, "onReceive: 获取ICCID_GET");
+            sendMessageToBlueTooth(ICCID_GET);
+            Log.i("toBLue", "连接成功");
+            //更新时间操作
+            sendMessageToBlueTooth(getBLETime());
         }
     }
 

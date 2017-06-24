@@ -2,6 +2,7 @@ package de.blinkt.openvpn.activities.Device.ModelImpl;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
@@ -34,9 +35,7 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
         if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
             socketTcpConnection = new SocketConnection();
         }
-        if(sendYiZhengService==null){
-            sendYiZhengService=new SendYiZhengService();
-        }
+        initSendYiZhengService();
     }
     @Override
     public void initPreData(PreReadEntity preReadEntity) {
@@ -84,11 +83,18 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
     }
 
     public void startTcpSocket() {
+        initSendYiZhengService();//在解除绑定的时候把这些数据清理了，因此如果要重新简历连接就需要重新初始化
         if (sendYiZhengService != null && SocketConnection.mReceiveSocketService != null) {
             sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
             return;
         }
         bindTcpSucceed();
+    }
+
+    private void initSendYiZhengService() {
+        if(sendYiZhengService==null){
+            sendYiZhengService=new SendYiZhengService();
+        }
     }
 
     private void bindTcpSucceed() {

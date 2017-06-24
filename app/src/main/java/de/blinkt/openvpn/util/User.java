@@ -13,10 +13,6 @@ public class User {
 		return phoneNumber.equals(sharedUtils.readString(Constant.USER_NAME));
 	}
 
-	public static boolean isLogin(String phoneNumber) {
-		SharedUtils sharedUtils = SharedUtils.getInstance();
-		return phoneNumber.equals(sharedUtils.readString(Constant.USER_NAME));
-	}
 	public static boolean isBlackList(String phoneNumber) {
 	BlackListDBHelp blackListDBHelp=new BlackListDBHelp(ICSOpenVPNApplication.getContext());
 		return blackListDBHelp.isBlackList(phoneNumber);

@@ -139,7 +139,7 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
                             //发送空卡序列号
                             writeCard();
                             //获取完空卡序列号后获取步数
-                            sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
+//                            sendMessageToBlueTooth(Constant.HISTORICAL_STEPS);
                             EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.AIXIAOQI_CARD);
 
 
