@@ -4,18 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +66,8 @@ public class PackageDetailActivity extends BaseActivity implements PackageDetail
     String[] detail_titles;
     PagerSlidingTabStripExtends mTabs;
     DisplayMetrics dm;
+    @BindView(R.id.originalPriceTextView)
+    TextView originalPriceTextView;
     private PackageDetailPresenter packageDetailPresenter;
 
     public static void launch(Context context, String id, String countryPic) {
@@ -156,7 +157,14 @@ public class PackageDetailActivity extends BaseActivity implements PackageDetail
         NoNetRelativeLayout.setVisibility(View.GONE);
         detailScrollView.setVisibility(View.VISIBLE);
         packageNameTextView.setText(bean.getPackageName());
-        priceTextView.setText("￥" + bean.getPrice());
+        priceTextView.setText(getString(R.string.money_type) + bean.getPrice());
+        if(TextUtils.isEmpty(bean.getOriginalPrice())){
+            originalPriceTextView.setVisibility(View.GONE);
+        }else{
+            originalPriceTextView.setVisibility(View.VISIBLE);
+            originalPriceTextView.setText(getString(R.string.original_price)+getString(R.string.money_type)+bean.getOriginalPrice());
+            originalPriceTextView.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
+        }
         setSpan(priceTextView, bean.getPrice());
     }
 

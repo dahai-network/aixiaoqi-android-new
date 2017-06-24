@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/order_detail_background"
-                android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/order_detail_background"
+    android:orientation="vertical">
 
 
     <RelativeLayout
@@ -56,9 +56,18 @@
             android:layout_toRightOf="@id/countryImageView"
             android:textColor="@color/color_f62a2a"
             android:textSize="15sp"
+            />
+        <TextView
+            android:id="@+id/orderOriginalPriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_15dp"
+            android:layout_toRightOf="@id/priceTextView"
+            android:layout_alignBaseline="@id/priceTextView"
+            android:textColor="@color/color_BFBFBF"
+            android:textSize="12sp"
 
             />
-
 
         <TextView
             android:id="@+id/packetCountTextView"
@@ -177,57 +186,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"/>
         </LinearLayout>
-
-
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@android:color/white"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:paddingBottom="7.5dp"-->
-        <!--android:paddingTop="7.5dp"-->
-        <!--&gt;-->
-
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:text="@string/discount"/>-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/discountTextView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--tools:text="5"/>-->
-        <!--</LinearLayout>-->
-
-
-        <!--<LinearLayout-->
-        <!--android:id="@+id/flowPayLinearLayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@android:color/white"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:paddingBottom="7.5dp"-->
-        <!--android:paddingTop="7.5dp"-->
-        <!--android:visibility="gone">-->
-
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:text="@string/actually_paid"/>-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/actuallyPaidTextView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--tools:text="61"/>-->
-        <!--</LinearLayout>-->
 
 
     </LinearLayout>
