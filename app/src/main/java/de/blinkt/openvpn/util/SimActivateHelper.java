@@ -11,15 +11,15 @@ import android.text.TextUtils;
 
 import java.lang.reflect.Method;
 
-public class SmsActivateHelper
+public class SimActivateHelper
 {
     private static final char[] bcdLookup = { 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 97, 98, 99, 100, 101, 102 };
-    private static SmsActivateHelper instance;
+    private static SimActivateHelper instance;
     private Method _updateMessageOnIcc = null;
     private Class<?> mClass = null;
     private SmsManager mSmsManager = null;
 
-    private SmsActivateHelper()
+    private SimActivateHelper()
     {
         try
         {
@@ -78,13 +78,13 @@ public class SmsActivateHelper
         return localStringBuffer.toString();
     }
 
-    public static SmsActivateHelper getInstance()
+    public static SimActivateHelper getInstance()
     {
         try
         {
             if (instance == null)
-                instance = new SmsActivateHelper();
-            SmsActivateHelper localSmsHelper = instance;
+                instance = new SimActivateHelper();
+            SimActivateHelper localSmsHelper = instance;
             return localSmsHelper;
         }
         finally

@@ -3,16 +3,19 @@ package de.blinkt.openvpn.activities.Base;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Window;
 
 import cn.com.aixiaoqi.R;
@@ -130,5 +133,33 @@ public class BaseSensorActivity extends CommenActivity implements SensorEventLis
 	protected void setDataParam(Intent intent){
 
 	}
+
+
+
+	AudioManager audio = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
+
+	//重写 Activity 的 onKeyDown 方法
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+			case KeyEvent.KEYCODE_VOLUME_UP:
+				audio.adjustStreamVolume(
+						AudioManager.STREAM_MUSIC,
+						AudioManager.ADJUST_RAISE,
+						AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+				return true;
+			case KeyEvent.KEYCODE_VOLUME_DOWN:
+				audio.adjustStreamVolume(
+						AudioManager.STREAM_MUSIC,
+						AudioManager.ADJUST_LOWER,
+						AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+				return true;
+			default:
+				break;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 
 }
