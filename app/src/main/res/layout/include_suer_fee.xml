@@ -19,7 +19,7 @@
             android:id="@+id/addUpTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/color_F62C2A"
+            android:textColor="@color/color_f62a2a"
             android:textSize="15sp"
             />
 
@@ -35,7 +35,7 @@
             android:id="@+id/sureTextView"
             android:layout_width="75dp"
             android:layout_height="match_parent"
-            android:background="@color/color_F62C2A"
+            android:background="@color/color_f62a2a"
             android:gravity="center"
             android:text="@string/sure"
             android:textColor="@color/white"

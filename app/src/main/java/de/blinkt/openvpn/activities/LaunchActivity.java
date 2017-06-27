@@ -50,7 +50,7 @@ public class LaunchActivity extends BaseActivity {
 	}
 
 	private void toLogin() {
-		toActivity(de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity.class);
+		toActivity(LoginMainActivity.class);
 		finish();
 	}
 

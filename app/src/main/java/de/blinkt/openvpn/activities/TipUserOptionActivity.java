@@ -99,6 +99,9 @@ public class TipUserOptionActivity extends BaseNetActivity implements InterfaceC
 	private SharedUtils utils = SharedUtils.getInstance();
 	private int REQUEST_ENABLE_BT = 2;
 	private String TAG = getClass().getSimpleName();
+	String type;
+	String openedTip;
+	String openedRecevieTip;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +111,7 @@ public class TipUserOptionActivity extends BaseNetActivity implements InterfaceC
 		initTitle();
 	}
 
-	String type;
-	String openedTip;
-	String openedRecevieTip;
+
 
 	private void formatString(int opened) {
 		if (type.equals(Constant.LIFT_WRIST)) {

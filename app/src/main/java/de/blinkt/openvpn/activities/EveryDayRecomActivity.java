@@ -11,6 +11,7 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Base.CommenActivity;
 
+//可以用对话框做
 public class EveryDayRecomActivity extends CommenActivity {
 
 	@BindView(R.id.recomImageView)

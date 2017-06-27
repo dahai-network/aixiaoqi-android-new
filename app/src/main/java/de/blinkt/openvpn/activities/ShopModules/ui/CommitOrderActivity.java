@@ -99,9 +99,6 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
     private int WEIXIN_PAY_METHOD = 2;
     private int ALI_PAY_METHOD = 1;
     private boolean isAliPayClick = false;
-    //微信支付类
-    private IWXAPI api;
-
     //余额
     private float balanceFloat;
     public CommitOrderPresenter commitOrderPresenter;
@@ -114,7 +111,6 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
         ButterKnife.bind(this);
         initSet();
         commitOrderPresenter = new CommitOrderPresenter(this) {
-
             @Override
             public void getBalance(BalanceHttp http) {
                 balanceFloat = http.getBalanceEntity().getAmount();
