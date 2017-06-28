@@ -111,9 +111,9 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
      * @param packetCount
      * @param playMethod
      */
-    public void commitOrder(String packageId, String packetCount, String playMethod) {
+    public void commitOrder(String packageId, String packetCount, String playMethod,String beginDateTime) {
         instance.showProgress(R.string.loading_data);
-        commitOrderMode.commitOrder(packageId, packetCount, playMethod, this);
+        commitOrderMode.commitOrder(packageId, packetCount, playMethod,beginDateTime, this);
     }
 
     OrderAddEntity orderEntity;
@@ -169,12 +169,13 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
                 commitOrderView.resetCountPresenter();
                 MyOrderDetailActivity.launch(instance, orderEntity.getOrder().getOrderID());
                 ICSOpenVPNApplication.getInstance().finishOtherActivity();
+                instance.dismissProgress();
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_GET_BALANCE) {
             BalanceHttp http = (BalanceHttp) object;
             getBalance(http);
         }
-        instance.dismissProgress();
+
     }
 
     @Override

@@ -53,6 +53,8 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.BuySucceedDialog;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+import de.blinkt.openvpn.views.dialog.DialogTip;
+
 import static android.view.View.GONE;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.orderStatus;
@@ -217,8 +219,10 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
 
     private void showBuySucceedDialog() {
         //不能按返回键，只能二选其一
-        BuySucceedDialog buySucceedDialog = new BuySucceedDialog(this, MyOrderDetailActivity.this, R.layout.dialog_balance, 3);
-        buySucceedDialog.changeText(getResources().getString(R.string.tip_buy_succeed), getResources().getString(R.string.activating), getResources().getString(R.string.wait_activate));
+       DialogTip dialogTip
+        =new DialogTip(this, this, R.layout.dialog_tip, 3);
+        dialogTip.setCanClickBack(false);
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

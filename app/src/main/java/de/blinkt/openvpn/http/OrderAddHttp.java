@@ -37,9 +37,10 @@ public class OrderAddHttp extends BaseHttp {
 		params.put("PackageID", URLEncoder.encode(valueParams[0], "utf-8"));
 		params.put("Quantity", URLEncoder.encode(valueParams[1], "utf-8"));
 		params.put("PaymentMethod", URLEncoder.encode(valueParams[2], "utf-8"));
-		if (valueParams.length > 3) {
-			params.put("MonthPackageFee", URLEncoder.encode(valueParams[3], "utf-8"));
-			params.put("PackageAttributeId", URLEncoder.encode(valueParams[4], "utf-8"));
+		params.put("BeginDateTime", URLEncoder.encode(valueParams[3], "utf-8"));
+		if (valueParams.length > 4) {
+			params.put("MonthPackageFee", URLEncoder.encode(valueParams[4], "utf-8"));
+			params.put("PackageAttributeId", URLEncoder.encode(valueParams[5], "utf-8"));
 		}
 	}
 

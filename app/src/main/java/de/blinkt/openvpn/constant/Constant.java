@@ -42,7 +42,7 @@ public class Constant {
 	public static final String IS_NEW_SIM_CARD = "is_new_sim_card";
 	public static final String VERSION_HEADER = "Version";
 	public static final String TERMINAL_HEADER = "Terminal";
-	public static final String DIALOG_NOREMIND_DATE = "dialog_noremind_date";
+
 	//运营商
 	public static final String OPERATER = "operater";
 	public static final String CHINA_TELECOM = "China_Telecom";

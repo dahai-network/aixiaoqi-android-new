@@ -227,7 +227,6 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
     public void choiceTime() {
         DialogYearMonthDayPicker dialogYearMonthDayPicker = new DialogYearMonthDayPicker(this, instance, R.layout.picker_year_month_day_layout, 0);
         dialogYearMonthDayPicker.changeText(instance.getResources().getString(R.string.select_time) + "(" + instance.getIntent().getStringExtra(IntentPutKeyConstant.COUNTRY_NAME) + ")");
-
     }
 
     public void showDialog() {
@@ -283,7 +282,6 @@ public class ActivatePresenter extends BaseNetActivity implements DialogInterfac
     private BroadcastReceiver finishActivityReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             instance.finish();
         }
     };
