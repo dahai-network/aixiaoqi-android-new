@@ -7,20 +7,40 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.HashMap;
 
+import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
+import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.WriteCardFlowModel;
 import de.blinkt.openvpn.activities.NetPresenterBaseImpl;
+import de.blinkt.openvpn.activities.ShopModules.modelImpl.CardDataModelImpl;
+import de.blinkt.openvpn.activities.ShopModules.modelImpl.EquipmentActivateModelImpl;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
 import de.blinkt.openvpn.activities.ShopModules.view.AiXiaoQiWhereView;
+import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
+import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.constant.HttpConfigUrl;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.OrderDataHttp;
+import de.blinkt.openvpn.model.WriteCardEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.SharedUtils;
+import de.blinkt.openvpn.util.SimActivateHelper;
 
+import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.orderStatus;
 import static de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity.CARD_RULE_BREAK;
 import static de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity.FINISH_PROCESS;
 import static de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity.FINISH_PROCESS_ONLY;
+import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 
 /**
@@ -30,7 +50,11 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
     AiXiaoQiWhereView aiXiaoQiWhereView;
     Context context;
-
+    EquipmentActivateModelImpl equipmentActivateModel;
+    CardDataModelImpl cardDataModel;
+    String  activateType;
+    private static String PHONE_ACTIVATE="phone";
+    private static String EQUIPMENT_ACTIVATE="phone";
     public boolean isActivateSuccess() {
         return isActivateSuccess;
     }
@@ -40,16 +64,41 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
     public AiXiaoQiWherePresenter(AiXiaoQiWhereView aiXiaoQiWhereView,Context context ){
         this.aiXiaoQiWhereView=aiXiaoQiWhereView;
         this.context=context;
+        equipmentActivateModel=new EquipmentActivateModelImpl(context);
+        cardDataModel=new CardDataModelImpl(this);
+        EventBus.getDefault().register(this);
         registerBroadcast();
 
     }
 
-    public void phoneActivate(){
+    public void phoneActivate( ){
+        aiXiaoQiWhereView.showProgress(context.getString(R.string.activate_succeed), false);
+        activateType=PHONE_ACTIVATE;
+        cardDataModel.getCardDataHttp(((Activity)context).getIntent().getStringExtra("id"),null);
 
     }
 
-    public void equipmentActivate(){
+    private void writeCMDSmall(String cardInfo){
+        if(SimActivateHelper.getInstance().writeCMDSmall(cardInfo)){
+            aiXiaoQiWhereView.showToast(R.string.activate_succeed);
+        }else{
+            aiXiaoQiWhereView.showToast(R.string.activate_faile);
+        }
+        aiXiaoQiWhereView.dismissProgress();
+    }
 
+    public void equipmentActivate(){
+        if(equipmentActivateModel.equipmentActivate()){
+            activateType=EQUIPMENT_ACTIVATE;
+            IS_TEXT_SIM = false;
+            orderStatus = 4;
+            aiXiaoQiWhereView.showProgress(context.getString(R.string.activate_succeed), false);
+            CommonTools.delayTime(20000);
+            if (!isActivateSuccess) {
+                aiXiaoQiWhereView.dismissProgress();
+                aiXiaoQiWhereView.showToast(R.string.activate_fail);
+            }
+        }
     }
 
     private void registerBroadcast(){
@@ -62,6 +111,12 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
         filter.addAction(MyOrderDetailActivity.FINISH_PROCESS_ONLY);
         filter.addAction(MyOrderDetailActivity.CARD_RULE_BREAK);
         return filter;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveWriteCardIdEntity(WriteCardEntity entity) {
+        String nullcardId = entity.getNullCardId();
+        cardDataModel.getCardDataHttp(((Activity)context).getIntent().getStringExtra("id"),nullcardId);
     }
 
     private BroadcastReceiver isWriteReceiver = new BroadcastReceiver() {
@@ -82,19 +137,54 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
                 }
 
 
-//                myOrderDetailPresenter.addData(((Activity)context).getIntent().getStringExtra("id"));
-              /*  GetOrderByIdHttp http = new GetOrderByIdHttp(MyOrderDetailActivity.this, HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID, getIntent().getStringExtra("id"));
-                new Thread(http).start();*/
-
             } else if (TextUtils.equals(intent.getAction(), FINISH_PROCESS_ONLY)) {
                 aiXiaoQiWhereView.dismissProgress();
             }
         }
     };
 
+
+    @Override
+    public void rightLoad(int cmdType, CommonHttp object) {
+        if (cmdType == HttpConfigUrl.COMTYPE_ORDER_DATA) {
+            OrderDataHttp orderDataHttp = (OrderDataHttp) object;
+            if (orderDataHttp.getStatus() == 1) {
+                if(PHONE_ACTIVATE.equals(activateType)){
+                    writeCMDSmall(orderDataHttp.getOrderDataEntity().getData());
+                }else if(EQUIPMENT_ACTIVATE.equals(activateType)){
+                    String message;
+                    if (!SharedUtils.getInstance().readBoolean(Constant.IS_NEW_SIM_CARD)) {
+                        message=orderDataHttp.getOrderDataEntity().getData();
+                        SendCommandToBluetooth.sendToBlue(orderDataHttp.getOrderDataEntity().getData(),"1300");
+                    } else {
+                        message= Constant.WRITE_SIM_FIRST;
+                        ICSOpenVPNApplication.cardData = orderDataHttp.getOrderDataEntity().getData();
+                        Log.i("MyOrderDetailPresenter", "卡数据：" + ICSOpenVPNApplication.cardData);
+                        ReceiveBLEMoveReceiver.isGetnullCardid = false;
+                        SendCommandToBluetooth.sendToBlue(Constant.WRITE_SIM_FIRST,"1300");
+                    }
+                    WriteCardFlowModel.lastSendMessageStr = message;
+                }
+            } else {
+                aiXiaoQiWhereView.showToast(orderDataHttp.getMsg());
+            }
+        }
+    }
+
+    @Override
+    public void errorComplete(int cmdType, String errorMessage) {
+        aiXiaoQiWhereView.dismissProgress();
+    }
+
+    @Override
+    public void noNet() {
+        aiXiaoQiWhereView.dismissProgress();
+    }
+
     @Override
     public void onDestroy() {
         if (isWriteReceiver != null)
             LocalBroadcastManager.getInstance(context).unregisterReceiver(isWriteReceiver);
+        EventBus.getDefault().unregister(this);
     }
 }

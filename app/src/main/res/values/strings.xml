@@ -703,5 +703,9 @@
     <string name="equipment_title">爱小器卡已放入设备中</string>
     <string name="phone_tip">已放入手机请前往激活</string>
     <string name="equipment_tip">请查看设备的相关状态前往激活</string>
+    <string name="equipment_unconnect">设备没有连上，请连上设备在激活卡</string>
+    <string name="equipment_un_insert_card">设备里边没有插爱小器卡</string>
+    <string name="activate_succeed">激活成功</string>
+    <string name="activate_faile">激活失败</string>
     <string name="insert_cart_statue">设备中爱小器卡</string>
 </resources>

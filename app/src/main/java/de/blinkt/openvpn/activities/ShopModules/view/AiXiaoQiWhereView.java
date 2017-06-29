@@ -8,5 +8,6 @@ public interface AiXiaoQiWhereView {
     void showToast(int contentId);
     void showToast(String content);
     void showDialog();
-    void dismissProgress();;
+    void dismissProgress();
+    void showProgress(String progressContent,boolean isCanCancel);
 }

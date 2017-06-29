@@ -19,6 +19,8 @@ import butterknife.OnClick;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
+import de.blinkt.openvpn.activities.ShopModules.presenter.AiXiaoQiWherePresenter;
+import de.blinkt.openvpn.activities.ShopModules.view.AiXiaoQiWhereView;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -35,7 +37,7 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
  * Created by Administrator on 2017/6/28 0028.
  */
 
-public class AiXiaoQiWhereActivity extends BaseActivity implements DialogInterfaceTypeBase {
+public class AiXiaoQiWhereActivity extends BaseActivity implements DialogInterfaceTypeBase,AiXiaoQiWhereView {
     @BindView(R.id.phone_activate)
     TextView phoneActivate;
     @BindView(R.id.equipment_activate)
@@ -45,25 +47,19 @@ public class AiXiaoQiWhereActivity extends BaseActivity implements DialogInterfa
     @BindView(R.id.insert_statue_tv)
     TextView insertStatueTv;
     DialogBalance  cardRuleBreakDialog;
+    AiXiaoQiWherePresenter aiXiaoQiWherePresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aixiaoqi_where);
         ButterKnife.bind(this);
+        aiXiaoQiWherePresenter=new AiXiaoQiWherePresenter(this,this);
         initUi();
         setTitle();
     }
 
-
-
-
-    private  void setTitle(){
-        hasLeftViewTitle(R.string.aixiaoqi_where,-1);
-    }
-
-
-    private void showDialog() {
-        //不能按返回键，只能二选其一
+    @Override
+    public void showDialog() {
         if(cardRuleBreakDialog==null){
             cardRuleBreakDialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
             cardRuleBreakDialog.setCanClickBack(false);
@@ -73,6 +69,19 @@ public class AiXiaoQiWhereActivity extends BaseActivity implements DialogInterfa
         }
     }
 
+    private  void setTitle(){
+        hasLeftViewTitle(R.string.aixiaoqi_where,-1);
+    }
+
+    @Override
+    public void dismissProgress() {
+        super.dismissProgress();
+    }
+
+    @Override
+    public void showProgress(String message, boolean isCanTouchOutside) {
+        super.showProgress(message, isCanTouchOutside);
+    }
 
     private void initUi() {
         if(ICSOpenVPNApplication.uartService!=null&&ICSOpenVPNApplication.uartService.isConnectedBlueTooth()){
@@ -97,10 +106,10 @@ public class AiXiaoQiWhereActivity extends BaseActivity implements DialogInterfa
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.phone_activate:
-
+                aiXiaoQiWherePresenter.phoneActivate();
                 break;
             case R.id.equipment_activate:
-
+                aiXiaoQiWherePresenter.equipmentActivate();
                 break;
         }
 
