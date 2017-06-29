@@ -186,6 +186,7 @@
         <activity android:name="de.blinkt.openvpn.activities.Set.ui.ContactUsActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.SetFlowCard.OverseaGuideFeeActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.ShopModules.ui.CommitOrderActivity"/>
+        <activity android:name="de.blinkt.openvpn.activities.ShopModules.ui.AiXiaoQiWhereActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.ShopModules.ui.CountryPackageActivity"/>
         <activity
             android:name="de.blinkt.openvpn.activities.SimOption.ui.ContactActivity"

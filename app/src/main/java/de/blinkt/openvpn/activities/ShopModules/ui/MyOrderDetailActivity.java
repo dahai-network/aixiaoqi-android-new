@@ -283,6 +283,7 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
                 }
                 break;
             case R.id.activateTextView:
+                toActivity(AiXiaoQiWhereActivity.class);
                 activatePackage();
                 break;
             case R.id.retryTextView:
@@ -323,9 +324,9 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
     private void activatePackage() {
         String operator = SharedUtils.getInstance().readString(Constant.OPERATER);
         UartService uartService = ICSOpenVPNApplication.uartService;
-        if (!TextUtils.isEmpty(operator)
-                && uartService != null
-                && uartService.isConnectedBlueTooth()) {
+        if (TextUtils.isEmpty(operator)
+                || uartService == null
+                ||uartService.isDisconnectedBlueTooth()) {
             showDialog();
             return;
         }
@@ -379,8 +380,8 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
 
     @Override
     protected void onDestroy() {
-        if (isWriteReceiver != null)
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(isWriteReceiver);
+
+
         EventBus.getDefault().unregister(this);
         myOrderDetailPresenter.relaseResource();
         super.onDestroy();
@@ -442,8 +443,6 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
                 expiryDateTextView.setText(bean.getExpireDays());
                 activateTextView.setText("再次激活");
             }
-
-
             if ("1".equals(bean.getPackageCategory())) {
                 activateTextView.setVisibility(GONE);
                 aboardHowToUse.setVisibility(GONE);

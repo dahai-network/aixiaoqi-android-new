@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:paddingRight="@dimen/padding_15dp"
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:background="@color/white"
+
+        android:layout_height="@dimen/padding_100dp">
+        <ImageView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:src="@drawable/phone"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/padding_10"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/phone_title"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/phone"
+            android:textColor="@color/color_333333"
+            android:layout_alignTop="@id/phone"
+            android:textSize="@dimen/little_16"
+            android:text="@string/phone_title"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/phone_tip"
+            android:layout_marginTop="@dimen/padding_5dp"
+            android:layout_toRightOf="@id/phone"
+            android:text="@string/phone_tip"
+            android:textColor="@color/color_cccccc"
+            android:textSize="@dimen/little_12"
+            android:layout_below="@id/phone_title"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/phone_activate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/going_activate"
+            android:padding="@dimen/padding_5dp"
+            android:background="@drawable/circle_light_gray_blue_bord_selector"
+            android:textColor="@drawable/blue_btn_click_color_selecor"
+            android:textSize="14sp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:paddingRight="@dimen/padding_15dp"
+        android:background="@color/white"
+
+        android:layout_marginTop="@dimen/padding_5dp"
+        android:layout_height="@dimen/padding_100dp">
+
+        <ImageView
+            android:id="@+id/equipment"
+            android:layout_width="wrap_content"
+            android:src="@drawable/equipment"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/padding_10"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/equipment_title"
+            android:layout_width="wrap_content"
+            android:textColor="@color/color_333333"
+            android:text="@string/equipment_title"
+            android:layout_toRightOf="@id/equipment"
+            android:textSize="@dimen/little_16"
+            android:layout_alignTop="@id/equipment"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/equipment_tip"
+            android:layout_marginTop="@dimen/padding_5dp"
+            android:layout_toRightOf="@id/equipment"
+            android:text="@string/equipment_tip"
+            android:textColor="@color/color_cccccc"
+            android:textSize="@dimen/little_12"
+            android:layout_below="@id/equipment_title"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/equipment_activate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/going_activate"
+            android:padding="@dimen/padding_5dp"
+            android:background="@drawable/circle_light_gray_blue_bord_selector"
+            android:textColor="@drawable/blue_btn_click_color_selecor"
+            android:textSize="14sp"
+            />
+    </RelativeLayout>
+    <View
+        style="@style/horizontal_line_margin_15dp"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:paddingRight="@dimen/padding_15dp"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:layout_height="@dimen/padding_50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:drawableLeft="@drawable/ellipse"
+            android:drawablePadding="@dimen/padding_4dp"
+            android:text="@string/connect_statue"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/connect_statue_tv"
+            android:layout_width="wrap_content"
+            android:text="@string/index_unbind"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/color_cccccc"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <View
+        style="@style/horizontal_line_margin_15dp"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/padding_15dp"
+        android:paddingRight="@dimen/padding_15dp"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:layout_height="@dimen/padding_50dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:drawableLeft="@drawable/ellipse"
+            android:drawablePadding="@dimen/padding_4dp"
+            android:text="@string/insert_cart_statue"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/insert_statue_tv"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/color_cccccc"
+            android:text="@string/index_un_insert_card"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>
