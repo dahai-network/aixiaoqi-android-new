@@ -49,9 +49,10 @@ import static de.blinkt.openvpn.constant.UmengContant.CLICKACTIVECARD;
 
 public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
     AiXiaoQiWhereView aiXiaoQiWhereView;
-    Context context;
+
     EquipmentActivateModelImpl equipmentActivateModel;
     CardDataModelImpl cardDataModel;
+    Context context;
     String  activateType;
     private static String PHONE_ACTIVATE="phone";
     private static String EQUIPMENT_ACTIVATE="phone";
@@ -82,7 +83,7 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
         if(SimActivateHelper.getInstance().writeCMDSmall(cardInfo)){
             aiXiaoQiWhereView.showToast(R.string.activate_succeed);
         }else{
-            aiXiaoQiWhereView.showToast(R.string.activate_faile);
+            aiXiaoQiWhereView.showToast(R.string.activate_failure);
         }
         aiXiaoQiWhereView.dismissProgress();
     }
@@ -131,11 +132,10 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
                     map.put("statue", 0 + "");
                     //友盟方法统计
                     MobclickAgent.onEvent(context, CLICKACTIVECARD, map);
-                    aiXiaoQiWhereView.showToast( "激活失败！请检查你的SIM卡是否是爱小器SIM卡");
+                    aiXiaoQiWhereView.showToast(R.string.activate_failure);
                 } else {
                     isActivateSuccess = true;
                 }
-
 
             } else if (TextUtils.equals(intent.getAction(), FINISH_PROCESS_ONLY)) {
                 aiXiaoQiWhereView.dismissProgress();
@@ -183,6 +183,9 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
 
     @Override
     public void onDestroy() {
+        aiXiaoQiWhereView=null;
+        equipmentActivateModel=null;
+        cardDataModel=null;
         if (isWriteReceiver != null)
             LocalBroadcastManager.getInstance(context).unregisterReceiver(isWriteReceiver);
         EventBus.getDefault().unregister(this);

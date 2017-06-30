@@ -119,14 +119,12 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
     Button inlandReset;
     private OrderEntity.ListBean bean;
     private boolean isCreateView = false;
-    private DialogBalance cardRuleBreakDialog;
     private boolean isActivateSuccess = false;
     MyOrderDetailPresenter myOrderDetailPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         ICSOpenVPNApplication.myOrderDetailActivity = this;
         Log.d("MyOrderDetailActivity", "onCreate: ");
         myOrderDetailPresenter = new MyOrderDetailPresenter(this);
@@ -160,7 +158,6 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
 
     //获取数据
     private void addData() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(isWriteReceiver, setFilter());
         myOrderDetailPresenter.addData(getIntent().getStringExtra("id"));
     }
 
@@ -183,40 +180,6 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
         }
     }
 
-    private BroadcastReceiver isWriteReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (TextUtils.equals(intent.getAction(), CARD_RULE_BREAK)) {
-                dismissProgress();
-                showDialog();
-            } else if (TextUtils.equals(intent.getAction(), FINISH_PROCESS)) {
-                if (ReceiveBLEMoveReceiver.orderStatus == 4) {
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("statue", 0 + "");
-                    //友盟方法统计
-                    MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
-                    CommonTools.showShortToast(MyOrderDetailActivity.this, "激活失败！请检查你的SIM卡是否是爱小器SIM卡");
-                } else {
-                    isActivateSuccess = true;
-                }
-                myOrderDetailPresenter.addData(getIntent().getStringExtra("id"));
-              /*  GetOrderByIdHttp http = new GetOrderByIdHttp(MyOrderDetailActivity.this, HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID, getIntent().getStringExtra("id"));
-                new Thread(http).start();*/
-
-            } else if (TextUtils.equals(intent.getAction(), FINISH_PROCESS_ONLY)) {
-                dismissProgress();
-            }
-        }
-    };
-
-    private void showDialog() {
-        //不能按返回键，只能二选其一
-        cardRuleBreakDialog = new DialogBalance(this, MyOrderDetailActivity.this, R.layout.dialog_balance, 2);
-        cardRuleBreakDialog.setCanClickBack(false);
-        cardRuleBreakDialog.changeText(getResources().getString(R.string.no_aixiaoqi_or_rule_break), getResources().getString(R.string.reset));
-    }
-
-
     private void showBuySucceedDialog() {
         //不能按返回键，只能二选其一
        DialogTip dialogTip
@@ -225,26 +188,11 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveWriteCardIdEntity(WriteCardEntity entity) {
-        String nullcardId = entity.getNullCardId();
-        String orderID = bean.getOrderID();
-        myOrderDetailPresenter.orderDataHttpPresenter(orderID,nullcardId);
-    }
-
     private void createViews() {
         setContentView(R.layout.activity_myorder_detail);
         ButterKnife.bind(this);
         initSet();
         isCreateView = true;
-    }
-
-    private IntentFilter setFilter() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(MyOrderDetailActivity.FINISH_PROCESS);
-        filter.addAction(MyOrderDetailActivity.FINISH_PROCESS_ONLY);
-        filter.addAction(MyOrderDetailActivity.CARD_RULE_BREAK);
-        return filter;
     }
 
 
@@ -328,8 +276,6 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
     @Override
     protected void onDestroy() {
 
-
-        EventBus.getDefault().unregister(this);
         myOrderDetailPresenter.relaseResource();
         super.onDestroy();
     }

@@ -85,12 +85,10 @@ public class AiXiaoQiWhereActivity extends BaseActivity implements DialogInterfa
 
     private void initUi() {
         if(ICSOpenVPNApplication.uartService!=null&&ICSOpenVPNApplication.uartService.isConnectedBlueTooth()){
-
             connectStatueTv.setText(getString(R.string.bind_seccess));
         }else{
             connectStatueTv.setText(getString(R.string.index_unbind));
         }
-
         if( SocketConstant.SIM_TYPE==4){//爱小器卡
             insertStatueTv.setText(getString(R.string.index_aixiaoqicard));
         }else if(SocketConstant.SIM_TYPE==0){//未插卡
@@ -112,9 +110,7 @@ public class AiXiaoQiWhereActivity extends BaseActivity implements DialogInterfa
                 aiXiaoQiWherePresenter.equipmentActivate();
                 break;
         }
-
     }
-
 
     @Override
     public void dialogText(int type, String text) {
@@ -131,5 +127,11 @@ public class AiXiaoQiWhereActivity extends BaseActivity implements DialogInterfa
     @Override
     public void showToast(int showContentId) {
         super.showToast(showContentId);
+    }
+
+    @Override
+    protected void onDestroy() {
+        aiXiaoQiWherePresenter.onDestroy();
+        super.onDestroy();
     }
 }

@@ -706,6 +706,6 @@
     <string name="equipment_unconnect">设备没有连上，请连上设备在激活卡</string>
     <string name="equipment_un_insert_card">设备里边没有插爱小器卡</string>
     <string name="activate_succeed">激活成功</string>
-    <string name="activate_faile">激活失败</string>
+    <string name="activate_failure">激活失败</string>
     <string name="insert_cart_statue">设备中爱小器卡</string>
 </resources>
