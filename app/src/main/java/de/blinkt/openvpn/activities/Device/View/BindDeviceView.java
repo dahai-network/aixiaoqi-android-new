@@ -1,6 +1,9 @@
 package de.blinkt.openvpn.activities.Device.View;
 
+import java.util.List;
 import de.blinkt.openvpn.activities.CommomView.Toast;
+import de.blinkt.openvpn.http.GetBindsIMEIHttp;
+import de.blinkt.openvpn.model.BluetoothEntity;
 
 /**
  * Created by Administrator on 2017/6/5 0005.
@@ -18,4 +21,5 @@ public interface BindDeviceView extends Toast{
     void connect(String macAddress);
     void scanLeDevice(boolean enable);
     void afterConnDevice();
+    void showDeviceView( List<BluetoothEntity> list,GetBindsIMEIHttp http);
 }

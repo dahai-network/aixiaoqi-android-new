@@ -8,9 +8,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+
+import org.greenrobot.eventbus.EventBus;
+
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.model.BluetoothEntity;
 
 /**
  * Created by Administrator on 2017/6/6 0006.
@@ -29,7 +33,6 @@ public abstract  class BluetoothBaseActivity extends BaseActivity {
     public boolean initialize() {
         // For API level 18 and above, get a reference to BluetoothAdapter through
         // BluetoothManager.
-
         if (! ICSOpenVPNApplication.getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {//蓝牙不支持低功耗蓝牙
             finish();
             return false;
@@ -55,6 +58,7 @@ public abstract  class BluetoothBaseActivity extends BaseActivity {
     }
 
     public  void scanLeDevice(boolean enable) {
+
         if (enable) {
             scanNotFindDevice();
             mBluetoothAdapter.startLeScan(mLeScanCallback);
@@ -83,11 +87,13 @@ public abstract  class BluetoothBaseActivity extends BaseActivity {
             };
 
     public void connect(String macAddress){
+        Log.d(TAG, "connect---: "+macAddress+"--mService="+mService);
         if(mService!=null){
             if(mService.mBluetoothAdapter==null){
                 mService.initialize();
                 Log.d(TAG, "BluetoothBaseActivity ->connect: "+mService.mBluetoothAdapter);
             }
+            EventBus.getDefault().post(new BluetoothEntity(macAddress));
             mService.connect(macAddress);
         }
     }
@@ -97,7 +103,6 @@ public abstract  class BluetoothBaseActivity extends BaseActivity {
             mService.disconnect();
         }
     }
-
 
 
     public boolean bluetoothIsOpen() {

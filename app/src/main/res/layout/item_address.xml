@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:layout_height="58dp">
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/padding_15dp"
+        android:id="@+id/device_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/device_icon"/>
+    <TextView
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/little_14"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/device_icon"
+        android:id="@+id/device_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:textSize="@dimen/little_14"
+        android:id="@+id/device_state"
+        android:text="@string/bind_state"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bind_device_item_btn"
+        android:layout_width="wrap_content"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_marginRight="@dimen/padding_15dp"
+        />
+    <TextView
+        android:textSize="@dimen/little_14"
+        android:id="@+id/device_state_tv"
+        android:text="@string/binded_"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/padding_15dp"
+        />
+
+</RelativeLayout>

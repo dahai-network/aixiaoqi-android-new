@@ -89,6 +89,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
             findBlueService();
 
         } else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+            //断开处理
             disconnectedOption();
         } else if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
             EventBusUtil.blueConnStatue(UartService.STATE_CONNECTED);

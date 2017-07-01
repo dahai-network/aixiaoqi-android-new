@@ -6,6 +6,11 @@ package de.blinkt.openvpn.model;
  */
 
 public class BluetoothEntity {
+
+	public BluetoothEntity(){}
+	public BluetoothEntity(String address){
+		this.address=address;
+	}
 	private String address;
 	private int rssi;
 	private String diviceName;
