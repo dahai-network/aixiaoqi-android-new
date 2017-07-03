@@ -20,14 +20,13 @@ public class IsBindDeviceModelImpl extends NetModelBaseImpl implements IsBindDev
     public  IsBindDeviceModelImpl(OnLoadFinishListener onLoadFinishListener){
         super(onLoadFinishListener);
     }
-    @Override
+  /*  @Override
     public void isBindDevice(String address) {
         if(address==null){
-            address = SharedUtils.getInstance().readString(Constant.BRACELETNAME, address);
         }
         Log.d("IsBindDeviceModelImpl", "isBindDevice: "+address);
         createHttpRequest(HttpConfigUrl.COMTYPE_ISBIND_DEVICE, address);
-    }
+    }*/
 
     @Override
     public void getDeviceState(ArrayList<String> addresss) {

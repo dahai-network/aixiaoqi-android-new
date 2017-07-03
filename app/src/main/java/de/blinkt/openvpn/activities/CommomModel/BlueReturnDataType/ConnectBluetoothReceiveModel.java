@@ -52,8 +52,8 @@ public class ConnectBluetoothReceiveModel {
             handler.sendEmptyMessage(IS_NOT_UNI);
         } else {
             Log.i("Encryption", "IMEI是否为空: " + (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))));
-            if (!CommonTools.isFastDoubleClick(50) && TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
-                EventBusUtil.bingDeviceStep(BluetoothConstant.BLUE_BIND);
+            if (!CommonTools.isFastDoubleClick(20) && TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
+                    EventBusUtil.bingDeviceStep(BluetoothConstant.BLUE_BIND);
                 Log.d("Encryption", "run: 发送绑定命令");
                 sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
             }

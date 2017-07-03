@@ -187,7 +187,6 @@ public abstract class CommonHttp implements Callback, Runnable {
             data = baseEntry.getData();
             if (status == 1) {
                 // Log.d(TAG, "onResponse: "+gson.toJson(baseEntry.getData());
-                Log.d(TAG, "onResponse:------------------ ");
                 right(gson.toJson(baseEntry.getData()));
             } else if (status == -999) {
 //				ICSOpenVPNApplication.getInstance().finishAllActivity();

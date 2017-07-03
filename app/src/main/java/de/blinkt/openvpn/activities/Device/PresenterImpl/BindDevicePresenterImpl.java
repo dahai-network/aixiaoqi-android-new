@@ -80,14 +80,6 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
     }
 
     @Override
-    public void requestIsBindDevice(String deviceAddres) {
-        if(isBindDeviceModel!=null) {
-            Log.d(TAG, "requestIsBindDevice: "+deviceAddres);
-            isBindDeviceModel.isBindDevice(deviceAddress);
-        }
-    }
-
-    @Override
     public void requestUpdateDeviceInfo() {
         if(updateDeviceInfoModel!=null)
         updateDeviceInfoModel.updateDeviceInfo();
@@ -272,7 +264,6 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
     String deviceAddress;
    @Subscribe(threadMode = ThreadMode.MAIN)//
     public  void getAddress(BluetoothEntity bluetoothEntity) {
-       // Log.i(TAG, "deviceAddress=" + bluetoothEntity.getAddress());
        deviceAddress=bluetoothEntity.getAddress();
     }
 

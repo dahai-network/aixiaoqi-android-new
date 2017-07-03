@@ -5,14 +5,18 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.provider.Telephony;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -40,6 +44,8 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.contact.DividerDecoration;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+
+import static de.blinkt.openvpn.core.ICSOpenVPNApplication.getContext;
 
 
 public class BindDeviceActivity extends BluetoothBaseActivity implements BindDeviceView, DialogInterfaceTypeBase,MyItemClickListener {
@@ -125,12 +131,21 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 	public void toActivity() {
 		toActivity(MyDeviceActivity.class);
 	}
-
+    int width;
+    int height;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_bind_device);
 		bluetoothName = getIntent().getStringExtra(Constant.BRACELETNAME);
+        WindowManager wm = (WindowManager) getContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+
+        width = wm.getDefaultDisplay().getWidth();
+
+        height = wm.getDefaultDisplay().getHeight();
+        Log.d("BindDeviceActivity", "onCreate: "+width+"---"+height);
+
 		ButterKnife.bind(this);
 		bindDevicePresenter=new BindDevicePresenterImpl(this);
 		if(bluetoothIsOpen()){
@@ -212,6 +227,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 	//连接成功设备以后
 	@Override
 	public void afterConnDevice() {
+        dismissProgress();
 		if (bluetoothName != null) {
 			if (bluetoothName.contains(Constant.UNIBOX)) {
 				showIsBindLayout();
@@ -243,11 +259,12 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
         stopTextView.setText(R.string.frist_connect);
         showAimal();
         pop_layout.startAnimation(mShowAnim);
-        pop_layout.setVisibility(View.VISIBLE);
-        startPropertyAnim(stopTextView,350,-580);
-        setAnimatorSet(uniImageView,-320,true);
-        setAnimatorSet(seekImageView,-320,true);
-        setAnimatorSet(outerRing,-320,true);
+       pop_layout.setVisibility(View.VISIBLE);
+        Log.d(TAG, "findDeviceAnimal: startPropertyAnim"+-(height/2-40));
+        startPropertyAnim(stopTextView,350,-(height/2-40));
+        setAnimatorSet(uniImageView,-(height/4-10),true);
+        setAnimatorSet(seekImageView,-(height/4-10),true);
+        setAnimatorSet(outerRing,-(height/4-10),true);
         iv_back.setVisibility(View.VISIBLE);
 
     }
@@ -411,8 +428,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
                     finish();
                 }else if(getResources().getString(R.string.frist_connect).equals(stopTextView.getText().toString())){
                     //首选连接
-                    Log.d(TAG, "onClick: "+getResources().getString(R.string.frist_connect));
-					//连接第一个
+                    showProgress("连接设备请稍等");
                     String address = bindDevcieAdapter.getData().get(0).getAddress();
                     SharedUtils.getInstance().writeString(Constant.BRACELETNAME, address);
                     connect(address);
@@ -449,15 +465,21 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 			}
 		}
 	}
-
     @Override
     public void onItemClick(View view, int postion) {
-
-    if(bindDevcieAdapter!=null) {
+        showProgress("连接设备请稍等");
+        if(bindDevcieAdapter!=null) {
         String address = bindDevcieAdapter.getData().get(postion).getAddress();
-        Log.d("test____", "onItemClick: ------"+address);
-        SharedUtils.getInstance().writeString(Constant.BRACELETNAME, address);
         connect(address);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dismissProgress();
+
+                    return;
+                }
+            },8000);
+
         }
     }
 

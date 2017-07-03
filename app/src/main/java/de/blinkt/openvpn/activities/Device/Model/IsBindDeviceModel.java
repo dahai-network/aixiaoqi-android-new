@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 
 public interface IsBindDeviceModel {
-    void isBindDevice(String address);
+
 
     /**
      *获取该设备的绑定状态

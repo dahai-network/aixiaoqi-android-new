@@ -7,7 +7,6 @@ import java.util.ArrayList;
  */
 
 public interface BindDevicePresenter {
-    void requestIsBindDevice(String address);
     void requestUpdateDeviceInfo();
     void onDestory();
     void requestBindDevice(String deviceType);
