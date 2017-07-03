@@ -103,7 +103,7 @@ public class PackageDetailPresenter extends BaseNetActivity {
     public void buyPackageButtonEvent() {
         if (bean != null) {
             MobclickAgent.onEvent(context, CLICKPACKAGEDETAILPURCHASE);
-            CommitOrderActivity.launch(instance, bean, 1);
+            CommitOrderActivity.launch(instance, bean);
         }
 
     }

@@ -31,19 +31,22 @@ import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.ShopModules.presenter.CommitOrderPresenter;
 import de.blinkt.openvpn.activities.ShopModules.view.CommitOrderView;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.BalanceHttp;
 import de.blinkt.openvpn.http.OrderAddHttp;
 import de.blinkt.openvpn.model.PacketDtailEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
+import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+import de.blinkt.openvpn.views.dialog.DialogYearMonthDayPicker;
 
 import static de.blinkt.openvpn.constant.UmengContant.CLICKSUREPAGMENT;
 
 /**
  * 提交订单界面
  */
-public class CommitOrderActivity extends BaseActivity implements CommitOrderView {
+public class CommitOrderActivity extends BaseActivity implements CommitOrderView , DialogInterfaceTypeBase {
 
     @BindView(R.id.countryImageView)
     ImageView countryImageView;
@@ -93,15 +96,19 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
     LinearLayout pricell;
     @BindView(R.id.orderOriginalPriceTextView)
     TextView orderOriginalPriceTextView;
+    @BindView(R.id.payForWhatTextView)
+    TextView payForWhatTextView;
+    @BindView(R.id.payWayTextView)
+    TextView payWayTextView;
+    @BindView(R.id.ll_select_date)
+    LinearLayout llSelectDate;
+    String dataTime;
     private PacketDtailEntity.ListBean bean;
     private int packetCount = 1;
     private int BALANCE_PAY_METHOD = 3;
     private int WEIXIN_PAY_METHOD = 2;
     private int ALI_PAY_METHOD = 1;
     private boolean isAliPayClick = false;
-    //微信支付类
-    private IWXAPI api;
-
     //余额
     private float balanceFloat;
     public CommitOrderPresenter commitOrderPresenter;
@@ -114,7 +121,6 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
         ButterKnife.bind(this);
         initSet();
         commitOrderPresenter = new CommitOrderPresenter(this) {
-
             @Override
             public void getBalance(BalanceHttp http) {
                 balanceFloat = http.getBalanceEntity().getAmount();
@@ -123,21 +129,19 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
         };
     }
 
-    public static void launch(Context context, PacketDtailEntity.ListBean bean, int type) {
+    public static void launch(Context context, PacketDtailEntity.ListBean bean) {
         Intent intent = new Intent(context, CommitOrderActivity.class);
         intent.putExtra("order", bean);
-        intent.putExtra("type", type);
         context.startActivity(intent);
     }
 
 
     private void initSet() {
         bean = (PacketDtailEntity.ListBean) getIntent().getSerializableExtra("order");
-        int type = getIntent().getIntExtra("type", 0);
-        if (type == 0) {
+        if (!bean.isCanBuyMultiple()) {
             pricell.setVisibility(View.GONE);
             dateTextView.setVisibility(View.INVISIBLE);
-        } else if (type == 1) {
+        } else {
             pricell.setVisibility(View.VISIBLE);
             dateTextView.setVisibility(View.VISIBLE);
         }
@@ -148,12 +152,12 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
         totalPriceTextView.setText("￥" + bean.getPrice());
         addUpTextView.setText("￥" + bean.getPrice());
         dateTextView.setText("最晚激活日期：" + DateUtils.getAdd180DayDate());
-        if(TextUtils.isEmpty(bean.getOriginalPrice())){
+        if (TextUtils.isEmpty(bean.getOriginalPrice())) {
             orderOriginalPriceTextView.setVisibility(View.GONE);
-        }else{
+        } else {
             orderOriginalPriceTextView.setVisibility(View.VISIBLE);
-            orderOriginalPriceTextView.setText(getString(R.string.original_price)+getString(R.string.money_type)+bean.getOriginalPrice());
-            orderOriginalPriceTextView.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
+            orderOriginalPriceTextView.setText(getString(R.string.original_price) + getString(R.string.money_type) + bean.getOriginalPrice());
+            orderOriginalPriceTextView.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //中划线
         }
         Glide.with(ICSOpenVPNApplication.getContext()).load(bean.getLogoPic()).into(countryImageView);
         setSpan(addUpTextView);
@@ -184,7 +188,7 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
         balancePayCheckBox.setChecked(balanceCheckBox);
     }
 
-    @OnClick({R.id.addImageView, R.id.reduceImageView, R.id.weixinPayLienarLayout, R.id.aliPayLienarLayout, R.id.sureTextView, R.id.balancePayLienarLayout})
+    @OnClick({R.id.addImageView, R.id.reduceImageView, R.id.weixinPayLienarLayout, R.id.aliPayLienarLayout, R.id.sureTextView, R.id.balancePayLienarLayout,R.id.ll_select_date})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.addImageView:
@@ -209,16 +213,20 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
             case R.id.aliPayLienarLayout:
                 setCheck(false, true, false, true);
                 break;
+            case R.id.ll_select_date:
+                DialogYearMonthDayPicker dialogYearMonthDayPicker = new DialogYearMonthDayPicker(this, this, R.layout.picker_year_month_day_layout, 0);
+                dialogYearMonthDayPicker.changeText(getString(R.string.select_time) + "(" + bean.getCountryName() + ")");
+                break;
             case R.id.sureTextView:
+                if (noSelectTime()) return;
                 HashMap<String, String> map = new HashMap<>();
-                OrderAddHttp http;
                 sureTextView.setEnabled(false);
                 if (weixinPayCheckBox.isChecked()) {
                     if (isWXAppInstalledAndSupported()) {
                         map.put("type", WEIXIN_PAY_METHOD + "");
                         //友盟方法统计
                         MobclickAgent.onEvent(this, CLICKSUREPAGMENT, map);
-                        commitOrderPresenter.commitOrder(bean.getPackageId(), packetCount + "", WEIXIN_PAY_METHOD + "");
+                        commitOrderPresenter.commitOrder(bean.getPackageId(), packetCount + "", WEIXIN_PAY_METHOD + "",dataTime);
                     } else {
                         CommonTools.showShortToast(this, getResources().getString(R.string.no_weixin_yet));
                         sureTextView.setEnabled(true);
@@ -227,16 +235,25 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
                     map.put("type", ALI_PAY_METHOD + "");
                     //友盟方法统计
                     MobclickAgent.onEvent(this, CLICKSUREPAGMENT, map);
-                    commitOrderPresenter.commitOrder(bean.getPackageId(), packetCount + "", ALI_PAY_METHOD + "");
+                    commitOrderPresenter.commitOrder(bean.getPackageId(), packetCount + "", ALI_PAY_METHOD + "",dataTime);
                 } else {
                     Log.d("CommitOrderActivity", "sureTextView: " + bean.getPackageId() + "" + packetCount);
                     map.put("type", BALANCE_PAY_METHOD + "");
                     //友盟方法统计
                     MobclickAgent.onEvent(this, CLICKSUREPAGMENT, map);
-                    commitOrderPresenter.commitOrder(bean.getPackageId(), packetCount + "", BALANCE_PAY_METHOD + "");
+
+                    commitOrderPresenter.commitOrder(bean.getPackageId(), packetCount + "", BALANCE_PAY_METHOD + "",dataTime);
                 }
                 break;
         }
+    }
+
+    private boolean noSelectTime() {
+        if(TextUtils.isEmpty(dataTime)){
+            CommonTools.showShortToast(this,getString(R.string.effective_date_is_null));
+            return true;
+        }
+        return false;
     }
 
     private void packCount() {
@@ -331,5 +348,22 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
     @Override
     public void showToast(String msg) {
         CommonTools.showShortToast(CommitOrderActivity.this, msg);
+    }
+
+    @Override
+    public void dialogText(int type, String text) {
+        if (type == 0) {
+            // - 24 * 60 * 60 * 1000
+            if (System.currentTimeMillis() >= DateUtils.getStringToDate(text + " 00:00:00")) {
+                CommonTools.showShortToast(this,getString(R.string.less_current_time));
+                return;
+            }
+            else if(System.currentTimeMillis()+180*24*60*60*1000l < DateUtils.getStringToDate(text + " 00:00:00")){
+                CommonTools.showShortToast(this,getString(R.string.last_current_time));
+                return;
+            }
+             dataTime = text;
+            payWayTextView.setText(text);
+        }
     }
 }

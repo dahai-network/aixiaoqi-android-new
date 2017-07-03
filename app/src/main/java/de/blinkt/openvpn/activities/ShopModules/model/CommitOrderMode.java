@@ -8,5 +8,5 @@ import de.blinkt.openvpn.activities.Base.BaseNetActivity;
  */
 public interface CommitOrderMode {
 
-    void commitOrder(String id , String packetCount, String playMehtod, BaseNetActivity baseNetActivity);
+    void commitOrder(String id , String packetCount, String playMehtod,String beginDateTime, BaseNetActivity baseNetActivity);
 }

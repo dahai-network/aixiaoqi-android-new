@@ -11,7 +11,7 @@ import de.blinkt.openvpn.constant.HttpConfigUrl;
 
 public class CommitOrderImpl implements CommitOrderMode {
     @Override
-    public void commitOrder(String id, String packetCount, String playMehtod, BaseNetActivity baseNetActivity) {
-        baseNetActivity.createHttpRequest(HttpConfigUrl.COMTYPE_CREATE_ORDER, id, packetCount, playMehtod);
+    public void commitOrder(String id, String packetCount, String playMehtod,String beginDateTime, BaseNetActivity baseNetActivity) {
+        baseNetActivity.createHttpRequest(HttpConfigUrl.COMTYPE_CREATE_ORDER, id, packetCount, playMehtod,beginDateTime);
     }
 }

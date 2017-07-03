@@ -180,7 +180,7 @@ public class ReceiveCallActivity extends BaseSensorActivity {
 
     }
 
-    @OnClick({R.id.mtview,R.id.calmTextView,R.id.cancelcallbtn, R.id.keyboard,R.id.hide_keyboard})
+    @OnClick({R.id.receiveBtn,R.id.calmTextView,R.id.mtview, R.id.cancelcallbtn,R.id.hangupbtn})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.receiveBtn:

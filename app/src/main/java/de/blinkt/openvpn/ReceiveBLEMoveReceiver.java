@@ -110,13 +110,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                         Log.d(TAG, "run: 接受数据");
                         String firstPackage = messages.get(0).substring(0, 2);
                         String dataType = messages.get(0).substring(6, 10);
-
-                        if (messages.size() == 1) {
-                            Log.e(TAG, messages.get(0));
-                        } else {
-                            for (int i = 0; i < messages.size(); i++) {
-                                Log.e(TAG, messages.get(i));
-                            }
+                        for (int i = 0; i < messages.size(); i++) {
+                            Log.e(TAG, messages.get(i));
                         }
                         Log.e("Blue_Chanl", "dataType：" + dataType);
                         Log.e("Blue_Chanl", "firstPackage：" + firstPackage);
@@ -214,7 +209,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
             }).start();
             retryTime++;
         } else {
-             gattDisconnect();
+            gattDisconnect();
             retryTime=0;
         }
     }

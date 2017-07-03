@@ -357,7 +357,7 @@
     <string name="connect_failure">连接失败,请重试</string>
     <string name="activate_unconnected">未连接</string>
     <string name="activate_begin">开始激活</string>
-    <string name="effective_date">生效日期</string>
+    <string name="effective_date">开始生效日期</string>
     <string name="effective_date_is_null">还没有选择生效日期</string>
     <string name="select_time">选择时间</string>
     <string name="effective_length">有效时长</string>
@@ -371,14 +371,6 @@
     <string name="before_going_abroad">出境前激活套餐</string>
     <string name="outside">在境外使用</string>
     <string name="overseas_guide_fee">海外节费引导</string>
-    <string name="user_intro">使用简介</string>、
-    <string name="user_intro_content">
-1）出国前在套餐超市中，购买需前往地的套餐，然后将它激活到爱小器国际卡。\n
-2）出国后将爱小器国际卡插入手机，实现上网，然后将国内电话卡插入爱小器智能设备，通过APP接打电话，收发短信。
-</string>
-
-    <string name="know_not_tip"> 知道了，以后不再提醒</string>
-
 
     <string name="after_going_abroad">回国后恢复设置</string>
     <string name="purchase_packet">购买套餐</string>
@@ -403,6 +395,7 @@
 
     <!--激活套餐-->
     <string name="less_current_time">生效时间不能小于当前时间</string>
+    <string name="last_current_time">生效时间不能大于最晚激活时间</string>
     <string name="app_name">联系人搜索</string>
     <string name="t9_keyboard_input_prompt">输入号码或拼音</string>
     <!-- <string name="call_phone">拨打</string>-->
@@ -616,6 +609,7 @@
     <string name="bill">账单</string>
     <string name="activited">已激活</string>
     <string name="no_activite">未激活</string>
+    <string name="going_activate">去激活</string>
     <string name="expire">已过期</string>
     <string name="OnOrOff">开关</string>
     <string name="registing">正在连接运营商服务器...</string>
@@ -641,7 +635,7 @@
     <string name="tip_activate">将国际卡插到智能硬件后，请保持APP与智能硬件连接，然后选择套餐生效时间，再确定激活。</string>
     <string name="un_connect_tip">未连上设备，请检查周围是否有设备</string>
     <string name="device_no_insert_tips">设备未插入电话卡或者插入的卡无效</string>
-    <string name="tip_buy_succeed">套餐购买成功，您必须激活套餐才能使用！</string>
+    <string name="tip_buy_succeed">套餐购买成功\n您必须激活爱小器卡才能使用！</string>
     <string name="activating">马上激活</string>
     <string name="wait_activate">稍后激活</string>
 
@@ -704,4 +698,18 @@
     
     <string name="money_type">￥</string>
     <string name="original_price">原价:</string>
+
+
+    <!--激活设备或者手机里边的爱小器卡-->
+    <string name="aixiaoqi_where">爱小器SIM卡在哪里</string>
+    <string name="connect_statue">设备</string>
+    <string name="phone_title">爱小器卡已放入手机中</string>
+    <string name="equipment_title">爱小器卡已放入设备中</string>
+    <string name="phone_tip">已放入手机请前往激活</string>
+    <string name="equipment_tip">请查看设备的相关状态前往激活</string>
+    <string name="equipment_unconnect">设备没有连上，请连上设备在激活卡</string>
+    <string name="equipment_un_insert_card">设备里边没有插爱小器卡</string>
+    <string name="activate_succeed">激活成功</string>
+    <string name="activate_failure">激活失败</string>
+    <string name="insert_cart_statue">设备中爱小器卡</string>
 </resources>

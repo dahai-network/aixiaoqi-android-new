@@ -57,6 +57,34 @@ public class PacketDtailEntity implements Serializable {
 		private String DescTitlePic;
 		private String DescPic;
 		private String OriginalPrice;
+		private String CountryName;
+		private String LastCanActivationDate;
+
+		public String getCountryName() {
+			return CountryName;
+		}
+
+		public void setCountryName(String countryName) {
+			CountryName = countryName;
+		}
+
+		public String getLastCanActivationDate() {
+			return LastCanActivationDate;
+		}
+
+		public void setLastCanActivationDate(String lastCanActivationDate) {
+			LastCanActivationDate = lastCanActivationDate;
+		}
+
+		public boolean isCanBuyMultiple() {
+			return IsCanBuyMultiple;
+		}
+
+		public void setCanBuyMultiple(boolean canBuyMultiple) {
+			IsCanBuyMultiple = canBuyMultiple;
+		}
+
+		private boolean IsCanBuyMultiple;
 		public String getDescTitlePic() {
 			return DescTitlePic;
 		}

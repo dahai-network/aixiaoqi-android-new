@@ -72,8 +72,6 @@ public class OutsideSecondStepActivity extends BaseActivity {
 
     }
 
-
-
     @Override
     protected void onClickRightView() {
         setResult(200);
@@ -106,7 +104,6 @@ public class OutsideSecondStepActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        e("requestCode="+requestCode+"  ,resultCode="+resultCode);
         switch (resultCode){
             case 200:
                 setResult(200);

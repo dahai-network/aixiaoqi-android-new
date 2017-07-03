@@ -12,41 +12,7 @@ import android.view.MotionEvent;
 
 public class MyViewPager extends ViewPager {
 
-    /*private boolean isScroll=true;
-    public MyViewPager(Context context) {
-        super(context);
-    }
 
-    public MyViewPager(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    */
-    /**
-     * @param isScroll 是否滑动（true 滑动，false 禁止）
-     *//*
-    public void setScroll(boolean isScroll){
-        this.isScroll=isScroll;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        if (isScroll) {
-            return super.onTouchEvent(ev);
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (isScroll) {
-            return super.onInterceptTouchEvent(ev);
-        } else {
-            return false;
-        }
-    }
-*/
     private boolean scrollble = true;
 
     public MyViewPager(Context context) {

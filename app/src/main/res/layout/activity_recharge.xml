@@ -170,7 +170,7 @@
                 android:visibility="invisible"
                 android:layout_marginRight="@dimen/padding_5dp"
                 android:layout_alignBottom="@id/moneyRadioGroup"
-                android:background="@color/color_F62C2A"
+                android:background="@color/color_f62a2a"
                 android:textColorHint="@color/white"
                 android:gravity="center"
                 android:textColor="@color/white"

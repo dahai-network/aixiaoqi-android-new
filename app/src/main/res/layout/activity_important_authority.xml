@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_back"
-    tools:context="de.blinkt.openvpn.activities.ImportantAuthorityActivity">
+>
 
     <TextView
         android:id="@+id/authorityTipTextView"

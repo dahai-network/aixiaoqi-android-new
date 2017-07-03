@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@drawable/dialog_background"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/icon_success"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+       android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_10dp"
+        android:layout_marginBottom="@dimen/padding_20dp"
+        android:lineSpacingMultiplier="1.2"
+        android:text="@string/tip_buy_succeed"/>
+
+    <View
+       style="@style/horizontal_line_view"/>
+    <TextView
+        android:id="@+id/sure_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_40dp"
+        android:textColor="@color/aggreement"
+        android:textSize="@dimen/little_16"
+        android:gravity="center"
+        android:text="@string/sure"
+        />
+</LinearLayout>

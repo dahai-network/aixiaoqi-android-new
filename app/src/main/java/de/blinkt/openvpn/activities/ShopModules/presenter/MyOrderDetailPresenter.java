@@ -58,7 +58,6 @@ public class MyOrderDetailPresenter extends BaseNetActivity {
                     instance.showToast("网络超时，获取套餐详情信息失败");
                     flg=false;
                 }
-
             }
         };
         mHandler.postDelayed(runnable, 10000);

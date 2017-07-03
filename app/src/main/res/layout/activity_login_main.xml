@@ -21,7 +21,7 @@
             android:layout_height="96dp"
             android:layout_marginTop="@dimen/padding_15dp"
             android:layout_marginBottom="@dimen/padding_15dp"
-            android:src="@drawable/login_logo"
+            android:src="@drawable/login_icon"
             />
         <TextView
             android:id="@+id/tip_login_user"

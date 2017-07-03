@@ -53,6 +53,8 @@ import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.dialog.BuySucceedDialog;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+import de.blinkt.openvpn.views.dialog.DialogTip;
+
 import static android.view.View.GONE;
 import static com.tencent.bugly.crashreport.inner.InnerAPI.context;
 import static de.blinkt.openvpn.ReceiveBLEMoveReceiver.orderStatus;
@@ -117,14 +119,12 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
     Button inlandReset;
     private OrderEntity.ListBean bean;
     private boolean isCreateView = false;
-    private DialogBalance cardRuleBreakDialog;
     private boolean isActivateSuccess = false;
     MyOrderDetailPresenter myOrderDetailPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         ICSOpenVPNApplication.myOrderDetailActivity = this;
         Log.d("MyOrderDetailActivity", "onCreate: ");
         myOrderDetailPresenter = new MyOrderDetailPresenter(this);
@@ -158,7 +158,6 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
 
     //获取数据
     private void addData() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(isWriteReceiver, setFilter());
         myOrderDetailPresenter.addData(getIntent().getStringExtra("id"));
     }
 
@@ -181,51 +180,12 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
         }
     }
 
-    private BroadcastReceiver isWriteReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (TextUtils.equals(intent.getAction(), CARD_RULE_BREAK)) {
-                dismissProgress();
-                showDialog();
-            } else if (TextUtils.equals(intent.getAction(), FINISH_PROCESS)) {
-                if (ReceiveBLEMoveReceiver.orderStatus == 4) {
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("statue", 0 + "");
-                    //友盟方法统计
-                    MobclickAgent.onEvent(mContext, CLICKACTIVECARD, map);
-                    CommonTools.showShortToast(MyOrderDetailActivity.this, "激活失败！请检查你的SIM卡是否是爱小器SIM卡");
-                } else {
-                    isActivateSuccess = true;
-                }
-                myOrderDetailPresenter.addData(getIntent().getStringExtra("id"));
-              /*  GetOrderByIdHttp http = new GetOrderByIdHttp(MyOrderDetailActivity.this, HttpConfigUrl.COMTYPE_GET_USER_PACKET_BY_ID, getIntent().getStringExtra("id"));
-                new Thread(http).start();*/
-
-            } else if (TextUtils.equals(intent.getAction(), FINISH_PROCESS_ONLY)) {
-                dismissProgress();
-            }
-        }
-    };
-
-    private void showDialog() {
-        //不能按返回键，只能二选其一
-        cardRuleBreakDialog = new DialogBalance(this, MyOrderDetailActivity.this, R.layout.dialog_balance, 2);
-        cardRuleBreakDialog.setCanClickBack(false);
-        cardRuleBreakDialog.changeText(getResources().getString(R.string.no_aixiaoqi_or_rule_break), getResources().getString(R.string.reset));
-    }
-
-
     private void showBuySucceedDialog() {
         //不能按返回键，只能二选其一
-        BuySucceedDialog buySucceedDialog = new BuySucceedDialog(this, MyOrderDetailActivity.this, R.layout.dialog_balance, 3);
-        buySucceedDialog.changeText(getResources().getString(R.string.tip_buy_succeed), getResources().getString(R.string.activating), getResources().getString(R.string.wait_activate));
-    }
+       DialogTip dialogTip
+        =new DialogTip(this, this, R.layout.dialog_tip, 3);
+        dialogTip.setCanClickBack(false);
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveWriteCardIdEntity(WriteCardEntity entity) {
-        String nullcardId = entity.getNullCardId();
-        String orderID = bean.getOrderID();
-        myOrderDetailPresenter.orderDataHttpPresenter(orderID,nullcardId);
     }
 
     private void createViews() {
@@ -233,14 +193,6 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
         ButterKnife.bind(this);
         initSet();
         isCreateView = true;
-    }
-
-    private IntentFilter setFilter() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(MyOrderDetailActivity.FINISH_PROCESS);
-        filter.addAction(MyOrderDetailActivity.FINISH_PROCESS_ONLY);
-        filter.addAction(MyOrderDetailActivity.CARD_RULE_BREAK);
-        return filter;
     }
 
 
@@ -279,7 +231,8 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
                 }
                 break;
             case R.id.activateTextView:
-                activatePackage();
+                toActivity(new Intent(this,AiXiaoQiWhereActivity.class).putExtra("id",bean.getOrderID()));
+
                 break;
             case R.id.retryTextView:
                 addData();
@@ -316,68 +269,13 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
         }
     }
 
-    private void activatePackage() {
-        String operator = SharedUtils.getInstance().readString(Constant.OPERATER);
-        UartService uartService = ICSOpenVPNApplication.uartService;
-        if (!TextUtils.isEmpty(operator)
-                && uartService != null
-                && uartService.isConnectedBlueTooth()) {
-            showDialog();
-            return;
-        }
-        if (!CommonTools.isFastDoubleClick(3000)) {
-            //友盟方法统计
-            MobclickAgent.onEvent(context, CLICKACTIVECARD);
-            OrderID = bean.getOrderID();
-            //如果订单未激活跳转到激活界面
-            if (bean.getOrderStatus() == 0)
-                toActivity(new Intent(this, ActivateActivity.class).putExtra(IntentPutKeyConstant.ORDER_ID, bean.getOrderID()).putExtra("ExpireDaysInt", bean.getExpireDaysInt())
-                        .putExtra(IntentPutKeyConstant.IS_SUPPORT_4G, bean.isPackageIsSupport4G())
-                        .putExtra(IntentPutKeyConstant.COUNTRY_NAME, bean.getCountryName())
-                        .putExtra(IntentPutKeyConstant.APN_NAME, bean.getPackageApnName())
-                );
-            else {
-                IS_TEXT_SIM = false;
-                orderStatus = 4;
-                showProgress("正在激活", false);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            ReceiveBLEMoveReceiver.isGetnullCardid = true;
-                            SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_NO_RESPONSE);
-                            Thread.sleep(20000);
-                        } catch (InterruptedException e) {
-                            dismissProgress();
-                            e.printStackTrace();
-                        }
-                        if (!isActivateSuccess) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dismissProgress();
-                                    CommonTools.showShortToast(MyOrderDetailActivity.this, getString(R.string.activate_fail));
-                                }
-                            });
-                        }
-                    }
-                }).start();
-            }
-        }
-    }
+
 
     public static String OrderID;
 
-    private void orderDataHttp(String orderID,String nullcardNumber) {
-
-       myOrderDetailPresenter.orderDataHttpPresenter(orderID,nullcardNumber);
-    }
-
     @Override
     protected void onDestroy() {
-        if (isWriteReceiver != null)
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(isWriteReceiver);
-        EventBus.getDefault().unregister(this);
+
         myOrderDetailPresenter.relaseResource();
         super.onDestroy();
     }
@@ -386,13 +284,6 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
     public void dialogText(int type, String text) {
         if (type == 2) {
             SendCommandToBluetooth.sendMessageToBlueTooth(Constant.RESTORATION);
-        } else if (type == 3) {
-            if (TextUtils.isEmpty(text)) {
-                activatePackage();
-            } else {
-                ICSOpenVPNApplication.getInstance().finishOtherActivity();
-            }
-
         }
     }
 
@@ -414,19 +305,14 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
                 packageStateTextView.setText("未激活");
             } else if (bean.getOrderStatus() == 2) {
                 packageStateTextView.setText("订单已过期");
-                expiryDateTextView.setVisibility(GONE);
-                activateTextView.setVisibility(GONE);
-                cancelOrderButton.setVisibility(GONE);
-                expirytitleTextView.setVisibility(GONE);
-                expirytitleTextView.setVisibility(GONE);
-                expiryDateTextView.setVisibility(GONE);
-                aboardHowToUse.setVisibility(GONE);
+                hideView();
                 inlandReset.setVisibility(GONE);
+                aboardHowToUse.setVisibility(GONE);
+                expirytitleTextView.setVisibility(GONE);
+
             } else if (bean.getOrderStatus() == 3) {
                 packageStateTextView.setText("订单已经被取消");
-                expiryDateTextView.setVisibility(GONE);
-                activateTextView.setVisibility(GONE);
-                cancelOrderButton.setVisibility(GONE);
+                hideView();
             } else if (bean.getOrderStatus() == 4) {
                 packageStateTextView.setText("激活失败");
                 cancelOrderButton.setVisibility(GONE);
@@ -438,20 +324,10 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
                 expiryDateTextView.setText(bean.getExpireDays());
                 activateTextView.setText("再次激活");
             }
-
-
             if ("1".equals(bean.getPackageCategory())) {
-                activateTextView.setVisibility(GONE);
-                aboardHowToUse.setVisibility(GONE);
-                inlandReset.setVisibility(GONE);
-                dateTitleTextView.setVisibility(GONE);
-                dateTextView.setVisibility(GONE);
+                hideWidget();
             } else if ("4".equals(bean.getPackageCategory()) || "5".equals(bean.getPackageCategory())) {
-                activateTextView.setVisibility(GONE);
-                aboardHowToUse.setVisibility(GONE);
-                inlandReset.setVisibility(GONE);
-                dateTitleTextView.setVisibility(GONE);
-                dateTextView.setVisibility(GONE);
+                hideWidget();
                 statueTextView.setVisibility(GONE);
                 packageStateTextView.setVisibility(GONE);
             } else {
@@ -468,6 +344,20 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
             payWayTextView.setText(getPaymentMethod(bean.getPaymentMethod()));
             dateTextView.setText(DateUtils.getDateToString(bean.getLastCanActivationDate() * 1000));
         }
+    }
+
+    private void hideView() {
+        expiryDateTextView.setVisibility(GONE);
+        activateTextView.setVisibility(GONE);
+        cancelOrderButton.setVisibility(GONE);
+    }
+
+    private void hideWidget() {
+        activateTextView.setVisibility(GONE);
+        aboardHowToUse.setVisibility(GONE);
+        inlandReset.setVisibility(GONE);
+        dateTitleTextView.setVisibility(GONE);
+        dateTextView.setVisibility(GONE);
     }
 
     @Override

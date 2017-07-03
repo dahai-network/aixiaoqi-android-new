@@ -118,6 +118,11 @@ public class ContactDetailActivity extends BaseActivity implements  DialogInterf
     private void setData(final ContactBean contactBean) {
 
 //		contactHeader.setBackgroundResource(contactBean.getHeader());
+        setHeaderInfo(contactBean);
+        showPhoneNumber(contactBean);
+    }
+
+    private void setHeaderInfo(ContactBean contactBean) {
         Bundle b = getIntent().getExtras();
         Bitmap bmp = b.getParcelable("bitmap");
         if (bmp != null) {
@@ -130,6 +135,9 @@ public class ContactDetailActivity extends BaseActivity implements  DialogInterf
         else {
             contactName.setText(contactBean.getPhoneNum());
         }
+    }
+
+    private void showPhoneNumber(final ContactBean contactBean) {
         String[] arrayNum = contactBean.getPhoneNum().split(",");
         int length = arrayNum.length;
         for (int i = 0; i < length; i++) {

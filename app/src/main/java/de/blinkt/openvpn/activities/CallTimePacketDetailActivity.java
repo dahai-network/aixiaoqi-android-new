@@ -111,7 +111,7 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
 				if (sureText != null && sureText.equals(getString(R.string.receive_fw))) {
 					createHttpRequest(HttpConfigUrl.COMTYPE_ADD_RECEIVE, getIntent().getStringExtra("id"));
 				} else {
-					CommitOrderActivity.launch(this, bean, 0);
+					CommitOrderActivity.launch(this, bean);
 				}
 				break;
 		}
@@ -130,8 +130,6 @@ public class CallTimePacketDetailActivity extends BaseNetActivity implements Int
 		WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		WordtoSpan.setSpan(new AbsoluteSizeSpan(22, true), 1, intLength + 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		WordtoSpan.setSpan(new AbsoluteSizeSpan(15, true), intLength + 2, textview.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-
 		textview.setText(WordtoSpan, TextView.BufferType.SPANNABLE);
 	}
 

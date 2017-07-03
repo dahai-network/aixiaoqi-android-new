@@ -55,7 +55,7 @@
             android:layout_below="@+id/tv_expirydate"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/countryImageView"
-            android:textColor="@color/color_F62C2A" />
+            android:textColor="@color/color_f62a2a" />
 
         <ImageView
             android:id="@+id/iv_purchase"

@@ -220,9 +220,9 @@ Unbinder unbinder;
                     @Override
                     public void run() {
                         if (ICSOpenVPNApplication.the_sipengineReceive != null) {
+                            CommonTools.delayTime(1000);
                             ICSOpenVPNApplication.the_sipengineReceive.Hangup();
                             finish();
-
                         }
                     }
                 }).start();

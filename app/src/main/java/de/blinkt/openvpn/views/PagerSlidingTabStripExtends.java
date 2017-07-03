@@ -54,16 +54,12 @@ public class PagerSlidingTabStripExtends extends HorizontalScrollView {
     private static final int[] ATTRS = new int[]{android.R.attr.textSize,
             android.R.attr.textColor};
     // @formatter:on
-
     private LinearLayout.LayoutParams defaultTabLayoutParams;
     private LinearLayout.LayoutParams expandedTabLayoutParams;
-
     private final PageListener pageListener = new PageListener();
     public OnPageChangeListener delegatePageListener;
-
     private LinearLayout tabsContainer;
     private ViewPager pager;
-
     private int tabCount;
 
     private int currentPosition = 0;
