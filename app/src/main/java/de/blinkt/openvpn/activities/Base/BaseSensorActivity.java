@@ -136,7 +136,7 @@ public class BaseSensorActivity extends CommenActivity implements SensorEventLis
 
 
 
-	AudioManager audio = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
+	//AudioManager audio = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
 
 	//重写 Activity 的 onKeyDown 方法
 
@@ -144,16 +144,16 @@ public class BaseSensorActivity extends CommenActivity implements SensorEventLis
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 			case KeyEvent.KEYCODE_VOLUME_UP:
-				audio.adjustStreamVolume(
+				/*audio.adjustStreamVolume(
 						AudioManager.STREAM_MUSIC,
 						AudioManager.ADJUST_RAISE,
-						AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+						AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);*/
 				return true;
 			case KeyEvent.KEYCODE_VOLUME_DOWN:
-				audio.adjustStreamVolume(
+				/*audio.adjustStreamVolume(
 						AudioManager.STREAM_MUSIC,
 						AudioManager.ADJUST_LOWER,
-						AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+						AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);*/
 				return true;
 			default:
 				break;
