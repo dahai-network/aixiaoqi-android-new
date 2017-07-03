@@ -13,7 +13,7 @@ import de.blinkt.openvpn.http.InterfaceCallback;
 
 public class PackageCategoryImpl implements PackageCategoryModel {
     @Override
-    public void getOrder(InterfaceCallback interfaceCallback, int page, int pageSize,int type, String channel_id) {
-        CreateHttpFactory.instanceHttp(interfaceCallback, HttpConfigUrl.COMTYPE_GET_ORDER, page + "", Constant.PAGESIZE + "", type+"", channel_id);
+    public void getOrder(InterfaceCallback interfaceCallback, int page, int pageSize,int type) {
+        CreateHttpFactory.instanceHttp(interfaceCallback, HttpConfigUrl.COMTYPE_GET_ORDER, page + "", Constant.PAGESIZE + "", type+"");
     }
 }

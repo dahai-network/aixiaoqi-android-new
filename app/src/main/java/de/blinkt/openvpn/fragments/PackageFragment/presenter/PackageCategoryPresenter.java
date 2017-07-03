@@ -27,21 +27,20 @@ public class PackageCategoryPresenter implements InterfaceCallback {
     boolean isTimeOut;
     private Handler mHandler = new Handler() {
     };
-    private PackageCategoryActivity instance;
 
     public PackageCategoryPresenter(PackageCategoryView packageCategoryView) {
 
         this.packageCategoryView = packageCategoryView;
         packageCategoryModel = new PackageCategoryImpl();
-        instance = ICSOpenVPNApplication.packageCategoryActivity;
+
     }
 
     Runnable runnable;
 
-    public void addData(int page, int pageSize, int type, String channel_id, boolean isLoadMore) {
+    public void addData(int page, int pageSize, int type , boolean isLoadMore) {
         if (!isLoadMore)
-            instance.showProgress(R.string.loading_data);
-        packageCategoryModel.getOrder(this, page, pageSize, type, channel_id);
+            packageCategoryView.showProgress(R.string.loading_data);
+        packageCategoryModel.getOrder(this, page, pageSize, type);
         isTimeOut = true;
         if (runnable != null)
             mHandler.removeCallbacks(runnable);
@@ -50,8 +49,8 @@ public class PackageCategoryPresenter implements InterfaceCallback {
             public void run() {
                 Log.d("PackageCPresenter", "run: " + isTimeOut);
                 if (isTimeOut) {
-                    instance.dismissProgress();
-                    instance.showToast("网络超时，请重试");
+                    packageCategoryView.dismissProgress();
+                    packageCategoryView.showToast("网络超时，请重试");
                     isTimeOut = false;
                 }
             }
@@ -68,17 +67,17 @@ public class PackageCategoryPresenter implements InterfaceCallback {
             packageCategoryView.loadSuccessView(bean);
         }
         isTimeOut = false;
-        instance.dismissProgress();
+        packageCategoryView.dismissProgress();
     }
 
     @Override
     public void errorComplete(int cmdType, String errorMessage) {
-        instance.dismissProgress();
+        packageCategoryView.dismissProgress();
     }
 
     @Override
     public void noNet() {
-        instance.dismissProgress();
+        packageCategoryView.dismissProgress();
     }
 
     public void releaseResource() {

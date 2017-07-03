@@ -102,8 +102,10 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 		if (bean.getOrderStatus() == 0 || bean.getOrderStatus() == 4) {
 			normalHolder.stateTextView.setText("未激活");
-//			normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.activite_color_selector));
-		} else if (bean.getOrderStatus() == 2) {
+			normalHolder.stateTextView.setTextColor(context.getResources().getColorStateList(R.color.activite_color_selector));
+			normalHolder.stateTextView.setVisibility(View.GONE);
+		} else
+		if (bean.getOrderStatus() == 2) {
 			normalHolder.stateTextView.setText("已过期");
 			normalHolder.stateTextView.setVisibility(View.GONE);
 		} else if (bean.getOrderStatus() == 3) {

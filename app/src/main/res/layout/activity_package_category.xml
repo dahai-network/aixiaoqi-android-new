@@ -5,35 +5,10 @@
     android:background="@color/gray_back_2"
     android:orientation="vertical">
 
-    <LinearLayout
+    <include layout="@layout/view_no_net"/>
+    <include layout="@layout/view_no_data"/>
+    <de.blinkt.openvpn.views.xrecycler.XRecyclerView
+        android:id="@+id/activite_rv"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/padding_50dp"
-        android:background="@color/blue_title">
-
-        <TextView
-            android:id="@+id/titlebar_iv_lefttext"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:drawableLeft="@drawable/btn_top_back"
-            android:gravity="center_vertical"
-            android:padding="@dimen/padding_15dp"
-            android:paddingLeft="@dimen/padding_15dp"
-            android:textColor="@color/white" />
-
-        <LinearLayout
-            android:id="@+id/mRadioGroup_content"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingRight="@dimen/padding_30dp" />
-    </LinearLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/mViewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"></de.blinkt.openvpn.views.xrecycler.XRecyclerView>
 </LinearLayout>

@@ -9,6 +9,6 @@ import de.blinkt.openvpn.http.InterfaceCallback;
 
 public interface PackageCategoryModel {
 
-    void getOrder(InterfaceCallback interfaceCallback, int page, int pageSize, int type,String channel_id);
+    void getOrder(InterfaceCallback interfaceCallback, int page, int pageSize, int type );
 
 }
