@@ -235,14 +235,16 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 	}
 
     private void findDeviceAnimal(LinearLayout pop_layout) {
-        search_bluetooth.setVisibility(View.GONE);
-        tip_search.setVisibility(View.GONE);
+        findedImageView.clearAnimation();
+		findedImageView.setVisibility(View.GONE);
+		search_bluetooth.setVisibility(View.GONE);
+		tip_search.setVisibility(View.GONE);
         seekImageView.clearAnimation();
         stopTextView.setText(R.string.frist_connect);
         showAimal();
         pop_layout.startAnimation(mShowAnim);
         pop_layout.setVisibility(View.VISIBLE);
-        startPropertyAnim(stopTextView,300,-580);
+        startPropertyAnim(stopTextView,350,-580);
         setAnimatorSet(uniImageView,-320,true);
         setAnimatorSet(seekImageView,-320,true);
         setAnimatorSet(outerRing,-320,true);
@@ -252,14 +254,15 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 
     private void connectSuccessAnimal(LinearLayout pop_layout){
         hideAnimal();
+		iv_back.setVisibility(View.GONE);
         pop_layout.startAnimation(HiddenAmin);
         pop_layout.setVisibility(View.GONE);
-        startPropertyAnim(stopTextView,300,0);
+        startPropertyAnim(stopTextView,350,0);
         setAnimatorSet(uniImageView,0,false);
         setAnimatorSet(seekImageView,0,false);
         setAnimatorSet(outerRing,0,false);
         stopTextView.setText(R.string.stop_bind);
-        iv_back.setVisibility(View.GONE);
+
     }
 
     BindDevcieAdapter bindDevcieAdapter;
@@ -342,7 +345,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 
         }
         ObjectAnimator anim = ObjectAnimator.ofFloat(view, "translationY", translationY, distance);
-        animatorSet.setDuration(300);
+        animatorSet.setDuration(500);
         animatorSet.setInterpolator(new DecelerateInterpolator());
         animatorSet.play(anim).with(scaleX).with(scaleY);
         animatorSet.start();
