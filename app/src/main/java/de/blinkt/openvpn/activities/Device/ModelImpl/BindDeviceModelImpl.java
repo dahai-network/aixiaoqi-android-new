@@ -1,5 +1,7 @@
 package de.blinkt.openvpn.activities.Device.ModelImpl;
 
+import android.util.Log;
+
 import de.blinkt.openvpn.activities.Device.ui.BindDeviceActivity;
 import de.blinkt.openvpn.activities.NetModelBaseImpl;
 import de.blinkt.openvpn.activities.Device.Model.BindDeviceModel;
@@ -20,6 +22,7 @@ public class BindDeviceModelImpl extends NetModelBaseImpl implements BindDeviceM
 
     @Override
     public void bindDevice(String address,String  deviceType) {
+        Log.d("BindDeviceModelImpl", "bindDevice: "+address);
         createHttpRequest(HttpConfigUrl.COMTYPE_BIND_DEVICE
                 ,address , deviceType);
     }

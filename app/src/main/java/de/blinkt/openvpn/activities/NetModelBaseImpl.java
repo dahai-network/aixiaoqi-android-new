@@ -1,13 +1,8 @@
 package de.blinkt.openvpn.activities;
 
-import cn.com.aixiaoqi.R;
-import de.blinkt.openvpn.activities.Set.ModelImpl.UserFeedbackModelImpl;
-import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.CreateHttpFactory;
 import de.blinkt.openvpn.http.InterfaceCallback;
-import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.NetworkUtils;
 
 import static de.blinkt.openvpn.util.NetworkUtils.hasWiFi;
 

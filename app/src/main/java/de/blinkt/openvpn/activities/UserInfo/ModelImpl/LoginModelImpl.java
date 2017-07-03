@@ -1,6 +1,7 @@
 package de.blinkt.openvpn.activities.UserInfo.ModelImpl;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import de.blinkt.openvpn.activities.NetModelBaseImpl;
 import de.blinkt.openvpn.activities.UserInfo.Model.LoginModel;

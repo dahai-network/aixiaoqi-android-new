@@ -6,7 +6,15 @@
     android:background="@color/blue_title"
     >
 
-
+<TextView
+    android:id="@+id/iv_back"
+    android:layout_width="100dp"
+    android:paddingTop="@dimen/padding_15dp"
+    android:paddingLeft="@dimen/padding_15dp"
+    android:drawableStart="@drawable/back_button_click"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+  />
     <TextView
         android:id="@+id/search_bluetooth"
         android:layout_width="wrap_content"
@@ -21,7 +29,7 @@
         android:id="@+id/tip_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/search_bluetooth"
+        android:layout_below="@+id/search_bluetooth"
         android:layout_centerHorizontal="true"
         android:text="@string/please_close_to_the_phone"
         android:textColor="@color/white"
@@ -36,19 +44,19 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/cancel_seek_selector"
+        android:background="@drawable/bind_device_btn"
         android:gravity="center"
         android:text="@string/stop_seek"
-        android:textColor="@color/blue_title"
+        android:textColor="@color/color_008FE5"
         />
 
     <ImageView
+        android:id="@+id/outerRing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
-        android:background="@drawable/pic_bind_arround"
-        />
+        android:background="@drawable/pic_bind_arround" />
 
     <ImageView
         android:id="@+id/uniImageView"
@@ -75,13 +83,28 @@
         android:background="@drawable/hand_up"
         android:visibility="gone"/>
 
-    <!--<android.support.v7.widget.RecyclerView
-        android:id="@+id/all_device_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-    </android.support.v7.widget.RecyclerView>-->
+
 
     <include
         layout="@layout/activity_bluetooth_connected"></include>
+
+    <LinearLayout
+        android:id="@+id/pop_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="292dp"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/bind_recyclerview"
+            android:divider="@color/color_e5e5e5"
+            android:dividerHeight="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 </RelativeLayout>

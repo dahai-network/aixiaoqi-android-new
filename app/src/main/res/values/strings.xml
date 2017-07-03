@@ -487,6 +487,8 @@
     <string name="input_compelete_password">请输入16位完整卡密码</string>
     <string name="communication_packet">通话套餐</string>
     <string name="double_click">不要重复点击</string>
+    <string name="bind_state">连接</string>
+    <string name="binded_">已绑定</string>
 
 
     <!--众筹选号信息-->
@@ -592,6 +594,7 @@
     <string name="authority_tip">为保证爱小器正常运行，必须开启以下权限:</string>
     <string name="set_now">立即设置</string>
     <string name="searching_unibox_strap">正在搜索周围双待王</string>
+    <string name="frist_connect">首选连接</string>
     <string name="only_power">剩余电量</string>
     <string name="power">电量</string>
     <string name="rechargeing">正在充电</string>
@@ -611,6 +614,7 @@
     <string name="OnOrOff">开关</string>
     <string name="registing">正在连接运营商服务器...</string>
     <string name="stop_seek">暂不搜索</string>
+    <string name="stop_bind">暂不绑定</string>
     <string name="hardware_product">硬件产品</string>
     <string name="china_telecom">中国电信</string>
     <string name="china_mobile">中国移动</string>

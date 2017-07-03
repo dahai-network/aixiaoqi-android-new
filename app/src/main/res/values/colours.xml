@@ -18,6 +18,7 @@
     <color name="cell_phone_background">#a0404040</color>
     <color name="black">#000000</color>
     <color name="blue_title">#00a0e9</color>
+    <color name="color_008FE5">#008FE5</color>
     <color name="color_02a0e9">#02A0E9</color>
     <color name="bottom_bar">#f7f7f8</color>
     <color name="bottom_bar_text_enable">#00a0e9</color>
@@ -62,6 +63,8 @@
     <color name="color01d0c0">#01d0c0</color>
     <color name="color333a48">#333a48</color>
     <color name="colordc730c">#dc730c</color>
+    <!--019FE9-->
+    <color name="color_019FE9">#019FE9</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="contact_letter_gray_line">#A0A0A0</color>
     <color name="darker_gray">#999999</color>

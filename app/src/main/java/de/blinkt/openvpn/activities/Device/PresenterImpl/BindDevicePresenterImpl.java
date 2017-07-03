@@ -5,16 +5,13 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Device.ModelImpl.BindDeviceModelImpl;
 import de.blinkt.openvpn.activities.Device.ModelImpl.IsBindDeviceModelImpl;
@@ -28,13 +25,13 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.http.GetBindsIMEIHttp;
 import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothEntity;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.CreateFiles;
 import de.blinkt.openvpn.util.SharedUtils;
-
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.BASIC_MESSAGE;
 import static de.blinkt.openvpn.constant.Constant.ICCID_GET;
@@ -51,9 +48,9 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
     UpdateDeviceInfoModelImpl updateDeviceInfoModel;
     private Handler mHandler;
     private Handler findDeviceHandler;
-
     private static final long SCAN_PERIOD = 20000;
     private List<BluetoothEntity> deviceList;
+    private ArrayList<String> addressList;
     CreateFiles createFiles;
 
     public BindDevicePresenterImpl(BindDeviceView bindDeviceView) {
@@ -71,14 +68,15 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
     @Override
     public void requestBindDevice(String deviceType) {
         if(bindDeviceModel!=null)
-        bindDeviceModel.bindDevice(deviceAddress,deviceType);
-        bindDeviceModel.bindDevice(deviceAddress, deviceType);
+            bindDeviceModel.bindDevice(deviceAddress,deviceType);
     }
 
     @Override
-    public void requestIsBindDevice() {
-        if(isBindDeviceModel!=null)
-        isBindDeviceModel.isBindDevice(deviceAddress);
+    public void requestBindDeviceList(ArrayList<String> addresss) {
+        if(addresss!=null){
+            isBindDeviceModel.getDeviceState(addresss);
+        }
+
     }
 
     @Override
@@ -166,35 +164,59 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
             if (object.getStatus() == 1) {
                 bindDeviceView.finishView();
             }
+            //批量获取绑定状态
+        }else if(cmdType==HttpConfigUrl.COMTYPE_GET_BINDS_IMEI){
+                if(object.getStatus()==1){
+                    if(object instanceof GetBindsIMEIHttp ) {
+                        Log.d("BindDevicePresenterImpl", "rightLoad: "+ object.getData());
+                        Log.d("BindDevicePresenterImpl", "deviceList"+ deviceList.size());
+                        GetBindsIMEIHttp http = (GetBindsIMEIHttp) object;
+                       // bindDeviceView.showBindState(http);
+                        bindDeviceView.showDeviceView(deviceList,http);
+
+                    }
+                }
+
         }
     }
 
     private boolean isStartFindDeviceDelay;
-
+    public void clearListData(){
+        if(deviceList!=null) {
+            deviceList.clear();
+        }
+    }
     //把搜索到的蓝牙设备保存到list中然后进行排序
-    public void findDevices(BluetoothDevice device, int rssi, byte[] scanRecord) {
+    public void findDevices(final BluetoothDevice device, int rssi, byte[] scanRecord) {
         if (device.getName() == null) {
             return;
         }
 
         if (deviceList == null) {
             deviceList = new ArrayList<>();
+            addressList=new ArrayList<>();
         }
 
         if (findDeviceHandler == null) {
             findDeviceHandler = new Handler();
         }
         Log.i("BindDevicePresenterImpl", "find the device:" + device.getName() + ",rssi :" + rssi);
-        if (device.getName().contains(bindDeviceView.getDeviceName())) {//过滤只需要的设备
+        if (device.getName().contains(bindDeviceView.getDeviceName())) {
+            //过滤只需要的设备
             BluetoothEntity model = new BluetoothEntity();
             model.setAddress(device.getAddress());
             model.setDiviceName(device.getName());
             model.setRssi(rssi);
             deviceList.add(model);
+
+            rmoveReplicatedData(deviceList);
             if (!isStartFindDeviceDelay) {
                 findDeviceHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        if(isStartFindDeviceDelay){
+                            return;
+                        }
                         //排序后连接操作
                         bindDeviceView.scanLeDevice(false);
                         if (deviceList.size() == 0 && !isStartFindDeviceDelay) {
@@ -210,30 +232,39 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                         });
                         for (int i = 0; i < deviceList.size(); i++) {
                             String id = deviceList.get(i).toString();
-                            Log.i(TAG, "排序后：" + id);
+                            Log.i("BindDevicePresenterImpl", "排序后：" + id);
                         }
+                        Log.d("BindDevicePresenterImpl", "run: 排序完毕"+isStartFindDeviceDelay);
                         try {
-                            isBind(0);
+                            if(!isStartFindDeviceDelay&&deviceList.size()>0) {
+                                getDevicesBindState(deviceList);
+                            }
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        isStartFindDeviceDelay = false;
-                        deviceList.clear();
+                        isStartFindDeviceDelay = true;
                     }
                 }, 5000);
-                isStartFindDeviceDelay = true;
+                isStartFindDeviceDelay = false;
             }
         }
     }
+    ///SMS/Gets
+    private void getDevicesBindState(List<BluetoothEntity> deviceLists){
+
+        for (int i=0;i<deviceList.size();i++){
+            addressList.add(i,deviceLists.get(i).getAddress());
+        }
+        Log.d(TAG, "getDevicesBindState:address= "+addressList.size()+"--deviceList="+deviceList.size());
+       requestBindDeviceList(addressList);
+
+    }
 
     String deviceAddress;
-
-    private void isBind(int index) {
-
-        deviceAddress = deviceList.get(index).getAddress();
-        SharedUtils.getInstance().writeString(Constant.BRACELETNAME, deviceList.get(index).getDiviceName());
-        Log.i(TAG, "deviceAddress=" + deviceAddress);
-        requestIsBindDevice();
+   @Subscribe(threadMode = ThreadMode.MAIN)//
+    public  void getAddress(BluetoothEntity bluetoothEntity) {
+       deviceAddress=bluetoothEntity.getAddress();
     }
 
     public void scanNotFindDevice() {
@@ -268,7 +299,23 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
         }
     }
 
+    /**
+     * 取出相同的address
+     * @param list  保存数据的集合
+     */
+  public void rmoveReplicatedData(List<BluetoothEntity> list){
 
+      for (int i = 0; i < list.size(); i++)  //外循环是循环的次数
+      {
+          for (int j = list.size() - 1 ; j > i; j--)  //内循环是 外循环一次比较的次数
+          {
+              if (list.get(i).getAddress().equals(list.get(j).getAddress()))
+              {
+                  list.remove(j);
+              }
+          }
+      }
+  }
     @Override
     public void onDestory() {
         if (bindDeviceModel != null) {

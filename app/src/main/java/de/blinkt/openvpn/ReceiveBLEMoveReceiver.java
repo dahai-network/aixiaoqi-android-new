@@ -89,6 +89,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
             findBlueService();
 
         } else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+            //断开处理
             disconnectedOption();
         } else if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
             EventBusUtil.blueConnStatue(UartService.STATE_CONNECTED);
@@ -231,8 +232,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
         createFiles.print("发送指令=" + APP_CONNECT + random8NumberString + "----随机数" + random8NumberString);
         Log.i(TAG, "发送了专属命令");
         String braceletname = utils.readString(Constant.BRACELETNAME);
+        Log.d(TAG, "findBlueService: "+braceletname);
 
-        if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && braceletname != null && braceletname.contains(Constant.UNIBOX)) {
+        if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || braceletname == null ) {
 
         } else {
             CommonTools.delayTime(200);

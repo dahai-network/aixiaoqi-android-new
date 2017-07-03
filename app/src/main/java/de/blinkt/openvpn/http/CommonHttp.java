@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.aixiaoqi.socket.EventBusUtil;
 import com.google.gson.Gson;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,10 +21,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
-
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.BaseEntry;
 import de.blinkt.openvpn.activities.UserInfo.ui.LoginMainActivity;
@@ -59,6 +57,7 @@ public abstract class CommonHttp implements Callback, Runnable {
     protected static final int POST_IMAGE = 2;
     protected static final int POST_JSON = 3;
     private static final String CACHE_FILE = "aixiaoqi_cache_file";
+    private static final int GET_MODE_ARRAYLIST = 4;
     protected int sendMethod_ = POST_MODE;
     protected String slaverDomain_;
     private static Context context_;
@@ -167,7 +166,9 @@ public abstract class CommonHttp implements Callback, Runnable {
             }
             String responseBody = null;
             try {
+
                 responseBody = response.body().string();
+                Log.d(TAG, "onResponse: "+responseBody);
             } catch (Exception e) {
                 Log.d("CommonHttp", "onResponse: " + responseBody + ":e=" + e.getMessage());
             }
@@ -358,6 +359,7 @@ public abstract class CommonHttp implements Callback, Runnable {
         } else {
             hostUrl_ = HttpConfigUrl.NEWBASICAPI + slaverDomain_;
         }
+        Log.d(TAG, "setCurrentUrl: "+hostUrl_);
 
     }
 
@@ -365,6 +367,7 @@ public abstract class CommonHttp implements Callback, Runnable {
     //set request params
     void excute() {
         try {
+            Log.d(TAG, "excute: ");
             BuildParams();
         } catch (Exception e) {
             e.printStackTrace();
@@ -387,12 +390,14 @@ public abstract class CommonHttp implements Callback, Runnable {
         if (sendMethod_ == GET_MODE) {
             if (params != null && !params.isEmpty()) {
                 hostUrl_ = hostUrl_ + "?";
+                Log.d(TAG, "sendRequest: "+params);
                 Iterator iter = params.entrySet().iterator();
                 int i = 0;
                 while (iter.hasNext()) {
                     Map.Entry entry = (Map.Entry) iter.next();
                     String key = (String) entry.getKey();
                     String value = (String) entry.getValue();
+                    Log.d(TAG, "sendRequest: key"+key +"--value"+value);
                     if (i == params.size() - 1) {
                         hostUrl_ += key + "=" + value;
                     } else {
@@ -413,7 +418,10 @@ public abstract class CommonHttp implements Callback, Runnable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (sendMethod_ == POST_MODE) {
+        }
+
+
+        else if (sendMethod_ == POST_MODE) {
             FormBody.Builder formEncodingBuilder = new FormBody.Builder();
             if (params != null && !params.isEmpty()) {
                 Iterator iter = params.entrySet().iterator();

@@ -225,6 +225,9 @@ public class CreateHttpFactory {
 				break;
 			case HttpConfigUrl.COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE://创建订单
 				startHttp(new DownloadSkyUpgradePackageHttp(interfaceCallback, cmdType,true,params));
+			case HttpConfigUrl.COMTYPE_GET_BINDS_IMEI://获取绑定状态
+                Log.d("CreateHttpFactory", "instanceHttp:----------- ");
+                startHttp(new GetBindsIMEIHttp(interfaceCallback, cmdType, params));
 				break;
 		}
 	}

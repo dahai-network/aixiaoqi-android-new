@@ -28,6 +28,7 @@ public class BaseHttp extends CommonHttp {
 	}
 
 	public BaseHttp(InterfaceCallback interfaceCallback, int cmdType_, int requestType, String url, String... params) {
+
 		initParams(interfaceCallback, cmdType_, url);
 		valueParams = params;
 		sendMethod_ = requestType;
@@ -35,6 +36,7 @@ public class BaseHttp extends CommonHttp {
 
 	private void initParams(InterfaceCallback interfaceCallback, int cmdType_, String url) {
 		this.interfaceCallback = interfaceCallback;
+		Log.d(TAG, "initParams: cmdType_="+cmdType_+"--url="+url);
 		this.cmdType_ = cmdType_;
 		slaverDomain_ = url;
 	}
@@ -51,7 +53,9 @@ public class BaseHttp extends CommonHttp {
 
 	@Override
 	protected void BuildParams() throws Exception {
+		Log.d(TAG, "BuildParams: params="+params+"--isCreateHashMap="+isCreateHashMap);
 		if (params == null && isCreateHashMap) {
+			Log.d(TAG, "BuildParams: params"+params);
 			params = new HashMap<>();
 		}
 	}
@@ -74,7 +78,6 @@ public class BaseHttp extends CommonHttp {
 		}
 
 		interfaceCallback.rightComplete(cmdType_, this);
-		Log.e(TAG, "parseResult: "+interfaceCallback);
 
 	}
 

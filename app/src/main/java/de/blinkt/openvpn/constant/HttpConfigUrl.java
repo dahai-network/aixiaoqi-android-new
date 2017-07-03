@@ -103,6 +103,7 @@ public class HttpConfigUrl {
 	public static final String CONFIRMED = "UserDeviceTel/Confirmed";
 	public static final String GETCURRENT = "UserDeviceTel/GetCurrent";
 	public static final String GET_ATTRS_BY_ID = "Package/GetAttrsByID";
+	public static final String GET_BINDS_IMEI = "DeviceBracelet/GetBindsIMEI";
 
 	public static final int COMTYPE_LOGIN = 0x0001;
 	public static final int COMTYPE_SECURITY_CONFIG = 0x0002;
@@ -187,4 +188,5 @@ public class HttpConfigUrl {
 	public static final int COMTYPE_CONFIRMED = 0x1056;
 	public static final int COMTYPE_GETCURRENT = 0x1057;
 	public static final int COMTYPE_GET_ATTRS_BY_ID = 0x1059;
+	public static final int COMTYPE_GET_BINDS_IMEI = 0x1060;
 }
