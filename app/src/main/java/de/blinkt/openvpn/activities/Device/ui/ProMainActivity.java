@@ -215,7 +215,7 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			moveTaskToBack(false);
+			moveTaskToBack(true);
 		}
 		return true;
 	}

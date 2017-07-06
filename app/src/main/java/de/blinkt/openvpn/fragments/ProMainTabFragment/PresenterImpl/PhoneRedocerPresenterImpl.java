@@ -3,6 +3,7 @@ package de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Filter;
 
@@ -133,6 +134,8 @@ public class PhoneRedocerPresenterImpl  implements RecyclerBaseAdapter.OnItemCli
     }
 
     public void searchContactRedocer(Context context) {
+        Log.e("searchContactRedocer","searchContactRedocer");
+        CommonTools.delayTime(200);
         AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, context.getContentResolver(), false);
         FindContactUtil.queryContactRecoderData(asyncQueryContactRecodeHandler);
     }
@@ -144,9 +147,13 @@ public class PhoneRedocerPresenterImpl  implements RecyclerBaseAdapter.OnItemCli
         } else {
             phoneView.rlNoPermission(View.GONE);
             mAllList = mAllLists;
+            Log.e("queryComplete",mAllList.toString());
             addDataContactRecodeAdapter();
         }
     }
+
+
+
     //搜索通话记录
     private void searchContactRecoder(String str, List<ContactRecodeEntity> searchResultList) {
         try {

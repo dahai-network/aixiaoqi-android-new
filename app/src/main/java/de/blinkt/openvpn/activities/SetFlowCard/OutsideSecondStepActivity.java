@@ -87,6 +87,8 @@ public class OutsideSecondStepActivity extends BaseActivity {
                 try {
                     startActivity(new Intent(Settings.ACTION_APN_SETTINGS));
                 } catch (ActivityNotFoundException e) {
+                    CommonTools.delayTime(100);
+                    canClickNext();
                     CommonTools.showShortToast(this, getString(R.string.not_suppert_open_way));
                 }
 
@@ -123,8 +125,12 @@ public class OutsideSecondStepActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         if (isOutsideSecondStepClick) {
-            activateTextView.setEnabled(true);
-            activateTextView.setBackgroundResource(R.drawable.green_btn_click);
+            canClickNext();
         }
+    }
+
+    private void canClickNext() {
+        activateTextView.setEnabled(true);
+        activateTextView.setBackgroundResource(R.drawable.green_btn_click);
     }
 }

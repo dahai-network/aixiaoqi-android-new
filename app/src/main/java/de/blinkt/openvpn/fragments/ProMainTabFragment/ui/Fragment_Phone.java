@@ -337,6 +337,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PERMISSION_SET) {
+            Log.e(TAG,"onActivityResult");
             phoneRedocerPresenter.searchContactRedocer(getActivity());
         }
     }

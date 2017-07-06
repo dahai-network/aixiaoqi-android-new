@@ -55,7 +55,7 @@ public class SetPermission {
 
 	private void goHuaWeiMainager() {
 		try {
-			Intent intent = new Intent("demo.vincent.com.tiaozhuan", android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+			Intent intent = new Intent("cn.com.aixiaoqi", android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			ComponentName comp = new ComponentName("com.huawei.systemmanager", "com.huawei.permissionmanager.ui.MainActivity");
 			intent.setComponent(comp);

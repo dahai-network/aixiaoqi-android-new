@@ -83,6 +83,8 @@ public class OutsideThirdStepActivity extends BaseActivity {
                 try {
                     startActivity(new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS));
                 } catch (ActivityNotFoundException e) {
+                    CommonTools.delayTime(100);
+                    canClickNext();
                     CommonTools.showShortToast(this, getString(R.string.not_suppert_open_way));
                 }
                 break;
@@ -113,9 +115,13 @@ public class OutsideThirdStepActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         if (isOutsideThirdStepClick) {
-            activateTextView.setEnabled(true);
-            activateTextView.setBackgroundResource(R.drawable.green_btn_click);
+            canClickNext();
         }
+    }
+
+    private void canClickNext() {
+        activateTextView.setEnabled(true);
+        activateTextView.setBackgroundResource(R.drawable.green_btn_click);
     }
 
     private void initData() {

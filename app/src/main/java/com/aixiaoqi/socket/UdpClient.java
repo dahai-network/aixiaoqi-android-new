@@ -4,7 +4,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -13,14 +15,17 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.LaunchActivity;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
+import de.blinkt.openvpn.views.dialog.DialogTip;
 
 /**
  * Created by Administrator on 2016/12/30 0030.
  */
 
-public abstract class UdpClient implements Runnable {
+public abstract class UdpClient implements Runnable,DialogInterfaceTypeBase {
 
 	private boolean flag;
 	DatagramSocket datagramSocket;
@@ -37,7 +42,9 @@ public abstract class UdpClient implements Runnable {
 			if (socket == null) {
 				try {
 					socket = new DatagramSocket(port);
+					socket.setReuseAddress(true);
 				}catch (Exception e){
+					port=0;
 					exceptionPort();
 				}
 			}
@@ -107,9 +114,19 @@ public abstract class UdpClient implements Runnable {
 		}
 	}
 
-//处理当端口号被占用的情况，当端口号被占用，只有杀死进程，端口号才能释放，否则创建UDP会失败。
-	private void exceptionPort() {
-		if(sendPort==0){
+
+	private  void showDialog(){
+		DialogTip dialogTip
+				=new DialogTip(this,ICSOpenVPNApplication.getContext(), R.layout.dialog_tip, 3);
+		dialogTip.setIvTipVisibility(View.GONE);
+		dialogTip.setTvRechangeText(R.string.sure_restart);
+		dialogTip.setTvContentText(R.string.sure_restart_content);
+		dialogTip.setCanClickBack(false);
+	}
+
+	@Override
+	public void dialogText(int type, String text) {
+		if(type==3){
 			Intent intent = new Intent(ICSOpenVPNApplication.getContext().getApplicationContext(), LaunchActivity.class);
 			PendingIntent restartIntent = PendingIntent.getActivity(
 					ICSOpenVPNApplication.getContext().getApplicationContext().getApplicationContext(), 0, intent,
@@ -123,9 +140,20 @@ public abstract class UdpClient implements Runnable {
 		}
 	}
 
+	//处理当端口号被占用的情况，当端口号被占用，只有杀死进程，端口号才能释放，否则创建UDP会失败。
+	private void exceptionPort() {
+		if(sendPort==0){
+			Log.e("UdpClient","port="+port);
+			Looper.prepare();
+			showDialog();
+			Looper.loop();
+
+		}
+	}
 
 
-//断开连接，因为端口号跟进程捆绑在一起，
+
+	//断开连接，因为端口号跟进程捆绑在一起，
 // 而我们没有另外搞一个子线程，
 // 因此进程没有关闭的情况下最好不要主动断开。
 // 否则，当换卡且没有注册过的时候，就会抛出端口号被占用的情况。

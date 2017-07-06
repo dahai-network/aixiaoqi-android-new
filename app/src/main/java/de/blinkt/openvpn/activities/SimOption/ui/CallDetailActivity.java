@@ -16,6 +16,7 @@ import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
 import de.blinkt.openvpn.activities.SimOption.PresenterImpl.CallDetailPresenterImpl;
 import de.blinkt.openvpn.activities.SimOption.View.CallDetailView;
+import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
@@ -168,7 +169,11 @@ public class CallDetailActivity extends BaseActivity implements CallDetailView, 
 				if (SocketConstant.REGISTER_STATUE_CODE == 3) {
 					callDetailPresenter.callPhone();
 				} else {
+					if(ICSOpenVPNApplication.uartService!=null&&ICSOpenVPNApplication.uartService.isConnectedBlueTooth()){
 					CommonTools.showShortToast(this, getString(R.string.sim_register_phone_tip));
+					}else{
+						CommonTools.showShortToast(this, getString(R.string.unconnection_device));
+					}
 				}
 				break;
 			case R.id.defriend_tv:

@@ -176,7 +176,6 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
 
                     }
                 }
-
         }
     }
 

@@ -3,6 +3,7 @@ package de.blinkt.openvpn.views.dialog;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.com.aixiaoqi.R;
@@ -16,8 +17,8 @@ public class DialogTip extends DialogBase implements View.OnClickListener{
 
 
     protected TextView tvRechange;
-
-
+    protected TextView tvContent;
+    protected  ImageView ivTip;
     public DialogTip(DialogInterfaceTypeBase dialogInterfaceTypeBase, Context context, int layoutId, int type) {
         super(dialogInterfaceTypeBase, context, layoutId, type);
         addListener();
@@ -45,11 +46,34 @@ public class DialogTip extends DialogBase implements View.OnClickListener{
                 break;
         }
     }
+    public  void setTvRechangeText(int tvRechangeId){
+        if(tvRechange!=null){
+            tvRechange.setText(context.getString(tvRechangeId));
+        }
+    }
+
+    public void setTvContentText(int contentid){
+        if(tvContent!=null){
+            tvContent.setText(context.getString(contentid));
+        }
+    }
+
+    public void setIvTipDrawable(int drawableId){
+        if(ivTip!=null){
+            ivTip.setImageResource(drawableId);
+        }
+    }
+
+    public void setIvTipVisibility(int viaiable){
+        if(ivTip!=null){
+            ivTip.setVisibility(viaiable);
+        }
+    }
 
     @Override
     protected void setDialogContentView(View view) {
+        tvContent=(TextView)view.findViewById(R.id.tv_content);
         tvRechange = (TextView) view.findViewById(R.id.sure_tv);
-
-
+        ivTip = (ImageView) view.findViewById(R.id.iv_tip);
     }
 }

@@ -134,6 +134,7 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
 
     public static void launch(Context context, String id, int PackageCategory) {
         Intent intent = new Intent(context, MyOrderDetailActivity.class);
+
         intent.putExtra("id", id);
         intent.putExtra("PackageCategory", PackageCategory);
         context.startActivity(intent);
@@ -148,8 +149,8 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
     private void initSet() {
         hasLeftViewTitle(R.string.order_detail, 0);
         if (getIntent().getIntExtra("PackageCategory", -1) != 0) {
-            aboardHowToUse.setVisibility(GONE);
-            inlandReset.setVisibility(GONE);
+//            aboardHowToUse.setVisibility(GONE);
+//            inlandReset.setVisibility(GONE);
         } else {
             cancelOrderButton.setVisibility(GONE);
         }
@@ -169,13 +170,13 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
             packageStateTextView.setText("已激活");
             cancelOrderButton.setVisibility(GONE);
             expiryDateTextView.setText(bean.getExpireDays());
-            activateTextView.setText("再次激活");
+            activateTextView.setText(getString(R.string.activate_now));
             ReceiveBLEMoveReceiver.orderStatus = -1;
         } else if (ReceiveBLEMoveReceiver.orderStatus == 4) {
             packageStateTextView.setText("激活失败");
             cancelOrderButton.setVisibility(GONE);
             expiryDateTextView.setText(bean.getExpireDays());
-            activateTextView.setText("再次激活");
+            activateTextView.setText(getString(R.string.activate_now));
             ReceiveBLEMoveReceiver.orderStatus = -1;
         }
     }
@@ -317,12 +318,12 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
                 packageStateTextView.setText("激活失败");
                 cancelOrderButton.setVisibility(GONE);
                 expiryDateTextView.setText(bean.getExpireDays());
-                activateTextView.setText("再次激活");
+                activateTextView.setText(getString(R.string.activate_now));
             } else if (bean.getOrderStatus() == 1) {
                 packageStateTextView.setText("已激活");
                 cancelOrderButton.setVisibility(GONE);
                 expiryDateTextView.setText(bean.getExpireDays());
-                activateTextView.setText("再次激活");
+                activateTextView.setText(getString(R.string.activate_now));
             }
             if ("1".equals(bean.getPackageCategory())) {
                 hideWidget();

@@ -132,6 +132,9 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                         @Override
                         public void run() {
                             e("开启线程=");
+                            if(CommonTools.isFastDoubleClick(3000)){
+                                return;
+                            }
                             if (sdkAndBluetoothDataInchange == null) {
                                 sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
                             }
@@ -149,7 +152,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                                     noPreDataRegister();
                                 }
                             } else {
-                                CommonTools.delayTime(2000);
+                                CommonTools.delayTime(3000);
                                 if(getIccidCount<3){
                                     SendCommandToBluetooth.sendMessageToBlueTooth(ICCID_GET);
                                     getIccidCount++;
@@ -170,6 +173,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
     }
 
     private void noPreDataRegister() {
+
         hasPreDataRegisterImpl.startSocketService();
         noPreDataRegisterModel.noPreDataStartSDKSimRegister();
     }
@@ -308,6 +312,8 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
             SocketConstant.REGISTER_STATUE_CODE = 1;
         }
     }
+
+
     @Override
     public void onDestory() {
         EventBus.getDefault().unregister(this);

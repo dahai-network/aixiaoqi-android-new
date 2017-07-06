@@ -712,4 +712,8 @@
     <string name="activate_succeed">激活成功</string>
     <string name="activate_failure">激活失败</string>
     <string name="insert_cart_statue">设备中爱小器卡</string>
+
+
+    <string name="sure_restart">确认重启</string>
+    <string name="sure_restart_content">读取手环或双待王内的SIM信息失败，请您重启APP再次读取</string>
 </resources>

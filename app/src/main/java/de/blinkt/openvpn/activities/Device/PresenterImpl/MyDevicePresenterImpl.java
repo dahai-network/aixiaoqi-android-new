@@ -21,6 +21,7 @@ import java.io.File;
 
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
+import de.blinkt.openvpn.activities.Device.Model.DownloadUpgradePackageModel;
 import de.blinkt.openvpn.activities.Device.ModelImpl.CheckDeviceIsOnlineModelImpl;
 import de.blinkt.openvpn.activities.Device.ModelImpl.DownloadUpgradePackageModelImpl;
 import de.blinkt.openvpn.activities.Device.ModelImpl.SkyUpgradeModelImpl;
@@ -120,18 +121,20 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
             }
             ;
         }else if(cmdType==HttpConfigUrl.COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE){
-            DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = (DownloadSkyUpgradePackageHttp) object;
-            if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
-                MyDeviceActivity.isUpgrade = true;
-                SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);
-                ICSOpenVPNApplication.isConnect=false;
-                SendCommandToBluetooth.sendMessageToBlueTooth(SKY_UPGRADE_ORDER);
-                myDeviceView.startAnim();
-                myDeviceView.showUpgradeDialog();
-                CommonTools.delayTime(1000);
-                skyUpgradeScan();
-            } else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
-                myDeviceView.showToast(R.string.download_upgrade_package_fail);
+            if(object instanceof DownloadSkyUpgradePackageHttp){
+                DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = (DownloadSkyUpgradePackageHttp) object;
+                if (Constant.DOWNLOAD_SUCCEED.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
+                    MyDeviceActivity.isUpgrade = true;
+                    SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);
+                    ICSOpenVPNApplication.isConnect=false;
+                    SendCommandToBluetooth.sendMessageToBlueTooth(SKY_UPGRADE_ORDER);
+                    myDeviceView.startAnim();
+                    myDeviceView.showUpgradeDialog();
+                    CommonTools.delayTime(1000);
+                    skyUpgradeScan();
+                } else if (Constant.DOWNLOAD_FAIL.equals(downloadSkyUpgradePackageHttp.getDownloadStatues())) {
+                    myDeviceView.showToast(R.string.download_upgrade_package_fail);
+                }
             }
 
         }else if(cmdType==HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA){
