@@ -71,7 +71,7 @@ public class BindDevcieAdapter extends RecyclerView.Adapter<BindDevcieAdapter.Vi
             }else {
                 holder.deviceState.setVisibility(View.VISIBLE);
                 holder.device_state_tv.setVisibility(View.GONE);
-                holder.deviceState.setText("连接");
+                holder.deviceState.setText("绑定");
                 holder.deviceAddress.setTextColor(mContext.getResources().getColor(R.color.color_333333));
 
             }

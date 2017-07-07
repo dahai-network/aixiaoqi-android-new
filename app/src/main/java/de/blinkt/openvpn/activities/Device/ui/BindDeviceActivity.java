@@ -221,7 +221,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 
 	@Override
 	public void onBackPressed() {
-		stopTextView.performClick();
+        finish();
 	}
 
 	//连接成功设备以后
@@ -432,6 +432,14 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
                     String address = bindDevcieAdapter.getData().get(0).getAddress();
                     SharedUtils.getInstance().writeString(Constant.BRACELETNAME, address);
                     connect(address);
+					mHandler.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							dismissProgress();
+							return;
+						}
+					},8000);
+
                     //暂不绑定
                 }else if(getResources().getString(R.string.stop_bind).equals(stopTextView.getText().toString())){
                     findDeviceAnimal(pop_layout);
@@ -475,7 +483,6 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
                 @Override
                 public void run() {
                     dismissProgress();
-
                     return;
                 }
             },8000);
