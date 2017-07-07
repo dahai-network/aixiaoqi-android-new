@@ -156,6 +156,7 @@ public class CallDetailPresenterImpl extends NetPresenterBaseImpl implements Cal
     public void initData(){
         ContactRecodeEntity phoneInfo = (ContactRecodeEntity) ((Activity)context).getIntent().getSerializableExtra(PHONE_INFO);
         contactBean = (ContactBean) ((Activity)context).getIntent().getSerializableExtra("contactBean");
+
         if (phoneInfo != null) {
             isContactExist(phoneInfo.getPhoneNumber());
         } else if (contactBean != null) {
@@ -165,6 +166,7 @@ public class CallDetailPresenterImpl extends NetPresenterBaseImpl implements Cal
             contactBean = new ContactBean();
             contactBean.setPhoneNum(phoneInfo.getPhoneNumber());
             contactBean.setDesplayName(phoneInfo.getName());
+           // Log.d(TAG, "initData: "+phoneInfo.getPhoneNumber()+".."+phoneInfo.getName());
         }
         if (!TextUtils.isEmpty(contactBean.getDesplayName()))
             callDetailView.setUserNameText(contactBean.getDesplayName());
@@ -182,11 +184,13 @@ public class CallDetailPresenterImpl extends NetPresenterBaseImpl implements Cal
 public void clickRight(){
     if (isExist) {
         Intent intent = new Intent(Intent.ACTION_EDIT);
+        Log.d(TAG, "clickRight:---------------------------- ");
         //需要获取到数据库contacts表中lookup列中的key值，在上面遍历contacts集合时获取到
         Uri data = ContactsContract.Contacts.getLookupUri(contactBean.getContactId(), contactBean.getLookUpKey());
         intent.setDataAndType(data, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
         intent.putExtra("finishActivityOnSaveCompleted", true);
         context.startActivity(intent);
+
     } else {
         Intent addIntent = new Intent(Intent.ACTION_INSERT, Uri.withAppendedPath(Uri.parse("content://com.android.contacts"), "contacts"));
         addIntent.setType("vnd.android.cursor.dir/person");

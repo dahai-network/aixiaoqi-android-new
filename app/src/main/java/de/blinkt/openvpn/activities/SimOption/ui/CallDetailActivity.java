@@ -25,6 +25,7 @@ import static de.blinkt.openvpn.util.NetworkUtils.hasWiFi;
 
 /**
  * Created by Administrator on 2017/4/6 0006.
+ * 拨打详情界面
  */
 
 public class CallDetailActivity extends BaseActivity implements CallDetailView, XRecyclerView.LoadingListener, DialogInterfaceTypeBase {
@@ -109,6 +110,7 @@ public class CallDetailActivity extends BaseActivity implements CallDetailView, 
 	@Override
 	protected void onClickRightView() {
 		callDetailPresenter.clickRight();
+        //需要重新获取系统联系人
 	}
 	@Override
 	public void setBlackList() {
@@ -212,4 +214,10 @@ public class CallDetailActivity extends BaseActivity implements CallDetailView, 
 			startActivity(intent);
 		}
 	}
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        callDetailPresenter.initData();
+    }
 }

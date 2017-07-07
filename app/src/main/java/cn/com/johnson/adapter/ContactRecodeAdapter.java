@@ -7,6 +7,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,8 @@ public class ContactRecodeAdapter extends RecyclerBaseAdapter<ContactRecodeAdapt
 		final 	String phoneNumber = contactRecodeEntity.getPhoneNumber();
 
 		final 	String name = contactRecodeEntity.getName();
+
+		Log.d("ContactRecodeAdapter", "onBindViewHolder:--- "+phoneNumber+"--"+name);
 
 		String address= PhoneNumberZone.getAddress(dao, PhoneFormatUtil.deleteprefix(" ",phoneNumber));
 		if (!TextUtils.isEmpty(name)) {
