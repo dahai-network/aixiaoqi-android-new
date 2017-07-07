@@ -99,6 +99,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
             //如果版本号小于android N
         } else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
             final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
+            Log.d(TAG, "onReceive:messages= "+messages.get(0));
             if (messages.size() == 0) {
                 return;
             }
@@ -122,7 +123,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                     case RECEIVE_ELECTRICITY:
                                         utils.writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(10, 12), 16));
                                         break;
-
                                     case AGREE_BIND:
                                         //绑定流程成功命令
                                         CommonTools.delayTime(500);

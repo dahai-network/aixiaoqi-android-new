@@ -23,6 +23,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
+import com.yanzhenjie.permission.AndPermission;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,6 +36,7 @@ import de.blinkt.openvpn.activities.MyModules.ui.RechargeActivity;
 import de.blinkt.openvpn.activities.SimOption.PresenterImpl.CallDetailPresenterImpl;
 import de.blinkt.openvpn.activities.SimOption.ui.CallDetailActivity;
 import de.blinkt.openvpn.activities.SimOption.ui.CallPhoneNewActivity;
+import de.blinkt.openvpn.activities.StartUpHomePageActivity;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl.PhoneRedocerPresenterImpl;
@@ -54,8 +57,6 @@ import static de.blinkt.openvpn.constant.Constant.SIM_CELL_PHONE;
 
 
 public class Fragment_Phone extends Fragment implements InterfaceCallback, T9TelephoneDialpadView.OnT9TelephoneDialpadView, DialogInterfaceTypeBase, T9TelephoneDialpadView.OnControlCallOptionListener, View.OnKeyListener,PhoneView{
-
-
 
     public TextView dial_delete_btn;
     public static int PERMISSION_SET = 1;
@@ -149,6 +150,7 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         switch (v.getId()) {
             case R.id.jump_permission:
                 new SetPermission(getActivity());
+                // 先判断是否有权限。
                 break;
             case R.id.floatingActionButton:
                 EventBusUtil.optionView(false);
@@ -214,8 +216,6 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
         this.curInputStr = curCharacter;
         EventBusUtil.optionView(curCharacter);
     }
-
-
 
     private String TAG = "Fragment_Phone";
 

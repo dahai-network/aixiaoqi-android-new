@@ -18,7 +18,6 @@
         android:layout_height="@dimen/padding_30dp" />
     <EditText
         android:layout_below="@id/top_view"
-
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
         android:layout_marginLeft="@dimen/padding_10"

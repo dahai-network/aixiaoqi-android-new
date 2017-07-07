@@ -221,7 +221,7 @@
     <string name="please_close_to_the_phone">当设备震动时，请点击确认绑定</string>
     <string name="please_makesure_bind">当设备亮灯闪烁时，请点击确认绑定</string>
     <string name="package_market">套餐超市</string>
-    <string name="loading_data">正在加载中。。</string>
+    <string name="loading_data">正在加载中...</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 
@@ -487,7 +487,7 @@
     <string name="input_compelete_password">请输入16位完整卡密码</string>
     <string name="communication_packet">通话套餐</string>
     <string name="double_click">不要重复点击</string>
-    <string name="bind_state">连接</string>
+    <string name="bind_state">绑定</string>
     <string name="binded_">已绑定</string>
 
 

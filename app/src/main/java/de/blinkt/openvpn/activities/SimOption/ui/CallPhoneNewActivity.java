@@ -17,10 +17,8 @@ import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.aixiaoqi.socket.SocketConstant;
 import com.umeng.analytics.MobclickAgent;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,7 +36,6 @@ import de.blinkt.openvpn.util.PhoneFormatUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.SearchConnectterHelper;
 import de.blinkt.openvpn.views.T9TelephoneDialpadView;
-
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLCONTROLVOIDE;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLHANGUP;
 import static de.blinkt.openvpn.constant.UmengContant.CLICKCALLPHONEQUIET;
@@ -71,7 +68,7 @@ public class CallPhoneNewActivity extends BaseSensorActivity implements  T9Telep
     ImageView hideKeyboard;
     @BindView(R.id.t9dialpadview)
     T9TelephoneDialpadView t9dialpadview;
-Unbinder unbinder;
+    Unbinder unbinder;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
