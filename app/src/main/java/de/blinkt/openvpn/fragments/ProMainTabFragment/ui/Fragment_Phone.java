@@ -343,6 +343,12 @@ public class Fragment_Phone extends Fragment implements InterfaceCallback, T9Tel
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        phoneRedocerPresenter.searchContactRedocer(getActivity());
+    }
+
+    @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (keyCode == KeyEvent.KEYCODE_BACK) {  //表示按返回键 时的操作

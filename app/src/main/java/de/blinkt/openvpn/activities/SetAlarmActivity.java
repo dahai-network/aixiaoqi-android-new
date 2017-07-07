@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -343,11 +345,7 @@ public class SetAlarmActivity extends BaseNetActivity  {
 	//为发送的数据添加0，如果小于15
 	private String addZero(String date) {
 		date = date.toUpperCase();
-		if (date.equals("A") || date.equals("B") || date.equals("C")
-				|| date.equals("D") || date.equals("E") || date.equals("F")
-				|| date.equals("0") || date.equals("1") || date.equals("2")
-				|| date.equals("3") || date.equals("4") || date.equals("5") ||
-				date.equals("6") || date.equals("7") || date.equals("8") || date.equals("9")) {
+		if (!TextUtils.isEmpty(date)&&date.length()==1) {
 			return "0" + date;
 		} else {
 			return "" + date;

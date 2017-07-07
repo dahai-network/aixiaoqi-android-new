@@ -1,6 +1,7 @@
 package de.blinkt.openvpn.activities.Device.PresenterImpl;
 
 import android.content.Context;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -298,7 +299,9 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                 }else{
                     CommonTools.delayTime(2000);
                     requestCount++;
+                    Looper.prepare();
                     getPortAndIp();
+                    Looper.loop();
                 }
             }
         }).start();

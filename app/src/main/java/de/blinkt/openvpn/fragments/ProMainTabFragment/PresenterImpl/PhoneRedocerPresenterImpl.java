@@ -135,9 +135,11 @@ public class PhoneRedocerPresenterImpl  implements RecyclerBaseAdapter.OnItemCli
 
     public void searchContactRedocer(Context context) {
         Log.e("searchContactRedocer","searchContactRedocer");
-        CommonTools.delayTime(200);
-        AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, context.getContentResolver(), false);
-        FindContactUtil.queryContactRecoderData(asyncQueryContactRecodeHandler);
+      if(mAllList==null||mAllList.size()==0) {
+          CommonTools.delayTime(200);
+          AsyncQueryContactRecodeHandler asyncQueryContactRecodeHandler = new AsyncQueryContactRecodeHandler(this, context.getContentResolver(), false);
+          FindContactUtil.queryContactRecoderData(asyncQueryContactRecodeHandler);
+      }
     }
 
     @Override

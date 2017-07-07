@@ -43,6 +43,7 @@ public class DialogTip extends DialogBase implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.sure_tv:
                 dialog.dismiss();
+                dialogInterfaceTypeBase.dialogText(type,null);
                 break;
         }
     }

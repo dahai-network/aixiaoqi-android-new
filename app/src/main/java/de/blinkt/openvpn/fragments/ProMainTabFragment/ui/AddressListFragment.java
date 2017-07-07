@@ -80,7 +80,11 @@ public class AddressListFragment extends BaseStatusFragment implements AddressLi
         setSearchLinstener();
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        addressPresenter.visibleFragment();
+    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
