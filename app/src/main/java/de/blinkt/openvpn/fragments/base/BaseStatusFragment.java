@@ -194,14 +194,11 @@ public class BaseStatusFragment extends Fragment {
 		switch (entity.getRigsterStatueReason()){
 			case SocketConstant.UN_INSERT_CARD:
 				bleStatus=getString(R.string.index_un_insert_card);
-
 				break;
 			case SocketConstant.AIXIAOQI_CARD:
-
 				bleStatus=getString(R.string.index_aixiaoqicard);
 				break;
 			case SocketConstant.CONNECTING_DEVICE:
-
 				bleStatus=getString(R.string.index_connecting);
 				break;
 			case SocketConstant.DISCOONECT_DEVICE:

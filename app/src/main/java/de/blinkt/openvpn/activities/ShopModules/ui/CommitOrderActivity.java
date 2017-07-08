@@ -354,7 +354,9 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
     public void dialogText(int type, String text) {
         if (type == 0) {
             // - 24 * 60 * 60 * 1000
-            if (System.currentTimeMillis() >= DateUtils.getStringToDate(text + " 00:00:00")) {
+            e("System.currentTimeMillis()="+(System.currentTimeMillis()- 24 * 60 * 60 * 1000l));
+            e("selectTime="+(DateUtils.getStringToDate(text + " 00:00:00")));
+            if (System.currentTimeMillis()- 24 * 60 * 60 * 1000l >= DateUtils.getStringToDate(text + " 00:00:00")) {
                 CommonTools.showShortToast(this,getString(R.string.less_current_time));
                 return;
             }
