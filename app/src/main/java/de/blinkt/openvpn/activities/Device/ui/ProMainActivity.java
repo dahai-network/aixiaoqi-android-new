@@ -428,10 +428,13 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 	//销毁数据
 	@Override
 	protected void onDestroy() {
+		Log.d(TAG, "onDestroy: --------------");
 		proMainPresenter.onDestory();
 		radiogroup = null;
-		if (mService != null)
+		if (mService != null){
+			mService.unbindService(mServiceConnection);
 			mService.stopSelf();
+		}
 		mService = null;
 		radiogroup = null;
 		list.clear();

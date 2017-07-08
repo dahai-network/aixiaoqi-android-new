@@ -3,6 +3,7 @@ package de.blinkt.openvpn.activities.Device.PresenterImpl;
 import android.content.Context;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.aixiaoqi.socket.EventBusUtil;
@@ -133,9 +134,10 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                         @Override
                         public void run() {
                             e("开启线程=");
-                            if(CommonTools.isFastDoubleClick(3000)){
+                          /*  if(CommonTools.isFastDoubleClick(3000)){
+
                                 return;
-                            }
+                            }*/
                             if (sdkAndBluetoothDataInchange == null) {
                                 sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
                             }
