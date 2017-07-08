@@ -320,7 +320,11 @@ public abstract class CommonHttp implements Callback, Runnable {
         }
         String s = e.getMessage();
         if (!"Canceled".equals(s)) {
+            if(Constant.IS_DEBUG){
             error(s);
+            }else{
+                error("网络请求异常");
+            }
         }
     }
 
