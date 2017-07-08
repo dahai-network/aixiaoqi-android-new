@@ -266,7 +266,7 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
                 savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
         topProgressView.setWhiteBack(true);
-        accountPresenterImpl=new AccountPresenterImpl(this);
+        accountPresenterImpl=new AccountPresenterImpl(this,getActivity());
         title.setTextTitle(getString(R.string.personal_center));
         return rootView;
     }
