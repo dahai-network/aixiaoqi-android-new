@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl;
 
+import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,6 +31,7 @@ import de.blinkt.openvpn.model.UsageRemainEntity;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
 import de.blinkt.openvpn.util.SharedUtils;
+import de.blinkt.openvpn.views.MyProgressDialog;
 
 import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
 import static de.blinkt.openvpn.constant.Constant.BRACELETPOWER;
@@ -44,8 +46,11 @@ public class AccountPresenterImpl extends NetPresenterBaseImpl implements Accoun
     GetBindDeviceInfoModelImpl getBindDeviceInfoModel;
     UnbindDeviceModelImpl unbindDeviceModel;
     UserOrderUsageModelImpl userOrderUsageModel;
-    public  AccountPresenterImpl(AccountView accountView){
+    Context context;
+    MyProgressDialog  myProgressDialog;
+    public  AccountPresenterImpl(AccountView accountView,Context context){
         this.accountView=accountView;
+        this.context=context;
         balanceModel=new BalanceModelImpl(this);
         getBindDeviceInfoModel=new GetBindDeviceInfoModelImpl(this);
         unbindDeviceModel=new UnbindDeviceModelImpl(this);
@@ -84,6 +89,8 @@ public class AccountPresenterImpl extends NetPresenterBaseImpl implements Accoun
         }else if (cmdType == HttpConfigUrl.COMTYPE_GET_USER_ORDER_USAGE_REMAINING) {
             showPackage(object);
         } else if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE) {
+            if(myProgressDialog!=null)
+            myProgressDialog.mydismiss();
             if(object.getStatus()==1){
            GetBindDeviceHttp getBindDeviceHttp=(GetBindDeviceHttp)     object;
                 if(getBindDeviceHttp.getBlueToothDeviceEntityity()==null||TextUtils.isEmpty(getBindDeviceHttp.getBlueToothDeviceEntityity().getIMEI())){
@@ -107,12 +114,17 @@ public class AccountPresenterImpl extends NetPresenterBaseImpl implements Accoun
             accountView.showToast(object.getMsg());
         }
     }
+
     public boolean canClick(){
         String braceletName = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
         //如果设备名没有就设置成爱小器钥匙扣
         if (TextUtils.isEmpty(braceletName)||TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
             if (NetworkUtils.isNetworkAvailable(ICSOpenVPNApplication.getContext())) {
                 isClickAddDevice = true;
+                myProgressDialog = new MyProgressDialog(context, R.style.MyAlertDialog);
+                myProgressDialog.setMyCancelable(true);
+                myProgressDialog.setMyTouchOutside(false);
+                myProgressDialog.myShow();
                 requestGetBindInfo();
             } else {
                 accountView.showToast(R.string.no_wifi);
@@ -132,7 +144,6 @@ public class AccountPresenterImpl extends NetPresenterBaseImpl implements Accoun
                         accountView.setDeviceType();
                         accountView.toMyDeviceActivity();
                     }
-
                 }
             }
         }
@@ -204,10 +215,14 @@ public class AccountPresenterImpl extends NetPresenterBaseImpl implements Accoun
     public void errorComplete(int cmdType, String errorMessage) {
         accountView.showToast(errorMessage);
         isClickAddDevice = false;
+        if(myProgressDialog!=null)
+            myProgressDialog.mydismiss();
     }
 
     @Override
     public void noNet() {
+        if(myProgressDialog!=null)
+            myProgressDialog.mydismiss();
         isClickAddDevice = false;
         accountView.showToast(R.string.no_wifi);
     }

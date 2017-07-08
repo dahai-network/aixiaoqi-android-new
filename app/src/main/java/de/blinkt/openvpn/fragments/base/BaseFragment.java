@@ -1,9 +1,10 @@
 package de.blinkt.openvpn.fragments.base;
 import android.support.v4.app.Fragment;
+
+
 public abstract class BaseFragment extends Fragment {
 
     protected boolean isVisible;
-
 
     /**
      * 在这里实现Fragment数据的缓加载.

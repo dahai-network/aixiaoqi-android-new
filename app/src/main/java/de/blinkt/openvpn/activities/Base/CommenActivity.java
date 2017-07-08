@@ -95,7 +95,6 @@ public class CommenActivity extends FragmentActivity {
 		myProgressDialog = new MyProgressDialog(mContext, R.style.MyAlertDialog);
 		myProgressDialog.setMyCancelable(true);
 		myProgressDialog.setMyTouchOutside(false);
-
 	}
 
 	/**
