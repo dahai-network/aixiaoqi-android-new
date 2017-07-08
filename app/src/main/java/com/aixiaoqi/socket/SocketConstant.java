@@ -48,8 +48,6 @@ public class SocketConstant {
 	};
 
 
-
-
 	public static String SESSION_ID = "00000000";//会话ID
 	public static String SDK_TAG = "c7";
 	public static String SDK_VALUE = "";
@@ -71,10 +69,6 @@ public class SocketConstant {
 	public static final String EN_APPEVT_PRDATA = "05";
 	public static final String EN_APPEVT_SIMDATA = "06";
 	public static final String EN_APPEVT_SIMINFO = "07";
-
-
-
-
 
 	public static int REGISTER_STATUE_CODE = 0;//0，表示还没有开始注册。1，表示获取预读取数据没有完成（已经写卡但未完成）。2，表示注册中，3表示注册成功
 	public static final String TRAN_DATA_TO_SDK = "88888888";
