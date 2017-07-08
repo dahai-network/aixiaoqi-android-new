@@ -24,6 +24,7 @@ public class SimDataInfoModel extends Logger{
         Log.i(TAG, "接收数据：是否插卡：" + messages.toString());
         if (messages.get(0).substring(10, 12).equals("00")) {
             Log.i(TAG, "未插卡");
+            iccid="";
             EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.UN_INSERT_CARD);
             //未插卡（需要修改：由于没有获取ICCID无法判断所以日后需要修改，暂时这样写）
             SocketConstant.REGISTER_STATUE_CODE = 0;
@@ -45,6 +46,7 @@ public class SimDataInfoModel extends Logger{
                 case "00"://有卡并且上电失败，可能是无效卡/卡未插好/设备异常 重启钥匙扣
                     sendMessageToBlueTooth(Constant.RESTORATION);
                     SharedUtils.getInstance().delete(Constant.OPERATER);
+                    iccid="";
                     break;
                 case "01":
                     Log.i(TAG, "移动卡！");
@@ -66,6 +68,7 @@ public class SimDataInfoModel extends Logger{
                     break;
                 case "04":
                     Log.i(TAG, "爱小器卡！");
+                    iccid="";
                     SharedUtils.getInstance().delete(Constant.OPERATER);
                     EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.AIXIAOQI_CARD);
                     break;
@@ -74,14 +77,26 @@ public class SimDataInfoModel extends Logger{
         }
     }
 
+    private  String iccid="";
+    private boolean isSameIccid;
+
     public void setIccid(ArrayList<String> messages){
         String Iccid = PacketeUtil.Combination(messages);
         Log.e("ICCID_BLUE_VALUE", Iccid);
+        if(Iccid.equals(iccid)){
+            isSameIccid=true;
+            return ;
+        }
+        iccid=Iccid;
+        isSameIccid=false;
         SharedUtils.getInstance().writeString(Constant.ICCID, Iccid);
         SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]] = RadixAsciiChange.convertStringToHex(Iccid);
     }
 
     private void registFlowPath(){
+        if(isSameIccid){
+            return ;
+        }
         Log.i("Bluetooth", "进入注册流程");
         EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.VAILD_CARD);
         IS_TEXT_SIM = true;
