@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +34,7 @@ import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.CreateFiles;
 import de.blinkt.openvpn.util.SharedUtils;
+import de.blinkt.openvpn.util.SimActivateHelper;
 import de.blinkt.openvpn.views.MySinkingView;
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
@@ -116,6 +118,7 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         myDevicePresenter=new MyDevicePresenterImpl(this,this);
         initSet();
         initDialogUpgrade();
+
     }
 
     @Override
@@ -421,6 +424,7 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         super.onDestroy();
         Log.d(TAG, "onDestroy()");
         myDevicePresenter.onDestory();
+
         stopAnim();
         if (sinking != null)
             sinking.clear();

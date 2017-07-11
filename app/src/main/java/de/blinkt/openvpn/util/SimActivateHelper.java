@@ -8,28 +8,51 @@ package de.blinkt.openvpn.util;
 
 import android.telephony.SmsManager;
 import android.text.TextUtils;
+import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class SimActivateHelper
 {
     private static final char[] bcdLookup = { 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 97, 98, 99, 100, 101, 102 };
+
+    public static void setInstance(SimActivateHelper instance) {
+        SimActivateHelper.instance = instance;
+    }
+
     private static SimActivateHelper instance;
+    private Method _deleteMessageFromIcc = null;
     private Method _updateMessageOnIcc = null;
     private Class<?> mClass = null;
     private SmsManager mSmsManager = null;
 
-    private SimActivateHelper()
+    private  SimActivateHelper()
     {
         try
         {
+
             this.mClass = Class.forName("android.telephony.SmsManager");
             Class localClass = this.mClass;
+//            Method[] methods = localClass.getDeclaredMethods();
+//            for (Method method : methods) {
+//                if ("updateMessageOnIcc".equals(method.getName())) {
+//                    Class[] params = method.getParameterTypes();
+//                    for(Class parameter : params){
+//                        Log.e("parameter","parameter="+parameter);
+//                    }
+//
+//                }
+//            }
+
             Class[] arrayOfClass = new Class[3];
             arrayOfClass[0] = Integer.TYPE;
             arrayOfClass[1] = Integer.TYPE;
-            arrayOfClass[2] = Byte.class;
+            arrayOfClass[2] = Class.forName("class [B");
             this._updateMessageOnIcc = localClass.getMethod("updateMessageOnIcc", arrayOfClass);
+//           Byte array[] = (Byte[]) Array.newInstance(Byte.TYPE);
+//            this._updateMessageOnIcc = localClass.getMethod("updateMessageOnIcc", Integer.TYPE,Integer.TYPE,);
             return;
         }
         catch (Exception localException)

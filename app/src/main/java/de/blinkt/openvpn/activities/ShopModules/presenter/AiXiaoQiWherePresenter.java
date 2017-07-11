@@ -76,7 +76,7 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
     }
 
     public void phoneActivate( ){
-        aiXiaoQiWhereView.showProgress(aiXiaoQiWhereContext.getString(R.string.activate_succeed), false);
+        aiXiaoQiWhereView.showProgress(aiXiaoQiWhereContext.getString(R.string.activate_begin), false);
         activateType=PHONE_ACTIVATE;
         cardDataModel.getCardDataHttp(((Activity)aiXiaoQiWhereContext).getIntent().getStringExtra("id"),null);
 
@@ -203,6 +203,7 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
 
     @Override
     public void onDestroy() {
+        SimActivateHelper.setInstance(null);
         aiXiaoQiWhereView=null;
         equipmentActivateModel=null;
         cardDataModel=null;

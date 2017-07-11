@@ -277,7 +277,7 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
         //获取数据，每次都重新获取一次以保持正确性。
         getData();
         accountPresenterImpl.requestUserPackage();
-        if(!getString(R.string.remove_bind).equals(bleStatus))
+        if(!getString(R.string.remove_bind).equals(unBind))
         getDeviceType();
         else{
             showDeviceSummarized(false);
