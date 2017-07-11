@@ -53,7 +53,6 @@ public class ActivateActivity extends BaseActivity implements View.OnClickListen
 
     private void initData() {
         orderId = getIntent().getStringExtra(IntentPutKeyConstant.ORDER_ID);
-        MyOrderDetailActivity.OrderID = null;
         payWayTextView.setText(DateUtils.getCurrentDate());
         effectTime = (System.currentTimeMillis() / 1000) + "";
         dataTime = DateUtils.getDateToString(System.currentTimeMillis()).substring(0, 10);

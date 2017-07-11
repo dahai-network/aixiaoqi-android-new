@@ -22,21 +22,22 @@ import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
 public class PowerOnModel extends Logger{
     WriteCardFlowModel writeCardFlowModel;
     public void returnPower(ArrayList<String> messages, Context context) {
+        Log.e("WriteCard", "Constant.RETURN_POWER：" + messages.get(0).substring(10, 12));
         if (messages.get(0).substring(10, 12).equals("03")) {
             //当上电完成则需要发送写卡命令
-            Log.i(TAG, "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
+            Log.i("WriteCard", "上电ReceiveBLEMove返回：IS_TEXT_SIM:" + IS_TEXT_SIM + ",nullCardId=" + nullCardId);
             if (SocketConstant.REGISTER_STATUE_CODE == 1 && SocketConstant.REGISTER_STATUE_CODE == 2) {
                 EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.REGISTERING);
             }
             initWriteCardFlowModel(context);
             //空卡ID是否不为空，若不为空则
             if (nullCardId != null) {
-                Log.i(TAG, "nullcardid上电返回");
+                Log.i("WriteCard", "nullcardid上电返回");
                 //发送旧卡空卡序列号
                 writeCardFlowModel.writeCard();
             }
             if (!IS_TEXT_SIM && isGetnullCardid&&nullCardId == null) {
-                    Log.i(TAG, "发送" + Constant.WRITE_SIM_FIRST);
+                    Log.i("WriteCard", "发送" + Constant.WRITE_SIM_FIRST);
                     writeCardFlowModel.sendMessageSeparate(Constant.WRITE_SIM_FIRST, Constant.WRITE_SIM_DATA);
             }
 

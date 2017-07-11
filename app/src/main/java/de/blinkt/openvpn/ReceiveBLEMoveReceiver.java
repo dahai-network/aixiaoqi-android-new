@@ -139,6 +139,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                         break;
 
                                     case Constant.RETURN_POWER:
+                                        Log.e("Blue_Chanl", "Constant.RETURN_POWER：" + firstPackage);
                                         PowerOnModel powerOnModel=new PowerOnModel();
                                         powerOnModel.returnPower(messages, context);
                                         break;
@@ -150,6 +151,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                         break;
                                     case RECEIVE_CARD_MSG:
 //										if ((Integer.parseInt(messages.get(0).substring(2, 4), 16) & 0x80) == 0x80) {
+                                        Log.e("WriteCard", "RECEIVE_CARD_MSG：" + firstPackage);
                                         mStrSimCmdPacket = PacketeUtil.Combination(messages);
                                         // 接收到一个完整的数据包,处理信息
                                         initWriteCardFlowModel(context);
