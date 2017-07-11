@@ -16,6 +16,7 @@ import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.CommomModel.BlueHttpModelImpl.OrderActivationLocalCompletedModelImpl;
 import de.blinkt.openvpn.activities.MyModules.ui.ActivateActivity;
 import de.blinkt.openvpn.activities.NetPresenterBaseImpl;
+import de.blinkt.openvpn.activities.ShopModules.presenter.AiXiaoQiWherePresenter;
 import de.blinkt.openvpn.activities.ShopModules.ui.MyOrderDetailActivity;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
 import de.blinkt.openvpn.constant.Constant;
@@ -60,7 +61,7 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
                 case WRITE_CARD_COMPLETE:
                     if(orderActivationLocalCompletedModel==null)
                     orderActivationLocalCompletedModel=new OrderActivationLocalCompletedModelImpl(WriteCardFlowModel.this);
-                    orderActivationLocalCompletedModel.requestOrderActivationLocalCompleted(MyOrderDetailActivity.OrderID != null?MyOrderDetailActivity.OrderID:ActivateActivity.orderId);
+                    orderActivationLocalCompletedModel.requestOrderActivationLocalCompleted(AiXiaoQiWherePresenter.orderDetailId);
                     break;
             }
         }
@@ -86,17 +87,19 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
 
     //写卡流程
     public void ReceiveDBOperate(String mStrSimCmdPacket) {
-        Log.i("test", "写卡收回：" + mStrSimCmdPacket);
+        Log.i("WriteCard", "写卡收回：" + mStrSimCmdPacket);
 
         if (lastSendMessageStr.contains(Constant.WRITE_NEW_SIM_STEP_A012)) {
             lastSendMessageStr = Constant.WRITE_NEW_SIM_STEP_A012;
         } else if (lastSendMessageStr.contains(Constant.WRITE_NEW_SIM_STEP_7)) {
             lastSendMessageStr = Constant.WRITE_NEW_SIM_STEP_7;
         }
+
+        Log.i("WriteCard", "写卡收回 lastSendMessageStr：" + lastSendMessageStr);
         switch (lastSendMessageStr) {
             //获取空卡序列号第一步/新卡写卡第一步
             case Constant.WRITE_SIM_FIRST:
-                Log.i("Bluetooth", "进入获取空卡序列号第一步:" + mStrSimCmdPacket);
+                Log.i("WriteCard", "进入获取空卡序列号第一步:" + mStrSimCmdPacket+"\nisGetnullCardid="+isGetnullCardid);
                 if (mStrSimCmdPacket.contains(WRITE_CARD_STEP1)) {
                     if (isGetnullCardid) {
                         sendMessageSeparate(Constant.WRITE_SIM_STEP_TWO, Constant.WRITE_SIM_DATA);
@@ -108,7 +111,7 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
                 break;
             //获取空卡序列号第二步
             case Constant.WRITE_SIM_STEP_TWO:
-                Log.i("Bluetooth", "进入获取空卡序列号第二步:" + mStrSimCmdPacket);
+                Log.i("WriteCard", "进入获取空卡序列号第二步:" + mStrSimCmdPacket);
                 if (mStrSimCmdPacket.contains(GET_NULLCARDID)) {
                     if (isGetnullCardid)
                         sendMessageSeparate(Constant.WRITE_SIM_STEP_THREE, Constant.WRITE_SIM_DATA);
@@ -116,29 +119,29 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
                 break;
             //获取空卡序列号第三部
             case Constant.WRITE_SIM_STEP_THREE:
-                Log.i("Bluetooth", "进入获取空卡序列号第三步:" + mStrSimCmdPacket);
+                Log.i("WriteCard", "进入获取空卡序列号第三步:" + mStrSimCmdPacket);
                 if (mStrSimCmdPacket.contains(WRITE_CARD_STEP5)
                         && (mStrSimCmdPacket.contains(RECEIVE_NULL_CARD_CHAR)
                         || mStrSimCmdPacket.contains(RECEIVE_NULL_CARD_CHAR2))) {
                     if (isGetnullCardid) {
                         if (mStrSimCmdPacket.length() > 20) {
                             mStrSimCmdPacket = mStrSimCmdPacket.substring(4, 20);
-                            Log.i("Bluetooth", "空卡序列号:" + mStrSimCmdPacket);
+                            Log.i("WriteCard", "空卡序列号:" + mStrSimCmdPacket);
                             nullCardId = mStrSimCmdPacket;
                             //重新上电清空
 //							sendMessageToBlueTooth(UP_TO_POWER);
                             if (Integer.valueOf(nullCardId.substring(8, 16)) >= 301) {
-                                Log.i(TAG, "这是新卡");
+                                Log.i("WriteCard", "这是新卡");
                                 SharedUtils.getInstance().writeBoolean(Constant.IS_NEW_SIM_CARD, true);
                                 writeCard();
                             } else {
-                                Log.i(TAG, "这是旧卡");
+                                Log.i("WriteCard", "这是旧卡");
                                 SharedUtils.getInstance().writeBoolean(Constant.IS_NEW_SIM_CARD, false);
                             }
                             isGetnullCardid = false;
                             lastSendMessageStr = "";
                             //发送空卡序列号
-                            EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.AIXIAOQI_CARD);
+//                            EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.AIXIAOQI_CARD);
 
 
                         }
@@ -165,9 +168,11 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
                 if (mStrSimCmdPacket.contains(Constant.WRITE_NEW_CARD_STEP3)) {
                     sendMessageSeparate(Constant.WRITE_NEW_SIM_STEP_4, Constant.WRITE_SIM_DATA);
                 } else if (mStrSimCmdPacket.contains(Constant.WRITE_NEW_CARD_STEP6)) {
+                    Log.i("WriteCard", "ICSOpenVPNApplication.cardData:" + ICSOpenVPNApplication.cardData);
                     sendMessageSeparate(Constant.WRITE_NEW_SIM_STEP_7 + ICSOpenVPNApplication.cardData, Constant.WRITE_SIM_DATA);
                 } else if (mStrSimCmdPacket.contains(Constant.WRITE_NEW_CARD_STEP8)) {
                     //新卡写卡完成
+                    Log.i("WriteCard", "WRITE_CARD_COMPLETE:" );
                     handler.sendEmptyMessage(WRITE_CARD_COMPLETE);
                     sendMessageToBlueTooth(OFF_TO_POWER);//对卡下电
                 }
@@ -232,7 +237,7 @@ public class WriteCardFlowModel extends NetPresenterBaseImpl  {
     public void errorComplete(int cmdType, String errorMessage) {
         try {
             CommonTools.showShortToast(context, errorMessage);
-            Log.i("test", "http.getMsg:" + errorMessage);
+            Log.i("WriteCard", "http.getMsg:" + errorMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }

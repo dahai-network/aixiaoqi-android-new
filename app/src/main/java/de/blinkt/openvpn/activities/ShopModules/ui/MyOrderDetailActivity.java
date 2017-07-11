@@ -272,8 +272,6 @@ public class MyOrderDetailActivity extends BaseActivity implements DialogInterfa
 
 
 
-    public static String OrderID;
-
     @Override
     protected void onDestroy() {
 

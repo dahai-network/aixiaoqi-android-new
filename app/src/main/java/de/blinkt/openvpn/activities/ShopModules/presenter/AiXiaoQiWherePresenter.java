@@ -5,6 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -52,30 +55,30 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
 
     EquipmentActivateModelImpl equipmentActivateModel;
     CardDataModelImpl cardDataModel;
-    Context context;
+    Context aiXiaoQiWhereContext;
     String  activateType;
     private static String PHONE_ACTIVATE="phone";
-    private static String EQUIPMENT_ACTIVATE="phone";
+    private static String EQUIPMENT_ACTIVATE="equipment";
     public boolean isActivateSuccess() {
         return isActivateSuccess;
     }
-
+    public static String orderDetailId;
     private boolean isActivateSuccess = false;
 
     public AiXiaoQiWherePresenter(AiXiaoQiWhereView aiXiaoQiWhereView,Context context ){
         this.aiXiaoQiWhereView=aiXiaoQiWhereView;
-        this.context=context;
+        this.aiXiaoQiWhereContext=context;
         equipmentActivateModel=new EquipmentActivateModelImpl(context);
         cardDataModel=new CardDataModelImpl(this);
         EventBus.getDefault().register(this);
         registerBroadcast();
-
+        orderDetailId=((Activity)context).getIntent().getStringExtra("id");
     }
 
     public void phoneActivate( ){
-        aiXiaoQiWhereView.showProgress(context.getString(R.string.activate_succeed), false);
+        aiXiaoQiWhereView.showProgress(aiXiaoQiWhereContext.getString(R.string.activate_succeed), false);
         activateType=PHONE_ACTIVATE;
-        cardDataModel.getCardDataHttp(((Activity)context).getIntent().getStringExtra("id"),null);
+        cardDataModel.getCardDataHttp(((Activity)aiXiaoQiWhereContext).getIntent().getStringExtra("id"),null);
 
     }
 
@@ -89,21 +92,37 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
     }
 
     public void equipmentActivate(){
+        activateType=EQUIPMENT_ACTIVATE;
         if(equipmentActivateModel.equipmentActivate()){
-            activateType=EQUIPMENT_ACTIVATE;
             IS_TEXT_SIM = false;
             orderStatus = 4;
-            aiXiaoQiWhereView.showProgress(context.getString(R.string.activate_succeed), false);
-            CommonTools.delayTime(20000);
-            if (!isActivateSuccess) {
-                aiXiaoQiWhereView.dismissProgress();
-                aiXiaoQiWhereView.showToast(R.string.activate_fail);
-            }
+            aiXiaoQiWhereView.showProgress(aiXiaoQiWhereContext.getString(R.string.activate_begin), false);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    handler.sendEmptyMessage(1);
+                }
+            },30000);
         }
     }
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    if (!isActivateSuccess) {
+                        aiXiaoQiWhereView.dismissProgress();
+                        aiXiaoQiWhereView.showToast(R.string.activate_fail);
+                    }
+                    break;
+            }
+        }
+    };
+
 
     private void registerBroadcast(){
-        LocalBroadcastManager.getInstance(context).registerReceiver(isWriteReceiver, setFilter());
+        LocalBroadcastManager.getInstance(aiXiaoQiWhereContext).registerReceiver(isWriteReceiver, setFilter());
     }
 
     private IntentFilter setFilter() {
@@ -117,7 +136,7 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveWriteCardIdEntity(WriteCardEntity entity) {
         String nullcardId = entity.getNullCardId();
-        cardDataModel.getCardDataHttp(((Activity)context).getIntent().getStringExtra("id"),nullcardId);
+        cardDataModel.getCardDataHttp(((Activity)aiXiaoQiWhereContext).getIntent().getStringExtra("id"),nullcardId);
     }
 
     private BroadcastReceiver isWriteReceiver = new BroadcastReceiver() {
@@ -127,15 +146,16 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
                 aiXiaoQiWhereView.dismissProgress();
                 aiXiaoQiWhereView.showDialog();
             } else if (TextUtils.equals(intent.getAction(), FINISH_PROCESS)) {
-                if (ReceiveBLEMoveReceiver.orderStatus == 4) {
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("statue", 0 + "");
-                    //友盟方法统计
-                    MobclickAgent.onEvent(context, CLICKACTIVECARD, map);
-                    aiXiaoQiWhereView.showToast(R.string.activate_failure);
-                } else {
-                    isActivateSuccess = true;
-                }
+//                if (ReceiveBLEMoveReceiver.orderStatus == 4) {
+//                    HashMap<String, String> map = new HashMap<>();
+//                    map.put("statue", 0 + "");
+//                    //友盟方法统计
+//                    MobclickAgent.onEvent(context, CLICKACTIVECARD, map);
+//                    aiXiaoQiWhereView.showToast(R.string.activate_failure);
+//                } else {
+                isActivateSuccess = true;
+                ((Activity)aiXiaoQiWhereContext).finish();
+//                }
 
             } else if (TextUtils.equals(intent.getAction(), FINISH_PROCESS_ONLY)) {
                 aiXiaoQiWhereView.dismissProgress();
@@ -187,7 +207,7 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
         equipmentActivateModel=null;
         cardDataModel=null;
         if (isWriteReceiver != null)
-            LocalBroadcastManager.getInstance(context).unregisterReceiver(isWriteReceiver);
+            LocalBroadcastManager.getInstance(aiXiaoQiWhereContext).unregisterReceiver(isWriteReceiver);
         EventBus.getDefault().unregister(this);
     }
 }
