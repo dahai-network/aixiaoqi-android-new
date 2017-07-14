@@ -144,6 +144,7 @@ public class BaseStatusFragment extends Fragment {
 	}
 
 
+	protected  String unBind;
 
 	//接收到到卡注册状态作出相应的操作
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
@@ -160,7 +161,7 @@ public class BaseStatusFragment extends Fragment {
 				setRegisted(false);
 				topProgressGone();
 				if(entity.getRigsterStatueReason()==SocketConstant.REGISTER_FAIL_INITIATIVE){
-					bleStatus=getString(R.string.remove_bind);
+					unBind=getString(R.string.remove_bind);
 				}
 
 				break;

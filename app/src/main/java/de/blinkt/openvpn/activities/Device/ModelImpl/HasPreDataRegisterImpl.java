@@ -75,7 +75,7 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
         });
     }
 
-    public void startSocketService() {
+    public synchronized void startSocketService() {
         if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
             Intent receiveSdkIntent = new Intent(context, ReceiveSocketService.class);
             context.bindService(receiveSdkIntent, socketTcpConnection, Context.BIND_AUTO_CREATE);
@@ -110,7 +110,7 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
         bindtime = 0;
     }
 
-    public void unbindTcpService() {
+    public synchronized void unbindTcpService() {
         if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {
             if(context!=null&&socketTcpConnection!=null)
                 context.unbindService(socketTcpConnection);

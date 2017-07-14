@@ -349,7 +349,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
 
     //通过eventbus接收从蓝牙那边传回来的数据，并进行相应的操作
     @Subscribe(threadMode = ThreadMode.MAIN)
-    private void blueReturnData(BlueReturnData blueReturnData){
+    public void blueReturnData(BlueReturnData blueReturnData){
         e("blueReturnData:" + blueReturnData );
         switch (blueReturnData.getDataType()){
             case Constant.SYSTEM_BASICE_INFO:
