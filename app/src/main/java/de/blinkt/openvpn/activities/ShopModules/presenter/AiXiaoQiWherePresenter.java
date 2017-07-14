@@ -100,14 +100,16 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
             IS_TEXT_SIM = false;
             orderStatus = 4;
             aiXiaoQiWhereView.showProgress(aiXiaoQiWhereContext.getString(R.string.activate_begin), false);
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    handler.sendEmptyMessage(1);
-                }
-            },30000);
+            handler.postDelayed(runnable,30000);
         }
     }
+
+  Runnable runnable=  new Runnable() {
+        @Override
+        public void run() {
+            handler.sendEmptyMessage(1);
+        }
+    };
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -157,6 +159,7 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
 //                    aiXiaoQiWhereView.showToast(R.string.activate_failure);
 //                } else {
                 isActivateSuccess = true;
+
                 ((Activity)aiXiaoQiWhereContext).finish();
 //                }
 
@@ -190,6 +193,7 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
                 }
             } else {
                 aiXiaoQiWhereView.showToast(orderDataHttp.getMsg());
+                aiXiaoQiWhereView.dismissProgress();
             }
         }
     }
@@ -207,6 +211,10 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
     @Override
     public void onDestroy() {
         SimActivateHelper.setInstance(null);
+        if(handler!=null){
+            handler.removeCallbacks(runnable);
+            handler=null;
+        }
         aiXiaoQiWhereView=null;
         equipmentActivateModel=null;
         cardDataModel=null;

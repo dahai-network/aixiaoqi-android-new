@@ -291,7 +291,8 @@ public class CommitOrderActivity extends BaseActivity implements CommitOrderView
             showBalanceCheckBox();
             return;
         }
-        if (bean.getPrice() * packetCount<= balanceFloat) {
+        Log.d(TAG, "checkBalance: "+bean.getPrice() * packetCount+"balanceFloat="+balanceFloat+"boolean="+(bean.getPrice() * packetCount+"").equals(balanceFloat+""));
+        if (bean.getPrice() * packetCount<balanceFloat||(bean.getPrice() * packetCount+"").equals(balanceFloat+"")) {
             //setBalanceSpan(balanceTextView, balanceFloat);
             //setSpan(balanceTextView);
             balancePayCheckBox.setChecked(true);
