@@ -142,10 +142,13 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                                 sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
                             }
                             sdkAndBluetoothDataInchange.isHasPreData = false;
+                            //判断是否有没有iccid
                             if (!TextUtils.isEmpty(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]])) {
                                 getIccidCount=0;
+                                //通过iccid去本地数据库获取鉴权数据
                                 DBHelp dbHelp = new DBHelp(context);
                                 PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]]);
+                                //判断是否有鉴权数据
                                 if (preReadEntity != null) {
                                     e("有预读取数据=");
                                     hasPreDataRegisterImpl.initPreData(preReadEntity);
@@ -175,6 +178,9 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
         }
     }
 
+    /**
+     * 获取不到鉴权数据
+     */
     private void noPreDataRegister() {
 
         hasPreDataRegisterImpl.startSocketService();
@@ -229,6 +235,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                 rigisterFail(entity.getRigsterStatueReason());
                 break;
             case SocketConstant.REGISTERING://注册中
+
                 registering(entity.getRigsterStatueReason());
                 break;
             case SocketConstant.UNREGISTER:
@@ -269,6 +276,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
 
     private void registering(int registeringReason) {
         switch (registeringReason) {
+            //TCP失败
             case SocketConstant.START_TCP_FAIL:
                 hasPreDataRegisterImpl.unbindTcpService();
                 destorySocketService();
@@ -288,6 +296,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
 
 
     private void getPortAndIp() {
+        //如果请求三次没成功显示失败
         if(requestCount>3){
             proMainView.showToast(R.string.no_wifi);
             EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NO_NET);
@@ -297,6 +306,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
             @Override
             public void run() {
                 if(NetworkUtils.isNetworkAvailable(context)){
+                    //请求网络获取port与ip
                     requestGetSecurityConfig();
                 }else{
                     CommonTools.delayTime(2000);

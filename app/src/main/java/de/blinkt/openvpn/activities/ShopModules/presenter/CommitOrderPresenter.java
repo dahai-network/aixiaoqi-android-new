@@ -227,6 +227,7 @@ public abstract class CommitOrderPresenter extends BaseNetActivity {
                 Message msg = new Message();
                 msg.what = SDK_PAY_FLAG;
                 msg.obj = result;
+                if(mHandler!=null)
                 mHandler.sendMessage(msg);
             }
         };

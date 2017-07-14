@@ -333,9 +333,6 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
     }
 
 
-
-
-
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程
     public void onIsSuccessEntity(SimRegisterStatue entity) {
         switch (entity.getRigsterSimStatue()) {

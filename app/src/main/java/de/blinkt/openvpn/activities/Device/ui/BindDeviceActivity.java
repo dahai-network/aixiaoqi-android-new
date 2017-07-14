@@ -259,7 +259,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
         stopTextView.setText(R.string.frist_connect);
         showAimal();
         pop_layout.startAnimation(mShowAnim);
-       pop_layout.setVisibility(View.VISIBLE);
+        pop_layout.setVisibility(View.VISIBLE);
         Log.d(TAG, "findDeviceAnimal: startPropertyAnim"+-(height/2-40));
         startPropertyAnim(stopTextView,350,-(height/2-40));
         setAnimatorSet(uniImageView,-(height/4-10),true);
@@ -463,9 +463,9 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 	private void showIsBindLayout() {
         if(pop_layout!=null)
             connectSuccessAnimal(pop_layout);
-		tip_search.setText(getString(R.string.finded_bracelet));
-		search_bluetooth.setText(getString(R.string.click_bracelet_sure_bind));
-		seekImageView.clearAnimation();
+		    tip_search.setText(getString(R.string.finded_bracelet));
+		    search_bluetooth.setText(getString(R.string.click_bracelet_sure_bind));
+		    seekImageView.clearAnimation();
 		if (bluetoothName != null) {
 			if (bluetoothName.equals(Constant.UNIBOX)) {
 				seekImageView.setBackgroundResource(R.drawable.seek_finish_pic);

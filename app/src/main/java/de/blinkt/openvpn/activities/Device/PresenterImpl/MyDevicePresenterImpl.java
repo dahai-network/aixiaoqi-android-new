@@ -224,7 +224,8 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
 
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程
     public void onIsSuccessEntity(SimRegisterStatue entity) {
-        e("RigsterSimStatue=" + entity.getRigsterSimStatue() + "\nrigsterStatueReason=" + entity.getRigsterStatueReason() + "\nSocketConstant.REGISTER_STATUE_CODE =" + SocketConstant.REGISTER_STATUE_CODE);
+        Log.d(TAG, "onIsSuccessEntity: "+"RigsterSimStatue=" + entity.getRigsterSimStatue() + "\nrigsterStatueReason=" + entity.getRigsterStatueReason() + "\nSocketConstant.REGISTER_STATUE_CODE ="+ SocketConstant.REGISTER_STATUE_CODE);
+       // e("RigsterSimStatue=" + entity.getRigsterSimStatue() + "\nrigsterStatueReason=" + entity.getRigsterStatueReason() + "\nSocketConstant.REGISTER_STATUE_CODE =" + SocketConstant.REGISTER_STATUE_CODE);
         synchronized (this) {
             myDeviceView.setConStatueBackground(R.color.gray_text);
             switch (entity.getRigsterSimStatue()) {
@@ -240,7 +241,6 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
                     myDeviceView.setConStatueText(R.string.index_regist_fail);
                     myDeviceView.percentTextViewVisible(GONE);
                     registerFail(entity.getRigsterStatueReason());
-
                     break;
                 case SocketConstant.UNREGISTER://未注册
                     myDeviceView.stopAnim();
@@ -286,6 +286,10 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
 
     }
 
+    /**
+     * 注册中
+     * @param entity
+     */
     private void registering(SimRegisterStatue entity) {
         switch (entity.getRigsterStatueReason()) {
             case SocketConstant.UPDATE_PERCENT:

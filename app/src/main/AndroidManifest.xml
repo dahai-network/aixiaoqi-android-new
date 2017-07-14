@@ -390,7 +390,6 @@
         <activity android:name="de.blinkt.openvpn.activities.MyModules.ui.BalanceParticularsActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.Set.ui.CallPackageLlistActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.Set.ui.CallTimeOrderDetailActitivy"/>
-        <activity android:name="de.blinkt.openvpn.activities.KingCardDetailActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.CallTimePacketDetailActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.Device.ui.ChoiceDeviceTypeActivity"/>
         <activity android:name="de.blinkt.openvpn.activities.TipUserOptionsActivity"/>
