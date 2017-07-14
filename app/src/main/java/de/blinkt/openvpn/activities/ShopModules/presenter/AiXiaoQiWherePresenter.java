@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 
 import com.umeng.analytics.MobclickAgent;
@@ -83,7 +84,9 @@ public class AiXiaoQiWherePresenter  extends NetPresenterBaseImpl{
     }
 
     private void writeCMDSmall(String cardInfo){
-        if(SimActivateHelper.getInstance().writeCMDSmall(cardInfo)){
+        String str2 = SimActivateHelper.bytesToHex(Base64.decode(cardInfo, 2));
+
+        if(SimActivateHelper.getInstance().writeCMDSmall(str2)){
             aiXiaoQiWhereView.showToast(R.string.activate_succeed);
         }else{
             aiXiaoQiWhereView.showToast(R.string.activate_failure);

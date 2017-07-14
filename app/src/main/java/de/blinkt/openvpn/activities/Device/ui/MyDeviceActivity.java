@@ -241,10 +241,10 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         RegisterStatueAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate_register_statue);
         titleSet();
         //初始化状态和电量
-        if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
+//        if (mService != null && mService.mConnectionState == UartService.STATE_CONNECTED) {
             //获取电量
             initData();
-        }
+//        }
 //显示固件版本
         setDeviceVersionText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
     }
@@ -424,7 +424,6 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         super.onDestroy();
         Log.d(TAG, "onDestroy()");
         myDevicePresenter.onDestory();
-
         stopAnim();
         if (sinking != null)
             sinking.clear();

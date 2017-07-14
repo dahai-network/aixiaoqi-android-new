@@ -1,5 +1,7 @@
 package de.blinkt.openvpn.activities.Device.PresenterImpl;
 
+import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -15,6 +17,7 @@ import java.util.List;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.activities.Device.ModelImpl.BindDeviceModelImpl;
 import de.blinkt.openvpn.activities.Device.ModelImpl.IsBindDeviceModelImpl;
+import de.blinkt.openvpn.activities.Device.ModelImpl.SkyUpgradeModelImpl;
 import de.blinkt.openvpn.activities.Device.ModelImpl.UpdateDeviceInfoModelImpl;
 import de.blinkt.openvpn.activities.Device.Presenter.BindDevicePresenter;
 import de.blinkt.openvpn.activities.Device.View.BindDeviceView;
@@ -29,6 +32,8 @@ import de.blinkt.openvpn.http.GetBindsIMEIHttp;
 import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothEntity;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
+import de.blinkt.openvpn.model.enentbus.BlueReturnData;
+import de.blinkt.openvpn.util.CheckAuthorityUtil;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.CreateFiles;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -52,17 +57,23 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
     private List<BluetoothEntity> deviceList;
     private ArrayList<String> addressList;
     CreateFiles createFiles;
-
+    SkyUpgradeModelImpl skyUpgradeModel;
     public BindDevicePresenterImpl(BindDeviceView bindDeviceView) {
         this.bindDeviceView = bindDeviceView;
         bindDeviceModel = new BindDeviceModelImpl(this);
         isBindDeviceModel = new IsBindDeviceModelImpl(this);
         updateDeviceInfoModel = new UpdateDeviceInfoModelImpl(this);
+        skyUpgradeModel=new SkyUpgradeModelImpl(this);
         EventBus.getDefault().register(this);
 //创建记录日志对象
         if (createFiles == null) {
             createFiles = new CreateFiles();
         }
+    }
+
+    @Override
+    public void requestSkyUpgrade() {
+        skyUpgradeModel.skyUpgrade();
     }
 
     @Override
@@ -289,12 +300,24 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
     public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
         String type = entity.getBlueType();
         if (BluetoothConstant.BLUE_BIND_SUCCESS.equals(type)) {
+
             Log.i("BindDevicePresenterImpl", "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + deviceAddress + ",版本号：" + SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
             if (bindDeviceView.getDeviceName().contains(Constant.UNIBOX)) {
                 requestBindDevice("1");
             }
         } else if (BluetoothConstant.BLUE_BIND.equals(type)) {
             bindDeviceView.afterConnDevice();
+        }
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void blueReturnData(BlueReturnData blueReturnData){
+        e("blueReturnData:" + blueReturnData );
+        switch (blueReturnData.getDataType()){
+            case Constant.SYSTEM_BASICE_INFO:
+                requestSkyUpgrade();
+                break;
         }
     }
 

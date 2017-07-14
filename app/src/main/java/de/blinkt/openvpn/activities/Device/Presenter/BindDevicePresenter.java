@@ -11,4 +11,5 @@ public interface BindDevicePresenter {
     void onDestory();
     void requestBindDevice(String deviceType);
     void requestBindDeviceList(ArrayList<String> addresss);
+    void requestSkyUpgrade();
 }

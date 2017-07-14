@@ -20,6 +20,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 
 import cn.com.aixiaoqi.R;
+import cn.com.johnson.model.AppMode;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Device.Model.DownloadUpgradePackageModel;
 import de.blinkt.openvpn.activities.Device.ModelImpl.CheckDeviceIsOnlineModelImpl;
@@ -116,6 +117,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
             if(object.getStatus()==1){
                 SharedUtils.getInstance().writeBoolean(Constant.HAS_DEVICE_NEED_UPGRADE,false);
                 registFail();
+                AppMode.getInstance().isClickAddDevice=false;
                 myDeviceView.clearData();
                 myDeviceView.finishView();
             }
@@ -188,9 +190,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
             MyDeviceActivity.percentInt = 0;
             IS_TEXT_SIM = false;
             //TODO 处理异常
-
             myDeviceView.startAnim();
-
             String macStr = SharedUtils.getInstance().readString(Constant.IMEI);
             String operater = SharedUtils.getInstance().readString(Constant.OPERATER);
             if (ICSOpenVPNApplication.uartService != null && !ICSOpenVPNApplication.uartService.isConnectedBlueTooth() && !TextUtils.isEmpty(macStr)) {
@@ -214,8 +214,6 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
                 requestCheckDeviceIsOnline();
             }
         }
-
-
     }
 
     @Override

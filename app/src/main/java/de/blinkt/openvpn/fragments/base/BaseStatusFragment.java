@@ -149,7 +149,7 @@ public class BaseStatusFragment extends Fragment {
 	//接收到到卡注册状态作出相应的操作
 	@Subscribe(threadMode = ThreadMode.MAIN)//ui线程
 	public void onIsSuccessEntity(SimRegisterStatue entity) {
-
+		unBind="";
 		switch (entity.getRigsterSimStatue()) {
 			case SocketConstant.REGISTER_SUCCESS:
 				bleStatus=getString(R.string.index_high_signal);

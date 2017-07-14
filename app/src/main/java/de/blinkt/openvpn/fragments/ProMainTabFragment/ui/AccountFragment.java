@@ -296,8 +296,29 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
             showDeviceSummarized(true);
             setDeviceType();
             setPowerPercent();
+            showRedDot();
         }
     }
+
+    private void showRedDot(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showAddDeviceRed();
+            }
+        },200);
+
+    }
+
+    private void showAddDeviceRed() {
+        Log.e(TAG,"isClickAddDevice="+AppMode.getInstance().isClickAddDevice);
+        if (!AppMode.getInstance().isClickAddDevice && SharedUtils.getInstance().readBoolean(Constant.HAS_DEVICE_NEED_UPGRADE)) {
+            updateVersionRedDot(SIGN_MSG_THREE);
+        } else {
+            updateVersionRedDot(SIGN_MSG_FOUR);
+        }
+    }
+
     @Override
     public void setDeviceType() {
         String deviceType = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
@@ -534,11 +555,8 @@ if(!flg){
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            if (!AppMode.getInstance().isClickAddDevice && SharedUtils.getInstance().readBoolean(Constant.HAS_DEVICE_NEED_UPGRADE)) {
-                updateVersionRedDot(SIGN_MSG_THREE);
-            } else {
-                updateVersionRedDot(SIGN_MSG_FOUR);
-            }
+            Log.e("isClickAddDevice","isClickAddDevice="+AppMode.getInstance().isClickAddDevice);
+            showAddDeviceRed();
         }
     }
 

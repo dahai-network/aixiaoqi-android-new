@@ -6,13 +6,14 @@ package de.blinkt.openvpn.util;
 
 
 
-import android.telephony.SmsManager;
-import android.text.TextUtils;
-import android.util.Log;
 
-import java.lang.reflect.Array;
+import android.telephony.SmsManager;
+
+import android.text.TextUtils;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 public class SimActivateHelper
 {
@@ -23,36 +24,29 @@ public class SimActivateHelper
     }
 
     private static SimActivateHelper instance;
-    private Method _deleteMessageFromIcc = null;
     private Method _updateMessageOnIcc = null;
     private Class<?> mClass = null;
     private SmsManager mSmsManager = null;
-
+    private Method _getDefault = null;
     private  SimActivateHelper()
     {
         try
         {
 
-            this.mClass = Class.forName("android.telephony.SmsManager");
-            Class localClass = this.mClass;
-//            Method[] methods = localClass.getDeclaredMethods();
-//            for (Method method : methods) {
-//                if ("updateMessageOnIcc".equals(method.getName())) {
-//                    Class[] params = method.getParameterTypes();
-//                    for(Class parameter : params){
-//                        Log.e("parameter","parameter="+parameter);
-//                    }
-//
-//                }
-//            }
+            mClass = Class.forName("android.telephony.SmsManager");
+            Class localClass = mClass;
 
-            Class[] arrayOfClass = new Class[3];
-            arrayOfClass[0] = Integer.TYPE;
-            arrayOfClass[1] = Integer.TYPE;
-            arrayOfClass[2] = Class.forName("class [B");
-            this._updateMessageOnIcc = localClass.getMethod("updateMessageOnIcc", arrayOfClass);
-//           Byte array[] = (Byte[]) Array.newInstance(Byte.TYPE);
-//            this._updateMessageOnIcc = localClass.getMethod("updateMessageOnIcc", Integer.TYPE,Integer.TYPE,);
+            Constructor[] cts = mClass.getDeclaredConstructors();
+            System.out.println(cts.length);
+            cts[0].setAccessible(true);
+             mSmsManager = (SmsManager) cts[0].newInstance();
+            Method[] methods=  localClass.getMethods();
+
+            for(Method method:methods){
+                if("updateMessageOnIcc".equals(method.getName())){
+                    _updateMessageOnIcc=method;
+                }
+            }
             return;
         }
         catch (Exception localException)
@@ -70,12 +64,12 @@ public class SimActivateHelper
 
     private boolean _updateMessageOnIcc(int paramInt1, int paramInt2, byte[] paramArrayOfByte)
     {
-        if (this._updateMessageOnIcc == null)
+        if (_updateMessageOnIcc == null)
             return false;
         try
         {
-            Method localMethod = this._updateMessageOnIcc;
-            SmsManager localSmsManager = this.mSmsManager;
+            Method localMethod = _updateMessageOnIcc;
+            SmsManager localSmsManager = mSmsManager;
             Object[] arrayOfObject = new Object[3];
             arrayOfObject[0] = Integer.valueOf(paramInt1);
             arrayOfObject[1] = Integer.valueOf(paramInt2);
