@@ -98,95 +98,99 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
             mService.enableTXNotification();
             //如果版本号小于android N
         } else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
-            final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
-            Log.d(TAG, "onReceive:messages= "+messages.get(0));
-            if (messages.size() == 0) {
-                return;
-            }
-            retryTime = 0;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Log.d(TAG, "run: 接受数据");
-                        String firstPackage = messages.get(0).substring(0, 2);
-                        String dataType = messages.get(0).substring(6, 10);
-                        for (int i = 0; i < messages.size(); i++) {
-                            Log.e(TAG, messages.get(i));
-                        }
-                        Log.e("Blue_Chanl", "dataType：" + dataType);
-                        Log.e("Blue_Chanl", "firstPackage：" + firstPackage);
-                        switch (firstPackage) {
-                            case "55":
-                                switch (dataType) {
-                                    //电量多少
-                                    case RECEIVE_ELECTRICITY:
-                                        utils.writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(10, 12), 16));
-                                        break;
-                                    case AGREE_BIND:
-                                        //绑定流程成功命令
-                                        CommonTools.delayTime(500);
-                                        //android 标记，给蓝牙设备标记是否是android设备用的
-                                        SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
-                                        EventBusUtil.bingDeviceStep(BluetoothConstant.BLUE_BIND_SUCCESS);
-                                        break;
-                                    //基本信息获取
-                                    case Constant.SYSTEM_BASICE_INFO:
-                                        if(deviceBaseSystemInfoModel==null){
-                                            deviceBaseSystemInfoModel=new DeviceBaseSystemInfoModel();
-                                        }
-                                        deviceBaseSystemInfoModel.returnBaseSystemInfo(messages);
-                                        break;
-
-                                    case Constant.RETURN_POWER:
-                                        Log.e("Blue_Chanl", "Constant.RETURN_POWER：" + firstPackage);
-                                        PowerOnModel powerOnModel=new PowerOnModel();
-                                        powerOnModel.returnPower(messages, context);
-                                        break;
-                                    case Constant.READ_SIM_DATA:
-                                        Log.i(TAG, "发送给SDK");
-                                        if (IS_TEXT_SIM) {
-                                            sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
-                                        }
-                                        break;
-                                    case RECEIVE_CARD_MSG:
-//										if ((Integer.parseInt(messages.get(0).substring(2, 4), 16) & 0x80) == 0x80) {
-                                        Log.e("WriteCard", "RECEIVE_CARD_MSG：" + firstPackage);
-                                        mStrSimCmdPacket = PacketeUtil.Combination(messages);
-                                        // 接收到一个完整的数据包,处理信息
-                                        initWriteCardFlowModel(context);
-                                        writeCardFlowModel.ReceiveDBOperate(mStrSimCmdPacket);
-                                        messages.clear();
-//										}
-                                        break;
-                                    case Constant.IS_INSERT_CARD:
-                                        //5580040c000102
-                                        initSimDataInfo();
-                                        simDataInfoModel.isInsertCardOrCardType(messages);
-                                        break;
-                                    case Constant.ICCID_BLUE_VALUE:
-                                        initSimDataInfo();
-                                        simDataInfoModel.setIccid(messages);
-                                        break;
-                                    case Constant.APP_CONNECT_RECEIVE:
-                                        Log.d(TAG, "run: 接收到专属命令返回");
-                                        connectBluetoothReceiveModel.appConnectReceive(messages);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            ).start();
+            if (hasValideData(context, intent)) return;
         }
         if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)) {
             mService.disconnect();
 //			 mReceiveSocketService.closeThread();
         }
+    }
+
+    private boolean hasValideData(final Context context, Intent intent) {
+        final ArrayList<String> messages = intent.getStringArrayListExtra(UartService.EXTRA_DATA);
+        if (messages.size() == 0) {
+            return true;
+        }
+        retryTime = 0;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Log.d(TAG, "run: 接受数据");
+                    String firstPackage = messages.get(0).substring(0, 2);
+                    String dataType = messages.get(0).substring(6, 10);
+                    for (int i = 0; i < messages.size(); i++) {
+                        Log.e(TAG, messages.get(i));
+                    }
+                    Log.e("Blue_Chanl", "dataType：" + dataType);
+                    Log.e("Blue_Chanl", "firstPackage：" + firstPackage);
+                    switch (firstPackage) {
+                        case "55":
+                            switch (dataType) {
+                                //电量多少
+                                case RECEIVE_ELECTRICITY:
+                                    utils.writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(10, 12), 16));
+                                    break;
+                                case AGREE_BIND:
+                                    //绑定流程成功命令
+                                    CommonTools.delayTime(500);
+                                    //android 标记，给蓝牙设备标记是否是android设备用的
+                                    SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
+                                    EventBusUtil.bingDeviceStep(BluetoothConstant.BLUE_BIND_SUCCESS);
+                                    break;
+                                //基本信息获取
+                                case Constant.SYSTEM_BASICE_INFO:
+                                    if(deviceBaseSystemInfoModel==null){
+                                        deviceBaseSystemInfoModel=new DeviceBaseSystemInfoModel();
+                                    }
+                                    deviceBaseSystemInfoModel.returnBaseSystemInfo(messages);
+                                    break;
+
+                                case Constant.RETURN_POWER:
+                                    Log.e("Blue_Chanl", "Constant.RETURN_POWER：" + firstPackage);
+                                    PowerOnModel powerOnModel=new PowerOnModel();
+                                    powerOnModel.returnPower(messages, context);
+                                    break;
+                                case Constant.READ_SIM_DATA:
+                                    Log.i(TAG, "发送给SDK");
+                                    if (IS_TEXT_SIM) {
+                                        sdkAndBluetoothDataInchange.sendToSDKAboutBluetoothInfo(messages);
+                                    }
+                                    break;
+                                case RECEIVE_CARD_MSG:
+//										if ((Integer.parseInt(messages.get(0).substring(2, 4), 16) & 0x80) == 0x80) {
+                                    Log.e("WriteCard", "RECEIVE_CARD_MSG：" + firstPackage);
+                                    mStrSimCmdPacket = PacketeUtil.Combination(messages);
+                                    // 接收到一个完整的数据包,处理信息
+                                    initWriteCardFlowModel(context);
+                                    writeCardFlowModel.ReceiveDBOperate(mStrSimCmdPacket);
+                                    messages.clear();
+//										}
+                                    break;
+                                case Constant.IS_INSERT_CARD:
+                                    //5580040c000102
+                                    initSimDataInfo();
+                                    simDataInfoModel.isInsertCardOrCardType(messages);
+                                    break;
+                                case Constant.ICCID_BLUE_VALUE:
+                                    initSimDataInfo();
+                                    simDataInfoModel.setIccid(messages);
+                                    break;
+                                case Constant.APP_CONNECT_RECEIVE:
+                                    Log.d(TAG, "run: 接收到专属命令返回");
+                                    connectBluetoothReceiveModel.appConnectReceive(messages);
+                                    break;
+                                default:
+                                    break;
+                            }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        ).start();
+        return false;
     }
 
     private void disconnectedOption() {

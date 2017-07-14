@@ -1,6 +1,7 @@
 package de.blinkt.openvpn.activities.Device.ModelImpl;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import de.blinkt.openvpn.activities.NetModelBaseImpl;
@@ -38,6 +39,7 @@ public class SkyUpgradeModelImpl extends NetModelBaseImpl implements SkyUpgradeM
         } else {
             return;
         }
+        Log.e("BRACELETVERSION", SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
         createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
     }
 
