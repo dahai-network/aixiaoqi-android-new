@@ -184,6 +184,9 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
     //如果是注册到GOIP的时候失败了，则从创建连接重新开始注册
     //如果重连失败再进入我的设备就清空重连次数重新进入连接流程
     public void refreshStatue(){
+        if(4==SocketConstant.SIM_TYPE){
+            return;
+        }
         if (!CommonTools.isFastDoubleClick(3000)) {
             //如果激活卡成功后，刷新按钮点击需要将标记激活
             isGetnullCardid = true;
@@ -322,6 +325,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         switch (unregisterReason) {
             case SocketConstant.AIXIAOQI_CARD:
                 myDeviceView.setConStatueText(R.string.index_aixiaoqicard);
+                myDeviceView.stopAnim();
                 //重新上电清空
                 SendCommandToBluetooth.sendMessageToBlueTooth(OFF_TO_POWER);
                 break;
