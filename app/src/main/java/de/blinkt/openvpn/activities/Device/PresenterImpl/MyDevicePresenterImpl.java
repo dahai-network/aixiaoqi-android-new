@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -240,7 +241,6 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
                     myDeviceView.setConStatueText(R.string.index_regist_fail);
                     myDeviceView.percentTextViewVisible(GONE);
                     registerFail(entity.getRigsterStatueReason());
-
                     break;
                 case SocketConstant.UNREGISTER://未注册
                     myDeviceView.stopAnim();
@@ -276,6 +276,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
 
                 break;
             case SocketConstant.NO_NET:
+                myDeviceView.setConStatueText(R.string.no_net_error);
                 myDeviceView.showToast(R.string.no_wifi);
                 break;
             case SocketConstant.NO_NET_ERROR:
@@ -285,6 +286,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         }
 
     }
+
 
     private void registering(SimRegisterStatue entity) {
         switch (entity.getRigsterStatueReason()) {
