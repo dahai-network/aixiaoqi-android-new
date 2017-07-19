@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.ChangeViewStateEvent;
+import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.SimDataInfoModel;
 import de.blinkt.openvpn.activities.Device.ModelImpl.GetBindDeviceInfoModelImpl;
 import de.blinkt.openvpn.activities.Device.ModelImpl.GetSecurityConfigModelImpl;
 import de.blinkt.openvpn.activities.Device.ModelImpl.HasPreDataRegisterImpl;
@@ -220,6 +221,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
     @Subscribe (threadMode = ThreadMode.BACKGROUND)
     public void bindStatue(BindStatue bindStatue) {
         if(bindStatue.getBindStatues()==0){
+            SimDataInfoModel.iccid="";
         hasPreDataRegisterImpl.unbindTcpService();
         destorySocketService();
         }

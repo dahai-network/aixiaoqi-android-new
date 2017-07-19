@@ -297,6 +297,7 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void bindStatue(BindStatue bindStatue) {
+        Log.e(TAG,"bindStatue="+bindStatue.getBindStatues());
         if(bindStatue.getBindStatues()==0){
             showDeviceSummarized(false);
         }else if(bindStatue.getBindStatues()==1){

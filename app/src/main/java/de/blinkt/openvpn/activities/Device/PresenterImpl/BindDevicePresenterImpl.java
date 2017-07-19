@@ -158,6 +158,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                 } else {
                     bindDeviceView.setFindedImageView(View.GONE);
                     bindDeviceView.tipSearchText(R.string.can_use);
+
                     bindDeviceView.SetUniImageViewBackground(R.drawable.bind_finish);
                     //更新时间操作
                     sendMessageToBlueTooth(getBLETime());
@@ -166,6 +167,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                     CommonTools.delayTime(200);
                     sendMessageToBlueTooth(ICCID_GET);
                 }
+                EventBusUtil.bindStatue(BindStatue.BIND_DEVICE);
                 requestUpdateDeviceInfo();
 
             } else {
@@ -321,7 +323,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
         switch (blueReturnData.getDataType()){
             case Constant.SYSTEM_BASICE_INFO:
                 requestSkyUpgrade();
-                EventBusUtil.bindStatue(BindStatue.BIND_DEVICE);
+
                 break;
         }
     }
