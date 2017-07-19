@@ -388,6 +388,10 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
             if (operatorTextView != null) {
                 operatorTextView.setText("----");
             }
+            //判断是否是爱小器卡
+            if (getString(R.string.index_aixiaoqicard).equals(bleStatus)) {
+                operatorTextView.setText(getString(R.string.unitoy_card));
+            }
         }
     }
 

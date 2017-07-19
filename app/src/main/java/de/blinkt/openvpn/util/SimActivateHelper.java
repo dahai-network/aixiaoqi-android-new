@@ -45,6 +45,7 @@ public class SimActivateHelper
             for(Method method:methods){
                 if("updateMessageOnIcc".equals(method.getName())){
                     _updateMessageOnIcc=method;
+                    break;
                 }
             }
             return;

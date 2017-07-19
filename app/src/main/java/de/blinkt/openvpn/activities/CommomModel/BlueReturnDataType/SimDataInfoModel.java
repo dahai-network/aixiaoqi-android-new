@@ -19,6 +19,7 @@ import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
  */
 
 public class SimDataInfoModel extends Logger{
+
     public void isInsertCardOrCardType(ArrayList<String> messages) {
         Log.d(TAG, "run: " + messages.toString() + ":" + messages.get(0).substring(10, 12));
         Log.i(TAG, "接收数据：是否插卡：" + messages.toString());
@@ -83,6 +84,7 @@ public class SimDataInfoModel extends Logger{
     public void setIccid(ArrayList<String> messages){
         String Iccid = PacketeUtil.Combination(messages);
         Log.e("ICCID_BLUE_VALUE", Iccid);
+        //89860115851010259736
         if(Iccid.equals(iccid)){
             isSameIccid=true;
             return ;
@@ -90,6 +92,7 @@ public class SimDataInfoModel extends Logger{
         iccid=Iccid;
         isSameIccid=false;
         SharedUtils.getInstance().writeString(Constant.ICCID, Iccid);
+        //给对应SIM卡ICCID进行赋值
         SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]] = RadixAsciiChange.convertStringToHex(Iccid);
     }
 
@@ -97,7 +100,7 @@ public class SimDataInfoModel extends Logger{
         if(isSameIccid){
             return ;
         }
-        Log.i("Bluetooth", "进入注册流程");
+        Log.e("SimDataInfoModel", "进入注册流程");
         EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.VAILD_CARD);
         IS_TEXT_SIM = true;
         ReceiveBLEMoveReceiver.isGetnullCardid = false;

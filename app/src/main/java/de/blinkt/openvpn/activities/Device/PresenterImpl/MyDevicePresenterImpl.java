@@ -240,6 +240,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
                     myDeviceView.setConStatueText(R.string.index_regist_fail);
                     myDeviceView.percentTextViewVisible(GONE);
                     registerFail(entity.getRigsterStatueReason());
+
                     break;
                 case SocketConstant.UNREGISTER://未注册
                     myDeviceView.stopAnim();

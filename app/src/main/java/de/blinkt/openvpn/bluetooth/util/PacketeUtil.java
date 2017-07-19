@@ -54,16 +54,20 @@ public class PacketeUtil {
 		//存储加入的byte
 		StringBuilder builder = new StringBuilder();
 		int size = message.size();
+		Log.d("PacketeUtil", "Combination: "+size);
 		for (int i = 0; i < size; i++) {
 			String eachCombindMessage;
 			if ((Integer.parseInt(message.get(i).substring(2, 4), 16) & 127) == 0) {
+
 				eachCombindMessage = message.get(i).substring(10, message.get(i).length());
 			} else {
+
 				eachCombindMessage = message.get(i).substring(6, message.get(i).length());
 			}
 			builder.append(eachCombindMessage);
 		}
-		return builder.toString();
+        Log.d("PacketeUtil", "Combination: "+builder.toString());
+        return builder.toString();
 	}
 
 

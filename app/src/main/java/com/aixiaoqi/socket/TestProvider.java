@@ -28,10 +28,10 @@ public class TestProvider {
 
 	//获取预读取数据。
 	public static void getCardInfo(String info) {
-		String indexString = info.substring(2, 4);
 		if (null == info) {
 			return;
 		}
+		String indexString = info.substring(2, 4);
 
 		if (SocketConstant.EN_APPEVT_PRDATA.equals(indexString) || SocketConstant.EN_APPEVT_SIMDATA.equals(indexString)) {
 			SendCommandToBluetooth.sendMessageToBlueTooth(Constant.OFF_TO_POWER);
@@ -90,9 +90,9 @@ public class TestProvider {
 
 	private static void connectTcp() {
 		sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
-		if (isCreate && isIccid) {
-			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
-		}
+//		if (isCreate && isIccid) {
+//			sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
+//		}
 	}
 	//获取到卡的预读数据，保存到数据库中
 	private static void savePreData() {
