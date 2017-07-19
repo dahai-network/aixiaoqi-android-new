@@ -78,7 +78,7 @@ public class SimDataInfoModel extends Logger{
         }
     }
 
-    public static  String iccid="";
+    public static  String iccid="";//
     private boolean isSameIccid;
 
     public void setIccid(ArrayList<String> messages){
