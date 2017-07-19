@@ -38,6 +38,7 @@ import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.CancelCallService;
 import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
+import de.blinkt.openvpn.model.enentbus.BindStatue;
 import de.blinkt.openvpn.model.enentbus.OptionProMainActivityView;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.NetworkUtils;
@@ -208,6 +209,13 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
         proMainView.showHotDot((event.isNewVersion() || event.isNewPackage())?View.VISIBLE:View.GONE);
     }
 
+    @Subscribe (threadMode = ThreadMode.BACKGROUND)
+    public void bindStatue(BindStatue bindStatue) {
+        if(bindStatue.getBindStatues()==0){
+        hasPreDataRegisterImpl.unbindTcpService();
+        destorySocketService();
+        }
+    }
     /**
      * 接收到到卡注册状态作出相应的操作
      * 连接TCP失败，要做操作。
@@ -258,12 +266,15 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
         switch (failReason) {
             case SocketConstant.REGISTER_FAIL_INITIATIVE:
                 //更改为注册中
-                hasPreDataRegisterImpl.unbindTcpService();
-                destorySocketService();
+//                hasPreDataRegisterImpl.unbindTcpService();
+//                destorySocketService();
                 break;
         }
 
     }
+
+
+
 
     private void registering(int registeringReason) {
         switch (registeringReason) {

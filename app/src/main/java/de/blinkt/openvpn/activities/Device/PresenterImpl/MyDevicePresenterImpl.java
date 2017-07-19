@@ -107,17 +107,13 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         unbindDeviceModel.unbindDevice();
     }
 
-    private void registFail() {
-        Log.e(TAG, "registFail");
-        EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
-    }
+
     @Override
     public void rightLoad(int cmdType, CommonHttp object) {
         if(cmdType==HttpConfigUrl.COMTYPE_UN_BIND_DEVICE){
             myDeviceView.showToast(object.getMsg());
             if(object.getStatus()==1){
                 SharedUtils.getInstance().writeBoolean(Constant.HAS_DEVICE_NEED_UPGRADE,false);
-                registFail();
                 AppMode.getInstance().isClickAddDevice=false;
                 myDeviceView.clearData();
                 myDeviceView.finishView();

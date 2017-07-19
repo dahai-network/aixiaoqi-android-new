@@ -357,8 +357,8 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
         switch (failReason) {
             case SocketConstant.REGISTER_FAIL_INITIATIVE:
                 //更改为注册中
-                unbindTcpService();
-                destorySocketService();
+//                unbindTcpService();
+//                destorySocketService();
                 break;
         }
 

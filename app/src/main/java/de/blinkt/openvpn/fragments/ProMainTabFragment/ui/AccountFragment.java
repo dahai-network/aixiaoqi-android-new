@@ -24,6 +24,8 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -53,6 +55,7 @@ import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl.AccountPresenterImpl;
 import de.blinkt.openvpn.fragments.ProMainTabFragment.View.AccountView;
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
+import de.blinkt.openvpn.model.enentbus.BindStatue;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
@@ -277,11 +280,11 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
         //获取数据，每次都重新获取一次以保持正确性。
         getData();
         accountPresenterImpl.requestUserPackage();
-        if(!getString(R.string.remove_bind).equals(unBind))
-        getDeviceType();
-        else{
-            showDeviceSummarized(false);
-        }
+//        if(!getString(R.string.remove_bind).equals(unBind))
+//        getDeviceType();
+//        else{
+//            showDeviceSummarized(false);
+//        }
         if(getString(R.string.index_high_signal).equals(bleStatus)){
             setRegisted(true);
         }else{
@@ -289,6 +292,18 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
         }
 
     }
+
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void bindStatue(BindStatue bindStatue) {
+        if(bindStatue.getBindStatues()==0){
+            showDeviceSummarized(false);
+        }else if(bindStatue.getBindStatues()==1){
+            getDeviceType();
+        }
+    }
+
     private void getDeviceType() {
         if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))) {
             accountPresenterImpl.requestGetBindInfo();

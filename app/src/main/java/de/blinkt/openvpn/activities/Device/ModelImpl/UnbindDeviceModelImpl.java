@@ -11,6 +11,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.CommonHttp;
+import de.blinkt.openvpn.model.enentbus.BindStatue;
 import de.blinkt.openvpn.util.SharedUtils;
 
 import static de.blinkt.openvpn.constant.Constant.BRACELETNAME;
@@ -42,7 +43,8 @@ public class UnbindDeviceModelImpl extends NetModelBaseImpl implements UnbindeDe
            //判断是否再次重连的标记
            ICSOpenVPNApplication.isConnect = false;
            // 解除绑定，注册失败不显示
-           EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
+               EventBusUtil.bindStatue(BindStatue.UNBIND_DEVICE);
+//           EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
            ICSOpenVPNApplication.uartService.disconnect();
            }
        }

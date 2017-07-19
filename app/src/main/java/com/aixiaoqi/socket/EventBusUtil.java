@@ -8,6 +8,7 @@ import de.blinkt.openvpn.model.CancelCallService;
 import de.blinkt.openvpn.model.GetTokenRes;
 import de.blinkt.openvpn.model.SimRegisterStatue;
 import de.blinkt.openvpn.model.StateChangeEntity;
+import de.blinkt.openvpn.model.enentbus.BindStatue;
 import de.blinkt.openvpn.model.enentbus.BlueConnStatue;
 import de.blinkt.openvpn.model.enentbus.BlueReturnData;
 import de.blinkt.openvpn.model.enentbus.OptionCellPhoneFragmentView;
@@ -37,6 +38,11 @@ public class EventBusUtil {
         SimRegisterStatue entity = new SimRegisterStatue();
         entity.setRigsterSimStatue(regstatues);
         entity.setRigsterStatueReason(regstatuesreason);
+        EventBus.getDefault().post(entity);
+    }
+    public static void bindStatue(int bindStatus) {
+        BindStatue entity = new BindStatue();
+        entity.setBindStatues(bindStatus);
         EventBus.getDefault().post(entity);
     }
     /**

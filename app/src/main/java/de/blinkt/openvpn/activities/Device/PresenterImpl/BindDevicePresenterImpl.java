@@ -7,6 +7,9 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+
+import com.aixiaoqi.socket.EventBusUtil;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -32,6 +35,7 @@ import de.blinkt.openvpn.http.GetBindsIMEIHttp;
 import de.blinkt.openvpn.http.IsBindHttp;
 import de.blinkt.openvpn.model.BluetoothEntity;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
+import de.blinkt.openvpn.model.enentbus.BindStatue;
 import de.blinkt.openvpn.model.enentbus.BlueReturnData;
 import de.blinkt.openvpn.util.CheckAuthorityUtil;
 import de.blinkt.openvpn.util.CommonTools;
@@ -317,6 +321,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
         switch (blueReturnData.getDataType()){
             case Constant.SYSTEM_BASICE_INFO:
                 requestSkyUpgrade();
+                EventBusUtil.bindStatue(BindStatue.BIND_DEVICE);
                 break;
         }
     }
