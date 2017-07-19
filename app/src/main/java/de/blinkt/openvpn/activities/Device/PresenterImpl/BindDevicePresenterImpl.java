@@ -167,7 +167,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                     CommonTools.delayTime(200);
                     sendMessageToBlueTooth(ICCID_GET);
                 }
-                EventBusUtil.bindStatue(BindStatue.BIND_DEVICE);
+
                 requestUpdateDeviceInfo();
 
             } else {
@@ -306,7 +306,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
     public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
         String type = entity.getBlueType();
         if (BluetoothConstant.BLUE_BIND_SUCCESS.equals(type)) {
-
+            EventBusUtil.bindStatue(BindStatue.BIND_DEVICE);
             Log.i("BindDevicePresenterImpl", "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + deviceAddress + ",版本号：" + SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
             if (bindDeviceView.getDeviceName().contains(Constant.UNIBOX)) {
                 requestBindDevice("1");

@@ -220,6 +220,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
 
     @Subscribe (threadMode = ThreadMode.BACKGROUND)
     public void bindStatue(BindStatue bindStatue) {
+        Log.e(TAG,"bindStatue="+bindStatue.getBindStatues());
         if(bindStatue.getBindStatues()==0){
             SimDataInfoModel.iccid="";
         hasPreDataRegisterImpl.unbindTcpService();
