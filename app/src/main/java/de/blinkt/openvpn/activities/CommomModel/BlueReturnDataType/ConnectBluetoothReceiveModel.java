@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.aixiaoqi.socket.EventBusUtil;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 
@@ -54,7 +55,8 @@ public class ConnectBluetoothReceiveModel {
             Log.i("Encryption", "IMEI是否为空: " + (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))));
             if (!CommonTools.isFastDoubleClick(20) && TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI))) {
                     EventBusUtil.bingDeviceStep(BluetoothConstant.BLUE_BIND);
-                Log.d("Encryption", "run: 发送绑定命令");
+                //Log.d("Encryption", "run: 发送绑定命令");-
+                Logger.d("发送绑定命令");
                 sendMessageToBlueTooth(BIND_DEVICE);//绑定命令
             }
         }

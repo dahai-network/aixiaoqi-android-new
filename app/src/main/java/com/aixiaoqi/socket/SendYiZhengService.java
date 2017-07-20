@@ -2,6 +2,8 @@ package com.aixiaoqi.socket;
 
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener {
 
 	public void sendGoip(String header) {
 		if (mReceiveSocketService != null)
+			Logger.d("发送一正服务建立TCP连接"+header);
 			sendService(header);
 	}
 
@@ -41,17 +44,24 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener {
 			number = "0" + number;
 		}
 		List<TlvEntity> yiZhengTlvList = new ArrayList<>();
+
 		if (SocketConstant.CONNECTION.equals(header)) {
+            //会话id
 			SocketConstant.SESSION_ID = SocketConstant.SESSION_ID_TEMP;
+            //开始连接
+            Logger.d("正在与服务建立TCP连接"+header);
 			connection(yiZhengTlvList);
 		} else if (SocketConstant.PRE_DATA.equals(header)) {
-			//
+			//1085a9000
+            Logger.d("获取鉴权数据"+header);
 			sdkReturn(yiZhengTlvList);
 		} else if (SocketConstant.UPDATE_CONNECTION.equals(header)) {
 			updateConnection(yiZhengTlvList);
+            Logger.d("更新TCP连接发送心跳包"+header);
 		}
 		MessagePackageEntity messagePackageEntity = new MessagePackageEntity(SocketConstant.SESSION_ID, number, header, yiZhengTlvList);
 		String str = messagePackageEntity.combinationPackage();
+        Logger.d("最终发送数据"+str);
 		mReceiveSocketService.sendMessage(str);
 	}
 

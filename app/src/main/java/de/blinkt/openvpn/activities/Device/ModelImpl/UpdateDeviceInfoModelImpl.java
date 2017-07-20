@@ -1,5 +1,7 @@
 package de.blinkt.openvpn.activities.Device.ModelImpl;
 
+import com.orhanobut.logger.Logger;
+
 import de.blinkt.openvpn.activities.NetModelBaseImpl;
 import de.blinkt.openvpn.activities.Device.Model.UpdateDeviceInfoModel;
 import de.blinkt.openvpn.constant.Constant;
@@ -20,6 +22,7 @@ public class UpdateDeviceInfoModelImpl extends NetModelBaseImpl implements Updat
     @Override
     public void updateDeviceInfo() {
         SharedUtils utils = SharedUtils.getInstance();
+        Logger.d("请求更新数据");
         createHttpRequest(HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO, utils.readString(Constant.BRACELETVERSION),
                 utils.readInt(Constant.BRACELETPOWER) + "", utils.readInt(Constant.BRACELETTYPEINT) + "");
     }

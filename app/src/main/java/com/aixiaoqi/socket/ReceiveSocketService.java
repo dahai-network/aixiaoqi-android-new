@@ -16,6 +16,8 @@ import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -122,6 +124,11 @@ public class ReceiveSocketService extends Service {
         return false;
     }
 
+    /**
+     * 接收到服务的响应
+     * @param s
+     * @param length
+     */
     private void receiveServiceData(byte[] s, int length) {
         String receiveData = HexStringExchangeBytesUtil.bytesToHexString(s, length);
         ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n" + receiveData);
@@ -133,7 +140,7 @@ public class ReceiveSocketService extends Service {
             sendPreDataType = "";
         }
         TlvAnalyticalUtils.builderMessagePackageList(receiveData);
-        Log.d(TAG, "onReceive: ---------------");
+        Logger.d("接收到服务器的响应数据"+receiveData);
         createHeartBeatPackage();
     }
 
@@ -194,10 +201,11 @@ public class ReceiveSocketService extends Service {
                 sendPreDataTime = System.currentTimeMillis();
             }
         }
-        Log.e(TAG, "sendYiZhengService=" + s);
-        Log.e("sendMessage", "发送到GOIPtcpClient" + (tcpClient != null));
+        Logger.d("发送给服务器信息=" + s);
+        Logger.d("发送到GOIPtcpClientTCP是否断开"+ (tcpClient != null));
         if (tcpClient != null && tcpClient.getTransceiver() != null) {
-            tcpClient.getTransceiver().send(s);
+            boolean send = tcpClient.getTransceiver().send(s);
+            Logger.d("发送是否成功"+send);
         }
         ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n" + s);
     }

@@ -3,6 +3,8 @@ package com.aixiaoqi.socket;
 import android.content.Intent;
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,8 +136,10 @@ public class TlvAnalyticalUtils {
 					if (typeParams == 199) {
 						SendCommandToBluetooth.sendMessageToBlueTooth(Constant.UP_TO_POWER_NO_RESPONSE);
 						if(SdkAndBluetoothDataInchange.isHasPreData) {
+							Logger.d("有鉴权数据进行处理");
 							hasPreData(orData, value);
 						}else{
+							Logger.d("没有鉴权数据进行处理");
 							byte[] bytes = HexStringExchangeBytesUtil.hexStringToBytes(value);
 							sendToSdkLisener.send(Byte.parseByte(SocketConstant.EN_APPEVT_SIMDATA), vl, bytes);
 						}
@@ -174,7 +178,7 @@ public class TlvAnalyticalUtils {
 		return orData;
 	}
 
-	//根据服务器发过来的数据获取卡数据
+	//有预读取数据，获取卡指令，进行解析
 	private static void hasPreData(String orData, String value) {
 		if(preData==null){
 			preData= new String[9];
@@ -206,7 +210,7 @@ public class TlvAnalyticalUtils {
 		}
 		preData[8]=orData.replace("8a1000", "8a9000").substring(0,20);
 		for(int i=0;i<9;i++){
-			Log.e("TlvAnalyticalUtils","分离服务器发过来的数据"+preData[i]);
+			Logger.d("分离服务器发过来的数据"+preData[i]);
 		}
 	}
 

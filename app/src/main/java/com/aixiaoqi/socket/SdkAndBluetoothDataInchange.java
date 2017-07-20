@@ -36,7 +36,8 @@ public class SdkAndBluetoothDataInchange {
 	TimerTask timerTaskMessage ;
 	private String hasPreResendToBlue="";//保存有预读取数据的信息
 	public void initReceiveDataframSocketService(ReceiveDataframSocketService receiveDataframSocketService, UartService mService) {
-		receiveDataframSocketService.setListener(new ReceiveDataframSocketService.MessageOutLisener() {
+		receiveDataframSocketService.setListener(
+				new ReceiveDataframSocketService.MessageOutLisener() {
 													 @Override
 													 public void sendToBluetoothMsg(final String msg) {
 														 //SDK接收到消息发送给蓝牙消息的方法
@@ -58,6 +59,10 @@ public class SdkAndBluetoothDataInchange {
 		EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NOT_CAN_RECEVIE_BLUETOOTH_DATA);
 	}
 
+	/**
+	 * sendToSDKAboutBluetoothInfo
+	 * @param messages
+	 */
 	public void sendToSDKAboutBluetoothInfo(ArrayList<String> messages) {
 
 		synchronized (this){

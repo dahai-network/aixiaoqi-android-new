@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
+import com.orhanobut.logger.*;
+
 import java.util.ArrayList;
 import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.ConnectBluetoothReceiveModel;
 import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.DeviceBaseSystemInfoModel;
@@ -20,7 +22,6 @@ import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.CreateFiles;
 import de.blinkt.openvpn.util.EncryptionUtil;
 import de.blinkt.openvpn.util.SharedUtils;
 import static de.blinkt.openvpn.activities.Device.PresenterImpl.ProMainPresenterImpl.sdkAndBluetoothDataInchange;
@@ -52,8 +53,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
     public static String nullCardId = null;
     //重连次数
     public static int retryTime;
-
-    CreateFiles createFiles;
     ConnectBluetoothReceiveModel connectBluetoothReceiveModel;
     DeviceBaseSystemInfoModel deviceBaseSystemInfoModel;
     SimDataInfoModel simDataInfoModel;
@@ -79,8 +78,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
      * @param intent
      */
     public void onReceive(final Context context, Intent intent) {
-        if (createFiles == null)
-            createFiles = new CreateFiles();
+
         if(connectBluetoothReceiveModel==null)
             connectBluetoothReceiveModel=new ConnectBluetoothReceiveModel(context);
         final String action = intent.getAction();
@@ -111,19 +109,28 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
         if (messages.size() == 0) {
             return true;
         }
+
         retryTime = 0;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    String firstPackage = null;
+                    String dataType = null;
                     Log.d(TAG, "run: 接受数据");
-                    String firstPackage = messages.get(0).substring(0, 2);
-                    String dataType = messages.get(0).substring(6, 10);
+                    if(messages.size()!=0) {
+                        firstPackage = messages.get(0).substring(0, 2);
+                        dataType = messages.get(0).substring(6, 10);
+                    }
                     for (int i = 0; i < messages.size(); i++) {
                         Log.e(TAG, messages.get(i));
                     }
-                    Log.e("Blue_Chanl", "dataType：" + dataType);
+                    com.orhanobut.logger.Logger.d("dataType：" + dataType);
                     Log.e("Blue_Chanl", "firstPackage：" + firstPackage);
+                    if(firstPackage==null){
+                        Log.d(TAG, "run: 蓝牙没有回数据");
+                        return;
+                    }
                     switch (firstPackage) {
                         case "55":
                             switch (dataType) {
@@ -135,6 +142,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                     //绑定流程成功命令
                                     CommonTools.delayTime(500);
                                     //android 标记，给蓝牙设备标记是否是android设备用的
+                                    com.orhanobut.logger.Logger.d("接收到绑定命令");
                                     SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
                                     EventBusUtil.bingDeviceStep(BluetoothConstant.BLUE_BIND_SUCCESS);
                                     break;
@@ -177,7 +185,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                     simDataInfoModel.setIccid(messages);
                                     break;
                                 case Constant.APP_CONNECT_RECEIVE:
-                                    Log.d(TAG, "run: 接收到专属命令返回");
+                                    Log.d(TAG,"接收到专属命令返回");
                                     connectBluetoothReceiveModel.appConnectReceive(messages);
                                     break;
                                 default:
@@ -207,7 +215,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                         // 会扫描不到设备，此时需要在断开连接后，不能立即扫描，而是要先停止扫描后，过2秒再扫描才能扫描到设备
                         EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
                         mService.connect(utils.readString(Constant.IMEI));
-
                     } else {
                         Log.d(TAG, "UART_DISCONNECT_MSG");
                     }
@@ -228,17 +235,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
         if(ICSOpenVPNApplication.random8NumberString==null){
             ICSOpenVPNApplication.random8NumberString= EncryptionUtil.random8Number();
         }
-
         String random8NumberString=ICSOpenVPNApplication.random8NumberString;
 
-        Log.d("Encryption", "send--run: " + APP_CONNECT + "--" + random8NumberString);
         sendMessageToBlueTooth(APP_CONNECT + random8NumberString);//APP专属命令
 
         //把日志保存到本地文件中
-        createFiles.print("发送指令=" + APP_CONNECT + random8NumberString + "----随机数" + random8NumberString);
-        Log.i(TAG, "发送了专属命令");
+        Log.d(TAG,"发送指令=" + APP_CONNECT + random8NumberString + "----随机数" + random8NumberString);
         String braceletname = utils.readString(Constant.BRACELETNAME);
-        Log.d(TAG, "findBlueService: "+braceletname);
+
 
         if (TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) || braceletname == null ) {
 
@@ -247,9 +251,8 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
             //获取蓝牙基本信息
             sendMessageToBlueTooth(BASIC_MESSAGE);
             CommonTools.delayTime(200);
-            Log.d(TAG, "onReceive: 获取ICCID_GET");
+            Log.d(TAG,"onReceive: 获取ICCID_GET");
             sendMessageToBlueTooth(ICCID_GET);
-            Log.i("toBLue", "连接成功");
             //更新时间操作
             sendMessageToBlueTooth(getBLETime());
         }
