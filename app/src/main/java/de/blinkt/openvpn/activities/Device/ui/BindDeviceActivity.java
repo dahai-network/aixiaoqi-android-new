@@ -25,6 +25,9 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.orhanobut.logger.Logger;
+
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +43,7 @@ import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.http.GetBindsIMEIHttp;
 import de.blinkt.openvpn.model.BluetoothEntity;
+import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.contact.DividerDecoration;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
@@ -436,9 +440,10 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 						@Override
 						public void run() {
 							dismissProgress();
+							//CommonTools.showShortToast(BindDeviceActivity.this,"连接中断请重新连接");
 							return;
 						}
-					},8000);
+					},10000);
 
                     //暂不绑定
                 }else if(getResources().getString(R.string.stop_bind).equals(stopTextView.getText().toString())){
@@ -483,6 +488,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
                 @Override
                 public void run() {
                     dismissProgress();
+					Logger.d("是否连接"+ICSOpenVPNApplication.isConnect);
                     return;
                 }
             },8000);

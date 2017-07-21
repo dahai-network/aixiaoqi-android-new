@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import com.aixiaoqi.socket.EventBusUtil;
 import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.File;
@@ -312,7 +314,7 @@ public abstract class CommonHttp implements Callback, Runnable {
 
     @Override
     public void onFailure(Call call, IOException e) {
-        Log.d("CommonHttp", "onFailure: e=" + e.getMessage());
+        Logger.d("onFailure: e=" + e.getMessage());
 
         if (!NetworkUtils.isNetworkAvailable(context_)) {
             noNetShow();
@@ -555,10 +557,14 @@ public abstract class CommonHttp implements Callback, Runnable {
         }
 
     }
-
+    static boolean isCancel=false;
     public static void cancel() {
-        if (call != null && !call.isCanceled())
+        Logger.d("取消网络访问");
+        if (call != null && !call.isCanceled()) {
             call.cancel();
+            isCancel=true;
+        }
+
     }
 
 }

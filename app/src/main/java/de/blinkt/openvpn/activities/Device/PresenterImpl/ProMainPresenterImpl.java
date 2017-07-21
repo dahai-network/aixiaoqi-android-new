@@ -1,6 +1,7 @@
 package de.blinkt.openvpn.activities.Device.PresenterImpl;
 
 import android.content.Context;
+import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
@@ -10,6 +11,7 @@ import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SdkAndBluetoothDataInchange;
 import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConstant;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,6 +67,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
     RegisterBroadcastModelImpl registerBroadcastModel;
     private int requestCount = 0;//判断是否有网，重发三次如果还没有网络，就注册失败
     public static   SdkAndBluetoothDataInchange sdkAndBluetoothDataInchange;
+    private Handler mHandler=new Handler(){};
     public  ProMainPresenterImpl(ProMainView proMainView,Context context){
         this.proMainView=proMainView;
         this.context=context;
@@ -98,15 +101,30 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
 
     @Override
     public void requestGetSecurityConfig() {
-        e("requestGetSecurityConfig");
+        Logger.d("开始访问网络获取ip和port");
+        isResponse=false;
         getSecurityConfigModel.getSecurityConfig();
+        //由于网络莫名报cancel导致一直处理注册中
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Logger.d("isResponse"+isResponse);
+                    if(!isResponse){
+                        Logger.d("执行延时操作");
+                        getSecurityConfigModel.getSecurityConfig();
+                        //EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.NO_NET_ERROR);
+                    }
+
+            }
+        },15000);
+
     }
 
     @Override
     public void requestSkyUpdate() {
         skyUpgradeModel.skyUpgrade();
     }
-
+    boolean isResponse=false;
     @Override
     public void rightLoad(int cmdType, CommonHttp object) {
         if (cmdType == HttpConfigUrl.COMTYPE_GET_BIND_DEVICE){
@@ -127,6 +145,8 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
         }
         else if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG){
             GetHostAndPortHttp http = (GetHostAndPortHttp) object;
+            Logger.d("获取ip与port的接口的响应"+http.getStatus());
+            isResponse=true;
             if (http.getStatus() == 1) {
                 requestCount = 0;
                 if (http.getGetHostAndPortEntity().getVswServer().getIp() != null) {
@@ -135,9 +155,8 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            e("开启线程=");
+                            Logger.d("开启线程=");
                           /*  if(CommonTools.isFastDoubleClick(3000)){
-
                                 return;
                             }*/
                             if (sdkAndBluetoothDataInchange == null) {
@@ -152,11 +171,11 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                                 PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]]);
                                 //判断是否有鉴权数据
                                 if (preReadEntity != null) {
-                                    e("有预读取数据=");
+                                    Logger.d("有预读取数据=");
                                     hasPreDataRegisterImpl.initPreData(preReadEntity);
                                     hasPreDataRegisterImpl.registerSimPreData();
                                 } else {
-                                    e("没有预读取数据=");
+                                    Logger.d("没有预读取数据=");
                                     noPreDataRegister();
                                 }
                             } else {
@@ -184,7 +203,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
      * 获取不到鉴权数据
      */
     private void noPreDataRegister() {
-
+        Logger.d("没有预读取数据，进行打开so库获取卡数据");
         hasPreDataRegisterImpl.startSocketService();
         noPreDataRegisterModel.noPreDataStartSDKSimRegister();
     }
@@ -193,6 +212,9 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
 
     @Override
     public void errorComplete(int cmdType, String errorMessage) {
+        isResponse=true;
+        Logger.d("访问网络错误"+errorMessage);
+
         if (cmdType == HttpConfigUrl.COMTYPE_GET_SECURITY_CONFIG) {
             if (requestCount < 3) {
                 requestCount++;
@@ -202,6 +224,13 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                 EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NO_NET);
             }
         }
+    }
+
+    @Override
+    public void noNet() {
+        isResponse=true;
+        super.noNet();
+        Logger.d("没有网络");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -238,7 +267,8 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
      */
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程
     public void onIsSuccessEntity(SimRegisterStatue entity) {
-        e("getRigsterSimStatue="+entity.getRigsterSimStatue()+"\ngetRigsterStatueReason="+entity.getRigsterStatueReason());
+        Logger.d("getRigsterSimStatue=" + entity.getRigsterSimStatue() + "\n" +
+                "getRigsterStatueReason=" + entity.getRigsterStatueReason());
         switch (entity.getRigsterSimStatue()) {
             case SocketConstant.REGISTER_SUCCESS:
                 break;
@@ -246,7 +276,6 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                 rigisterFail(entity.getRigsterStatueReason());
                 break;
             case SocketConstant.REGISTERING://注册中
-
                 registering(entity.getRigsterStatueReason());
                 break;
             case SocketConstant.UNREGISTER:
@@ -303,7 +332,9 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                 hasPreDataRegisterImpl.startTcpSocket();
                 break;
             case SocketConstant.VAILD_CARD:
+                Logger.d("registering: 获取端口号和ip");
                 getPortAndIp();
+
                 break;
         }
     }
@@ -319,10 +350,14 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Logger.d("网络状态"+NetworkUtils.isNetworkAvailable(context));
                 if(NetworkUtils.isNetworkAvailable(context)){
+
+                    Logger.d("run: 开始获取port与ip");
                     //请求网络获取port与ip
                     requestGetSecurityConfig();
                 }else{
+                    Logger.d("run: 重试三遍");
                     CommonTools.delayTime(2000);
                     requestCount++;
                     Looper.prepare();

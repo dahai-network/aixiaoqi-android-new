@@ -15,15 +15,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
 import com.tencent.bugly.beta.ui.UILifecycleListener;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import cn.com.aixiaoqi.R;
 import cn.qfishphone.sipengine.SipEngineCore;
 import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
@@ -116,10 +116,11 @@ public class ICSOpenVPNApplication extends Application implements QueryCompleteL
     @Override
     public void onCreate() {
         super.onCreate();
-
         instance = this;
          //mRefWatcher = Constant.IS_DEBUG ?  LeakCanary.install(this) : RefWatcher.DISABLED;
 //         mRefWatcher = Constant.IS_DEBUG ?  RefWatcher.DISABLED : RefWatcher.DISABLED;
+        Logger.addLogAdapter(new AndroidLogAdapter());
+
         CommonHttp.setContext(getApplicationContext());
 //		if (Constant.IS_DEBUG) {
         CrashHandler crashHandler = CrashHandler.getInstance();

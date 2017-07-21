@@ -2,6 +2,8 @@ package de.blinkt.openvpn.activities.Device.ModelImpl;
 
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
+
 import de.blinkt.openvpn.activities.Device.ui.BindDeviceActivity;
 import de.blinkt.openvpn.activities.NetModelBaseImpl;
 import de.blinkt.openvpn.activities.Device.Model.BindDeviceModel;
@@ -22,7 +24,7 @@ public class BindDeviceModelImpl extends NetModelBaseImpl implements BindDeviceM
 
     @Override
     public void bindDevice(String address,String  deviceType) {
-        Log.d("BindDeviceModelImpl", "bindDevice: "+address);
+        Logger.d( "bindDevice: "+address);
         createHttpRequest(HttpConfigUrl.COMTYPE_BIND_DEVICE
                 ,address , deviceType);
     }

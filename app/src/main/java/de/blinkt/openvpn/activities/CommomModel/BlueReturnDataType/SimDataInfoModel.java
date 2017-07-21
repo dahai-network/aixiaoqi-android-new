@@ -4,8 +4,9 @@ import android.util.Log;
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.RadixAsciiChange;
 import com.aixiaoqi.socket.SocketConstant;
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
-import de.blinkt.openvpn.Logger;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.constant.Constant;
@@ -18,13 +19,14 @@ import static de.blinkt.openvpn.constant.Constant.OFF_TO_POWER;
  * Created by Administrator on 2017/6/12 0012.
  */
 
-public class SimDataInfoModel extends Logger{
+public class SimDataInfoModel {
 
     public void isInsertCardOrCardType(ArrayList<String> messages) {
-        Log.d(TAG, "run: " + messages.toString() + ":" + messages.get(0).substring(10, 12));
-        Log.i(TAG, "接收数据：是否插卡：" + messages.toString());
+        Logger.d("run: " + messages.toString() + ":" + messages.get(0).substring(10, 12));
+        Logger.d( "接收数据：是否插卡：" + messages.toString());
+
         if (messages.get(0).substring(10, 12).equals("00")) {
-            Log.i(TAG, "未插卡");
+            Logger.d( "未插卡");
             iccid="";
             EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.UN_INSERT_CARD);
             //未插卡（需要修改：由于没有获取ICCID无法判断所以日后需要修改，暂时这样写）
@@ -36,7 +38,7 @@ public class SimDataInfoModel extends Logger{
         } else if (messages.get(0).substring(10, 12).equals("04")) {
 
         } else {
-            Log.i(TAG, "已插卡");
+            Logger.d( "已插卡");
             if (SocketConstant.REGISTER_STATUE_CODE != 0) {
                 SocketConstant.REGISTER_STATUE_CODE = 1;
             }
@@ -50,25 +52,25 @@ public class SimDataInfoModel extends Logger{
                     iccid="";
                     break;
                 case "01":
-                    Log.i(TAG, "移动卡！");
+                    Logger.d( "移动卡！");
                     registFlowPath();
                     SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_MOBILE);
                     //卡类型是运营商则开始注册
                     break;
                 case "02":
-                    Log.i(TAG, "联通卡！");
+                    Logger.d( "联通卡！");
                     registFlowPath();
                     SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_UNICOM);
                     //卡类型是运营商则开始注册
                     break;
                 case "03":
-                    Log.i(TAG, "电信卡！");
+                    Logger.d( "电信卡！");
                     registFlowPath();
                     SharedUtils.getInstance().writeString(Constant.OPERATER, Constant.CHINA_TELECOM);
                     //卡类型是运营商则开始注册
                     break;
                 case "04":
-                    Log.i(TAG, "爱小器卡！");
+                    Logger.d( "爱小器卡！");
                     iccid="";
                     SharedUtils.getInstance().delete(Constant.OPERATER);
                     EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.AIXIAOQI_CARD);
@@ -97,10 +99,12 @@ public class SimDataInfoModel extends Logger{
     }
 
     private void registFlowPath(){
+
+        Logger.d("判断Iccid是否相同"+isSameIccid);
         if(isSameIccid){
             return ;
         }
-        Log.e("SimDataInfoModel", "进入注册流程");
+        Logger.d("SimDataInfoModel"+"进入注册流程");
         EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.VAILD_CARD);
         IS_TEXT_SIM = true;
         ReceiveBLEMoveReceiver.isGetnullCardid = false;

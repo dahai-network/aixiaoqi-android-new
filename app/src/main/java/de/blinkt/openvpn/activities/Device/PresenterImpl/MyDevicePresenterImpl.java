@@ -13,6 +13,7 @@ import android.util.Log;
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SocketConstant;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -224,7 +225,10 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
 
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程
     public void onIsSuccessEntity(SimRegisterStatue entity) {
-        e("RigsterSimStatue=" + entity.getRigsterSimStatue() + "\nrigsterStatueReason=" + entity.getRigsterStatueReason() + "\nSocketConstant.REGISTER_STATUE_CODE =" + SocketConstant.REGISTER_STATUE_CODE);
+        Logger.d("RigsterSimStatue="+entity.getRigsterSimStatue() );
+        Logger.d("rigsterStatueReason="+entity.getRigsterStatueReason() );
+        Logger.d("SocketConstant.REGISTER_STATUE_CODE 1未注册失败，3为注册成功="+SocketConstant.REGISTER_STATUE_CODE );
+
         synchronized (this) {
             myDeviceView.setConStatueBackground(R.color.gray_text);
             switch (entity.getRigsterSimStatue()) {
@@ -248,6 +252,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
                     unregister(entity.getRigsterStatueReason());
                     break;
                 case SocketConstant.REGISTERING://注册中
+                    Logger.d("当前为注册中");
                     if (SocketConstant.REGISTER_STATUE_CODE == 3) {
                         myDeviceView.setConStatueBackground(R.color.select_contacct);
                         myDeviceView.percentTextViewVisible(GONE);

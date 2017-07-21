@@ -19,7 +19,6 @@
     <uses-feature
         android:name="android.hardware.location.gps"
         android:required="true"/>
-
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
@@ -74,6 +73,7 @@
         android:label="@string/app"
         android:largeHeap="true"
         android:persistent="true"
+        android:hardwareAccelerated="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute"

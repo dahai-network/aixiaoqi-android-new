@@ -220,12 +220,13 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 		return true;
 	}
 
+	private boolean isBind=false;
 	//实例化UartService
 	public void initServices() {
 		if (!ICSOpenVPNApplication.getInstance().isServiceRunning(UartService.class.getName())) {
 			i("开启UartService");
 			Intent bindIntent = new Intent(this, UartService.class);
-			bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+			isBind = bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
 		}else{
 			if (!TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.IMEI)) && !TextUtils.isEmpty(SharedUtils.getInstance().readString(Constant.BRACELETNAME))&&mService!=null&&mService.isDisconnectedBlueTooth()) {
 				blueToothOpen();
@@ -431,9 +432,10 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 		Log.d(TAG, "onDestroy: --------------");
 		proMainPresenter.onDestory();
 		radiogroup = null;
-		if (mService != null){
+		if (mService != null&&isBind){
 			mService.unbindService(mServiceConnection);
-			mService.stopSelf();
+            mService.stopSelf();
+            isBind=false;
 		}
 		mService = null;
 		radiogroup = null;

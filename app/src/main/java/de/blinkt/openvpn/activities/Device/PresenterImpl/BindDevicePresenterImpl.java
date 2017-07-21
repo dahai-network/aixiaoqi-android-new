@@ -1,15 +1,12 @@
 package de.blinkt.openvpn.activities.Device.PresenterImpl;
 
-import android.Manifest;
-import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-
 import com.aixiaoqi.socket.EventBusUtil;
-
+import com.orhanobut.logger.Logger;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -37,7 +34,6 @@ import de.blinkt.openvpn.model.BluetoothEntity;
 import de.blinkt.openvpn.model.BluetoothMessageCallBackEntity;
 import de.blinkt.openvpn.model.enentbus.BindStatue;
 import de.blinkt.openvpn.model.enentbus.BlueReturnData;
-import de.blinkt.openvpn.util.CheckAuthorityUtil;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.CreateFiles;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -142,7 +138,9 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                 bindDeviceView.finishView();
             }
         } else if (cmdType == HttpConfigUrl.COMTYPE_BIND_DEVICE) {
-            Log.i("BindDevicePresenterImpl", "绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
+
+            bindDeviceView.finishView();
+            Logger.d("服务器绑定设备返回：" + object.getMsg() + ",返回码：" + object.getStatus());
             if (object.getStatus() == 1) {
                 SharedUtils.getInstance().writeString(Constant.IMEI, deviceAddress);
                 SharedUtils.getInstance().writeString(Constant.BRACELETNAME, bindDeviceView.getDeviceName());
@@ -166,6 +164,8 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
                     sendMessageToBlueTooth(BASIC_MESSAGE);
                     CommonTools.delayTime(200);
                     sendMessageToBlueTooth(ICCID_GET);
+                    CommonTools.delayTime(500);
+
                 }
 
                 requestUpdateDeviceInfo();
@@ -179,7 +179,8 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
 //			finish();
         } else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO) {
             if (object.getStatus() == 1) {
-                bindDeviceView.finishView();
+                Logger.d("--绑定完成");
+                //bindDeviceView.finishView();
             }
             //批量获取绑定状态
         }else if(cmdType==HttpConfigUrl.COMTYPE_GET_BINDS_IMEI){
@@ -305,9 +306,10 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程
     public void onVersionEntity(BluetoothMessageCallBackEntity entity) {
         String type = entity.getBlueType();
+        Logger.d("接受到专属命令");
         if (BluetoothConstant.BLUE_BIND_SUCCESS.equals(type)) {
             EventBusUtil.bindStatue(BindStatue.BIND_DEVICE);
-            Log.i("BindDevicePresenterImpl", "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + deviceAddress + ",版本号：" + SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
+            Logger.d( "蓝牙注册返回:" + entity.getBlueType() + ",参数：MEI：" + deviceAddress + ",版本号：" + SharedUtils.getInstance().readString(Constant.BRACELETVERSION)+"/n"+bindDeviceView.getDeviceName().contains(Constant.UNIBOX));
             if (bindDeviceView.getDeviceName().contains(Constant.UNIBOX)) {
                 requestBindDevice("1");
             }

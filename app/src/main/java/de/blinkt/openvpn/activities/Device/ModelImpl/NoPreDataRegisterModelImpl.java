@@ -8,6 +8,7 @@ import com.aixiaoqi.socket.ReceiveDataframSocketService;
 import com.aixiaoqi.socket.ReceiveSocketService;
 import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConnection;
+import com.orhanobut.logger.Logger;
 
 import de.blinkt.openvpn.activities.Device.Model.NoPreDataRegisterModel;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
@@ -27,27 +28,30 @@ public class NoPreDataRegisterModelImpl implements NoPreDataRegisterModel {
         if(socketUdpConnection==null)
             socketUdpConnection = new SocketConnection();
 
-
     }
     @Override
     public void noPreDataStartSDKSimRegister() {
         isStartSdk = true;
         startDataframService();
         CommonTools.delayTime(5000);
-        JNIUtil.getInstance().startSDK(1);
+        Logger.d("开启so库");
+        JNIUtil.getInstance().startSDK(0);
     }
-
+private boolean isBind=false;
     private void startDataframService() {
         if (!ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
             Intent receiveSdkIntent = new Intent(context, ReceiveDataframSocketService.class);
-            context.bindService(receiveSdkIntent, socketUdpConnection, Context.BIND_AUTO_CREATE);
+            isBind = context.bindService(receiveSdkIntent, socketUdpConnection, Context.BIND_AUTO_CREATE);
         }
 
     }
 
     public void unbindUdpService(){
         if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveDataframSocketService.class.getName())) {
-            context.unbindService(socketUdpConnection);
+            if(isBind&&socketUdpConnection!=null) {
+                context.unbindService(socketUdpConnection);
+                isBind=false;
+            }
             if (SocketConnection.mReceiveDataframSocketService != null) {
                 SocketConnection.mReceiveDataframSocketService.stopSelf();
             }
