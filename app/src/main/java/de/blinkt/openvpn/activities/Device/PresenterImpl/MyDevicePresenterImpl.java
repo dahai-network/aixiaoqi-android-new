@@ -451,7 +451,6 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
             starter.setZip(abo);
             starter.start(context, DfuService.class);
         }
-
     }
 
 

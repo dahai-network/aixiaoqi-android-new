@@ -25,8 +25,6 @@ import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
 
 public class PackageCategoryActivity extends BaseActivity implements XRecyclerView.LoadingListener, PackageCategoryView {
 
-    Activity activity;
-    String channel_id;
     @BindView(R.id.activite_rv)
     XRecyclerView activiteRv;
     @BindView(R.id.retryTextView)
@@ -49,7 +47,6 @@ public class PackageCategoryActivity extends BaseActivity implements XRecyclerVi
         hasLeftViewTitle(R.string.my_pakages,-1);
         packageCategoryPresenter = new PackageCategoryPresenter(this);
         initView();
-
     }
 
 
