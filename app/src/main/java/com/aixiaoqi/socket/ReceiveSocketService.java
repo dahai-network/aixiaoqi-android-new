@@ -151,7 +151,6 @@ public class ReceiveSocketService extends Service {
         if (tcpClient != null && !tcpClient.isConnected()) {
             if (REGISTER_STATUE_CODE == 3) {
                 REGISTER_STATUE_CODE = 2;
-
             }
             if (contactFailCount <= 3) {
                 reConnect();
