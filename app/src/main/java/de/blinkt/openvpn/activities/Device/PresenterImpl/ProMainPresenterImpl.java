@@ -137,7 +137,6 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                         }else{
                             proMainView.showHotDot(View.VISIBLE);
                         }
-
                         proMainView.blueToothOpen();
                     }
                 }
@@ -272,9 +271,6 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
         switch (entity.getRigsterSimStatue()) {
             case SocketConstant.REGISTER_SUCCESS:
                 break;
-            case SocketConstant.REGISTER_FAIL://注册失败
-                rigisterFail(entity.getRigsterStatueReason());
-                break;
             case SocketConstant.REGISTERING://注册中
                 registering(entity.getRigsterStatueReason());
                 break;
@@ -303,16 +299,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
         }
     }
 
-    private void rigisterFail(int failReason) {
-        switch (failReason) {
-            case SocketConstant.REGISTER_FAIL_INITIATIVE:
-                //更改为注册中
-//                hasPreDataRegisterImpl.unbindTcpService();
-//                destorySocketService();
-                break;
-        }
 
-    }
 
 
 

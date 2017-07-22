@@ -44,7 +44,6 @@ public class UnbindDeviceModelImpl extends NetModelBaseImpl implements UnbindeDe
            ICSOpenVPNApplication.isConnect = false;
            // 解除绑定，注册失败不显示
                EventBusUtil.bindStatue(BindStatue.UNBIND_DEVICE);
-//           EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL, SocketConstant.REGISTER_FAIL_INITIATIVE);
            ICSOpenVPNApplication.uartService.disconnect();
            }
        }

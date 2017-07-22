@@ -82,7 +82,6 @@ public class SocketConstant {
 	public static final int REGISTER_FAIL = 1;//注册失败
 	public static final int REGISTER_FAIL_IMSI_IS_NULL = 101;//imsi是空的，注册失败
 	public static final int REGISTER_FAIL_IMSI_IS_ERROR = 102;//imsi是错误的，注册失败
-	public static final int REGISTER_FAIL_INITIATIVE = 103;//如果主动解除绑定那么不显示注册失败
 	public static final int TOKEN_IS_NULL = 104;//没有token，注册失败
 	public static final int SERVER_IS_ERROR = 105;//服务端出错，注册失败
 	public static final int NOT_CAN_RECEVIE_BLUETOOTH_DATA = 106;//收不到蓝牙发过来的数据，注册失败

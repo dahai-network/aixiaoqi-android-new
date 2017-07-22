@@ -336,9 +336,7 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程
     public void onIsSuccessEntity(SimRegisterStatue entity) {
         switch (entity.getRigsterSimStatue()) {
-            case SocketConstant.REGISTER_FAIL://注册失败
-                rigisterFail(entity.getRigsterStatueReason());
-                break;
+
             case SocketConstant.REGISTERING://注册中
                 registering(entity.getRigsterStatueReason());
                 break;
@@ -350,16 +348,7 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
 
     }
 
-    private void rigisterFail(int failReason) {
-        switch (failReason) {
-            case SocketConstant.REGISTER_FAIL_INITIATIVE:
-                //更改为注册中
-//                unbindTcpService();
-//                destorySocketService();
-                break;
-        }
 
-    }
     //解除绑定
     private void unbindTcpService() {
         if (ICSOpenVPNApplication.getInstance().isServiceRunning(ReceiveSocketService.class.getName())) {

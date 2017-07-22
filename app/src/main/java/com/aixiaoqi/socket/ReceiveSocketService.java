@@ -195,7 +195,7 @@ public class ReceiveSocketService extends Service {
             sendConnectionTime = System.currentTimeMillis();
         } else if (s.startsWith(SocketConstant.PRE_DATA)) {
             if (REGISTER_STATUE_CODE != 3) {
-                isReceiveConnection=false;
+                isReceivePreData=false;
                 sendPreDataType = SocketConstant.PRE_DATA;
                 sendPreDataContent = s;
                 sendPreDataTime = System.currentTimeMillis();
