@@ -361,7 +361,6 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
             case Constant.SYSTEM_BASICE_INFO:
                 myDeviceView.setDeviceVersionText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
                 myDeviceView.dismissProgress();
-
                 myDeviceView.setElectricityPercent(((float) SharedUtils.getInstance().readInt(Constant.BRACELETPOWER))/100);
                 break;
         }
