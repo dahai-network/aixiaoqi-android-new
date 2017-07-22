@@ -54,7 +54,7 @@ public class CommenActivity extends FragmentActivity {
 			Log.i(TAG, message);
 	}
 
-
+/*
 	@Override
 	public Resources getResources() {
 		Resources res = super.getResources();
@@ -62,7 +62,7 @@ public class CommenActivity extends FragmentActivity {
 		config.setToDefaults();
 		res.updateConfiguration(config, res.getDisplayMetrics());
 		return res;
-	}
+	}*/
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

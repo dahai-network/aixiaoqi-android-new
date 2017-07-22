@@ -3,6 +3,8 @@ package com.aixiaoqi.socket;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -65,6 +67,7 @@ public class SdkAndBluetoothDataInchange {
 	 */
 	public void sendToSDKAboutBluetoothInfo(ArrayList<String> messages) {
 
+		Logger.d("sendToSDKAboutBluetoothInfo"+messages.size());
 		synchronized (this){
 			isReceiveBluetoothData = true;
 			notCanReceiveBluetoothDataCount = 0;
@@ -78,7 +81,7 @@ public class SdkAndBluetoothDataInchange {
 				eventPercent(percent);
 				mStrSimPowerOnPacket = PacketeUtil.Combination(messages);
 				socketTag = mReceiveDataframSocketService.getSorcketTag();
-				Log.e(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
+				Logger.d(TAG, "从蓝牙发出的完整数据 socketTag:" + socketTag + "; \n"
 						+ mStrSimPowerOnPacket);
 				sendToSDKAboutBluetoothInfo(socketTag + mStrSimPowerOnPacket);
 
@@ -89,7 +92,7 @@ public class SdkAndBluetoothDataInchange {
 
 	private void startTimer() {
 		if (countMessage ==0) {
-			Log.e("timer", "开启定时器");
+			Logger.d("startTimer开启定时器");
 			countMessage++;
 			if(timerMessage==null){
 				timerMessage= new Timer();
@@ -101,7 +104,7 @@ public class SdkAndBluetoothDataInchange {
 
 						if (SocketConstant.REGISTER_STATUE_CODE != 3) {
 							if (System.currentTimeMillis() - getSendBlueToothTime >=5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
-								Log.e("timer", "接收不到蓝牙数据");
+								Logger.d( "接收不到蓝牙数据");
 								if(isHasPreData){
 									SendCommandToBluetooth.sendToBlue(hasPreResendToBlue,Constant.READED_SIM_DATA);
 								}else{

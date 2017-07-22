@@ -17,14 +17,13 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener {
 
 	public void sendGoip(String header) {
 		if (mReceiveSocketService != null)
-			Logger.d("发送一正服务建立TCP连接"+header);
+			Logger.d("发送一正服务  04建立TCP连接，05更新"+header);
 			sendService(header);
 	}
 
 	public void initSocket(ReceiveSocketService receiveSocketService) {
 		if(mReceiveSocketService==null)
 		mReceiveSocketService = receiveSocketService;
-
 		receiveSocketService.initSocket();
 		if (TlvAnalyticalUtils.sendToSdkLisener == null) {
 			TlvAnalyticalUtils.setListener(this);
@@ -43,6 +42,7 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener {
 		} else if (number.length() % 4 == 3) {
 			number = "0" + number;
 		}
+
 		List<TlvEntity> yiZhengTlvList = new ArrayList<>();
 
 		if (SocketConstant.CONNECTION.equals(header)) {
@@ -60,9 +60,12 @@ public class SendYiZhengService implements TlvAnalyticalUtils.SendToSdkLisener {
             Logger.d("更新TCP连接发送心跳包"+header);
 		}
 		MessagePackageEntity messagePackageEntity = new MessagePackageEntity(SocketConstant.SESSION_ID, number, header, yiZhengTlvList);
+		Logger.d("SESSION_ID="+SocketConstant.SESSION_ID+",number="+number+",header="+",yiZhengTlvList="+yiZhengTlvList);
 		String str = messagePackageEntity.combinationPackage();
         Logger.d("最终发送数据"+str);
-		mReceiveSocketService.sendMessage(str);
+        Logger.d("mReceiveSocketService="+mReceiveSocketService);
+        if(mReceiveSocketService!=null)
+            mReceiveSocketService.sendMessage(str);
 	}
 
 	private void sdkReturn(List<TlvEntity> yiZhengTlvList) {

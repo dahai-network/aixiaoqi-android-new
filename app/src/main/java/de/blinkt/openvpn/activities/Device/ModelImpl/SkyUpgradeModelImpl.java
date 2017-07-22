@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.SimDataInfoModel;
 import de.blinkt.openvpn.activities.NetModelBaseImpl;
 import de.blinkt.openvpn.activities.Device.Model.SkyUpgradeModel;
 import de.blinkt.openvpn.constant.Constant;
@@ -23,7 +24,6 @@ public class SkyUpgradeModelImpl extends NetModelBaseImpl implements SkyUpgradeM
     }
     @Override
     public void skyUpgrade( ) {
-
         int DeviceType;
         String braceletname = SharedUtils.getInstance().readString(Constant.BRACELETNAME);
         if (!TextUtils.isEmpty(braceletname)) {
@@ -39,6 +39,7 @@ public class SkyUpgradeModelImpl extends NetModelBaseImpl implements SkyUpgradeM
         } else {
             return;
         }
+        SimDataInfoModel.iccid="";
         Log.e("BRACELETVERSION", SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
         createHttpRequest(HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA, SharedUtils.getInstance().readString(Constant.BRACELETVERSION), DeviceType + "");
     }
@@ -46,6 +47,7 @@ public class SkyUpgradeModelImpl extends NetModelBaseImpl implements SkyUpgradeM
     @Override
     public void rightComplete(int cmdType, CommonHttp object) {
     if (cmdType == HttpConfigUrl.COMTYPE_DEVICE_BRACELET_OTA) {
+
             SkyUpgradeHttp skyUpgradeHttp = (SkyUpgradeHttp) object;
             if (skyUpgradeHttp.getStatus() == 1) {
                 String braceletVersion = SharedUtils.getInstance().readString(Constant.BRACELETVERSION);

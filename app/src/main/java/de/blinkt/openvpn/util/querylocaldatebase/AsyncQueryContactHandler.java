@@ -89,13 +89,15 @@ public class AsyncQueryContactHandler extends AsyncQueryHandler {
 //                    }
 
 					String pinyin = characterParser.getSelling(name);
-					String sortString = pinyin.substring(0, 1).toUpperCase();
-					if (sortString.matches("[A-Z]")) {
-						contact.setSortLetters(sortString.toUpperCase());
-					} else {
-						contact.setSortLetters("#");
+					if(pinyin.length()!=0) {
+						String sortString = pinyin.substring(0, 1).toUpperCase();
+					  if (sortString.matches("[A-Z]"))
+						 contact.setSortLetters(sortString.toUpperCase());
+					 else
+						{
+						 contact.setSortLetters("#");
+						}
 					}
-
 					contact.setPhotoId(photoId);
 					contact.setBitmapHeader(getContactPhoto(ICSOpenVPNApplication.getContext(), number));
 					contact.setLookUpKey(lookUpKey);

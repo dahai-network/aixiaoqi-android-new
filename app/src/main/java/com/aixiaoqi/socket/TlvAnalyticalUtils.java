@@ -1,6 +1,7 @@
 package com.aixiaoqi.socket;
 
 import android.content.Intent;
+import android.os.Looper;
 import android.util.Log;
 
 import com.orhanobut.logger.Logger;
@@ -32,7 +33,7 @@ public class TlvAnalyticalUtils {
 	private static long lastClickTime;
 	private static int count = 0;
 	private static MessagePackageEntity builderMessagePackage(String hexString) {
-		Log.e("TlvAnalyticalUtils", hexString);
+		Logger.d("指令"+hexString);
 		int position = 0;
 		String responeHeader = hexString.substring(position, position + 8);
 		String tagString = hexString.substring(4, 6);
@@ -95,6 +96,7 @@ public class TlvAnalyticalUtils {
 	public static void builderMessagePackageList(String hexString) {
 		String dataLength = hexString.substring(20, 24);
 		int index = Integer.parseInt(dataLength, 16) * 2;
+        Logger.d("处理数据"+index+"---指令的长度="+hexString.length());
 		if (index + 24 < hexString.length()) {
 			builderMessagePackage(hexString.substring(0, index + 24));
 			builderMessagePackageList(hexString.substring(index + 24));
@@ -122,6 +124,8 @@ public class TlvAnalyticalUtils {
 				continue;
 			}
 			position = position + value.length();
+            Logger.d("tag="+tag);
+            Logger.d("typeParams="+tag);
 			int typeParams = Integer.parseInt(_hexTag, 16);
 			if (tag == 4) {
 				value = getConnectResultString(tag, value, typeParams);
@@ -153,6 +157,7 @@ public class TlvAnalyticalUtils {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
 				}
 			} else if (tag == 15) {
+                Logger.d("收到0f,进行重连");
 				disConnect(orData, tag);
 			} else if (tag == 5) {
 				simStatue(value, typeParams);
