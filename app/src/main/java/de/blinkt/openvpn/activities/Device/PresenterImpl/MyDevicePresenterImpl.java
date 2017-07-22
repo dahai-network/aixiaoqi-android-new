@@ -171,7 +171,6 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
             SocketConstant.REGISTER_STATUE_CODE = 2;
             myDeviceView.setConStatueText(R.string.index_registing);
             myDeviceView.setConStatueBackground(R.color.gray_text);
-            EventBusUtil.simRegisterStatue(SocketConstant.REGISTERING, SocketConstant.REGISTER_CHANGING);
             sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
         }
     }

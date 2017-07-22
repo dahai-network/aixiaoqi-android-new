@@ -346,7 +346,7 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 	//如果没有连上，每隔10秒重连一次
 	private void connDeviceFiveSecond(String imeiStr) {
 			mService.connect(imeiStr);
-			EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);
+
 	}
 
 	@Override
