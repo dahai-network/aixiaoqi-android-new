@@ -59,7 +59,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
     WriteCardFlowModel writeCardFlowModel;
     SharedUtils utils = SharedUtils.getInstance();
     public static boolean isGetnullCardid = false;//是否获取空卡数据
-
+    public static String rechargeStatue="01";
     private void gattDisconnect() {
         if (mService != null) {
             Log.d(TAG, "断开服务gattDisconnect: ");
@@ -137,7 +137,13 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                             switch (dataType) {
                                 //电量多少
                                 case RECEIVE_ELECTRICITY:
-                                    utils.writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(10, 12), 16));
+                                    int braceletPower;
+                                    if(Integer.parseInt(messages.get(0).substring(10, 12), 16)>100){
+                                        braceletPower=100;
+                                    }else{
+                                        braceletPower=Integer.parseInt(messages.get(0).substring(10, 12), 16);
+                                    }
+                                    utils.writeInt(Constant.BRACELETPOWER, braceletPower);
                                     break;
                                 case AGREE_BIND:
                                     //绑定流程成功命令
@@ -154,7 +160,12 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                     }
                                     deviceBaseSystemInfoModel.returnBaseSystemInfo(messages);
                                     break;
-
+                                case Constant.RECHARGE_STATE:
+                                    if(messages!=null&&messages.get(0)!=null){
+                                        rechargeStatue=messages.get(0).substring(10,12);
+                                        EventBusUtil.blueReturnData(Constant.RECHARGE_STATE,rechargeStatue,"");
+                                    }
+                                    break;
                                 case Constant.RETURN_POWER:
                                     Log.e("Blue_Chanl", "Constant.RETURN_POWER：" + firstPackage);
                                     PowerOnModel powerOnModel=new PowerOnModel();

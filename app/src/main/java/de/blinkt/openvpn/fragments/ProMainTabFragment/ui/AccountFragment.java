@@ -37,6 +37,7 @@ import cn.com.aixiaoqi.R;
 import cn.com.johnson.model.AppMode;
 import cn.com.johnson.model.ChangeViewStateEvent;
 import cn.com.johnson.widget.GlideCircleTransform;
+import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.activities.Device.ui.ChoiceDeviceTypeActivity;
 import de.blinkt.openvpn.activities.Device.ui.MyDeviceActivity;
 import de.blinkt.openvpn.activities.FreeWorryPacketChoiceActivity;
@@ -56,6 +57,7 @@ import de.blinkt.openvpn.fragments.ProMainTabFragment.PresenterImpl.AccountPrese
 import de.blinkt.openvpn.fragments.ProMainTabFragment.View.AccountView;
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.model.enentbus.BindStatue;
+import de.blinkt.openvpn.model.enentbus.BlueReturnData;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.SharedUtils;
 import de.blinkt.openvpn.views.TitleBar;
@@ -287,10 +289,31 @@ public class AccountFragment extends BaseStatusFragment implements AccountView, 
             setRegisted(false);
         }
 
+        showRechargeStatu(ReceiveBLEMoveReceiver.rechargeStatue);
+
     }
 
+    private String unrecharge="01";
+    private String rechargeing="02";
+    private String recharged="03";
+    private void showRechargeStatu(String responeStatue) {
+        if(unrecharge.equals(responeStatue)){//未充电
+            powerTextView.setText(SharedUtils.getInstance().readInt(Constant.BRACELETPOWER) + "%");
+        }else if(rechargeing.equals(responeStatue)){
+            powerTextView.setText(getString(R.string.rechargeing));
+        }else if(recharged.equals(responeStatue)){
+            powerTextView.setText(SharedUtils.getInstance().readInt(Constant.BRACELETPOWER) + "%");
+        }
+    }
 
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void blueReturnData(BlueReturnData blueReturnData){
+        switch (blueReturnData.getDataType()){
+            case Constant.RECHARGE_STATE:
+                showRechargeStatu(blueReturnData.getResponeStatue());
+                break;
+        }
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void bindStatue(BindStatue bindStatue) {
         Log.e(TAG,"bindStatue="+bindStatue.getBindStatues());

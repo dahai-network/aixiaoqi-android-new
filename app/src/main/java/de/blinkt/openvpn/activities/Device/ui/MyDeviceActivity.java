@@ -122,6 +122,15 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
     }
 
     @Override
+    public void setSinkingViewText(int textId) {
+        if(textId==0){
+            sinking.setStronly(null);
+        }else{
+            sinking.setStronly(getString(textId));
+        }
+    }
+
+    @Override
     public void startAnim() {
         if (!registerSimStatu.isEnabled()) return;
         clearAnim(false);
