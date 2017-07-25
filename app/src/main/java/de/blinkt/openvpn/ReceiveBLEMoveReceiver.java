@@ -8,9 +8,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
+import com.orhanobut.logger.*;
 import com.orhanobut.logger.Logger;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -149,7 +148,9 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                     }else{
                                         braceletPower=Integer.parseInt(messages.get(0).substring(10, 12), 16);
                                     }
+                                    Logger.e("braceletPower="+braceletPower);
                                     utils.writeInt(Constant.BRACELETPOWER, braceletPower);
+                                    EventBusUtil.blueReturnData(Constant.RECEIVE_ELECTRICITY,"","");
                                     break;
                                 case AGREE_BIND:
                                     //绑定流程成功命令

@@ -54,6 +54,14 @@ public class MySinkingView extends FrameLayout {
 
 	private String stronly;
 
+
+
+    public void setShowPercent(boolean showPercent) {
+        this.showPercent = showPercent;
+    }
+
+    private boolean showPercent=true;
+
 	public MySinkingView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
@@ -104,8 +112,6 @@ public class MySinkingView extends FrameLayout {
 			mPaint.setColor(ContextCompat.getColor(ICSOpenVPNApplication.getContext(), R.color.color_a4d9ff));
 			mPaint.setStyle(Style.FILL);
 			canvas.drawCircle(width / 2, height / 2, width / 2, mPaint);
-
-
 			if (mScaledBitmap == null) {
 				mBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.wave2);
 				mScaledBitmap = Bitmap.createScaledBitmap(mBitmap, width, height, false);
@@ -113,6 +119,7 @@ public class MySinkingView extends FrameLayout {
 				mBitmap = null;
 				mRepeatCount = (int) Math.ceil(width / mScaledBitmap.getWidth() + 0.5) + 1;
 			}
+			if(showPercent){
 			for (int idx = 0; idx < mRepeatCount; idx++) {
 				canvas.drawBitmap(mScaledBitmap, mLeft + (idx - 1) * mScaledBitmap.getWidth(), (1 - mPercent) * getHeight(), null);
 				canvas.drawBitmap(mScaledBitmap, mLeft + (idx - 1.16f) * mScaledBitmap.getWidth(), (1 - mPercent) * getHeight(), null);
@@ -123,9 +130,11 @@ public class MySinkingView extends FrameLayout {
 			textPaint.setColor(mTextColor);
 			textPaint.setTextSize(DEFAULT_PERCENTSIZE);
 			textPaint.setStyle(Style.FILL);
-			canvas.drawText(str, (width - textPaint.measureText(str)) / 2, (height + textPaint.measureText(str)) / 2, textPaint);
-			if (TextUtils.isEmpty(stronly))
+            canvas.drawText(str, (width - textPaint.measureText(str)) / 2, (height + textPaint.measureText(str)) / 2, textPaint);
+			}
+			if (TextUtils.isEmpty(stronly)){
 				stronly = ICSOpenVPNApplication.getContext().getString(R.string.only_power);
+			}
 			TextPaint onlyPaint = new TextPaint();
 			onlyPaint.setColor(mTextColor);
 			onlyPaint.setTextSize(mTextSize);

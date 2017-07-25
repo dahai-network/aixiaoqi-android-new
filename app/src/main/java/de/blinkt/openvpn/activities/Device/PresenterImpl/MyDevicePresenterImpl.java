@@ -370,11 +370,16 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
             case Constant.RECHARGE_STATE:
                 showRechargeStatu(blueReturnData.getResponeStatue());
                 break;
+            case Constant.RECEIVE_ELECTRICITY:
+                myDeviceView.dismissProgress();
+                myDeviceView.setElectricityPercent(((float) SharedUtils.getInstance().readInt(Constant.BRACELETPOWER))/100);
+                break;
         }
     }
 
     private void showRechargeStatu(String responeStatue) {
         if(unrecharge.equals(responeStatue)){//未充电
+            myDeviceView.setElectricityPercent(((float) SharedUtils.getInstance().readInt(Constant.BRACELETPOWER))/100);
             myDeviceView.setSinkingViewText(0);
         }else if(rechargeing.equals(responeStatue)){
             myDeviceView.setSinkingViewText(R.string.rechargeing);
