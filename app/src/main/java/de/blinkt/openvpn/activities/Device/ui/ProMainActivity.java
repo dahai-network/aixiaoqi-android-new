@@ -432,7 +432,7 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 		Log.d(TAG, "onDestroy: --------------");
 		proMainPresenter.onDestory();
 		radiogroup = null;
-		if (mService != null&&isBind){
+		if (mService != null&&isBind&&mServiceConnection!=null){
 			mService.unbindService(mServiceConnection);
             mService.stopSelf();
             isBind=false;

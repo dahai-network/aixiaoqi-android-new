@@ -206,12 +206,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                     Logger.d("接收到专属命令返回");
                                     connectBluetoothReceiveModel.appConnectReceive(messages);
                                     break;
-                                case Constant.RECHARGE_STATE:
-                                    //558003030001
-                                    String eleStatue = messages.get(0).substring(10);
-                                    Logger.d("获取充电状态"+eleStatue);
-                                    /*connectBluetoothReceiveModel.appConnectReceive(messages);*/
-                                    break;
                                 default:
                                     break;
                             }

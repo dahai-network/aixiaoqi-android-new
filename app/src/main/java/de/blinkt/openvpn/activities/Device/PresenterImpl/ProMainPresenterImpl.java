@@ -162,9 +162,10 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                                 //通过iccid去本地数据库获取鉴权数据
                                 DBHelp dbHelp = new DBHelp(context);
                                 PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]]);
-
                                 Logger.d("ICCID"+SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]]);
-                                Logger.d("preReadEntity="+preReadEntity.toString());
+                                if(preReadEntity!=null) {
+                                    Logger.d("preReadEntity=" + preReadEntity.toString());
+                                }
                                 //判断是否有鉴权数据
                                 if (preReadEntity != null) {
                                     Logger.d("有预读取数据=");
