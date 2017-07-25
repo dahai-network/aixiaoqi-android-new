@@ -125,8 +125,12 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
     public void setSinkingViewText(int textId) {
         if(textId==0){
             sinking.setStronly(null);
+            sinking.setShowPercent(true);
+
         }else{
             sinking.setStronly(getString(textId));
+            sinking.setPercent(0);
+            sinking.setShowPercent(false);
         }
     }
 
