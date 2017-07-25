@@ -2,6 +2,8 @@ package com.aixiaoqi.socket;
 
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
+
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.util.SharedUtils;
@@ -49,7 +51,7 @@ public class JNIUtil {
 	public static void startSDK(int reconnectType) {
 //		if (!IS_TEXT_SIM) return;
 
-		Log.e("Blue_Chanl", "启动startSDK - REGISTER_STATUE_CODE=" + SocketConstant.REGISTER_STATUE_CODE);
+		Logger.d("启动startSDK - REGISTER_STATUE_CODE=" + SocketConstant.REGISTER_STATUE_CODE);
 		switch (SocketConstant.REGISTER_STATUE_CODE) {
 			case 0:
 				if (jniUtil != null)

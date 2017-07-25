@@ -6,13 +6,10 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SdkAndBluetoothDataInchange;
-import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConstant;
 import com.orhanobut.logger.Logger;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -28,7 +25,6 @@ import de.blinkt.openvpn.activities.Device.ModelImpl.RegisterBroadcastModelImpl;
 import de.blinkt.openvpn.activities.Device.ModelImpl.SkyUpgradeModelImpl;
 import de.blinkt.openvpn.activities.Device.Presenter.ProMainPresenter;
 import de.blinkt.openvpn.activities.Device.View.ProMainView;
-import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
 import de.blinkt.openvpn.activities.NetPresenterBaseImpl;
 import de.blinkt.openvpn.activities.UserInfo.ModelImpl.BasicConfigModelImpl;
 import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;
@@ -38,7 +34,6 @@ import de.blinkt.openvpn.database.DBHelp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.http.GetBindDeviceHttp;
 import de.blinkt.openvpn.http.GetHostAndPortHttp;
-import de.blinkt.openvpn.http.SkyUpgradeHttp;
 import de.blinkt.openvpn.model.CancelCallService;
 import de.blinkt.openvpn.model.PreReadEntity;
 import de.blinkt.openvpn.model.SimRegisterStatue;
@@ -103,6 +98,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
     public void requestGetSecurityConfig() {
         Logger.d("开始访问网络获取ip和port");
         isResponse=false;
+      long  satrtTime=System.currentTimeMillis();
         getSecurityConfigModel.getSecurityConfig();
         //由于网络莫名报cancel导致一直处理注册中
         mHandler.postDelayed(new Runnable() {
@@ -117,6 +113,10 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
 
             }
         },15000);
+        long  endTime=System.currentTimeMillis();
+        if(satrtTime-endTime>8000){
+            Logger.d("时间太长");
+        }
 
     }
 

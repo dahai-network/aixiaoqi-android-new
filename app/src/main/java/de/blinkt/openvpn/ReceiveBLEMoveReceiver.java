@@ -89,6 +89,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
         } else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
             //断开处理
             disconnectedOption();
+            ICSOpenVPNApplication.isConnect = false;
         } else if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
             EventBusUtil.blueConnStatue(UartService.STATE_CONNECTED);
             EventBusUtil.simRegisterStatue(SocketConstant.UNREGISTER, SocketConstant.CONNECTING_DEVICE);

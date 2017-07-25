@@ -2,6 +2,8 @@ package com.aixiaoqi.socket;
 
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
+
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetAddress;
@@ -34,7 +36,7 @@ public abstract class TcpClient implements Runnable {
 	 * 连接建立失败，回调{@code onConnectFailed()}
 	 */
 	public void connect() {
-		Log.e("connectSocket", "connect");
+
 		new Thread(this).start();
 	}
 
@@ -42,7 +44,7 @@ public abstract class TcpClient implements Runnable {
 	@Override
 	public void run() {
 		try {
-			Log.e("initSocket", "socket start="+connect);
+			Logger.d("TCP开始建立连接"+connect);
 			if (!connect) {
 				connectSocket();
 			}
@@ -59,6 +61,7 @@ public abstract class TcpClient implements Runnable {
 
 	//创建连接
 	private void connectSocket() throws IOException {
+		Logger.d("创建TCP");
 		SocketAddress address = new InetSocketAddress(SocketConstant.hostIP, SocketConstant.port);
 		Socket socket = new Socket();
 		//TCP保活

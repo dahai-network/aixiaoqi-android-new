@@ -65,6 +65,7 @@ public class Constant {
 	public static final String CALL_OUTGOING = "拨出";
 	public static final String CALL_MISSED = "未接";
 
+
 	public static final  String UP_TO_POWER_DETAIL = "888003100002";//上电指令,只有详细卡信息以及BB665544BB
 	public static final  String UP_TO_POWER_NO_RESPONSE = "888003100003";//上电指令,返回BB998877BB，用于SDK使用的上下电命令
 	public static final String OFF_TO_POWER = "8880021100";//断电指令

@@ -12,6 +12,7 @@ import com.aixiaoqi.socket.SendYiZhengService;
 import com.aixiaoqi.socket.SocketConnection;
 import com.aixiaoqi.socket.SocketConstant;
 import com.aixiaoqi.socket.TestProvider;
+import com.orhanobut.logger.Logger;
 
 import de.blinkt.openvpn.activities.Device.Model.HasPreDataRegisterModel;
 import de.blinkt.openvpn.activities.Device.ui.ProMainActivity;
@@ -52,11 +53,15 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
     @Override
     public void registerSimPreData() {
         if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_SUCCEED) {//TCP已经创建成功了
+            Logger.d("向服务器发送建立连接指令");
             sendYiZhengService.sendGoip(SocketConstant.CONNECTION);
         } else if (SocketConnection.mReceiveSocketService != null && SocketConnection.mReceiveSocketService.CONNECT_STATUE == SocketConnection.mReceiveSocketService.CONNECT_FAIL) {//如果是连接失败且没有销毁，则断开在重新创建连接
+            Logger.d("建立连接失败，断开连接，重新创建TCP");
             SocketConnection.mReceiveSocketService.disconnect();
-            startTcp();
-        } else {//创建连接
+            startTcp(); }
+        else {
+            //创建连接
+            Logger.d("建立连接");
             startTcp();
         }
     }
@@ -83,7 +88,7 @@ public class HasPreDataRegisterImpl  implements HasPreDataRegisterModel{
     }
 
     public void startTcpSocket() {
-        initSendYiZhengService();//在解除绑定的时候把这些数据清理了，因此如果要重新简历连接就需要重新初始化
+        initSendYiZhengService();//在解除绑定的时候把这些数据清理了，因此如果要重新建立连接就需要重新初始化
         if (sendYiZhengService != null && SocketConnection.mReceiveSocketService != null) {
             sendYiZhengService.initSocket(SocketConnection.mReceiveSocketService);
             return;

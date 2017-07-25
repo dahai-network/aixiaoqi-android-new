@@ -179,8 +179,7 @@ public class BindDevicePresenterImpl extends NetPresenterBaseImpl implements Bin
 //			finish();
         } else if (cmdType == HttpConfigUrl.COMTYPE_UPDATE_CONN_INFO) {
             if (object.getStatus() == 1) {
-                Logger.d("--绑定完成");
-                //bindDeviceView.finishView();
+                Logger.d("绑定完成");
             }
             //批量获取绑定状态
         }else if(cmdType==HttpConfigUrl.COMTYPE_GET_BINDS_IMEI){

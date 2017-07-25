@@ -25,9 +25,11 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.blinkt.openvpn.activities.Device.ui.BluetoothBaseActivity;
 import de.blinkt.openvpn.bluetooth.service.UartService;
 import de.blinkt.openvpn.bluetooth.util.HexStringExchangeBytesUtil;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.service.JobSchedulerService;
 import de.blinkt.openvpn.util.CommonTools;
 import de.blinkt.openvpn.util.DateUtils;
@@ -76,10 +78,11 @@ public class ReceiveSocketService extends Service {
 
 
     public void initSocket() {
-        Log.e("Blue_Chanl", "initSocket");
+        Logger.d("initSocket");
         tcpClient.connect();
     }
 
+    //接受数据回调
     TcpClient tcpClient = new TcpClient() {
         @Override
         public void onConnect(SocketTransceiver transceiver) {
@@ -139,6 +142,7 @@ public class ReceiveSocketService extends Service {
             isReceivePreData =true;
             sendPreDataType = "";
         }
+        //108a0f00300cef2100f80016a3146c617374207377697463682074696d656f757400
         TlvAnalyticalUtils.builderMessagePackageList(receiveData);
         Logger.d("接收到服务器的响应数据"+receiveData);
         createHeartBeatPackage();
@@ -183,6 +187,8 @@ public class ReceiveSocketService extends Service {
     public void sendMessage(String s) {
         //当与设备断开连接，就不再发送创建连接。因为重新连接的时候还会发送创建连接，发送这条数据没有意义。是为了防止客户端与服务器不断创建与断开的问题
         ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n" + "UartService.STATE_DISCONNECTED="+( UartService.mConnectionState==UartService.STATE_DISCONNECTED));
+
+        Logger.d("指令"+(s.startsWith(SocketConstant.CONNECTION))+"蓝牙连接状态"+UartService.mConnectionState);
         if(s.startsWith(SocketConstant.CONNECTION)&& UartService.mConnectionState==UartService.STATE_DISCONNECTED){
             return;
         }
@@ -191,14 +197,21 @@ public class ReceiveSocketService extends Service {
             sendConnectionType = SocketConstant.CONNECTION;
             sendConnectionContent = s;
             isReceiveConnection=false;
+            resendConnectionCount=0;
             sendConnectionTime = System.currentTimeMillis();
         } else if (s.startsWith(SocketConstant.PRE_DATA)) {
             if (REGISTER_STATUE_CODE != 3) {
                 isReceivePreData=false;
                 sendPreDataType = SocketConstant.PRE_DATA;
                 sendPreDataContent = s;
+                Logger.d("记录当前的时间sendPreDataTime="+sendPreDataTime);
                 sendPreDataTime = System.currentTimeMillis();
+                resendPreDataCount=0;
             }
+            //108a8f00300cef3002270016a3146c617374207377697463682074696d656f757400
+        }else if(s.startsWith("108a8f")){
+
+            return;
         }
         Logger.d("发送给服务器信息=" + s);
         Logger.d("发送到GOIPtcpClientTCP是否断开"+ (tcpClient != null));
@@ -222,48 +235,66 @@ public class ReceiveSocketService extends Service {
                 tcpResendTimerTask = new TimerTask() {
                     @Override
                     public void run() {
-                        Log.e(TAG, "coming");
+                        Logger.d("coming");
+                        if("信号强".equals(BaseStatusFragment.bleStatus)){
+                            Logger.d("关闭定时器");
+                            tcpResendTimerTask.cancel();
+                            return;
+                        }
                         if (CONNECT_STATUE == CONNECT_SUCCEED) {
-                            Log.e(TAG, "sendConnectionType=" + sendConnectionType);
+                            Logger.d("sendConnectionType=" + sendConnectionType );
                             if (!TextUtils.isEmpty(sendConnectionType)) {
-                                if (System.currentTimeMillis() - sendConnectionTime >=30 * 1000&&!isReceiveConnection&&resendConnectionCount<3) {
+
+                                if("网络异常".equals(BaseStatusFragment.bleStatus)){
+                                    if (!TextUtils.isEmpty(sendConnectionContent)) {
+                                        Logger.d("网络异常处理重新创建TCP");
+                                        sendMessage(sendConnectionContent);
+                                        resendConnectionCount++;
+                                    }
+                                }
+
+                               Logger.d("时间是否相差15s=="+(System.currentTimeMillis() - sendConnectionTime >=15 * 1000) +"!isReceiveConnection"+!isReceiveConnection+"--resendConnectionCount="+resendConnectionCount);
+                                if (System.currentTimeMillis() - sendConnectionTime >=15 * 1000&&!isReceiveConnection&&resendConnectionCount<3) {
                                     //重新创建连接
                                     if (!TextUtils.isEmpty(sendConnectionContent)) {
+                                        Logger.d("重新创建TCP");
                                         sendMessage(sendConnectionContent);
                                         resendConnectionCount++;
                                     }
                                 }else{
-
+                                    Logger.d("创建TCP重复3次发送已执行完毕");
                                     if(resendConnectionCount>=3){
                                     //关闭定时器
                                     clearResendTimer();
-
                                     //EventBus 通知界面提示网络异常
                                     EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NO_NET_ERROR);
+                                        resendConnectionCount=0;
                                     }
                                     //把resendConnectionCount重置为零
-                                    resendConnectionCount=0;
+
                                 }
                             }
                             if (!TextUtils.isEmpty(sendPreDataType)) {
                                 if (REGISTER_STATUE_CODE != 3) {
-                                    if (System.currentTimeMillis() - sendPreDataTime >= 30 * 1000&&!isReceivePreData&&resendPreDataCount<3) {
+                                    Logger.d("重新发送预读取数据"+((System.currentTimeMillis() - sendPreDataTime) >= 30 * 1000)+"--!isReceivePreData="+!isReceivePreData);
+                                    if (System.currentTimeMillis() - sendPreDataTime >= 15 * 1000&&!isReceivePreData&&resendPreDataCount<3) {
                                         //重新发送预读取数据
                                         if (!TextUtils.isEmpty(sendPreDataContent)) {
+                                            Logger.d("执行重新发送预读取数据"+sendPreDataContent);
                                             sendMessage(sendPreDataContent);
                                             resendPreDataCount++;
                                         }
                                     }else{
-
+                                        Logger.d("重复发送预读数据3次发送已执行完毕"+resendPreDataCount);
                                         if(resendPreDataCount>=3){
                                         //关闭定时器
                                         clearResendTimer();
                                         //EventBus 通知界面提示网络异常
                                         EventBusUtil.simRegisterStatue(SocketConstant.REGISTER_FAIL,SocketConstant.NO_NET_ERROR);
-
+                                            resendPreDataCount=0;
                                         }
                                         //把resendPreDataCount重置为零
-                                        resendPreDataCount=0;
+
                                     }
                                 } else {
                                     sendPreDataContent = "";
@@ -273,7 +304,7 @@ public class ReceiveSocketService extends Service {
                         }
                     }
                 };
-
+            Logger.d("启动定时器");
             tcpResendTimer.schedule(tcpResendTimerTask, 30 * 1000, 30 * 1000);
 
         }
@@ -340,6 +371,7 @@ public class ReceiveSocketService extends Service {
 
     //创建心跳包
     private void createHeartBeatPackage() {
+        Logger.d("创建心跳包"+Build.VERSION.SDK_INT);
         Log.e(TAG, "count=" + count + "\nSocketConstant.SESSION_ID_TEMP" + SocketConstant.SESSION_ID_TEMP + "\nSocketConstant.SESSION_ID=" + SocketConstant.SESSION_ID + (SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID)));
         if (!SocketConstant.SESSION_ID_TEMP.equals(SocketConstant.SESSION_ID) && count == 0 && (am == null || mJobScheduler == null)) {
             count = count + 1;

@@ -305,7 +305,6 @@ public class UartService extends Service implements Serializable {
     public boolean connect(String address) {
 
         checkBleDevice();
-
         Log.d(TAG, "connect: 开始连接");
         if (mBluetoothAdapter == null || address == null) {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");

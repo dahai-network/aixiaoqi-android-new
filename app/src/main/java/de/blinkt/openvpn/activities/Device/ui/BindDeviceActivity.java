@@ -49,6 +49,7 @@ import de.blinkt.openvpn.views.contact.DividerDecoration;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
+import static de.blinkt.openvpn.bluetooth.service.UartService.mConnectionState;
 import static de.blinkt.openvpn.core.ICSOpenVPNApplication.getContext;
 
 
@@ -133,7 +134,9 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 
 	@Override
 	public void toActivity() {
+
 		toActivity(MyDeviceActivity.class);
+        isJumpActivity=true;
 	}
     int width;
     int height;
@@ -417,6 +420,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 			noDevicedialog = null;
 		}
 
+
 	}
 
 	@OnClick(R.id.stopTextView)
@@ -440,7 +444,8 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 						@Override
 						public void run() {
 							dismissProgress();
-							//CommonTools.showShortToast(BindDeviceActivity.this,"连接中断请重新连接");
+							if(mConnectionState==0&&!isJumpActivity)
+							CommonTools.showShortToast(BindDeviceActivity.this,"连接中断请重新连接");
 							return;
 						}
 					},10000);
@@ -478,6 +483,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 			}
 		}
 	}
+    boolean isJumpActivity=false;//是否跳转
     @Override
     public void onItemClick(View view, int postion) {
         showProgress("连接设备请稍等");
@@ -488,10 +494,12 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
                 @Override
                 public void run() {
                     dismissProgress();
-					Logger.d("是否连接"+ICSOpenVPNApplication.isConnect);
+					if(mConnectionState==0&&!isJumpActivity) {
+						CommonTools.showShortToast(BindDeviceActivity.this, "连接中断请重新连接");
+					}
                     return;
                 }
-            },8000);
+            },15000);
 
         }
     }

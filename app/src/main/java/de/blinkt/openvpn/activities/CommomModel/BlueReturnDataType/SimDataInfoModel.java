@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import de.blinkt.openvpn.ReceiveBLEMoveReceiver;
 import de.blinkt.openvpn.bluetooth.util.PacketeUtil;
 import de.blinkt.openvpn.constant.Constant;
+import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.util.SharedUtils;
 import static de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth.sendMessageToBlueTooth;
 import static de.blinkt.openvpn.constant.Constant.IS_TEXT_SIM;
@@ -100,8 +101,8 @@ public class SimDataInfoModel {
 
     private void registFlowPath(){
 
-        Logger.d("判断Iccid是否相同"+isSameIccid);
-        if(isSameIccid){
+        Logger.d("判断Iccid是否相同"+isSameIccid +"--当前状态"+ BaseStatusFragment.bleStatus);
+        if(isSameIccid&&"注册中".equals(BaseStatusFragment.bleStatus)){
             return ;
         }
         Logger.d("SimDataInfoModel"+"进入注册流程");

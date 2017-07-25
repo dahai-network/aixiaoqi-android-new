@@ -204,6 +204,9 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
     @Override
     public void setConStatueText(int contentId) {
         conStatusTextView.setText(getString(contentId));
+        //记录当前状态
+
+
     }
 
     @Override
