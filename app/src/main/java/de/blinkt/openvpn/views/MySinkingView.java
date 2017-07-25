@@ -11,6 +11,7 @@ import android.graphics.Path;
 import android.graphics.Region;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
@@ -123,7 +124,7 @@ public class MySinkingView extends FrameLayout {
 			textPaint.setTextSize(DEFAULT_PERCENTSIZE);
 			textPaint.setStyle(Style.FILL);
 			canvas.drawText(str, (width - textPaint.measureText(str)) / 2, (height + textPaint.measureText(str)) / 2, textPaint);
-			if (stronly == null)
+			if (TextUtils.isEmpty(stronly))
 				stronly = ICSOpenVPNApplication.getContext().getString(R.string.only_power);
 			TextPaint onlyPaint = new TextPaint();
 			onlyPaint.setColor(mTextColor);

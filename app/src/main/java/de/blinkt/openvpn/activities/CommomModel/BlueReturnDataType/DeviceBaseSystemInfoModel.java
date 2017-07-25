@@ -30,8 +30,14 @@ public class DeviceBaseSystemInfoModel extends Logger{
                 DeviceType = 1;
             }
         }
+       int braceletPower;
+       if(Integer.parseInt(messages.get(0).substring(14, 16), 16)>100){
+           braceletPower=100;
+       }else{
+           braceletPower=Integer.parseInt(messages.get(0).substring(10, 12), 16);
+       }
         SharedUtils.getInstance().writeInt(Constant.BRACELETTYPEINT, DeviceType);
-        SharedUtils.getInstance().writeInt(Constant.BRACELETPOWER, Integer.parseInt(messages.get(0).substring(14, 16), 16));
+        SharedUtils.getInstance().writeInt(Constant.BRACELETPOWER,braceletPower );
         SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, deviceVesion);
         EventBusUtil.blueReturnData(Constant.SYSTEM_BASICE_INFO,"","");
        updateDeviceInfo();

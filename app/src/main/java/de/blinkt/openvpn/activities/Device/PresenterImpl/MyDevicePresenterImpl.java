@@ -84,6 +84,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         downloadUpgradePackageModel=new DownloadUpgradePackageModelImpl(this);
         skyUpgradeModel=new SkyUpgradeModelImpl(this);
         unbindDeviceModel=new UnbindDeviceModelImpl(this);
+        showRechargeStatu(ReceiveBLEMoveReceiver.rechargeStatue);
     }
 
     @Override
@@ -352,6 +353,10 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         }
     }
 
+    private String unrecharge="01";
+    private String rechargeing="02";
+    private String recharged="03";
+
     //通过eventbus接收从蓝牙那边传回来的数据，并进行相应的操作
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void blueReturnData(BlueReturnData blueReturnData){
@@ -362,8 +367,23 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
                 myDeviceView.dismissProgress();
                 myDeviceView.setElectricityPercent(((float) SharedUtils.getInstance().readInt(Constant.BRACELETPOWER))/100);
                 break;
+            case Constant.RECHARGE_STATE:
+                showRechargeStatu(blueReturnData.getResponeStatue());
+                break;
         }
     }
+
+    private void showRechargeStatu(String responeStatue) {
+        if(unrecharge.equals(responeStatue)){//未充电
+            myDeviceView.setSinkingViewText(0);
+        }else if(rechargeing.equals(responeStatue)){
+            myDeviceView.setSinkingViewText(R.string.rechargeing);
+        }else if(recharged.equals(responeStatue)){
+            myDeviceView.setSinkingViewText(0);
+            myDeviceView.setElectricityPercent(1);
+        }
+    }
+
     //实时监测连接状态，并进行相应的操作
     @Subscribe(threadMode = ThreadMode.MAIN)
     private void blueConnStatue(BlueConnStatue blueConnStatue){
@@ -474,6 +494,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
         EventBus.getDefault().unregister(this);
         if (isDfuServiceRunning()) {
             context.stopService(new Intent(context, DfuService.class));
+
         }
     }
 }

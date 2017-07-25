@@ -69,7 +69,7 @@ public interface MyDeviceView extends Toast{
      * @param progressContent 进度条内存id
      * @param isCanCancel  是否准许取消
      */
-  void   showProgress(int progressContent, boolean isCanCancel);
+    void   showProgress(int progressContent, boolean isCanCancel);
 
     /**
      * 设置硬件版本号
@@ -82,4 +82,5 @@ public interface MyDeviceView extends Toast{
      * @param electricityFlost 电量
      */
     void setElectricityPercent(float electricityFlost );
+    void  setSinkingViewText(int textId);
 }

@@ -101,7 +101,6 @@ public class SdkAndBluetoothDataInchange {
 				timerTaskMessage= new TimerTask() {
 					@Override
 					public void run() {
-
 						if (SocketConstant.REGISTER_STATUE_CODE != 3) {
 							if (System.currentTimeMillis() - getSendBlueToothTime >=5000 && !isReceiveBluetoothData&&notCanReceiveBluetoothDataCount<3) {
 								Logger.d( "接收不到蓝牙数据");
@@ -191,7 +190,6 @@ public class SdkAndBluetoothDataInchange {
 			TlvAnalyticalUtils.sendToSdkLisener.sendServer(toServerMessage);
 
 		}
-
 	}
 
 	private void sendBluetoothFlag() {
