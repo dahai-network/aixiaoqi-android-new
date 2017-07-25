@@ -371,8 +371,10 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
                 showRechargeStatu(blueReturnData.getResponeStatue());
                 break;
             case Constant.RECEIVE_ELECTRICITY:
+                if(!rechargeing.equals(ReceiveBLEMoveReceiver.rechargeStatue)){
                 myDeviceView.dismissProgress();
                 myDeviceView.setElectricityPercent(((float) SharedUtils.getInstance().readInt(Constant.BRACELETPOWER))/100);
+                }
                 break;
         }
     }
