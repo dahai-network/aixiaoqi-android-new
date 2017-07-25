@@ -98,7 +98,6 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
     public void requestGetSecurityConfig() {
         Logger.d("开始访问网络获取ip和port");
         isResponse=false;
-      long  satrtTime=System.currentTimeMillis();
         getSecurityConfigModel.getSecurityConfig();
         //由于网络莫名报cancel导致一直处理注册中
         mHandler.postDelayed(new Runnable() {
@@ -113,10 +112,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
 
             }
         },15000);
-        long  endTime=System.currentTimeMillis();
-        if(satrtTime-endTime>8000){
-            Logger.d("时间太长");
-        }
+
 
     }
 
@@ -155,9 +151,7 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                         @Override
                         public void run() {
                             Logger.d("开启线程=");
-                          /*  if(CommonTools.isFastDoubleClick(3000)){
-                                return;
-                            }*/
+
                             if (sdkAndBluetoothDataInchange == null) {
                                 sdkAndBluetoothDataInchange = new SdkAndBluetoothDataInchange();
                             }
@@ -168,6 +162,9 @@ public class ProMainPresenterImpl extends NetPresenterBaseImpl implements ProMai
                                 //通过iccid去本地数据库获取鉴权数据
                                 DBHelp dbHelp = new DBHelp(context);
                                 PreReadEntity preReadEntity = dbHelp.getPreReadEntity(SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]]);
+
+                                Logger.d("ICCID"+SocketConstant.CONNENCT_VALUE[SocketConstant.CONNECT_VARIABLE_POSITION[0]]);
+                                Logger.d("preReadEntity="+preReadEntity.toString());
                                 //判断是否有鉴权数据
                                 if (preReadEntity != null) {
                                     Logger.d("有预读取数据=");

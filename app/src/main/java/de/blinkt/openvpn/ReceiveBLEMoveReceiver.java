@@ -3,13 +3,18 @@ package de.blinkt.openvpn;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import com.aixiaoqi.socket.EventBusUtil;
 import com.aixiaoqi.socket.SocketConstant;
-import com.orhanobut.logger.*;
+import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+
+import cn.com.johnson.model.MyDeviceEntity;
 import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.ConnectBluetoothReceiveModel;
 import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.DeviceBaseSystemInfoModel;
 import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.PowerOnModel;
@@ -127,10 +132,10 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                     for (int i = 0; i < messages.size(); i++) {
                         Log.e(TAG, messages.get(i));
                     }
-                    com.orhanobut.logger.Logger.d("dataType：" + dataType);
-                    Log.e("Blue_Chanl", "firstPackage：" + firstPackage);
+                    Logger.d("dataType：" + dataType);
+                    Logger.d("firstPackage：" + firstPackage);
                     if(firstPackage==null){
-                        Log.d(TAG, "run: 蓝牙没有回数据");
+                        Logger.d("run: 蓝牙没有回数据");
                         return;
                     }
                     switch (firstPackage) {
@@ -144,7 +149,7 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                     //绑定流程成功命令
                                     CommonTools.delayTime(500);
                                     //android 标记，给蓝牙设备标记是否是android设备用的
-                                    com.orhanobut.logger.Logger.d("接收到绑定命令");
+                                    Logger.d("接收到绑定命令");
                                     SendCommandToBluetooth.sendMessageToBlueTooth(BIND_SUCCESS);
                                     EventBusUtil.bingDeviceStep(BluetoothConstant.BLUE_BIND_SUCCESS);
                                     break;
@@ -187,8 +192,14 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                     simDataInfoModel.setIccid(messages);
                                     break;
                                 case Constant.APP_CONNECT_RECEIVE:
-                                    Log.d(TAG,"接收到专属命令返回");
+                                    Logger.d("接收到专属命令返回");
                                     connectBluetoothReceiveModel.appConnectReceive(messages);
+                                    break;
+                                case Constant.RECHARGE_STATE:
+                                    //558003030001
+                                    String eleStatue = messages.get(0).substring(10);
+                                    Logger.d("获取充电状态"+eleStatue);
+                                    /*connectBluetoothReceiveModel.appConnectReceive(messages);*/
                                     break;
                                 default:
                                     break;

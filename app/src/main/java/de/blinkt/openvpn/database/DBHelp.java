@@ -45,6 +45,7 @@ public class DBHelp {
         Cursor mCursor =
                 db.query(PreReadSimDataSQLite.DATABASE_TABLE, new String[]{ PreReadSimDataSQLite.KEY_ICCID,
                         PreReadSimDataSQLite.KEY_IMSSI, PreReadSimDataSQLite.KEY_PRE_READ_DATA, PreReadSimDataSQLite.KEY_DATA_LENGTH}, PreReadSimDataSQLite.KEY_ICCID + " = ?" , new String[]{iccid} , null, null, null, null);
+
         if (mCursor != null&&mCursor.moveToFirst()){
             if(preReadEntity==null){
                 preReadEntity=new PreReadEntity();
@@ -53,10 +54,13 @@ public class DBHelp {
             preReadEntity.setImsi( mCursor.getString(mCursor.getColumnIndex(PreReadSimDataSQLite.KEY_IMSSI)));
             preReadEntity.setPreReadData(mCursor.getString(mCursor.getColumnIndex(PreReadSimDataSQLite.KEY_PRE_READ_DATA)));
             preReadEntity.setDataLength( mCursor.getString(mCursor.getColumnIndex(PreReadSimDataSQLite.KEY_DATA_LENGTH)));
+
         }
         close();
         return  preReadEntity;
     }
+
+
 
 
 }

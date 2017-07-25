@@ -214,11 +214,21 @@ public class ReceiveSocketService extends Service {
 
             return;
         }
-        Logger.d("发送给服务器信息=" + s);
+
         Logger.d("发送到GOIPtcpClientTCP是否断开"+ (tcpClient != null));
+        Logger.d("检查状态"+ tcpClient.getTransceiver());
         if (tcpClient != null && tcpClient.getTransceiver() != null) {
             boolean send = tcpClient.getTransceiver().send(s);
+            Logger.d("发送给服务器信息=" + s);
             Logger.d("发送是否成功"+send);
+        }else{
+            Logger.d("开始创建连接");
+            tcpClient.connect();
+            if (tcpClient != null && tcpClient.getTransceiver() != null) {
+                boolean send = tcpClient.getTransceiver().send(s);
+                Logger.d("发送是否成功2"+send);
+                Logger.d("发送给服务器信息2=" + s);
+            }
         }
         ReceiveSocketService.recordStringLog(DateUtils.getCurrentDateForFileDetail() + "\n" + s);
     }
@@ -255,7 +265,7 @@ public class ReceiveSocketService extends Service {
                                 }
 
                                Logger.d("时间是否相差15s=="+(System.currentTimeMillis() - sendConnectionTime >=15 * 1000) +"!isReceiveConnection"+!isReceiveConnection+"--resendConnectionCount="+resendConnectionCount);
-                                if (System.currentTimeMillis() - sendConnectionTime >=15 * 1000&&!isReceiveConnection&&resendConnectionCount<3) {
+                                if (System.currentTimeMillis() - sendConnectionTime >=25 * 1000&&!isReceiveConnection&&resendConnectionCount<3) {
                                     //重新创建连接
                                     if (!TextUtils.isEmpty(sendConnectionContent)) {
                                         Logger.d("重新创建TCP");
@@ -278,7 +288,7 @@ public class ReceiveSocketService extends Service {
                             if (!TextUtils.isEmpty(sendPreDataType)) {
                                 if (REGISTER_STATUE_CODE != 3) {
                                     Logger.d("重新发送预读取数据"+((System.currentTimeMillis() - sendPreDataTime) >= 30 * 1000)+"--!isReceivePreData="+!isReceivePreData);
-                                    if (System.currentTimeMillis() - sendPreDataTime >= 15 * 1000&&!isReceivePreData&&resendPreDataCount<3) {
+                                    if (System.currentTimeMillis() - sendPreDataTime >= 25 * 1000&&!isReceivePreData&&resendPreDataCount<3) {
                                         //重新发送预读取数据
                                         if (!TextUtils.isEmpty(sendPreDataContent)) {
                                             Logger.d("执行重新发送预读取数据"+sendPreDataContent);

@@ -1,17 +1,12 @@
 package com.aixiaoqi.socket;
 
-import android.util.Log;
-
 import com.orhanobut.logger.Logger;
-
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 /**
@@ -99,7 +94,6 @@ public abstract class TcpClient implements Runnable {
 
 	/**
 	 * 判断是否连接
-	 *
 	 * @return 当前处于连接状态，则返回true
 	 */
 	public boolean isConnected() {

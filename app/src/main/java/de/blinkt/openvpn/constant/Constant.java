@@ -308,4 +308,11 @@ public class Constant {
 
 	public static final String OPPO_PACKAGENAME_AUTORUN = "com.coloros.safecenter";
 	public static final String OPPO_PACKAGE_AUTORUN = "com.coloros.safecenter.startupapp.StartupAppListActivity";
+
+
+/**
+ * 广播
+ */
+ public static final String BLUE_ELECTRICSTATUE ="com.aixiaoqi.blue_electricStatue";
+
 }
