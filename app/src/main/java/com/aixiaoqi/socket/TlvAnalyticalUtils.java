@@ -157,6 +157,7 @@ public class TlvAnalyticalUtils {
 					value = RadixAsciiChange.convertHexToString(value.substring(0, value.length() - 2));
 				}
 			} else if (tag == 15) {
+				//108a0f00300cf03a01c30016a3146c617374207377697463682074696d656f757400
                 Logger.d("收到0f,进行重连");
 				disConnect(orData, tag);
 			} else if (tag == 5) {

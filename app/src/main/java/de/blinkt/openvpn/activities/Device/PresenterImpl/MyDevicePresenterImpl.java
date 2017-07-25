@@ -120,7 +120,7 @@ public class MyDevicePresenterImpl extends NetPresenterBaseImpl implements MyDev
                 myDeviceView.clearData();
                 myDeviceView.finishView();
             }
-            ;
+
         }else if(cmdType==HttpConfigUrl.COMTYPE_DOWNLOAD_SKY_UPDATE_PACKAGE){
             if(object instanceof DownloadSkyUpgradePackageHttp){
                 DownloadSkyUpgradePackageHttp downloadSkyUpgradePackageHttp = (DownloadSkyUpgradePackageHttp) object;

@@ -10,6 +10,7 @@ import de.blinkt.openvpn.constant.BluetoothConstant;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.constant.HttpConfigUrl;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
+import de.blinkt.openvpn.database.DBHelp;
 import de.blinkt.openvpn.http.CommonHttp;
 import de.blinkt.openvpn.model.enentbus.BindStatue;
 import de.blinkt.openvpn.util.SharedUtils;

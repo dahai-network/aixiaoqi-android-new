@@ -2,12 +2,10 @@ package de.blinkt.openvpn.activities.Device.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,9 +31,7 @@ import de.blinkt.openvpn.bluetooth.util.SendCommandToBluetooth;;
 import de.blinkt.openvpn.constant.Constant;
 import de.blinkt.openvpn.fragments.base.BaseStatusFragment;
 import de.blinkt.openvpn.util.CommonTools;
-import de.blinkt.openvpn.util.CreateFiles;
 import de.blinkt.openvpn.util.SharedUtils;
-import de.blinkt.openvpn.util.SimActivateHelper;
 import de.blinkt.openvpn.views.MySinkingView;
 import de.blinkt.openvpn.views.TitleBar;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
@@ -104,7 +101,6 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
     public static int percentInt;
     //手环类型
     private String braceletname;
-
     public static boolean isUpgrade = false;
     public static final int DOWNLOAD_SKY_UPGRADE = 5;
     public static final int UNBIND = 7;
@@ -182,6 +178,9 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         macTextView.setText("");
         SharedUtils.getInstance().delete(Constant.IMEI);
         SharedUtils.getInstance().delete(Constant.BRACELETNAME);
+
+
+
     }
 
     @Override
@@ -265,10 +264,10 @@ public class MyDeviceActivity extends BluetoothBaseActivity implements MyDeviceV
         setDeviceVersionText(SharedUtils.getInstance().readString(Constant.BRACELETVERSION));
     }
 
+
     private void initData() {
         String blueStatus = BaseStatusFragment.bleStatus;
-        int electricityInt = SharedUtils.getInstance().readInt(BRACELETPOWER);
-        sinking.setPercent(((float) electricityInt) / 100);
+
         initSimStatue(blueStatus);
         if(SharedUtils.getInstance().readBoolean(Constant.HAS_DEVICE_NEED_UPGRADE)){
             showOrHideVersionUpgradeHotDot(VISIBLE);

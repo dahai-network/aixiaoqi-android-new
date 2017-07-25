@@ -336,7 +336,6 @@ public class SimRegisterFlowService extends Service implements InterfaceCallback
     @Subscribe(threadMode = ThreadMode.MAIN)//ui线程
     public void onIsSuccessEntity(SimRegisterStatue entity) {
         switch (entity.getRigsterSimStatue()) {
-
             case SocketConstant.REGISTERING://注册中
                 registering(entity.getRigsterStatueReason());
                 break;
