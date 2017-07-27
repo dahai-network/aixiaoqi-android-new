@@ -647,7 +647,8 @@
     <string name="last_step">上一步</string>
     <string name="update_header">正在更新头像，请稍后...</string>
 
-    <string name="no_location_permission">蓝牙搜索需要打开位置信息</string>
+    <string name="no_location_permission">您需要开启定位权限，才能搜索到周围的爱小器设备</string>
+    <string name="no_recode_permission">您需要开启录音权限才能正常拨打</string>
     <string name="no_location_tips">未打开位置服务，将无法搜索手环</string>
     <string name="start_permission">立即解决</string>
     <string name="black_add_success">屏蔽成功！</string>

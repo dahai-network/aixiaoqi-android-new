@@ -30,6 +30,7 @@ public abstract  class BluetoothBaseActivity extends BaseActivity {
         initialize();
     }
     public static final int REQUEST_ENABLE_BT = 2;
+    public static final int REQUEST_ENABLE_LOCATION = 3;
     public boolean initialize() {
         // For API level 18 and above, get a reference to BluetoothAdapter through
         // BluetoothManager.

@@ -10,9 +10,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioFormat;
 import android.media.AudioManager;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,6 +25,9 @@ import android.view.Window;
 import cn.com.aixiaoqi.R;
 import de.blinkt.openvpn.constant.IntentPutKeyConstant;
 import de.blinkt.openvpn.push.PhoneReceiver;
+import de.blinkt.openvpn.util.DialogUtils;
+import de.blinkt.openvpn.views.dialog.DialogBalance;
+import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 
 /**
  * Created by Administrator on 2016/11/26.
@@ -35,6 +42,14 @@ public class BaseSensorActivity extends CommenActivity implements SensorEventLis
 	protected NotificationManager mNotificationManager;
 	NotificationCompat.Builder mBuilder;
 	protected  int notifyId = 100;
+
+
+
+
+
+
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -160,6 +175,7 @@ public class BaseSensorActivity extends CommenActivity implements SensorEventLis
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+
 
 
 }

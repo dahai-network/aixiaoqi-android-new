@@ -49,6 +49,8 @@ public class DialogBalance extends DialogBase implements View.OnClickListener {
 				//如果我的设备传入的type则取消需要返回
 				if (type == 2) {
 					dialogInterfaceTypeBase.dialogText(1, "");
+				}else if(type == 3){
+					dialogInterfaceTypeBase.dialogText(10, "");
 				}
 				break;
 			case R.id.tv_rechange:

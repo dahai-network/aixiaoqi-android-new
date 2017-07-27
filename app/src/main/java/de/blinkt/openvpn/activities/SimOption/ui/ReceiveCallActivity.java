@@ -33,6 +33,7 @@ import de.blinkt.openvpn.service.CallPhoneService;
 import de.blinkt.openvpn.util.AssetsDatabaseManager;
 import de.blinkt.openvpn.util.DatabaseDAO;
 import de.blinkt.openvpn.util.DateUtils;
+import de.blinkt.openvpn.util.IsHasrecodePermission;
 import de.blinkt.openvpn.util.PhoneNumberZone;
 import de.blinkt.openvpn.util.PinYinConverNumber;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
@@ -80,6 +81,8 @@ public class ReceiveCallActivity extends BaseSensorActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         setContentView(R.layout.activity_receive_call);
         unbinder= ButterKnife.bind(this);
+        IsHasrecodePermission isHasrecodePermission=new IsHasrecodePermission(this);
+        isHasrecodePermission.isHasPermission();
         registerReceiver();
         setData();
         initDB();

@@ -23,6 +23,7 @@ import de.blinkt.openvpn.fragments.ProMainTabFragment.View.PhoneView;
 import de.blinkt.openvpn.model.ContactBean;
 import de.blinkt.openvpn.model.ContactRecodeEntity;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.IsHasrecodePermission;
 import de.blinkt.openvpn.util.querylocaldatebase.AsyncQueryContactRecodeHandler;
 import de.blinkt.openvpn.util.querylocaldatebase.FindContactUtil;
 import de.blinkt.openvpn.util.querylocaldatebase.QueryCompleteListener;
@@ -55,7 +56,7 @@ public class PhoneRedocerPresenterImpl  implements RecyclerBaseAdapter.OnItemCli
         contactRecodeAdapter = new ContactRecodeAdapter(numberDbModel.initDB(context), context, mAllList);
         contactRecodeAdapter.setOnItemClickListener(this);
     }
-
+    IsHasrecodePermission isHasrecodePermission;
     public void addDataContactRecodeAdapter(){
         contactRecodeAdapter.addAll(mAllList);
     }
@@ -70,8 +71,11 @@ public class PhoneRedocerPresenterImpl  implements RecyclerBaseAdapter.OnItemCli
                 break;
             default:
                 if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+                    if(isHasrecodePermission==null){
+                        isHasrecodePermission=new IsHasrecodePermission(context);
+                    }
                     //拨打电话
-                    if (!CommonTools.isFastDoubleClick(1000))
+                    if (!CommonTools.isFastDoubleClick(1000)&&isHasrecodePermission.isHasPermission())
                         phoneView.simCallPhone(contactRecodeEntity);
                 } else {
                     phoneView.showToast(R.string.sim_register_phone_tip);

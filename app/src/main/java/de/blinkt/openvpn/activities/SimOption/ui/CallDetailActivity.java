@@ -18,6 +18,7 @@ import de.blinkt.openvpn.activities.SimOption.PresenterImpl.CallDetailPresenterI
 import de.blinkt.openvpn.activities.SimOption.View.CallDetailView;
 import de.blinkt.openvpn.core.ICSOpenVPNApplication;
 import de.blinkt.openvpn.util.CommonTools;
+import de.blinkt.openvpn.util.IsHasrecodePermission;
 import de.blinkt.openvpn.views.dialog.DialogBalance;
 import de.blinkt.openvpn.views.dialog.DialogInterfaceTypeBase;
 import de.blinkt.openvpn.views.xrecycler.XRecyclerView;
@@ -157,7 +158,7 @@ public class CallDetailActivity extends BaseActivity implements CallDetailView, 
 		if (hasWiFi())
 			callDetailPresenter.requestMaxPhoneCallTime();
 	}
-
+IsHasrecodePermission isHasrecodePermission;
 	@OnClick({R.id.sms_tv, R.id.net_call_tv, R.id.dual_standby_king_tv, R.id.defriend_tv})
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -169,6 +170,11 @@ public class CallDetailActivity extends BaseActivity implements CallDetailView, 
 				break;
 			case R.id.dual_standby_king_tv:
 				if (SocketConstant.REGISTER_STATUE_CODE == 3) {
+
+					if(isHasrecodePermission==null){
+						isHasrecodePermission=new IsHasrecodePermission(this);
+					}
+					if(isHasrecodePermission.isHasPermission())
 					callDetailPresenter.callPhone();
 				} else {
 					if(ICSOpenVPNApplication.uartService!=null&&ICSOpenVPNApplication.uartService.isConnectedBlueTooth()){

@@ -34,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.com.aixiaoqi.R;
 import cn.com.johnson.adapter.FragmentAdapter;
+import de.blinkt.openvpn.Logger;
 import de.blinkt.openvpn.activities.Base.BaseActivity;
 import de.blinkt.openvpn.activities.CommomModel.JPush.ModelImpl.JPushSetAliaModelImpl;
 import de.blinkt.openvpn.activities.Device.PresenterImpl.ProMainPresenterImpl;
@@ -152,24 +153,14 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 		initServices();
 		proMainPresenter=new ProMainPresenterImpl(this,this);
 		initBrocast();
-		initSet();
+//		initSet();
 		initFragment();
 		initView();
 		setListener();
 
 	}
 
-	/**
-	 * android 6.0以上需要位置信息动态获取
-	 */
-	private void initSet() {
-		if (Build.VERSION.SDK_INT >= 23 && !NetworkUtils.isLocationOpen(getApplicationContext())) {
-			//不能按返回键，只能二选其一
-			noLocationPermissionDialog = new DialogBalance(this, this, R.layout.dialog_balance, 2);
-			noLocationPermissionDialog.changeText(getResources().getString(R.string.no_location_permission), getResources().getString(R.string.sure));
-		}
-		CheckAuthorityUtil.checkPermissions(this, Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG);
-	}
+
 
 	/**
 	 * 初始化界面
@@ -345,7 +336,7 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 
 	//如果没有连上，每隔10秒重连一次
 	private void connDeviceFiveSecond(String imeiStr) {
-			mService.connect(imeiStr);
+		mService.connect(imeiStr);
 
 	}
 
@@ -434,8 +425,8 @@ public class ProMainActivity extends BaseActivity implements ProMainView, Dialog
 		radiogroup = null;
 		if (mService != null&&isBind&&mServiceConnection!=null){
 			mService.unbindService(mServiceConnection);
-            mService.stopSelf();
-            isBind=false;
+			mService.stopSelf();
+			isBind=false;
 		}
 		mService = null;
 		radiogroup = null;

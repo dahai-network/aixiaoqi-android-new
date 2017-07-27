@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.activities.Device.ui;
 
+import android.Manifest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -7,10 +8,14 @@ import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.provider.Telephony;
+import android.support.v13.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -111,6 +116,48 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 		uniImageView.setBackgroundResource(sourceId);
 	}
 
+	/**
+	 * android 6.0以上需要位置信息动态获取
+	 */
+	private void initSet() {
+//		e("Build.VERSION.SDK_INT="+Build.VERSION.SDK_INT+"\nisLocationOpen="+NetworkUtils.isLocationOpen(getApplicationContext()));
+
+		if (Build.VERSION.SDK_INT >= 23) {
+			int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+			if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
+				//判断是否需要 向用户解释，为什么要申请该权限
+				if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)){
+
+				}
+				ActivityCompat.requestPermissions(this ,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},PERMISSION_REQUEST_COARSE_LOCATION);
+				return ;
+			}else{
+				if(bluetoothIsOpen()){
+					bindDevicePresenter.clearListData();
+					setAnimation();
+					scanLeDevice(true);
+				}
+			}
+		}
+	}
+	public static final int PERMISSION_REQUEST_COARSE_LOCATION=1;
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case PERMISSION_REQUEST_COARSE_LOCATION:
+				if (grantResults.length > 0&&grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					// TODO request success
+				}else{
+
+					DialogBalance	noLocationPermissionDialog = new DialogBalance(this, this, R.layout.dialog_balance, 3);
+					noLocationPermissionDialog.setCanClickBack(false);
+					noLocationPermissionDialog.changeText(getResources().getString(R.string.no_location_permission), getResources().getString(R.string.sure));
+				}
+				break;
+		}
+	}
+
+
 	@Override
 	protected void findDevices(BluetoothDevice device, int rssi, byte[] scanRecord) {
 		bindDevicePresenter.findDevices(device,rssi,scanRecord);
@@ -144,6 +191,7 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_bind_device);
+		ButterKnife.bind(this);
 		bluetoothName = getIntent().getStringExtra(Constant.BRACELETNAME);
         WindowManager wm = (WindowManager) getContext()
                 .getSystemService(Context.WINDOW_SERVICE);
@@ -153,13 +201,10 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
         height = wm.getDefaultDisplay().getHeight();
         Log.d("BindDeviceActivity", "onCreate: "+width+"---"+height);
 
-		ButterKnife.bind(this);
+
+		initSet();
 		bindDevicePresenter=new BindDevicePresenterImpl(this);
-		if(bluetoothIsOpen()){
-            bindDevicePresenter.clearListData();
-			setAnimation();
-			scanLeDevice(true);
-		}
+
 		if (bluetoothName != null && bluetoothName.contains(Constant.UNIBOX)) {
 			initUnibox();
 		}
@@ -211,6 +256,15 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 					scanLeDevice(true);
 				} else {
 					Log.d(TAG, "蓝牙未打开");
+					finish();
+				}
+				break;
+			case REQUEST_ENABLE_LOCATION:
+				if (resultCode == Activity.RESULT_OK) {
+					setAnimation();
+					scanLeDevice(true);
+				} else {
+					Log.d(TAG, "权限位置没有打开");
 					finish();
 				}
 				break;
@@ -463,9 +517,12 @@ public class BindDeviceActivity extends BluetoothBaseActivity implements BindDev
 	public void dialogText(int type, String text) {
 		if (type == 2) {
 			scanLeDevice(true);
-		} else {
+		} else if(type==3){
+			startActivityForResult(new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS),REQUEST_ENABLE_LOCATION);
+		} else if(type==10){
+			finish();
+		}else{
 			stopTextView.performClick();
-
 		}
 	}
 

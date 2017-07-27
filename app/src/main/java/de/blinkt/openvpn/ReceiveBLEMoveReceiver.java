@@ -12,6 +12,8 @@ import com.orhanobut.logger.*;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import cn.com.johnson.model.MyDeviceEntity;
 import de.blinkt.openvpn.activities.CommomModel.BlueReturnDataType.ConnectBluetoothReceiveModel;
@@ -148,7 +150,6 @@ public class ReceiveBLEMoveReceiver extends BroadcastReceiver   {
                                     }else{
                                         braceletPower=Integer.parseInt(messages.get(0).substring(10, 12), 16);
                                     }
-                                    Logger.e("braceletPower="+braceletPower);
                                     utils.writeInt(Constant.BRACELETPOWER, braceletPower);
                                     EventBusUtil.blueReturnData(Constant.RECEIVE_ELECTRICITY,"","");
                                     break;

@@ -36,7 +36,6 @@ public class DeviceBaseSystemInfoModel extends Logger{
        }else{
            braceletPower=Integer.parseInt(messages.get(0).substring(14, 16), 16);
        }
-       com.orhanobut.logger.Logger.e("braceletPower1="+braceletPower);
         SharedUtils.getInstance().writeInt(Constant.BRACELETTYPEINT, DeviceType);
         SharedUtils.getInstance().writeInt(Constant.BRACELETPOWER,braceletPower );
         SharedUtils.getInstance().writeString(Constant.BRACELETVERSION, deviceVesion);
